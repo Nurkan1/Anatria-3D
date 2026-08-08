@@ -43,6 +43,35 @@ invisible in a list, and impossible to miss as a shape on a body.
 
 ---
 
+## Download
+
+**[Latest release](https://github.com/Nurkan1/Anatria-3D/releases/latest)** —
+Windows, 64-bit. Two files, for two situations:
+
+| File | Take this one if |
+|---|---|
+| `Anatria3D_<version>_x64-setup.exe` | You are installing it on your own machine. |
+| `Anatria3D_<version>_x64_en-US.msi` | You are deploying it across a faculty or a lab, through Group Policy or Intune. |
+
+**It installs without administrator rights.** On a university laptop where you
+are not an administrator, you can still install it.
+
+> **Windows will warn you the first time.** Anatria3D is not code-signed — a
+> certificate costs money the project does not spend — so you will see *"Windows
+> protected your PC"*. Click **More info**, then **Run anyway**.
+>
+> If you would rather check before trusting it, every release lists the SHA-256
+> of each file. Compare with `certutil -hashfile <file> SHA256`. The source for
+> that exact build is the tag it was cut from, and you can build it yourself.
+
+There is **no auto-updater**, on purpose: the application never reaches the
+network by itself. New versions appear on the releases page, and nowhere else —
+Anatria3D is not distributed by email or on request.
+
+Releases are cut following [RELEASING.md](RELEASING.md).
+
+---
+
 ## Status
 
 | Phase | Scope | State |
