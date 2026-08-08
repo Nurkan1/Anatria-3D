@@ -53,6 +53,15 @@ jobs:
           .venv/Scripts/python -m pip install --upgrade pip
           .venv/Scripts/python -m pip install -e "engine[dev]"
 
+      # Before the Rust gates, not after: Tauri's build script validates the
+      # resource paths in tauri.conf.json, and the sidecar is one of them, so
+      # `cargo test` cannot even build without it on a clean machine.
+      #
+      # It has to be rebuilt for the release regardless — anything that changed
+      # under engine/, prompt text included, ships stale otherwise.
+      - name: Build the Python sidecar
+        run: .venv/Scripts/python engine/build_sidecar.py --clean
+
       # The gates again, on the exact commit being released. A tag is the one
       # moment where "it passed on main yesterday" is not good enough.
       - name: Gates
@@ -62,13 +71,6 @@ jobs:
           .venv/Scripts/python -m pytest engine -q
           .venv/Scripts/python -m ruff check engine
           cargo test --manifest-path src-tauri/Cargo.toml
-
-      # First, always. The sidecar is compiled separately and bundled as a Tauri
-      # resource, so anything that changed under engine/ — prompt text included,
-      # which is the easiest to forget because it is "just words" — ships stale
-      # otherwise.
-      - name: Build the Python sidecar
-        run: .venv/Scripts/python engine/build_sidecar.py --clean
 
       - name: Build the installers
         run: pnpm tauri build

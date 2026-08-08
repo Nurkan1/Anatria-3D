@@ -78,6 +78,17 @@ jobs:
       - name: Python lint
         run: .venv/Scripts/python -m ruff check engine
 
+      # Before any Rust step. Tauri's build script validates the resource paths
+      # declared in tauri.conf.json, and the sidecar is one of them — so even
+      # `cargo test` fails on a clean machine without it. It passed locally only
+      # because a previous build had left the directory behind, which is the
+      # class of false gate this workflow exists to catch.
+      #
+      # It doubles as a gate in its own right: if build_sidecar.py breaks, that
+      # should surface on the push that broke it, not at release time.
+      - name: Build the Python sidecar
+        run: .venv/Scripts/python engine/build_sidecar.py
+
       - name: Rust tests
         run: cargo test --manifest-path src-tauri/Cargo.toml
 
