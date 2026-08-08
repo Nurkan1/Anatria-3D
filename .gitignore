@@ -52,3 +52,6 @@ test-results/
 # in public/anatomy/ and the reports the manifest is built from.
 tools/asset-pipeline/vendor/Z-Anatomy/
 tools/asset-pipeline/vendor/Z-Anatomy.zip
+
+# Coworker instructions for AI agents — kept local, not published.
+AGENTS.md
