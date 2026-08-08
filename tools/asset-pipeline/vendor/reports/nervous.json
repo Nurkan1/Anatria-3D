@@ -1,0 +1,7215 @@
+{
+ "system": "nervous",
+ "collections": [
+  "Bonus collection/Nervous system",
+  "7: Nervous system & Sense organs"
+ ],
+ "output": "C:\\Users\\TrendingPC\\Documents\\Anatria3D\\public\\anatomy\\nervous_male.glb",
+ "draco": true,
+ "object_count": 860,
+ "skipped_count": 128,
+ "skipped": [
+  "Accessory visual structures.j",
+  "Anterior bony ampulla.j",
+  "Anterior funiculus.j",
+  "Anterior horn of spinal cord.j",
+  "Anterior median fissure of medulla oblongata.j",
+  "Anterior pole of eyeball.j",
+  "Anterior rami of lumbar nerves.j",
+  "Anterior semicircular canal.j",
+  "Anterior surface of cornea.j",
+  "Anterior surface of iris.j",
+  "Anterolateral fasciculus.j",
+  "Anterolateral sulcus of medulla oblongata.j",
+  "Autonomic division of peripheral nervous system.j",
+  "Basal forebrain.j",
+  "Base of cochlea.j",
+  "Basilar part of pons.j",
+  "Brachial plexus.j",
+  "Brain.j",
+  "Brainstem.j",
+  "Branches of anterior part of lumbar plexus.j",
+  "Branches of lateral cord of brachial plexus.j",
+  "Branches of medial cord of brachial plexus.j",
+  "Branches of posterior cord of brachial plexus.j",
+  "Branches of posterior part of lumbar plexus.j",
+  "Central mesencephalic structures.j",
+  "Central nervous system.j",
+  "Central structures of spinal cord.j",
+  "Cerebellar peduncles.j",
+  "Cerebellum.j",
+  "Cerebral hemisphere.j",
+  "Cerebral peduncle.j",
+  "Cerebrum.j",
+  "Cervical nerves.j",
+  "Cervical plexus.j",
+  "Ciliary body-curve.l",
+  "Ciliary body-curve.r",
+  "Cochlear cupula.j",
+  "Commissural fibres of telencephalon.j",
+  "Common bony limb.j",
+  "Corneoscleral junction.j",
+  "Corpus striatum.j",
+  "Cranial nerves.j",
+  "Cuneate tubercle.j",
+  "Diencephalon.j",
+  "Dilator pupillae.j",
+  "Dorsal striatum.j",
+  "Ear.j",
+  "Ependyma.j",
+  "Equator of eyeball.r",
+  "External axis of eyeball",
+  "External ear'.j",
+  "Eyeball'.j",
+  "Eyeball.j",
+  "Folds of iris.j",
+  "Frontal lobe.j",
+  "Ganglia.j",
+  "Gracile tubercle.j",
+  "Grey matter of medulla oblongata.j",
+  "Grey matter of pontine tegmentum.j",
+  "Grey matter of spinal cord.j",
+  "Grey matter of tegmentum of midbrain.j",
+  "Grey matter.j",
+  "Inferior medulla oblongata.j",
+  "Infraclavicular part of brachial plexus.j",
+  "Insula.j",
+  "Interlobar sulci.j",
+  "Intermediate zone of spinal cord.j",
+  "Internal axis of eyeball.r",
+  "Internal ear.j",
+  "Lacrimal apparatus.j",
+  "Lateral bony ampulla.j",
+  "Lateral funiculus of medulla oblongata.j",
+  "Lateral funiculus.j",
+  "Lateral semicircular canal.j",
+  "Limbic lobe.j",
+  "Lumbar nerves.j",
+  "Lumbar plexus.j",
+  "Lumbosacral plexus.j",
+  "Mandibular nerve.j",
+  "Medulla-path",
+  "Meninges.j",
+  "Meridians of eyeball.r",
+  "Midbrain.j",
+  "Middle ear.j",
+  "Occipital lobe.j",
+  "Oculomotor complex.j",
+  "Olive.j",
+  "Optic axis.j",
+  "Parietal lobe.j",
+  "Peripheral nervous system.j",
+  "Posterior bony ampulla.j",
+  "Posterior funiculus.j",
+  "Posterior horn of spinal cord.j",
+  "Posterior median sulcus of medulla oblongata.j",
+  "Posterior pole of eyeball.j",
+  "Posterior rami of lumbar nerves.j",
+  "Posterior semicircular canal.j",
+  "Posterior surface of cornea.j",
+  "Posterior surface of iris.j",
+  "Posterolateral sulcus of medulla oblongata.j",
+  "Projection fibres of telencephalon.j",
+  "Pupil.j",
+  "Pupillary margin of iris.j",
+  "Pyramid of medulla oblongata.j",
+  "Reticular formation.j",
+  "Retro-olivary groove.j",
+  "Roots of nerves.j",
+  "Sacral plexus.j",
+  "Simple bony limb.j",
+  "Sphincter pupillae.j",
+  "Spinal cord.j",
+  "Spinal nerves.j",
+  "Spiral canal of cochlea.j",
+  "Sulcus sclerae.j",
+  "Superior medulla oblongata.j",
+  "Supraclavicular part of brachial plexus.j",
+  "Tectum of midbrain.j",
+  "Tegmentum of midbrain.j",
+  "Tegmentum of pons.j",
+  "Telencephalon.j",
+  "Temporal lobe.j",
+  "Thoracic nerves.j",
+  "Trigeminal tubercle.j",
+  "Walls of lateral ventricle.j",
+  "White matter of diencephalon.j",
+  "White matter of spinal cord.j",
+  "White matter.j",
+  "Zonular fibers-curve.r"
+ ],
+ "objects": [
+  {
+   "name": " Posterior transverse collateral sulcus.l",
+   "polygons": 160,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": " Posterior transverse collateral sulcus.r",
+   "polygons": 160,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "(Abdominal part of pectoralis major muscle).l",
+   "polygons": 1508,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of lateral cord of brachial plexus",
+    "Lateral pectoral nerve"
+   ]
+  },
+  {
+   "name": "(Abdominal part of pectoralis major muscle).r",
+   "polygons": 1508,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of lateral cord of brachial plexus",
+    "Lateral pectoral nerve"
+   ]
+  },
+  {
+   "name": "(Communicating branch of median nerve with ulnar nerve).l",
+   "polygons": 288,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "(Communicating branch of median nerve with ulnar nerve).r",
+   "polygons": 288,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "(Opponens digiti minimi muscle of foot).l",
+   "polygons": 236,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "(Opponens digiti minimi muscle of foot).r",
+   "polygons": 236,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Abducens nerve (VI).l",
+   "polygons": 2488,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Abducens nerve (VI).r",
+   "polygons": 2488,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Abductor digiti minimi of foot.l",
+   "polygons": 1280,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Abductor digiti minimi of foot.r",
+   "polygons": 1280,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Abductor digiti minimi of hand.l",
+   "polygons": 672,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
+   ]
+  },
+  {
+   "name": "Abductor digiti minimi of hand.r",
+   "polygons": 672,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
+   ]
+  },
+  {
+   "name": "Abductor hallucis.l",
+   "polygons": 1688,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Abductor hallucis.r",
+   "polygons": 1688,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Abductor pollicis brevis.l",
+   "polygons": 624,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Abductor pollicis brevis.r",
+   "polygons": 624,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Accessory nerve (XI).l",
+   "polygons": 7752,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Accessory nerve (XI).r",
+   "polygons": 7752,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Accessory nucleus of oculomotor nerve.l",
+   "polygons": 384,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Accessory nucleus of oculomotor nerve.r",
+   "polygons": 384,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Acromial part of deltoid muscle.l",
+   "polygons": 2964,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Axillary nerve"
+   ]
+  },
+  {
+   "name": "Acromial part of deltoid muscle.r",
+   "polygons": 2964,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Axillary nerve"
+   ]
+  },
+  {
+   "name": "Adductor brevis.l",
+   "polygons": 2132,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of anterior part of lumbar plexus",
+    "Obturator nerve"
+   ]
+  },
+  {
+   "name": "Adductor brevis.r",
+   "polygons": 2132,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of anterior part of lumbar plexus",
+    "Obturator nerve"
+   ]
+  },
+  {
+   "name": "Adductor longus.l",
+   "polygons": 3714,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of anterior part of lumbar plexus",
+    "Obturator nerve"
+   ]
+  },
+  {
+   "name": "Adductor longus.r",
+   "polygons": 3714,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of anterior part of lumbar plexus",
+    "Obturator nerve"
+   ]
+  },
+  {
+   "name": "Adductor magnus.l",
+   "polygons": 8192,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of anterior part of lumbar plexus",
+    "Obturator nerve"
+   ]
+  },
+  {
+   "name": "Adductor magnus.r",
+   "polygons": 8192,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of anterior part of lumbar plexus",
+    "Obturator nerve"
+   ]
+  },
+  {
+   "name": "Ampulla of lacrimal canaliculus.l",
+   "polygons": 244,
+   "path": [
+    "Sense organs"
+   ]
+  },
+  {
+   "name": "Ampulla of lacrimal canaliculus.r",
+   "polygons": 244,
+   "path": [
+    "Sense organs"
+   ]
+  },
+  {
+   "name": "Amygdaloid body.l",
+   "polygons": 384,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Amygdaloid body.r",
+   "polygons": 384,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Anconeus muscle.l",
+   "polygons": 1442,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve"
+   ]
+  },
+  {
+   "name": "Anconeus muscle.r",
+   "polygons": 1442,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve"
+   ]
+  },
+  {
+   "name": "Angular gyrus.l",
+   "polygons": 1441,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Angular gyrus.r",
+   "polygons": 1441,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Anterior belly of digastric muscle.l",
+   "polygons": 392,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
+   ]
+  },
+  {
+   "name": "Anterior belly of digastric muscle.r",
+   "polygons": 392,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
+   ]
+  },
+  {
+   "name": "Anterior branch of medial antebrachial cutaneous nerve.l",
+   "polygons": 720,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Anterior branch of medial antebrachial cutaneous nerve.r",
+   "polygons": 720,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Anterior branch of obturator nerve.l",
+   "polygons": 864,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Anterior branch of obturator nerve.r",
+   "polygons": 864,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Anterior chamber of eyeball.l",
+   "polygons": 4352,
+   "path": []
+  },
+  {
+   "name": "Anterior chamber of eyeball.r",
+   "polygons": 4352,
+   "path": []
+  },
+  {
+   "name": "Anterior cochlear nucleus.l",
+   "polygons": 96,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Anterior cochlear nucleus.r",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "Anterior commissure",
+   "polygons": 800,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Anterior corticospinal tract",
+   "polygons": 3636,
+   "path": []
+  },
+  {
+   "name": "Anterior cutaneous branches of femoral nerve.l",
+   "polygons": 720,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Anterior cutaneous branches of femoral nerve.r",
+   "polygons": 720,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Anterior division of inferior trunk of brachial plexus.l",
+   "polygons": 288,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Anterior division of inferior trunk of brachial plexus.r",
+   "polygons": 288,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Anterior division of mandibular nerve.l",
+   "polygons": 308,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Anterior division of mandibular nerve.r",
+   "polygons": 308,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Anterior division of middle trunk of brachial plexus.l",
+   "polygons": 144,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Anterior division of middle trunk of brachial plexus.r",
+   "polygons": 144,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Anterior division of superior trunk of brachial plexus.l",
+   "polygons": 144,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Anterior division of superior trunk of brachial plexus.r",
+   "polygons": 144,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Anterior fasciculus proprius",
+   "polygons": 4646,
+   "path": []
+  },
+  {
+   "name": "Anterior horn of spinal cord",
+   "polygons": 4444,
+   "path": []
+  },
+  {
+   "name": "Anterior interosseous nerve of forearm.l",
+   "polygons": 720,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Anterior interosseous nerve of forearm.r",
+   "polygons": 720,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Anterior occipital sulcus*.l",
+   "polygons": 322,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Anterior occipital sulcus*.r",
+   "polygons": 322,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Anterior quadrangular lobule.l",
+   "polygons": 6520,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Anterior quadrangular lobule.r",
+   "polygons": 6520,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Anterior root of posterior femoral cutaneous nerve.l",
+   "polygons": 720,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Anterior root of posterior femoral cutaneous nerve.r",
+   "polygons": 720,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Anterior root of spinal nerve.l",
+   "polygons": 3312,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Anterior root of spinal nerve.r",
+   "polygons": 3312,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Anterior segment of eyeball.l",
+   "polygons": 1664,
+   "path": []
+  },
+  {
+   "name": "Anterior segment of eyeball.r",
+   "polygons": 1664,
+   "path": []
+  },
+  {
+   "name": "Anterior spinocerebellar tract",
+   "polygons": 5858,
+   "path": []
+  },
+  {
+   "name": "Anterior spinothalamic tract",
+   "polygons": 4040,
+   "path": []
+  },
+  {
+   "name": "Aqueduct of midbrain",
+   "polygons": 460,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Ascending part of trapezius muscle.l",
+   "polygons": 4596,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Accessory nerve (XI)"
+   ]
+  },
+  {
+   "name": "Ascending part of trapezius muscle.r",
+   "polygons": 4596,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Accessory nerve (XI)"
+   ]
+  },
+  {
+   "name": "Auditory tube.l",
+   "polygons": 920,
+   "path": []
+  },
+  {
+   "name": "Auditory tube.r",
+   "polygons": 920,
+   "path": []
+  },
+  {
+   "name": "Axillary nerve.l",
+   "polygons": 576,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Axillary nerve.r",
+   "polygons": 576,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Base of peduncle.l",
+   "polygons": 5046,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Base of peduncle.r",
+   "polygons": 5046,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Biventral lobule.l",
+   "polygons": 8902,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Biventral lobule.r",
+   "polygons": 8902,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Brachialis muscle.l",
+   "polygons": 3478,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of lateral cord of brachial plexus",
+    "Musculocutaneous nerve"
+   ]
+  },
+  {
+   "name": "Brachialis muscle.r",
+   "polygons": 3478,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of lateral cord of brachial plexus",
+    "Musculocutaneous nerve"
+   ]
+  },
+  {
+   "name": "Brachioradialis muscle.l",
+   "polygons": 7312,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve"
+   ]
+  },
+  {
+   "name": "Brachioradialis muscle.r",
+   "polygons": 7312,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve"
+   ]
+  },
+  {
+   "name": "Buccal nerve.l",
+   "polygons": 1336,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Buccal nerve.r",
+   "polygons": 1336,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Bucinator.l",
+   "polygons": 884,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Bucinator.r",
+   "polygons": 884,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Calcaneal tendon.l",
+   "polygons": 4334,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Calcaneal tendon.r",
+   "polygons": 4334,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Calcarine sulcus.l",
+   "polygons": 779,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Calcarine sulcus.r",
+   "polygons": 779,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Cauda equina",
+   "polygons": 6912,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Caudate nucleus.l",
+   "polygons": 2570,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Caudate nucleus.r",
+   "polygons": 2570,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Central canal",
+   "polygons": 1616,
+   "path": []
+  },
+  {
+   "name": "Central canal'",
+   "polygons": 288,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Central lobule",
+   "polygons": 1006,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Central sulcus.l",
+   "polygons": 1326,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Central sulcus.r",
+   "polygons": 1326,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Chorda tympani.l",
+   "polygons": 884,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Chorda tympani.r",
+   "polygons": 884,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Choroid plexus.l",
+   "polygons": 2647,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Choroid plexus.r",
+   "polygons": 2647,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Cingulate gyrus (Posteroventral part*).l",
+   "polygons": 247,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Cingulate gyrus (Posteroventral part*).r",
+   "polygons": 247,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Cingulate gyrus and sulcus (Middle anterior part).l",
+   "polygons": 687,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Cingulate gyrus and sulcus (Middle anterior part).r",
+   "polygons": 687,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Cingulate gyrus and sulcus (Middle posterior part).l",
+   "polygons": 545,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Cingulate gyrus and sulcus (Middle posterior part).r",
+   "polygons": 545,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Cingulate gyrus and sulcus (Posterior dorsal part).l",
+   "polygons": 401,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Cingulate gyrus and sulcus (Posterior dorsal part).r",
+   "polygons": 401,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Cingulate sulcus (Marginal part*).l",
+   "polygons": 491,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Cingulate sulcus (Marginal part*).r",
+   "polygons": 491,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Circular sulcus of insula.l",
+   "polygons": 720,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Circular sulcus of insula.r",
+   "polygons": 720,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Clavicular head of pectoralis major muscle.l",
+   "polygons": 850,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of lateral cord of brachial plexus",
+    "Lateral pectoral nerve"
+   ]
+  },
+  {
+   "name": "Clavicular head of pectoralis major muscle.r",
+   "polygons": 850,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of lateral cord of brachial plexus",
+    "Lateral pectoral nerve"
+   ]
+  },
+  {
+   "name": "Clavicular part of deltoid muscle.l",
+   "polygons": 2902,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Axillary nerve"
+   ]
+  },
+  {
+   "name": "Clavicular part of deltoid muscle.r",
+   "polygons": 2902,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Axillary nerve"
+   ]
+  },
+  {
+   "name": "Cochlea.l",
+   "polygons": 3084,
+   "path": [
+    "Sense organs"
+   ]
+  },
+  {
+   "name": "Cochlea.r",
+   "polygons": 3084,
+   "path": [
+    "Sense organs"
+   ]
+  },
+  {
+   "name": "Cochlear nerve",
+   "polygons": 879,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Cochlear nerve.l",
+   "polygons": 452,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Collateral sulcus.l",
+   "polygons": 1041,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Collateral sulcus.r",
+   "polygons": 1041,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Common fibular nerve.l",
+   "polygons": 1008,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Common fibular nerve.r",
+   "polygons": 1008,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Common palmar digital branches of median nerve.l",
+   "polygons": 1152,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Common palmar digital branches of median nerve.r",
+   "polygons": 1152,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Common palmar digital branches of ulnar nerve.l",
+   "polygons": 864,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Common palmar digital branches of ulnar nerve.r",
+   "polygons": 864,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Common plantar digital branches of lateral plantar nerve.l",
+   "polygons": 720,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Common plantar digital branches of lateral plantar nerve.r",
+   "polygons": 720,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Common plantar digital branches of medial plantar nerve",
+   "polygons": 864,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Common plantar digital branches of medial plantar nerve.l",
+   "polygons": 864,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Common tendinous ring.l",
+   "polygons": 362,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Oculomotor nerve (III)"
+   ]
+  },
+  {
+   "name": "Common tendinous ring.r",
+   "polygons": 362,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Oculomotor nerve (III)"
+   ]
+  },
+  {
+   "name": "Coracobrachialis muscle.l",
+   "polygons": 1160,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of lateral cord of brachial plexus",
+    "Musculocutaneous nerve"
+   ]
+  },
+  {
+   "name": "Coracobrachialis muscle.r",
+   "polygons": 1160,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of lateral cord of brachial plexus",
+    "Musculocutaneous nerve"
+   ]
+  },
+  {
+   "name": "Cornea.l",
+   "polygons": 1344,
+   "path": []
+  },
+  {
+   "name": "Cornea.r",
+   "polygons": 1344,
+   "path": []
+  },
+  {
+   "name": "Corpus callosum",
+   "polygons": 2020,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Corrugator supercilii.l",
+   "polygons": 278,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Corrugator supercilii.r",
+   "polygons": 278,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Culmen",
+   "polygons": 2378,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Cuneate fasciculus",
+   "polygons": 1512,
+   "path": []
+  },
+  {
+   "name": "Cuneus.l",
+   "polygons": 869,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Cuneus.r",
+   "polygons": 869,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Declive",
+   "polygons": 2125,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Deep branch of radial nerve.l",
+   "polygons": 1008,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Deep branch of radial nerve.r",
+   "polygons": 1008,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Deep branch of ulnar nerve.l",
+   "polygons": 720,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Deep branch of ulnar nerve.r",
+   "polygons": 720,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Deep fibular nerve.l",
+   "polygons": 2160,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Deep fibular nerve.r",
+   "polygons": 2160,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Deep head of flexor pollicis brevis.l",
+   "polygons": 746,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Deep head of flexor pollicis brevis.r",
+   "polygons": 746,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Deep head of pronator teres.l",
+   "polygons": 1114,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Deep head of pronator teres.r",
+   "polygons": 1114,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Deep part of masseter.l",
+   "polygons": 994,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
+   ]
+  },
+  {
+   "name": "Deep part of masseter.r",
+   "polygons": 994,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
+   ]
+  },
+  {
+   "name": "Depressor anguli oris.l",
+   "polygons": 594,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Depressor anguli oris.r",
+   "polygons": 594,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Depressor labii inferioris.l",
+   "polygons": 832,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Depressor labii inferioris.r",
+   "polygons": 832,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Depressor septi nasi.l",
+   "polygons": 276,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Depressor septi nasi.r",
+   "polygons": 276,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Descending part of trapezius muscle.l",
+   "polygons": 6760,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Accessory nerve (XI)"
+   ]
+  },
+  {
+   "name": "Descending part of trapezius muscle.r",
+   "polygons": 6760,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Accessory nerve (XI)"
+   ]
+  },
+  {
+   "name": "Dorsal branch of ulnar nerve.l",
+   "polygons": 720,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Dorsal branch of ulnar nerve.r",
+   "polygons": 720,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Dorsal digital branches of deep fibular nerve.l",
+   "polygons": 1584,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Dorsal digital branches of deep fibular nerve.r",
+   "polygons": 1584,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Dorsal digital branches of radial nerve.l",
+   "polygons": 6768,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Dorsal digital branches of radial nerve.r",
+   "polygons": 6768,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Dorsal digital branches of superficial fibular nerve.l",
+   "polygons": 4176,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Dorsal digital branches of superficial fibular nerve.r",
+   "polygons": 4176,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Dorsal digital branches of ulnar nerve.l",
+   "polygons": 2448,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Dorsal digital branches of ulnar nerve.r",
+   "polygons": 2448,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Dorsal interossei muscles of foot.l",
+   "polygons": 1946,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Dorsal interossei muscles of foot.r",
+   "polygons": 1946,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Dorsal interossei muscles of hand.l",
+   "polygons": 1364,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
+   ]
+  },
+  {
+   "name": "Dorsal interossei muscles of hand.r",
+   "polygons": 1364,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
+   ]
+  },
+  {
+   "name": "Dorsal scapular nerve.l",
+   "polygons": 1296,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Dorsal scapular nerve.r",
+   "polygons": 1296,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Epicranial aponeurosis.l",
+   "polygons": 20118,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Epicranial aponeurosis.r",
+   "polygons": 20118,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Extensor carpi radialis brevis.l",
+   "polygons": 3142,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve"
+   ]
+  },
+  {
+   "name": "Extensor carpi radialis brevis.r",
+   "polygons": 3142,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve"
+   ]
+  },
+  {
+   "name": "Extensor carpi radialis longus.l",
+   "polygons": 3706,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve"
+   ]
+  },
+  {
+   "name": "Extensor carpi radialis longus.r",
+   "polygons": 3706,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve"
+   ]
+  },
+  {
+   "name": "Extensor digitorum brevis.l",
+   "polygons": 3184,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Extensor digitorum brevis.r",
+   "polygons": 3184,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Extensor digitorum longus.l",
+   "polygons": 3176,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Extensor digitorum longus.r",
+   "polygons": 3176,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Extensor hallucis brevis.l",
+   "polygons": 1118,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Extensor hallucis brevis.r",
+   "polygons": 1118,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Extensor hallucis longus.l",
+   "polygons": 2362,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Extensor hallucis longus.r",
+   "polygons": 2362,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Facial nerve (VII).l",
+   "polygons": 13776,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Facial nerve (VII).r",
+   "polygons": 13776,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Falx cerebri",
+   "polygons": 7362,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Femoral branch of genitofemoral nerve.l",
+   "polygons": 1296,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Femoral branch of genitofemoral nerve.r",
+   "polygons": 1296,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Femoral nerve.l",
+   "polygons": 2016,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Femoral nerve.r",
+   "polygons": 2016,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Fibularis brevis muscle.l",
+   "polygons": 3446,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Fibularis brevis muscle.r",
+   "polygons": 3446,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Fibularis longus muscle.l",
+   "polygons": 5522,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Fibularis longus muscle.r",
+   "polygons": 5522,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Fibularis tertius muscle.l",
+   "polygons": 586,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Fibularis tertius muscle.r",
+   "polygons": 586,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Flexor carpi radialis.l",
+   "polygons": 1666,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Flexor carpi radialis.r",
+   "polygons": 1666,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Flexor digiti minimi of foot.l",
+   "polygons": 464,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Flexor digiti minimi of foot.r",
+   "polygons": 464,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Flexor digiti minimi of hand.l",
+   "polygons": 308,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
+   ]
+  },
+  {
+   "name": "Flexor digiti minimi of hand.r",
+   "polygons": 308,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
+   ]
+  },
+  {
+   "name": "Flexor digitorum brevis.l",
+   "polygons": 3224,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Flexor digitorum brevis.r",
+   "polygons": 3224,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Flexor digitorum longus.l",
+   "polygons": 6836,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Flexor digitorum longus.r",
+   "polygons": 6836,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Flexor digitorum profundus.l",
+   "polygons": 7110,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
+   ]
+  },
+  {
+   "name": "Flexor digitorum profundus.r",
+   "polygons": 7110,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
+   ]
+  },
+  {
+   "name": "Flexor hallucis longus.l",
+   "polygons": 5878,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Flexor hallucis longus.r",
+   "polygons": 5878,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Flexor pollicis longus.l",
+   "polygons": 1666,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Flexor pollicis longus.r",
+   "polygons": 1666,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Flocculus.l",
+   "polygons": 3660,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Flocculus.r",
+   "polygons": 3660,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Folium of vermis",
+   "polygons": 812,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Fornix.l",
+   "polygons": 1090,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Fornix.r",
+   "polygons": 1090,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Fourth ventricle",
+   "polygons": 5787,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Frontalis muscle.l",
+   "polygons": 5874,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Frontalis muscle.r",
+   "polygons": 5874,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Ganglia of sympathetic trunk.l",
+   "polygons": 12672,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Ganglia of sympathetic trunk.r",
+   "polygons": 12672,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Genioglossus muscle.l",
+   "polygons": 3746,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Hypoglossal nerve (XII)"
+   ]
+  },
+  {
+   "name": "Genioglossus muscle.r",
+   "polygons": 3746,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Hypoglossal nerve (XII)"
+   ]
+  },
+  {
+   "name": "Genital branch of genitofemoral nerve.l",
+   "polygons": 864,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Genital branch of genitofemoral nerve.r",
+   "polygons": 864,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Genitofemoral nerve.l",
+   "polygons": 432,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Genitofemoral nerve.r",
+   "polygons": 432,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Globus pallidus.l",
+   "polygons": 5276,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Globus pallidus.r",
+   "polygons": 5276,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Glossopharyngeal nerve (IX).l",
+   "polygons": 6764,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Glossopharyngeal nerve (IX).r",
+   "polygons": 6764,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Gracile fasciculus",
+   "polygons": 3838,
+   "path": []
+  },
+  {
+   "name": "Gracile lobule.l",
+   "polygons": 6961,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Gracile lobule.r",
+   "polygons": 6961,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Gracilis muscle.l",
+   "polygons": 4812,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of anterior part of lumbar plexus",
+    "Obturator nerve"
+   ]
+  },
+  {
+   "name": "Gracilis muscle.r",
+   "polygons": 4812,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of anterior part of lumbar plexus",
+    "Obturator nerve"
+   ]
+  },
+  {
+   "name": "Habenula",
+   "polygons": 398,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Hippocampal commissure",
+   "polygons": 9860,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Hippocampus.l",
+   "polygons": 1020,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Hippocampus.r",
+   "polygons": 1020,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Humeral head of flexor carpi ulnaris.l",
+   "polygons": 3912,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
+   ]
+  },
+  {
+   "name": "Humeral head of flexor carpi ulnaris.r",
+   "polygons": 3912,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
+   ]
+  },
+  {
+   "name": "Humero-ulnar head of flexor digitorum superficialis.l",
+   "polygons": 12798,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Humero-ulnar head of flexor digitorum superficialis.r",
+   "polygons": 12798,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Hyoglossus muscle.l",
+   "polygons": 1424,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Hypoglossal nerve (XII)"
+   ]
+  },
+  {
+   "name": "Hyoglossus muscle.r",
+   "polygons": 1424,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Hypoglossal nerve (XII)"
+   ]
+  },
+  {
+   "name": "Hypoglossal nerve (XII).l",
+   "polygons": 8224,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Hypoglossal nerve (XII).r",
+   "polygons": 8224,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Hypothalamus",
+   "polygons": 4258,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Iliacus muscle.l",
+   "polygons": 4354,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve"
+   ]
+  },
+  {
+   "name": "Iliacus muscle.r",
+   "polygons": 4354,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve"
+   ]
+  },
+  {
+   "name": "Ilio-inguinal nerve.l",
+   "polygons": 1872,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Ilio-inguinal nerve.r",
+   "polygons": 1872,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Iliohypogastric nerve.l",
+   "polygons": 864,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Iliohypogastric nerve.r",
+   "polygons": 864,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Inferior alveolar nerve.l",
+   "polygons": 8592,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Inferior alveolar nerve.r",
+   "polygons": 8592,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Inferior colliculus.l",
+   "polygons": 464,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Inferior colliculus.r",
+   "polygons": 464,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Inferior frontal sulcus.l",
+   "polygons": 642,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Inferior frontal sulcus.r",
+   "polygons": 642,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Inferior head of lateral pterygoid muscle.l",
+   "polygons": 326,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
+   ]
+  },
+  {
+   "name": "Inferior head of lateral pterygoid muscle.r",
+   "polygons": 326,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
+   ]
+  },
+  {
+   "name": "Inferior lateral brachial cutaneous nerve.l",
+   "polygons": 288,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Inferior lateral brachial cutaneous nerve.r",
+   "polygons": 288,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Inferior oblique muscle.l",
+   "polygons": 1148,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Oculomotor nerve (III)"
+   ]
+  },
+  {
+   "name": "Inferior oblique muscle.r",
+   "polygons": 1148,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Oculomotor nerve (III)"
+   ]
+  },
+  {
+   "name": "Inferior occipital gyrus and sulcus*.l",
+   "polygons": 813,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Inferior occipital gyrus and sulcus*.r",
+   "polygons": 813,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Inferior rectus muscle.l",
+   "polygons": 1736,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Oculomotor nerve (III)"
+   ]
+  },
+  {
+   "name": "Inferior rectus muscle.r",
+   "polygons": 1736,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Oculomotor nerve (III)"
+   ]
+  },
+  {
+   "name": "Inferior salivatory nucleus.l",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Inferior salivatory nucleus.r",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Inferior semilunar lobule.l",
+   "polygons": 7787,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Inferior semilunar lobule.r",
+   "polygons": 7787,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Inferior subscapular nerve.l",
+   "polygons": 1008,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Inferior subscapular nerve.r",
+   "polygons": 1008,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Inferior tarsus.l",
+   "polygons": 106,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Oculomotor nerve (III)"
+   ]
+  },
+  {
+   "name": "Inferior tarsus.r",
+   "polygons": 106,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Oculomotor nerve (III)"
+   ]
+  },
+  {
+   "name": "Inferior temporal gyrus.l",
+   "polygons": 1392,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Inferior temporal gyrus.r",
+   "polygons": 1392,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Inferior temporal sulcus.l",
+   "polygons": 227,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Inferior temporal sulcus.r",
+   "polygons": 227,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Inferior trunk of brachial plexus.l",
+   "polygons": 288,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Inferior trunk of brachial plexus.r",
+   "polygons": 288,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Infrapatellar branch of saphenous nerve.l",
+   "polygons": 288,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Infrapatellar branch of saphenous nerve.r",
+   "polygons": 288,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Infraspinatus muscle.l",
+   "polygons": 3166,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular branches of brachial plexus",
+    "Suprascapular nerve"
+   ]
+  },
+  {
+   "name": "Infraspinatus muscle.r",
+   "polygons": 3166,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular branches of brachial plexus",
+    "Suprascapular nerve"
+   ]
+  },
+  {
+   "name": "Insula (Subcentral gyrus and ant. and post. sulci*).l",
+   "polygons": 680,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Insula (Subcentral gyrus and ant. and post. sulci*).r",
+   "polygons": 680,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Intercostal nerves.l",
+   "polygons": 25776,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Intercostal nerves.r",
+   "polygons": 25776,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Intermediate dorsal cutaneous nerve of foot.l",
+   "polygons": 1296,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Intermediate dorsal cutaneous nerve of foot.r",
+   "polygons": 1296,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Intermediolateral nucleus",
+   "polygons": 2828,
+   "path": []
+  },
+  {
+   "name": "Intermediomedial nucleus",
+   "polygons": 3232,
+   "path": []
+  },
+  {
+   "name": "Interpeduncular fossa.l",
+   "polygons": 58,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Interpeduncular fossa.r",
+   "polygons": 58,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Intraparietal sulcus.l",
+   "polygons": 781,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Intraparietal sulcus.r",
+   "polygons": 781,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Iris.l",
+   "polygons": 3248,
+   "path": []
+  },
+  {
+   "name": "Iris.r",
+   "polygons": 3248,
+   "path": []
+  },
+  {
+   "name": "Lacrimal canaliculus.l",
+   "polygons": 411,
+   "path": [
+    "Sense organs"
+   ]
+  },
+  {
+   "name": "Lacrimal canaliculus.r",
+   "polygons": 411,
+   "path": [
+    "Sense organs"
+   ]
+  },
+  {
+   "name": "Lacrimal gland.l",
+   "polygons": 1810,
+   "path": [
+    "Sense organs"
+   ]
+  },
+  {
+   "name": "Lacrimal gland.r",
+   "polygons": 1810,
+   "path": [
+    "Sense organs"
+   ]
+  },
+  {
+   "name": "Lacrimal sac.l",
+   "polygons": 384,
+   "path": [
+    "Sense organs"
+   ]
+  },
+  {
+   "name": "Lacrimal sac.r",
+   "polygons": 384,
+   "path": [
+    "Sense organs"
+   ]
+  },
+  {
+   "name": "Lat_Fis-ant-Horizont.l",
+   "polygons": 153,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Lat_Fis-ant-Horizont.r",
+   "polygons": 153,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Lat_Fis-ant-Vertical.l",
+   "polygons": 168,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Lat_Fis-ant-Vertical.r",
+   "polygons": 168,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Lat_Fis-post.l",
+   "polygons": 435,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Lat_Fis-post.r",
+   "polygons": 435,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Lateral antebrachial cutaneous nerve.l",
+   "polygons": 864,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Lateral antebrachial cutaneous nerve.r",
+   "polygons": 864,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Lateral corticospinal tract",
+   "polygons": 3838,
+   "path": []
+  },
+  {
+   "name": "Lateral fasciculus proprius",
+   "polygons": 10100,
+   "path": []
+  },
+  {
+   "name": "Lateral femoral cutaneous nerve.l",
+   "polygons": 2304,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Lateral femoral cutaneous nerve.r",
+   "polygons": 2304,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Lateral geniculate body.l",
+   "polygons": 604,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Lateral geniculate body.r",
+   "polygons": 604,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Lateral head of flexor hallucis brevis.l",
+   "polygons": 966,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Lateral head of flexor hallucis brevis.r",
+   "polygons": 966,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Lateral head of gastrocnemius.l",
+   "polygons": 4908,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Lateral head of gastrocnemius.r",
+   "polygons": 4908,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Lateral head of triceps brachii.l",
+   "polygons": 3628,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve"
+   ]
+  },
+  {
+   "name": "Lateral head of triceps brachii.r",
+   "polygons": 3628,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve"
+   ]
+  },
+  {
+   "name": "Lateral intermediate substance",
+   "polygons": 6666,
+   "path": []
+  },
+  {
+   "name": "Lateral occipital gyrus (Middle occipital gyrus*).l",
+   "polygons": 756,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Lateral occipital gyrus (Middle occipital gyrus*).r",
+   "polygons": 756,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Lateral occipitotemporal gyrus.l",
+   "polygons": 805,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Lateral occipitotemporal gyrus.r",
+   "polygons": 805,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Lateral pectoral nerve.l",
+   "polygons": 3600,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Lateral pectoral nerve.r",
+   "polygons": 3600,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Lateral plantar nerve.l",
+   "polygons": 576,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Lateral plantar nerve.r",
+   "polygons": 576,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Lateral reticulospinal tract",
+   "polygons": 1616,
+   "path": []
+  },
+  {
+   "name": "Lateral spinothalamic tract",
+   "polygons": 4444,
+   "path": []
+  },
+  {
+   "name": "Lateral ventricle.l",
+   "polygons": 1456,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Lateral ventricle.r",
+   "polygons": 1456,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Lateral vestibulospinal tract",
+   "polygons": 4848,
+   "path": []
+  },
+  {
+   "name": "Lens.l",
+   "polygons": 1598,
+   "path": []
+  },
+  {
+   "name": "Lens.r",
+   "polygons": 1598,
+   "path": []
+  },
+  {
+   "name": "Lentiform nucleus.l",
+   "polygons": 1087,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Lentiform nucleus.r",
+   "polygons": 1087,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Levator anguli oris.l",
+   "polygons": 330,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Levator anguli oris.r",
+   "polygons": 330,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Levator labii superioris.l",
+   "polygons": 540,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Levator labii superioris.r",
+   "polygons": 540,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Levator nasolabialis.l",
+   "polygons": 172,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Levator nasolabialis.r",
+   "polygons": 172,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Levator palpebrae superioris.l",
+   "polygons": 2152,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Oculomotor nerve (III)"
+   ]
+  },
+  {
+   "name": "Levator palpebrae superioris.r",
+   "polygons": 2152,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Oculomotor nerve (III)"
+   ]
+  },
+  {
+   "name": "Levator scapulae.l",
+   "polygons": 3082,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular branches of brachial plexus",
+    "Dorsal scapular nerve"
+   ]
+  },
+  {
+   "name": "Levator scapulae.r",
+   "polygons": 3082,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular branches of brachial plexus",
+    "Dorsal scapular nerve"
+   ]
+  },
+  {
+   "name": "Lingual gyrus.l",
+   "polygons": 1525,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Lingual gyrus.r",
+   "polygons": 1525,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Lingual nerve.l",
+   "polygons": 1316,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Lingual nerve.r",
+   "polygons": 1316,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Lingula of cerebellum",
+   "polygons": 1028,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Long head of biceps brachii.l",
+   "polygons": 3218,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of lateral cord of brachial plexus",
+    "Musculocutaneous nerve"
+   ]
+  },
+  {
+   "name": "Long head of biceps brachii.r",
+   "polygons": 3218,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of lateral cord of brachial plexus",
+    "Musculocutaneous nerve"
+   ]
+  },
+  {
+   "name": "Long head of biceps femoris.l",
+   "polygons": 7258,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Long head of biceps femoris.r",
+   "polygons": 7258,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Long head of triceps brachii.l",
+   "polygons": 3950,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve"
+   ]
+  },
+  {
+   "name": "Long head of triceps brachii.r",
+   "polygons": 3950,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve"
+   ]
+  },
+  {
+   "name": "Long thoracic nerve.l",
+   "polygons": 2016,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Long thoracic nerve.r",
+   "polygons": 2016,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Lumbrical muscles of foot.l",
+   "polygons": 418,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Lumbrical muscles of foot.r",
+   "polygons": 418,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Lumbrical muscles of hand.l",
+   "polygons": 1368,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
+   ]
+  },
+  {
+   "name": "Lumbrical muscles of hand.r",
+   "polygons": 1368,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
+   ]
+  },
+  {
+   "name": "Lunate sulcus.l",
+   "polygons": 338,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Lunate sulcus.r",
+   "polygons": 338,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Mamillary body.l",
+   "polygons": 220,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Mamillary body.r",
+   "polygons": 220,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Maxillary nerve.l",
+   "polygons": 3988,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Maxillary nerve.r",
+   "polygons": 3988,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Medial antebrachial cutaneous nerve.l",
+   "polygons": 864,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Medial antebrachial cutaneous nerve.r",
+   "polygons": 864,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Medial brachial cutaneous nerve.l",
+   "polygons": 864,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Medial brachial cutaneous nerve.r",
+   "polygons": 864,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Medial crural cutaneous branches of saphenous nerve.l",
+   "polygons": 288,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Medial crural cutaneous branches of saphenous nerve.r",
+   "polygons": 288,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Medial dorsal cutaneous nerve of foot.l",
+   "polygons": 2016,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Medial dorsal cutaneous nerve of foot.r",
+   "polygons": 2016,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Medial geniculate body.l",
+   "polygons": 198,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Medial geniculate body.r",
+   "polygons": 198,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Medial head of flexor hallucis brevis.l",
+   "polygons": 514,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Medial head of flexor hallucis brevis.r",
+   "polygons": 514,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Medial head of gastrocnemius.l",
+   "polygons": 6462,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Medial head of gastrocnemius.r",
+   "polygons": 6462,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Medial head of triceps brachii.l",
+   "polygons": 2686,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve"
+   ]
+  },
+  {
+   "name": "Medial head of triceps brachii.r",
+   "polygons": 2686,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve"
+   ]
+  },
+  {
+   "name": "Medial occipitotemporal gyrus (Parahippocampal*).l",
+   "polygons": 774,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Medial occipitotemporal gyrus (Parahippocampal*).r",
+   "polygons": 774,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Medial pectoral nerve.l",
+   "polygons": 1008,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Medial pectoral nerve.r",
+   "polygons": 1008,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Medial plantar nerve.l",
+   "polygons": 576,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Medial plantar nerve.r",
+   "polygons": 576,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Medial pterygoid muscle.l",
+   "polygons": 496,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
+   ]
+  },
+  {
+   "name": "Medial pterygoid muscle.r",
+   "polygons": 496,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
+   ]
+  },
+  {
+   "name": "Medial rectus muscle.l",
+   "polygons": 1252,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Oculomotor nerve (III)"
+   ]
+  },
+  {
+   "name": "Medial rectus muscle.r",
+   "polygons": 1252,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Oculomotor nerve (III)"
+   ]
+  },
+  {
+   "name": "Medial reticulospinal tract",
+   "polygons": 4040,
+   "path": []
+  },
+  {
+   "name": "Medial sural cutaneous nerve.l",
+   "polygons": 144,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Medial sural cutaneous nerve.r",
+   "polygons": 144,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Medial vestibulospinal tract",
+   "polygons": 1616,
+   "path": []
+  },
+  {
+   "name": "Median nerve.l",
+   "polygons": 2592,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Median nerve.r",
+   "polygons": 2592,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Medulla oblongata.l",
+   "polygons": 6078,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Medulla oblongata.r",
+   "polygons": 6078,
+   "path": []
+  },
+  {
+   "name": "Meningeal branch of maxillary nerve.l",
+   "polygons": 3084,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Meningeal branch of maxillary nerve.r",
+   "polygons": 3084,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Mental nerve.l",
+   "polygons": 1356,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Mental nerve.r",
+   "polygons": 1356,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Mentalis muscle.l",
+   "polygons": 166,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Mentalis muscle.r",
+   "polygons": 166,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Midbrain.l",
+   "polygons": 6092,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Midbrain.r",
+   "polygons": 6092,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Middle frontal gyrus.l",
+   "polygons": 2232,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Middle frontal gyrus.r",
+   "polygons": 2232,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Middle temporal gyrus.l",
+   "polygons": 1184,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Middle temporal gyrus.r",
+   "polygons": 1184,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Middle trunk of brachial plexus.l",
+   "polygons": 144,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Middle trunk of brachial plexus.r",
+   "polygons": 144,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Motor nucleus of facial nerve.l",
+   "polygons": 384,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Motor nucleus of facial nerve.r",
+   "polygons": 384,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Motor root of trigeminal nerve.l",
+   "polygons": 480,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Motor root of trigeminal nerve.r",
+   "polygons": 480,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Muscular branches of axillary nerve.l",
+   "polygons": 576,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Muscular branches of axillary nerve.r",
+   "polygons": 576,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Muscular branches of deep fibular nerve.l",
+   "polygons": 432,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Muscular branches of deep fibular nerve.r",
+   "polygons": 432,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Muscular branches of median nerve.l",
+   "polygons": 576,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Muscular branches of median nerve.r",
+   "polygons": 576,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Muscular branches of radial nerve.l",
+   "polygons": 1296,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Muscular branches of radial nerve.r",
+   "polygons": 1296,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Muscular branches of ulnar nerve.l",
+   "polygons": 288,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Muscular branches of ulnar nerve.r",
+   "polygons": 288,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Musculocutaneous nerve.l",
+   "polygons": 720,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Musculocutaneous nerve.r",
+   "polygons": 720,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Mylohyoid muscle.l",
+   "polygons": 1122,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
+   ]
+  },
+  {
+   "name": "Mylohyoid muscle.r",
+   "polygons": 1122,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
+   ]
+  },
+  {
+   "name": "Nasalis muscle.l",
+   "polygons": 704,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Nasalis muscle.r",
+   "polygons": 704,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Nasolacrimal duct.l",
+   "polygons": 444,
+   "path": [
+    "Sense organs"
+   ]
+  },
+  {
+   "name": "Nasolacrimal duct.r",
+   "polygons": 444,
+   "path": [
+    "Sense organs"
+   ]
+  },
+  {
+   "name": "Nerve to mylohyoid muscle.l",
+   "polygons": 1768,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Nerve to mylohyoid muscle.r",
+   "polygons": 1768,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Nerve to piriformis muscle.l",
+   "polygons": 720,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Nerve to piriformis muscle.r",
+   "polygons": 720,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Nerve to quadratus femoris muscle.l",
+   "polygons": 2160,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Nerve to quadratus femoris muscle.r",
+   "polygons": 2160,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Nodule of vermis",
+   "polygons": 1012,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Nucleus ambiguus.l",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Nucleus ambiguus.r",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Nucleus of abducens nerve.l",
+   "polygons": 384,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Nucleus of abducens nerve.r",
+   "polygons": 384,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Nucleus of accessory nerve.l",
+   "polygons": 896,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Nucleus of accessory nerve.r",
+   "polygons": 896,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Nucleus of hypoglossal nerve.l",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Nucleus of hypoglossal nerve.r",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Nucleus of oculomotor nerve.l",
+   "polygons": 384,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Nucleus of oculomotor nerve.r",
+   "polygons": 384,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Nucleus of solitary tract.l",
+   "polygons": 672,
+   "path": []
+  },
+  {
+   "name": "Nucleus of solitary tract.r",
+   "polygons": 672,
+   "path": []
+  },
+  {
+   "name": "Nucleus of trochlear nerve.l",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Nucleus of trochlear nerve.r",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Nucleus proprius",
+   "polygons": 1616,
+   "path": []
+  },
+  {
+   "name": "Oblique head of adductor hallucis.l",
+   "polygons": 904,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
+   ]
+  },
+  {
+   "name": "Oblique head of adductor hallucis.r",
+   "polygons": 904,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
+   ]
+  },
+  {
+   "name": "Oblique head of adductor pollicis.l",
+   "polygons": 450,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Oblique head of adductor pollicis.r",
+   "polygons": 450,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Obturator internus.l",
+   "polygons": 3760,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of anterior part of lumbar plexus",
+    "Obturator nerve"
+   ]
+  },
+  {
+   "name": "Obturator internus.r",
+   "polygons": 3760,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of anterior part of lumbar plexus",
+    "Obturator nerve"
+   ]
+  },
+  {
+   "name": "Obturator nerve.l",
+   "polygons": 1728,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Obturator nerve.r",
+   "polygons": 1728,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Occipital pole.l",
+   "polygons": 887,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Occipital pole.r",
+   "polygons": 887,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Occipitalis muscle.l",
+   "polygons": 2602,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Occipitalis muscle.r",
+   "polygons": 2602,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Occipitotemporal sulcus (Lateral part*).l",
+   "polygons": 439,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Occipitotemporal sulcus (Lateral part*).r",
+   "polygons": 439,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Oculomotor nerve (III).l",
+   "polygons": 4460,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Oculomotor nerve (III).r",
+   "polygons": 4460,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Olfactory nerve (I).l",
+   "polygons": 13708,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Olfactory nerve (I).r",
+   "polygons": 13708,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Olfactory sulcus.l",
+   "polygons": 487,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Olfactory sulcus.r",
+   "polygons": 487,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Olive.l",
+   "polygons": 512,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Olive.r",
+   "polygons": 512,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Opercular part of inferior frontal gyrus.l",
+   "polygons": 659,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Opercular part of inferior frontal gyrus.r",
+   "polygons": 659,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Ophthalmic nerve.l",
+   "polygons": 3412,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Ophthalmic nerve.r",
+   "polygons": 3412,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Opponens digiti minimi muscle of hand.l",
+   "polygons": 420,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
+   ]
+  },
+  {
+   "name": "Opponens digiti minimi muscle of hand.r",
+   "polygons": 420,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
+   ]
+  },
+  {
+   "name": "Opponens pollicis muscle.l",
+   "polygons": 384,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Opponens pollicis muscle.r",
+   "polygons": 384,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Optic chiasm.l",
+   "polygons": 890,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Optic chiasm.r",
+   "polygons": 890,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Optic nerve (II).l",
+   "polygons": 884,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Optic nerve (II).r",
+   "polygons": 884,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Optic tract.l",
+   "polygons": 2332,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Optic tract.r",
+   "polygons": 2332,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Orbicularis oris muscle.l",
+   "polygons": 1880,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Orbicularis oris muscle.r",
+   "polygons": 1880,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Orbital gyri (Frontomarginal gyrus and sulcus*).l",
+   "polygons": 593,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Orbital gyri (Frontomarginal gyrus and sulcus*).r",
+   "polygons": 593,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Orbital gyri.l",
+   "polygons": 1363,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Orbital gyri.r",
+   "polygons": 1363,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Orbital part of  inferior frontal gyrus.l",
+   "polygons": 156,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Orbital part of  inferior frontal gyrus.r",
+   "polygons": 156,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Orbital part of orbicularis oculi.l",
+   "polygons": 2390,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Orbital part of orbicularis oculi.r",
+   "polygons": 2390,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Orbital sulci (H-shaped orbital sulci*).l",
+   "polygons": 707,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Orbital sulci (H-shaped orbital sulci*).r",
+   "polygons": 707,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Orbital sulci (Lateral Orbital sulcus*).l",
+   "polygons": 173,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Orbital sulci (Lateral Orbital sulcus*).r",
+   "polygons": 173,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Palmar branch of median nerve.l",
+   "polygons": 576,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Palmar branch of median nerve.r",
+   "polygons": 576,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Palmar branch of ulnar nerve.l",
+   "polygons": 576,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Palmar branch of ulnar nerve.r",
+   "polygons": 576,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Palmar interossei muscles.l",
+   "polygons": 172,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
+   ]
+  },
+  {
+   "name": "Palmar interossei muscles.r",
+   "polygons": 172,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
+   ]
+  },
+  {
+   "name": "Palmaris longus muscle.l",
+   "polygons": 4374,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Palmaris longus muscle.r",
+   "polygons": 4374,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Palpebral part of orbicularis oculi.l",
+   "polygons": 830,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Palpebral part of orbicularis oculi.r",
+   "polygons": 830,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Paracentral gyrus and sulcus*.l",
+   "polygons": 715,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Paracentral gyrus and sulcus*.r",
+   "polygons": 715,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Paracentral sulcus.l",
+   "polygons": 587,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Paracentral sulcus.r",
+   "polygons": 587,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Parieto-occipital sulcus.l",
+   "polygons": 1514,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Parieto-occipital sulcus.r",
+   "polygons": 1514,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Pectineus muscle.l",
+   "polygons": 1952,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve"
+   ]
+  },
+  {
+   "name": "Pectineus muscle.r",
+   "polygons": 1952,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve"
+   ]
+  },
+  {
+   "name": "Peduncle of flocculus.l",
+   "polygons": 2368,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Peduncle of flocculus.r",
+   "polygons": 2368,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Plantar interossei muscles.l",
+   "polygons": 1242,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Plantar interossei muscles.r",
+   "polygons": 1242,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Plantaris muscle.l",
+   "polygons": 4698,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Plantaris muscle.r",
+   "polygons": 4698,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Pons.l",
+   "polygons": 10171,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Pons.r",
+   "polygons": 10171,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Popliteus muscle.l",
+   "polygons": 1132,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Popliteus muscle.r",
+   "polygons": 1132,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Postcentral gyrus.l",
+   "polygons": 1114,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Postcentral gyrus.r",
+   "polygons": 1114,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Postcentral sulcus.l",
+   "polygons": 1104,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Postcentral sulcus.r",
+   "polygons": 1104,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Posterior antebrachial cutaneous nerve.l",
+   "polygons": 1296,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Posterior antebrachial cutaneous nerve.r",
+   "polygons": 1296,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Posterior belly of digastric muscle.l",
+   "polygons": 1276,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Posterior belly of digastric muscle.r",
+   "polygons": 1276,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Posterior branch of medial antebrachial cutaneous nerve.l",
+   "polygons": 1152,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Posterior branch of medial antebrachial cutaneous nerve.r",
+   "polygons": 1152,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Posterior branch of obturator nerve.l",
+   "polygons": 576,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Posterior branch of obturator nerve.r",
+   "polygons": 576,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Posterior cochlear nucleus.l",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Posterior cochlear nucleus.r",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Posterior commissure",
+   "polygons": 864,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Posterior cord of brachial plexus.l",
+   "polygons": 288,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Posterior cord of brachial plexus.r",
+   "polygons": 288,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Posterior division of inferior trunk of brachial plexus.l",
+   "polygons": 144,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Posterior division of inferior trunk of brachial plexus.r",
+   "polygons": 144,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Posterior division of mandibular nerve.l",
+   "polygons": 452,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Posterior division of mandibular nerve.r",
+   "polygons": 452,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Posterior division of middle trunk of brachial plexus.l",
+   "polygons": 144,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Posterior division of middle trunk of brachial plexus.r",
+   "polygons": 144,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Posterior division of superior trunk of brachial plexus.l",
+   "polygons": 144,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Posterior division of superior trunk of brachial plexus.r",
+   "polygons": 144,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Posterior fasciculus proprius",
+   "polygons": 6464,
+   "path": []
+  },
+  {
+   "name": "Posterior femoral cutaneous nerve.l",
+   "polygons": 1296,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Posterior femoral cutaneous nerve.r",
+   "polygons": 1296,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Posterior horn of spinal cord",
+   "polygons": 6464,
+   "path": []
+  },
+  {
+   "name": "Posterior interosseous nerve of forearm.l",
+   "polygons": 864,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Posterior interosseous nerve of forearm.r",
+   "polygons": 864,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Posterior nucleus of vagus nerve.l",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Posterior nucleus of vagus nerve.r",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Posterior quadrangular lobule.l",
+   "polygons": 3618,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Posterior quadrangular lobule.r",
+   "polygons": 3618,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Posterior root of posterior femoral cutaneous nerve.l",
+   "polygons": 2016,
+   "path": [
+    "Peripheral nervous system",
+    "Nerves"
+   ]
+  },
+  {
+   "name": "Posterior root of posterior femoral cutaneous nerve.r",
+   "polygons": 2016,
+   "path": [
+    "Peripheral nervous system",
+    "Nerves"
+   ]
+  },
+  {
+   "name": "Posterior root of spinal nerve.l",
+   "polygons": 3024,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Posterior root of spinal nerve.r",
+   "polygons": 3024,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Posterior segment of eyeball.l",
+   "polygons": 3264,
+   "path": []
+  },
+  {
+   "name": "Posterior segment of eyeball.r",
+   "polygons": 3264,
+   "path": []
+  },
+  {
+   "name": "Posterior spinocerebellar tract",
+   "polygons": 5858,
+   "path": []
+  },
+  {
+   "name": "Posterolateral tract",
+   "polygons": 4444,
+   "path": []
+  },
+  {
+   "name": "Precentral gyrus.l",
+   "polygons": 1481,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Precentral gyrus.r",
+   "polygons": 1481,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Precentral sulcus (Superior part)*.l",
+   "polygons": 506,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Precentral sulcus (Superior part)*.r",
+   "polygons": 506,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Precentral sulcus (inferior part)*.l",
+   "polygons": 700,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Precentral sulcus (inferior part)*.r",
+   "polygons": 700,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Precuneus.l",
+   "polygons": 1194,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Precuneus.r",
+   "polygons": 1194,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Procerus muscle.l",
+   "polygons": 546,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Procerus muscle.r",
+   "polygons": 546,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Pronator quadratus.l",
+   "polygons": 1020,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Pronator quadratus.r",
+   "polygons": 1020,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Proper palmar digital branches of median nerve.l",
+   "polygons": 5472,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Proper palmar digital branches of median nerve.r",
+   "polygons": 5472,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Proper palmar digital branches of ulnar nerve.l",
+   "polygons": 2880,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Proper palmar digital branches of ulnar nerve.r",
+   "polygons": 2880,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Proper plantar digital branches of lateral plantar nerve.l",
+   "polygons": 3744,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Proper plantar digital branches of lateral plantar nerve.r",
+   "polygons": 3744,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Proper plantar digital branches of medial plantar nerve.l",
+   "polygons": 3168,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Proper plantar digital branches of medial plantar nerve.r",
+   "polygons": 3168,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Pudendal nerve.l",
+   "polygons": 1872,
+   "path": [
+    "Peripheral nervous system",
+    "Nerves"
+   ]
+  },
+  {
+   "name": "Pudendal nerve.r",
+   "polygons": 1872,
+   "path": [
+    "Peripheral nervous system",
+    "Nerves"
+   ]
+  },
+  {
+   "name": "Putamen.l",
+   "polygons": 586,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Putamen.r",
+   "polygons": 586,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Pyramid of medulla oblongata.l",
+   "polygons": 512,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Pyramid of medulla oblongata.r",
+   "polygons": 512,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Pyramis of vermis",
+   "polygons": 1182,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Quadratus plantae muscle.l",
+   "polygons": 1176,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Quadratus plantae muscle.r",
+   "polygons": 1176,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Radial nerve.l",
+   "polygons": 1152,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Radial nerve.r",
+   "polygons": 1152,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Rectus femoris muscle.l",
+   "polygons": 8276,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve"
+   ]
+  },
+  {
+   "name": "Rectus femoris muscle.r",
+   "polygons": 8276,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve"
+   ]
+  },
+  {
+   "name": "Red nucleus.l",
+   "polygons": 352,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Red nucleus.r",
+   "polygons": 352,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Retina.l",
+   "polygons": 3152,
+   "path": []
+  },
+  {
+   "name": "Retina.r",
+   "polygons": 3152,
+   "path": []
+  },
+  {
+   "name": "Rhomboid major muscle.l",
+   "polygons": 4800,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular branches of brachial plexus",
+    "Dorsal scapular nerve"
+   ]
+  },
+  {
+   "name": "Rhomboid major muscle.r",
+   "polygons": 4800,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular branches of brachial plexus",
+    "Dorsal scapular nerve"
+   ]
+  },
+  {
+   "name": "Rhomboid minor muscle.l",
+   "polygons": 1494,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular branches of brachial plexus",
+    "Dorsal scapular nerve"
+   ]
+  },
+  {
+   "name": "Rhomboid minor muscle.r",
+   "polygons": 1494,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular branches of brachial plexus",
+    "Dorsal scapular nerve"
+   ]
+  },
+  {
+   "name": "Risorius muscle.l",
+   "polygons": 592,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Risorius muscle.r",
+   "polygons": 592,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Roots of brachial plexus.l",
+   "polygons": 2304,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Roots of brachial plexus.r",
+   "polygons": 2304,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Rubrospinal tract",
+   "polygons": 3232,
+   "path": []
+  },
+  {
+   "name": "Saphenous nerve.l",
+   "polygons": 3312,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Saphenous nerve.r",
+   "polygons": 3312,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Sartorius muscle.l",
+   "polygons": 4966,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve"
+   ]
+  },
+  {
+   "name": "Sartorius muscle.r",
+   "polygons": 4966,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve"
+   ]
+  },
+  {
+   "name": "Scapular spinal part of deltoid muscle.l",
+   "polygons": 4378,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Axillary nerve"
+   ]
+  },
+  {
+   "name": "Scapular spinal part of deltoid muscle.r",
+   "polygons": 4378,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Axillary nerve"
+   ]
+  },
+  {
+   "name": "Sciatic nerve.l",
+   "polygons": 2448,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Sciatic nerve.r",
+   "polygons": 2448,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Sclera.l",
+   "polygons": 2272,
+   "path": []
+  },
+  {
+   "name": "Sclera.r",
+   "polygons": 2272,
+   "path": []
+  },
+  {
+   "name": "Semimembranosus muscle.l",
+   "polygons": 7442,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Semimembranosus muscle.r",
+   "polygons": 7442,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Semitendinosus muscle.l",
+   "polygons": 4316,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Semitendinosus muscle.r",
+   "polygons": 4316,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Sensory root of trigeminal nerve.l",
+   "polygons": 1376,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Sensory root of trigeminal nerve.r",
+   "polygons": 1376,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Septal nuclei",
+   "polygons": 548,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Septum pellucidum",
+   "polygons": 2322,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Serratus anterior muscle.l",
+   "polygons": 25240,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular branches of brachial plexus",
+    "Long thoracic nerve"
+   ]
+  },
+  {
+   "name": "Serratus anterior muscle.r",
+   "polygons": 25240,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular branches of brachial plexus",
+    "Long thoracic nerve"
+   ]
+  },
+  {
+   "name": "Short head of biceps brachii.l",
+   "polygons": 2696,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of lateral cord of brachial plexus",
+    "Musculocutaneous nerve"
+   ]
+  },
+  {
+   "name": "Short head of biceps brachii.r",
+   "polygons": 2696,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of lateral cord of brachial plexus",
+    "Musculocutaneous nerve"
+   ]
+  },
+  {
+   "name": "Short head of biceps femoris.l",
+   "polygons": 2476,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Short head of biceps femoris.r",
+   "polygons": 2476,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Soleus muscle.l",
+   "polygons": 6774,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Soleus muscle.r",
+   "polygons": 6774,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Spinal dura",
+   "polygons": 17501,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Spinal ganglion.l",
+   "polygons": 1680,
+   "path": []
+  },
+  {
+   "name": "Spinal ganglion.r",
+   "polygons": 1680,
+   "path": []
+  },
+  {
+   "name": "Spinal reticular process",
+   "polygons": 3434,
+   "path": []
+  },
+  {
+   "name": "Spinotectal tract",
+   "polygons": 1616,
+   "path": []
+  },
+  {
+   "name": "Sternocleidomastoid muscle.l",
+   "polygons": 4952,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Accessory nerve (XI)"
+   ]
+  },
+  {
+   "name": "Sternocleidomastoid muscle.r",
+   "polygons": 4952,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Accessory nerve (XI)"
+   ]
+  },
+  {
+   "name": "Sternocostal head of pectoralis major muscle.l",
+   "polygons": 3217,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of lateral cord of brachial plexus",
+    "Lateral pectoral nerve"
+   ]
+  },
+  {
+   "name": "Sternocostal head of pectoralis major muscle.r",
+   "polygons": 3217,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of lateral cord of brachial plexus",
+    "Lateral pectoral nerve"
+   ]
+  },
+  {
+   "name": "Straight gyrus (Gyrus rectus).l",
+   "polygons": 457,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Straight gyrus (Gyrus rectus).r",
+   "polygons": 457,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Stria medullaris thalami.l",
+   "polygons": 842,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Stria medullaris thalami.r",
+   "polygons": 842,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Stria terminalis.l",
+   "polygons": 746,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Stria terminalis.r",
+   "polygons": 746,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Stylohyoid muscle.l",
+   "polygons": 694,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Stylohyoid muscle.r",
+   "polygons": 694,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Subclavian nerve.l",
+   "polygons": 432,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Subclavian nerve.r",
+   "polygons": 432,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Subclavius muscle.l",
+   "polygons": 794,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular branches of brachial plexus",
+    "Subclavian nerve"
+   ]
+  },
+  {
+   "name": "Subclavius muscle.r",
+   "polygons": 794,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular branches of brachial plexus",
+    "Subclavian nerve"
+   ]
+  },
+  {
+   "name": "Subparietal sulcus.l",
+   "polygons": 509,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Subparietal sulcus.r",
+   "polygons": 509,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Sulcus interm_prim-Jensen.l",
+   "polygons": 319,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Sulcus interm_prim-Jensen.r",
+   "polygons": 319,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Superficial branch of radial nerve.l",
+   "polygons": 2160,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Superficial branch of radial nerve.r",
+   "polygons": 2160,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Superficial branch of ulnar nerve.l",
+   "polygons": 432,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Superficial branch of ulnar nerve.r",
+   "polygons": 432,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Superficial fibular nerve.l",
+   "polygons": 1584,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Superficial fibular nerve.r",
+   "polygons": 1584,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Superficial head of flexor pollicis brevis.l",
+   "polygons": 276,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Superficial head of flexor pollicis brevis.r",
+   "polygons": 276,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Superficial head of pronator teres.l",
+   "polygons": 2546,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Superficial head of pronator teres.r",
+   "polygons": 2546,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Superficial part of masseter.l",
+   "polygons": 1402,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
+   ]
+  },
+  {
+   "name": "Superficial part of masseter.r",
+   "polygons": 1402,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
+   ]
+  },
+  {
+   "name": "Superior cerebellar peduncle.l",
+   "polygons": 8474,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Superior cerebellar peduncle.r",
+   "polygons": 8474,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Superior colliculus.l",
+   "polygons": 458,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Superior colliculus.r",
+   "polygons": 458,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Superior frontal gyrus.l",
+   "polygons": 3684,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Superior frontal gyrus.r",
+   "polygons": 3684,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Superior frontal sulcus.l",
+   "polygons": 1189,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Superior frontal sulcus.r",
+   "polygons": 1189,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Superior gluteal nerve.l",
+   "polygons": 1728,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Superior gluteal nerve.r",
+   "polygons": 1728,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Superior head of lateral pterygoid muscle.l",
+   "polygons": 226,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
+   ]
+  },
+  {
+   "name": "Superior head of lateral pterygoid muscle.r",
+   "polygons": 226,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
+   ]
+  },
+  {
+   "name": "Superior lateral brachial cutaneous nerve.l",
+   "polygons": 1008,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Superior lateral brachial cutaneous nerve.r",
+   "polygons": 1008,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Superior occipital gyri.l",
+   "polygons": 610,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Superior occipital gyri.r",
+   "polygons": 610,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Superior parietal lobule.l",
+   "polygons": 1159,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Superior parietal lobule.r",
+   "polygons": 1159,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Superior rectus muscle.l",
+   "polygons": 1284,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Oculomotor nerve (III)"
+   ]
+  },
+  {
+   "name": "Superior rectus muscle.r",
+   "polygons": 1284,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Oculomotor nerve (III)"
+   ]
+  },
+  {
+   "name": "Superior salivatory nucleus.l",
+   "polygons": 384,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Superior salivatory nucleus.r",
+   "polygons": 384,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Superior semilunar lobule.l",
+   "polygons": 8688,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Superior semilunar lobule.r",
+   "polygons": 8688,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Superior subscapular nerve.l",
+   "polygons": 576,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Superior subscapular nerve.r",
+   "polygons": 576,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Superior tarsus.l",
+   "polygons": 178,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Oculomotor nerve (III)"
+   ]
+  },
+  {
+   "name": "Superior tarsus.r",
+   "polygons": 178,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Oculomotor nerve (III)"
+   ]
+  },
+  {
+   "name": "Superior temporal gyrus (Lateral part).l",
+   "polygons": 978,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Superior temporal gyrus (Lateral part).r",
+   "polygons": 978,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Superior temporal sulcus.l",
+   "polygons": 2216,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Superior temporal sulcus.r",
+   "polygons": 2216,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Superior trunk of brachial plexus.l",
+   "polygons": 144,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Superior trunk of brachial plexus.r",
+   "polygons": 144,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Supramarginal gyrus.l",
+   "polygons": 1389,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Supramarginal gyrus.r",
+   "polygons": 1389,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Suprascapular nerve.l",
+   "polygons": 2448,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Suprascapular nerve.r",
+   "polygons": 2448,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Supraspinatus muscle.l",
+   "polygons": 1430,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular branches of brachial plexus",
+    "Suprascapular nerve"
+   ]
+  },
+  {
+   "name": "Supraspinatus muscle.r",
+   "polygons": 1430,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular branches of brachial plexus",
+    "Suprascapular nerve"
+   ]
+  },
+  {
+   "name": "Sural communicating branch of common fibular nerve.l",
+   "polygons": 576,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Sural communicating branch of common fibular nerve.r",
+   "polygons": 576,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Sural nerve.l",
+   "polygons": 2016,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Sural nerve.r",
+   "polygons": 2016,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Suspensory ligament of eyeball.l",
+   "polygons": 5502,
+   "path": [
+    "Sense organs"
+   ]
+  },
+  {
+   "name": "Suspensory ligament of eyeball.r",
+   "polygons": 5502,
+   "path": [
+    "Sense organs"
+   ]
+  },
+  {
+   "name": "Sympathetic nerves.l",
+   "polygons": 12240,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Sympathetic nerves.r",
+   "polygons": 12240,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Sympathetic trunk.l",
+   "polygons": 12672,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Sympathetic trunk.r",
+   "polygons": 12672,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Tectospinal tract",
+   "polygons": 1616,
+   "path": []
+  },
+  {
+   "name": "Temporal plane.l",
+   "polygons": 498,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Temporal plane.r",
+   "polygons": 498,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Temporal pole.l",
+   "polygons": 488,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Temporal pole.r",
+   "polygons": 488,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Temporalis muscle.l",
+   "polygons": 10260,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
+   ]
+  },
+  {
+   "name": "Temporalis muscle.r",
+   "polygons": 10260,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
+   ]
+  },
+  {
+   "name": "Temporoparietalis muscle.l",
+   "polygons": 11972,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Temporoparietalis muscle.r",
+   "polygons": 11972,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Tendon of extensor digitorum longus.l",
+   "polygons": 5184,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Tendon of extensor digitorum longus.r",
+   "polygons": 5184,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Tentorium cerebelli.l",
+   "polygons": 2282,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Tentorium cerebelli.r",
+   "polygons": 2282,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Teres minor muscle.l",
+   "polygons": 1522,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Axillary nerve"
+   ]
+  },
+  {
+   "name": "Teres minor muscle.r",
+   "polygons": 1522,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Axillary nerve"
+   ]
+  },
+  {
+   "name": "Thalamus.l",
+   "polygons": 758,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Thalamus.r",
+   "polygons": 758,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Third ventricle",
+   "polygons": 4119,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Thoracodorsal nerve.l",
+   "polygons": 2304,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Thoracodorsal nerve.r",
+   "polygons": 2304,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Tibial nerve.l",
+   "polygons": 1296,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Tibial nerve.r",
+   "polygons": 1296,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Tibialis anterior muscle.l",
+   "polygons": 3526,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Tibialis anterior muscle.r",
+   "polygons": 3526,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Tibialis posterior muscle.l",
+   "polygons": 5526,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Tibialis posterior muscle.r",
+   "polygons": 5526,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
+   ]
+  },
+  {
+   "name": "Tonsil of cerebellum.l",
+   "polygons": 3638,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Tonsil of cerebellum.r",
+   "polygons": 3638,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Transverse frontopolar gyrus and sulcus*.l",
+   "polygons": 213,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Transverse frontopolar gyrus and sulcus*.r",
+   "polygons": 213,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Transverse head of adductor hallucis.l",
+   "polygons": 366,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
+   ]
+  },
+  {
+   "name": "Transverse head of adductor hallucis.r",
+   "polygons": 366,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
+   ]
+  },
+  {
+   "name": "Transverse head of adductor pollicis.l",
+   "polygons": 1014,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Transverse head of adductor pollicis.r",
+   "polygons": 1014,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
+   ]
+  },
+  {
+   "name": "Transverse occipital sulcus.l",
+   "polygons": 618,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Transverse occipital sulcus.r",
+   "polygons": 618,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Transverse part of trapezius muscle.l",
+   "polygons": 2992,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Accessory nerve (XI)"
+   ]
+  },
+  {
+   "name": "Transverse part of trapezius muscle.r",
+   "polygons": 2992,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Accessory nerve (XI)"
+   ]
+  },
+  {
+   "name": "Transverse temporal gyri.l",
+   "polygons": 203,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Transverse temporal gyri.r",
+   "polygons": 203,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Triangular part of inferior frontal gyrus.l",
+   "polygons": 450,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Triangular part of inferior frontal gyrus.r",
+   "polygons": 450,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Trigeminal nerve (V).l",
+   "polygons": 1192,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Trigeminal nerve (V).r",
+   "polygons": 1192,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Trochlear nerve (IV).l",
+   "polygons": 1892,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Trochlear nerve (IV).r",
+   "polygons": 1892,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Tuber of vermis",
+   "polygons": 1178,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Tympanic membrane.l",
+   "polygons": 786,
+   "path": [
+    "Sense organs"
+   ]
+  },
+  {
+   "name": "Tympanic membrane.r",
+   "polygons": 786,
+   "path": [
+    "Sense organs"
+   ]
+  },
+  {
+   "name": "Ulnar head of flexor carpi ulnaris.l",
+   "polygons": 1466,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
+   ]
+  },
+  {
+   "name": "Ulnar head of flexor carpi ulnaris.r",
+   "polygons": 1466,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
+   ]
+  },
+  {
+   "name": "Ulnar nerve.l",
+   "polygons": 1584,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Ulnar nerve.r",
+   "polygons": 1584,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Uvula of vermis",
+   "polygons": 2176,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Vagus nerve (X).l",
+   "polygons": 7340,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Vagus nerve (X).r",
+   "polygons": 23172,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Vastus intermedius muscle.l",
+   "polygons": 6164,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve"
+   ]
+  },
+  {
+   "name": "Vastus intermedius muscle.r",
+   "polygons": 6164,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve"
+   ]
+  },
+  {
+   "name": "Vastus lateralis muscle.l",
+   "polygons": 9356,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve"
+   ]
+  },
+  {
+   "name": "Vastus lateralis muscle.r",
+   "polygons": 9356,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve"
+   ]
+  },
+  {
+   "name": "Vastus medialis muscle.l",
+   "polygons": 6460,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve"
+   ]
+  },
+  {
+   "name": "Vastus medialis muscle.r",
+   "polygons": 6460,
+   "path": [
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve"
+   ]
+  },
+  {
+   "name": "Vestibular nerve.l",
+   "polygons": 2384,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Vestibular nerve.r",
+   "polygons": 2384,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Vestibular nuclei.l",
+   "polygons": 784,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Vestibular nuclei.r",
+   "polygons": 784,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "Vestibule.l",
+   "polygons": 4290,
+   "path": [
+    "Sense organs"
+   ]
+  },
+  {
+   "name": "Vestibule.r",
+   "polygons": 4290,
+   "path": [
+    "Sense organs"
+   ]
+  },
+  {
+   "name": "Vestibulocochlear nerve (VIII).l",
+   "polygons": 904,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Vestibulocochlear nerve (VIII).r",
+   "polygons": 904,
+   "path": [
+    "Peripheral nervous system"
+   ]
+  },
+  {
+   "name": "Vitreous body.l",
+   "polygons": 5436,
+   "path": []
+  },
+  {
+   "name": "Vitreous body.r",
+   "polygons": 5436,
+   "path": []
+  },
+  {
+   "name": "White matter of spinal cord",
+   "polygons": 7777,
+   "path": []
+  },
+  {
+   "name": "White matter of telencephalon.l",
+   "polygons": 67644,
+   "path": [
+    "Central nervous system"
+   ]
+  },
+  {
+   "name": "White matter of telencephalon.r",
+   "polygons": 67644,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
+   ]
+  },
+  {
+   "name": "Wing of central lobule.l",
+   "polygons": 3144,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Wing of central lobule.r",
+   "polygons": 3144,
+   "path": [
+    "Central nervous system",
+    "Brain",
+    "Cerebellum"
+   ]
+  },
+  {
+   "name": "Zonular fibres.l",
+   "polygons": 352,
+   "path": []
+  },
+  {
+   "name": "Zonular fibres.r",
+   "polygons": 34144,
+   "path": []
+  },
+  {
+   "name": "Zygomaticus major muscle.l",
+   "polygons": 798,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Zygomaticus major muscle.r",
+   "polygons": 798,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Zygomaticus minor muscle.l",
+   "polygons": 432,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  },
+  {
+   "name": "Zygomaticus minor muscle.r",
+   "polygons": 432,
+   "path": [
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
+   ]
+  }
+ ]
+}

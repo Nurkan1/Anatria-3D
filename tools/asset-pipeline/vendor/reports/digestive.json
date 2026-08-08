@@ -1,0 +1,402 @@
+{
+ "system": "digestive",
+ "collections": [
+  "Bonus collection/Visceral systems/Digestive system"
+ ],
+ "output": "C:\\Users\\TrendingPC\\Documents\\Anatria3D\\public\\anatomy\\digestive_male.glb",
+ "draco": true,
+ "object_count": 75,
+ "skipped_count": 13,
+ "skipped": [
+  "Colon.j",
+  "Digestive canal.j",
+  "Digestive system.j",
+  "Extrahepatic bile ducts.j",
+  "Fauces.j",
+  "Large intestine.j",
+  "Major salivary glands.j",
+  "Mouth.j",
+  "Oesophagus-profile",
+  "Palate.j",
+  "Salivary glands.j",
+  "Small intestine.j",
+  "Taeniae coli.j"
+ ],
+ "objects": [
+  {
+   "name": "(Accessory parotid gland).l",
+   "polygons": 106,
+   "path": []
+  },
+  {
+   "name": "(Accessory parotid gland).r",
+   "polygons": 106,
+   "path": []
+  },
+  {
+   "name": "Accessory pancreatic duct",
+   "polygons": 5688,
+   "path": []
+  },
+  {
+   "name": "Anterior lateral segment of liver (VI)",
+   "polygons": 1676,
+   "path": []
+  },
+  {
+   "name": "Anterior medial segment of liver (V)",
+   "polygons": 1769,
+   "path": []
+  },
+  {
+   "name": "Ascending colon",
+   "polygons": 8756,
+   "path": []
+  },
+  {
+   "name": "Bile duct",
+   "polygons": 1008,
+   "path": []
+  },
+  {
+   "name": "Descending colon",
+   "polygons": 12372,
+   "path": []
+  },
+  {
+   "name": "Duodenum",
+   "polygons": 1737,
+   "path": []
+  },
+  {
+   "name": "Epiglottis",
+   "polygons": 3326,
+   "path": []
+  },
+  {
+   "name": "External anal sphincter.l",
+   "polygons": 202,
+   "path": []
+  },
+  {
+   "name": "External anal sphincter.r",
+   "polygons": 202,
+   "path": []
+  },
+  {
+   "name": "Free taenia",
+   "polygons": 3356,
+   "path": []
+  },
+  {
+   "name": "Gallbladder",
+   "polygons": 368,
+   "path": []
+  },
+  {
+   "name": "Gingiva",
+   "polygons": 12298,
+   "path": []
+  },
+  {
+   "name": "Jejunum",
+   "polygons": 13824,
+   "path": []
+  },
+  {
+   "name": "Left anterior lateral segment of liver (III)",
+   "polygons": 1722,
+   "path": []
+  },
+  {
+   "name": "Left medial segment of liver (IV)",
+   "polygons": 2386,
+   "path": []
+  },
+  {
+   "name": "Left posterior lateral segment of liver (II)",
+   "polygons": 1658,
+   "path": []
+  },
+  {
+   "name": "Liver",
+   "polygons": 6135,
+   "path": []
+  },
+  {
+   "name": "Lower canine.l",
+   "polygons": 1276,
+   "path": []
+  },
+  {
+   "name": "Lower canine.r",
+   "polygons": 1276,
+   "path": []
+  },
+  {
+   "name": "Lower first molar tooth.l",
+   "polygons": 4475,
+   "path": []
+  },
+  {
+   "name": "Lower first molar tooth.r",
+   "polygons": 4475,
+   "path": []
+  },
+  {
+   "name": "Lower first premolar.l",
+   "polygons": 1207,
+   "path": []
+  },
+  {
+   "name": "Lower first premolar.r",
+   "polygons": 1207,
+   "path": []
+  },
+  {
+   "name": "Lower lateral incisor.l",
+   "polygons": 1033,
+   "path": []
+  },
+  {
+   "name": "Lower lateral incisor.r",
+   "polygons": 1033,
+   "path": []
+  },
+  {
+   "name": "Lower medial incisor.l",
+   "polygons": 984,
+   "path": []
+  },
+  {
+   "name": "Lower medial incisor.r",
+   "polygons": 984,
+   "path": []
+  },
+  {
+   "name": "Lower second molar tooth.l",
+   "polygons": 1655,
+   "path": []
+  },
+  {
+   "name": "Lower second molar tooth.r",
+   "polygons": 1655,
+   "path": []
+  },
+  {
+   "name": "Lower second premolar.l",
+   "polygons": 1180,
+   "path": []
+  },
+  {
+   "name": "Lower second premolar.r",
+   "polygons": 1180,
+   "path": []
+  },
+  {
+   "name": "Mesocolic taenia",
+   "polygons": 3396,
+   "path": []
+  },
+  {
+   "name": "Mucosa of stomach",
+   "polygons": 4874,
+   "path": []
+  },
+  {
+   "name": "Oesophagus",
+   "polygons": 8160,
+   "path": []
+  },
+  {
+   "name": "Omental taenia",
+   "polygons": 3116,
+   "path": []
+  },
+  {
+   "name": "Pancreas",
+   "polygons": 5056,
+   "path": []
+  },
+  {
+   "name": "Pancreatic duct",
+   "polygons": 27912,
+   "path": []
+  },
+  {
+   "name": "Parotid duct.l",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Parotid duct.r",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Parotid gland.l",
+   "polygons": 852,
+   "path": []
+  },
+  {
+   "name": "Parotid gland.r",
+   "polygons": 852,
+   "path": []
+  },
+  {
+   "name": "Pharynx.j",
+   "polygons": 1,
+   "path": []
+  },
+  {
+   "name": "Posterior lateral segment of liver (VII)",
+   "polygons": 1194,
+   "path": []
+  },
+  {
+   "name": "Posterior medial segment of liver (VIII)",
+   "polygons": 1780,
+   "path": []
+  },
+  {
+   "name": "Posterior segment of liver (I)",
+   "polygons": 1304,
+   "path": []
+  },
+  {
+   "name": "Sigmoid colon",
+   "polygons": 3377,
+   "path": []
+  },
+  {
+   "name": "Stomach",
+   "polygons": 4734,
+   "path": []
+  },
+  {
+   "name": "Sublingual gland.l",
+   "polygons": 324,
+   "path": []
+  },
+  {
+   "name": "Sublingual gland.r",
+   "polygons": 324,
+   "path": []
+  },
+  {
+   "name": "Submandibular duct.l",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Submandibular duct.r",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Submandibular gland.l",
+   "polygons": 392,
+   "path": []
+  },
+  {
+   "name": "Submandibular gland.r",
+   "polygons": 392,
+   "path": []
+  },
+  {
+   "name": "Thyroid cartilage",
+   "polygons": 4482,
+   "path": []
+  },
+  {
+   "name": "Tongue",
+   "polygons": 602,
+   "path": []
+  },
+  {
+   "name": "Transverse colon",
+   "polygons": 8308,
+   "path": []
+  },
+  {
+   "name": "Upper canine.l",
+   "polygons": 1434,
+   "path": []
+  },
+  {
+   "name": "Upper canine.r",
+   "polygons": 1434,
+   "path": []
+  },
+  {
+   "name": "Upper first molar tooth.l",
+   "polygons": 2168,
+   "path": []
+  },
+  {
+   "name": "Upper first molar tooth.r",
+   "polygons": 2168,
+   "path": []
+  },
+  {
+   "name": "Upper first premolar.l",
+   "polygons": 1651,
+   "path": []
+  },
+  {
+   "name": "Upper first premolar.r",
+   "polygons": 1651,
+   "path": []
+  },
+  {
+   "name": "Upper lateral incisor.l",
+   "polygons": 1412,
+   "path": []
+  },
+  {
+   "name": "Upper lateral incisor.r",
+   "polygons": 1412,
+   "path": []
+  },
+  {
+   "name": "Upper medial incisor.l",
+   "polygons": 1368,
+   "path": []
+  },
+  {
+   "name": "Upper medial incisor.r",
+   "polygons": 1368,
+   "path": []
+  },
+  {
+   "name": "Upper second molar tooth.l",
+   "polygons": 1843,
+   "path": []
+  },
+  {
+   "name": "Upper second molar tooth.r",
+   "polygons": 1843,
+   "path": []
+  },
+  {
+   "name": "Upper second premolar.l",
+   "polygons": 1511,
+   "path": []
+  },
+  {
+   "name": "Upper second premolar.r",
+   "polygons": 1511,
+   "path": []
+  },
+  {
+   "name": "Uvula of palate",
+   "polygons": 1502,
+   "path": []
+  },
+  {
+   "name": "Vermiform appendix",
+   "polygons": 442,
+   "path": []
+  }
+ ]
+}

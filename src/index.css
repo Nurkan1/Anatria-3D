@@ -1,0 +1,175 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-navy: #0f1b2d;
+  --color-brand-cyan: #00a8e8;
+  --color-brand-slate: #1e293b;
+}
+
+:root {
+  color-scheme: light dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+  overflow: hidden;
+}
+
+/*
+ * The opening screen's cardiac trace: a bright segment sweeping a dim line, the
+ * way a monitor draws it.
+ *
+ * `stroke-dasharray` makes a short visible run followed by a gap longer than
+ * the whole path, so exactly one segment is ever lit; animating the offset
+ * walks it along. The path length is measured in the SVG's own units, and 620
+ * comfortably exceeds it — an overshoot only lengthens the pause between
+ * sweeps, where an undershoot would show two segments at once.
+ */
+@keyframes ecg-sweep {
+  from {
+    stroke-dashoffset: 620;
+  }
+  to {
+    stroke-dashoffset: -60;
+  }
+}
+
+.animate-ecg {
+  stroke-dasharray: 46 620;
+  animation: ecg-sweep 2.2s linear infinite;
+}
+
+/*
+ * Someone who has asked their system for less motion has asked for it here
+ * too. The trace stays — it is the artwork — it simply stops moving.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .animate-ecg {
+    animation: none;
+    stroke-dasharray: none;
+  }
+}
+
+/*
+ * Printing the study journal.
+ *
+ * The app never leaves the screen, so printing means swapping the whole
+ * document for the sheet: `#root` goes away and the portal that `PrintSheet`
+ * renders into `<body>` becomes the page. That is why the sheet is a portal and
+ * not a child of the app — a preview inside `#root` would be hidden along with
+ * everything else here.
+ */
+@media print {
+  /* The shell's `overflow: hidden` would clip the page to one screenful. */
+  html,
+  body {
+    height: auto;
+    overflow: visible;
+    background: #fff;
+  }
+
+  #root {
+    display: none !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  [data-print-root] {
+    position: static;
+    inset: auto;
+    overflow: visible;
+    padding: 0;
+    background: none;
+    backdrop-filter: none;
+  }
+
+  .print-sheet {
+    max-width: none;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    color: #000;
+  }
+
+  @page {
+    margin: 16mm 14mm;
+  }
+
+  /*
+   * The compliance notice repeats on every page as a table footer group.
+   *
+   * It was `position: fixed` first. That did repeat it — but a fixed element is
+   * out of the flow and reserves no height, so the last lines of each page ran
+   * underneath it, and its own left edge was clipped by the containing block
+   * the print layout gave it. A table footer group is the one mechanism that
+   * repeats *and* keeps the space, because the notice is still ordinary flowed
+   * content; it is simply flowed once per page.
+   */
+  .print-layout {
+    display: table;
+    width: 100%;
+  }
+
+  .print-layout > tbody {
+    display: table-row-group;
+  }
+
+  .print-layout > tfoot {
+    display: table-footer-group;
+  }
+
+  .print-layout tr {
+    display: table-row;
+  }
+
+  .print-layout td {
+    display: table-cell;
+  }
+
+  .print-footer {
+    margin: 0;
+    padding-top: 3mm;
+    border-top: 0.4pt solid #999;
+  }
+
+  /* A note or a table split across a page boundary is unreadable; a long
+     answer split across one is normal, so those are left alone. */
+  .print-block {
+    break-inside: avoid;
+  }
+
+  /* A heading stranded at the foot of a page belongs to nothing. */
+  .print-keep-with-next {
+    break-after: avoid;
+  }
+}
+
+/*
+ * The print sheet's table exists only so the compliance notice can be a
+ * repeating page footer. On screen it must not behave like a table — a single
+ * cell holding a whole document would shrink-to-fit and ignore the sheet's
+ * width — so every part of it is collapsed back to plain blocks.
+ */
+@media screen {
+  .print-layout,
+  .print-layout > tbody,
+  .print-layout > tfoot,
+  .print-layout tr,
+  .print-layout td {
+    display: block;
+    width: auto;
+  }
+}

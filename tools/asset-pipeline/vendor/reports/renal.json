@@ -1,0 +1,55 @@
+{
+ "system": "renal",
+ "collections": [
+  "Bonus collection/Visceral systems/Urinary system"
+ ],
+ "output": "C:\\Users\\TrendingPC\\Documents\\Anatria3D\\public\\anatomy\\renal_male.glb",
+ "draco": true,
+ "object_count": 8,
+ "skipped_count": 1,
+ "skipped": [
+  "Urinary system.j"
+ ],
+ "objects": [
+  {
+   "name": "Kidney.l",
+   "polygons": 2982,
+   "path": []
+  },
+  {
+   "name": "Kidney.r",
+   "polygons": 2319,
+   "path": []
+  },
+  {
+   "name": "Renal pelvis.l",
+   "polygons": 1450,
+   "path": []
+  },
+  {
+   "name": "Renal pelvis.r",
+   "polygons": 1262,
+   "path": []
+  },
+  {
+   "name": "Ureter.l",
+   "polygons": 1440,
+   "path": []
+  },
+  {
+   "name": "Ureter.r",
+   "polygons": 1584,
+   "path": []
+  },
+  {
+   "name": "Urethra",
+   "polygons": 1440,
+   "path": []
+  },
+  {
+   "name": "Urinary bladder",
+   "polygons": 1518,
+   "path": []
+  }
+ ]
+}

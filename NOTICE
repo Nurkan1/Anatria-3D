@@ -1,0 +1,26 @@
+Anatria3D
+Copyright 2026 PYSBG
+
+This product includes software developed by PYSBG, licensed under the Apache
+License, Version 2.0. See the LICENSE file alongside this one.
+
+--------------------------------------------------------------------------
+
+This product also includes anatomical 3D meshes and nomenclature that are NOT
+covered by the Apache License. They are adaptations of open anatomical datasets
+and remain under Creative Commons Attribution-ShareAlike 4.0 International:
+
+  BodyParts3D — The Database Center for Life Science (DBCLS), Japan
+                CC BY-SA 2.1 Japan
+  Z-Anatomy   — the libre 3D atlas of anatomy, derived from BodyParts3D
+                CC BY-SA 4.0 — https://www.z-anatomy.com/
+
+Anatria3D's adaptations of those meshes are themselves CC BY-SA 4.0.
+Redistributing them requires preserving this attribution and keeping them under
+that licence. The full attribution ships with the data, in `anatomy/NOTICE` and
+`anatomy/LICENSE`, and is summarised for readers in THIRD-PARTY-NOTICES.txt.
+
+--------------------------------------------------------------------------
+
+Anatria3D is educational software. It is not a medical device, and it is not
+for the diagnosis or treatment of any person.

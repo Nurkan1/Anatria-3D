@@ -1,0 +1,8423 @@
+{
+ "system": "muscular",
+ "collections": [
+  "Bonus collection/Muscular system",
+  "4: Muscular system",
+  "2: Muscular insertions"
+ ],
+ "output": "C:\\Users\\TrendingPC\\Documents\\Anatria3D\\public\\anatomy\\muscular_male.glb",
+ "draco": true,
+ "object_count": 1388,
+ "skipped_count": 105,
+ "skipped": [
+  "Abdominal part of muscular system.j",
+  "Adductor hallucis.j",
+  "Anterior compartment of arm.j",
+  "Anterior compartment of forearm.j",
+  "Anterior compartment of leg.j",
+  "Anterior compartment of thigh.j",
+  "Anterior tarsal tendon sheaths.j",
+  "Biceps brachii muscle.j",
+  "Bursae of head.j",
+  "Bursae of lower limb.j",
+  "Bursae of upper limb.j",
+  "Carpal tendon sheaths.j",
+  "Cervical bursae.j",
+  "Cervical fasciae.j",
+  "Cervical part of muscular system.j",
+  "Cranial part of muscular system.j",
+  "Deep gluteal muscles.j",
+  "Deep part of anterior compartment of forearm.j",
+  "Deep part of posterior compartment of forearm.j",
+  "Deep part of posterior compartment of leg.j",
+  "Deltoid muscle.j",
+  "Digastric muscle.j",
+  "Dorsal carpal tendon sheaths.j",
+  "Dorsal part of muscular system.j",
+  "Endo-abdominal fascia.j",
+  "Epaxial muscles.j",
+  "Epicranius muscle.j",
+  "Erector spinae.j",
+  "Extra-ocular muscles.j",
+  "Extrinsic auricular muscles.j",
+  "Facial muscles.j",
+  "Fasciae of abdomen.j",
+  "Fasciae of head.j",
+  "Fasciae of lower limb.j",
+  "Fasciae of thorax.j",
+  "Fasciae of upper limb.j",
+  "Fasciae.j",
+  "Fibular tarsal tendon sheaths.j",
+  "Flexor hallucis brevis.j",
+  "Hypaxial muscles of back.j",
+  "Iliocostalis muscles.j",
+  "Iliopsoas muscle.j",
+  "Infrahyoid muscles.j",
+  "Interspinales muscles.j",
+  "Intertransversarii muscles.j",
+  "Intrinsic auricular muscles.j",
+  "Laryngeal muscles.j",
+  "Lateral compartment of leg.j",
+  "Levator ani.j",
+  "Levatores costarum.j",
+  "Longissimus muscles.j",
+  "Masticatory muscles.j",
+  "Medial compartment of thigh.j",
+  "Multifidus muscles.j",
+  "Muscles of abdomen.j",
+  "Muscles of auditory ossicles.j",
+  "Muscles of foot.j",
+  "Muscles of hand.j",
+  "Muscles of head.j",
+  "Muscles of lower limb.j",
+  "Muscles of neck.j",
+  "Muscles of pelvis.j",
+  "Muscles of soft palate.j",
+  "Muscles of thorax.j",
+  "Muscles of tongue.j",
+  "Muscles of upper limb.j",
+  "Muscles.j",
+  "Muscular system of lower limb.j",
+  "Muscular system of upper limb.j",
+  "Palmar carpal tendon sheaths.j",
+  "Pectoralis major muscle.j",
+  "Pelvic diaphragm.j",
+  "Pelvic part of muscular system.j",
+  "Perineal muscles.j",
+  "Pharyngeal muscles.j",
+  "Posterior compartment of arm.j",
+  "Posterior compartment of forearm.j",
+  "Posterior compartment of leg.j",
+  "Posterior compartment of thigh.j",
+  "Rotator cuff muscles.j",
+  "Rotatores.j",
+  "Scapulohumeral mucles.j",
+  "Semispinalis muscles.j",
+  "Spinalis muscles.j",
+  "Spinotransversales muscles.j",
+  "Splenius muscles.j",
+  "Suboccipital muscles.j",
+  "Superficial gluteal muscles.j",
+  "Superficial muscles of head.j",
+  "Superficial part of anterior compartment of forearm.j",
+  "Superficial part of posterior compartment of forearm.j",
+  "Superficial part of posterior compartment of leg.j",
+  "Suprahyoid muscles.j",
+  "Synovial bursae.j",
+  "Tendon sheaths of digits of hand.j",
+  "Tendon sheaths of lower limb.j",
+  "Tendon sheaths of toes.j",
+  "Tendon sheaths of upper limb.j",
+  "Tendon sheaths.j",
+  "Thoracic part of muscular system.j",
+  "Thoracolumbar fascia.j",
+  "Tibial tarsal tendon sheaths.j",
+  "Transversospinal muscles.j",
+  "Trapezius muscle.j",
+  "Triceps brachii muscle.j"
+ ],
+ "objects": [
+  {
+   "name": "(Abdominal part of pectoralis major muscle).l",
+   "polygons": 1508,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "(Abdominal part of pectoralis major muscle).ol",
+   "polygons": 662,
+   "path": []
+  },
+  {
+   "name": "(Abdominal part of pectoralis major muscle).or",
+   "polygons": 662,
+   "path": []
+  },
+  {
+   "name": "(Abdominal part of pectoralis major muscle).r",
+   "polygons": 1508,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "(Adductor minimus).l",
+   "polygons": 948,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "(Adductor minimus).r",
+   "polygons": 948,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "(Iliopectineal bursa).l",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "(Iliopectineal bursa).r",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "(Opponens digiti minimi muscle of foot).l",
+   "polygons": 236,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "(Opponens digiti minimi muscle of foot).ol",
+   "polygons": 284,
+   "path": []
+  },
+  {
+   "name": "(Opponens digiti minimi muscle of foot).or",
+   "polygons": 284,
+   "path": []
+  },
+  {
+   "name": "(Opponens digiti minimi muscle of foot).r",
+   "polygons": 236,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Abductor digiti minimi of foot.el",
+   "polygons": 344,
+   "path": []
+  },
+  {
+   "name": "Abductor digiti minimi of foot.er",
+   "polygons": 344,
+   "path": []
+  },
+  {
+   "name": "Abductor digiti minimi of foot.l",
+   "polygons": 1280,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Abductor digiti minimi of foot.r",
+   "polygons": 1280,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Abductor digiti minimi of hand.el",
+   "polygons": 588,
+   "path": []
+  },
+  {
+   "name": "Abductor digiti minimi of hand.er",
+   "polygons": 588,
+   "path": []
+  },
+  {
+   "name": "Abductor digiti minimi of hand.l",
+   "polygons": 672,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Abductor digiti minimi of hand.ol",
+   "polygons": 392,
+   "path": []
+  },
+  {
+   "name": "Abductor digiti minimi of hand.or",
+   "polygons": 392,
+   "path": []
+  },
+  {
+   "name": "Abductor digiti minimi of hand.r",
+   "polygons": 672,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Abductor hallucis.el",
+   "polygons": 126,
+   "path": []
+  },
+  {
+   "name": "Abductor hallucis.er",
+   "polygons": 126,
+   "path": []
+  },
+  {
+   "name": "Abductor hallucis.l",
+   "polygons": 1688,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Abductor hallucis.ol",
+   "polygons": 312,
+   "path": []
+  },
+  {
+   "name": "Abductor hallucis.or",
+   "polygons": 312,
+   "path": []
+  },
+  {
+   "name": "Abductor hallucis.r",
+   "polygons": 1688,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Abductor pollicis brevis.l",
+   "polygons": 624,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Abductor pollicis brevis.r",
+   "polygons": 624,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Abductor pollicis longus.el",
+   "polygons": 140,
+   "path": []
+  },
+  {
+   "name": "Abductor pollicis longus.er",
+   "polygons": 140,
+   "path": []
+  },
+  {
+   "name": "Abductor pollicis longus.l",
+   "polygons": 2462,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Abductor pollicis longus.ol",
+   "polygons": 804,
+   "path": []
+  },
+  {
+   "name": "Abductor pollicis longus.or",
+   "polygons": 804,
+   "path": []
+  },
+  {
+   "name": "Abductor pollicis longus.r",
+   "polygons": 2462,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Acromial part of deltoid muscle.l",
+   "polygons": 2964,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Acromial part of deltoid muscle.ol",
+   "polygons": 3452,
+   "path": []
+  },
+  {
+   "name": "Acromial part of deltoid muscle.or",
+   "polygons": 3452,
+   "path": []
+  },
+  {
+   "name": "Acromial part of deltoid muscle.r",
+   "polygons": 2964,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Adductor brevis.l",
+   "polygons": 2132,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Adductor brevis.r",
+   "polygons": 2132,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Adductor longus.el",
+   "polygons": 290,
+   "path": []
+  },
+  {
+   "name": "Adductor longus.er",
+   "polygons": 290,
+   "path": []
+  },
+  {
+   "name": "Adductor longus.l",
+   "polygons": 3714,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Adductor longus.ol",
+   "polygons": 158,
+   "path": []
+  },
+  {
+   "name": "Adductor longus.or",
+   "polygons": 158,
+   "path": []
+  },
+  {
+   "name": "Adductor longus.r",
+   "polygons": 3714,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Adductor magnus.el",
+   "polygons": 1038,
+   "path": []
+  },
+  {
+   "name": "Adductor magnus.er",
+   "polygons": 1038,
+   "path": []
+  },
+  {
+   "name": "Adductor magnus.l",
+   "polygons": 8192,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Adductor magnus.ol",
+   "polygons": 436,
+   "path": []
+  },
+  {
+   "name": "Adductor magnus.or",
+   "polygons": 436,
+   "path": []
+  },
+  {
+   "name": "Adductor magnus.r",
+   "polygons": 8192,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Adductor pollicis.e1l",
+   "polygons": 148,
+   "path": []
+  },
+  {
+   "name": "Adductor pollicis.e1r",
+   "polygons": 148,
+   "path": []
+  },
+  {
+   "name": "Adductor pollicis.el",
+   "polygons": 268,
+   "path": []
+  },
+  {
+   "name": "Adductor pollicis.er",
+   "polygons": 268,
+   "path": []
+  },
+  {
+   "name": "Anconeus muscle.el",
+   "polygons": 216,
+   "path": []
+  },
+  {
+   "name": "Anconeus muscle.er",
+   "polygons": 216,
+   "path": []
+  },
+  {
+   "name": "Anconeus muscle.l",
+   "polygons": 1442,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Anconeus muscle.ol",
+   "polygons": 262,
+   "path": []
+  },
+  {
+   "name": "Anconeus muscle.or",
+   "polygons": 262,
+   "path": []
+  },
+  {
+   "name": "Anconeus muscle.r",
+   "polygons": 1442,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Anserine bursa.l",
+   "polygons": 608,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Anserine bursa.r",
+   "polygons": 608,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Antebrachial fascia.l",
+   "polygons": 2253,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Antebrachial fascia.r",
+   "polygons": 2253,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Anterior belly of digastric muscle.el",
+   "polygons": 158,
+   "path": []
+  },
+  {
+   "name": "Anterior belly of digastric muscle.er",
+   "polygons": 158,
+   "path": []
+  },
+  {
+   "name": "Anterior belly of digastric muscle.l",
+   "polygons": 392,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Anterior belly of digastric muscle.r",
+   "polygons": 392,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Anterior intermuscular septum of leg.l",
+   "polygons": 208,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Anterior intermuscular septum of leg.r",
+   "polygons": 208,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Anterior layer of thoracolumbar fascia.l",
+   "polygons": 90,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Anterior layer of thoracolumbar fascia.r",
+   "polygons": 90,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Articularis genus muscle.ol",
+   "polygons": 166,
+   "path": []
+  },
+  {
+   "name": "Articularis genus muscle.or",
+   "polygons": 166,
+   "path": []
+  },
+  {
+   "name": "Ary-epiglottic part of oblique arytenoid muscle.l",
+   "polygons": 1022,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Ary-epiglottic part of oblique arytenoid muscle.r",
+   "polygons": 1022,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Ascending part of trapezius muscle.el",
+   "polygons": 182,
+   "path": []
+  },
+  {
+   "name": "Ascending part of trapezius muscle.er",
+   "polygons": 182,
+   "path": []
+  },
+  {
+   "name": "Ascending part of trapezius muscle.l",
+   "polygons": 4596,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Ascending part of trapezius muscle.ol",
+   "polygons": 498,
+   "path": []
+  },
+  {
+   "name": "Ascending part of trapezius muscle.or",
+   "polygons": 498,
+   "path": []
+  },
+  {
+   "name": "Ascending part of trapezius muscle.r",
+   "polygons": 4596,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Biceps brachii muscle.el",
+   "polygons": 210,
+   "path": []
+  },
+  {
+   "name": "Biceps brachii muscle.er",
+   "polygons": 210,
+   "path": []
+  },
+  {
+   "name": "Biceps femoris muscle.el",
+   "polygons": 426,
+   "path": []
+  },
+  {
+   "name": "Biceps femoris muscle.er",
+   "polygons": 426,
+   "path": []
+  },
+  {
+   "name": "Bicipitoradial bursa.l",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Bicipitoradial bursa.r",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Brachial fascia.l",
+   "polygons": 1532,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Brachial fascia.r",
+   "polygons": 1532,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Brachialis muscle.el",
+   "polygons": 510,
+   "path": []
+  },
+  {
+   "name": "Brachialis muscle.er",
+   "polygons": 510,
+   "path": []
+  },
+  {
+   "name": "Brachialis muscle.l",
+   "polygons": 3478,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Brachialis muscle.ol",
+   "polygons": 1448,
+   "path": []
+  },
+  {
+   "name": "Brachialis muscle.or",
+   "polygons": 1448,
+   "path": []
+  },
+  {
+   "name": "Brachialis muscle.r",
+   "polygons": 3478,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Brachioradialis muscle.el",
+   "polygons": 256,
+   "path": []
+  },
+  {
+   "name": "Brachioradialis muscle.er",
+   "polygons": 256,
+   "path": []
+  },
+  {
+   "name": "Brachioradialis muscle.l",
+   "polygons": 7312,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Brachioradialis muscle.ol",
+   "polygons": 252,
+   "path": []
+  },
+  {
+   "name": "Brachioradialis muscle.or",
+   "polygons": 252,
+   "path": []
+  },
+  {
+   "name": "Brachioradialis muscle.r",
+   "polygons": 7312,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Bucinator.l",
+   "polygons": 884,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Bucinator.o1l",
+   "polygons": 184,
+   "path": []
+  },
+  {
+   "name": "Bucinator.o1r",
+   "polygons": 184,
+   "path": []
+  },
+  {
+   "name": "Bucinator.ol",
+   "polygons": 206,
+   "path": []
+  },
+  {
+   "name": "Bucinator.or",
+   "polygons": 206,
+   "path": []
+  },
+  {
+   "name": "Bucinator.r",
+   "polygons": 884,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Bursa of piriformis muscle.l",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Bursa of piriformis muscle.r",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Calcaneal tendon.l",
+   "polygons": 4334,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Calcaneal tendon.r",
+   "polygons": 4334,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Clavicular head of pectoralis major muscle.l",
+   "polygons": 850,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Clavicular head of pectoralis major muscle.r",
+   "polygons": 850,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Clavicular part of deltoid muscle.l",
+   "polygons": 2902,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Clavicular part of deltoid muscle.ol",
+   "polygons": 962,
+   "path": []
+  },
+  {
+   "name": "Clavicular part of deltoid muscle.or",
+   "polygons": 962,
+   "path": []
+  },
+  {
+   "name": "Clavicular part of deltoid muscle.r",
+   "polygons": 2902,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Clavipectoral fascia.l",
+   "polygons": 656,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Clavipectoral fascia.r",
+   "polygons": 656,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Coccygeus muscle.l",
+   "polygons": 1034,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Coccygeus muscle.r",
+   "polygons": 1034,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Common extensor tendon.ol",
+   "polygons": 328,
+   "path": []
+  },
+  {
+   "name": "Common extensor tendon.or",
+   "polygons": 328,
+   "path": []
+  },
+  {
+   "name": "Common flexor tendon sheath.l",
+   "polygons": 441,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Common flexor tendon sheath.r",
+   "polygons": 6984,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Common flexor tendon.ol",
+   "polygons": 344,
+   "path": []
+  },
+  {
+   "name": "Common flexor tendon.or",
+   "polygons": 344,
+   "path": []
+  },
+  {
+   "name": "Common tendinous ring.l",
+   "polygons": 362,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Common tendinous ring.r",
+   "polygons": 362,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Common tendon sheath of fibularis muscles.l",
+   "polygons": 768,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Common tendon sheath of fibularis muscles.r",
+   "polygons": 768,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Coracobrachial bursa.l",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Coracobrachial bursa.r",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Coracobrachialis muscle.l",
+   "polygons": 1160,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Coracobrachialis muscle.ol",
+   "polygons": 1450,
+   "path": []
+  },
+  {
+   "name": "Coracobrachialis muscle.or",
+   "polygons": 1450,
+   "path": []
+  },
+  {
+   "name": "Coracobrachialis muscle.r",
+   "polygons": 1160,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Corrugator supercilii.l",
+   "polygons": 278,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Corrugator supercilii.r",
+   "polygons": 278,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Cruciform part of fibrous sheath of digit of hand.l",
+   "polygons": 2364,
+   "path": []
+  },
+  {
+   "name": "Cruciform part of fibrous sheath of digit of hand.r",
+   "polygons": 2364,
+   "path": []
+  },
+  {
+   "name": "Crural fascia.l",
+   "polygons": 5523,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Crural fascia.r",
+   "polygons": 5523,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Deep head of flexor pollicis brevis.l",
+   "polygons": 746,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Deep head of flexor pollicis brevis.o1l",
+   "polygons": 278,
+   "path": []
+  },
+  {
+   "name": "Deep head of flexor pollicis brevis.o1r",
+   "polygons": 278,
+   "path": []
+  },
+  {
+   "name": "Deep head of flexor pollicis brevis.ol",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Deep head of flexor pollicis brevis.or",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Deep head of flexor pollicis brevis.r",
+   "polygons": 746,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Deep head of pronator teres.l",
+   "polygons": 1114,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Deep head of pronator teres.r",
+   "polygons": 1114,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Deep infrapatellar bursa.l",
+   "polygons": 496,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Deep infrapatellar bursa.r",
+   "polygons": 496,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Deep part of masseter.l",
+   "polygons": 994,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Deep part of masseter.r",
+   "polygons": 994,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Deltoid fascia.l",
+   "polygons": 1821,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Deltoid fascia.r",
+   "polygons": 1821,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Deltoid muscle.el",
+   "polygons": 294,
+   "path": []
+  },
+  {
+   "name": "Deltoid muscle.er",
+   "polygons": 294,
+   "path": []
+  },
+  {
+   "name": "Depressor anguli oris.l",
+   "polygons": 594,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Depressor anguli oris.ol",
+   "polygons": 170,
+   "path": []
+  },
+  {
+   "name": "Depressor anguli oris.or",
+   "polygons": 170,
+   "path": []
+  },
+  {
+   "name": "Depressor anguli oris.r",
+   "polygons": 594,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Depressor labii inferioris.l",
+   "polygons": 832,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Depressor labii inferioris.ol",
+   "polygons": 190,
+   "path": []
+  },
+  {
+   "name": "Depressor labii inferioris.or",
+   "polygons": 190,
+   "path": []
+  },
+  {
+   "name": "Depressor labii inferioris.r",
+   "polygons": 832,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Depressor septi nasi.l",
+   "polygons": 276,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Depressor septi nasi.ol",
+   "polygons": 210,
+   "path": []
+  },
+  {
+   "name": "Depressor septi nasi.or",
+   "polygons": 210,
+   "path": []
+  },
+  {
+   "name": "Depressor septi nasi.r",
+   "polygons": 276,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Descending part of trapezius muscle.l",
+   "polygons": 6760,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Descending part of trapezius muscle.ol",
+   "polygons": 1830,
+   "path": []
+  },
+  {
+   "name": "Descending part of trapezius muscle.or",
+   "polygons": 1830,
+   "path": []
+  },
+  {
+   "name": "Descending part of trapezius muscle.r",
+   "polygons": 6760,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Diaphragm",
+   "polygons": 19434,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Diaphragm.o1l",
+   "polygons": 716,
+   "path": []
+  },
+  {
+   "name": "Diaphragm.o1r",
+   "polygons": 716,
+   "path": []
+  },
+  {
+   "name": "Diaphragm.o2l",
+   "polygons": 408,
+   "path": []
+  },
+  {
+   "name": "Diaphragm.o2r",
+   "polygons": 408,
+   "path": []
+  },
+  {
+   "name": "Diaphragm.o3l",
+   "polygons": 226,
+   "path": []
+  },
+  {
+   "name": "Diaphragm.o3r",
+   "polygons": 226,
+   "path": []
+  },
+  {
+   "name": "Diaphragm.o4l",
+   "polygons": 3276,
+   "path": []
+  },
+  {
+   "name": "Diaphragm.o4r",
+   "polygons": 3276,
+   "path": []
+  },
+  {
+   "name": "Diaphragm.o5l",
+   "polygons": 602,
+   "path": []
+  },
+  {
+   "name": "Diaphragm.o5r",
+   "polygons": 602,
+   "path": []
+  },
+  {
+   "name": "Diaphragm.ol",
+   "polygons": 1702,
+   "path": []
+  },
+  {
+   "name": "Diaphragm.or",
+   "polygons": 1702,
+   "path": []
+  },
+  {
+   "name": "Diaphragmatic fascia",
+   "polygons": 2391,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Dorsal fascia of hand.l",
+   "polygons": 746,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Dorsal fascia of hand.r",
+   "polygons": 746,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Dorsal interossei muscles of foot.l",
+   "polygons": 1946,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Dorsal interossei muscles of foot.r",
+   "polygons": 1946,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Dorsal interossei muscles of hand.l",
+   "polygons": 1364,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Dorsal interossei muscles of hand.o1l",
+   "polygons": 558,
+   "path": []
+  },
+  {
+   "name": "Dorsal interossei muscles of hand.o1r",
+   "polygons": 558,
+   "path": []
+  },
+  {
+   "name": "Dorsal interossei muscles of hand.o2l",
+   "polygons": 474,
+   "path": []
+  },
+  {
+   "name": "Dorsal interossei muscles of hand.o2r",
+   "polygons": 474,
+   "path": []
+  },
+  {
+   "name": "Dorsal interossei muscles of hand.o3l",
+   "polygons": 470,
+   "path": []
+  },
+  {
+   "name": "Dorsal interossei muscles of hand.o3r",
+   "polygons": 470,
+   "path": []
+  },
+  {
+   "name": "Dorsal interossei muscles of hand.o4l",
+   "polygons": 164,
+   "path": []
+  },
+  {
+   "name": "Dorsal interossei muscles of hand.o4r",
+   "polygons": 164,
+   "path": []
+  },
+  {
+   "name": "Dorsal interossei muscles of hand.ol",
+   "polygons": 200,
+   "path": []
+  },
+  {
+   "name": "Dorsal interossei muscles of hand.or",
+   "polygons": 200,
+   "path": []
+  },
+  {
+   "name": "Dorsal interossei muscles of hand.r",
+   "polygons": 1364,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Dorsal parts of lateral intertransversarii lumborum muscles.l",
+   "polygons": 720,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Dorsal parts of lateral intertransversarii lumborum muscles.r",
+   "polygons": 720,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Epicranial aponeurosis.l",
+   "polygons": 20118,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Epicranial aponeurosis.r",
+   "polygons": 20118,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Erector spinae.ol",
+   "polygons": 514,
+   "path": []
+  },
+  {
+   "name": "Erector spinae.or",
+   "polygons": 514,
+   "path": []
+  },
+  {
+   "name": "Extensor carpi radialis brevis.el",
+   "polygons": 130,
+   "path": []
+  },
+  {
+   "name": "Extensor carpi radialis brevis.er",
+   "polygons": 130,
+   "path": []
+  },
+  {
+   "name": "Extensor carpi radialis brevis.l",
+   "polygons": 3142,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Extensor carpi radialis brevis.r",
+   "polygons": 3142,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Extensor carpi radialis longus.el",
+   "polygons": 122,
+   "path": []
+  },
+  {
+   "name": "Extensor carpi radialis longus.er",
+   "polygons": 122,
+   "path": []
+  },
+  {
+   "name": "Extensor carpi radialis longus.l",
+   "polygons": 3706,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Extensor carpi radialis longus.ol",
+   "polygons": 510,
+   "path": []
+  },
+  {
+   "name": "Extensor carpi radialis longus.or",
+   "polygons": 510,
+   "path": []
+  },
+  {
+   "name": "Extensor carpi radialis longus.r",
+   "polygons": 3706,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Extensor carpi ulnaris.el",
+   "polygons": 58,
+   "path": []
+  },
+  {
+   "name": "Extensor carpi ulnaris.er",
+   "polygons": 58,
+   "path": []
+  },
+  {
+   "name": "Extensor carpi ulnaris.ol",
+   "polygons": 98,
+   "path": []
+  },
+  {
+   "name": "Extensor carpi ulnaris.or",
+   "polygons": 98,
+   "path": []
+  },
+  {
+   "name": "Extensor digiti minimi.l",
+   "polygons": 2152,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Extensor digiti minimi.r",
+   "polygons": 2152,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Extensor digitorum brevis.e1l",
+   "polygons": 194,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum brevis.e1r",
+   "polygons": 194,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum brevis.e2l",
+   "polygons": 140,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum brevis.e2r",
+   "polygons": 140,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum brevis.el",
+   "polygons": 142,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum brevis.er",
+   "polygons": 142,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum brevis.l",
+   "polygons": 3184,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Extensor digitorum brevis.r",
+   "polygons": 3184,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Extensor digitorum longus.e1l",
+   "polygons": 124,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum longus.e1r",
+   "polygons": 124,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum longus.e2l",
+   "polygons": 158,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum longus.e2r",
+   "polygons": 158,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum longus.e3l",
+   "polygons": 68,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum longus.e3r",
+   "polygons": 68,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum longus.e4l",
+   "polygons": 130,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum longus.e4r",
+   "polygons": 130,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum longus.el",
+   "polygons": 130,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum longus.er",
+   "polygons": 130,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum longus.l",
+   "polygons": 3176,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Extensor digitorum longus.o1l",
+   "polygons": 1638,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum longus.o1r",
+   "polygons": 1638,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum longus.ol",
+   "polygons": 154,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum longus.or",
+   "polygons": 154,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum longus.r",
+   "polygons": 3176,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Extensor digitorum.e1l",
+   "polygons": 140,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum.e1r",
+   "polygons": 140,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum.e2l",
+   "polygons": 222,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum.e2r",
+   "polygons": 222,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum.e3l",
+   "polygons": 170,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum.e3r",
+   "polygons": 170,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum.e4l",
+   "polygons": 88,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum.e4r",
+   "polygons": 88,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum.e5l",
+   "polygons": 110,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum.e5r",
+   "polygons": 110,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum.e6l",
+   "polygons": 68,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum.e6r",
+   "polygons": 68,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum.e7l",
+   "polygons": 144,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum.e7r",
+   "polygons": 144,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum.el",
+   "polygons": 180,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum.er",
+   "polygons": 180,
+   "path": []
+  },
+  {
+   "name": "Extensor digitorum.l",
+   "polygons": 6410,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Extensor digitorum.r",
+   "polygons": 6410,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Extensor hallucis brevis.l",
+   "polygons": 1118,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Extensor hallucis brevis.ol",
+   "polygons": 250,
+   "path": []
+  },
+  {
+   "name": "Extensor hallucis brevis.or",
+   "polygons": 250,
+   "path": []
+  },
+  {
+   "name": "Extensor hallucis brevis.r",
+   "polygons": 1118,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Extensor hallucis longus.el",
+   "polygons": 172,
+   "path": []
+  },
+  {
+   "name": "Extensor hallucis longus.er",
+   "polygons": 172,
+   "path": []
+  },
+  {
+   "name": "Extensor hallucis longus.l",
+   "polygons": 2362,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Extensor hallucis longus.ol",
+   "polygons": 2348,
+   "path": []
+  },
+  {
+   "name": "Extensor hallucis longus.or",
+   "polygons": 2348,
+   "path": []
+  },
+  {
+   "name": "Extensor hallucis longus.r",
+   "polygons": 2362,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Extensor indicis.el",
+   "polygons": 112,
+   "path": []
+  },
+  {
+   "name": "Extensor indicis.er",
+   "polygons": 112,
+   "path": []
+  },
+  {
+   "name": "Extensor indicis.l",
+   "polygons": 1142,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Extensor indicis.ol",
+   "polygons": 386,
+   "path": []
+  },
+  {
+   "name": "Extensor indicis.or",
+   "polygons": 386,
+   "path": []
+  },
+  {
+   "name": "Extensor indicis.r",
+   "polygons": 1142,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Extensor pollicis brevis.el",
+   "polygons": 148,
+   "path": []
+  },
+  {
+   "name": "Extensor pollicis brevis.er",
+   "polygons": 148,
+   "path": []
+  },
+  {
+   "name": "Extensor pollicis brevis.l",
+   "polygons": 1173,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Extensor pollicis brevis.ol",
+   "polygons": 474,
+   "path": []
+  },
+  {
+   "name": "Extensor pollicis brevis.or",
+   "polygons": 474,
+   "path": []
+  },
+  {
+   "name": "Extensor pollicis brevis.r",
+   "polygons": 1173,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Extensor pollicis longus.el",
+   "polygons": 130,
+   "path": []
+  },
+  {
+   "name": "Extensor pollicis longus.er",
+   "polygons": 130,
+   "path": []
+  },
+  {
+   "name": "Extensor pollicis longus.l",
+   "polygons": 1602,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Extensor pollicis longus.ol",
+   "polygons": 520,
+   "path": []
+  },
+  {
+   "name": "Extensor pollicis longus.or",
+   "polygons": 520,
+   "path": []
+  },
+  {
+   "name": "Extensor pollicis longus.r",
+   "polygons": 1602,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Extensor retinaculum of wrist.l",
+   "polygons": 194,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Extensor retinaculum of wrist.r",
+   "polygons": 194,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "External abdominal oblique muscle.l",
+   "polygons": 29622,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "External abdominal oblique muscle.o1l",
+   "polygons": 1066,
+   "path": []
+  },
+  {
+   "name": "External abdominal oblique muscle.o1r",
+   "polygons": 1066,
+   "path": []
+  },
+  {
+   "name": "External abdominal oblique muscle.o2l",
+   "polygons": 862,
+   "path": []
+  },
+  {
+   "name": "External abdominal oblique muscle.o2r",
+   "polygons": 862,
+   "path": []
+  },
+  {
+   "name": "External abdominal oblique muscle.o3l",
+   "polygons": 1576,
+   "path": []
+  },
+  {
+   "name": "External abdominal oblique muscle.o3r",
+   "polygons": 1576,
+   "path": []
+  },
+  {
+   "name": "External abdominal oblique muscle.o4l",
+   "polygons": 592,
+   "path": []
+  },
+  {
+   "name": "External abdominal oblique muscle.o4r",
+   "polygons": 592,
+   "path": []
+  },
+  {
+   "name": "External abdominal oblique muscle.o5l",
+   "polygons": 1480,
+   "path": []
+  },
+  {
+   "name": "External abdominal oblique muscle.o5r",
+   "polygons": 1480,
+   "path": []
+  },
+  {
+   "name": "External abdominal oblique muscle.ol",
+   "polygons": 1016,
+   "path": []
+  },
+  {
+   "name": "External abdominal oblique muscle.or",
+   "polygons": 1016,
+   "path": []
+  },
+  {
+   "name": "External abdominal oblique muscle.r",
+   "polygons": 29622,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "External anal sphincter.l",
+   "polygons": 202,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "External anal sphincter.r",
+   "polygons": 202,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "External intercostal muscles.l",
+   "polygons": 41357,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "External intercostal muscles.r",
+   "polygons": 41357,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "External part of thyro-arytenoid muscle.l",
+   "polygons": 2236,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "External part of thyro-arytenoid muscle.r",
+   "polygons": 2236,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Fascia lata.l",
+   "polygons": 6530,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Fascia lata.r",
+   "polygons": 6530,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Fibularis brevis muscle.el",
+   "polygons": 356,
+   "path": []
+  },
+  {
+   "name": "Fibularis brevis muscle.er",
+   "polygons": 356,
+   "path": []
+  },
+  {
+   "name": "Fibularis brevis muscle.l",
+   "polygons": 3446,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Fibularis brevis muscle.ol",
+   "polygons": 432,
+   "path": []
+  },
+  {
+   "name": "Fibularis brevis muscle.or",
+   "polygons": 432,
+   "path": []
+  },
+  {
+   "name": "Fibularis brevis muscle.r",
+   "polygons": 3446,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Fibularis longus muscle.l",
+   "polygons": 5522,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Fibularis longus muscle.ol",
+   "polygons": 784,
+   "path": []
+  },
+  {
+   "name": "Fibularis longus muscle.or",
+   "polygons": 784,
+   "path": []
+  },
+  {
+   "name": "Fibularis longus muscle.r",
+   "polygons": 5522,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Fibularis tertius muscle.el",
+   "polygons": 208,
+   "path": []
+  },
+  {
+   "name": "Fibularis tertius muscle.er",
+   "polygons": 208,
+   "path": []
+  },
+  {
+   "name": "Fibularis tertius muscle.l",
+   "polygons": 586,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Fibularis tertius muscle.ol",
+   "polygons": 80,
+   "path": []
+  },
+  {
+   "name": "Fibularis tertius muscle.or",
+   "polygons": 80,
+   "path": []
+  },
+  {
+   "name": "Fibularis tertius muscle.r",
+   "polygons": 586,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Flexor carpi radialis.l",
+   "polygons": 1666,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Flexor carpi radialis.r",
+   "polygons": 1666,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Flexor carpi ulnaris.el",
+   "polygons": 448,
+   "path": []
+  },
+  {
+   "name": "Flexor carpi ulnaris.er",
+   "polygons": 448,
+   "path": []
+  },
+  {
+   "name": "Flexor digiti minimi of foot.el",
+   "polygons": 282,
+   "path": []
+  },
+  {
+   "name": "Flexor digiti minimi of foot.er",
+   "polygons": 282,
+   "path": []
+  },
+  {
+   "name": "Flexor digiti minimi of foot.l",
+   "polygons": 464,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Flexor digiti minimi of foot.r",
+   "polygons": 464,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Flexor digiti minimi of hand.el",
+   "polygons": 564,
+   "path": []
+  },
+  {
+   "name": "Flexor digiti minimi of hand.er",
+   "polygons": 564,
+   "path": []
+  },
+  {
+   "name": "Flexor digiti minimi of hand.l",
+   "polygons": 308,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Flexor digiti minimi of hand.ol",
+   "polygons": 120,
+   "path": []
+  },
+  {
+   "name": "Flexor digiti minimi of hand.or",
+   "polygons": 120,
+   "path": []
+  },
+  {
+   "name": "Flexor digiti minimi of hand.r",
+   "polygons": 308,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Flexor digitorum brevis.e1l",
+   "polygons": 500,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum brevis.e1r",
+   "polygons": 500,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum brevis.e2l",
+   "polygons": 250,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum brevis.e2r",
+   "polygons": 250,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum brevis.el",
+   "polygons": 326,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum brevis.er",
+   "polygons": 326,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum brevis.l",
+   "polygons": 3224,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Flexor digitorum brevis.ol",
+   "polygons": 350,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum brevis.or",
+   "polygons": 350,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum brevis.r",
+   "polygons": 3224,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Flexor digitorum longus.e1l",
+   "polygons": 156,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum longus.e1r",
+   "polygons": 156,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum longus.e2l",
+   "polygons": 100,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum longus.e2r",
+   "polygons": 100,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum longus.e3l",
+   "polygons": 154,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum longus.e3r",
+   "polygons": 154,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum longus.el",
+   "polygons": 156,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum longus.er",
+   "polygons": 156,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum longus.l",
+   "polygons": 6836,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Flexor digitorum longus.ol",
+   "polygons": 210,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum longus.or",
+   "polygons": 210,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum longus.r",
+   "polygons": 6836,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Flexor digitorum profundus.e1l",
+   "polygons": 110,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum profundus.e1r",
+   "polygons": 110,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum profundus.e2l",
+   "polygons": 78,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum profundus.e2r",
+   "polygons": 78,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum profundus.e3l",
+   "polygons": 130,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum profundus.e3r",
+   "polygons": 130,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum profundus.el",
+   "polygons": 78,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum profundus.er",
+   "polygons": 78,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum profundus.l",
+   "polygons": 7110,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Flexor digitorum profundus.r",
+   "polygons": 7110,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Flexor digitorum superficialis.e1l",
+   "polygons": 248,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum superficialis.e1r",
+   "polygons": 248,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum superficialis.e2l",
+   "polygons": 266,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum superficialis.e2r",
+   "polygons": 266,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum superficialis.e3l",
+   "polygons": 258,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum superficialis.e3r",
+   "polygons": 258,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum superficialis.el",
+   "polygons": 240,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum superficialis.er",
+   "polygons": 240,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum superficialis.ol",
+   "polygons": 402,
+   "path": []
+  },
+  {
+   "name": "Flexor digitorum superficialis.or",
+   "polygons": 402,
+   "path": []
+  },
+  {
+   "name": "Flexor hallucis longus.el",
+   "polygons": 154,
+   "path": []
+  },
+  {
+   "name": "Flexor hallucis longus.er",
+   "polygons": 154,
+   "path": []
+  },
+  {
+   "name": "Flexor hallucis longus.l",
+   "polygons": 5878,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Flexor hallucis longus.ol",
+   "polygons": 1812,
+   "path": []
+  },
+  {
+   "name": "Flexor hallucis longus.or",
+   "polygons": 1812,
+   "path": []
+  },
+  {
+   "name": "Flexor hallucis longus.r",
+   "polygons": 5878,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Flexor pollicis longus.el",
+   "polygons": 68,
+   "path": []
+  },
+  {
+   "name": "Flexor pollicis longus.er",
+   "polygons": 68,
+   "path": []
+  },
+  {
+   "name": "Flexor pollicis longus.l",
+   "polygons": 1666,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Flexor pollicis longus.o1l",
+   "polygons": 922,
+   "path": []
+  },
+  {
+   "name": "Flexor pollicis longus.o1r",
+   "polygons": 922,
+   "path": []
+  },
+  {
+   "name": "Flexor pollicis longus.ol",
+   "polygons": 112,
+   "path": []
+  },
+  {
+   "name": "Flexor pollicis longus.or",
+   "polygons": 112,
+   "path": []
+  },
+  {
+   "name": "Flexor pollicis longus.r",
+   "polygons": 1666,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Flexor retinaculum of ankle.l",
+   "polygons": 358,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Flexor retinaculum of ankle.r",
+   "polygons": 358,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Flexor retinaculum of wrist.l",
+   "polygons": 273,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Flexor retinaculum of wrist.r",
+   "polygons": 273,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Frontalis muscle.l",
+   "polygons": 5874,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Frontalis muscle.ol",
+   "polygons": 594,
+   "path": []
+  },
+  {
+   "name": "Frontalis muscle.or",
+   "polygons": 594,
+   "path": []
+  },
+  {
+   "name": "Frontalis muscle.r",
+   "polygons": 5874,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Genioglossus muscle.l",
+   "polygons": 3746,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Genioglossus muscle.r",
+   "polygons": 3746,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Geniohyoid muscle.el",
+   "polygons": 294,
+   "path": []
+  },
+  {
+   "name": "Geniohyoid muscle.er",
+   "polygons": 294,
+   "path": []
+  },
+  {
+   "name": "Geniohyoid muscle.l",
+   "polygons": 530,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Geniohyoid muscle.ol",
+   "polygons": 78,
+   "path": []
+  },
+  {
+   "name": "Geniohyoid muscle.or",
+   "polygons": 78,
+   "path": []
+  },
+  {
+   "name": "Geniohyoid muscle.r",
+   "polygons": 530,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Gluteus maximus muscle.el",
+   "polygons": 488,
+   "path": []
+  },
+  {
+   "name": "Gluteus maximus muscle.er",
+   "polygons": 488,
+   "path": []
+  },
+  {
+   "name": "Gluteus maximus muscle.l",
+   "polygons": 3326,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Gluteus maximus muscle.ol",
+   "polygons": 640,
+   "path": []
+  },
+  {
+   "name": "Gluteus maximus muscle.or",
+   "polygons": 640,
+   "path": []
+  },
+  {
+   "name": "Gluteus maximus muscle.r",
+   "polygons": 3326,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Gluteus medius muscle.el",
+   "polygons": 272,
+   "path": []
+  },
+  {
+   "name": "Gluteus medius muscle.er",
+   "polygons": 320,
+   "path": []
+  },
+  {
+   "name": "Gluteus medius muscle.l",
+   "polygons": 5176,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Gluteus medius muscle.ol",
+   "polygons": 502,
+   "path": []
+  },
+  {
+   "name": "Gluteus medius muscle.or",
+   "polygons": 502,
+   "path": []
+  },
+  {
+   "name": "Gluteus medius muscle.r",
+   "polygons": 5176,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Gluteus minimus muscle.l",
+   "polygons": 6250,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Gluteus minimus muscle.ol",
+   "polygons": 702,
+   "path": []
+  },
+  {
+   "name": "Gluteus minimus muscle.or",
+   "polygons": 702,
+   "path": []
+  },
+  {
+   "name": "Gluteus minimus muscle.r",
+   "polygons": 6250,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Gracilis muscle.el",
+   "polygons": 132,
+   "path": []
+  },
+  {
+   "name": "Gracilis muscle.er",
+   "polygons": 132,
+   "path": []
+  },
+  {
+   "name": "Gracilis muscle.l",
+   "polygons": 4812,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Gracilis muscle.ol",
+   "polygons": 502,
+   "path": []
+  },
+  {
+   "name": "Gracilis muscle.or",
+   "polygons": 502,
+   "path": []
+  },
+  {
+   "name": "Gracilis muscle.r",
+   "polygons": 4812,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Humeral head of extensor carpi ulnaris.l",
+   "polygons": 830,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Humeral head of extensor carpi ulnaris.r",
+   "polygons": 830,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Humeral head of flexor carpi ulnaris.l",
+   "polygons": 3912,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Humeral head of flexor carpi ulnaris.r",
+   "polygons": 3912,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Humero-ulnar head of flexor digitorum superficialis.l",
+   "polygons": 12798,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Humero-ulnar head of flexor digitorum superficialis.r",
+   "polygons": 12798,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Hyoglossus muscle.l",
+   "polygons": 1424,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Hyoglossus muscle.r",
+   "polygons": 1424,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Iliacus muscle.l",
+   "polygons": 4354,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Iliacus muscle.ol",
+   "polygons": 584,
+   "path": []
+  },
+  {
+   "name": "Iliacus muscle.or",
+   "polygons": 584,
+   "path": []
+  },
+  {
+   "name": "Iliacus muscle.r",
+   "polygons": 4354,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Iliococcygeus muscle.l",
+   "polygons": 1962,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Iliococcygeus muscle.r",
+   "polygons": 1962,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Iliocostalis colli muscle",
+   "polygons": 2050,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Iliocostalis colli muscle.el",
+   "polygons": 172,
+   "path": []
+  },
+  {
+   "name": "Iliocostalis colli muscle.er",
+   "polygons": 172,
+   "path": []
+  },
+  {
+   "name": "Iliocostalis colli muscle.r",
+   "polygons": 2050,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Iliocostalis lumborum muscle.l",
+   "polygons": 10038,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Iliocostalis lumborum muscle.r",
+   "polygons": 10038,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Iliocostalis thoracis muscle.l",
+   "polygons": 5772,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Iliocostalis thoracis muscle.r",
+   "polygons": 5772,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Iliopectineal arch.l",
+   "polygons": 13,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Iliopectineal arch.r",
+   "polygons": 140,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Iliopsoas fascia.l",
+   "polygons": 830,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Iliopsoas fascia.r",
+   "polygons": 830,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Iliopsoas muscle.el",
+   "polygons": 756,
+   "path": []
+  },
+  {
+   "name": "Iliopsoas muscle.er",
+   "polygons": 756,
+   "path": []
+  },
+  {
+   "name": "Iliotibial tract.l",
+   "polygons": 48612,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Iliotibial tract.r",
+   "polygons": 48612,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Inferior extensor retinaculum of ankle.l",
+   "polygons": 169,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Inferior extensor retinaculum of ankle.r",
+   "polygons": 169,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Inferior fibular retinaculum.l",
+   "polygons": 35,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Inferior fibular retinaculum.r",
+   "polygons": 35,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Inferior gemellus muscle.l",
+   "polygons": 976,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Inferior gemellus muscle.ol",
+   "polygons": 194,
+   "path": []
+  },
+  {
+   "name": "Inferior gemellus muscle.or",
+   "polygons": 194,
+   "path": []
+  },
+  {
+   "name": "Inferior gemellus muscle.r",
+   "polygons": 976,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Inferior head of lateral pterygoid muscle.l",
+   "polygons": 326,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Inferior head of lateral pterygoid muscle.r",
+   "polygons": 326,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Inferior oblique muscle.l",
+   "polygons": 1148,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Inferior oblique muscle.r",
+   "polygons": 1148,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Inferior pharyngeal constrictor.l",
+   "polygons": 3696,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Inferior pharyngeal constrictor.r",
+   "polygons": 3696,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Inferior rectus muscle.l",
+   "polygons": 1736,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Inferior rectus muscle.r",
+   "polygons": 1736,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Inferior subtendinous bursa of biceps femoris muscle.l",
+   "polygons": 496,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Inferior subtendinous bursa of biceps femoris muscle.r",
+   "polygons": 496,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Inferior tarsus.l",
+   "polygons": 106,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Inferior tarsus.r",
+   "polygons": 106,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Infraspinatus muscle.el",
+   "polygons": 622,
+   "path": []
+  },
+  {
+   "name": "Infraspinatus muscle.er",
+   "polygons": 622,
+   "path": []
+  },
+  {
+   "name": "Infraspinatus muscle.l",
+   "polygons": 3166,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Infraspinatus muscle.ol",
+   "polygons": 6726,
+   "path": []
+  },
+  {
+   "name": "Infraspinatus muscle.or",
+   "polygons": 6726,
+   "path": []
+  },
+  {
+   "name": "Infraspinatus muscle.r",
+   "polygons": 3166,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Inguinal ligament.l",
+   "polygons": 1056,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Inguinal ligament.r",
+   "polygons": 1056,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Innermost intercostal muscles.l",
+   "polygons": 38254,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Innermost intercostal muscles.r",
+   "polygons": 38254,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Intermediate tendon of digastric muscle.l",
+   "polygons": 228,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Intermediate tendon of digastric muscle.r",
+   "polygons": 228,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Intermuscular gluteal bursae.l",
+   "polygons": 620,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Intermuscular gluteal bursae.r",
+   "polygons": 2480,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Internal abdominal oblique muscle.l",
+   "polygons": 28869,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Internal abdominal oblique muscle.o1l",
+   "polygons": 760,
+   "path": []
+  },
+  {
+   "name": "Internal abdominal oblique muscle.o1r",
+   "polygons": 760,
+   "path": []
+  },
+  {
+   "name": "Internal abdominal oblique muscle.o2l",
+   "polygons": 654,
+   "path": []
+  },
+  {
+   "name": "Internal abdominal oblique muscle.o2r",
+   "polygons": 654,
+   "path": []
+  },
+  {
+   "name": "Internal abdominal oblique muscle.o3l",
+   "polygons": 636,
+   "path": []
+  },
+  {
+   "name": "Internal abdominal oblique muscle.o3r",
+   "polygons": 636,
+   "path": []
+  },
+  {
+   "name": "Internal abdominal oblique muscle.o4l",
+   "polygons": 3192,
+   "path": []
+  },
+  {
+   "name": "Internal abdominal oblique muscle.o4r",
+   "polygons": 3192,
+   "path": []
+  },
+  {
+   "name": "Internal abdominal oblique muscle.ol",
+   "polygons": 2524,
+   "path": []
+  },
+  {
+   "name": "Internal abdominal oblique muscle.or",
+   "polygons": 2524,
+   "path": []
+  },
+  {
+   "name": "Internal abdominal oblique muscle.r",
+   "polygons": 28869,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Internal intercostal muscles.l",
+   "polygons": 40184,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Internal intercostal muscles.r",
+   "polygons": 40184,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Interspinales colli muscles.l",
+   "polygons": 444,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Interspinales colli muscles.r",
+   "polygons": 444,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Interspinales lumborum muscles.l",
+   "polygons": 562,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Interspinales lumborum muscles.r",
+   "polygons": 562,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Interspinales thoracis muscles.l",
+   "polygons": 198,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Interspinales thoracis muscles.r",
+   "polygons": 198,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Intertubercular tendon sheath.l",
+   "polygons": 416,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Intertubercular tendon sheath.r",
+   "polygons": 416,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Investing abdominal fascia.l",
+   "polygons": 5618,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Investing abdominal fascia.r",
+   "polygons": 5618,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Lateral crico-arytenoid muscle.l",
+   "polygons": 1624,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Lateral crico-arytenoid muscle.r",
+   "polygons": 1624,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Lateral femoral intermuscular septum.l",
+   "polygons": 294,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Lateral femoral intermuscular septum.r",
+   "polygons": 294,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Lateral head of flexor hallucis brevis.el",
+   "polygons": 126,
+   "path": []
+  },
+  {
+   "name": "Lateral head of flexor hallucis brevis.er",
+   "polygons": 126,
+   "path": []
+  },
+  {
+   "name": "Lateral head of flexor hallucis brevis.l",
+   "polygons": 966,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Lateral head of flexor hallucis brevis.o1l",
+   "polygons": 194,
+   "path": []
+  },
+  {
+   "name": "Lateral head of flexor hallucis brevis.o1r",
+   "polygons": 194,
+   "path": []
+  },
+  {
+   "name": "Lateral head of flexor hallucis brevis.ol",
+   "polygons": 660,
+   "path": []
+  },
+  {
+   "name": "Lateral head of flexor hallucis brevis.or",
+   "polygons": 660,
+   "path": []
+  },
+  {
+   "name": "Lateral head of flexor hallucis brevis.r",
+   "polygons": 966,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Lateral head of gastrocnemius.l",
+   "polygons": 4908,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Lateral head of gastrocnemius.ol",
+   "polygons": 168,
+   "path": []
+  },
+  {
+   "name": "Lateral head of gastrocnemius.or",
+   "polygons": 168,
+   "path": []
+  },
+  {
+   "name": "Lateral head of gastrocnemius.r",
+   "polygons": 4908,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Lateral head of triceps brachii.l",
+   "polygons": 3628,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Lateral head of triceps brachii.ol",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Lateral head of triceps brachii.or",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Lateral head of triceps brachii.r",
+   "polygons": 3628,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Lateral intermuscular septum of arm.l",
+   "polygons": 80,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Lateral intermuscular septum of arm.r",
+   "polygons": 80,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Lateral patellar retinaculum.l",
+   "polygons": 74,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Lateral patellar retinaculum.r",
+   "polygons": 74,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Lateral pterygoid muscle.o1l",
+   "polygons": 206,
+   "path": []
+  },
+  {
+   "name": "Lateral pterygoid muscle.o1r",
+   "polygons": 206,
+   "path": []
+  },
+  {
+   "name": "Lateral pterygoid muscle.ol",
+   "polygons": 422,
+   "path": []
+  },
+  {
+   "name": "Lateral pterygoid muscle.or",
+   "polygons": 422,
+   "path": []
+  },
+  {
+   "name": "Lateral rectus muscle.l",
+   "polygons": 1600,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Lateral rectus muscle.r",
+   "polygons": 1600,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Lateral subtendinous bursa of gastrocnemius muscle.l",
+   "polygons": 496,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Lateral subtendinous bursa of gastrocnemius muscle.r",
+   "polygons": 496,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Latissimus dorsi muscle.el",
+   "polygons": 1648,
+   "path": []
+  },
+  {
+   "name": "Latissimus dorsi muscle.er",
+   "polygons": 1648,
+   "path": []
+  },
+  {
+   "name": "Latissimus dorsi muscle.l",
+   "polygons": 21580,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Latissimus dorsi muscle.ol",
+   "polygons": 506,
+   "path": []
+  },
+  {
+   "name": "Latissimus dorsi muscle.or",
+   "polygons": 506,
+   "path": []
+  },
+  {
+   "name": "Latissimus dorsi muscle.r",
+   "polygons": 21580,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Levator anguli oris.l",
+   "polygons": 330,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Levator anguli oris.ol",
+   "polygons": 176,
+   "path": []
+  },
+  {
+   "name": "Levator anguli oris.or",
+   "polygons": 176,
+   "path": []
+  },
+  {
+   "name": "Levator anguli oris.r",
+   "polygons": 330,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Levator ani.ol",
+   "polygons": 388,
+   "path": []
+  },
+  {
+   "name": "Levator ani.or",
+   "polygons": 388,
+   "path": []
+  },
+  {
+   "name": "Levator labii superioris.l",
+   "polygons": 540,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Levator labii superioris.ol",
+   "polygons": 578,
+   "path": []
+  },
+  {
+   "name": "Levator labii superioris.or",
+   "polygons": 578,
+   "path": []
+  },
+  {
+   "name": "Levator labii superioris.r",
+   "polygons": 540,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Levator nasolabialis.l",
+   "polygons": 172,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Levator nasolabialis.ol",
+   "polygons": 216,
+   "path": []
+  },
+  {
+   "name": "Levator nasolabialis.or",
+   "polygons": 216,
+   "path": []
+  },
+  {
+   "name": "Levator nasolabialis.r",
+   "polygons": 172,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Levator palpebrae superioris.l",
+   "polygons": 2152,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Levator palpebrae superioris.r",
+   "polygons": 2152,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Levator scapulae.el",
+   "polygons": 5666,
+   "path": []
+  },
+  {
+   "name": "Levator scapulae.er",
+   "polygons": 5666,
+   "path": []
+  },
+  {
+   "name": "Levator scapulae.l",
+   "polygons": 3082,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Levator scapulae.o1l",
+   "polygons": 76,
+   "path": []
+  },
+  {
+   "name": "Levator scapulae.o1r",
+   "polygons": 76,
+   "path": []
+  },
+  {
+   "name": "Levator scapulae.o2l",
+   "polygons": 228,
+   "path": []
+  },
+  {
+   "name": "Levator scapulae.o2r",
+   "polygons": 228,
+   "path": []
+  },
+  {
+   "name": "Levator scapulae.o3l",
+   "polygons": 230,
+   "path": []
+  },
+  {
+   "name": "Levator scapulae.o3r",
+   "polygons": 230,
+   "path": []
+  },
+  {
+   "name": "Levator scapulae.ol",
+   "polygons": 128,
+   "path": []
+  },
+  {
+   "name": "Levator scapulae.or",
+   "polygons": 128,
+   "path": []
+  },
+  {
+   "name": "Levator scapulae.r",
+   "polygons": 3082,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Levatores breves costarum.l",
+   "polygons": 2690,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Levatores breves costarum.r",
+   "polygons": 2690,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Levatores longi costarum.e10l",
+   "polygons": 270,
+   "path": []
+  },
+  {
+   "name": "Levatores longi costarum.e10r",
+   "polygons": 270,
+   "path": []
+  },
+  {
+   "name": "Levatores longi costarum.e1l",
+   "polygons": 668,
+   "path": []
+  },
+  {
+   "name": "Levatores longi costarum.e1r",
+   "polygons": 668,
+   "path": []
+  },
+  {
+   "name": "Levatores longi costarum.e2l",
+   "polygons": 692,
+   "path": []
+  },
+  {
+   "name": "Levatores longi costarum.e2r",
+   "polygons": 692,
+   "path": []
+  },
+  {
+   "name": "Levatores longi costarum.e3l",
+   "polygons": 522,
+   "path": []
+  },
+  {
+   "name": "Levatores longi costarum.e3r",
+   "polygons": 522,
+   "path": []
+  },
+  {
+   "name": "Levatores longi costarum.e4l",
+   "polygons": 568,
+   "path": []
+  },
+  {
+   "name": "Levatores longi costarum.e4r",
+   "polygons": 568,
+   "path": []
+  },
+  {
+   "name": "Levatores longi costarum.e5l",
+   "polygons": 362,
+   "path": []
+  },
+  {
+   "name": "Levatores longi costarum.e5r",
+   "polygons": 362,
+   "path": []
+  },
+  {
+   "name": "Levatores longi costarum.e6l",
+   "polygons": 490,
+   "path": []
+  },
+  {
+   "name": "Levatores longi costarum.e6r",
+   "polygons": 490,
+   "path": []
+  },
+  {
+   "name": "Levatores longi costarum.e7l",
+   "polygons": 1140,
+   "path": []
+  },
+  {
+   "name": "Levatores longi costarum.e7r",
+   "polygons": 1140,
+   "path": []
+  },
+  {
+   "name": "Levatores longi costarum.e8l",
+   "polygons": 908,
+   "path": []
+  },
+  {
+   "name": "Levatores longi costarum.e8r",
+   "polygons": 908,
+   "path": []
+  },
+  {
+   "name": "Levatores longi costarum.e9l",
+   "polygons": 1032,
+   "path": []
+  },
+  {
+   "name": "Levatores longi costarum.e9r",
+   "polygons": 1032,
+   "path": []
+  },
+  {
+   "name": "Levatores longi costarum.el",
+   "polygons": 440,
+   "path": []
+  },
+  {
+   "name": "Levatores longi costarum.er",
+   "polygons": 440,
+   "path": []
+  },
+  {
+   "name": "Levatores longi costarum.l",
+   "polygons": 5930,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Levatores longi costarum.r",
+   "polygons": 5930,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Linea alba",
+   "polygons": 338,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Long head of biceps brachii.l",
+   "polygons": 3218,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Long head of biceps brachii.ol",
+   "polygons": 608,
+   "path": []
+  },
+  {
+   "name": "Long head of biceps brachii.or",
+   "polygons": 608,
+   "path": []
+  },
+  {
+   "name": "Long head of biceps brachii.r",
+   "polygons": 3218,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Long head of biceps femoris.l",
+   "polygons": 7258,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Long head of biceps femoris.ol",
+   "polygons": 206,
+   "path": []
+  },
+  {
+   "name": "Long head of biceps femoris.or",
+   "polygons": 206,
+   "path": []
+  },
+  {
+   "name": "Long head of biceps femoris.r",
+   "polygons": 7258,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Long head of triceps brachii.l",
+   "polygons": 3950,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Long head of triceps brachii.ol",
+   "polygons": 746,
+   "path": []
+  },
+  {
+   "name": "Long head of triceps brachii.or",
+   "polygons": 746,
+   "path": []
+  },
+  {
+   "name": "Long head of triceps brachii.r",
+   "polygons": 3950,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Long plantar ligament.o1l",
+   "polygons": 314,
+   "path": []
+  },
+  {
+   "name": "Long plantar ligament.o1r",
+   "polygons": 314,
+   "path": []
+  },
+  {
+   "name": "Long plantar ligament.o2l",
+   "polygons": 228,
+   "path": []
+  },
+  {
+   "name": "Long plantar ligament.o2r",
+   "polygons": 228,
+   "path": []
+  },
+  {
+   "name": "Long plantar ligament.o3l",
+   "polygons": 88,
+   "path": []
+  },
+  {
+   "name": "Long plantar ligament.o3r",
+   "polygons": 88,
+   "path": []
+  },
+  {
+   "name": "Long plantar ligament.o4l",
+   "polygons": 168,
+   "path": []
+  },
+  {
+   "name": "Long plantar ligament.o4r",
+   "polygons": 168,
+   "path": []
+  },
+  {
+   "name": "Long plantar ligament.ol",
+   "polygons": 404,
+   "path": []
+  },
+  {
+   "name": "Long plantar ligament.or",
+   "polygons": 404,
+   "path": []
+  },
+  {
+   "name": "Longissimus capitis muscle.l",
+   "polygons": 1574,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Longissimus capitis muscle.r",
+   "polygons": 1574,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Longissimus colli muscle.l",
+   "polygons": 1826,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Longissimus colli muscle.r",
+   "polygons": 1826,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Longissimus thoracis muscle.e10l",
+   "polygons": 366,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e10r",
+   "polygons": 366,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e11l",
+   "polygons": 132,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e11r",
+   "polygons": 132,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e12l",
+   "polygons": 248,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e12r",
+   "polygons": 248,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e13l",
+   "polygons": 212,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e13r",
+   "polygons": 212,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e14l",
+   "polygons": 232,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e14r",
+   "polygons": 232,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e15l",
+   "polygons": 88,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e15r",
+   "polygons": 88,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e16l",
+   "polygons": 164,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e16r",
+   "polygons": 164,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e17l",
+   "polygons": 138,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e17r",
+   "polygons": 138,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e18l",
+   "polygons": 312,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e18r",
+   "polygons": 312,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e19l",
+   "polygons": 158,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e19r",
+   "polygons": 158,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e1l",
+   "polygons": 494,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e1r",
+   "polygons": 494,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e20l",
+   "polygons": 284,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e20r",
+   "polygons": 284,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e21l",
+   "polygons": 214,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e21r",
+   "polygons": 214,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e22l",
+   "polygons": 178,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e22r",
+   "polygons": 178,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e23l",
+   "polygons": 148,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e23r",
+   "polygons": 148,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e24l",
+   "polygons": 248,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e24r",
+   "polygons": 248,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e25l",
+   "polygons": 174,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e25r",
+   "polygons": 174,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e26l",
+   "polygons": 318,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e26r",
+   "polygons": 318,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e2l",
+   "polygons": 380,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e2r",
+   "polygons": 380,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e3l",
+   "polygons": 274,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e3r",
+   "polygons": 274,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e4l",
+   "polygons": 380,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e4r",
+   "polygons": 380,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e5l",
+   "polygons": 206,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e5r",
+   "polygons": 206,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e6l",
+   "polygons": 454,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e6r",
+   "polygons": 454,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e7l",
+   "polygons": 342,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e7r",
+   "polygons": 342,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e8l",
+   "polygons": 250,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e8r",
+   "polygons": 250,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e9l",
+   "polygons": 204,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.e9r",
+   "polygons": 204,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.el",
+   "polygons": 196,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.er",
+   "polygons": 196,
+   "path": []
+  },
+  {
+   "name": "Longissimus thoracis muscle.l",
+   "polygons": 9652,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Longissimus thoracis muscle.r",
+   "polygons": 9652,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Longus capitis muscle.l",
+   "polygons": 1980,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Longus capitis muscle.ol",
+   "polygons": 72,
+   "path": []
+  },
+  {
+   "name": "Longus capitis muscle.or",
+   "polygons": 72,
+   "path": []
+  },
+  {
+   "name": "Longus capitis muscle.r",
+   "polygons": 1980,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Longus colli muscle.l",
+   "polygons": 6294,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Longus colli muscle.r",
+   "polygons": 6294,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Lumbrical muscles of foot.l",
+   "polygons": 418,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Lumbrical muscles of foot.r",
+   "polygons": 418,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Lumbrical muscles of hand.l",
+   "polygons": 1368,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Lumbrical muscles of hand.r",
+   "polygons": 1368,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Masseter.el",
+   "polygons": 358,
+   "path": []
+  },
+  {
+   "name": "Masseter.er",
+   "polygons": 358,
+   "path": []
+  },
+  {
+   "name": "Masseter.o1l",
+   "polygons": 532,
+   "path": []
+  },
+  {
+   "name": "Masseter.o1r",
+   "polygons": 532,
+   "path": []
+  },
+  {
+   "name": "Masseter.ol",
+   "polygons": 692,
+   "path": []
+  },
+  {
+   "name": "Masseter.or",
+   "polygons": 692,
+   "path": []
+  },
+  {
+   "name": "Masseteric fascia.l",
+   "polygons": 205,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Masseteric fascia.r",
+   "polygons": 205,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Medial femoral intermuscular septum.l",
+   "polygons": 3861,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Medial femoral intermuscular septum.r",
+   "polygons": 3861,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Medial head of flexor hallucis brevis.el",
+   "polygons": 178,
+   "path": []
+  },
+  {
+   "name": "Medial head of flexor hallucis brevis.er",
+   "polygons": 178,
+   "path": []
+  },
+  {
+   "name": "Medial head of flexor hallucis brevis.l",
+   "polygons": 514,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Medial head of flexor hallucis brevis.r",
+   "polygons": 514,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Medial head of gastrocnemius.l",
+   "polygons": 6462,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Medial head of gastrocnemius.ol",
+   "polygons": 448,
+   "path": []
+  },
+  {
+   "name": "Medial head of gastrocnemius.or",
+   "polygons": 448,
+   "path": []
+  },
+  {
+   "name": "Medial head of gastrocnemius.r",
+   "polygons": 6462,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Medial head of triceps brachii.l",
+   "polygons": 2686,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Medial head of triceps brachii.ol",
+   "polygons": 770,
+   "path": []
+  },
+  {
+   "name": "Medial head of triceps brachii.or",
+   "polygons": 770,
+   "path": []
+  },
+  {
+   "name": "Medial head of triceps brachii.r",
+   "polygons": 2686,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Medial intermuscular septum of arm.l",
+   "polygons": 156,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Medial intermuscular septum of arm.r",
+   "polygons": 156,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Medial patellar retinaculum.l",
+   "polygons": 92,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Medial patellar retinaculum.r",
+   "polygons": 92,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Medial pterygoid muscle.el",
+   "polygons": 170,
+   "path": []
+  },
+  {
+   "name": "Medial pterygoid muscle.er",
+   "polygons": 170,
+   "path": []
+  },
+  {
+   "name": "Medial pterygoid muscle.l",
+   "polygons": 496,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Medial pterygoid muscle.ol",
+   "polygons": 342,
+   "path": []
+  },
+  {
+   "name": "Medial pterygoid muscle.or",
+   "polygons": 342,
+   "path": []
+  },
+  {
+   "name": "Medial pterygoid muscle.r",
+   "polygons": 496,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Medial rectus muscle.l",
+   "polygons": 1252,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Medial rectus muscle.r",
+   "polygons": 1252,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Medial subtendinous bursa of gastrocnemius muscle.l",
+   "polygons": 432,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Medial subtendinous bursa of gastrocnemius muscle.r",
+   "polygons": 432,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Mentalis muscle.l",
+   "polygons": 166,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Mentalis muscle.ol",
+   "polygons": 44,
+   "path": []
+  },
+  {
+   "name": "Mentalis muscle.or",
+   "polygons": 44,
+   "path": []
+  },
+  {
+   "name": "Mentalis muscle.r",
+   "polygons": 166,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Middle layer of thoracolumbar fascia.l",
+   "polygons": 82,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Middle layer of thoracolumbar fascia.r",
+   "polygons": 82,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Middle pharyngeal constrictor.l",
+   "polygons": 2948,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Middle pharyngeal constrictor.r",
+   "polygons": 2948,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Multifidus colli muscle.l",
+   "polygons": 1390,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Multifidus colli muscle.r",
+   "polygons": 1390,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Multifidus lumborum muscle.l",
+   "polygons": 2820,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Multifidus lumborum muscle.r",
+   "polygons": 2820,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Multifidus thoracis muscle.l",
+   "polygons": 3902,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Multifidus thoracis muscle.r",
+   "polygons": 3902,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Mylohyoid muscle.l",
+   "polygons": 1122,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Mylohyoid muscle.ol",
+   "polygons": 194,
+   "path": []
+  },
+  {
+   "name": "Mylohyoid muscle.or",
+   "polygons": 194,
+   "path": []
+  },
+  {
+   "name": "Mylohyoid muscle.r",
+   "polygons": 1122,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Nasalis muscle.l",
+   "polygons": 704,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Nasalis muscle.ol",
+   "polygons": 264,
+   "path": []
+  },
+  {
+   "name": "Nasalis muscle.or",
+   "polygons": 264,
+   "path": []
+  },
+  {
+   "name": "Nasalis muscle.r",
+   "polygons": 704,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Oblique head of adductor hallucis.el",
+   "polygons": 138,
+   "path": []
+  },
+  {
+   "name": "Oblique head of adductor hallucis.er",
+   "polygons": 138,
+   "path": []
+  },
+  {
+   "name": "Oblique head of adductor hallucis.l",
+   "polygons": 904,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Oblique head of adductor hallucis.o1l",
+   "polygons": 544,
+   "path": []
+  },
+  {
+   "name": "Oblique head of adductor hallucis.o1r",
+   "polygons": 544,
+   "path": []
+  },
+  {
+   "name": "Oblique head of adductor hallucis.ol",
+   "polygons": 278,
+   "path": []
+  },
+  {
+   "name": "Oblique head of adductor hallucis.or",
+   "polygons": 278,
+   "path": []
+  },
+  {
+   "name": "Oblique head of adductor hallucis.r",
+   "polygons": 904,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Oblique head of adductor pollicis.l",
+   "polygons": 450,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Oblique head of adductor pollicis.r",
+   "polygons": 450,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Oblique part of cricothyroid muscle.l",
+   "polygons": 2060,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Oblique part of cricothyroid muscle.r",
+   "polygons": 2060,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Obliquus inferior capitis muscle.el",
+   "polygons": 172,
+   "path": []
+  },
+  {
+   "name": "Obliquus inferior capitis muscle.er",
+   "polygons": 172,
+   "path": []
+  },
+  {
+   "name": "Obliquus inferior capitis muscle.l",
+   "polygons": 540,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Obliquus inferior capitis muscle.ol",
+   "polygons": 112,
+   "path": []
+  },
+  {
+   "name": "Obliquus inferior capitis muscle.or",
+   "polygons": 112,
+   "path": []
+  },
+  {
+   "name": "Obliquus inferior capitis muscle.r",
+   "polygons": 540,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Obliquus superior capitis muscle.l",
+   "polygons": 654,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Obliquus superior capitis muscle.ol",
+   "polygons": 304,
+   "path": []
+  },
+  {
+   "name": "Obliquus superior capitis muscle.or",
+   "polygons": 304,
+   "path": []
+  },
+  {
+   "name": "Obliquus superior capitis muscle.r",
+   "polygons": 654,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Obturator externus.l",
+   "polygons": 1156,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Obturator externus.ol",
+   "polygons": 4936,
+   "path": []
+  },
+  {
+   "name": "Obturator externus.or",
+   "polygons": 4936,
+   "path": []
+  },
+  {
+   "name": "Obturator externus.r",
+   "polygons": 1156,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Obturator internus.l",
+   "polygons": 3760,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Obturator internus.ol",
+   "polygons": 910,
+   "path": []
+  },
+  {
+   "name": "Obturator internus.or",
+   "polygons": 910,
+   "path": []
+  },
+  {
+   "name": "Obturator internus.r",
+   "polygons": 3760,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Occipitalis muscle.l",
+   "polygons": 2602,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Occipitalis muscle.ol",
+   "polygons": 250,
+   "path": []
+  },
+  {
+   "name": "Occipitalis muscle.or",
+   "polygons": 250,
+   "path": []
+  },
+  {
+   "name": "Occipitalis muscle.r",
+   "polygons": 2602,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Omohyoid muscle.el",
+   "polygons": 130,
+   "path": []
+  },
+  {
+   "name": "Omohyoid muscle.er",
+   "polygons": 130,
+   "path": []
+  },
+  {
+   "name": "Omohyoid muscle.l",
+   "polygons": 2706,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Omohyoid muscle.ol",
+   "polygons": 518,
+   "path": []
+  },
+  {
+   "name": "Omohyoid muscle.or",
+   "polygons": 518,
+   "path": []
+  },
+  {
+   "name": "Omohyoid muscle.r",
+   "polygons": 2706,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Opponens digiti minimi muscle of hand.l",
+   "polygons": 420,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Opponens digiti minimi muscle of hand.ol",
+   "polygons": 152,
+   "path": []
+  },
+  {
+   "name": "Opponens digiti minimi muscle of hand.or",
+   "polygons": 152,
+   "path": []
+  },
+  {
+   "name": "Opponens digiti minimi muscle of hand.r",
+   "polygons": 420,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Opponens pollicis muscle.l",
+   "polygons": 384,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Opponens pollicis muscle.r",
+   "polygons": 384,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Orbicularis oris muscle.l",
+   "polygons": 1880,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Orbicularis oris muscle.ol",
+   "polygons": 80,
+   "path": []
+  },
+  {
+   "name": "Orbicularis oris muscle.or",
+   "polygons": 80,
+   "path": []
+  },
+  {
+   "name": "Orbicularis oris muscle.r",
+   "polygons": 1880,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Orbital part of orbicularis oculi.l",
+   "polygons": 2390,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Orbital part of orbicularis oculi.ol",
+   "polygons": 152,
+   "path": []
+  },
+  {
+   "name": "Orbital part of orbicularis oculi.or",
+   "polygons": 152,
+   "path": []
+  },
+  {
+   "name": "Orbital part of orbicularis oculi.r",
+   "polygons": 2390,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Palatopharyngeus muscle.l",
+   "polygons": 15282,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Palatopharyngeus muscle.r",
+   "polygons": 15282,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Palmar aponeurosis.l",
+   "polygons": 663,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Palmar aponeurosis.r",
+   "polygons": 663,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Palmar interossei muscles.l",
+   "polygons": 172,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Palmar interossei muscles.r",
+   "polygons": 172,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Palmaris longus muscle.l",
+   "polygons": 4374,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Palmaris longus muscle.r",
+   "polygons": 4374,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Palpebral part of orbicularis oculi.l",
+   "polygons": 830,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Palpebral part of orbicularis oculi.r",
+   "polygons": 830,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Patellar ligament.el",
+   "polygons": 342,
+   "path": []
+  },
+  {
+   "name": "Patellar ligament.er",
+   "polygons": 342,
+   "path": []
+  },
+  {
+   "name": "Patellar ligament.ol",
+   "polygons": 376,
+   "path": []
+  },
+  {
+   "name": "Patellar ligament.or",
+   "polygons": 376,
+   "path": []
+  },
+  {
+   "name": "Pectineus muscle.el",
+   "polygons": 150,
+   "path": []
+  },
+  {
+   "name": "Pectineus muscle.l",
+   "polygons": 1952,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Pectineus muscle.ol",
+   "polygons": 446,
+   "path": []
+  },
+  {
+   "name": "Pectineus muscle.or",
+   "polygons": 446,
+   "path": []
+  },
+  {
+   "name": "Pectineus muscle.r",
+   "polygons": 1952,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Pectoral fascia.l",
+   "polygons": 1376,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Pectoral fascia.r",
+   "polygons": 1376,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Pectoralis major muscle.el",
+   "polygons": 366,
+   "path": []
+  },
+  {
+   "name": "Pectoralis major muscle.er",
+   "polygons": 366,
+   "path": []
+  },
+  {
+   "name": "Pectoralis major muscle.ol",
+   "polygons": 808,
+   "path": []
+  },
+  {
+   "name": "Pectoralis major muscle.or",
+   "polygons": 808,
+   "path": []
+  },
+  {
+   "name": "Pectoralis minor muscle.e1l",
+   "polygons": 1282,
+   "path": []
+  },
+  {
+   "name": "Pectoralis minor muscle.e1r",
+   "polygons": 1282,
+   "path": []
+  },
+  {
+   "name": "Pectoralis minor muscle.e2l",
+   "polygons": 938,
+   "path": []
+  },
+  {
+   "name": "Pectoralis minor muscle.e2r",
+   "polygons": 938,
+   "path": []
+  },
+  {
+   "name": "Pectoralis minor muscle.el",
+   "polygons": 754,
+   "path": []
+  },
+  {
+   "name": "Pectoralis minor muscle.er",
+   "polygons": 754,
+   "path": []
+  },
+  {
+   "name": "Pectoralis minor muscle.l",
+   "polygons": 4142,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Pectoralis minor muscle.ol",
+   "polygons": 2394,
+   "path": []
+  },
+  {
+   "name": "Pectoralis minor muscle.or",
+   "polygons": 2394,
+   "path": []
+  },
+  {
+   "name": "Pectoralis minor muscle.r",
+   "polygons": 4142,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Piriformis fascia.l",
+   "polygons": 469,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Piriformis fascia.r",
+   "polygons": 469,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Piriformis muscle.el",
+   "polygons": 196,
+   "path": []
+  },
+  {
+   "name": "Piriformis muscle.l",
+   "polygons": 1500,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Piriformis muscle.ol",
+   "polygons": 964,
+   "path": []
+  },
+  {
+   "name": "Piriformis muscle.or",
+   "polygons": 964,
+   "path": []
+  },
+  {
+   "name": "Piriformis muscle.r",
+   "polygons": 1500,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Plantar aponeurosis.l",
+   "polygons": 211,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Plantar aponeurosis.r",
+   "polygons": 211,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Plantar interossei muscles.e1l",
+   "polygons": 164,
+   "path": []
+  },
+  {
+   "name": "Plantar interossei muscles.e2l",
+   "polygons": 150,
+   "path": []
+  },
+  {
+   "name": "Plantar interossei muscles.el",
+   "polygons": 142,
+   "path": []
+  },
+  {
+   "name": "Plantar interossei muscles.l",
+   "polygons": 1242,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Plantar interossei muscles.o1l",
+   "polygons": 254,
+   "path": []
+  },
+  {
+   "name": "Plantar interossei muscles.o2l",
+   "polygons": 348,
+   "path": []
+  },
+  {
+   "name": "Plantar interossei muscles.ol",
+   "polygons": 234,
+   "path": []
+  },
+  {
+   "name": "Plantar interossei muscles.r",
+   "polygons": 1242,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Plantar tendon sheath of fibularis longus muscle.l",
+   "polygons": 320,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Plantar tendon sheath of fibularis longus muscle.r",
+   "polygons": 320,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Plantaris muscle.l",
+   "polygons": 4698,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Plantaris muscle.ol",
+   "polygons": 332,
+   "path": []
+  },
+  {
+   "name": "Plantaris muscle.or",
+   "polygons": 332,
+   "path": []
+  },
+  {
+   "name": "Plantaris muscle.r",
+   "polygons": 4698,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Platysma.l",
+   "polygons": 6548,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Platysma.r",
+   "polygons": 6548,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Popliteal fascia.l",
+   "polygons": 246,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Popliteal fascia.r",
+   "polygons": 246,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Popliteus muscle.el",
+   "polygons": 454,
+   "path": []
+  },
+  {
+   "name": "Popliteus muscle.er",
+   "polygons": 454,
+   "path": []
+  },
+  {
+   "name": "Popliteus muscle.l",
+   "polygons": 1132,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Popliteus muscle.ol",
+   "polygons": 242,
+   "path": []
+  },
+  {
+   "name": "Popliteus muscle.or",
+   "polygons": 242,
+   "path": []
+  },
+  {
+   "name": "Popliteus muscle.r",
+   "polygons": 1132,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Posterior belly of digastric muscle.l",
+   "polygons": 1276,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Posterior belly of digastric muscle.r",
+   "polygons": 1276,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Posterior crico-arytenoid muscle.l",
+   "polygons": 1812,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Posterior crico-arytenoid muscle.r",
+   "polygons": 1812,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Posterior intermuscular septum of leg.l",
+   "polygons": 265,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Posterior intermuscular septum of leg.r",
+   "polygons": 265,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Posterior layer of thoracolumbar fascia.l",
+   "polygons": 158,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Posterior layer of thoracolumbar fascia.r",
+   "polygons": 158,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Procerus muscle.el",
+   "polygons": 134,
+   "path": []
+  },
+  {
+   "name": "Procerus muscle.l",
+   "polygons": 546,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Procerus muscle.ol",
+   "polygons": 144,
+   "path": []
+  },
+  {
+   "name": "Procerus muscle.or",
+   "polygons": 144,
+   "path": []
+  },
+  {
+   "name": "Procerus muscle.r",
+   "polygons": 546,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Pronator quadratus.el",
+   "polygons": 318,
+   "path": []
+  },
+  {
+   "name": "Pronator quadratus.l",
+   "polygons": 1020,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Pronator quadratus.ol",
+   "polygons": 130,
+   "path": []
+  },
+  {
+   "name": "Pronator quadratus.r",
+   "polygons": 1020,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Pronator teres.el",
+   "polygons": 152,
+   "path": []
+  },
+  {
+   "name": "Pronator teres.er",
+   "polygons": 152,
+   "path": []
+  },
+  {
+   "name": "Pronator teres.ol",
+   "polygons": 160,
+   "path": []
+  },
+  {
+   "name": "Pronator teres.or",
+   "polygons": 160,
+   "path": []
+  },
+  {
+   "name": "Psoas major.l",
+   "polygons": 5474,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Psoas major.r",
+   "polygons": 5474,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Pubo-analis muscle.l",
+   "polygons": 1440,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Pubo-analis muscle.r",
+   "polygons": 1440,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Pubococcygeus muscle.l",
+   "polygons": 2512,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Pubococcygeus muscle.r",
+   "polygons": 2512,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Pyramidalis muscle.l",
+   "polygons": 1112,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Pyramidalis muscle.r",
+   "polygons": 1112,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Quadratus femoris muscle.el",
+   "polygons": 334,
+   "path": []
+  },
+  {
+   "name": "Quadratus femoris muscle.er",
+   "polygons": 334,
+   "path": []
+  },
+  {
+   "name": "Quadratus femoris muscle.l",
+   "polygons": 1646,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Quadratus femoris muscle.ol",
+   "polygons": 254,
+   "path": []
+  },
+  {
+   "name": "Quadratus femoris muscle.or",
+   "polygons": 254,
+   "path": []
+  },
+  {
+   "name": "Quadratus femoris muscle.r",
+   "polygons": 1646,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Quadratus lumborum muscle.l",
+   "polygons": 2832,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Quadratus lumborum muscle.r",
+   "polygons": 2832,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Quadratus plantae muscle.l",
+   "polygons": 1176,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Quadratus plantae muscle.r",
+   "polygons": 1176,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Quadriceps femoris muscle.el",
+   "polygons": 368,
+   "path": []
+  },
+  {
+   "name": "Quadriceps femoris muscle.er",
+   "polygons": 368,
+   "path": []
+  },
+  {
+   "name": "Radial head of flexor digitorum superficialis.l",
+   "polygons": 1276,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Radial head of flexor digitorum superficialis.r",
+   "polygons": 1276,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Rectus abdominis muscle.el",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Rectus abdominis muscle.er",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Rectus abdominis muscle.l",
+   "polygons": 20604,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Rectus abdominis muscle.ol",
+   "polygons": 2282,
+   "path": []
+  },
+  {
+   "name": "Rectus abdominis muscle.or",
+   "polygons": 2282,
+   "path": []
+  },
+  {
+   "name": "Rectus abdominis muscle.r",
+   "polygons": 20604,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Rectus anterior capitis muscle.el",
+   "polygons": 178,
+   "path": []
+  },
+  {
+   "name": "Rectus anterior capitis muscle.er",
+   "polygons": 178,
+   "path": []
+  },
+  {
+   "name": "Rectus anterior capitis muscle.l",
+   "polygons": 396,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Rectus anterior capitis muscle.ol",
+   "polygons": 66,
+   "path": []
+  },
+  {
+   "name": "Rectus anterior capitis muscle.or",
+   "polygons": 66,
+   "path": []
+  },
+  {
+   "name": "Rectus anterior capitis muscle.r",
+   "polygons": 396,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Rectus femoris muscle.l",
+   "polygons": 8276,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Rectus femoris muscle.ol",
+   "polygons": 284,
+   "path": []
+  },
+  {
+   "name": "Rectus femoris muscle.or",
+   "polygons": 284,
+   "path": []
+  },
+  {
+   "name": "Rectus femoris muscle.r",
+   "polygons": 8276,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Rectus lateralis capitis muscle.l",
+   "polygons": 360,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Rectus lateralis capitis muscle.ol",
+   "polygons": 258,
+   "path": []
+  },
+  {
+   "name": "Rectus lateralis capitis muscle.or",
+   "polygons": 258,
+   "path": []
+  },
+  {
+   "name": "Rectus lateralis capitis muscle.r",
+   "polygons": 360,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Rectus posterior major capitis muscle.el",
+   "polygons": 158,
+   "path": []
+  },
+  {
+   "name": "Rectus posterior major capitis muscle.er",
+   "polygons": 158,
+   "path": []
+  },
+  {
+   "name": "Rectus posterior major capitis muscle.l",
+   "polygons": 788,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Rectus posterior major capitis muscle.ol",
+   "polygons": 146,
+   "path": []
+  },
+  {
+   "name": "Rectus posterior major capitis muscle.or",
+   "polygons": 146,
+   "path": []
+  },
+  {
+   "name": "Rectus posterior major capitis muscle.r",
+   "polygons": 788,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Rectus posterior minor capitis muscle.el",
+   "polygons": 242,
+   "path": []
+  },
+  {
+   "name": "Rectus posterior minor capitis muscle.er",
+   "polygons": 242,
+   "path": []
+  },
+  {
+   "name": "Rectus posterior minor capitis muscle.l",
+   "polygons": 432,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Rectus posterior minor capitis muscle.ol",
+   "polygons": 146,
+   "path": []
+  },
+  {
+   "name": "Rectus posterior minor capitis muscle.or",
+   "polygons": 146,
+   "path": []
+  },
+  {
+   "name": "Rectus posterior minor capitis muscle.r",
+   "polygons": 432,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Rhomboid major muscle.el",
+   "polygons": 7948,
+   "path": []
+  },
+  {
+   "name": "Rhomboid major muscle.er",
+   "polygons": 7948,
+   "path": []
+  },
+  {
+   "name": "Rhomboid major muscle.l",
+   "polygons": 4800,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Rhomboid major muscle.r",
+   "polygons": 4800,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Rhomboid minor muscle.el",
+   "polygons": 2348,
+   "path": []
+  },
+  {
+   "name": "Rhomboid minor muscle.er",
+   "polygons": 2348,
+   "path": []
+  },
+  {
+   "name": "Rhomboid minor muscle.l",
+   "polygons": 1494,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Rhomboid minor muscle.r",
+   "polygons": 1494,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Risorius muscle.l",
+   "polygons": 592,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Risorius muscle.r",
+   "polygons": 592,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Rotatores.l",
+   "polygons": 6518,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Rotatores.r",
+   "polygons": 6518,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Sartorius muscle.el",
+   "polygons": 88,
+   "path": []
+  },
+  {
+   "name": "Sartorius muscle.er",
+   "polygons": 88,
+   "path": []
+  },
+  {
+   "name": "Sartorius muscle.l",
+   "polygons": 4966,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Sartorius muscle.ol",
+   "polygons": 654,
+   "path": []
+  },
+  {
+   "name": "Sartorius muscle.or",
+   "polygons": 654,
+   "path": []
+  },
+  {
+   "name": "Sartorius muscle.r",
+   "polygons": 4966,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Scalenus anterior muscle.e1l",
+   "polygons": 148,
+   "path": []
+  },
+  {
+   "name": "Scalenus anterior muscle.e1r",
+   "polygons": 148,
+   "path": []
+  },
+  {
+   "name": "Scalenus anterior muscle.e2l",
+   "polygons": 92,
+   "path": []
+  },
+  {
+   "name": "Scalenus anterior muscle.e2r",
+   "polygons": 92,
+   "path": []
+  },
+  {
+   "name": "Scalenus anterior muscle.el",
+   "polygons": 196,
+   "path": []
+  },
+  {
+   "name": "Scalenus anterior muscle.er",
+   "polygons": 196,
+   "path": []
+  },
+  {
+   "name": "Scalenus anterior muscle.l",
+   "polygons": 1386,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Scalenus anterior muscle.ol",
+   "polygons": 524,
+   "path": []
+  },
+  {
+   "name": "Scalenus anterior muscle.or",
+   "polygons": 524,
+   "path": []
+  },
+  {
+   "name": "Scalenus anterior muscle.r",
+   "polygons": 1386,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Scalenus medius muscle.e1l",
+   "polygons": 210,
+   "path": []
+  },
+  {
+   "name": "Scalenus medius muscle.e1r",
+   "polygons": 210,
+   "path": []
+  },
+  {
+   "name": "Scalenus medius muscle.el",
+   "polygons": 286,
+   "path": []
+  },
+  {
+   "name": "Scalenus medius muscle.er",
+   "polygons": 286,
+   "path": []
+  },
+  {
+   "name": "Scalenus medius muscle.l",
+   "polygons": 2078,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Scalenus medius muscle.ol",
+   "polygons": 692,
+   "path": []
+  },
+  {
+   "name": "Scalenus medius muscle.or",
+   "polygons": 692,
+   "path": []
+  },
+  {
+   "name": "Scalenus medius muscle.r",
+   "polygons": 2078,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Scalenus posterior muscle.el",
+   "polygons": 300,
+   "path": []
+  },
+  {
+   "name": "Scalenus posterior muscle.er",
+   "polygons": 300,
+   "path": []
+  },
+  {
+   "name": "Scalenus posterior muscle.l",
+   "polygons": 1326,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Scalenus posterior muscle.r",
+   "polygons": 1326,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Scapular spinal part of deltoid muscle.l",
+   "polygons": 4378,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Scapular spinal part of deltoid muscle.ol",
+   "polygons": 5864,
+   "path": []
+  },
+  {
+   "name": "Scapular spinal part of deltoid muscle.or",
+   "polygons": 5864,
+   "path": []
+  },
+  {
+   "name": "Scapular spinal part of deltoid muscle.r",
+   "polygons": 4378,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Sciatic bursa of gluteus maximus muscle.l",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Sciatic bursa of gluteus maximus muscle.r",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Sciatic bursa of obturator internus.l",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Sciatic bursa of obturator internus.r",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Semimembranosus bursa.l",
+   "polygons": 496,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Semimembranosus bursa.r",
+   "polygons": 496,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Semimembranosus muscle.el",
+   "polygons": 338,
+   "path": []
+  },
+  {
+   "name": "Semimembranosus muscle.er",
+   "polygons": 338,
+   "path": []
+  },
+  {
+   "name": "Semimembranosus muscle.l",
+   "polygons": 7442,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Semimembranosus muscle.ol",
+   "polygons": 272,
+   "path": []
+  },
+  {
+   "name": "Semimembranosus muscle.or",
+   "polygons": 272,
+   "path": []
+  },
+  {
+   "name": "Semimembranosus muscle.r",
+   "polygons": 7442,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Semispinalis colli muscle.l",
+   "polygons": 2584,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Semispinalis colli muscle.r",
+   "polygons": 2584,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Semispinalis thoracis muscle.l",
+   "polygons": 4972,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Semispinalis thoracis muscle.r",
+   "polygons": 4972,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Semitendinosus muscle.el",
+   "polygons": 232,
+   "path": []
+  },
+  {
+   "name": "Semitendinosus muscle.er",
+   "polygons": 232,
+   "path": []
+  },
+  {
+   "name": "Semitendinosus muscle.l",
+   "polygons": 4316,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Semitendinosus muscle.ol",
+   "polygons": 398,
+   "path": []
+  },
+  {
+   "name": "Semitendinosus muscle.or",
+   "polygons": 398,
+   "path": []
+  },
+  {
+   "name": "Semitendinosus muscle.r",
+   "polygons": 4316,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Serratus anterior muscle.e1l",
+   "polygons": 1002,
+   "path": []
+  },
+  {
+   "name": "Serratus anterior muscle.e2l",
+   "polygons": 1308,
+   "path": []
+  },
+  {
+   "name": "Serratus anterior muscle.e2r",
+   "polygons": 1308,
+   "path": []
+  },
+  {
+   "name": "Serratus anterior muscle.e3l",
+   "polygons": 2078,
+   "path": []
+  },
+  {
+   "name": "Serratus anterior muscle.e3r",
+   "polygons": 2078,
+   "path": []
+  },
+  {
+   "name": "Serratus anterior muscle.e4l",
+   "polygons": 866,
+   "path": []
+  },
+  {
+   "name": "Serratus anterior muscle.e4r",
+   "polygons": 866,
+   "path": []
+  },
+  {
+   "name": "Serratus anterior muscle.e5l",
+   "polygons": 1002,
+   "path": []
+  },
+  {
+   "name": "Serratus anterior muscle.e5r",
+   "polygons": 1002,
+   "path": []
+  },
+  {
+   "name": "Serratus anterior muscle.e6l",
+   "polygons": 1404,
+   "path": []
+  },
+  {
+   "name": "Serratus anterior muscle.e6r",
+   "polygons": 1404,
+   "path": []
+  },
+  {
+   "name": "Serratus anterior muscle.e7l",
+   "polygons": 922,
+   "path": []
+  },
+  {
+   "name": "Serratus anterior muscle.e7r",
+   "polygons": 922,
+   "path": []
+  },
+  {
+   "name": "Serratus anterior muscle.e8l",
+   "polygons": 668,
+   "path": []
+  },
+  {
+   "name": "Serratus anterior muscle.el",
+   "polygons": 900,
+   "path": []
+  },
+  {
+   "name": "Serratus anterior muscle.er",
+   "polygons": 900,
+   "path": []
+  },
+  {
+   "name": "Serratus anterior muscle.l",
+   "polygons": 25240,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Serratus anterior muscle.ol",
+   "polygons": 2516,
+   "path": []
+  },
+  {
+   "name": "Serratus anterior muscle.or",
+   "polygons": 2516,
+   "path": []
+  },
+  {
+   "name": "Serratus anterior muscle.r",
+   "polygons": 25240,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Serratus posterior inferior muscle.e1l",
+   "polygons": 722,
+   "path": []
+  },
+  {
+   "name": "Serratus posterior inferior muscle.e2l",
+   "polygons": 352,
+   "path": []
+  },
+  {
+   "name": "Serratus posterior inferior muscle.e3l",
+   "polygons": 448,
+   "path": []
+  },
+  {
+   "name": "Serratus posterior inferior muscle.el",
+   "polygons": 700,
+   "path": []
+  },
+  {
+   "name": "Serratus posterior inferior muscle.l",
+   "polygons": 8958,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Serratus posterior inferior muscle.r",
+   "polygons": 8958,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Serratus posterior superior muscle.e1l",
+   "polygons": 1010,
+   "path": []
+  },
+  {
+   "name": "Serratus posterior superior muscle.e2l",
+   "polygons": 2508,
+   "path": []
+  },
+  {
+   "name": "Serratus posterior superior muscle.e3l",
+   "polygons": 1950,
+   "path": []
+  },
+  {
+   "name": "Serratus posterior superior muscle.el",
+   "polygons": 1062,
+   "path": []
+  },
+  {
+   "name": "Serratus posterior superior muscle.l",
+   "polygons": 5518,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Serratus posterior superior muscle.r",
+   "polygons": 5518,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Short head of biceps brachii.l",
+   "polygons": 2696,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Short head of biceps brachii.ol",
+   "polygons": 1382,
+   "path": []
+  },
+  {
+   "name": "Short head of biceps brachii.r",
+   "polygons": 2696,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Short head of biceps femoris.el",
+   "polygons": 574,
+   "path": []
+  },
+  {
+   "name": "Short head of biceps femoris.l",
+   "polygons": 2476,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Short head of biceps femoris.r",
+   "polygons": 2476,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Soleus muscle.l",
+   "polygons": 6774,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Soleus muscle.o1l",
+   "polygons": 400,
+   "path": []
+  },
+  {
+   "name": "Soleus muscle.o1r",
+   "polygons": 400,
+   "path": []
+  },
+  {
+   "name": "Soleus muscle.ol",
+   "polygons": 404,
+   "path": []
+  },
+  {
+   "name": "Soleus muscle.or",
+   "polygons": 404,
+   "path": []
+  },
+  {
+   "name": "Soleus muscle.r",
+   "polygons": 6774,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Spinalis capitis muscle.el",
+   "polygons": 226,
+   "path": []
+  },
+  {
+   "name": "Spinalis capitis muscle.er",
+   "polygons": 226,
+   "path": []
+  },
+  {
+   "name": "Spinalis capitis muscle.l",
+   "polygons": 2560,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Spinalis capitis muscle.r",
+   "polygons": 2560,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Spinalis colli muscle.l",
+   "polygons": 596,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Spinalis colli muscle.r",
+   "polygons": 596,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Spinalis thoracis muscle.l",
+   "polygons": 5532,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Spinalis thoracis muscle.r",
+   "polygons": 5532,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Splenius capitis muscle.l",
+   "polygons": 5262,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Splenius capitis muscle.r",
+   "polygons": 5262,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Splenius colli muscle.e1l",
+   "polygons": 280,
+   "path": []
+  },
+  {
+   "name": "Splenius colli muscle.e1r",
+   "polygons": 280,
+   "path": []
+  },
+  {
+   "name": "Splenius colli muscle.el",
+   "polygons": 126,
+   "path": []
+  },
+  {
+   "name": "Splenius colli muscle.er",
+   "polygons": 126,
+   "path": []
+  },
+  {
+   "name": "Splenius colli muscle.l",
+   "polygons": 4314,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Splenius colli muscle.r",
+   "polygons": 4314,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Sternocleidomastoid muscle.el",
+   "polygons": 1456,
+   "path": []
+  },
+  {
+   "name": "Sternocleidomastoid muscle.er",
+   "polygons": 1456,
+   "path": []
+  },
+  {
+   "name": "Sternocleidomastoid muscle.l",
+   "polygons": 4952,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Sternocleidomastoid muscle.o1l",
+   "polygons": 256,
+   "path": []
+  },
+  {
+   "name": "Sternocleidomastoid muscle.o1r",
+   "polygons": 256,
+   "path": []
+  },
+  {
+   "name": "Sternocleidomastoid muscle.ol",
+   "polygons": 568,
+   "path": []
+  },
+  {
+   "name": "Sternocleidomastoid muscle.or",
+   "polygons": 568,
+   "path": []
+  },
+  {
+   "name": "Sternocleidomastoid muscle.r",
+   "polygons": 4952,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Sternocostal head of pectoralis major muscle.e1l",
+   "polygons": 2388,
+   "path": []
+  },
+  {
+   "name": "Sternocostal head of pectoralis major muscle.e1r",
+   "polygons": 2388,
+   "path": []
+  },
+  {
+   "name": "Sternocostal head of pectoralis major muscle.e2l",
+   "polygons": 1164,
+   "path": []
+  },
+  {
+   "name": "Sternocostal head of pectoralis major muscle.e2r",
+   "polygons": 1164,
+   "path": []
+  },
+  {
+   "name": "Sternocostal head of pectoralis major muscle.el",
+   "polygons": 3020,
+   "path": []
+  },
+  {
+   "name": "Sternocostal head of pectoralis major muscle.er",
+   "polygons": 3020,
+   "path": []
+  },
+  {
+   "name": "Sternocostal head of pectoralis major muscle.l",
+   "polygons": 3217,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Sternocostal head of pectoralis major muscle.r",
+   "polygons": 3217,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Sternohyoid muscle.el",
+   "polygons": 226,
+   "path": []
+  },
+  {
+   "name": "Sternohyoid muscle.er",
+   "polygons": 226,
+   "path": []
+  },
+  {
+   "name": "Sternohyoid muscle.l",
+   "polygons": 1394,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Sternohyoid muscle.ol",
+   "polygons": 802,
+   "path": []
+  },
+  {
+   "name": "Sternohyoid muscle.or",
+   "polygons": 802,
+   "path": []
+  },
+  {
+   "name": "Sternohyoid muscle.r",
+   "polygons": 1394,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Sternothyroid muscle.l",
+   "polygons": 1088,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Sternothyroid muscle.r",
+   "polygons": 1088,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Straight part of cricothyroid muscle.l",
+   "polygons": 1180,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Straight part of cricothyroid muscle.r",
+   "polygons": 1180,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Stylohyoid muscle.l",
+   "polygons": 694,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Stylohyoid muscle.r",
+   "polygons": 694,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Stylopharyngeus muscle.l",
+   "polygons": 9478,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Stylopharyngeus muscle.r",
+   "polygons": 9478,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Subacromial bursa.l",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subacromial bursa.r",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subclavius muscle.l",
+   "polygons": 794,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Subclavius muscle.ol",
+   "polygons": 414,
+   "path": []
+  },
+  {
+   "name": "Subclavius muscle.or",
+   "polygons": 414,
+   "path": []
+  },
+  {
+   "name": "Subclavius muscle.r",
+   "polygons": 794,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Subcutaneous acromial bursa.l",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subcutaneous acromial bursa.r",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subcutaneous bursa of lateral malleolus.l",
+   "polygons": 328,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subcutaneous bursa of lateral malleolus.r",
+   "polygons": 328,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subcutaneous bursa of medial malleolus.l",
+   "polygons": 328,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subcutaneous bursa of medial malleolus.r",
+   "polygons": 328,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subcutaneous bursa of tuberosity of tibia.l",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subcutaneous bursa of tuberosity of tibia.r",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subcutaneous calcaneal bursa.l",
+   "polygons": 272,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subcutaneous calcaneal bursa.r",
+   "polygons": 272,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subcutaneous infrapatellar bursa.l",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subcutaneous infrapatellar bursa.r",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subcutaneous prepatellar bursa.l",
+   "polygons": 496,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subcutaneous prepatellar bursa.r",
+   "polygons": 496,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subcutaneous trochanteric bursa.l",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subcutaneous trochanteric bursa.r",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subdeltoid bursa.l",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subdeltoid bursa.r",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subfacial prepatellar bursa.l",
+   "polygons": 496,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subfacial prepatellar bursa.r",
+   "polygons": 496,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subscapularis muscle.el",
+   "polygons": 248,
+   "path": []
+  },
+  {
+   "name": "Subscapularis muscle.er",
+   "polygons": 248,
+   "path": []
+  },
+  {
+   "name": "Subscapularis muscle.l",
+   "polygons": 2954,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Subscapularis muscle.ol",
+   "polygons": 8510,
+   "path": []
+  },
+  {
+   "name": "Subscapularis muscle.or",
+   "polygons": 8510,
+   "path": []
+  },
+  {
+   "name": "Subscapularis muscle.r",
+   "polygons": 2954,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Subtendinous bursa of iliacus muscle.l",
+   "polygons": 192,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subtendinous bursa of iliacus muscle.r",
+   "polygons": 192,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subtendinous bursa of infraspinatus muscle.l",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subtendinous bursa of infraspinatus muscle.r",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subtendinous bursa of obturator internus.l",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subtendinous bursa of obturator internus.r",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subtendinous bursa of sartorius muscle.l",
+   "polygons": 648,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subtendinous bursa of sartorius muscle.r",
+   "polygons": 648,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subtendinous bursa of teres major muscle.l",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subtendinous bursa of teres major muscle.r",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subtendinous bursa of tibialis anterior.l",
+   "polygons": 352,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subtendinous bursa of tibialis anterior.r",
+   "polygons": 352,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subtendinous bursa of trapezius muscle.l",
+   "polygons": 2944,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subtendinous bursa of trapezius muscle.r",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subtendinous bursa of triceps brachii muscle.l",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subtendinous bursa of triceps brachii muscle.r",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subtendinous calcaneal bursa.l",
+   "polygons": 272,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subtendinous calcaneal bursa.r",
+   "polygons": 272,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subtendinous prepatellar bursa.l",
+   "polygons": 496,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Subtendinous prepatellar bursa.r",
+   "polygons": 496,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Superficial head of flexor pollicis brevis.l",
+   "polygons": 276,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Superficial head of flexor pollicis brevis.r",
+   "polygons": 276,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Superficial head of pronator teres.l",
+   "polygons": 2546,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Superficial head of pronator teres.r",
+   "polygons": 2546,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Superficial investing cervical fascia.l",
+   "polygons": 1715,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Superficial investing cervical fascia.r",
+   "polygons": 1715,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Superficial layer of temporal fascia.l",
+   "polygons": 359,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Superficial layer of temporal fascia.r",
+   "polygons": 359,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Superficial part of masseter.l",
+   "polygons": 1402,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Superficial part of masseter.r",
+   "polygons": 1402,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Superficial transverse metacarpal ligament.l",
+   "polygons": 98,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Superficial transverse metacarpal ligament.r",
+   "polygons": 98,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Superficial transverse metatarsal ligament.l",
+   "polygons": 55,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Superficial transverse metatarsal ligament.r",
+   "polygons": 55,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Superior bursa of biceps femoris muscle.l",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Superior bursa of biceps femoris muscle.r",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Superior extensor retinaculum of ankle.l",
+   "polygons": 133,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Superior extensor retinaculum of ankle.r",
+   "polygons": 133,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Superior fibular retinaculum.l",
+   "polygons": 348,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Superior fibular retinaculum.r",
+   "polygons": 348,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Superior gemellus muscle.l",
+   "polygons": 404,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Superior gemellus muscle.ol",
+   "polygons": 310,
+   "path": []
+  },
+  {
+   "name": "Superior gemellus muscle.or",
+   "polygons": 310,
+   "path": []
+  },
+  {
+   "name": "Superior gemellus muscle.r",
+   "polygons": 404,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Superior head of lateral pterygoid muscle.l",
+   "polygons": 226,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Superior head of lateral pterygoid muscle.r",
+   "polygons": 226,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Superior oblique muscle.l",
+   "polygons": 1750,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Superior oblique muscle.r",
+   "polygons": 1750,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Superior pharyngeal constrictor.l",
+   "polygons": 5334,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Superior pharyngeal constrictor.r",
+   "polygons": 5334,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Superior rectus muscle.l",
+   "polygons": 1284,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Superior rectus muscle.r",
+   "polygons": 1284,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Superior tarsus.l",
+   "polygons": 178,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Superior tarsus.r",
+   "polygons": 178,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Supinator.el",
+   "polygons": 660,
+   "path": []
+  },
+  {
+   "name": "Supinator.er",
+   "polygons": 660,
+   "path": []
+  },
+  {
+   "name": "Supinator.l",
+   "polygons": 2754,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Supinator.ol",
+   "polygons": 242,
+   "path": []
+  },
+  {
+   "name": "Supinator.or",
+   "polygons": 242,
+   "path": []
+  },
+  {
+   "name": "Supinator.r",
+   "polygons": 2754,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Suprapatellar bursa.l",
+   "polygons": 648,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Suprapatellar bursa.r",
+   "polygons": 648,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Supraspinatus muscle.el",
+   "polygons": 674,
+   "path": []
+  },
+  {
+   "name": "Supraspinatus muscle.er",
+   "polygons": 674,
+   "path": []
+  },
+  {
+   "name": "Supraspinatus muscle.l",
+   "polygons": 1430,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Supraspinatus muscle.ol",
+   "polygons": 3996,
+   "path": []
+  },
+  {
+   "name": "Supraspinatus muscle.or",
+   "polygons": 3996,
+   "path": []
+  },
+  {
+   "name": "Supraspinatus muscle.r",
+   "polygons": 1430,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Synovial sheaths of digits of hand.l",
+   "polygons": 3488,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Synovial sheaths of digits of hand.r",
+   "polygons": 3488,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Temporalis muscle.el",
+   "polygons": 910,
+   "path": []
+  },
+  {
+   "name": "Temporalis muscle.er",
+   "polygons": 910,
+   "path": []
+  },
+  {
+   "name": "Temporalis muscle.l",
+   "polygons": 10260,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Temporalis muscle.o1l",
+   "polygons": 744,
+   "path": []
+  },
+  {
+   "name": "Temporalis muscle.o1r",
+   "polygons": 744,
+   "path": []
+  },
+  {
+   "name": "Temporalis muscle.o2l",
+   "polygons": 1728,
+   "path": []
+  },
+  {
+   "name": "Temporalis muscle.o2r",
+   "polygons": 1728,
+   "path": []
+  },
+  {
+   "name": "Temporalis muscle.o3l",
+   "polygons": 638,
+   "path": []
+  },
+  {
+   "name": "Temporalis muscle.o3r",
+   "polygons": 638,
+   "path": []
+  },
+  {
+   "name": "Temporalis muscle.o4l",
+   "polygons": 2728,
+   "path": []
+  },
+  {
+   "name": "Temporalis muscle.o4r",
+   "polygons": 2728,
+   "path": []
+  },
+  {
+   "name": "Temporalis muscle.r",
+   "polygons": 10260,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Temporoparietalis muscle.l",
+   "polygons": 11972,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Temporoparietalis muscle.r",
+   "polygons": 11972,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Tendinous arch of levator ani.l",
+   "polygons": 750,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Tendinous arch of levator ani.r",
+   "polygons": 750,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Tendon of extensor digitorum longus.l",
+   "polygons": 5184,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Tendon of extensor digitorum longus.r",
+   "polygons": 5184,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Tendon sheath - abd. pollicis longus - ext. pollicis brevis.l",
+   "polygons": 342,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath - abd. pollicis longus - ext. pollicis brevis.r",
+   "polygons": 342,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of extensor carpi ulnaris.l",
+   "polygons": 480,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of extensor carpi ulnaris.r",
+   "polygons": 480,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of extensor digiti minimi manus.l",
+   "polygons": 296,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of extensor digiti minimi manus.r",
+   "polygons": 296,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of extensor digitorum and extensor indicis.l",
+   "polygons": 1184,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of extensor digitorum and extensor indicis.r",
+   "polygons": 1184,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of extensor digitorum longus.l",
+   "polygons": 1032,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of extensor digitorum longus.r",
+   "polygons": 1032,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of extensor hallucis longus.l",
+   "polygons": 296,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of extensor hallucis longus.r",
+   "polygons": 296,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of extensor pollicis longus.l",
+   "polygons": 216,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of extensor pollicis longus.r",
+   "polygons": 216,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of extensors carpi radialis.l",
+   "polygons": 1152,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of extensors carpi radialis.r",
+   "polygons": 1152,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of flexor carpi radialis.l",
+   "polygons": 544,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of flexor carpi radialis.r",
+   "polygons": 544,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of flexor digitorum longus.l",
+   "polygons": 128,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of flexor digitorum longus.r",
+   "polygons": 128,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of flexor hallucis longus.l",
+   "polygons": 864,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of flexor hallucis longus.r",
+   "polygons": 864,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of flexor pollicis longus.l",
+   "polygons": 1568,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of flexor pollicis longus.r",
+   "polygons": 1568,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of tibialis anterior.l",
+   "polygons": 120,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of tibialis anterior.r",
+   "polygons": 120,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of tibialis posterior muscle.l",
+   "polygons": 150,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tendon sheath of tibialis posterior muscle.r",
+   "polygons": 150,
+   "path": [
+    "Tendon sheaths"
+   ]
+  },
+  {
+   "name": "Tensor fasciae latae.l",
+   "polygons": 1862,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Tensor fasciae latae.ol",
+   "polygons": 198,
+   "path": []
+  },
+  {
+   "name": "Tensor fasciae latae.or",
+   "polygons": 198,
+   "path": []
+  },
+  {
+   "name": "Tensor fasciae latae.r",
+   "polygons": 1862,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Teres major muscle.l",
+   "polygons": 1154,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Teres major muscle.ol",
+   "polygons": 2378,
+   "path": []
+  },
+  {
+   "name": "Teres major muscle.or",
+   "polygons": 2378,
+   "path": []
+  },
+  {
+   "name": "Teres major muscle.r",
+   "polygons": 1154,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Teres minor muscle.el",
+   "polygons": 910,
+   "path": []
+  },
+  {
+   "name": "Teres minor muscle.er",
+   "polygons": 910,
+   "path": []
+  },
+  {
+   "name": "Teres minor muscle.l",
+   "polygons": 1522,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Teres minor muscle.ol",
+   "polygons": 2824,
+   "path": []
+  },
+  {
+   "name": "Teres minor muscle.or",
+   "polygons": 2824,
+   "path": []
+  },
+  {
+   "name": "Teres minor muscle.r",
+   "polygons": 1522,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Thyro-epiglottic part of thyro-arytenoid muscle.l",
+   "polygons": 3110,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Thyro-epiglottic part of thyro-arytenoid muscle.r",
+   "polygons": 3110,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Thyrohyoid muscle.el",
+   "polygons": 588,
+   "path": []
+  },
+  {
+   "name": "Thyrohyoid muscle.er",
+   "polygons": 588,
+   "path": []
+  },
+  {
+   "name": "Thyrohyoid muscle.l",
+   "polygons": 692,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Thyrohyoid muscle.ol",
+   "polygons": 268,
+   "path": []
+  },
+  {
+   "name": "Thyrohyoid muscle.or",
+   "polygons": 268,
+   "path": []
+  },
+  {
+   "name": "Thyrohyoid muscle.r",
+   "polygons": 692,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Tibialis anterior muscle.e1l",
+   "polygons": 282,
+   "path": []
+  },
+  {
+   "name": "Tibialis anterior muscle.e1r",
+   "polygons": 282,
+   "path": []
+  },
+  {
+   "name": "Tibialis anterior muscle.el",
+   "polygons": 652,
+   "path": []
+  },
+  {
+   "name": "Tibialis anterior muscle.er",
+   "polygons": 652,
+   "path": []
+  },
+  {
+   "name": "Tibialis anterior muscle.l",
+   "polygons": 3526,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Tibialis anterior muscle.ol",
+   "polygons": 2704,
+   "path": []
+  },
+  {
+   "name": "Tibialis anterior muscle.or",
+   "polygons": 2704,
+   "path": []
+  },
+  {
+   "name": "Tibialis anterior muscle.r",
+   "polygons": 3526,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Tibialis posterior muscle.l",
+   "polygons": 5526,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Tibialis posterior muscle.ol",
+   "polygons": 4238,
+   "path": []
+  },
+  {
+   "name": "Tibialis posterior muscle.or",
+   "polygons": 4238,
+   "path": []
+  },
+  {
+   "name": "Tibialis posterior muscle.r",
+   "polygons": 5526,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Transversalis fascia",
+   "polygons": 2175,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Transverse arytenoid muscle",
+   "polygons": 1822,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Transverse head of adductor hallucis.e1l",
+   "polygons": 120,
+   "path": []
+  },
+  {
+   "name": "Transverse head of adductor hallucis.e1r",
+   "polygons": 120,
+   "path": []
+  },
+  {
+   "name": "Transverse head of adductor hallucis.e2l",
+   "polygons": 490,
+   "path": []
+  },
+  {
+   "name": "Transverse head of adductor hallucis.e2r",
+   "polygons": 490,
+   "path": []
+  },
+  {
+   "name": "Transverse head of adductor hallucis.e3l",
+   "polygons": 300,
+   "path": []
+  },
+  {
+   "name": "Transverse head of adductor hallucis.e3r",
+   "polygons": 300,
+   "path": []
+  },
+  {
+   "name": "Transverse head of adductor hallucis.l",
+   "polygons": 366,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Transverse head of adductor hallucis.ol",
+   "polygons": 68,
+   "path": []
+  },
+  {
+   "name": "Transverse head of adductor hallucis.or",
+   "polygons": 68,
+   "path": []
+  },
+  {
+   "name": "Transverse head of adductor hallucis.r",
+   "polygons": 366,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Transverse head of adductor pollicis.l",
+   "polygons": 1014,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Transverse head of adductor pollicis.r",
+   "polygons": 1014,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Transverse intermuscular septum of leg.l",
+   "polygons": 492,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Transverse intermuscular septum of leg.r",
+   "polygons": 492,
+   "path": [
+    "Fascia"
+   ]
+  },
+  {
+   "name": "Transverse part of trapezius muscle.l",
+   "polygons": 2992,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Transverse part of trapezius muscle.ol",
+   "polygons": 1524,
+   "path": []
+  },
+  {
+   "name": "Transverse part of trapezius muscle.or",
+   "polygons": 1524,
+   "path": []
+  },
+  {
+   "name": "Transverse part of trapezius muscle.r",
+   "polygons": 2992,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Transversus abdominis muscle.l",
+   "polygons": 34328,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Transversus abdominis muscle.ol",
+   "polygons": 612,
+   "path": []
+  },
+  {
+   "name": "Transversus abdominis muscle.or",
+   "polygons": 612,
+   "path": []
+  },
+  {
+   "name": "Transversus abdominis muscle.r",
+   "polygons": 34328,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Transversus thoracis muscle.l",
+   "polygons": 1670,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Transversus thoracis muscle.o1l",
+   "polygons": 476,
+   "path": []
+  },
+  {
+   "name": "Transversus thoracis muscle.o1r",
+   "polygons": 476,
+   "path": []
+  },
+  {
+   "name": "Transversus thoracis muscle.ol",
+   "polygons": 1828,
+   "path": []
+  },
+  {
+   "name": "Transversus thoracis muscle.or",
+   "polygons": 1828,
+   "path": []
+  },
+  {
+   "name": "Transversus thoracis muscle.r",
+   "polygons": 1670,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Triceps brachii muscle.el",
+   "polygons": 452,
+   "path": []
+  },
+  {
+   "name": "Triceps brachii muscle.er",
+   "polygons": 452,
+   "path": []
+  },
+  {
+   "name": "Triceps surae muscle.el",
+   "polygons": 474,
+   "path": []
+  },
+  {
+   "name": "Triceps surae muscle.er",
+   "polygons": 474,
+   "path": []
+  },
+  {
+   "name": "Trochanteric bursa of gluteus maximus muscle.l",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Trochanteric bursa of gluteus maximus muscle.r",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Trochanteric bursa of gluteus medius muscle.l",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Trochanteric bursa of gluteus medius muscle.r",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Trochanteric bursa of gluteus minimus muscle.l",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Trochanteric bursa of gluteus minimus muscle.r",
+   "polygons": 736,
+   "path": [
+    "Bursae"
+   ]
+  },
+  {
+   "name": "Trochanteric insertion.el",
+   "polygons": 232,
+   "path": []
+  },
+  {
+   "name": "Trochanteric insertion.er",
+   "polygons": 232,
+   "path": []
+  },
+  {
+   "name": "Trochlea of superior oblique muscle.l",
+   "polygons": 192,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Trochlea of superior oblique muscle.r",
+   "polygons": 192,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Ulnar head of extensor carpi ulnaris.l",
+   "polygons": 582,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Ulnar head of extensor carpi ulnaris.r",
+   "polygons": 582,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Ulnar head of flexor carpi ulnaris.l",
+   "polygons": 1466,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Ulnar head of flexor carpi ulnaris.ol",
+   "polygons": 1716,
+   "path": []
+  },
+  {
+   "name": "Ulnar head of flexor carpi ulnaris.or",
+   "polygons": 1716,
+   "path": []
+  },
+  {
+   "name": "Ulnar head of flexor carpi ulnaris.r",
+   "polygons": 1466,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Vastus intermedius muscle.l",
+   "polygons": 6164,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Vastus intermedius muscle.ol",
+   "polygons": 790,
+   "path": []
+  },
+  {
+   "name": "Vastus intermedius muscle.or",
+   "polygons": 790,
+   "path": []
+  },
+  {
+   "name": "Vastus intermedius muscle.r",
+   "polygons": 6164,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Vastus lateralis muscle.l",
+   "polygons": 9356,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Vastus lateralis muscle.ol",
+   "polygons": 998,
+   "path": []
+  },
+  {
+   "name": "Vastus lateralis muscle.or",
+   "polygons": 998,
+   "path": []
+  },
+  {
+   "name": "Vastus lateralis muscle.r",
+   "polygons": 9356,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Vastus medialis muscle.l",
+   "polygons": 6460,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Vastus medialis muscle.ol",
+   "polygons": 946,
+   "path": []
+  },
+  {
+   "name": "Vastus medialis muscle.or",
+   "polygons": 946,
+   "path": []
+  },
+  {
+   "name": "Vastus medialis muscle.r",
+   "polygons": 6460,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Ventral parts of lateral intertransversarii lumborum muscles.l",
+   "polygons": 996,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Ventral parts of lateral intertransversarii lumborum muscles.r",
+   "polygons": 996,
+   "path": [
+    "Muscles"
+   ]
+  },
+  {
+   "name": "Zygomaticus major muscle.l",
+   "polygons": 798,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Zygomaticus major muscle.ol",
+   "polygons": 68,
+   "path": []
+  },
+  {
+   "name": "Zygomaticus major muscle.or",
+   "polygons": 68,
+   "path": []
+  },
+  {
+   "name": "Zygomaticus major muscle.r",
+   "polygons": 798,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Zygomaticus minor muscle.l",
+   "polygons": 432,
+   "path": [
+    "Superficial muscles"
+   ]
+  },
+  {
+   "name": "Zygomaticus minor muscle.ol",
+   "polygons": 88,
+   "path": []
+  },
+  {
+   "name": "Zygomaticus minor muscle.or",
+   "polygons": 88,
+   "path": []
+  },
+  {
+   "name": "Zygomaticus minor muscle.r",
+   "polygons": 432,
+   "path": [
+    "Superficial muscles"
+   ]
+  }
+ ]
+}

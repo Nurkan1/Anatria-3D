@@ -1,0 +1,4416 @@
+{
+ "system": "articular",
+ "collections": [
+  "Bonus collection/Arthrology",
+  "3: Joints"
+ ],
+ "output": "C:\\Users\\TrendingPC\\Documents\\Anatria3D\\public\\anatomy\\articular_male.glb",
+ "draco": true,
+ "object_count": 413,
+ "skipped_count": 66,
+ "skipped": [
+  "Ankle joint.j",
+  "Cartilaginous joints of sternum.j",
+  "Costochondral joints.j",
+  "Crico-arytenoid joint.j",
+  "Cricothyroid joint.j",
+  "Denticulate suture.j",
+  "Distal radio-ulnar joint.j",
+  "Fibro-elastic membrane of larynx.j",
+  "Fibrous joints of free upper limb.j",
+  "Fibrous joints of larynx.j",
+  "Fibrous joints of thorax.j",
+  "Fibrous joints.j",
+  "Gomphosis.j",
+  "Hip joint.j",
+  "Intermetatarsal joints.j",
+  "Interosseous ligament.j",
+  "Interosseous membrane.j",
+  "Interphalangeal joints of foot.j",
+  "Intertarsal joints.j",
+  "Intervertebral symphysis.j",
+  "Joints of auditory ossicles.j",
+  "Joints of foot.j",
+  "Joints of free lower limb.j",
+  "Joints of free upper limb.j",
+  "Joints of hand.j",
+  "Joints of lower limb.j",
+  "Joints of pectoral girdle.j",
+  "Joints of pelvic girdle.j",
+  "Joints of skull.j",
+  "Joints of upper limb.j",
+  "Joints of vertebral column.j",
+  "Knee joint.j",
+  "Laryngeal joints.j",
+  "Lateral atlanto-axial joint.j",
+  "Lateral collateral ligament of ankle.j",
+  "Ligaments of epiglottis.j",
+  "Limbous suture.j",
+  "Lumbosacral symphysis.j",
+  "Medial collateral ligament of ankle.j",
+  "Median atlanto-axial joint.j",
+  "Metatarsophalangeal joints.j",
+  "Plane suture.j",
+  "Radio-ulnar syndesmoses.j",
+  "Radiocarpal joint.j",
+  "Sacro-iliac joint.j",
+  "Sacrococcygeal joint.j",
+  "Schindylesis.j",
+  "Serrate suture.j",
+  "Sternochondral synchondrosis of first rib.j",
+  "Superior tibiofibular joint.j",
+  "Sutures.j",
+  "Symphysis.j",
+  "Synchondroses.j",
+  "Syndesmoses.j",
+  "Synostosis.j",
+  "Synovial joint.j",
+  "Synovial joints of free upper limb.j",
+  "Synovial joints of larynx.j",
+  "Synovial joints of thorax.j",
+  "Tarsometatarsal joints.j",
+  "Temporomandibular joint.j",
+  "Thoracic joints.j",
+  "Thyrohyoid membrane.j",
+  "Tibiofibular syndesmosis.j",
+  "Uncovertebral joints.j",
+  "Zygapophysial joints.j"
+ ],
+ "objects": [
+  {
+   "name": "Acetabular labrum.l",
+   "polygons": 704,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Hip joint"
+   ]
+  },
+  {
+   "name": "Acetabular labrum.r",
+   "polygons": 704,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Hip joint"
+   ]
+  },
+  {
+   "name": "Acromioclavicular ligament.l",
+   "polygons": 160,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Synovial joints of pectoral girdle",
+    "Acromioclavicular joint"
+   ]
+  },
+  {
+   "name": "Acromioclavicular ligament.r",
+   "polygons": 160,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Synovial joints of pectoral girdle",
+    "Acromioclavicular joint"
+   ]
+  },
+  {
+   "name": "Annular ligament of radius.l",
+   "polygons": 188,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Elbow joint"
+   ]
+  },
+  {
+   "name": "Annular ligament of radius.r",
+   "polygons": 188,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Elbow joint"
+   ]
+  },
+  {
+   "name": "Anterior cruciate ligament.l",
+   "polygons": 808,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Anterior cruciate ligament.r",
+   "polygons": 808,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Anterior ligament of fibular head.l",
+   "polygons": 52,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Superior tibiofibular joint"
+   ]
+  },
+  {
+   "name": "Anterior ligament of fibular head.r",
+   "polygons": 52,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Superior tibiofibular joint"
+   ]
+  },
+  {
+   "name": "Anterior longitudinal ligament",
+   "polygons": 2464,
+   "path": [
+    "Joints of vertebral column",
+    "Fibrous joints of vertebral column"
+   ]
+  },
+  {
+   "name": "Anterior meniscotibial ligament (Lateral meniscus).l",
+   "polygons": 124,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint",
+    "Lateral meniscus"
+   ]
+  },
+  {
+   "name": "Anterior meniscotibial ligament (Lateral meniscus).r",
+   "polygons": 124,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint",
+    "Lateral meniscus"
+   ]
+  },
+  {
+   "name": "Anterior meniscotibial ligament (Medial meniscus).l",
+   "polygons": 64,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint",
+    "Medial meniscus"
+   ]
+  },
+  {
+   "name": "Anterior meniscotibial ligament (Medial meniscus).r",
+   "polygons": 64,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint",
+    "Medial meniscus"
+   ]
+  },
+  {
+   "name": "Anterior sacro-iliac ligament.l",
+   "polygons": 252,
+   "path": [
+    "Joints of lower limb",
+    "Joints of pelvic girdle",
+    "Synovial joints of pelvic girdle",
+    "Sacro-iliac joint"
+   ]
+  },
+  {
+   "name": "Anterior sacro-iliac ligament.r",
+   "polygons": 252,
+   "path": [
+    "Joints of lower limb",
+    "Joints of pelvic girdle",
+    "Synovial joints of pelvic girdle",
+    "Sacro-iliac joint"
+   ]
+  },
+  {
+   "name": "Anterior sternoclavicular ligament.l",
+   "polygons": 160,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Synovial joints of pectoral girdle",
+    "Sternoclavicular joint"
+   ]
+  },
+  {
+   "name": "Anterior sternoclavicular ligament.r",
+   "polygons": 160,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Synovial joints of pectoral girdle",
+    "Sternoclavicular joint"
+   ]
+  },
+  {
+   "name": "Anterior talocalcaneal ligament.l",
+   "polygons": 52,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Subtalar joint"
+   ]
+  },
+  {
+   "name": "Anterior talocalcaneal ligament.r",
+   "polygons": 52,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Subtalar joint"
+   ]
+  },
+  {
+   "name": "Anterior talofibular ligament.l",
+   "polygons": 16,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Ankle joint",
+    "Lateral collateral ligament"
+   ]
+  },
+  {
+   "name": "Anterior talofibular ligament.r",
+   "polygons": 16,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Ankle joint",
+    "Lateral collateral ligament"
+   ]
+  },
+  {
+   "name": "Anterior tibiofibular ligament.l",
+   "polygons": 124,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Fibrous joints of free lower limb",
+    "Tibiofibular syndesmosis"
+   ]
+  },
+  {
+   "name": "Anterior tibiofibular ligament.r",
+   "polygons": 124,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Fibrous joints of free lower limb",
+    "Tibiofibular syndesmosis"
+   ]
+  },
+  {
+   "name": "Arcuate popliteal ligament.l",
+   "polygons": 644,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Arcuate popliteal ligament.r",
+   "polygons": 644,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Articular capsule of acromioclavicular joint.l",
+   "polygons": 576,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Synovial joints of pectoral girdle",
+    "Acromioclavicular joint"
+   ]
+  },
+  {
+   "name": "Articular capsule of acromioclavicular joint.r",
+   "polygons": 576,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Synovial joints of pectoral girdle",
+    "Acromioclavicular joint"
+   ]
+  },
+  {
+   "name": "Articular capsule of elbow joint.l",
+   "polygons": 878,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Elbow joint"
+   ]
+  },
+  {
+   "name": "Articular capsule of elbow joint.r",
+   "polygons": 878,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Elbow joint"
+   ]
+  },
+  {
+   "name": "Articular capsule of glenohumeral joint.l",
+   "polygons": 1616,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Glenohumeral joint"
+   ]
+  },
+  {
+   "name": "Articular capsule of glenohumeral joint.r",
+   "polygons": 1616,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Glenohumeral joint"
+   ]
+  },
+  {
+   "name": "Articular capsule of hip joint.l",
+   "polygons": 560,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Hip joint"
+   ]
+  },
+  {
+   "name": "Articular capsule of hip joint.r",
+   "polygons": 560,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Hip joint"
+   ]
+  },
+  {
+   "name": "Articular capsule of interphalangeal joint of great toe.l",
+   "polygons": 192,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Interphalangeal joints of foot"
+   ]
+  },
+  {
+   "name": "Articular capsule of interphalangeal joint of great toe.r",
+   "polygons": 192,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Interphalangeal joints of foot"
+   ]
+  },
+  {
+   "name": "Articular capsule of knee joint.l",
+   "polygons": 1472,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Articular capsule of knee joint.r",
+   "polygons": 1472,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Articular capsule of radiocarpal joint.l",
+   "polygons": 671,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Distal radio-ulnar joint"
+   ]
+  },
+  {
+   "name": "Articular capsule of radiocarpal joint.r",
+   "polygons": 671,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Distal radio-ulnar joint"
+   ]
+  },
+  {
+   "name": "Articular capsule of sternoclavicular joint.l",
+   "polygons": 504,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Synovial joints of pectoral girdle",
+    "Sternoclavicular joint"
+   ]
+  },
+  {
+   "name": "Articular capsule of sternoclavicular joint.r",
+   "polygons": 504,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Synovial joints of pectoral girdle",
+    "Sternoclavicular joint"
+   ]
+  },
+  {
+   "name": "Articular capsule of superior tibiofibular joint.l",
+   "polygons": 280,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Superior tibiofibular joint"
+   ]
+  },
+  {
+   "name": "Articular capsule of superior tibiofibular joint.r",
+   "polygons": 280,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Superior tibiofibular joint"
+   ]
+  },
+  {
+   "name": "Articular capsule of temporomandibular joint.l",
+   "polygons": 900,
+   "path": [
+    "Joints of skull",
+    "Cranial synovial joints",
+    "Temporomandibular joint"
+   ]
+  },
+  {
+   "name": "Articular capsule of temporomandibular joint.r",
+   "polygons": 900,
+   "path": [
+    "Joints of skull",
+    "Cranial synovial joints",
+    "Temporomandibular joint"
+   ]
+  },
+  {
+   "name": "Articular capsules of distal interphalangeal joints of foot.l",
+   "polygons": 712,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Interphalangeal joints of foot"
+   ]
+  },
+  {
+   "name": "Articular capsules of distal interphalangeal joints of foot.r",
+   "polygons": 712,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Interphalangeal joints of foot"
+   ]
+  },
+  {
+   "name": "Articular capsules of distal interphalangeal joints.l",
+   "polygons": 752,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Interphalangeal joints of hand"
+   ]
+  },
+  {
+   "name": "Articular capsules of distal interphalangeal joints.r",
+   "polygons": 752,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Interphalangeal joints of hand"
+   ]
+  },
+  {
+   "name": "Articular capsules of metacarpophalangeal joints.l",
+   "polygons": 784,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Metacarpophalangeal joints"
+   ]
+  },
+  {
+   "name": "Articular capsules of metacarpophalangeal joints.r",
+   "polygons": 784,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Metacarpophalangeal joints"
+   ]
+  },
+  {
+   "name": "Articular capsules of metatarsophalangeal joints.l",
+   "polygons": 876,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Metatarsophalangeal joints"
+   ]
+  },
+  {
+   "name": "Articular capsules of metatarsophalangeal joints.r",
+   "polygons": 876,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Metatarsophalangeal joints"
+   ]
+  },
+  {
+   "name": "Articular capsules of proximal interphalangeal joints of foot.l",
+   "polygons": 732,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Interphalangeal joints of foot"
+   ]
+  },
+  {
+   "name": "Articular capsules of proximal interphalangeal joints of foot.r",
+   "polygons": 732,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Interphalangeal joints of foot"
+   ]
+  },
+  {
+   "name": "Articular capsules of proximal interphalangeal joints.l",
+   "polygons": 696,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Interphalangeal joints of hand"
+   ]
+  },
+  {
+   "name": "Articular capsules of proximal interphalangeal joints.r",
+   "polygons": 696,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Interphalangeal joints of hand"
+   ]
+  },
+  {
+   "name": "Articular disc of acromioclavicular joint.l",
+   "polygons": 88,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Synovial joints of pectoral girdle",
+    "Acromioclavicular joint"
+   ]
+  },
+  {
+   "name": "Articular disc of acromioclavicular joint.r",
+   "polygons": 88,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Synovial joints of pectoral girdle",
+    "Acromioclavicular joint"
+   ]
+  },
+  {
+   "name": "Articular disc of distal radio-ulnar joint.l",
+   "polygons": 15,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Distal radio-ulnar joint"
+   ]
+  },
+  {
+   "name": "Articular disc of distal radio-ulnar joint.r",
+   "polygons": 15,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Distal radio-ulnar joint"
+   ]
+  },
+  {
+   "name": "Articular disc of sternoclavicular joint.l",
+   "polygons": 88,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Synovial joints of pectoral girdle",
+    "Sternoclavicular joint"
+   ]
+  },
+  {
+   "name": "Articular disc of sternoclavicular joint.r",
+   "polygons": 88,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Synovial joints of pectoral girdle",
+    "Sternoclavicular joint"
+   ]
+  },
+  {
+   "name": "Articular disc of temporomandibular joint.l",
+   "polygons": 274,
+   "path": [
+    "Joints of skull",
+    "Cranial synovial joints",
+    "Temporomandibular joint"
+   ]
+  },
+  {
+   "name": "Articular disc of temporomandibular joint.r",
+   "polygons": 274,
+   "path": [
+    "Joints of skull",
+    "Cranial synovial joints",
+    "Temporomandibular joint"
+   ]
+  },
+  {
+   "name": "Calcaneocuboid ligament.l",
+   "polygons": 16,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Transverse tarsal joint",
+    "Bifurcate ligament"
+   ]
+  },
+  {
+   "name": "Calcaneocuboid ligament.r",
+   "polygons": 16,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Transverse tarsal joint",
+    "Bifurcate ligament"
+   ]
+  },
+  {
+   "name": "Calcaneofibular ligament.l",
+   "polygons": 16,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Ankle joint",
+    "Lateral collateral ligament"
+   ]
+  },
+  {
+   "name": "Calcaneofibular ligament.r",
+   "polygons": 16,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Ankle joint",
+    "Lateral collateral ligament"
+   ]
+  },
+  {
+   "name": "Calcaneonavicular ligament.l",
+   "polygons": 48,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Transverse tarsal joint",
+    "Bifurcate ligament"
+   ]
+  },
+  {
+   "name": "Calcaneonavicular ligament.r",
+   "polygons": 48,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Transverse tarsal joint",
+    "Bifurcate ligament"
+   ]
+  },
+  {
+   "name": "Capitohamate interosseous ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Interosseus intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Capitohamate interosseous ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Interosseus intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Collateral interphalangeal ligaments of foot.l",
+   "polygons": 1348,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Interphalangeal joints of foot"
+   ]
+  },
+  {
+   "name": "Collateral interphalangeal ligaments of foot.r",
+   "polygons": 1348,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Interphalangeal joints of foot"
+   ]
+  },
+  {
+   "name": "Collateral interphalangeal ligaments of hand.l",
+   "polygons": 984,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Interphalangeal joints of hand"
+   ]
+  },
+  {
+   "name": "Collateral interphalangeal ligaments of hand.r",
+   "polygons": 984,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Interphalangeal joints of hand"
+   ]
+  },
+  {
+   "name": "Collateral metacarpophalangeal ligaments.l",
+   "polygons": 520,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Metacarpophalangeal joints"
+   ]
+  },
+  {
+   "name": "Collateral metacarpophalangeal ligaments.r",
+   "polygons": 520,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Metacarpophalangeal joints"
+   ]
+  },
+  {
+   "name": "Collateral metatarsophalangeal ligaments.l",
+   "polygons": 808,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Metatarsophalangeal joints"
+   ]
+  },
+  {
+   "name": "Collateral metatarsophalangeal ligaments.r",
+   "polygons": 808,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Metatarsophalangeal joints"
+   ]
+  },
+  {
+   "name": "Conoid ligament.l",
+   "polygons": 28,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Synovial joints of pectoral girdle",
+    "Acromioclavicular joint",
+    "Coracoclavicular ligament"
+   ]
+  },
+  {
+   "name": "Conoid ligament.r",
+   "polygons": 28,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Synovial joints of pectoral girdle",
+    "Acromioclavicular joint",
+    "Coracoclavicular ligament"
+   ]
+  },
+  {
+   "name": "Coraco-acromial ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Fibrous joints of pectoral girdle"
+   ]
+  },
+  {
+   "name": "Coraco-acromial ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Fibrous joints of pectoral girdle"
+   ]
+  },
+  {
+   "name": "Coracohumeral ligament.l",
+   "polygons": 100,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Glenohumeral joint"
+   ]
+  },
+  {
+   "name": "Coracohumeral ligament.r",
+   "polygons": 100,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Glenohumeral joint"
+   ]
+  },
+  {
+   "name": "Costoclavicular ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Synovial joints of pectoral girdle",
+    "Sternoclavicular joint"
+   ]
+  },
+  {
+   "name": "Costoclavicular ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Synovial joints of pectoral girdle",
+    "Sternoclavicular joint"
+   ]
+  },
+  {
+   "name": "Costotransverse ligament.l",
+   "polygons": 198,
+   "path": [
+    "Thoracic joints",
+    "Synovial joints of thorax",
+    "Costovertebral joints",
+    "Costotransverse joint"
+   ]
+  },
+  {
+   "name": "Costotransverse ligament.r",
+   "polygons": 198,
+   "path": [
+    "Thoracic joints",
+    "Synovial joints of thorax",
+    "Costovertebral joints",
+    "Costotransverse joint"
+   ]
+  },
+  {
+   "name": "Cricopharyngeal ligament.l",
+   "polygons": 3119,
+   "path": [
+    "Laryngeal joints",
+    "Synovial joints of larynx",
+    "Crico-arythenoid joint"
+   ]
+  },
+  {
+   "name": "Cricopharyngeal ligament.r",
+   "polygons": 3119,
+   "path": [
+    "Laryngeal joints",
+    "Synovial joints of larynx",
+    "Crico-arythenoid joint"
+   ]
+  },
+  {
+   "name": "Cuneocuboid interosseous ligament.l",
+   "polygons": 40,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Cuneocuboid joint"
+   ]
+  },
+  {
+   "name": "Cuneocuboid interosseous ligament.r",
+   "polygons": 40,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Cuneocuboid joint"
+   ]
+  },
+  {
+   "name": "Cuneometatarsal interosseous ligaments.l",
+   "polygons": 18,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Tarsometatarsal joints"
+   ]
+  },
+  {
+   "name": "Cuneometatarsal interosseous ligaments.r",
+   "polygons": 18,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Tarsometatarsal joints"
+   ]
+  },
+  {
+   "name": "Deep part of tibial collateral ligament.l",
+   "polygons": 128,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint",
+    "Tibial collateral ligament"
+   ]
+  },
+  {
+   "name": "Deep part of tibial collateral ligament.r",
+   "polygons": 128,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint",
+    "Tibial collateral ligament"
+   ]
+  },
+  {
+   "name": "Deep transverse metacarpal ligament.l",
+   "polygons": 30,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Metacarpophalangeal joints"
+   ]
+  },
+  {
+   "name": "Deep transverse metacarpal ligament.r",
+   "polygons": 30,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Metacarpophalangeal joints"
+   ]
+  },
+  {
+   "name": "Deep transverse metatarsal ligament.l",
+   "polygons": 76,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Metatarsophalangeal joints"
+   ]
+  },
+  {
+   "name": "Deep transverse metatarsal ligament.r",
+   "polygons": 76,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Metatarsophalangeal joints"
+   ]
+  },
+  {
+   "name": "Descending part of iliofemoral ligament.l",
+   "polygons": 304,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Hip joint",
+    "Iliofemoral ligament"
+   ]
+  },
+  {
+   "name": "Descending part of iliofemoral ligament.r",
+   "polygons": 304,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Hip joint",
+    "Iliofemoral ligament"
+   ]
+  },
+  {
+   "name": "Dorsal calcaneocuboid ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Transverse tarsal joint",
+    "Calcaneocuboid joint"
+   ]
+  },
+  {
+   "name": "Dorsal calcaneocuboid ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Transverse tarsal joint",
+    "Calcaneocuboid joint"
+   ]
+  },
+  {
+   "name": "Dorsal carpometacarpal ligaments.l",
+   "polygons": 74,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Carpometacarpal joints"
+   ]
+  },
+  {
+   "name": "Dorsal carpometacarpal ligaments.r",
+   "polygons": 74,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Carpometacarpal joints"
+   ]
+  },
+  {
+   "name": "Dorsal cuboideonavicular ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Cuboidonavicular joint"
+   ]
+  },
+  {
+   "name": "Dorsal cuboideonavicular ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Cuboidonavicular joint"
+   ]
+  },
+  {
+   "name": "Dorsal cuneocuboid ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Cuneocuboid joint"
+   ]
+  },
+  {
+   "name": "Dorsal cuneocuboid ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Cuneocuboid joint"
+   ]
+  },
+  {
+   "name": "Dorsal cuneonavicular ligaments.l",
+   "polygons": 30,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Cuneonavicular joint"
+   ]
+  },
+  {
+   "name": "Dorsal cuneonavicular ligaments.r",
+   "polygons": 30,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Cuneonavicular joint"
+   ]
+  },
+  {
+   "name": "Dorsal intercarpal ligaments.l",
+   "polygons": 220,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Dorsal intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Dorsal intercarpal ligaments.r",
+   "polygons": 220,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Dorsal intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Dorsal intercuneiform ligaments.l",
+   "polygons": 12,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Intercuneiform joints"
+   ]
+  },
+  {
+   "name": "Dorsal intercuneiform ligaments.r",
+   "polygons": 12,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Intercuneiform joints"
+   ]
+  },
+  {
+   "name": "Dorsal metacarpal ligaments.l",
+   "polygons": 24,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intermetacarpal joints"
+   ]
+  },
+  {
+   "name": "Dorsal metacarpal ligaments.r",
+   "polygons": 24,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intermetacarpal joints"
+   ]
+  },
+  {
+   "name": "Dorsal metatarsal ligaments.l",
+   "polygons": 28,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intermetatarsal joints"
+   ]
+  },
+  {
+   "name": "Dorsal metatarsal ligaments.r",
+   "polygons": 28,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intermetatarsal joints"
+   ]
+  },
+  {
+   "name": "Dorsal radio-ulnar ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Distal radio-ulnar joint"
+   ]
+  },
+  {
+   "name": "Dorsal radio-ulnar ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Distal radio-ulnar joint"
+   ]
+  },
+  {
+   "name": "Dorsal radiocarpal ligament.l",
+   "polygons": 124,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Radiocarpal joint"
+   ]
+  },
+  {
+   "name": "Dorsal radiocarpal ligament.r",
+   "polygons": 124,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Radiocarpal joint"
+   ]
+  },
+  {
+   "name": "Dorsal scaphotriquetral ligament.l",
+   "polygons": 52,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Dorsal intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Dorsal scaphotriquetral ligament.r",
+   "polygons": 52,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Dorsal intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Dorsal tarsometatarsal ligaments.l",
+   "polygons": 196,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Tarsometatarsal joints"
+   ]
+  },
+  {
+   "name": "Dorsal tarsometatarsal ligaments.r",
+   "polygons": 196,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Tarsometatarsal joints"
+   ]
+  },
+  {
+   "name": "Dorsal ulnocarpal ligament.l",
+   "polygons": 60,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Radiocarpal joint"
+   ]
+  },
+  {
+   "name": "Dorsal ulnocarpal ligament.r",
+   "polygons": 60,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Radiocarpal joint"
+   ]
+  },
+  {
+   "name": "External intercostal membrane.l",
+   "polygons": 3368,
+   "path": [
+    "Thoracic joints",
+    "Fibrous joints of thorax"
+   ]
+  },
+  {
+   "name": "External intercostal membrane.r",
+   "polygons": 3368,
+   "path": [
+    "Thoracic joints",
+    "Fibrous joints of thorax"
+   ]
+  },
+  {
+   "name": "Fibular collateral ligament.l",
+   "polygons": 40,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Fibular collateral ligament.r",
+   "polygons": 40,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Frenula capsulae.l",
+   "polygons": 432,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Hip joint"
+   ]
+  },
+  {
+   "name": "Frenula capsulae.r",
+   "polygons": 432,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Hip joint"
+   ]
+  },
+  {
+   "name": "Glenoid labrum.l",
+   "polygons": 424,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Glenohumeral joint"
+   ]
+  },
+  {
+   "name": "Glenoid labrum.r",
+   "polygons": 424,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Glenohumeral joint"
+   ]
+  },
+  {
+   "name": "Iliolumbar ligament.l",
+   "polygons": 56,
+   "path": [
+    "Joints of lower limb",
+    "Joints of pelvic girdle",
+    "Fibrous joints of pelvic girdle"
+   ]
+  },
+  {
+   "name": "Iliolumbar ligament.r",
+   "polygons": 56,
+   "path": [
+    "Joints of lower limb",
+    "Joints of pelvic girdle",
+    "Fibrous joints of pelvic girdle"
+   ]
+  },
+  {
+   "name": "Inferior glenohumeral ligament.l",
+   "polygons": 160,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Glenohumeral joint",
+    "Glenohumeral ligaments"
+   ]
+  },
+  {
+   "name": "Inferior glenohumeral ligament.r",
+   "polygons": 160,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Glenohumeral joint",
+    "Glenohumeral ligaments"
+   ]
+  },
+  {
+   "name": "Inferior pubic ligament",
+   "polygons": 48,
+   "path": [
+    "Joints of lower limb",
+    "Joints of pelvic girdle",
+    "Cartilaginous joints of pelvic girdle",
+    "Pubic symphysis"
+   ]
+  },
+  {
+   "name": "Inferior transverse scapular ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Fibrous joints of pectoral girdle"
+   ]
+  },
+  {
+   "name": "Inferior transverse scapular ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Fibrous joints of pectoral girdle"
+   ]
+  },
+  {
+   "name": "Infrapatellar fat pad.l",
+   "polygons": 384,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Infrapatellar fat pad.r",
+   "polygons": 384,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Interclavicular ligament.l",
+   "polygons": 40,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Synovial joints of pectoral girdle",
+    "Sternoclavicular joint"
+   ]
+  },
+  {
+   "name": "Interclavicular ligament.r",
+   "polygons": 40,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Synovial joints of pectoral girdle",
+    "Sternoclavicular joint"
+   ]
+  },
+  {
+   "name": "Intercornual ligament.l",
+   "polygons": 28,
+   "path": [
+    "Joints of vertebral column",
+    "Fibrous joints of vertebral column"
+   ]
+  },
+  {
+   "name": "Intercornual ligament.r",
+   "polygons": 28,
+   "path": [
+    "Joints of vertebral column",
+    "Fibrous joints of vertebral column"
+   ]
+  },
+  {
+   "name": "Intercuneiform interosseous ligaments.l",
+   "polygons": 12,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Intercuneiform joints"
+   ]
+  },
+  {
+   "name": "Intercuneiform interosseous ligaments.r",
+   "polygons": 12,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Intercuneiform joints"
+   ]
+  },
+  {
+   "name": "Internal intercostal membrane.l",
+   "polygons": 2360,
+   "path": [
+    "Thoracic joints",
+    "Fibrous joints of thorax"
+   ]
+  },
+  {
+   "name": "Internal intercostal membrane.r",
+   "polygons": 2360,
+   "path": [
+    "Thoracic joints",
+    "Fibrous joints of thorax"
+   ]
+  },
+  {
+   "name": "Interosseous membrane of forearm.l",
+   "polygons": 2766,
+   "path": []
+  },
+  {
+   "name": "Interosseous membrane of forearm.r",
+   "polygons": 2766,
+   "path": []
+  },
+  {
+   "name": "Interosseous membrane of leg.l",
+   "polygons": 12642,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Fibrous joints of free lower limb"
+   ]
+  },
+  {
+   "name": "Interosseous membrane of leg.r",
+   "polygons": 12642,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Fibrous joints of free lower limb"
+   ]
+  },
+  {
+   "name": "Interosseous metacarpal ligaments.l",
+   "polygons": 24,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intermetacarpal joints"
+   ]
+  },
+  {
+   "name": "Interosseous metacarpal ligaments.r",
+   "polygons": 24,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intermetacarpal joints"
+   ]
+  },
+  {
+   "name": "Interosseous sacro-iliac ligament.l",
+   "polygons": 100,
+   "path": [
+    "Joints of lower limb",
+    "Joints of pelvic girdle",
+    "Synovial joints of pelvic girdle",
+    "Sacro-iliac joint"
+   ]
+  },
+  {
+   "name": "Interosseous sacro-iliac ligament.r",
+   "polygons": 100,
+   "path": [
+    "Joints of lower limb",
+    "Joints of pelvic girdle",
+    "Synovial joints of pelvic girdle",
+    "Sacro-iliac joint"
+   ]
+  },
+  {
+   "name": "Interpubic disc",
+   "polygons": 208,
+   "path": [
+    "Joints of lower limb",
+    "Joints of pelvic girdle",
+    "Cartilaginous joints of pelvic girdle",
+    "Pubic symphysis"
+   ]
+  },
+  {
+   "name": "Intersesamoid ligament.l",
+   "polygons": 28,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intermetatarsal joints"
+   ]
+  },
+  {
+   "name": "Intersesamoid ligament.r",
+   "polygons": 28,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intermetatarsal joints"
+   ]
+  },
+  {
+   "name": "Interspinous ligaments",
+   "polygons": 292,
+   "path": [
+    "Joints of vertebral column",
+    "Fibrous joints of vertebral column"
+   ]
+  },
+  {
+   "name": "Intertransverse ligaments.l",
+   "polygons": 5720,
+   "path": [
+    "Joints of vertebral column",
+    "Fibrous joints of vertebral column"
+   ]
+  },
+  {
+   "name": "Intertransverse ligaments.r",
+   "polygons": 5720,
+   "path": [
+    "Joints of vertebral column",
+    "Fibrous joints of vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc C2-C3",
+   "polygons": 810,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Intervertebral disc C3-C4",
+   "polygons": 654,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Intervertebral disc C4-C5",
+   "polygons": 822,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Intervertebral disc C5-C6",
+   "polygons": 930,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Intervertebral disc C6-C7",
+   "polygons": 800,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Intervertebral disc C7-T1",
+   "polygons": 1140,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Intervertebral disc L1-L2",
+   "polygons": 3058,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Intervertebral disc L2-L3",
+   "polygons": 3302,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Intervertebral disc L3-L4",
+   "polygons": 3040,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Intervertebral disc L4-L5",
+   "polygons": 3216,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Intervertebral disc L5-S1",
+   "polygons": 3498,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T1-T2",
+   "polygons": 1208,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T10-T11",
+   "polygons": 2770,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T11-T12",
+   "polygons": 3300,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T12-L1",
+   "polygons": 3246,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T2-T3",
+   "polygons": 1272,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T3-T4",
+   "polygons": 1310,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T4-T5",
+   "polygons": 1600,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T5-T6",
+   "polygons": 1684,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T6-T7",
+   "polygons": 2326,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T7-T8",
+   "polygons": 2572,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T8-T9",
+   "polygons": 2786,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T9-T10",
+   "polygons": 1186,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Intra-articular ligament of head of rib",
+   "polygons": 54,
+   "path": [
+    "Thoracic joints",
+    "Synovial joints of thorax",
+    "Costovertebral joints",
+    "Joint of head of rib"
+   ]
+  },
+  {
+   "name": "Intra-articular ligament of head of rib.r",
+   "polygons": 54,
+   "path": [
+    "Thoracic joints",
+    "Synovial joints of thorax",
+    "Costovertebral joints",
+    "Joint of head of rib"
+   ]
+  },
+  {
+   "name": "Ischiofemoral ligament.l",
+   "polygons": 336,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Hip joint"
+   ]
+  },
+  {
+   "name": "Ischiofemoral ligament.r",
+   "polygons": 336,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Hip joint"
+   ]
+  },
+  {
+   "name": "Lateral meniscus.l",
+   "polygons": 234,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Lateral meniscus.r",
+   "polygons": 234,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Lateral talocalcaneal ligament.l",
+   "polygons": 28,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Subtalar joint"
+   ]
+  },
+  {
+   "name": "Lateral talocalcaneal ligament.r",
+   "polygons": 28,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Subtalar joint"
+   ]
+  },
+  {
+   "name": "Lateral temporomandibular ligament.l",
+   "polygons": 38,
+   "path": [
+    "Joints of skull",
+    "Cranial synovial joints",
+    "Temporomandibular joint"
+   ]
+  },
+  {
+   "name": "Lateral temporomandibular ligament.r",
+   "polygons": 38,
+   "path": [
+    "Joints of skull",
+    "Cranial synovial joints",
+    "Temporomandibular joint"
+   ]
+  },
+  {
+   "name": "Lateral thyrohyoid ligament.l",
+   "polygons": 912,
+   "path": [
+    "Laryngeal joints",
+    "Fibrous joints of larynx",
+    "Thyrohyoid membrane"
+   ]
+  },
+  {
+   "name": "Lateral thyrohyoid ligament.r",
+   "polygons": 912,
+   "path": [
+    "Laryngeal joints",
+    "Fibrous joints of larynx",
+    "Thyrohyoid membrane"
+   ]
+  },
+  {
+   "name": "Ligament of head of femur.l",
+   "polygons": 390,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Hip joint"
+   ]
+  },
+  {
+   "name": "Ligament of head of femur.r",
+   "polygons": 390,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Hip joint"
+   ]
+  },
+  {
+   "name": "Ligamenta flava",
+   "polygons": 2364,
+   "path": [
+    "Joints of vertebral column",
+    "Fibrous joints of vertebral column"
+   ]
+  },
+  {
+   "name": "Long plantar ligament.l",
+   "polygons": 3486,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Transverse tarsal joint"
+   ]
+  },
+  {
+   "name": "Long plantar ligament.r",
+   "polygons": 3486,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Transverse tarsal joint"
+   ]
+  },
+  {
+   "name": "Lunotriquetral interosseous ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Interosseus intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Lunotriquetral interosseous ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Interosseus intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Medial meniscus.l",
+   "polygons": 142,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint",
+    "Lateral meniscus"
+   ]
+  },
+  {
+   "name": "Medial meniscus.r",
+   "polygons": 142,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint",
+    "Lateral meniscus"
+   ]
+  },
+  {
+   "name": "Medial talocalcaneal ligament.l",
+   "polygons": 68,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Subtalar joint"
+   ]
+  },
+  {
+   "name": "Medial talocalcaneal ligament.r",
+   "polygons": 68,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Subtalar joint"
+   ]
+  },
+  {
+   "name": "Median cricothyroid ligament",
+   "polygons": 1872,
+   "path": [
+    "Laryngeal joints",
+    "Fibrous joints of larynx"
+   ]
+  },
+  {
+   "name": "Median thyrohyoid ligament",
+   "polygons": 2753,
+   "path": [
+    "Laryngeal joints",
+    "Fibrous joints of larynx",
+    "Thyrohyoid membrane"
+   ]
+  },
+  {
+   "name": "Meniscopatellar ligament.l",
+   "polygons": 76,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Meniscopatellar ligament.r",
+   "polygons": 76,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Metatarsal interosseous ligaments.l",
+   "polygons": 24,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intermetatarsal joints"
+   ]
+  },
+  {
+   "name": "Metatarsal interosseous ligaments.r",
+   "polygons": 24,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intermetatarsal joints"
+   ]
+  },
+  {
+   "name": "Middle glenohumeral ligament.l",
+   "polygons": 140,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Glenohumeral joint",
+    "Glenohumeral ligaments"
+   ]
+  },
+  {
+   "name": "Middle glenohumeral ligament.r",
+   "polygons": 140,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Glenohumeral joint",
+    "Glenohumeral ligaments"
+   ]
+  },
+  {
+   "name": "Nuchal ligament",
+   "polygons": 324,
+   "path": [
+    "Joints of vertebral column",
+    "Fibrous joints of vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus C2-C3",
+   "polygons": 512,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus C3-C4",
+   "polygons": 512,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus C4-C5",
+   "polygons": 512,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus C5-C6",
+   "polygons": 512,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus C6-C7",
+   "polygons": 512,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus C7-T1",
+   "polygons": 512,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus L1-L2",
+   "polygons": 512,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus L2-L3",
+   "polygons": 512,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus L3-L4",
+   "polygons": 512,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus L4-L5",
+   "polygons": 512,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus L5-S1",
+   "polygons": 512,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T1-T2",
+   "polygons": 512,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T10-T11",
+   "polygons": 512,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T11-T12",
+   "polygons": 512,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T12-L1",
+   "polygons": 512,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T2-T3",
+   "polygons": 512,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T3-T4",
+   "polygons": 512,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T4-T5",
+   "polygons": 512,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T5-T6",
+   "polygons": 512,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T6-T7",
+   "polygons": 512,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T7-T8",
+   "polygons": 512,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T8-T9",
+   "polygons": 512,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T9-T10",
+   "polygons": 512,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Oblique cord.l",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Fibrous joints of free upper limb",
+    "Radio-ulnar syndesmoses"
+   ]
+  },
+  {
+   "name": "Oblique cord.r",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Fibrous joints of free upper limb",
+    "Radio-ulnar syndesmoses"
+   ]
+  },
+  {
+   "name": "Oblique popliteal ligament.l",
+   "polygons": 184,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Oblique popliteal ligament.r",
+   "polygons": 184,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Obturator membrane.l",
+   "polygons": 536,
+   "path": [
+    "Joints of lower limb",
+    "Joints of pelvic girdle",
+    "Fibrous joints of pelvic girdle",
+    "Obturator membrane"
+   ]
+  },
+  {
+   "name": "Obturator membrane.r",
+   "polygons": 536,
+   "path": [
+    "Joints of lower limb",
+    "Joints of pelvic girdle",
+    "Fibrous joints of pelvic girdle",
+    "Obturator membrane"
+   ]
+  },
+  {
+   "name": "Palmar capitohamate ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Palmar intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Palmar capitohamate ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Palmar intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Palmar carpometacarpal ligaments.l",
+   "polygons": 208,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Carpometacarpal joints"
+   ]
+  },
+  {
+   "name": "Palmar carpometacarpal ligaments.r",
+   "polygons": 208,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Carpometacarpal joints"
+   ]
+  },
+  {
+   "name": "Palmar interphalangeal ligaments.l",
+   "polygons": 432,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Interphalangeal joints of hand"
+   ]
+  },
+  {
+   "name": "Palmar interphalangeal ligaments.r",
+   "polygons": 432,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Interphalangeal joints of hand"
+   ]
+  },
+  {
+   "name": "Palmar lunotriquetral ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Palmar intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Palmar lunotriquetral ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Palmar intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Palmar metacarpal ligaments.l",
+   "polygons": 24,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intermetacarpal joints"
+   ]
+  },
+  {
+   "name": "Palmar metacarpal ligaments.r",
+   "polygons": 24,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intermetacarpal joints"
+   ]
+  },
+  {
+   "name": "Palmar radio-ulnar ligament.l",
+   "polygons": 40,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Distal radio-ulnar joint"
+   ]
+  },
+  {
+   "name": "Palmar radio-ulnar ligament.r",
+   "polygons": 40,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Distal radio-ulnar joint"
+   ]
+  },
+  {
+   "name": "Palmar scaphotriquetral ligament.l",
+   "polygons": 128,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Palmar intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Palmar scaphotriquetral ligament.r",
+   "polygons": 128,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Palmar intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Palmar trapezoideocapitate ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Palmar intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Palmar trapezoideocapitate ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Palmar intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Pisohamate ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Pisiform joint"
+   ]
+  },
+  {
+   "name": "Pisohamate ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Pisiform joint"
+   ]
+  },
+  {
+   "name": "Pisometacarpal ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Pisiform joint"
+   ]
+  },
+  {
+   "name": "Pisometacarpal ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Pisiform joint"
+   ]
+  },
+  {
+   "name": "Pisotriquetral ligament.l",
+   "polygons": 132,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Palmar intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Pisotriquetral ligament.r",
+   "polygons": 132,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Palmar intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Plantar calcaneocuboid ligament.l",
+   "polygons": 68,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Transverse tarsal joint",
+    "Calcaneocuboid joint"
+   ]
+  },
+  {
+   "name": "Plantar calcaneocuboid ligament.r",
+   "polygons": 68,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Transverse tarsal joint",
+    "Calcaneocuboid joint"
+   ]
+  },
+  {
+   "name": "Plantar calcaneonavicular ligament.l",
+   "polygons": 16,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Transverse tarsal joint",
+    "Talocalcaneonavicular joint"
+   ]
+  },
+  {
+   "name": "Plantar calcaneonavicular ligament.r",
+   "polygons": 16,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Transverse tarsal joint",
+    "Talocalcaneonavicular joint"
+   ]
+  },
+  {
+   "name": "Plantar cuboideonavicular ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Cuboidonavicular joint"
+   ]
+  },
+  {
+   "name": "Plantar cuboideonavicular ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Cuboidonavicular joint"
+   ]
+  },
+  {
+   "name": "Plantar cuneocuboid ligament.l",
+   "polygons": 48,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Cuneocuboid joint"
+   ]
+  },
+  {
+   "name": "Plantar cuneocuboid ligament.r",
+   "polygons": 48,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Cuneocuboid joint"
+   ]
+  },
+  {
+   "name": "Plantar cuneonavicular ligaments.l",
+   "polygons": 26,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Cuneonavicular joint"
+   ]
+  },
+  {
+   "name": "Plantar cuneonavicular ligaments.r",
+   "polygons": 26,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Cuneonavicular joint"
+   ]
+  },
+  {
+   "name": "Plantar intercuneiform ligaments.l",
+   "polygons": 12,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Intercuneiform joints"
+   ]
+  },
+  {
+   "name": "Plantar intercuneiform ligaments.r",
+   "polygons": 12,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Intercuneiform joints"
+   ]
+  },
+  {
+   "name": "Plantar interphalangeal ligaments.l",
+   "polygons": 808,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Interphalangeal joints of foot"
+   ]
+  },
+  {
+   "name": "Plantar interphalangeal ligaments.r",
+   "polygons": 808,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Interphalangeal joints of foot"
+   ]
+  },
+  {
+   "name": "Plantar metatarsal ligaments.l",
+   "polygons": 24,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intermetatarsal joints"
+   ]
+  },
+  {
+   "name": "Plantar metatarsal ligaments.r",
+   "polygons": 24,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intermetatarsal joints"
+   ]
+  },
+  {
+   "name": "Plantar metatarsophalangeal ligaments.l",
+   "polygons": 440,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Metatarsophalangeal joints"
+   ]
+  },
+  {
+   "name": "Plantar metatarsophalangeal ligaments.r",
+   "polygons": 440,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Metatarsophalangeal joints"
+   ]
+  },
+  {
+   "name": "Plantar tarsometatarsal ligaments.l",
+   "polygons": 50,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Tarsometatarsal joints"
+   ]
+  },
+  {
+   "name": "Plantar tarsometatarsal ligaments.r",
+   "polygons": 50,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Tarsometatarsal joints"
+   ]
+  },
+  {
+   "name": "Popliteofibular ligament.l",
+   "polygons": 448,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Popliteofibular ligament.r",
+   "polygons": 448,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Posterior cruciate ligament.l",
+   "polygons": 404,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Posterior cruciate ligament.r",
+   "polygons": 404,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Posterior ligament of fibular head.l",
+   "polygons": 88,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Superior tibiofibular joint"
+   ]
+  },
+  {
+   "name": "Posterior ligament of fibular head.r",
+   "polygons": 88,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Superior tibiofibular joint"
+   ]
+  },
+  {
+   "name": "Posterior longitudinal ligament",
+   "polygons": 3768,
+   "path": [
+    "Joints of vertebral column",
+    "Fibrous joints of vertebral column"
+   ]
+  },
+  {
+   "name": "Posterior meniscotibial ligament (Lateral meniscus).l",
+   "polygons": 96,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint",
+    "Lateral meniscus"
+   ]
+  },
+  {
+   "name": "Posterior meniscotibial ligament (Lateral meniscus).r",
+   "polygons": 96,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint",
+    "Lateral meniscus"
+   ]
+  },
+  {
+   "name": "Posterior meniscotibial ligament (Medial meniscus).l",
+   "polygons": 152,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint",
+    "Medial meniscus"
+   ]
+  },
+  {
+   "name": "Posterior meniscotibial ligament (Medial meniscus).r",
+   "polygons": 152,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint",
+    "Medial meniscus"
+   ]
+  },
+  {
+   "name": "Posterior sacro-iliac ligament.l",
+   "polygons": 2728,
+   "path": [
+    "Joints of lower limb",
+    "Joints of pelvic girdle",
+    "Synovial joints of pelvic girdle",
+    "Sacro-iliac joint"
+   ]
+  },
+  {
+   "name": "Posterior sacro-iliac ligament.r",
+   "polygons": 2728,
+   "path": [
+    "Joints of lower limb",
+    "Joints of pelvic girdle",
+    "Synovial joints of pelvic girdle",
+    "Sacro-iliac joint"
+   ]
+  },
+  {
+   "name": "Posterior sternoclavicular ligament.l",
+   "polygons": 68,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Synovial joints of pectoral girdle",
+    "Sternoclavicular joint"
+   ]
+  },
+  {
+   "name": "Posterior sternoclavicular ligament.r",
+   "polygons": 68,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Synovial joints of pectoral girdle",
+    "Sternoclavicular joint"
+   ]
+  },
+  {
+   "name": "Posterior talocalcaneal ligament.l",
+   "polygons": 40,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Subtalar joint"
+   ]
+  },
+  {
+   "name": "Posterior talocalcaneal ligament.r",
+   "polygons": 40,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Subtalar joint"
+   ]
+  },
+  {
+   "name": "Posterior talofibular ligament.l",
+   "polygons": 16,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Ankle joint",
+    "Lateral collateral ligament"
+   ]
+  },
+  {
+   "name": "Posterior talofibular ligament.r",
+   "polygons": 16,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Ankle joint",
+    "Lateral collateral ligament"
+   ]
+  },
+  {
+   "name": "Posterior tibiofibular ligament.l",
+   "polygons": 124,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Fibrous joints of free lower limb",
+    "Tibiofibular syndesmosis"
+   ]
+  },
+  {
+   "name": "Posterior tibiofibular ligament.r",
+   "polygons": 124,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Fibrous joints of free lower limb",
+    "Tibiofibular syndesmosis"
+   ]
+  },
+  {
+   "name": "Posterior tibiotalar ligament.l",
+   "polygons": 28,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Ankle joint",
+    "Medial collateral ligament"
+   ]
+  },
+  {
+   "name": "Posterior tibiotalar ligament.r",
+   "polygons": 28,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Ankle joint",
+    "Medial collateral ligament"
+   ]
+  },
+  {
+   "name": "Pterygospinous ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of skull",
+    "Cranial fibrous joints",
+    "Cranial syndesmosis"
+   ]
+  },
+  {
+   "name": "Pterygospinous ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of skull",
+    "Cranial fibrous joints",
+    "Cranial syndesmosis"
+   ]
+  },
+  {
+   "name": "Pubic symphysis",
+   "polygons": 208,
+   "path": [
+    "Joints of lower limb",
+    "Joints of pelvic girdle",
+    "Cartilaginous joints of pelvic girdle",
+    "Pubic symphysis"
+   ]
+  },
+  {
+   "name": "Pubofemoral ligament.l",
+   "polygons": 196,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Hip joint"
+   ]
+  },
+  {
+   "name": "Pubofemoral ligament.r",
+   "polygons": 196,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Hip joint"
+   ]
+  },
+  {
+   "name": "Quadrangular membrane.l",
+   "polygons": 4592,
+   "path": [
+    "Laryngeal joints",
+    "Fibrous joints of larynx",
+    "Fibro-elastic membrane of larynx",
+    "Quadrangular membrane"
+   ]
+  },
+  {
+   "name": "Quadrangular membrane.r",
+   "polygons": 4592,
+   "path": [
+    "Laryngeal joints",
+    "Fibrous joints of larynx",
+    "Fibro-elastic membrane of larynx",
+    "Quadrangular membrane"
+   ]
+  },
+  {
+   "name": "Quadrate ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Elbow joint"
+   ]
+  },
+  {
+   "name": "Quadrate ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Elbow joint"
+   ]
+  },
+  {
+   "name": "Radial collateral ligament of wrist joint.l",
+   "polygons": 72,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Radiocarpal joint"
+   ]
+  },
+  {
+   "name": "Radial collateral ligament of wrist joint.r",
+   "polygons": 72,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Radiocarpal joint"
+   ]
+  },
+  {
+   "name": "Radial collateral ligament.l",
+   "polygons": 48,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Elbow joint"
+   ]
+  },
+  {
+   "name": "Radial collateral ligament.r",
+   "polygons": 48,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Elbow joint"
+   ]
+  },
+  {
+   "name": "Radiate carpal ligament.l",
+   "polygons": 204,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand"
+   ]
+  },
+  {
+   "name": "Radiate carpal ligament.r",
+   "polygons": 204,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand"
+   ]
+  },
+  {
+   "name": "Radiate ligament of head of rib.l",
+   "polygons": 1728,
+   "path": [
+    "Thoracic joints",
+    "Synovial joints of thorax",
+    "Costovertebral joints",
+    "Joint of head of rib"
+   ]
+  },
+  {
+   "name": "Radiate ligament of head of rib.r",
+   "polygons": 1728,
+   "path": [
+    "Thoracic joints",
+    "Synovial joints of thorax",
+    "Costovertebral joints",
+    "Joint of head of rib"
+   ]
+  },
+  {
+   "name": "Radiocapitate ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Radiocarpal joint",
+    "Palmar radiocarpal ligament"
+   ]
+  },
+  {
+   "name": "Radiocapitate ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Radiocarpal joint",
+    "Palmar radiocarpal ligament"
+   ]
+  },
+  {
+   "name": "Radioscaphocapitate ligament.l",
+   "polygons": 10,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Radiocarpal joint",
+    "Palmar radiocarpal ligament"
+   ]
+  },
+  {
+   "name": "Radioscaphocapitate ligament.r",
+   "polygons": 10,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Radiocarpal joint",
+    "Palmar radiocarpal ligament"
+   ]
+  },
+  {
+   "name": "Sacrococcygeal symphysis",
+   "polygons": 178,
+   "path": [
+    "Joints of vertebral column",
+    "Cartilaginous joints of vertebral column",
+    "Intervertebral symphysis",
+    "Intervertebral disc"
+   ]
+  },
+  {
+   "name": "Sacrospinous ligament.l",
+   "polygons": 140,
+   "path": [
+    "Joints of lower limb",
+    "Joints of pelvic girdle",
+    "Fibrous joints of pelvic girdle"
+   ]
+  },
+  {
+   "name": "Sacrospinous ligament.r",
+   "polygons": 140,
+   "path": [
+    "Joints of lower limb",
+    "Joints of pelvic girdle",
+    "Fibrous joints of pelvic girdle"
+   ]
+  },
+  {
+   "name": "Sacrotuberous ligament.l",
+   "polygons": 328,
+   "path": [
+    "Joints of lower limb",
+    "Joints of pelvic girdle",
+    "Fibrous joints of pelvic girdle",
+    "Sacrotuberous ligament"
+   ]
+  },
+  {
+   "name": "Sacrotuberous ligament.r",
+   "polygons": 328,
+   "path": [
+    "Joints of lower limb",
+    "Joints of pelvic girdle",
+    "Fibrous joints of pelvic girdle",
+    "Sacrotuberous ligament"
+   ]
+  },
+  {
+   "name": "Scaphocapitate ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Palmar intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Scaphocapitate ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Palmar intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Scapholunate interosseous ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Interosseus intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Scapholunate interosseous ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Interosseus intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Scaphotrapeziotrapezoidal ligament.l",
+   "polygons": 72,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Palmar intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Scaphotrapeziotrapezoidal ligament.r",
+   "polygons": 72,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Palmar intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Sphenomandibular ligament.l",
+   "polygons": 144,
+   "path": [
+    "Joints of skull",
+    "Cranial fibrous joints",
+    "Cranial syndesmosis"
+   ]
+  },
+  {
+   "name": "Sphenomandibular ligament.r",
+   "polygons": 144,
+   "path": [
+    "Joints of skull",
+    "Cranial fibrous joints",
+    "Cranial syndesmosis"
+   ]
+  },
+  {
+   "name": "Stylohyoid ligament.l",
+   "polygons": 312,
+   "path": [
+    "Joints of skull",
+    "Cranial fibrous joints",
+    "Cranial syndesmosis"
+   ]
+  },
+  {
+   "name": "Stylohyoid ligament.r",
+   "polygons": 312,
+   "path": [
+    "Joints of skull",
+    "Cranial fibrous joints",
+    "Cranial syndesmosis"
+   ]
+  },
+  {
+   "name": "Stylomandibular ligament.l",
+   "polygons": 22,
+   "path": [
+    "Joints of skull",
+    "Cranial fibrous joints",
+    "Cranial syndesmosis"
+   ]
+  },
+  {
+   "name": "Stylomandibular ligament.r",
+   "polygons": 22,
+   "path": [
+    "Joints of skull",
+    "Cranial fibrous joints",
+    "Cranial syndesmosis"
+   ]
+  },
+  {
+   "name": "Superficial part of tibial collateral ligament.l",
+   "polygons": 76,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Superficial part of tibial collateral ligament.r",
+   "polygons": 248,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Superior glenohumeral ligament.l",
+   "polygons": 100,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Glenohumeral joint",
+    "Glenohumeral ligaments"
+   ]
+  },
+  {
+   "name": "Superior glenohumeral ligament.r",
+   "polygons": 100,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Glenohumeral joint",
+    "Glenohumeral ligaments"
+   ]
+  },
+  {
+   "name": "Superior pubic ligament",
+   "polygons": 48,
+   "path": [
+    "Joints of lower limb",
+    "Joints of pelvic girdle",
+    "Cartilaginous joints of pelvic girdle",
+    "Pubic symphysis"
+   ]
+  },
+  {
+   "name": "Superior transverse scapular ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Fibrous joints of pectoral girdle"
+   ]
+  },
+  {
+   "name": "Superior transverse scapular ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Fibrous joints of pectoral girdle"
+   ]
+  },
+  {
+   "name": "Supraspinous ligament",
+   "polygons": 436,
+   "path": [
+    "Joints of vertebral column",
+    "Fibrous joints of vertebral column"
+   ]
+  },
+  {
+   "name": "Talocalcaneal interosseous ligament.l",
+   "polygons": 212,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Subtalar joint"
+   ]
+  },
+  {
+   "name": "Talocalcaneal interosseous ligament.r",
+   "polygons": 212,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Subtalar joint"
+   ]
+  },
+  {
+   "name": "Talonavicular ligament.l",
+   "polygons": 68,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Transverse tarsal joint",
+    "Talocalcaneonavicular joint"
+   ]
+  },
+  {
+   "name": "Talonavicular ligament.r",
+   "polygons": 68,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Joints of foot",
+    "Intertarsal joints",
+    "Transverse tarsal joint",
+    "Talocalcaneonavicular joint"
+   ]
+  },
+  {
+   "name": "Tibiocalcaneal ligament.l",
+   "polygons": 28,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Ankle joint",
+    "Medial collateral ligament"
+   ]
+  },
+  {
+   "name": "Tibiocalcaneal ligament.r",
+   "polygons": 28,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Ankle joint",
+    "Medial collateral ligament"
+   ]
+  },
+  {
+   "name": "Tibionavicular ligament.l",
+   "polygons": 116,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Ankle joint",
+    "Medial collateral ligament"
+   ]
+  },
+  {
+   "name": "Tibionavicular ligament.r",
+   "polygons": 116,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Ankle joint",
+    "Medial collateral ligament"
+   ]
+  },
+  {
+   "name": "Transverse acetabular ligament.l",
+   "polygons": 284,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Hip joint"
+   ]
+  },
+  {
+   "name": "Transverse acetabular ligament.r",
+   "polygons": 284,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Hip joint"
+   ]
+  },
+  {
+   "name": "Transverse humeral ligament.l",
+   "polygons": 68,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Glenohumeral joint"
+   ]
+  },
+  {
+   "name": "Transverse humeral ligament.r",
+   "polygons": 232,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Glenohumeral joint"
+   ]
+  },
+  {
+   "name": "Transverse ligament of knee.l",
+   "polygons": 216,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Transverse ligament of knee.r",
+   "polygons": 216,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Knee joint"
+   ]
+  },
+  {
+   "name": "Transverse part of iliofemoral ligament.l",
+   "polygons": 232,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Hip joint",
+    "Iliofemoral ligament"
+   ]
+  },
+  {
+   "name": "Transverse part of iliofemoral ligament.r",
+   "polygons": 232,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Hip joint",
+    "Iliofemoral ligament"
+   ]
+  },
+  {
+   "name": "Transverse tibiofibular ligament.l",
+   "polygons": 52,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Fibrous joints of free lower limb",
+    "Tibiofibular syndesmosis"
+   ]
+  },
+  {
+   "name": "Transverse tibiofibular ligament.r",
+   "polygons": 52,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Fibrous joints of free lower limb",
+    "Tibiofibular syndesmosis"
+   ]
+  },
+  {
+   "name": "Trapeziotrapezoidal interosseous ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Interosseus intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Trapeziotrapezoidal interosseous ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Interosseus intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Trapezoid ligament.l",
+   "polygons": 28,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Synovial joints of pectoral girdle",
+    "Acromioclavicular joint",
+    "Coracoclavicular ligament"
+   ]
+  },
+  {
+   "name": "Trapezoid ligament.r",
+   "polygons": 28,
+   "path": [
+    "Joints of upper limb",
+    "Joints of pectoral girdle",
+    "Synovial joints of pectoral girdle",
+    "Acromioclavicular joint",
+    "Coracoclavicular ligament"
+   ]
+  },
+  {
+   "name": "Trapezoideocapitate interosseous ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Interosseus intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Trapezoideocapitate interosseous ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Interosseus intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Triquetrocapitate ligament.l",
+   "polygons": 10,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Palmar intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Triquetrocapitate ligament.r",
+   "polygons": 10,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Palmar intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Triquetrohamate ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Palmar intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Triquetrohamate ligament.r",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Joints of hand",
+    "Intercarpal joints",
+    "Palmar intercarpal ligaments"
+   ]
+  },
+  {
+   "name": "Triradiate cartilage.l",
+   "polygons": 802,
+   "path": [
+    "Joints of lower limb",
+    "Joints of pelvic girdle",
+    "Cartilaginous joints of pelvic girdle"
+   ]
+  },
+  {
+   "name": "Triradiate cartilage.r",
+   "polygons": 802,
+   "path": [
+    "Joints of lower limb",
+    "Joints of pelvic girdle",
+    "Cartilaginous joints of pelvic girdle"
+   ]
+  },
+  {
+   "name": "Ulnar collateral ligament of wrist joint.l",
+   "polygons": 64,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Radiocarpal joint"
+   ]
+  },
+  {
+   "name": "Ulnar collateral ligament of wrist joint.r",
+   "polygons": 64,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Radiocarpal joint"
+   ]
+  },
+  {
+   "name": "Ulnar collateral ligament.l",
+   "polygons": 76,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Elbow joint"
+   ]
+  },
+  {
+   "name": "Ulnar collateral ligament.r",
+   "polygons": 76,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Elbow joint"
+   ]
+  },
+  {
+   "name": "Ulnocapitate ligament.l",
+   "polygons": 64,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Radiocarpal joint",
+    "Palmar ulnocarpal ligament"
+   ]
+  },
+  {
+   "name": "Ulnocapitate ligament.r",
+   "polygons": 64,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Radiocarpal joint",
+    "Palmar ulnocarpal ligament"
+   ]
+  },
+  {
+   "name": "Ulnolunate ligament.l",
+   "polygons": 52,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Radiocarpal joint",
+    "Palmar ulnocarpal ligament"
+   ]
+  },
+  {
+   "name": "Ulnolunate ligament.r",
+   "polygons": 52,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Radiocarpal joint",
+    "Palmar ulnocarpal ligament"
+   ]
+  },
+  {
+   "name": "Ulnopisiform ligament",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Radiocarpal joint",
+    "Palmar ulnocarpal ligament"
+   ]
+  },
+  {
+   "name": "Ulnopisiform ligament.l",
+   "polygons": 6,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Radiocarpal joint",
+    "Palmar ulnocarpal ligament"
+   ]
+  },
+  {
+   "name": "Ulnotriquetral ligament.l",
+   "polygons": 28,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Radiocarpal joint",
+    "Palmar ulnocarpal ligament"
+   ]
+  },
+  {
+   "name": "Ulnotriquetral ligament.r",
+   "polygons": 28,
+   "path": [
+    "Joints of upper limb",
+    "Joints of free upper limb",
+    "Synovial joints of free upper limb",
+    "Radiocarpal joint",
+    "Palmar ulnocarpal ligament"
+   ]
+  },
+  {
+   "name": "Zona orbicularis.l",
+   "polygons": 2368,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Hip joint"
+   ]
+  },
+  {
+   "name": "Zona orbicularis.r",
+   "polygons": 2368,
+   "path": [
+    "Joints of lower limb",
+    "Joints of free lower limb",
+    "Synovial joints of free lower limb",
+    "Hip joint"
+   ]
+  }
+ ]
+}

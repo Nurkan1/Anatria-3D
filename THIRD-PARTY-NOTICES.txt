@@ -1,0 +1,80 @@
+Anatria3D — licensing notice
+============================
+
+Anatria3D is educational software. It is NOT a medical device, and it is not
+for diagnosis or treatment of any person.
+
+
+Anatomical assets — Creative Commons Attribution-ShareAlike 4.0
+--------------------------------------------------------------
+
+The 3D meshes and the anatomical nomenclature shipped with this application are
+not original to it. They are adaptations of open anatomical datasets and remain
+under a share-alike licence:
+
+  1. BodyParts3D
+     The Database Center for Life Science (DBCLS), Japan
+     CC BY-SA 2.1 Japan — https://creativecommons.org/licenses/by-sa/2.1/jp/
+
+  2. Z-Anatomy — the libre 3D atlas of anatomy, derived from BodyParts3D
+     CC BY-SA 4.0 — https://creativecommons.org/licenses/by-sa/4.0/
+     https://www.z-anatomy.com/
+
+  3. Anatria3D adaptations — headless Blender export to glTF binary, modifiers
+     baked in, lossy Draco compression, materials dropped in favour of shading
+     applied by the viewer, stable organ identifiers added, and an anatomical
+     hierarchy derived from Z-Anatomy's own collection nesting.
+
+     As adaptations of CC BY-SA 4.0 material these files are themselves
+     licensed CC BY-SA 4.0.
+
+Redistributing the assets, in this application or apart from it, requires
+preserving this attribution and keeping them under CC BY-SA 4.0. The full
+notice ships alongside the data, in `anatomy/NOTICE` and `anatomy/LICENSE`.
+
+The nomenclature is Terminologia Anatomica 2 Latin and clinical English only.
+No localised medical terminology is stored or redistributed here; translation
+is performed at runtime by the AI assistant for the reader in front of it.
+
+
+Application source code — Apache License, Version 2.0
+-----------------------------------------------------
+
+  Copyright 2026 PYSBG
+
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  use this file except in compliance with the License. You may obtain a copy of
+  the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  License for the specific language governing permissions and limitations under
+  the License.
+
+You may use, modify and redistribute the application code, including inside
+your own institution's systems, provided you keep the copyright and licence
+notices and state any changes you made. The full text ships as LICENSE.
+
+Note the two licences do not merge: the code is Apache-2.0, the anatomy is
+CC BY-SA 4.0, and redistributing the anatomy keeps it under CC BY-SA 4.0
+whatever you do with the code.
+
+
+Bundled components
+------------------
+
+The application bundles a Python runtime and third-party Python packages, each
+under its own licence. Their licence files are installed alongside them, under
+`anatria-engine/_internal/`.
+
+
+Your own data
+-------------
+
+Notes, saved sessions and case results are written to a local SQLite database
+in your user profile. Nothing is uploaded. The only data that leaves the machine
+is the text of a question you send, which goes to the AI provider whose API key
+you supplied.

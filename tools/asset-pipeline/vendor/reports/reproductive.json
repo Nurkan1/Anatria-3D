@@ -1,0 +1,89 @@
+{
+ "system": "reproductive",
+ "collections": [
+  "Bonus collection/Visceral systems/Genital systems'"
+ ],
+ "output": "C:\\Users\\TrendingPC\\Documents\\Anatria3D\\public\\anatomy\\reproductive_male.glb",
+ "draco": true,
+ "object_count": 14,
+ "skipped_count": 5,
+ "skipped": [
+  "Genital systems.j",
+  "Male external genitalia.j",
+  "Male genital system.j",
+  "Male internal genitalia.j",
+  "Penis.j"
+ ],
+ "objects": [
+  {
+   "name": "Corpus cavernosum of penis",
+   "polygons": 1288,
+   "path": []
+  },
+  {
+   "name": "Corpus spongiosum of penis",
+   "polygons": 560,
+   "path": []
+  },
+  {
+   "name": "Ductus deferens.l",
+   "polygons": 2448,
+   "path": []
+  },
+  {
+   "name": "Ductus deferens.r",
+   "polygons": 2448,
+   "path": []
+  },
+  {
+   "name": "Ejaculatory duct.l",
+   "polygons": 432,
+   "path": []
+  },
+  {
+   "name": "Ejaculatory duct.r",
+   "polygons": 432,
+   "path": []
+  },
+  {
+   "name": "Epididymis.l",
+   "polygons": 216,
+   "path": []
+  },
+  {
+   "name": "Epididymis.r",
+   "polygons": 216,
+   "path": []
+  },
+  {
+   "name": "Glans penis",
+   "polygons": 1391,
+   "path": []
+  },
+  {
+   "name": "Prostate",
+   "polygons": 468,
+   "path": []
+  },
+  {
+   "name": "Seminal gland.l",
+   "polygons": 360,
+   "path": []
+  },
+  {
+   "name": "Seminal gland.r",
+   "polygons": 360,
+   "path": []
+  },
+  {
+   "name": "Testis.l",
+   "polygons": 678,
+   "path": []
+  },
+  {
+   "name": "Testis.r",
+   "polygons": 678,
+   "path": []
+  }
+ ]
+}

@@ -1,0 +1,65 @@
+Anatria3D — anatomical mesh assets
+==================================
+
+The 3D meshes and anatomical nomenclature in this directory are NOT covered by
+the Anatria3D application licence. They are adapted from open anatomical
+datasets and remain under a share-alike licence.
+
+Attribution chain
+-----------------
+
+1. BodyParts3D
+   The Database Center for Life Science (DBCLS), Japan
+   Licensed under Creative Commons Attribution-ShareAlike 2.1 Japan
+   https://creativecommons.org/licenses/by-sa/2.1/jp/
+
+2. Z-Anatomy — the libre 3D atlas of anatomy
+   Derived from BodyParts3D.
+   Licensed under Creative Commons Attribution-ShareAlike 4.0 International
+   https://creativecommons.org/licenses/by-sa/4.0/
+   https://www.z-anatomy.com/
+
+3. Anatria3D adaptations
+   The .glb files here are adaptations of the Z-Anatomy meshes, produced by a
+   headless Blender export (tools/asset-pipeline/): conversion from .blend to
+   glTF binary, Blender modifiers baked into the exported geometry, lossy Draco
+   compression (position quantisation 14 bits, normal 10), materials dropped in
+   favour of shading applied by the viewer, and the addition of stable organ
+   identifiers. The anatomical hierarchy in manifest.json is derived from
+   Z-Anatomy's own collection nesting. No polygon reduction is applied beyond
+   what Draco quantisation implies.
+
+   Anatomical labels are taken from Z-Anatomy's TA2.csv (Terminologia
+   Anatomica 2).
+
+   As adaptations of CC BY-SA 4.0 material, these files are themselves licensed
+   under Creative Commons Attribution-ShareAlike 4.0 International:
+   https://creativecommons.org/licenses/by-sa/4.0/
+
+What this means in practice
+---------------------------
+
+- These asset files may be redistributed, including commercially, provided the
+  attribution above is preserved and they remain under CC BY-SA 4.0.
+- The share-alike obligation attaches to the meshes and their derived label
+  data. It does not extend to the Anatria3D application source code, which
+  merely aggregates these assets rather than adapting them.
+- Do not relicense, or claim exclusive rights over, anything in this directory.
+
+Nomenclature, and why nothing here is translated
+------------------------------------------------
+
+manifest.json carries two names per structure and no others: the Terminologia
+Anatomica 2 Latin term, and the clinical English term. There are no localised
+labels in this data and no machine translation of any kind.
+
+That is deliberate. Rendering "Ventriculus sinister" for a layperson, a student
+and a clinician calls for three different explanations, in each of the
+languages the application supports — that is teaching, not a lookup table. It
+is done at runtime by the AI assistant, with the reader's profile and language
+in hand, and no such text is stored or redistributed here.
+
+Redistributing this directory therefore redistributes professional
+nomenclature only. If you add localised medical terminology to it, that
+terminology is yours: have it reviewed by someone qualified before presenting
+it as authoritative.

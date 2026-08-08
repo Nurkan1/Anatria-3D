@@ -1,0 +1,346 @@
+//! Tauri commands — the entire surface the webview can reach.
+//!
+//! Note what is *not* here: there is no command that returns an API key. The
+//! frontend can store one, check whether one exists, and clear it. Reading is
+//! a crate-private operation used only to fill in the frame we hand to the
+//! sidecar over stdin.
+
+use serde::Deserialize;
+use serde_json::{Map, Value};
+use tauri::State;
+
+use crate::keyring_store::{self, KeyringError, Provider};
+use crate::sidecar::{EngineError, EngineHandle, EngineStatus};
+use crate::study_db::{
+    ImportSummary, JournalExport, Note, NoteInput, SessionDetail, SessionSummary, StudyCoverage,
+    StudyDb, StudyError, StudyStats, TurnInput,
+};
+
+#[derive(Debug, thiserror::Error)]
+pub enum CommandError {
+    #[error(transparent)]
+    Keyring(#[from] KeyringError),
+    #[error(transparent)]
+    Engine(#[from] EngineError),
+    #[error(transparent)]
+    Study(#[from] StudyError),
+    #[error("{0}")]
+    Invalid(String),
+}
+
+impl serde::Serialize for CommandError {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        serializer.serialize_str(&self.to_string())
+    }
+}
+
+type CommandResult<T> = Result<T, CommandError>;
+
+// ---------------------------------------------------------------------------
+// Credentials
+// ---------------------------------------------------------------------------
+
+#[tauri::command]
+pub fn save_api_key(provider: Provider, api_key: String) -> CommandResult<()> {
+    keyring_store::store(provider, &api_key)?;
+    Ok(())
+}
+
+#[tauri::command]
+pub fn has_api_key(provider: Provider) -> bool {
+    keyring_store::exists(provider)
+}
+
+#[tauri::command]
+pub fn delete_api_key(provider: Provider) -> CommandResult<()> {
+    keyring_store::delete(provider)?;
+    Ok(())
+}
+
+// ---------------------------------------------------------------------------
+// Engine
+// ---------------------------------------------------------------------------
+
+/// Rust models only the two fields it actually needs — `provider` to pick the
+/// credential and `request_id` for correlation. Everything else rides along
+/// opaquely in `rest` and is validated by Pydantic at the far end. Keeping
+/// Rust out of the schema business means the protocol has two owners
+/// (TypeScript and Python), not three.
+#[derive(Debug, Deserialize)]
+pub struct FrontendRequest {
+    request_id: String,
+    provider: Provider,
+    #[serde(flatten)]
+    rest: Map<String, Value>,
+}
+
+/// Fields the frontend is not permitted to set. `api_key` is the one that
+/// matters: silently overwriting a smuggled value would hide a bug or an
+/// injection attempt, so we reject the request instead.
+const RESERVED_FIELDS: [&str; 2] = ["api_key", "kind"];
+
+fn build_frame(kind: &str, request: FrontendRequest) -> CommandResult<String> {
+    if let Some(field) = RESERVED_FIELDS
+        .iter()
+        .find(|field| request.rest.contains_key(**field))
+    {
+        return Err(CommandError::Invalid(format!(
+            "request must not set the reserved field '{field}'"
+        )));
+    }
+
+    let api_key = keyring_store::read(request.provider)?;
+
+    let mut frame = request.rest;
+    frame.insert("kind".into(), Value::String(kind.into()));
+    frame.insert("request_id".into(), Value::String(request.request_id));
+    frame.insert(
+        "provider".into(),
+        serde_json::to_value(request.provider)
+            .map_err(|e| CommandError::Invalid(e.to_string()))?,
+    );
+    frame.insert("api_key".into(), Value::String(api_key));
+
+    serde_json::to_string(&Value::Object(frame))
+        .map_err(|e| CommandError::Invalid(e.to_string()))
+}
+
+#[tauri::command]
+pub fn ask_agent(engine: State<'_, EngineHandle>, request: FrontendRequest) -> CommandResult<()> {
+    let frame = build_frame("agent_request", request)?;
+    engine.send_frame(&frame)?;
+    Ok(())
+}
+
+#[tauri::command]
+pub fn list_models(engine: State<'_, EngineHandle>, request: FrontendRequest) -> CommandResult<()> {
+    let frame = build_frame("list_models", request)?;
+    engine.send_frame(&frame)?;
+    Ok(())
+}
+
+/// Is the engine up, and if not, why?
+///
+/// The companion to the `ready` event rather than a duplicate of it. That event
+/// fires once, before the webview has necessarily attached a listener, so the
+/// frontend asks this as soon as it *is* attached: an early `ready` is answered
+/// here, a later one arrives as the event, and neither can be missed. The same
+/// applies to a spawn failure, which is reported before any frontend exists.
+#[tauri::command]
+pub fn engine_status(engine: State<'_, EngineHandle>) -> EngineStatus {
+    engine.status()
+}
+
+/// Restart the analysis engine after a crash.
+#[tauri::command]
+pub fn restart_engine(app: tauri::AppHandle) -> CommandResult<()> {
+    crate::sidecar::restart(&app)?;
+    Ok(())
+}
+
+#[tauri::command]
+pub fn cancel_request(engine: State<'_, EngineHandle>, request_id: String) -> CommandResult<()> {
+    let frame = serde_json::json!({ "kind": "cancel", "request_id": request_id });
+    engine.send_frame(&frame.to_string())?;
+    Ok(())
+}
+
+// ---------------------------------------------------------------------------
+// Study journal
+//
+// Local-only, and the only way the webview can reach the SQLite file: there is
+// no filesystem permission in the app, so a note is written through a typed
+// command or not at all.
+// ---------------------------------------------------------------------------
+
+#[tauri::command]
+pub fn save_study_turn(db: State<'_, StudyDb>, turn: TurnInput) -> CommandResult<()> {
+    db.save_turn(turn)?;
+    Ok(())
+}
+
+#[tauri::command]
+pub fn record_case_result(
+    db: State<'_, StudyDb>,
+    session_id: String,
+    score: i64,
+    verdict: String,
+) -> CommandResult<()> {
+    db.record_case_result(&session_id, score, &verdict)?;
+    Ok(())
+}
+
+#[tauri::command]
+pub fn list_study_sessions(
+    db: State<'_, StudyDb>,
+    query: Option<String>,
+    organ_id: Option<String>,
+    limit: i64,
+) -> CommandResult<Vec<SessionSummary>> {
+    Ok(db.list_sessions(query.as_deref(), organ_id.as_deref(), limit)?)
+}
+
+#[tauri::command]
+pub fn get_study_session(
+    db: State<'_, StudyDb>,
+    session_id: String,
+) -> CommandResult<Option<SessionDetail>> {
+    Ok(db.session(&session_id)?)
+}
+
+#[tauri::command]
+pub fn rename_study_session(
+    db: State<'_, StudyDb>,
+    session_id: String,
+    title: String,
+) -> CommandResult<()> {
+    db.rename_session(&session_id, &title)?;
+    Ok(())
+}
+
+#[tauri::command]
+pub fn delete_study_session(db: State<'_, StudyDb>, session_id: String) -> CommandResult<()> {
+    db.delete_session(&session_id)?;
+    Ok(())
+}
+
+#[tauri::command]
+pub fn create_note(db: State<'_, StudyDb>, note: NoteInput) -> CommandResult<Note> {
+    Ok(db.create_note(note)?)
+}
+
+#[tauri::command]
+pub fn update_note(db: State<'_, StudyDb>, id: i64, body: String) -> CommandResult<()> {
+    db.update_note(id, &body)?;
+    Ok(())
+}
+
+#[tauri::command]
+pub fn delete_note(db: State<'_, StudyDb>, id: i64) -> CommandResult<()> {
+    db.delete_note(id)?;
+    Ok(())
+}
+
+#[tauri::command]
+pub fn list_notes(
+    db: State<'_, StudyDb>,
+    organ_id: Option<String>,
+    query: Option<String>,
+    limit: i64,
+) -> CommandResult<Vec<Note>> {
+    Ok(db.list_notes(organ_id.as_deref(), query.as_deref(), limit)?)
+}
+
+#[tauri::command]
+pub fn study_stats(db: State<'_, StudyDb>) -> CommandResult<StudyStats> {
+    Ok(db.stats()?)
+}
+
+/// Which structures the reader has actually worked on, and how much.
+#[tauri::command]
+pub fn study_coverage(db: State<'_, StudyDb>) -> CommandResult<Vec<StudyCoverage>> {
+    Ok(db.coverage()?)
+}
+
+// ---------------------------------------------------------------------------
+// Taking the journal with you
+//
+// **Rust picks the file, not the webview.** A command that accepted a path
+// would be a general "write anywhere on this disk" capability handed to the
+// renderer, which is precisely what this app has spent its whole design
+// avoiding. The dialog is opened here; the frontend never learns a path and
+// cannot name one.
+// ---------------------------------------------------------------------------
+
+const JOURNAL_EXTENSION: &str = "anatria-journal.json";
+
+#[tauri::command]
+pub fn export_journal(app: tauri::AppHandle, db: State<'_, StudyDb>) -> CommandResult<Option<String>> {
+    use tauri_plugin_dialog::DialogExt;
+
+    let journal = db.export()?;
+    let body = serde_json::to_string_pretty(&journal)
+        .map_err(|e| CommandError::Invalid(e.to_string()))?;
+
+    let Some(path) = app
+        .dialog()
+        .file()
+        .set_file_name(JOURNAL_EXTENSION)
+        .add_filter("Anatria3D journal", &["json"])
+        .blocking_save_file()
+    else {
+        // Cancelled. Not an error — `None` lets the UI stay quiet.
+        return Ok(None);
+    };
+    let path = path
+        .into_path()
+        .map_err(|e| CommandError::Invalid(e.to_string()))?;
+
+    std::fs::write(&path, body).map_err(|e| CommandError::Invalid(e.to_string()))?;
+    Ok(Some(path.display().to_string()))
+}
+
+/// Save a rendered view as a PNG the reader picks a home for.
+///
+/// Rust opens the dialog for the same reason it does for the journal: a command
+/// that accepted a path would be a general write-anywhere capability handed to
+/// the renderer. The extension is forced rather than trusted — this writes PNG
+/// bytes, so the file has to be named like one however the dialog came back.
+#[tauri::command]
+pub fn save_view_image(
+    app: tauri::AppHandle,
+    png_base64: String,
+) -> CommandResult<Option<String>> {
+    use base64::Engine as _;
+    use tauri_plugin_dialog::DialogExt;
+
+    let bytes = base64::engine::general_purpose::STANDARD
+        .decode(png_base64.as_bytes())
+        .map_err(|_| CommandError::Invalid("The image could not be decoded.".into()))?;
+
+    let Some(path) = app
+        .dialog()
+        .file()
+        .set_file_name("anatria3d-view.png")
+        .add_filter("PNG image", &["png"])
+        .blocking_save_file()
+    else {
+        return Ok(None);
+    };
+    let mut path = path
+        .into_path()
+        .map_err(|e| CommandError::Invalid(e.to_string()))?;
+    if path.extension().is_none_or(|ext| !ext.eq_ignore_ascii_case("png")) {
+        path.set_extension("png");
+    }
+
+    std::fs::write(&path, bytes).map_err(|e| CommandError::Invalid(e.to_string()))?;
+    Ok(Some(path.display().to_string()))
+}
+
+#[tauri::command]
+pub fn import_journal(
+    app: tauri::AppHandle,
+    db: State<'_, StudyDb>,
+) -> CommandResult<Option<ImportSummary>> {
+    use tauri_plugin_dialog::DialogExt;
+
+    let Some(path) = app
+        .dialog()
+        .file()
+        .add_filter("Anatria3D journal", &["json"])
+        .blocking_pick_file()
+    else {
+        return Ok(None);
+    };
+    let path = path
+        .into_path()
+        .map_err(|e| CommandError::Invalid(e.to_string()))?;
+
+    let body = std::fs::read_to_string(&path).map_err(|e| CommandError::Invalid(e.to_string()))?;
+    let journal: JournalExport = serde_json::from_str(&body).map_err(|_| {
+        CommandError::Invalid("That file is not an Anatria3D study journal.".into())
+    })?;
+
+    Ok(Some(db.import(journal)?))
+}

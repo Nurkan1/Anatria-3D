@@ -1,0 +1,21 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Capabilities granted to the Anatria3D main window.",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "store:default",
+    "dialog:allow-save",
+    "opener:allow-open-path"
+  ],
+  "//": [
+    "There is no shell permission here, and no shell plugin in Cargo.toml.",
+    "The AI engine is spawned from Rust with std::process::Command, so the",
+    "webview has no path to executing anything — not the engine, not an",
+    "arbitrary program. See src-tauri/src/sidecar.rs for why.",
+    "",
+    "`dialog:allow-save` and `opener:allow-open-path` exist only so a generated",
+    "report can be written to a user-chosen location and then opened."
+  ]
+}

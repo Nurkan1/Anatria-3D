@@ -1,0 +1,56 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Anatria3D",
+  "version": "0.1.0",
+  "identifier": "com.pysbg.anatria3d",
+  "build": {
+    "beforeDevCommand": "pnpm dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "pnpm build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Anatria3D",
+        "width": 1440,
+        "height": 900,
+        "backgroundColor": "#0b1220",
+        "minWidth": 1024,
+        "minHeight": 700,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; script-src 'self' 'wasm-unsafe-eval' blob:; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self' ipc: http://ipc.localhost blob: data:; object-src 'none'; base-uri 'self'; form-action 'none'"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["msi", "nsis", "deb", "appimage", "dmg"],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.ico"
+    ],
+    "resources": {
+      "../engine/dist/anatria-engine/": "anatria-engine/"
+    },
+    "category": "Education",
+    "publisher": "PYSBG",
+    "copyright": "Anatomy © Z-Anatomy / BodyParts3D (DBCLS), CC BY-SA 4.0",
+    "shortDescription": "Interactive anatomy and AI insights",
+    "longDescription": "Anatria3D is an educational anatomy atlas with an AI assistant that can drive the 3D viewport. Not a medical device; not for diagnosis or treatment.",
+    "licenseFile": "../THIRD-PARTY-NOTICES.txt",
+    "windows": {
+      "nsis": {
+        "displayLanguageSelector": true,
+        "languages": ["English", "Spanish", "Bulgarian"],
+        "installerIcon": "icons/icon.ico",
+        "installMode": "currentUser"
+      }
+    }
+  }
+}

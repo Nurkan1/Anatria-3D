@@ -1,0 +1,46 @@
+{
+ "system": "endocrine",
+ "collections": [
+  "Bonus collection/Visceral systems/Endocrine glands"
+ ],
+ "output": "C:\\Users\\TrendingPC\\Documents\\Anatria3D\\public\\anatomy\\endocrine_male.glb",
+ "draco": true,
+ "object_count": 6,
+ "skipped_count": 2,
+ "skipped": [
+  "Endocrine glands.j",
+  "Hypophysis.j"
+ ],
+ "objects": [
+  {
+   "name": "Adenohypophysis",
+   "polygons": 678,
+   "path": []
+  },
+  {
+   "name": "Neurohypophysis",
+   "polygons": 592,
+   "path": []
+  },
+  {
+   "name": "Pineal gland",
+   "polygons": 592,
+   "path": []
+  },
+  {
+   "name": "Suprarenal gland.l",
+   "polygons": 3996,
+   "path": []
+  },
+  {
+   "name": "Suprarenal gland.r",
+   "polygons": 2294,
+   "path": []
+  },
+  {
+   "name": "Thyroid gland",
+   "polygons": 1300,
+   "path": []
+  }
+ ]
+}

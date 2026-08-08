@@ -1,0 +1,3325 @@
+{
+ "system": "skeletal",
+ "collections": [
+  "Bonus collection/Skeletal system",
+  "1: Skeletal system"
+ ],
+ "output": "C:\\Users\\TrendingPC\\Documents\\Anatria3D\\public\\anatomy\\skeletal_male.glb",
+ "draco": true,
+ "object_count": 335,
+ "skipped_count": 977,
+ "skipped": [
+  "(Canal for vertebral artery).j",
+  "(External occipital crest).j",
+  "(Internal occipital crest).j",
+  "(Mandibular symphysis).j",
+  "(Middle clinoid process).j",
+  "(Posterior obturator tubercle).i",
+  "(Posterior obturator tubercle).j",
+  "(Supra-orbital notch).j",
+  "(Third trochanter).i",
+  "(Third trochanter).j",
+  "(Vermian fossa).j",
+  "Acetabular fossa.i",
+  "Acetabular fossa.j",
+  "Acetabular margin.i",
+  "Acetabular margin.j",
+  "Acetabular notch.i",
+  "Acetabular notch.j",
+  "Acetabulum.i",
+  "Acetabulum.j",
+  "Acromial angle.i",
+  "Acromial angle.j",
+  "Acromial end.i",
+  "Acromial end.j",
+  "Acromial facet.i",
+  "Acromial facet.j",
+  "Acromion.i",
+  "Acromion.j",
+  "Adductor tubercle.i",
+  "Adductor tubercle.j",
+  "Ala of ilium.i",
+  "Ala of ilium.j",
+  "Ala of sacrum.j",
+  "Anatomical neck of humerus.i",
+  "Anatomical neck of humerus.j",
+  "Angle of rib.i",
+  "Angle of rib.j",
+  "Annular epiphysis.j",
+  "Anterior arch of atlas.j",
+  "Anterior articular facet of dens axis.j",
+  "Anterior bony ampulla.j",
+  "Anterior border of fibula.i",
+  "Anterior border of fibula.j",
+  "Anterior border of humerus.i",
+  "Anterior border of humerus.j",
+  "Anterior border of radius.i",
+  "Anterior border of radius.j",
+  "Anterior border of tibia.i",
+  "Anterior border of tibia.j",
+  "Anterior border of ulna.i",
+  "Anterior border of ulna.j",
+  "Anterior clinoid process.j",
+  "Anterior gluteal line.i",
+  "Anterior gluteal line.j",
+  "Anterior inferior iliac spine.i",
+  "Anterior inferior iliac spine.j",
+  "Anterior intercondylar area.i",
+  "Anterior intercondylar area.j",
+  "Anterior limb of stapes.i",
+  "Anterior limb of stapes.j",
+  "Anterior obturator tubercle.i",
+  "Anterior obturator tubercle.j",
+  "Anterior process of calcaneus.i",
+  "Anterior process of calcaneus.j",
+  "Anterior process of malleus.i",
+  "Anterior process of malleus.j",
+  "Anterior sacral foramina.j",
+  "Anterior semicircular canal.j",
+  "Anterior superior iliac spine.i",
+  "Anterior superior iliac spine.j",
+  "Anterior surface of petrous part.i",
+  "Anterior surface of petrous part.j",
+  "Anterior surface of radius.i",
+  "Anterior surface of radius.j",
+  "Anterior tubercle of atlas.j",
+  "Anterior tubercle of transverse process.j",
+  "Anterolateral surface of arytenoid cartilage.i",
+  "Anterolateral surface of arytenoid cartilage.j",
+  "Anterolateral surface of humerus.i",
+  "Anterolateral surface of humerus.j",
+  "Anteromedial surface of fibula.i",
+  "Anteromedial surface of fibula.j",
+  "Anteromedial surface of humerus.i",
+  "Anteromedial surface of humerus.j",
+  "Apex of arytenoid cartilage.i",
+  "Apex of arytenoid cartilage.j",
+  "Apex of coccyx.j",
+  "Apex of dens axis.j",
+  "Apex of head of fibula.i",
+  "Apex of head of fibula.j",
+  "Apex of petrous part.i",
+  "Apex of petrous part.j",
+  "Apex of sacrum.j",
+  "Appendicular skeleton.j",
+  "Arch of cricoid cartilage.j",
+  "Arcuate crest.i",
+  "Arcuate crest.j",
+  "Arcuate eminence.i",
+  "Arcuate eminence.j",
+  "Arcuate line of ilium.i",
+  "Arcuate line of ilium.j",
+  "Articular circumference of head of radius.i",
+  "Articular circumference of head of radius.j",
+  "Articular circumference of head of ulna.i",
+  "Articular circumference of head of ulna.j",
+  "Articular facet for malleus.i",
+  "Articular facet for malleus.j",
+  "Articular facet for stapes.i",
+  "Articular facet for stapes.j",
+  "Articular facet of head of fibula.i",
+  "Articular facet of head of fibula.j",
+  "Articular facet of head of malleus.i",
+  "Articular facet of head of malleus.j",
+  "Articular facet of head of radius.i",
+  "Articular facet of head of radius.j",
+  "Articular facet of head of stapes.i",
+  "Articular facet of head of stapes.j",
+  "Articular facet of lateral malleolus.i",
+  "Articular facet of lateral malleolus.j",
+  "Articular facet of medial malleolus.i",
+  "Articular facet of medial malleolus.j",
+  "Articular facet of tubercle of rib.i",
+  "Articular facet of tubercle of rib.j",
+  "Articular facets of head of rib.i",
+  "Articular facets of head of rib.j",
+  "Articular surface for cuboid.i",
+  "Articular surface for cuboid.j",
+  "Articular surface of arytenoid cartilage.i",
+  "Articular surface of arytenoid cartilage.j",
+  "Articular surface of medial condyle.i",
+  "Articular surface of medial condyle.j",
+  "Arytenoid articular surface.j",
+  "Atlas.j",
+  "Auditory ossicles.j",
+  "Auricular surface of ilium.i",
+  "Auricular surface of ilium.j",
+  "Auricular surface of sacrum.j",
+  "Axial skeleton.j",
+  "Axis (C2).j",
+  "Base of arytenoid cartilage.i",
+  "Base of arytenoid cartilage.j",
+  "Base of coccyx.j",
+  "Base of cochlea.j",
+  "Base of mandible.j",
+  "Base of metatarsal bone.i",
+  "Base of metatarsal bone.j",
+  "Base of phalanx of foot.i",
+  "Base of phalanx of foot.j",
+  "Base of phalanx of hand.i",
+  "Base of phalanx of hand.j",
+  "Base of sacrum.j",
+  "Base of stapes.i",
+  "Base of stapes.j",
+  "Basilar part of occipital bone.j",
+  "Body of clavicle.i",
+  "Body of clavicle.j",
+  "Body of femur.i",
+  "Body of femur.j",
+  "Body of fibula.i",
+  "Body of fibula.j",
+  "Body of humerus.i",
+  "Body of humerus.j",
+  "Body of hyoid bone.j",
+  "Body of ilium.i",
+  "Body of ilium.j",
+  "Body of incus.i",
+  "Body of incus.j",
+  "Body of ischium.i",
+  "Body of ischium.j",
+  "Body of mandible.j",
+  "Body of metacarpal bone.i",
+  "Body of metacarpal bone.j",
+  "Body of metatarsal bone.i",
+  "Body of metatarsal bone.j",
+  "Body of phalanx of foot.i",
+  "Body of phalanx of foot.j",
+  "Body of phalanx of hand.i",
+  "Body of phalanx of hand.j",
+  "Body of pubis.i",
+  "Body of pubis.j",
+  "Body of radius.i",
+  "Body of radius.j",
+  "Body of rib.i",
+  "Body of rib.j",
+  "Body of sphenoid bone.j",
+  "Body of talus.i",
+  "Body of talus.j",
+  "Body of tibia.i",
+  "Body of tibia.j",
+  "Body of ulna.i",
+  "Body of ulna.j",
+  "Bones of cranium.j",
+  "Bones of foot.j",
+  "Bones of free part of lower limb.j",
+  "Bones of free part of upper limb.j",
+  "Bones of hand.j",
+  "Bones of lower limb.j",
+  "Bones of pectoral girdle.j",
+  "Bones of pelvic girdle.j",
+  "Bones of thorax.j",
+  "Bones of upper limb.j",
+  "Bones of vertebral column.j",
+  "Bony pelvis.j",
+  "Calcaneal sulcus.i",
+  "Calcaneal sulcus.j",
+  "Calcaneal tubercle.i",
+  "Calcaneal tubercle.j",
+  "Calcaneal tuberosity.i",
+  "Calcaneal tuberosity.j",
+  "Capitulum of humerus.i",
+  "Capitulum of humerus.j",
+  "Carotid sulcus.j",
+  "Carpal articular surface.i",
+  "Carpal articular surface.j",
+  "Carpal bones.j",
+  "Cartilages of ear.j",
+  "Cerebellar fossa.j",
+  "Cerebral fossa.j",
+  "Cerebral surface of greater wing.j",
+  "Cervical vertebra.j",
+  "Cervical vertebrae.j",
+  "Chiasmatic sulcus.j",
+  "Clavicular facet.i",
+  "Clavicular facet.j",
+  "Clavicular notch.j",
+  "Coccygeal horn.j",
+  "Coccyx.j",
+  "Cochlear cupula.j",
+  "Colliculus of arytenoid cartilage.i",
+  "Colliculus of arytenoid cartilage.j",
+  "Common bony limb.j",
+  "Condylar canal.j",
+  "Condylar fossa.j",
+  "Condyle of humerus.i",
+  "Condyle of humerus.j",
+  "Conoid tubercle.i",
+  "Conoid tubercle.j",
+  "Coracoid process.i",
+  "Coracoid process.j",
+  "Coronoid fossa.i",
+  "Coronoid fossa.j",
+  "Coronoid process of ulna.i",
+  "Coronoid process of ulna.j",
+  "Costal arch.j",
+  "Costal cartilages.j",
+  "Costal groove.i",
+  "Costal groove.j",
+  "Costal notches.j",
+  "Costal part of transverse process.j",
+  "Costal surface of scapula.i",
+  "Costal surface of scapula.j",
+  "Cranium.j",
+  "Crest of greater tubercle.i",
+  "Crest of greater tubercle.j",
+  "Crest of head of rib.i",
+  "Crest of head of rib.j",
+  "Crest of lesser tubercle.i",
+  "Crest of lesser tubercle.j",
+  "Crest of neck of rib.i",
+  "Crest of neck of rib.j",
+  "Crown of tooth.i",
+  "Crown of tooth.j",
+  "Cruciform eminence.j",
+  "Cusp of tooth.i",
+  "Cusp of tooth.j",
+  "Deltoid tubercle.i",
+  "Deltoid tubercle.j",
+  "Deltoid tuberosity.i",
+  "Deltoid tuberosity.j",
+  "Dens axis.j",
+  "Digastric fossa.j",
+  "Distal surface of tooth.i",
+  "Distal surface of tooth.j",
+  "Dorsal radial tubercle.i",
+  "Dorsal radial tubercle.j",
+  "Dorsal surface of sacrum.j",
+  "Dorsum sellae.j",
+  "Ethmoidal notch.j",
+  "External occipital protuberance.j",
+  "External surface of frontal bone.j",
+  "External surface of parietal bone.j",
+  "Extracranial bones of head.j",
+  "Facet for calcaneonavicular part of bifurcate ligament.i",
+  "Facet for calcaneonavicular part of bifurcate ligament.j",
+  "Facet for dens.j",
+  "Facet for plantar calcaneonavicular ligament.i",
+  "Facet for plantar calcaneonavicular ligament.j",
+  "Facial bones.j",
+  "False ribs.j",
+  "Femur.i",
+  "Femur.j",
+  "Fibula.i",
+  "Fibula.j",
+  "Fibular articular facet.i",
+  "Fibular articular facet.j",
+  "Fibular notch.i",
+  "Fibular notch.j",
+  "Fifth metatarsal bone.i",
+  "Fifth metatarsal bone.j",
+  "First metatarsal bone.i",
+  "First metatarsal bone.j",
+  "Floating ribs.j",
+  "Foramen caecum of frontal bone.j",
+  "Foramen magnum.j",
+  "Foramen ovale.j",
+  "Foramen rotundum.j",
+  "Foramen spinosum.j",
+  "Foramen transversarium.j",
+  "Fossa for lacrimal gland.j",
+  "Fovea for ligament of head of femur.i",
+  "Fovea for ligament of head of femur.j",
+  "Frontal angle of parietal bone.j",
+  "Frontal border of parietal bone.j",
+  "Frontal crest.j",
+  "Frontal eminence.j",
+  "Frontal margin of greater wing.j",
+  "Frontal part of orbital margin.j",
+  "Genion.j",
+  "Glabella.j",
+  "Glenoid fossa.i",
+  "Glenoid fossa.j",
+  "Glenoid process of scapula.i",
+  "Glenoid process of scapula.j",
+  "Gluteal surface of ilium.i",
+  "Gluteal surface of ilium.j",
+  "Gluteal tuberosity.i",
+  "Gluteal tuberosity.j",
+  "Gnathion.j",
+  "Greater horn of hyoid bone.j",
+  "Greater sciatic foramen.i",
+  "Greater sciatic foramen.j",
+  "Greater sciatic notch.i",
+  "Greater sciatic notch.j",
+  "Greater trochanter.i",
+  "Greater trochanter.j",
+  "Greater tubercle.i",
+  "Greater tubercle.j",
+  "Greater wing.j",
+  "Groove for marginal sinus.j",
+  "Groove for middle meningeal artery.j",
+  "Groove for occipital sinus.j",
+  "Groove for popliteus muscle.i",
+  "Groove for popliteus muscle.j",
+  "Groove for spinal nerve.j",
+  "Groove for subclavius muscle.i",
+  "Groove for subclavius muscle.j",
+  "Groove for tendon of fibularis longus muscle of cuboid bone.i",
+  "Groove for tendon of fibularis longus muscle of cuboid bone.j",
+  "Groove for tendon of flexor hallucis longus of calcaneus.i",
+  "Groove for tendon of flexor hallucis longus of calcaneus.j",
+  "Groove for tendon of flexor hallucis longus of talus.i",
+  "Groove for tendon of flexor hallucis longus of talus.j",
+  "Groove for transverse sinus.j",
+  "Groove for ulnar nerve.i",
+  "Groove for ulnar nerve.j",
+  "Groove for vertebral artery.j",
+  "Groove of pterygoid hamulus.j",
+  "Grooves for extensor tendons.i",
+  "Grooves for extensor tendons.j",
+  "Handle of malleus.i",
+  "Handle of malleus.j",
+  "Head of femur.i",
+  "Head of femur.j",
+  "Head of fibula.i",
+  "Head of fibula.j",
+  "Head of humerus.i",
+  "Head of humerus.j",
+  "Head of malleus.i",
+  "Head of malleus.j",
+  "Head of metacarpal bone.i",
+  "Head of metacarpal bone.j",
+  "Head of metatarsal bone.i",
+  "Head of metatarsal bone.j",
+  "Head of phalanx of foot.i",
+  "Head of phalanx of foot.j",
+  "Head of phalanx of hand.i",
+  "Head of phalanx of hand.j",
+  "Head of radius.i",
+  "Head of radius.j",
+  "Head of rib.i",
+  "Head of rib.j",
+  "Head of talus.i",
+  "Head of talus.j",
+  "Head of ulna.i",
+  "Head of ulna.j",
+  "Hip bone.i",
+  "Hip bone.j",
+  "Hook of hamate bone.i",
+  "Hook of hamate bone.j",
+  "Humerus.i",
+  "Humerus.j",
+  "Hypoglossal canal.j",
+  "Hypophysial fossa.j",
+  "Iliac crest.i",
+  "Iliac crest.j",
+  "Iliac fossa.i",
+  "Iliac fossa.j",
+  "Iliac tubercle.i",
+  "Iliac tubercle.j",
+  "Iliac tuberosity.i",
+  "Iliac tuberosity.j",
+  "Iliopubic eminence.i",
+  "Iliopubic eminence.j",
+  "Ilium.i",
+  "Ilium.j",
+  "Impression for costoclavicular ligament.i",
+  "Impression for costoclavicular ligament.j",
+  "Inferior angle of scapula.i",
+  "Inferior angle of scapula.j",
+  "Inferior articular facet of vertebra.j",
+  "Inferior articular surface of atlas.j",
+  "Inferior articular surface of tibia.i",
+  "Inferior articular surface of tibia.j",
+  "Inferior costal facet.j",
+  "Inferior gluteal line.i",
+  "Inferior gluteal line.j",
+  "Inferior horn of thyroid cartilage.j",
+  "Inferior mental spine.j",
+  "Inferior nuchal line.j",
+  "Inferior pubic ramus.i",
+  "Inferior pubic ramus.j",
+  "Inferior temporal line.j",
+  "Inferior thoracic aperture.j",
+  "Inferior thyroid notch.j",
+  "Inferior thyroid tubercle.j",
+  "Inferior vertebral notch.j",
+  "Infraglenoid tubercle.i",
+  "Infraglenoid tubercle.j",
+  "Infraspinous fossa.i",
+  "Infraspinous fossa.j",
+  "Infrasternal angle.j",
+  "Infratemporal surface of greater wing.j",
+  "Inner lip of iliac crest.i",
+  "Inner lip of iliac crest.j",
+  "Intercondylar area.i",
+  "Intercondylar area.j",
+  "Intercondylar eminence.i",
+  "Intercondylar eminence.j",
+  "Intercondylar fossa.i",
+  "Intercondylar fossa.j",
+  "Intercondylar line.i",
+  "Intercondylar line.j",
+  "Intercostal space.j",
+  "Intermediate sacral crest.j",
+  "Intermediate zone.i",
+  "Intermediate zone.j",
+  "Internal occipital protuberance.j",
+  "Internal surface of parietal bone.j",
+  "Internal surface of squamous part of frontal bone.j",
+  "Interosseous border of radius.i",
+  "Interosseous border of radius.j",
+  "Interosseous border of tibia.i",
+  "Interosseous border of tibia.j",
+  "Interosseous border of ulna.i",
+  "Interosseous border of ulna.j",
+  "Interosseous crest of fibula.i",
+  "Interosseous crest of fibula.j",
+  "Intertrochanteric crest.i",
+  "Intertrochanteric crest.j",
+  "Intertrochanteric line.i",
+  "Intertrochanteric line.j",
+  "Intertubercular sulcus.i",
+  "Intertubercular sulcus.j",
+  "Intervertebral foramen.j",
+  "Intervertebral foramina.j",
+  "Intervertebral surface.j",
+  "Intrajugular process of occipital bone.j",
+  "Ischial spine.i",
+  "Ischial spine.j",
+  "Ischial tuberosity.i",
+  "Ischial tuberosity.j",
+  "Ischiopubic ramus.i",
+  "Ischiopubic ramus.j",
+  "Ischium.i",
+  "Ischium.j",
+  "Jugular notch of occipital bone.j",
+  "Jugular process.j",
+  "Lamina of cricoid cartilage.j",
+  "Lamina of thyroid cartilage.j",
+  "Lamina of vertebral arch.j",
+  "Laryngeal cartilages.j",
+  "Laryngeal prominence.j",
+  "Lateral angle of scapula.i",
+  "Lateral angle of scapula.j",
+  "Lateral bony ampulla.j",
+  "Lateral border of humerus.i",
+  "Lateral border of humerus.j",
+  "Lateral border of scapula.i",
+  "Lateral border of scapula.j",
+  "Lateral condyle of femur.i",
+  "Lateral condyle of femur.j",
+  "Lateral condyle of tibia.i",
+  "Lateral condyle of tibia.j",
+  "Lateral epicondyle of femur.i",
+  "Lateral epicondyle of femur.j",
+  "Lateral epicondyle of humerus.i",
+  "Lateral epicondyle of humerus.j",
+  "Lateral intercondylar tubercle.i",
+  "Lateral intercondylar tubercle.j",
+  "Lateral lip of linea apera.i",
+  "Lateral lip of linea apera.j",
+  "Lateral malleolar facet.i",
+  "Lateral malleolar facet.j",
+  "Lateral malleolus.i",
+  "Lateral malleolus.j",
+  "Lateral mass.j",
+  "Lateral part of occipital bone.j",
+  "Lateral part of sacrum.j",
+  "Lateral part of transverse process.j",
+  "Lateral process of calcaneal tuberosity.i",
+  "Lateral process of calcaneal tuberosity.j",
+  "Lateral process of malleus.i",
+  "Lateral process of malleus.j",
+  "Lateral process of talus.i",
+  "Lateral process of talus.j",
+  "Lateral pterygoid plate.j",
+  "Lateral sacral crest.j",
+  "Lateral semicircular canal.j",
+  "Lateral supracondylar line.i",
+  "Lateral supracondylar line.j",
+  "Lateral supracondylar ridge.i",
+  "Lateral supracondylar ridge.j",
+  "Lateral surface of fibula.i",
+  "Lateral surface of fibula.j",
+  "Lateral surface of radius.i",
+  "Lateral surface of radius.j",
+  "Lateral surface of tibia.i",
+  "Lateral surface of tibia.j",
+  "Lateral tubercle.i",
+  "Lateral tubercle.j",
+  "Lenticular process of incus.i",
+  "Lenticular process of incus.j",
+  "Lesser horn of hyoid bone.j",
+  "Lesser sciatic foramen.i",
+  "Lesser sciatic foramen.j",
+  "Lesser sciatic notch.i",
+  "Lesser sciatic notch.j",
+  "Lesser trochanter.i",
+  "Lesser trochanter.j",
+  "Lesser tubercle.i",
+  "Lesser tubercle.j",
+  "Lesser wing.j",
+  "Limbus of sphenoid.j",
+  "Linea aspera.i",
+  "Linea aspera.j",
+  "Linea terminalis.j",
+  "Lingual surface of tooth.i",
+  "Lingual surface of tooth.j",
+  "Long limb of incus.i",
+  "Long limb of incus.j",
+  "Lumbar vertebrae.j",
+  "Lunate surface.i",
+  "Lunate surface.j",
+  "Malleolar fossa.i",
+  "Malleolar fossa.j",
+  "Malleolar groove of fibula.i",
+  "Malleolar groove of fibula.j",
+  "Malleolar groove of tibia.i",
+  "Malleolar groove of tibia.j",
+  "Mandibular dental arch.j",
+  "Manubrium of sternum.j",
+  "Mastoid angle of parietal bone.j",
+  "Mastoid border of occipital bone.j",
+  "Mastoid notch.i",
+  "Mastoid notch.j",
+  "Mastoid process.i",
+  "Mastoid process.j",
+  "Maxillary dental arch.i",
+  "Maxillary dental arch.j",
+  "Maxillary surface of greater wing.j",
+  "Medial border of fibula.i",
+  "Medial border of fibula.j",
+  "Medial border of humerus.i",
+  "Medial border of humerus.j",
+  "Medial border of scapula.i",
+  "Medial border of scapula.j",
+  "Medial border of tibia.i",
+  "Medial border of tibia.j",
+  "Medial condyle of femur.i",
+  "Medial condyle of femur.j",
+  "Medial condyle of tibia.i",
+  "Medial condyle of tibia.j",
+  "Medial epicondyle of femur.i",
+  "Medial epicondyle of femur.j",
+  "Medial epicondyle of humerus.i",
+  "Medial epicondyle of humerus.j",
+  "Medial intercondylar tubercle.i",
+  "Medial intercondylar tubercle.j",
+  "Medial lip of linea apera.i",
+  "Medial lip of linea apera.j",
+  "Medial malleolar facet.i",
+  "Medial malleolar facet.j",
+  "Medial malleolus.i",
+  "Medial malleolus.j",
+  "Medial process of calcaneal tuberosity.i",
+  "Medial process of calcaneal tuberosity.j",
+  "Medial pterygoid plate.j",
+  "Medial supracondylar line.i",
+  "Medial supracondylar line.j",
+  "Medial supracondylar ridge.i",
+  "Medial supracondylar ridge.j",
+  "Medial surface of arytenoid cartilage.i",
+  "Medial surface of arytenoid cartilage.j",
+  "Medial surface of fibula.i",
+  "Medial surface of fibula.j",
+  "Medial surface of tibia.i",
+  "Medial surface of tibia.j",
+  "Medial surface of ulna.i",
+  "Medial surface of ulna.j",
+  "Medial tubercle.i",
+  "Medial tubercle.j",
+  "Median sacral crest.j",
+  "Mental foramen.j",
+  "Mental protuberance.j",
+  "Mental tubercle.j",
+  "Mesial surface of tooth.i",
+  "Mesial surface of tooth.j",
+  "Metacarpal base.i",
+  "Metacarpal base.j",
+  "Metacarpal bones.j",
+  "Metatarsal bones.j",
+  "Middle facet for calcaneus.i",
+  "Middle facet for calcaneus.j",
+  "Muscular process.i",
+  "Muscular process.j",
+  "Mylohyoid line.j",
+  "Nasal cartilages.j",
+  "Nasal margin of frontal bone.j",
+  "Nasal part of frontal bone.j",
+  "Nasal spine of frontal bone.j",
+  "Navicular articular surface.i",
+  "Navicular articular surface.j",
+  "Neck of femur.i",
+  "Neck of femur.j",
+  "Neck of fibula.i",
+  "Neck of fibula.j",
+  "Neck of malleus.i",
+  "Neck of malleus.j",
+  "Neck of radius.i",
+  "Neck of radius.j",
+  "Neck of rib.i",
+  "Neck of rib.j",
+  "Neck of scapula.i",
+  "Neck of scapula.j",
+  "Neck of talus.i",
+  "Neck of talus.j",
+  "Neck of tooth.i",
+  "Neck of tooth.j",
+  "Neurocranium.j",
+  "Oblique line of mandible.j",
+  "Oblique line of thyroid cartilage.j",
+  "Oblong fovea.i",
+  "Oblong fovea.j",
+  "Obturator crest.i",
+  "Obturator crest.j",
+  "Obturator foramen.i",
+  "Obturator foramen.j",
+  "Obturator groove.i",
+  "Obturator groove.j",
+  "Occipital angle of parietal bone.j",
+  "Occipital border of parietal bone.j",
+  "Occipital condyle.j",
+  "Occipital margin of temporal bone.i",
+  "Occipital margin of temporal bone.j",
+  "Occipital plane.j",
+  "Occlusal surface of tooth.i",
+  "Occlusal surface of tooth.j",
+  "Olecranon fossa.i",
+  "Olecranon fossa.j",
+  "Olecranon.i",
+  "Olecranon.j",
+  "Opening of frontal sinus.j",
+  "Optic canal.j",
+  "Orbital part of frontal bone.j",
+  "Orbital plate of frontal bone.j",
+  "Orbital surface of frontal bone.j",
+  "Orbital surface of greater wing.j",
+  "Outer lip of iliac crest.i",
+  "Outer lip of iliac crest.j",
+  "Parietal eminence.j",
+  "Parietal foramen.j",
+  "Parietal margin of frontal bone.j",
+  "Parietal margin of greater wing.j",
+  "Pars interarticularis of vertebral arch.j",
+  "Patellar surface of femur.i",
+  "Patellar surface of femur.j",
+  "Pecten pubis.i",
+  "Pecten pubis.j",
+  "Pectineal line of femur.i",
+  "Pectineal line of femur.j",
+  "Pectoral girdle.j",
+  "Pedicle of vertebral arch.j",
+  "Pelvic girdle.j",
+  "Pelvic inlet.j",
+  "Pelvic outlet.j",
+  "Pelvic surface of sacrum.j",
+  "Petrous part of temporal bone.i",
+  "Petrous part of temporal bone.j",
+  "Phalanges of foot.j",
+  "Phalanges of hand.j",
+  "Pharyngeal tubercle.j",
+  "Popliteal surface of femur.i",
+  "Popliteal surface of femur.j",
+  "Posterior arch of atlas.j",
+  "Posterior articular facet of dens axis.j",
+  "Posterior bony ampulla.j",
+  "Posterior border of fibula.i",
+  "Posterior border of fibula.j",
+  "Posterior border of radius.i",
+  "Posterior border of radius.j",
+  "Posterior border of ulna.i",
+  "Posterior border of ulna.j",
+  "Posterior calcaneal articular facet.i",
+  "Posterior calcaneal articular facet.j",
+  "Posterior clinoid process.j",
+  "Posterior gluteal line.i",
+  "Posterior gluteal line.j",
+  "Posterior inferior iliac spine.i",
+  "Posterior inferior iliac spine.j",
+  "Posterior intercondylar area.i",
+  "Posterior intercondylar area.j",
+  "Posterior limb of stapes.i",
+  "Posterior limb of stapes.j",
+  "Posterior malleolus.i",
+  "Posterior malleolus.j",
+  "Posterior process of talus.i",
+  "Posterior process of talus.j",
+  "Posterior sacral foramina.j",
+  "Posterior semicircular canal.j",
+  "Posterior superior iliac spine.i",
+  "Posterior superior iliac spine.j",
+  "Posterior surface of arytenoid cartilage.i",
+  "Posterior surface of arytenoid cartilage.j",
+  "Posterior surface of fibula.i",
+  "Posterior surface of fibula.j",
+  "Posterior surface of humerus.i",
+  "Posterior surface of humerus.j",
+  "Posterior surface of petrous part.i",
+  "Posterior surface of petrous part.j",
+  "Posterior surface of radius.i",
+  "Posterior surface of radius.j",
+  "Posterior surface of scapula.i",
+  "Posterior surface of scapula.j",
+  "Posterior surface of tibia.i",
+  "Posterior surface of tibia.j",
+  "Posterior surface of ulna.i",
+  "Posterior surface of ulna.j",
+  "Posterior tubercle of atlas.j",
+  "Posterior tubercle of transverse process.j",
+  "Posteromedial surface of fibula.i",
+  "Posteromedial surface of fibula.j",
+  "Promontory.j",
+  "Pronator tuberosity.i",
+  "Pronator tuberosity.j",
+  "Pterygoid canal.j",
+  "Pterygoid fossa.j",
+  "Pterygoid hamulus.j",
+  "Pterygoid notch.j",
+  "Pterygoid process .j",
+  "Pterygospinous process.j",
+  "Pubic crest.i",
+  "Pubic crest.j",
+  "Pubic tubercle.i",
+  "Pubic tubercle.j",
+  "Pubis.i",
+  "Pubis.j",
+  "Quadrate tubercle.i",
+  "Quadrate tubercle.j",
+  "Radial fossa.i",
+  "Radial fossa.j",
+  "Radial groove.i",
+  "Radial groove.j",
+  "Radial notch.i",
+  "Radial notch.j",
+  "Radial styloid process.i",
+  "Radial styloid process.j",
+  "Radial tuberosity.i",
+  "Radial tuberosity.j",
+  "Radius.i",
+  "Radius.j",
+  "Ramus of ischium.i",
+  "Ramus of ischium.j",
+  "Rib.i",
+  "Rib.j",
+  "Ribs.j",
+  "Root apex.i",
+  "Root apex.j",
+  "Root of tooth.i",
+  "Root of tooth.j",
+  "Sacral canal.j",
+  "Sacral hiatus.j",
+  "Sacral horn.j",
+  "Sacral tuberosity.j",
+  "Sacropelvic surface of ilium.i",
+  "Sacropelvic surface of ilium.j",
+  "Sacrum.j",
+  "Sagittal border of parietal bone.j",
+  "Scaphoid fossa.j",
+  "Scapula.i",
+  "Scapula.j",
+  "Scapular notch.i",
+  "Scapular notch.j",
+  "Sella turcica.j",
+  "Septum of frontal sinuses.j",
+  "Septum of sphenoidal sinuses.j",
+  "Simple bony limb.j",
+  "Skeleton of free lower limb.j",
+  "Skeleton of free upper limb.j",
+  "Skeleton of lower limbs.j",
+  "Skeleton of upper limbs.j",
+  "Soleal line.i",
+  "Soleal line.j",
+  "Sphenoidal angle of parietal bone.j",
+  "Sphenoidal crest.j",
+  "Sphenoidal lingula.j",
+  "Sphenoidal margin of frontal bone.j",
+  "Sphenoidal yoke.j",
+  "Spine of scapula.i",
+  "Spine of scapula.j",
+  "Spine of sphenoid bone.j",
+  "Spinoglenoid notch.i",
+  "Spinoglenoid notch.j",
+  "Spinous process.j",
+  "Spiral canal of cochlea.j",
+  "Squamosal border of parietal bone.j",
+  "Squamosal margin of greater wing.j",
+  "Squamous part of frontal bone.j",
+  "Squamous part of occipital bone.j",
+  "Squamous part of temporal bone.i",
+  "Squamous part of temporal bone.j",
+  "Stapes.i",
+  "Stapes.j",
+  "Sternal angle.j",
+  "Sternal articular surface.i",
+  "Sternal articular surface.j",
+  "Sternal end.i",
+  "Sternal end.j",
+  "Sternum.j",
+  "Styloid process of temporal bone.i",
+  "Styloid process of temporal bone.j",
+  "Styloid process of third metacarpal bone.i",
+  "Styloid process of third metacarpal bone.j",
+  "Sublime tubercle.i",
+  "Sublime tubercle.j",
+  "Sublingual fossa.j",
+  "Subscapular fossa.i",
+  "Subscapular fossa.j",
+  "Sulcus of auditory tube.j",
+  "Supercilliary arch.j",
+  "Superior angle of scapula.i",
+  "Superior angle of scapula.j",
+  "Superior articular facet of vertebra.j",
+  "Superior articular process of sacrum.j",
+  "Superior articular process of vertebra.j",
+  "Superior articular surface of atlas.j",
+  "Superior articular surface of lateral condyle.i",
+  "Superior articular surface of lateral condyle.j",
+  "Superior articular surfaces of tibia.i",
+  "Superior articular surfaces of tibia.j",
+  "Superior border of scapula.i",
+  "Superior border of scapula.j",
+  "Superior costal facet.j",
+  "Superior facet of talus.i",
+  "Superior facet of talus.j",
+  "Superior horn of thyroid cartilage.j",
+  "Superior mental spine.j",
+  "Superior nuchal line.j",
+  "Superior pubic ramus.i",
+  "Superior pubic ramus.j",
+  "Superior temporal line.j",
+  "Superior thoracic aperture.j",
+  "Superior thyroid notch.j",
+  "Superior thyroid tubercle.j",
+  "Superior vertebral notch.j",
+  "Supinator crest.i",
+  "Supinator crest.j",
+  "Supra-acetabular groove.i",
+  "Supra-acetabular groove.j",
+  "Supraglenoid tubercle.i",
+  "Supraglenoid tubercle.j",
+  "Supraspinous fossa.i",
+  "Supraspinous fossa.j",
+  "Suprastyloid crest.i",
+  "Suprastyloid crest.j",
+  "Supreme nuchal line.j",
+  "Surgical neck of humerus.i",
+  "Surgical neck of humerus.j",
+  "Sustentaculum tali.i",
+  "Sustentaculum tali.j",
+  "Symphysial surface of pubis.i",
+  "Symphysial surface of pubis.j",
+  "Talar sulcus.i",
+  "Talar sulcus.j",
+  "Tarsal bones.j",
+  "Tarsal sinus.i",
+  "Tarsal sinus.j",
+  "Teeth.j",
+  "Tegmen tympani.i",
+  "Tegmen tympani.j",
+  "Temporal line.j",
+  "Temporal surface of frontal bone.j",
+  "Temporal surface of greater wing.j",
+  "Thoracic skeleton.j",
+  "Thoracic vertebra.j",
+  "Thoracic vertebrae.j",
+  "Thyroid articular surface.j",
+  "Tibia.i",
+  "Tibia.j",
+  "Tibial plateau.i",
+  "Tibial plateau.j",
+  "Tibial tuberosity.i",
+  "Tibial tuberosity.j",
+  "Transverse costal facet.j",
+  "Transverse ligament tubercle.j",
+  "Transverse process.j",
+  "Transverse ridges.j",
+  "Trapezoid line.i",
+  "Trapezoid line.j",
+  "Triangular fovea.i",
+  "Triangular fovea.j",
+  "Trochanteric fossa.i",
+  "Trochanteric fossa.j",
+  "Trochlea of humerus.i",
+  "Trochlea of humerus.j",
+  "Trochlea of phalanx of foot.i",
+  "Trochlea of phalanx of foot.j",
+  "Trochlea of phalanx of hand.i",
+  "Trochlea of phalanx of hand.j",
+  "Trochlea of talus.i",
+  "Trochlea of talus.j",
+  "Trochlear fovea.j",
+  "Trochlear notch.i",
+  "Trochlear notch.j",
+  "True ribs.j",
+  "Tubercle of iliotibial tract.i",
+  "Tubercle of iliotibial tract.j",
+  "Tubercle of rib.i",
+  "Tubercle of rib.j",
+  "Tubercle of scaphoid bone.i",
+  "Tubercle of scaphoid bone.j",
+  "Tubercle of trapezium bone.j",
+  "Tuberculum sellae.j",
+  "Tuberosity for coracoclavicular ligament.i",
+  "Tuberosity for coracoclavicular ligament.j",
+  "Tuberosity of cuboid bone.i",
+  "Tuberosity of cuboid bone.j",
+  "Tuberosity of distal phalanx of foot.i",
+  "Tuberosity of distal phalanx of foot.j",
+  "Tuberosity of distal phalanx of hand.i",
+  "Tuberosity of distal phalanx of hand.j",
+  "Tuberosity of navicular bone.i",
+  "Tuberosity of navicular bone.j",
+  "Tuberosity of ulna.i",
+  "Tuberosity of ulna.j",
+  "Tympanic part of temporal bone.i",
+  "Tympanic part of temporal bone.j",
+  "Ulna.i",
+  "Ulna.j",
+  "Ulnar notch.i",
+  "Ulnar notch.j",
+  "Ulnar styloid process.i",
+  "Ulnar styloid process.j",
+  "Uncinate process of first thoracic vertebra.j",
+  "Uncinate process of vertebra.j",
+  "Vaginal process of sphenoid bone.j",
+  "Vertebra.j",
+  "Vertebral arch.j",
+  "Vertebral body.j",
+  "Vertebral column.j",
+  "Vertebral foramen.j",
+  "Vestibular surface of tooth.i",
+  "Vestibular surface of tooth.j",
+  "Viscerocranium.j",
+  "Vocal process.j",
+  "Xiphoid process.j",
+  "Zygomatic margin of greater wing.j",
+  "Zygomatic process of frontal bone.j",
+  "[Trochlear spine].j"
+ ],
+ "objects": [
+  {
+   "name": "Anterior cells of ethmoid bone.l",
+   "polygons": 368,
+   "path": []
+  },
+  {
+   "name": "Anterior cells of ethmoid bone.r",
+   "polygons": 368,
+   "path": []
+  },
+  {
+   "name": "Anterior longitudinal ligament",
+   "polygons": 2464,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Arytenoid cartilage.l",
+   "polygons": 1890,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Arytenoid cartilage.r",
+   "polygons": 1890,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Atlas (C1)",
+   "polygons": 2146,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Axis (C2)",
+   "polygons": 2244,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Body of sternum",
+   "polygons": 4466,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Calcaneus.l",
+   "polygons": 1432,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Calcaneus.r",
+   "polygons": 1432,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Capitate bone.l",
+   "polygons": 470,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Capitate bone.r",
+   "polygons": 470,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Clavicle.l",
+   "polygons": 1548,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Clavicle.r",
+   "polygons": 1548,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Coccyx",
+   "polygons": 1066,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Corniculate cartilage.l",
+   "polygons": 136,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Corniculate cartilage.r",
+   "polygons": 136,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Costal cartilage of eighth rib.l",
+   "polygons": 1312,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Costal cartilage of eighth rib.r",
+   "polygons": 1312,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Costal cartilage of fifth rib.l",
+   "polygons": 3246,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Costal cartilage of fifth rib.r",
+   "polygons": 3246,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Costal cartilage of first rib.l",
+   "polygons": 1386,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Costal cartilage of first rib.r",
+   "polygons": 1386,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Costal cartilage of fourth rib.l",
+   "polygons": 2236,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Costal cartilage of fourth rib.r",
+   "polygons": 2236,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Costal cartilage of ninth rib.l",
+   "polygons": 982,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Costal cartilage of ninth rib.r",
+   "polygons": 982,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Costal cartilage of second rib.l",
+   "polygons": 1704,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Costal cartilage of second rib.r",
+   "polygons": 1704,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Costal cartilage of seventh rib.l",
+   "polygons": 6882,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Costal cartilage of seventh rib.r",
+   "polygons": 6882,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Costal cartilage of sixth rib.l",
+   "polygons": 4060,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Costal cartilage of sixth rib.r",
+   "polygons": 4060,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Costal cartilage of tenth rib.l",
+   "polygons": 762,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Costal cartilage of tenth rib.r",
+   "polygons": 762,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Costal cartilage of third rib.l",
+   "polygons": 1800,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Costal cartilage of third rib.r",
+   "polygons": 1800,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Cricoid cartilage",
+   "polygons": 1806,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Cuboid bone.l",
+   "polygons": 994,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Cuboid bone.r",
+   "polygons": 994,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Distal phalanx of fifth finger of foot.l",
+   "polygons": 222,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Distal phalanx of fifth finger of foot.r",
+   "polygons": 222,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Distal phalanx of fifth finger of hand.l",
+   "polygons": 192,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Distal phalanx of fifth finger of hand.r",
+   "polygons": 192,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Distal phalanx of first finger of foot.l",
+   "polygons": 466,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Distal phalanx of first finger of foot.r",
+   "polygons": 466,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Distal phalanx of first finger of hand.l",
+   "polygons": 222,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Distal phalanx of first finger of hand.r",
+   "polygons": 222,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Distal phalanx of fourth finger of foot.l",
+   "polygons": 278,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Distal phalanx of fourth finger of foot.r",
+   "polygons": 278,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Distal phalanx of fourth finger of hand.l",
+   "polygons": 134,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Distal phalanx of fourth finger of hand.r",
+   "polygons": 134,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Distal phalanx of second finger of foot.l",
+   "polygons": 236,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Distal phalanx of second finger of foot.r",
+   "polygons": 236,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Distal phalanx of second finger of hand.l",
+   "polygons": 250,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Distal phalanx of second finger of hand.r",
+   "polygons": 250,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Distal phalanx of third finger of foot.l",
+   "polygons": 318,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Distal phalanx of third finger of foot.r",
+   "polygons": 318,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Distal phalanx of third finger of hand.l",
+   "polygons": 192,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Distal phalanx of third finger of hand.r",
+   "polygons": 192,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Eighth rib.l",
+   "polygons": 8257,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Eighth rib.r",
+   "polygons": 8257,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Eleventh rib.l",
+   "polygons": 5032,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Eleventh rib.r",
+   "polygons": 5032,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Ethmoid bone",
+   "polygons": 6696,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Femur.l",
+   "polygons": 3786,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Femur.r",
+   "polygons": 3786,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Fibula.l",
+   "polygons": 1264,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Fibula.r",
+   "polygons": 1264,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Fifth metacarpal bone.l",
+   "polygons": 503,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Fifth metacarpal bone.r",
+   "polygons": 503,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Fifth metatarsal bone.l",
+   "polygons": 894,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Fifth metatarsal bone.r",
+   "polygons": 894,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Fifth rib.l",
+   "polygons": 9360,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Fifth rib.r",
+   "polygons": 9360,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "First metacarpal bone.l",
+   "polygons": 682,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "First metacarpal bone.r",
+   "polygons": 682,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "First metatarsal bone.l",
+   "polygons": 1087,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "First metatarsal bone.r",
+   "polygons": 1087,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "First rib.l",
+   "polygons": 3208,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "First rib.r",
+   "polygons": 3208,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Fourth metacarpal bone.l",
+   "polygons": 642,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Fourth metacarpal bone.r",
+   "polygons": 642,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Fourth metatarsal bone.l",
+   "polygons": 732,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Fourth metatarsal bone.r",
+   "polygons": 732,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Fourth rib.l",
+   "polygons": 8640,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Fourth rib.r",
+   "polygons": 8640,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Frontal bone",
+   "polygons": 7754,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Hamate bone.l",
+   "polygons": 536,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Hamate bone.r",
+   "polygons": 536,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Hip bone.l",
+   "polygons": 3608,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Hip bone.r",
+   "polygons": 3608,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Humerus.l",
+   "polygons": 4280,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Humerus.r",
+   "polygons": 4280,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Hyoid bone",
+   "polygons": 1310,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Incus.l",
+   "polygons": 1277,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Incus.r",
+   "polygons": 1277,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Inferior nasal concha bone.l",
+   "polygons": 476,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Inferior nasal concha bone.r",
+   "polygons": 476,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Intermediate cuneiform bone.l",
+   "polygons": 444,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Intermediate cuneiform bone.r",
+   "polygons": 444,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Interspinous ligaments",
+   "polygons": 292,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intertransverse ligaments.l",
+   "polygons": 5720,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intertransverse ligaments.r",
+   "polygons": 5720,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc C2-C3",
+   "polygons": 810,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc C3-C4",
+   "polygons": 654,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc C4-C5",
+   "polygons": 822,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc C5-C6",
+   "polygons": 930,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc C6-C7",
+   "polygons": 800,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc C7-T1",
+   "polygons": 1140,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc L1-L2",
+   "polygons": 3058,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc L2-L3",
+   "polygons": 3302,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc L3-L4",
+   "polygons": 3040,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc L4-L5",
+   "polygons": 3216,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc L5-S1",
+   "polygons": 3498,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T1-T2",
+   "polygons": 1208,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T10-T11",
+   "polygons": 2770,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T11-T12",
+   "polygons": 3300,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T12-L1",
+   "polygons": 3246,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T2-T3",
+   "polygons": 1272,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T3-T4",
+   "polygons": 1310,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T4-T5",
+   "polygons": 1600,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T5-T6",
+   "polygons": 1684,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T6-T7",
+   "polygons": 2326,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T7-T8",
+   "polygons": 2572,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T8-T9",
+   "polygons": 2786,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intervertebral disc T9-T10",
+   "polygons": 1186,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intra-articular ligament of head of rib",
+   "polygons": 54,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Intra-articular ligament of head of rib.r",
+   "polygons": 54,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Lacrimal bone.l",
+   "polygons": 588,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Lacrimal bone.r",
+   "polygons": 588,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Lateral cuneiform bone.l",
+   "polygons": 632,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Lateral cuneiform bone.r",
+   "polygons": 632,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Lateral process of nasal septal cartilage.l",
+   "polygons": 347,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Lateral process of nasal septal cartilage.r",
+   "polygons": 347,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Ligamenta flava",
+   "polygons": 2364,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Lower canine.l",
+   "polygons": 1276,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Lower canine.r",
+   "polygons": 1276,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Lower first molar tooth.l",
+   "polygons": 4475,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Lower first molar tooth.r",
+   "polygons": 4475,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Lower first premolar.l",
+   "polygons": 1207,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Lower first premolar.r",
+   "polygons": 1207,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Lower lateral incisor.l",
+   "polygons": 1033,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Lower lateral incisor.r",
+   "polygons": 1033,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Lower medial incisor.l",
+   "polygons": 984,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Lower medial incisor.r",
+   "polygons": 984,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Lower second molar tooth.l",
+   "polygons": 1655,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Lower second molar tooth.r",
+   "polygons": 1655,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Lower second premolar.l",
+   "polygons": 1180,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Lower second premolar.r",
+   "polygons": 1180,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Lunate bone.l",
+   "polygons": 1044,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Lunate bone.r",
+   "polygons": 1044,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Major alar cartilage.l",
+   "polygons": 344,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Major alar cartilage.r",
+   "polygons": 344,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Malleus.l",
+   "polygons": 1998,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Malleus.r",
+   "polygons": 1998,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Mandible",
+   "polygons": 18838,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Manubrium of sternum",
+   "polygons": 2662,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Maxilla.l",
+   "polygons": 4798,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Maxilla.r",
+   "polygons": 4798,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Medial cuneiform bone.l",
+   "polygons": 968,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Medial cuneiform bone.r",
+   "polygons": 968,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Middle cells of ethmoid bone.l",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Middle cells of ethmoid bone.r",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Middle phalanx of fifth finger of foot.l",
+   "polygons": 216,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Middle phalanx of fifth finger of foot.r",
+   "polygons": 216,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Middle phalanx of fifth finger of hand.l",
+   "polygons": 292,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Middle phalanx of fifth finger of hand.r",
+   "polygons": 292,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Middle phalanx of fourth finger of foot.l",
+   "polygons": 404,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Middle phalanx of fourth finger of foot.r",
+   "polygons": 404,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Middle phalanx of fourth finger of hand.l",
+   "polygons": 446,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Middle phalanx of fourth finger of hand.r",
+   "polygons": 446,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Middle phalanx of second finger of foot.l",
+   "polygons": 326,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Middle phalanx of second finger of foot.r",
+   "polygons": 326,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Middle phalanx of second finger of hand.l",
+   "polygons": 314,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Middle phalanx of second finger of hand.r",
+   "polygons": 314,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Middle phalanx of third finger of foot.l",
+   "polygons": 359,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Middle phalanx of third finger of foot.r",
+   "polygons": 359,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Middle phalanx of third finger of hand.l",
+   "polygons": 360,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Middle phalanx of third finger of hand.r",
+   "polygons": 360,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Nasal bone.l",
+   "polygons": 292,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Nasal bone.r",
+   "polygons": 292,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Nasal septal cartilage",
+   "polygons": 360,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Navicular bone.l",
+   "polygons": 731,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Navicular bone.r",
+   "polygons": 731,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Ninth rib.l",
+   "polygons": 7743,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Ninth rib.r",
+   "polygons": 7743,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Nuchal ligament",
+   "polygons": 324,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus C2-C3",
+   "polygons": 512,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus C3-C4",
+   "polygons": 512,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus C4-C5",
+   "polygons": 512,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus C5-C6",
+   "polygons": 512,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus C6-C7",
+   "polygons": 512,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus C7-T1",
+   "polygons": 512,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus L1-L2",
+   "polygons": 512,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus L2-L3",
+   "polygons": 512,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus L3-L4",
+   "polygons": 512,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus L4-L5",
+   "polygons": 512,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus L5-S1",
+   "polygons": 512,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T1-T2",
+   "polygons": 512,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T10-T11",
+   "polygons": 512,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T11-T12",
+   "polygons": 512,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T12-L1",
+   "polygons": 512,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T2-T3",
+   "polygons": 512,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T3-T4",
+   "polygons": 512,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T4-T5",
+   "polygons": 512,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T5-T6",
+   "polygons": 512,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T6-T7",
+   "polygons": 512,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T7-T8",
+   "polygons": 512,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T8-T9",
+   "polygons": 512,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Nucleus pulposus T9-T10",
+   "polygons": 512,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Occipital bone",
+   "polygons": 7493,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Palatine bone.l",
+   "polygons": 1460,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Palatine bone.r",
+   "polygons": 1460,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Parietal bone.l",
+   "polygons": 6886,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Parietal bone.r",
+   "polygons": 6713,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Patella.l",
+   "polygons": 274,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Patella.r",
+   "polygons": 274,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Pisiform bone.l",
+   "polygons": 834,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Pisiform bone.r",
+   "polygons": 834,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Posterior cells of ethmoid bone.l",
+   "polygons": 608,
+   "path": []
+  },
+  {
+   "name": "Posterior cells of ethmoid bone.r",
+   "polygons": 608,
+   "path": []
+  },
+  {
+   "name": "Posterior longitudinal ligament",
+   "polygons": 3768,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Proximal phalanx of fifth finger of foot.l",
+   "polygons": 516,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Proximal phalanx of fifth finger of foot.r",
+   "polygons": 516,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Proximal phalanx of fifth finger of hand.l",
+   "polygons": 560,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Proximal phalanx of fifth finger of hand.r",
+   "polygons": 560,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Proximal phalanx of first finger of foot.l",
+   "polygons": 517,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Proximal phalanx of first finger of foot.r",
+   "polygons": 517,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Proximal phalanx of first finger of hand.l",
+   "polygons": 328,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Proximal phalanx of first finger of hand.r",
+   "polygons": 328,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Proximal phalanx of fourth finger of foot.l",
+   "polygons": 460,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Proximal phalanx of fourth finger of foot.r",
+   "polygons": 460,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Proximal phalanx of fourth finger of hand.l",
+   "polygons": 368,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Proximal phalanx of fourth finger of hand.r",
+   "polygons": 368,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Proximal phalanx of second finger of foot.l",
+   "polygons": 424,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Proximal phalanx of second finger of foot.r",
+   "polygons": 424,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Proximal phalanx of second finger of hand.l",
+   "polygons": 414,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Proximal phalanx of second finger of hand.r",
+   "polygons": 414,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Proximal phalanx of third finger of foot.l",
+   "polygons": 458,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Proximal phalanx of third finger of foot.r",
+   "polygons": 458,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Proximal phalanx of third finger of hand.l",
+   "polygons": 439,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Proximal phalanx of third finger of hand.r",
+   "polygons": 439,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Radiate ligament of head of rib.l",
+   "polygons": 1728,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Radiate ligament of head of rib.r",
+   "polygons": 1728,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Radius.l",
+   "polygons": 719,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Radius.r",
+   "polygons": 719,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Sacrococcygeal symphysis",
+   "polygons": 178,
+   "path": [
+    "Vertebral column"
+   ]
+  },
+  {
+   "name": "Sacrum",
+   "polygons": 8522,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Scaphoid bone.l",
+   "polygons": 390,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Scaphoid bone.r",
+   "polygons": 390,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Scapula.l",
+   "polygons": 25255,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Scapula.r",
+   "polygons": 25255,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Second metacarpal bone.l",
+   "polygons": 764,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Second metacarpal bone.r",
+   "polygons": 764,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Second metatarsal bone.l",
+   "polygons": 690,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Second metatarsal bone.r",
+   "polygons": 690,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Second rib.l",
+   "polygons": 5354,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Second rib.r",
+   "polygons": 5354,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Sesamoid bones of foot.l",
+   "polygons": 290,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Sesamoid bones of foot.r",
+   "polygons": 290,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Seventh rib.l",
+   "polygons": 9741,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Seventh rib.r",
+   "polygons": 9741,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Sinus of frontal bone",
+   "polygons": 752,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Sinus of sphenoid bone",
+   "polygons": 384,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Sixth rib.l",
+   "polygons": 10092,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Sixth rib.r",
+   "polygons": 10092,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Sphenoid bone",
+   "polygons": 7308,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Stapes.l",
+   "polygons": 2180,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Stapes.r",
+   "polygons": 2180,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Talus.l",
+   "polygons": 1325,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Talus.r",
+   "polygons": 1325,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Temporal bone.l",
+   "polygons": 14094,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Temporal bone.r",
+   "polygons": 14094,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Tenth rib.l",
+   "polygons": 7002,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Tenth rib.r",
+   "polygons": 7002,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Third metacarpal bone.l",
+   "polygons": 708,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Third metacarpal bone.r",
+   "polygons": 708,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Third metatarsal bone.l",
+   "polygons": 804,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Third metatarsal bone.r",
+   "polygons": 804,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Third rib.l",
+   "polygons": 6957,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Third rib.r",
+   "polygons": 6957,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Thyroid cartilage",
+   "polygons": 4482,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Tibia.l",
+   "polygons": 1613,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Tibia.r",
+   "polygons": 1613,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Trapezium bone.l",
+   "polygons": 500,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Trapezium bone.r",
+   "polygons": 500,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Trapezoid bone.l",
+   "polygons": 364,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Trapezoid bone.r",
+   "polygons": 364,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Triquetrum bone.l",
+   "polygons": 176,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Triquetrum bone.r",
+   "polygons": 176,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Twelfth rib.l",
+   "polygons": 2995,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Twelfth rib.r",
+   "polygons": 2995,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Ulna.l",
+   "polygons": 875,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Ulna.r",
+   "polygons": 875,
+   "path": [
+    "Appendicular skeleton"
+   ]
+  },
+  {
+   "name": "Upper canine.l",
+   "polygons": 1434,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Upper canine.r",
+   "polygons": 1434,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Upper first molar tooth.l",
+   "polygons": 2168,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Upper first molar tooth.r",
+   "polygons": 2168,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Upper first premolar.l",
+   "polygons": 1651,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Upper first premolar.r",
+   "polygons": 1651,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Upper lateral incisor.l",
+   "polygons": 1412,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Upper lateral incisor.r",
+   "polygons": 1412,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Upper medial incisor.l",
+   "polygons": 1368,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Upper medial incisor.r",
+   "polygons": 1368,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Upper second molar tooth.l",
+   "polygons": 1843,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Upper second molar tooth.r",
+   "polygons": 1843,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Upper second premolar.l",
+   "polygons": 1511,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Upper second premolar.r",
+   "polygons": 1511,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Vertebra C3",
+   "polygons": 2374,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Vertebra C4",
+   "polygons": 1938,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Vertebra C5",
+   "polygons": 2256,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Vertebra C6",
+   "polygons": 2224,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Vertebra C7",
+   "polygons": 2090,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Vertebra L1",
+   "polygons": 3056,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Vertebra L2",
+   "polygons": 2572,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Vertebra L3",
+   "polygons": 3060,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Vertebra L4",
+   "polygons": 3692,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Vertebra L5",
+   "polygons": 3920,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Vertebra T1",
+   "polygons": 1946,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Vertebra T10",
+   "polygons": 2953,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Vertebra T11",
+   "polygons": 1780,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Vertebra T12",
+   "polygons": 2472,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Vertebra T2",
+   "polygons": 2092,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Vertebra T3",
+   "polygons": 2342,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Vertebra T4",
+   "polygons": 2214,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Vertebra T5",
+   "polygons": 2152,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Vertebra T6",
+   "polygons": 1774,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Vertebra T7",
+   "polygons": 2646,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Vertebra T8",
+   "polygons": 1706,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Vertebra T9",
+   "polygons": 2968,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Vomer",
+   "polygons": 946,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Xiphoid process",
+   "polygons": 913,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Zygomatic bone.l",
+   "polygons": 1328,
+   "path": [
+    "Axial skeleton"
+   ]
+  },
+  {
+   "name": "Zygomatic bone.r",
+   "polygons": 1328,
+   "path": [
+    "Axial skeleton"
+   ]
+  }
+ ]
+}

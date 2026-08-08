@@ -1,0 +1,1336 @@
+{
+ "system": "regional",
+ "collections": [
+  "9: Regions of human body"
+ ],
+ "output": "C:\\Users\\TrendingPC\\Documents\\Anatria3D\\public\\anatomy\\regional_male.glb",
+ "draco": true,
+ "object_count": 256,
+ "skipped_count": 42,
+ "skipped": [
+  "Antebrachial region.j",
+  "Anterior region of neck.j",
+  "Anterior region of thigh.j",
+  "Anterior region of thorax.j",
+  "Apex of nose.j",
+  "Auricular region.j",
+  "Brachial region.j",
+  "Carpal region.j",
+  "Cheek.j",
+  "Chin.j",
+  "Cubital region.j",
+  "External nose.j",
+  "Eyelids.j",
+  "Femoral region.j",
+  "Gluteal region.j",
+  "Hairs.j",
+  "Infrahyoid region.j",
+  "Knee region.j",
+  "Lateral region of neck.j",
+  "Leg region.j",
+  "Lower eyelid.j",
+  "Posterior region of ankle.j",
+  "Posterior region of knee.j",
+  "Regions of abdomen.j",
+  "Regions of back.j",
+  "Regions of digits of foot.j",
+  "Regions of digits of hand.j",
+  "Regions of epicranium.j",
+  "Regions of face.j",
+  "Regions of foot.j",
+  "Regions of hand.j",
+  "Regions of head.j",
+  "Regions of lower limb.j",
+  "Regions of neck.j",
+  "Regions of perineum.j",
+  "Regions of thorax.j",
+  "Regions of upper limb.j",
+  "Root of nose.j",
+  "Sternocleidomastoid region.j",
+  "Suprahyoid region.j",
+  "Upper eyelid.j",
+  "Upper lip.j"
+ ],
+ "objects": [
+  {
+   "name": "Anal region.l",
+   "polygons": 24,
+   "path": []
+  },
+  {
+   "name": "Anal region.r",
+   "polygons": 24,
+   "path": []
+  },
+  {
+   "name": "Angle of mouth.l",
+   "polygons": 45,
+   "path": []
+  },
+  {
+   "name": "Angle of mouth.r",
+   "polygons": 45,
+   "path": []
+  },
+  {
+   "name": "Anterior notch of auricle.l",
+   "polygons": 49,
+   "path": []
+  },
+  {
+   "name": "Anterior notch of auricle.r",
+   "polygons": 49,
+   "path": []
+  },
+  {
+   "name": "Anterior region of ankle.l",
+   "polygons": 286,
+   "path": []
+  },
+  {
+   "name": "Anterior region of ankle.r",
+   "polygons": 286,
+   "path": []
+  },
+  {
+   "name": "Anterior region of arm.l",
+   "polygons": 530,
+   "path": []
+  },
+  {
+   "name": "Anterior region of arm.r",
+   "polygons": 530,
+   "path": []
+  },
+  {
+   "name": "Anterior region of elbow.l",
+   "polygons": 228,
+   "path": []
+  },
+  {
+   "name": "Anterior region of elbow.r",
+   "polygons": 228,
+   "path": []
+  },
+  {
+   "name": "Anterior region of forearm.l",
+   "polygons": 594,
+   "path": []
+  },
+  {
+   "name": "Anterior region of forearm.r",
+   "polygons": 594,
+   "path": []
+  },
+  {
+   "name": "Anterior region of knee.l",
+   "polygons": 378,
+   "path": []
+  },
+  {
+   "name": "Anterior region of knee.r",
+   "polygons": 378,
+   "path": []
+  },
+  {
+   "name": "Anterior region of leg.l",
+   "polygons": 646,
+   "path": []
+  },
+  {
+   "name": "Anterior region of leg.r",
+   "polygons": 646,
+   "path": []
+  },
+  {
+   "name": "Anterior region of thigh.l",
+   "polygons": 996,
+   "path": []
+  },
+  {
+   "name": "Anterior region of thigh.r",
+   "polygons": 996,
+   "path": []
+  },
+  {
+   "name": "Anterior region of wrist.l",
+   "polygons": 108,
+   "path": []
+  },
+  {
+   "name": "Anterior region of wrist.r",
+   "polygons": 108,
+   "path": []
+  },
+  {
+   "name": "Antihelix.l",
+   "polygons": 85,
+   "path": []
+  },
+  {
+   "name": "Antihelix.r",
+   "polygons": 85,
+   "path": []
+  },
+  {
+   "name": "Antitragus.l",
+   "polygons": 39,
+   "path": []
+  },
+  {
+   "name": "Antitragus.r",
+   "polygons": 39,
+   "path": []
+  },
+  {
+   "name": "Apex of auricle.l",
+   "polygons": 36,
+   "path": []
+  },
+  {
+   "name": "Apex of auricle.r",
+   "polygons": 36,
+   "path": []
+  },
+  {
+   "name": "Auricular region.l",
+   "polygons": 148,
+   "path": []
+  },
+  {
+   "name": "Auricular region.r",
+   "polygons": 148,
+   "path": []
+  },
+  {
+   "name": "Auricular tubercle.l",
+   "polygons": 26,
+   "path": []
+  },
+  {
+   "name": "Auricular tubercle.r",
+   "polygons": 26,
+   "path": []
+  },
+  {
+   "name": "Buccal region.l",
+   "polygons": 222,
+   "path": []
+  },
+  {
+   "name": "Buccal region.r",
+   "polygons": 222,
+   "path": []
+  },
+  {
+   "name": "Carotid triangle.l",
+   "polygons": 42,
+   "path": []
+  },
+  {
+   "name": "Carotid triangle.r",
+   "polygons": 42,
+   "path": []
+  },
+  {
+   "name": "Cavity of concha.l",
+   "polygons": 215,
+   "path": []
+  },
+  {
+   "name": "Cavity of concha.r",
+   "polygons": 215,
+   "path": []
+  },
+  {
+   "name": "Concha of auricle.l",
+   "polygons": 64,
+   "path": []
+  },
+  {
+   "name": "Concha of auricle.r",
+   "polygons": 64,
+   "path": []
+  },
+  {
+   "name": "Crura of antihelix.l",
+   "polygons": 90,
+   "path": []
+  },
+  {
+   "name": "Crura of antihelix.r",
+   "polygons": 90,
+   "path": []
+  },
+  {
+   "name": "Cubital fossa.l",
+   "polygons": 70,
+   "path": []
+  },
+  {
+   "name": "Cubital fossa.r",
+   "polygons": 70,
+   "path": []
+  },
+  {
+   "name": "Cymba conchae.l",
+   "polygons": 89,
+   "path": []
+  },
+  {
+   "name": "Cymba conchae.r",
+   "polygons": 89,
+   "path": []
+  },
+  {
+   "name": "Deltoid region.l",
+   "polygons": 328,
+   "path": []
+  },
+  {
+   "name": "Deltoid region.r",
+   "polygons": 328,
+   "path": []
+  },
+  {
+   "name": "Deltopectoral triangle.l",
+   "polygons": 46,
+   "path": []
+  },
+  {
+   "name": "Deltopectoral triangle.r",
+   "polygons": 46,
+   "path": []
+  },
+  {
+   "name": "Distal transverse arch of foot.l",
+   "polygons": 42,
+   "path": []
+  },
+  {
+   "name": "Distal transverse arch of foot.r",
+   "polygons": 42,
+   "path": []
+  },
+  {
+   "name": "Dorsal surfaces of digits of foot.l",
+   "polygons": 584,
+   "path": []
+  },
+  {
+   "name": "Dorsal surfaces of digits of foot.r",
+   "polygons": 584,
+   "path": []
+  },
+  {
+   "name": "Dorsal surfaces of digits of hand.l",
+   "polygons": 2129,
+   "path": []
+  },
+  {
+   "name": "Dorsal surfaces of digits of hand.r",
+   "polygons": 2129,
+   "path": []
+  },
+  {
+   "name": "Dorsum of foot.l",
+   "polygons": 177,
+   "path": []
+  },
+  {
+   "name": "Dorsum of foot.r",
+   "polygons": 177,
+   "path": []
+  },
+  {
+   "name": "Dorsum of hand.l",
+   "polygons": 357,
+   "path": []
+  },
+  {
+   "name": "Dorsum of hand.r",
+   "polygons": 357,
+   "path": []
+  },
+  {
+   "name": "Eminentia conchae.l",
+   "polygons": 57,
+   "path": []
+  },
+  {
+   "name": "Eminentia conchae.r",
+   "polygons": 57,
+   "path": []
+  },
+  {
+   "name": "Eminentia fossae triangularis.l",
+   "polygons": 51,
+   "path": []
+  },
+  {
+   "name": "Eminentia fossae triangularis.r",
+   "polygons": 51,
+   "path": []
+  },
+  {
+   "name": "Eminentia scaphae.l",
+   "polygons": 97,
+   "path": []
+  },
+  {
+   "name": "Eminentia scaphae.r",
+   "polygons": 97,
+   "path": []
+  },
+  {
+   "name": "Epigastric region.l",
+   "polygons": 92,
+   "path": []
+  },
+  {
+   "name": "Epigastric region.r",
+   "polygons": 92,
+   "path": []
+  },
+  {
+   "name": "Eyebrow.l",
+   "polygons": 26,
+   "path": []
+  },
+  {
+   "name": "Eyebrow.r",
+   "polygons": 26,
+   "path": []
+  },
+  {
+   "name": "Eyelashes.l",
+   "polygons": 300,
+   "path": []
+  },
+  {
+   "name": "Eyelashes.r",
+   "polygons": 300,
+   "path": []
+  },
+  {
+   "name": "Femoral triangle.l",
+   "polygons": 116,
+   "path": []
+  },
+  {
+   "name": "Femoral triangle.r",
+   "polygons": 116,
+   "path": []
+  },
+  {
+   "name": "Fossa antihelica.l",
+   "polygons": 59,
+   "path": []
+  },
+  {
+   "name": "Fossa antihelica.r",
+   "polygons": 59,
+   "path": []
+  },
+  {
+   "name": "Frontal region.l",
+   "polygons": 281,
+   "path": []
+  },
+  {
+   "name": "Frontal region.r",
+   "polygons": 281,
+   "path": []
+  },
+  {
+   "name": "Gluteal fold.l",
+   "polygons": 26,
+   "path": []
+  },
+  {
+   "name": "Gluteal fold.r",
+   "polygons": 26,
+   "path": []
+  },
+  {
+   "name": "Gluteal region.l",
+   "polygons": 436,
+   "path": []
+  },
+  {
+   "name": "Gluteal region.r",
+   "polygons": 436,
+   "path": []
+  },
+  {
+   "name": "Greater supraclavicular fossa.l",
+   "polygons": 100,
+   "path": []
+  },
+  {
+   "name": "Greater supraclavicular fossa.r",
+   "polygons": 100,
+   "path": []
+  },
+  {
+   "name": "Hairs of eyebrow.l",
+   "polygons": 794,
+   "path": []
+  },
+  {
+   "name": "Hairs of eyebrow.r",
+   "polygons": 794,
+   "path": []
+  },
+  {
+   "name": "Hairs of head",
+   "polygons": 8599,
+   "path": []
+  },
+  {
+   "name": "Hallucial eminence.l",
+   "polygons": 132,
+   "path": []
+  },
+  {
+   "name": "Hallucial eminence.r",
+   "polygons": 132,
+   "path": []
+  },
+  {
+   "name": "Heel region.l",
+   "polygons": 319,
+   "path": []
+  },
+  {
+   "name": "Heel region.r",
+   "polygons": 319,
+   "path": []
+  },
+  {
+   "name": "Helix.l",
+   "polygons": 466,
+   "path": []
+  },
+  {
+   "name": "Helix.r",
+   "polygons": 466,
+   "path": []
+  },
+  {
+   "name": "Hip region.l",
+   "polygons": 82,
+   "path": []
+  },
+  {
+   "name": "Hip region.r",
+   "polygons": 82,
+   "path": []
+  },
+  {
+   "name": "Hypochondriac region.l",
+   "polygons": 126,
+   "path": []
+  },
+  {
+   "name": "Hypochondriac region.r",
+   "polygons": 126,
+   "path": []
+  },
+  {
+   "name": "Hypogastric region.l",
+   "polygons": 151,
+   "path": []
+  },
+  {
+   "name": "Hypogastric region.r",
+   "polygons": 151,
+   "path": []
+  },
+  {
+   "name": "Infra-orbital region.l",
+   "polygons": 68,
+   "path": []
+  },
+  {
+   "name": "Infra-orbital region.r",
+   "polygons": 68,
+   "path": []
+  },
+  {
+   "name": "Infraclavicular fossa.l",
+   "polygons": 106,
+   "path": []
+  },
+  {
+   "name": "Infraclavicular fossa.r",
+   "polygons": 106,
+   "path": []
+  },
+  {
+   "name": "Inframammary region.l",
+   "polygons": 46,
+   "path": []
+  },
+  {
+   "name": "Inframammary region.r",
+   "polygons": 46,
+   "path": []
+  },
+  {
+   "name": "Infrascapular region.l",
+   "polygons": 242,
+   "path": []
+  },
+  {
+   "name": "Infrascapular region.r",
+   "polygons": 242,
+   "path": []
+  },
+  {
+   "name": "Inguinal region.l",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "Inguinal region.r",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "Interscapular region.l",
+   "polygons": 134,
+   "path": []
+  },
+  {
+   "name": "Interscapular region.r",
+   "polygons": 134,
+   "path": []
+  },
+  {
+   "name": "Intertragic incisure.l",
+   "polygons": 71,
+   "path": []
+  },
+  {
+   "name": "Intertragic incisure.r",
+   "polygons": 71,
+   "path": []
+  },
+  {
+   "name": "Labial commissure.l",
+   "polygons": 70,
+   "path": []
+  },
+  {
+   "name": "Labial commissure.r",
+   "polygons": 70,
+   "path": []
+  },
+  {
+   "name": "Lateral bicipital groove.l",
+   "polygons": 52,
+   "path": []
+  },
+  {
+   "name": "Lateral bicipital groove.r",
+   "polygons": 52,
+   "path": []
+  },
+  {
+   "name": "Lateral border of foot.l",
+   "polygons": 153,
+   "path": []
+  },
+  {
+   "name": "Lateral border of foot.r",
+   "polygons": 153,
+   "path": []
+  },
+  {
+   "name": "Lateral border of forearm.l",
+   "polygons": 82,
+   "path": []
+  },
+  {
+   "name": "Lateral border of forearm.r",
+   "polygons": 82,
+   "path": []
+  },
+  {
+   "name": "Lateral malleolus.l",
+   "polygons": 106,
+   "path": []
+  },
+  {
+   "name": "Lateral malleolus.r",
+   "polygons": 106,
+   "path": []
+  },
+  {
+   "name": "Lateral part of longitudinal arch of foot.l",
+   "polygons": 87,
+   "path": []
+  },
+  {
+   "name": "Lateral part of longitudinal arch of foot.r",
+   "polygons": 87,
+   "path": []
+  },
+  {
+   "name": "Lateral region of abdomen.l",
+   "polygons": 186,
+   "path": []
+  },
+  {
+   "name": "Lateral region of abdomen.r",
+   "polygons": 186,
+   "path": []
+  },
+  {
+   "name": "Lateral region of neck.l",
+   "polygons": 240,
+   "path": []
+  },
+  {
+   "name": "Lateral region of neck.r",
+   "polygons": 240,
+   "path": []
+  },
+  {
+   "name": "Lateral region of thorax.l",
+   "polygons": 404,
+   "path": []
+  },
+  {
+   "name": "Lateral region of thorax.r",
+   "polygons": 404,
+   "path": []
+  },
+  {
+   "name": "Lateral retromalleolar region.l",
+   "polygons": 108,
+   "path": []
+  },
+  {
+   "name": "Lateral retromalleolar region.r",
+   "polygons": 108,
+   "path": []
+  },
+  {
+   "name": "Lesser supraclavicular fossa.l",
+   "polygons": 24,
+   "path": []
+  },
+  {
+   "name": "Lesser supraclavicular fossa.r",
+   "polygons": 24,
+   "path": []
+  },
+  {
+   "name": "Lobule of auricle.l",
+   "polygons": 217,
+   "path": []
+  },
+  {
+   "name": "Lobule of auricle.r",
+   "polygons": 217,
+   "path": []
+  },
+  {
+   "name": "Lumbar region.l",
+   "polygons": 197,
+   "path": []
+  },
+  {
+   "name": "Lumbar region.r",
+   "polygons": 197,
+   "path": []
+  },
+  {
+   "name": "Mammary region.l",
+   "polygons": 160,
+   "path": []
+  },
+  {
+   "name": "Mammary region.r",
+   "polygons": 160,
+   "path": []
+  },
+  {
+   "name": "Mastoid region.l",
+   "polygons": 58,
+   "path": []
+  },
+  {
+   "name": "Mastoid region.r",
+   "polygons": 58,
+   "path": []
+  },
+  {
+   "name": "Medial bicipital groove.l",
+   "polygons": 38,
+   "path": []
+  },
+  {
+   "name": "Medial bicipital groove.r",
+   "polygons": 38,
+   "path": []
+  },
+  {
+   "name": "Medial border of foot.l",
+   "polygons": 162,
+   "path": []
+  },
+  {
+   "name": "Medial border of foot.r",
+   "polygons": 162,
+   "path": []
+  },
+  {
+   "name": "Medial border of forearm.l",
+   "polygons": 78,
+   "path": []
+  },
+  {
+   "name": "Medial border of forearm.r",
+   "polygons": 78,
+   "path": []
+  },
+  {
+   "name": "Medial malleolus.l",
+   "polygons": 84,
+   "path": []
+  },
+  {
+   "name": "Medial malleolus.r",
+   "polygons": 84,
+   "path": []
+  },
+  {
+   "name": "Medial part of longitudinal arch of foot.l",
+   "polygons": 56,
+   "path": []
+  },
+  {
+   "name": "Medial part of longitudinal arch of foot.r",
+   "polygons": 56,
+   "path": []
+  },
+  {
+   "name": "Medial retromalleolar region.l",
+   "polygons": 118,
+   "path": []
+  },
+  {
+   "name": "Medial retromalleolar region.r",
+   "polygons": 118,
+   "path": []
+  },
+  {
+   "name": "Mental region.l",
+   "polygons": 104,
+   "path": []
+  },
+  {
+   "name": "Mental region.r",
+   "polygons": 104,
+   "path": []
+  },
+  {
+   "name": "Mentolabial sulcus.l",
+   "polygons": 54,
+   "path": []
+  },
+  {
+   "name": "Mentolabial sulcus.r",
+   "polygons": 54,
+   "path": []
+  },
+  {
+   "name": "Metatarsal region.l",
+   "polygons": 247,
+   "path": []
+  },
+  {
+   "name": "Metatarsal region.r",
+   "polygons": 247,
+   "path": []
+  },
+  {
+   "name": "Muscular triangle.l",
+   "polygons": 131,
+   "path": []
+  },
+  {
+   "name": "Muscular triangle.r",
+   "polygons": 131,
+   "path": []
+  },
+  {
+   "name": "Nail plate (foot).l",
+   "polygons": 968,
+   "path": []
+  },
+  {
+   "name": "Nail plate (foot).r",
+   "polygons": 968,
+   "path": []
+  },
+  {
+   "name": "Nail plate.l",
+   "polygons": 1380,
+   "path": []
+  },
+  {
+   "name": "Nail plate.r",
+   "polygons": 1380,
+   "path": []
+  },
+  {
+   "name": "Nasal region.l",
+   "polygons": 306,
+   "path": []
+  },
+  {
+   "name": "Nasal region.r",
+   "polygons": 306,
+   "path": []
+  },
+  {
+   "name": "Nasolabial sulcus.l",
+   "polygons": 48,
+   "path": []
+  },
+  {
+   "name": "Nasolabial sulcus.r",
+   "polygons": 48,
+   "path": []
+  },
+  {
+   "name": "Occipital region.l",
+   "polygons": 178,
+   "path": []
+  },
+  {
+   "name": "Occipital region.r",
+   "polygons": 178,
+   "path": []
+  },
+  {
+   "name": "Oral region.l",
+   "polygons": 337,
+   "path": []
+  },
+  {
+   "name": "Oral region.r",
+   "polygons": 337,
+   "path": []
+  },
+  {
+   "name": "Orbital region.l",
+   "polygons": 293,
+   "path": []
+  },
+  {
+   "name": "Orbital region.r",
+   "polygons": 293,
+   "path": []
+  },
+  {
+   "name": "Palm.l",
+   "polygons": 303,
+   "path": []
+  },
+  {
+   "name": "Palm.r",
+   "polygons": 303,
+   "path": []
+  },
+  {
+   "name": "Palmar surfaces of digits of hand.l",
+   "polygons": 1924,
+   "path": []
+  },
+  {
+   "name": "Palmar surfaces of digits of hand.r",
+   "polygons": 1924,
+   "path": []
+  },
+  {
+   "name": "Parietal region.l",
+   "polygons": 257,
+   "path": []
+  },
+  {
+   "name": "Parietal region.r",
+   "polygons": 257,
+   "path": []
+  },
+  {
+   "name": "Parotideomasseteric region.l",
+   "polygons": 116,
+   "path": []
+  },
+  {
+   "name": "Parotideomasseteric region.r",
+   "polygons": 116,
+   "path": []
+  },
+  {
+   "name": "Pectoral region.l",
+   "polygons": 261,
+   "path": []
+  },
+  {
+   "name": "Pectoral region.r",
+   "polygons": 261,
+   "path": []
+  },
+  {
+   "name": "Perionyx (foot).l",
+   "polygons": 920,
+   "path": []
+  },
+  {
+   "name": "Perionyx (foot).r",
+   "polygons": 920,
+   "path": []
+  },
+  {
+   "name": "Perionyx.l",
+   "polygons": 118,
+   "path": []
+  },
+  {
+   "name": "Perionyx.r",
+   "polygons": 118,
+   "path": []
+  },
+  {
+   "name": "Philtrum.l",
+   "polygons": 28,
+   "path": []
+  },
+  {
+   "name": "Philtrum.r",
+   "polygons": 28,
+   "path": []
+  },
+  {
+   "name": "Plantar surfaces of digits of foot.l",
+   "polygons": 1018,
+   "path": []
+  },
+  {
+   "name": "Plantar surfaces of digits of foot.r",
+   "polygons": 1018,
+   "path": []
+  },
+  {
+   "name": "Popliteal fossa.l",
+   "polygons": 65,
+   "path": []
+  },
+  {
+   "name": "Popliteal fossa.r",
+   "polygons": 65,
+   "path": []
+  },
+  {
+   "name": "Posterior auricular groove.l",
+   "polygons": 119,
+   "path": []
+  },
+  {
+   "name": "Posterior auricular groove.r",
+   "polygons": 119,
+   "path": []
+  },
+  {
+   "name": "Posterior region of arm.l",
+   "polygons": 469,
+   "path": []
+  },
+  {
+   "name": "Posterior region of arm.r",
+   "polygons": 469,
+   "path": []
+  },
+  {
+   "name": "Posterior region of elbow.l",
+   "polygons": 244,
+   "path": []
+  },
+  {
+   "name": "Posterior region of elbow.r",
+   "polygons": 244,
+   "path": []
+  },
+  {
+   "name": "Posterior region of forearm.l",
+   "polygons": 684,
+   "path": []
+  },
+  {
+   "name": "Posterior region of forearm.r",
+   "polygons": 684,
+   "path": []
+  },
+  {
+   "name": "Posterior region of knee.l",
+   "polygons": 331,
+   "path": []
+  },
+  {
+   "name": "Posterior region of knee.r",
+   "polygons": 331,
+   "path": []
+  },
+  {
+   "name": "Posterior region of leg.l",
+   "polygons": 610,
+   "path": []
+  },
+  {
+   "name": "Posterior region of leg.r",
+   "polygons": 610,
+   "path": []
+  },
+  {
+   "name": "Posterior region of neck.l",
+   "polygons": 359,
+   "path": []
+  },
+  {
+   "name": "Posterior region of neck.r",
+   "polygons": 359,
+   "path": []
+  },
+  {
+   "name": "Posterior region of thigh.l",
+   "polygons": 524,
+   "path": []
+  },
+  {
+   "name": "Posterior region of thigh.r",
+   "polygons": 524,
+   "path": []
+  },
+  {
+   "name": "Posterior region of wrist.l",
+   "polygons": 120,
+   "path": []
+  },
+  {
+   "name": "Posterior region of wrist.r",
+   "polygons": 120,
+   "path": []
+  },
+  {
+   "name": "Presternal region.l",
+   "polygons": 142,
+   "path": []
+  },
+  {
+   "name": "Presternal region.r",
+   "polygons": 142,
+   "path": []
+  },
+  {
+   "name": "Proximal transverse arch of foot.l",
+   "polygons": 49,
+   "path": []
+  },
+  {
+   "name": "Proximal transverse arch of foot.r",
+   "polygons": 49,
+   "path": []
+  },
+  {
+   "name": "Pubic hairs",
+   "polygons": 1484,
+   "path": []
+  },
+  {
+   "name": "Radial foveola.l",
+   "polygons": 28,
+   "path": []
+  },
+  {
+   "name": "Radial foveola.r",
+   "polygons": 28,
+   "path": []
+  },
+  {
+   "name": "Sacral region.l",
+   "polygons": 92,
+   "path": []
+  },
+  {
+   "name": "Sacral region.r",
+   "polygons": 92,
+   "path": []
+  },
+  {
+   "name": "Scapha.l",
+   "polygons": 69,
+   "path": []
+  },
+  {
+   "name": "Scapha.r",
+   "polygons": 69,
+   "path": []
+  },
+  {
+   "name": "Scapular region.l",
+   "polygons": 354,
+   "path": []
+  },
+  {
+   "name": "Scapular region.r",
+   "polygons": 354,
+   "path": []
+  },
+  {
+   "name": "Sole.l",
+   "polygons": 88,
+   "path": []
+  },
+  {
+   "name": "Sole.r",
+   "polygons": 88,
+   "path": []
+  },
+  {
+   "name": "Sternocleidomastoid region.l",
+   "polygons": 291,
+   "path": []
+  },
+  {
+   "name": "Sternocleidomastoid region.r",
+   "polygons": 291,
+   "path": []
+  },
+  {
+   "name": "Submandibular triangle.l",
+   "polygons": 78,
+   "path": []
+  },
+  {
+   "name": "Submandibular triangle.r",
+   "polygons": 78,
+   "path": []
+  },
+  {
+   "name": "Submental triangle.l",
+   "polygons": 62,
+   "path": []
+  },
+  {
+   "name": "Submental triangle.r",
+   "polygons": 62,
+   "path": []
+  },
+  {
+   "name": "Temporal region.l",
+   "polygons": 222,
+   "path": []
+  },
+  {
+   "name": "Temporal region.r",
+   "polygons": 222,
+   "path": []
+  },
+  {
+   "name": "Tragus.l",
+   "polygons": 76,
+   "path": []
+  },
+  {
+   "name": "Tragus.r",
+   "polygons": 76,
+   "path": []
+  },
+  {
+   "name": "Triangle of auscultation.l",
+   "polygons": 10,
+   "path": []
+  },
+  {
+   "name": "Triangle of auscultation.r",
+   "polygons": 10,
+   "path": []
+  },
+  {
+   "name": "Triangular fossa.l",
+   "polygons": 58,
+   "path": []
+  },
+  {
+   "name": "Triangular fossa.r",
+   "polygons": 58,
+   "path": []
+  },
+  {
+   "name": "Tubercle of upper lip.l",
+   "polygons": 10,
+   "path": []
+  },
+  {
+   "name": "Tubercle of upper lip.r",
+   "polygons": 10,
+   "path": []
+  },
+  {
+   "name": "Umbilical region.l",
+   "polygons": 116,
+   "path": []
+  },
+  {
+   "name": "Umbilical region.r",
+   "polygons": 116,
+   "path": []
+  },
+  {
+   "name": "Umbilicus.l",
+   "polygons": 20,
+   "path": []
+  },
+  {
+   "name": "Umbilicus.r",
+   "polygons": 20,
+   "path": []
+  },
+  {
+   "name": "Urogenital region.l",
+   "polygons": 642,
+   "path": []
+  },
+  {
+   "name": "Urogenital region.r",
+   "polygons": 642,
+   "path": []
+  },
+  {
+   "name": "Vertebral region.l",
+   "polygons": 297,
+   "path": []
+  },
+  {
+   "name": "Vertebral region.r",
+   "polygons": 297,
+   "path": []
+  },
+  {
+   "name": "Zygomatic region.l",
+   "polygons": 108,
+   "path": []
+  },
+  {
+   "name": "Zygomatic region.r",
+   "polygons": 108,
+   "path": []
+  }
+ ]
+}

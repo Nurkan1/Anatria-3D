@@ -1,0 +1,4844 @@
+{
+ "system": "cardiovascular",
+ "collections": [
+  "Bonus collection/Cardiovascular system",
+  "5: Cardiovascular system"
+ ],
+ "output": "C:\\Users\\TrendingPC\\Documents\\Anatria3D\\public\\anatomy\\cardiovascular_male.glb",
+ "draco": true,
+ "object_count": 676,
+ "skipped_count": 38,
+ "skipped": [
+  "Anterior interventricular sulcus.j",
+  "Anterior surface of heart.j",
+  "Aorta.j",
+  "Aortic bifurcation.j",
+  "Aortic valve.j",
+  "Apex of heart.j",
+  "Arteries of heart.j",
+  "Arteries of spinal cord.j",
+  "Base of heart.j",
+  "Cardiac veins.j",
+  "Cerebral arterial circle.j",
+  "Confluence of sinuses.j",
+  "Coronary sulcus.j",
+  "Cranial veins.j",
+  "Dural venous sinuses.j",
+  "Hepatic portal vein.j",
+  "Inferior border of heart.j",
+  "Inferior interventricular sulcus.j",
+  "Inferior lobar artery of left lung.j",
+  "Inferior surface of heart.j",
+  "Interatrial septum.j",
+  "Left atrioventricular valve.j",
+  "Left surface of heart.j",
+  "Notch of cardiac apex.j",
+  "Orbital veins.j",
+  "Pulmonary arteries.j",
+  "Pulmonary valve.j",
+  "Pulmonary veins.j",
+  "Right atrioventricular valve.j",
+  "Right border of heart.j",
+  "Right surface of heart.j",
+  "Root of aorta.j",
+  "Root of pulmonary trunk.j",
+  "Superior lobar artery of left lung.j",
+  "Systemic arteries.j",
+  "Systemic veins.j",
+  "Union of brachiocephalic veins.j",
+  "Valvular complex of heart.j"
+ ],
+ "objects": [
+  {
+   "name": "(Deep branch of transverse cervical artery).l",
+   "polygons": 4320,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "(Deep branch of transverse cervical artery).r",
+   "polygons": 4320,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "(Superficial branch of transverse cervical artery).l",
+   "polygons": 1584,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "(Superficial branch of transverse cervical artery).r",
+   "polygons": 1584,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "(Ulnar recurrent artery).l",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "(Ulnar recurrent artery).r",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "????????",
+   "polygons": 10368,
+   "path": [
+    "Cardiac vessels",
+    "Cardiac veins"
+   ]
+  },
+  {
+   "name": "?x.l",
+   "polygons": 1872,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "?x.r",
+   "polygons": 1872,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Abdominal aorta",
+   "polygons": 1008,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Accessory branch of middle meningeal artery.l",
+   "polygons": 720,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Accessory branch of middle meningeal artery.r",
+   "polygons": 720,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Accessory hemi-azygos vein",
+   "polygons": 2736,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Angular artery.l",
+   "polygons": 5904,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Angular artery.r",
+   "polygons": 5904,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Angular vein.l",
+   "polygons": 2160,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Angular vein.r",
+   "polygons": 2160,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Anterior basal segmental artery of left lung",
+   "polygons": 2736,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Anterior basal segmental artery of right lung",
+   "polygons": 1584,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Anterior branch of renal artery.l",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior branch of renal artery.r",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior cerebral artery.l",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior cerebral artery.r",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior circumflex humeral artery.l",
+   "polygons": 1296,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior circumflex humeral artery.r",
+   "polygons": 1296,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior circumflex humeral vein.l",
+   "polygons": 1872,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Anterior circumflex humeral vein.r",
+   "polygons": 1872,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Anterior communicating artery",
+   "polygons": 90,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior deep temporal artery.l",
+   "polygons": 2016,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior deep temporal artery.r",
+   "polygons": 2016,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior division of internal iliac artery.l",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior division of internal iliac artery.r",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior division of retromandibular vein.l",
+   "polygons": 288,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Anterior division of retromandibular vein.r",
+   "polygons": 288,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Anterior ethmoidal artery.l",
+   "polygons": 1872,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior ethmoidal artery.r",
+   "polygons": 1872,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior inferior cerebellar artery.l",
+   "polygons": 2304,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior inferior cerebellar artery.r",
+   "polygons": 2304,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior inferior pancreaticoduodenal artery",
+   "polygons": 4464,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior intercavernous sinus",
+   "polygons": 288,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Anterior interventricular artery",
+   "polygons": 5760,
+   "path": [
+    "Cardiac vessels",
+    "Arteries of heart"
+   ]
+  },
+  {
+   "name": "Anterior jugular vein.l",
+   "polygons": 864,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Anterior jugular vein.r",
+   "polygons": 864,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Anterior papillary muscle of right ventricle",
+   "polygons": 1544,
+   "path": [
+    "Heart"
+   ]
+  },
+  {
+   "name": "Anterior segmental artery of left lung",
+   "polygons": 3456,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Anterior segmental artery of right lung",
+   "polygons": 2880,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Anterior semilunar leaflet of pulmonary valve",
+   "polygons": 2531,
+   "path": [
+    "Heart"
+   ]
+  },
+  {
+   "name": "Anterior septal branches of anterior ethmoidal artery.l",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior septal branches of anterior ethmoidal artery.r",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior spinal artery.l",
+   "polygons": 864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior spinal artery.r",
+   "polygons": 864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior temporal branch.l",
+   "polygons": 5184,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior temporal branch.r",
+   "polygons": 5184,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior tibial artery.l",
+   "polygons": 2160,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior tibial artery.r",
+   "polygons": 2160,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Anterior tibial veins.l",
+   "polygons": 2304,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Anterior tibial veins.r",
+   "polygons": 2304,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Anterior vein of left lung",
+   "polygons": 1440,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary veins"
+   ]
+  },
+  {
+   "name": "Anterior vein of right lung",
+   "polygons": 1152,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary veins"
+   ]
+  },
+  {
+   "name": "Aortic arch",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Apical segmental artery of left lung",
+   "polygons": 1872,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Apical segmental artery of right lung",
+   "polygons": 4608,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Apical vein of right lung",
+   "polygons": 2880,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary veins"
+   ]
+  },
+  {
+   "name": "Apicoposterior vein of left lung",
+   "polygons": 7056,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary veins"
+   ]
+  },
+  {
+   "name": "Appendicular artery",
+   "polygons": 2448,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Arcuate artery.l",
+   "polygons": 720,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Arcuate artery.r",
+   "polygons": 720,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Artery of central sulcus.l",
+   "polygons": 2304,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Artery of central sulcus.r",
+   "polygons": 2304,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Artery of precentral sulcus.l",
+   "polygons": 6192,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Artery of precentral sulcus.r",
+   "polygons": 6192,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Artery of pterygoid canal.l",
+   "polygons": 720,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Artery of pterygoid canal.r",
+   "polygons": 720,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Ascending aorta",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Ascending branch of left colic artery",
+   "polygons": 864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Ascending pharyngeal artery.l",
+   "polygons": 3024,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Ascending pharyngeal artery.r",
+   "polygons": 3024,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Axillary artery.l",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Axillary artery.r",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Axillary vein.l",
+   "polygons": 864,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Axillary vein.r",
+   "polygons": 864,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Azygos vein",
+   "polygons": 2736,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Basilar artery",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Basilar venous plexus",
+   "polygons": 28096,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Basilic vein.l",
+   "polygons": 2160,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Basilic vein.r",
+   "polygons": 2160,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Bifurcation of pulmonary trunk",
+   "polygons": 576,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Brachial artery.l",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Brachial artery.r",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Brachial veins.l",
+   "polygons": 1152,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Brachial veins.r",
+   "polygons": 1152,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Brachiocephalic trunk",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Branch to angular gyrus.l",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Branch to angular gyrus.r",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Buccal artery.l",
+   "polygons": 720,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Buccal artery.r",
+   "polygons": 720,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Calcaneal branches of fibular artery.l",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Calcaneal branches of fibular artery.r",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Calcaneal branches of posterior tibial artery.l",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Calcaneal branches of posterior tibial artery.r",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Callosomarginal artery.l",
+   "polygons": 7488,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Callosomarginal artery.r",
+   "polygons": 7488,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Cavernous sinus.l",
+   "polygons": 4864,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Cavernous sinus.r",
+   "polygons": 4864,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Central retinal artery.l",
+   "polygons": 103680,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Central retinal artery.r",
+   "polygons": 103680,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Cephalic vein.l",
+   "polygons": 3456,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Cephalic vein.r",
+   "polygons": 3456,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Circumflex artery of heart",
+   "polygons": 8208,
+   "path": [
+    "Cardiac vessels",
+    "Arteries of heart"
+   ]
+  },
+  {
+   "name": "Circumflex scapular artery.l",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Circumflex scapular artery.r",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Circumflex scapular vein.l",
+   "polygons": 720,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Circumflex scapular vein.r",
+   "polygons": 720,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Coeliac trunk",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Colic branch of ileocolic artery",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Common facial vein.l",
+   "polygons": 288,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Common facial vein.r",
+   "polygons": 288,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Common hepatic artery",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Common iliac artery.l",
+   "polygons": 144,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Common iliac artery.r",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Common iliac vein.l",
+   "polygons": 288,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Common iliac vein.r",
+   "polygons": 144,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Common interosseous artery.l",
+   "polygons": 144,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Common interosseous artery.r",
+   "polygons": 144,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Common palmar digital arteries.l",
+   "polygons": 1584,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Common palmar digital arteries.r",
+   "polygons": 1584,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Common plantar digital arteries.l",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Common plantar digital arteries.r",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Coronary sinus",
+   "polygons": 720,
+   "path": [
+    "Cardiac vessels",
+    "Cardiac veins"
+   ]
+  },
+  {
+   "name": "Costocervical trunk.l",
+   "polygons": 144,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Costocervical trunk.r",
+   "polygons": 144,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Deep artery of penis.l",
+   "polygons": 1584,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Deep artery of penis.r",
+   "polygons": 1584,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Deep brachial artery.l",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Deep brachial artery.r",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Deep cervical artery.l",
+   "polygons": 1584,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Deep cervical artery.r",
+   "polygons": 1584,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Deep dorsal vein of penis",
+   "polygons": 2160,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Deep external pudendal artery.l",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Deep external pudendal artery.r",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Deep femoral artery.l",
+   "polygons": 1152,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Deep femoral artery.r",
+   "polygons": 1152,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Deep femoral vein.l",
+   "polygons": 1584,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Deep femoral vein.r",
+   "polygons": 1584,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Deep palmar arch.l",
+   "polygons": 1152,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Deep palmar arch.r",
+   "polygons": 1152,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Deep plantar artery.l",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Deep plantar artery.r",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Deep venous palmar arch.l",
+   "polygons": 2448,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Deep venous palmar arch.r",
+   "polygons": 2448,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Descending branch of lateral circumflex femoral artery",
+   "polygons": 1152,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Descending branch of lateral circumflex femoral artery.l",
+   "polygons": 1152,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Descending branch of left colic artery",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Descending palatine artery.l",
+   "polygons": 1728,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Descending palatine artery.r",
+   "polygons": 1728,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Distal lateral striate branches.l",
+   "polygons": 4608,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Distal lateral striate branches.r",
+   "polygons": 4608,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Dorsal artery of penis.l",
+   "polygons": 5760,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Dorsal artery of penis.r",
+   "polygons": 5760,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Dorsal carpal anastomosis.l",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Dorsal carpal anastomosis.r",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Dorsal carpal branch of ulnar artery.l",
+   "polygons": 864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Dorsal carpal branch of ulnar artery.r",
+   "polygons": 864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Dorsal digital arteries of foot.l",
+   "polygons": 9504,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Dorsal digital arteries of foot.r",
+   "polygons": 9504,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Dorsal digital arteries of hand.l",
+   "polygons": 7488,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Dorsal digital arteries of hand.r",
+   "polygons": 7488,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Dorsal digital veins of foot.l",
+   "polygons": 8352,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Dorsal digital veins of foot.r",
+   "polygons": 8352,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Dorsal digital veins of hand.l",
+   "polygons": 9216,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Dorsal digital veins of hand.r",
+   "polygons": 9216,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Dorsal metacarpal arteries.l",
+   "polygons": 2880,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Dorsal metacarpal arteries.r",
+   "polygons": 2880,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Dorsal metatarsal arteries.l",
+   "polygons": 2016,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Dorsal metatarsal arteries.r",
+   "polygons": 2016,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Dorsal metatarsal veins.l",
+   "polygons": 2592,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Dorsal metatarsal veins.r",
+   "polygons": 2592,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Dorsal venous arch of foot.l",
+   "polygons": 1152,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Dorsal venous arch of foot.r",
+   "polygons": 1152,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Dorsal venous network of hand.l",
+   "polygons": 1296,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Dorsal venous network of hand.r",
+   "polygons": 1296,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Dorsalis pedis artery.l",
+   "polygons": 720,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Dorsalis pedis artery.r",
+   "polygons": 720,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "External carotid artery.l",
+   "polygons": 864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "External carotid artery.r",
+   "polygons": 864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "External iliac artery.l",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "External iliac artery.r",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "External iliac vein.l",
+   "polygons": 288,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "External iliac vein.r",
+   "polygons": 288,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "External jugular vein.l",
+   "polygons": 1008,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "External jugular vein.r",
+   "polygons": 1008,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "External pudendal veins.l",
+   "polygons": 1584,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "External pudendal veins.r",
+   "polygons": 1584,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Facial artery.l",
+   "polygons": 1296,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Facial artery.r",
+   "polygons": 1296,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Facial vein.l",
+   "polygons": 1728,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Facial vein.r",
+   "polygons": 1728,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Femoral artery.l",
+   "polygons": 2160,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Femoral artery.r",
+   "polygons": 2160,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Femoral vein.l",
+   "polygons": 2016,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Femoral vein.r",
+   "polygons": 2016,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Fibular artery.l",
+   "polygons": 3168,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Fibular artery.r",
+   "polygons": 3168,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Fibular veins.l",
+   "polygons": 1440,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Fibular veins.r",
+   "polygons": 1440,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "First posterior intercostal artery.l",
+   "polygons": 1296,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "First posterior intercostal artery.r",
+   "polygons": 1584,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Frontal branch of superficial temporal artery.l",
+   "polygons": 2304,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Frontal branch of superficial temporal artery.r",
+   "polygons": 2304,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Frontal branches of callosomarginal artery.l",
+   "polygons": 1008,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Frontal branches of callosomarginal artery.r",
+   "polygons": 1008,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Gastroduodenal artery",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Genicular veins.l",
+   "polygons": 5040,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Genicular veins.r",
+   "polygons": 5040,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Great cardiac vein",
+   "polygons": 7344,
+   "path": [
+    "Cardiac vessels",
+    "Cardiac veins"
+   ]
+  },
+  {
+   "name": "Great saphenous vein.l",
+   "polygons": 4176,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Great saphenous vein.r",
+   "polygons": 4176,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Greater palatine artery.l",
+   "polygons": 1008,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Greater palatine artery.r",
+   "polygons": 1008,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Hemi-azygos vein",
+   "polygons": 1728,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Hepatic portal vein",
+   "polygons": 288,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Hepatic veins",
+   "polygons": 288,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Ileal branch of ileocolic artery",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Ileocolic artery",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Iliacus branch of iliolumbar artery.l",
+   "polygons": 1584,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Iliacus branch of iliolumbar artery.r",
+   "polygons": 1584,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Iliolumbar artery.l",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Iliolumbar artery.r",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Iliolumbar vein.l",
+   "polygons": 1728,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Iliolumbar vein.r",
+   "polygons": 1728,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Inferior alveolar artery.l",
+   "polygons": 2592,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Inferior alveolar artery.r",
+   "polygons": 2592,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Inferior basal vein of left lung",
+   "polygons": 2448,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary veins"
+   ]
+  },
+  {
+   "name": "Inferior basal vein of right lung",
+   "polygons": 4464,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary veins"
+   ]
+  },
+  {
+   "name": "Inferior epigastric artery.l",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Inferior epigastric artery.r",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Inferior epigastric vein.l",
+   "polygons": 1440,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Inferior epigastric vein.r",
+   "polygons": 1440,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Inferior gluteal artery.l",
+   "polygons": 1872,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Inferior gluteal artery.r",
+   "polygons": 1872,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Inferior gluteal veins.l",
+   "polygons": 2160,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Inferior gluteal veins.r",
+   "polygons": 2160,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Inferior labial artery.l",
+   "polygons": 1152,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Inferior labial artery.r",
+   "polygons": 1152,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Inferior labial veins.l",
+   "polygons": 3024,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Inferior labial veins.r",
+   "polygons": 3024,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Inferior lateral genicular artery.l",
+   "polygons": 1152,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Inferior lateral genicular artery.r",
+   "polygons": 1152,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Inferior leaflet of right atrioventricular valve",
+   "polygons": 9852,
+   "path": [
+    "Heart"
+   ]
+  },
+  {
+   "name": "Inferior lingular artery of left lung",
+   "polygons": 1584,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Inferior lingular vein of left lung",
+   "polygons": 1296,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary veins"
+   ]
+  },
+  {
+   "name": "Inferior lobar artery of right lung",
+   "polygons": 288,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Inferior medial genicular artery.l",
+   "polygons": 1008,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Inferior medial genicular artery.r",
+   "polygons": 1008,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Inferior mesenteric artery",
+   "polygons": 864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Inferior mesenteric vein",
+   "polygons": 1008,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Inferior ophthalmic vein.l",
+   "polygons": 432,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Inferior ophthalmic vein.r",
+   "polygons": 432,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Inferior pancreaticoduodenal artery",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Inferior papillary muscle of left ventricle",
+   "polygons": 1560,
+   "path": [
+    "Heart"
+   ]
+  },
+  {
+   "name": "Inferior papillary muscle of right ventricle",
+   "polygons": 1090,
+   "path": [
+    "Heart"
+   ]
+  },
+  {
+   "name": "Inferior petrosal sinus.l",
+   "polygons": 864,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Inferior petrosal sinus.r",
+   "polygons": 864,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Inferior phrenic artery",
+   "polygons": 2016,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Inferior sagittal sinus",
+   "polygons": 1728,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Inferior suprarenal artery.l",
+   "polygons": 2448,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Inferior suprarenal artery.r",
+   "polygons": 2016,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Inferior thyroid artery.l",
+   "polygons": 720,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Inferior thyroid artery.r",
+   "polygons": 720,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Inferior ulnar collateral artery.l",
+   "polygons": 720,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Inferior ulnar collateral artery.r",
+   "polygons": 720,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Inferior vein of left ventricle",
+   "polygons": 5904,
+   "path": [
+    "Cardiac vessels",
+    "Cardiac veins"
+   ]
+  },
+  {
+   "name": "Inferior vein of left ventricle (//Posterior '')",
+   "polygons": 11088,
+   "path": [
+    "Cardiac vessels",
+    "Cardiac veins"
+   ]
+  },
+  {
+   "name": "Inferior vena cava (abdominal part)",
+   "polygons": 288,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Inferior vena cava (thoracic part)",
+   "polygons": 432,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Infra-orbital artery.l",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Infra-orbital artery.r",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Insular branches of middle cerebral artery (M2).r",
+   "polygons": 864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Insular branches of middle cerebral artery (M2-segment).l",
+   "polygons": 864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Intercapitular veins of foot.l",
+   "polygons": 3888,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Intercapitular veins of foot.r",
+   "polygons": 3888,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Internal carotid artery.l",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Internal carotid artery.r",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Internal iliac artery.l",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Internal iliac artery.r",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Internal iliac vein.l",
+   "polygons": 288,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Internal iliac vein.r",
+   "polygons": 288,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Internal jugular vein.l",
+   "polygons": 1728,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Internal jugular vein.r",
+   "polygons": 1728,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Internal pudendal artery.l",
+   "polygons": 4032,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Internal pudendal artery.r",
+   "polygons": 4032,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Internal pudendal vein.l",
+   "polygons": 1728,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Internal pudendal vein.r",
+   "polygons": 1728,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Internal thoracic artery.l",
+   "polygons": 1296,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Internal thoracic artery.r",
+   "polygons": 1296,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Internal thoracic veins.l",
+   "polygons": 1728,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Internal thoracic veins.r",
+   "polygons": 1728,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Intrarenal arteries of left kidney",
+   "polygons": 8208,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Intrarenal arteries of right kidney",
+   "polygons": 10224,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Intrarenal veins of left kidney",
+   "polygons": 11376,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Intrarenal veins of right kidney",
+   "polygons": 14256,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Lacrimal artery.l",
+   "polygons": 2160,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Lacrimal artery.r",
+   "polygons": 2160,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Lateral basal segmental artery of left lung",
+   "polygons": 2880,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Lateral basal segmental artery of right lung",
+   "polygons": 1440,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Lateral circumflex femoral artery.l",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Lateral circumflex femoral artery.r",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Lateral circumflex femoral veins.l",
+   "polygons": 1584,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Lateral circumflex femoral veins.r",
+   "polygons": 1584,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Lateral frontobasal artery.l",
+   "polygons": 2880,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Lateral frontobasal artery.r",
+   "polygons": 2880,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Lateral occipital artery.l",
+   "polygons": 2160,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Lateral occipital artery.r",
+   "polygons": 2160,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Lateral plantar artery.l",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Lateral plantar artery.r",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Lateral plantar veins.l",
+   "polygons": 576,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Lateral plantar veins.r",
+   "polygons": 576,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Lateral pontine branches of basilar artery.l",
+   "polygons": 1728,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Lateral pontine branches of basilar artery.r",
+   "polygons": 1728,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Lateral sacral veins.l",
+   "polygons": 720,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Lateral sacral veins.r",
+   "polygons": 720,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Lateral segmental artery of right lung",
+   "polygons": 1728,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Lateral tarsal artery.l",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Lateral tarsal artery.r",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Lateral thoracic artery.l",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Lateral thoracic artery.r",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Lateral thoracic vein.l",
+   "polygons": 5040,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Lateral thoracic vein.r",
+   "polygons": 5040,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Lateral vein of right lung",
+   "polygons": 2304,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary veins"
+   ]
+  },
+  {
+   "name": "Left ascending lumbar vein",
+   "polygons": 2448,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Left atrium",
+   "polygons": 2610,
+   "path": [
+    "Heart"
+   ]
+  },
+  {
+   "name": "Left brachiocephalic vein",
+   "polygons": 432,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Left colic artery",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Left common carotid artery",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Left coronary artery",
+   "polygons": 288,
+   "path": [
+    "Cardiac vessels",
+    "Arteries of heart"
+   ]
+  },
+  {
+   "name": "Left coronary leaflet",
+   "polygons": 914,
+   "path": [
+    "Heart"
+   ]
+  },
+  {
+   "name": "Left gastric artery",
+   "polygons": 720,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Left gastro-omental vein",
+   "polygons": 1296,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Left inferior pulmonary vein",
+   "polygons": 432,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary veins"
+   ]
+  },
+  {
+   "name": "Left pulmonary artery",
+   "polygons": 1008,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Left renal artery",
+   "polygons": 144,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Left renal vein",
+   "polygons": 720,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Left semilunar leaflet of pulmonary valve",
+   "polygons": 1992,
+   "path": [
+    "Heart"
+   ]
+  },
+  {
+   "name": "Left subclavian artery",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Left subclavian vein",
+   "polygons": 576,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Left subcostal vein",
+   "polygons": 1872,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Left superior intercostal vein",
+   "polygons": 25488,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Left superior pulmonary vein",
+   "polygons": 432,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary veins"
+   ]
+  },
+  {
+   "name": "Left testicular artery",
+   "polygons": 4464,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Left testicular vein",
+   "polygons": 4896,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Left ventricle",
+   "polygons": 11126,
+   "path": [
+    "Heart"
+   ]
+  },
+  {
+   "name": "Lingual vein.l",
+   "polygons": 576,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Lingual vein.r",
+   "polygons": 576,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Lingular vein of left lung",
+   "polygons": 288,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary veins"
+   ]
+  },
+  {
+   "name": "Long posterior ciliary arteries.l",
+   "polygons": 2160,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Long posterior ciliary arteries.r",
+   "polygons": 2160,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Lumbar arteries.l",
+   "polygons": 5328,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Lumbar arteries.r",
+   "polygons": 5904,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Lumbar branch of iliolumbar artery.l",
+   "polygons": 1296,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Lumbar branch of iliolumbar artery.r",
+   "polygons": 1296,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Lumbar veins.l",
+   "polygons": 2880,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Lumbar veins.r",
+   "polygons": 7344,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Marginal artery",
+   "polygons": 4752,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Maxillary artery.l",
+   "polygons": 4752,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Maxillary artery.r",
+   "polygons": 4752,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Maxillary veins.l",
+   "polygons": 1440,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Maxillary veins.r",
+   "polygons": 1440,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Medial basal segmental artery of left lung",
+   "polygons": 1008,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Medial basal segmental artery of right lung",
+   "polygons": 720,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Medial circumflex femoral artery.l",
+   "polygons": 1584,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Medial circumflex femoral artery.r",
+   "polygons": 1584,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Medial circumflex femoral veins.l",
+   "polygons": 1728,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Medial circumflex femoral veins.r",
+   "polygons": 1728,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Medial occipital artery.l",
+   "polygons": 2592,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Medial occipital artery.r",
+   "polygons": 2592,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Medial plantar artery.l",
+   "polygons": 720,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Medial plantar artery.r",
+   "polygons": 720,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Medial plantar veins.l",
+   "polygons": 1152,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Medial plantar veins.r",
+   "polygons": 1152,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Medial pontine branches of basilar artery.l",
+   "polygons": 1152,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Medial pontine branches of basilar artery.r",
+   "polygons": 1152,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Medial segmental artery of right lung",
+   "polygons": 1728,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Medial vein of right lung",
+   "polygons": 1584,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary veins"
+   ]
+  },
+  {
+   "name": "Median antebrachial vein.l",
+   "polygons": 2592,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Median antebrachial vein.r",
+   "polygons": 2592,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Median cubital vein.l",
+   "polygons": 864,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Median cubital vein.r",
+   "polygons": 864,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Median sacral artery",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Mental branch of inferior alveolar artery.l",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Mental branch of inferior alveolar artery.r",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Middle cardiac vein",
+   "polygons": 15984,
+   "path": [
+    "Cardiac vessels",
+    "Cardiac veins"
+   ]
+  },
+  {
+   "name": "Middle cerebral artery (M1-segment).l",
+   "polygons": 720,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Middle cerebral artery (M1-segment).r",
+   "polygons": 720,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Middle cerebral artery (M3 segment).l",
+   "polygons": 1872,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Middle cerebral artery (M3-segment).r",
+   "polygons": 1872,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Middle colic artery",
+   "polygons": 1152,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Middle colic vein",
+   "polygons": 2736,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Middle collateral artery.l",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Middle collateral artery.r",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Middle genicular artery.l",
+   "polygons": 2448,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Middle genicular artery.r",
+   "polygons": 2448,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Middle lobar artery of right lung",
+   "polygons": 144,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Middle meningeal artery.l",
+   "polygons": 720,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Middle meningeal artery.r",
+   "polygons": 720,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Musculophrenic artery.l",
+   "polygons": 1728,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Musculophrenic artery.r",
+   "polygons": 1728,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Musculophrenic veins.l",
+   "polygons": 1296,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Musculophrenic veins.r",
+   "polygons": 1296,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Mylohyoid branch of inferior alveolar artery.l",
+   "polygons": 1584,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Mylohyoid branch of inferior alveolar artery.r",
+   "polygons": 1584,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Non-coronary leaflet",
+   "polygons": 316,
+   "path": [
+    "Heart"
+   ]
+  },
+  {
+   "name": "Obturator artery.l",
+   "polygons": 864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Obturator artery.r",
+   "polygons": 864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Occipital artery.l",
+   "polygons": 6768,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Occipital artery.r",
+   "polygons": 6768,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Occipital sinus",
+   "polygons": 576,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Occipital vein.l",
+   "polygons": 2592,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Occipital vein.r",
+   "polygons": 2592,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Ophthalmic artery.l",
+   "polygons": 864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Ophthalmic artery.r",
+   "polygons": 864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Orbitofrontal branches of anterior cerebral artery.l",
+   "polygons": 2304,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Orbitofrontal branches of anterior cerebral artery.r",
+   "polygons": 2304,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Palmar carpal branch of radial artery.l",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Palmar carpal branch of radial artery.r",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Palmar digital veins.l",
+   "polygons": 14256,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Palmar digital veins.r",
+   "polygons": 14256,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Palmar metacarpal arteries.l",
+   "polygons": 2160,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Palmar metacarpal arteries.r",
+   "polygons": 2160,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Parietal branches of middle cerebral artery.l",
+   "polygons": 2016,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Parietal branches of middle cerebral artery.r",
+   "polygons": 2016,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Parieto-occipital artery.l",
+   "polygons": 4176,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Parieto-occipital artery.r",
+   "polygons": 4176,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Patellar anastomosis.l",
+   "polygons": 4752,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Patellar anastomosis.r",
+   "polygons": 4752,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Pectoral branches of thoraco-acromial artery.l",
+   "polygons": 864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Pectoral branches of thoraco-acromial artery.r",
+   "polygons": 864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Perforating branches of plantar metatarsal arteries.l",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Perforating branches of plantar metatarsal arteries.r",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Perforating femoral arteries.l",
+   "polygons": 1152,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Perforating femoral arteries.r",
+   "polygons": 1152,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Perforating veins.l",
+   "polygons": 1152,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Perforating veins.r",
+   "polygons": 1152,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Pericallosal artery.l",
+   "polygons": 16128,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Pericallosal artery.r",
+   "polygons": 16128,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Plantar arch.l",
+   "polygons": 1152,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Plantar arch.r",
+   "polygons": 1152,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Plantar digital veins.l",
+   "polygons": 12672,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Plantar digital veins.r",
+   "polygons": 12672,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Plantar metatarsal arteries.l",
+   "polygons": 2880,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Plantar metatarsal arteries.r",
+   "polygons": 2880,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Plantar metatarsal veins.l",
+   "polygons": 4320,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Plantar metatarsal veins.r",
+   "polygons": 4320,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Plantar venous arch.l",
+   "polygons": 864,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Plantar venous arch.r",
+   "polygons": 864,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Popliteal artery.l",
+   "polygons": 1008,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Popliteal artery.r",
+   "polygons": 1008,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Popliteal vein.l",
+   "polygons": 1008,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Popliteal vein.r",
+   "polygons": 1008,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Postcentral arterial branch.l",
+   "polygons": 2448,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Postcentral arterial branch.r",
+   "polygons": 2448,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior auricular vein.l",
+   "polygons": 1008,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Posterior auricular vein.r",
+   "polygons": 1008,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Posterior basal segmental artery of left lung",
+   "polygons": 3024,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Posterior basal segmental artery of right lung",
+   "polygons": 1008,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Posterior branch of renal artery.l",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior branch of renal artery.r",
+   "polygons": 864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior cerebral artery.l",
+   "polygons": 16848,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior cerebral artery.r",
+   "polygons": 16848,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior circumflex humeral artery.l",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior circumflex humeral artery.r",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior circumflex humeral vein.l",
+   "polygons": 1008,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Posterior circumflex humeral vein.r",
+   "polygons": 1008,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Posterior communicating artery.l",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior communicating artery.r",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior deep temporal artery.l",
+   "polygons": 1872,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior deep temporal artery.r",
+   "polygons": 1872,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior division of internal iliac artery.l",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior division of internal iliac artery.r",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior division of retromandibular vein.l",
+   "polygons": 288,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Posterior division of retromandibular vein.r",
+   "polygons": 288,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Posterior ethmoidal artery.l",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior ethmoidal artery.r",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior inferior cerebellar artery.l",
+   "polygons": 18864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior inferior cerebellar artery.r",
+   "polygons": 18864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior intercavernous sinus",
+   "polygons": 720,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Posterior intercostal arteries.l",
+   "polygons": 21744,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior intercostal arteries.r",
+   "polygons": 24912,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior interosseous artery.l",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior interosseous artery.r",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior lateral nasal branches of sphenopalatine artery..l",
+   "polygons": 7776,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior lateral nasal branches of sphenopalatine artery..r",
+   "polygons": 7776,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior leaflet of left atrioventricular valve",
+   "polygons": 7640,
+   "path": [
+    "Heart"
+   ]
+  },
+  {
+   "name": "Posterior parietal artery.l",
+   "polygons": 4608,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior parietal artery.r",
+   "polygons": 4608,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior segmental artery of left lung",
+   "polygons": 2304,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Posterior segmental artery of right lung",
+   "polygons": 1296,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Posterior septal branches of sphenopalatine artery.l",
+   "polygons": 2016,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior septal branches of sphenopalatine artery.r",
+   "polygons": 2016,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior superior alveolar artery.l",
+   "polygons": 1296,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior superior alveolar artery.r",
+   "polygons": 1296,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior temporal branch.l",
+   "polygons": 2160,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior temporal branch.r",
+   "polygons": 2160,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior tibial artery.l",
+   "polygons": 2016,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior tibial artery.r",
+   "polygons": 2016,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Posterior tibial veins.l",
+   "polygons": 2448,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Posterior tibial veins.r",
+   "polygons": 2448,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Posterior vein of right lung",
+   "polygons": 3600,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary veins"
+   ]
+  },
+  {
+   "name": "Prefrontal artery.l",
+   "polygons": 3168,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Prefrontal artery.r",
+   "polygons": 3168,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Proper hepatic artery",
+   "polygons": 2160,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Proper palmar digital arteries.l",
+   "polygons": 15552,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Proper palmar digital arteries.r",
+   "polygons": 15552,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Proper plantar digital arteries.l",
+   "polygons": 8640,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Proper plantar digital arteries.r",
+   "polygons": 8640,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Proximal lateral striate branches.l",
+   "polygons": 3888,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Proximal lateral striate branches.r",
+   "polygons": 3888,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Pulmonary trunk",
+   "polygons": 115,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Radial artery.l",
+   "polygons": 1584,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Radial artery.r",
+   "polygons": 1584,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Radial collateral artery.l",
+   "polygons": 1296,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Radial collateral artery.r",
+   "polygons": 1296,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Radial veins.l",
+   "polygons": 1152,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Radial veins.r",
+   "polygons": 1152,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Recurrent interosseous artery.l",
+   "polygons": 864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Recurrent interosseous artery.r",
+   "polygons": 864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Retromandibular vein.l",
+   "polygons": 288,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Retromandibular vein.r",
+   "polygons": 288,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Right ascending lumbar vein",
+   "polygons": 4176,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Right atrium",
+   "polygons": 11341,
+   "path": [
+    "Heart"
+   ]
+  },
+  {
+   "name": "Right brachiocephalic vein",
+   "polygons": 288,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Right colic artery",
+   "polygons": 1584,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Right colic vein",
+   "polygons": 2880,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Right common carotid artery",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Right coronary artery",
+   "polygons": 13536,
+   "path": [
+    "Cardiac vessels",
+    "Arteries of heart"
+   ]
+  },
+  {
+   "name": "Right coronary leaflet",
+   "polygons": 918,
+   "path": [
+    "Heart"
+   ]
+  },
+  {
+   "name": "Right gastro-omental vein",
+   "polygons": 3312,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Right inferior pulmonary vein",
+   "polygons": 288,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary veins"
+   ]
+  },
+  {
+   "name": "Right inferolateral branch of right coronary artery",
+   "polygons": 9216,
+   "path": [
+    "Cardiac vessels",
+    "Arteries of heart"
+   ]
+  },
+  {
+   "name": "Right pulmonary artery",
+   "polygons": 288,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Right renal artery",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Right renal vein",
+   "polygons": 432,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Right semilunar leaflet of pulmonary valve",
+   "polygons": 2735,
+   "path": [
+    "Heart"
+   ]
+  },
+  {
+   "name": "Right subclavian artery",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Right subclavian vein",
+   "polygons": 432,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Right subcostal vein",
+   "polygons": 2160,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Right superior intercostal vein",
+   "polygons": 31392,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Right superior phrenic vein",
+   "polygons": 5328,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Right superior pulmonary vein",
+   "polygons": 864,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary veins"
+   ]
+  },
+  {
+   "name": "Right testicular artery.r",
+   "polygons": 5040,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Right testicular vein",
+   "polygons": 4896,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Right ventricle",
+   "polygons": 11161,
+   "path": [
+    "Heart"
+   ]
+  },
+  {
+   "name": "Second posterior intercostal artery.l",
+   "polygons": 2448,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Second posterior intercostal artery.r",
+   "polygons": 2448,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Septal branches of anterior interventricular artery",
+   "polygons": 3456,
+   "path": [
+    "Cardiac vessels",
+    "Arteries of heart"
+   ]
+  },
+  {
+   "name": "Septal branches of posterior ethmoidal artery.l",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Septal branches of posterior ethmoidal artery.r",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Septal leaflet of right atrioventricular valve",
+   "polygons": 9040,
+   "path": [
+    "Heart"
+   ]
+  },
+  {
+   "name": "Septal papillary muscle of right ventricle",
+   "polygons": 844,
+   "path": [
+    "Heart"
+   ]
+  },
+  {
+   "name": "Short posterior ciliary arteries.l",
+   "polygons": 1296,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Short posterior ciliary arteries.r",
+   "polygons": 1296,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Sigmoid arteries",
+   "polygons": 4464,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Sigmoid sinus.l",
+   "polygons": 432,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Sigmoid sinus.r",
+   "polygons": 432,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Sigmoid veins",
+   "polygons": 4464,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Small saphenous vein.l",
+   "polygons": 2880,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Small saphenous vein.r",
+   "polygons": 2880,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Spinal branch of iliolumbar artery.l",
+   "polygons": 144,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Spinal branch of iliolumbar artery.r",
+   "polygons": 144,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Splenic artery",
+   "polygons": 4320,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Splenic vein",
+   "polygons": 4752,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Straight sinus",
+   "polygons": 1152,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Subcostal artery.l",
+   "polygons": 2448,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Subcostal artery.r",
+   "polygons": 2448,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Submental artery.l",
+   "polygons": 2160,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Submental artery.r",
+   "polygons": 2160,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Submental vein.l",
+   "polygons": 1152,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Submental vein.r",
+   "polygons": 1152,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Subscapular artery.l",
+   "polygons": 144,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Subscapular artery.r",
+   "polygons": 144,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Subscapular vein.l",
+   "polygons": 864,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Subscapular vein.r",
+   "polygons": 864,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Superficial branch of medial plantar artery.l",
+   "polygons": 1008,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superficial branch of medial plantar artery.r",
+   "polygons": 1008,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superficial dorsal veins of penis",
+   "polygons": 1152,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Superficial epigastric artery.l",
+   "polygons": 2016,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superficial epigastric artery.r",
+   "polygons": 2016,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superficial epigastric vein.l",
+   "polygons": 3600,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Superficial epigastric vein.r",
+   "polygons": 3600,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Superficial external pudendal artery.l",
+   "polygons": 1872,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superficial external pudendal artery.r",
+   "polygons": 1872,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superficial palmar arch.l",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superficial palmar arch.r",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superficial temporal artery.l",
+   "polygons": 13104,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superficial temporal artery.r",
+   "polygons": 13104,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superficial temporal veins.l",
+   "polygons": 1728,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Superficial temporal veins.r",
+   "polygons": 1728,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Superficial venous palmar arch.l",
+   "polygons": 2160,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Superficial venous palmar arch.r",
+   "polygons": 2160,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Superior anorectal artery",
+   "polygons": 1152,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superior basal vein of left lung",
+   "polygons": 2304,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary veins"
+   ]
+  },
+  {
+   "name": "Superior basal vein of right lung",
+   "polygons": 3456,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary veins"
+   ]
+  },
+  {
+   "name": "Superior cerebellar artery.l",
+   "polygons": 5472,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superior cerebellar artery.r",
+   "polygons": 5472,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superior epigastric artery.l",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superior epigastric artery.r",
+   "polygons": 1440,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superior epigastric veins.l",
+   "polygons": 864,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Superior epigastric veins.r",
+   "polygons": 864,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Superior gluteal artery.l",
+   "polygons": 8640,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superior gluteal artery.r",
+   "polygons": 8640,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superior gluteal veins.l",
+   "polygons": 2160,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Superior gluteal veins.r",
+   "polygons": 2160,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Superior labial artery.l",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superior labial artery.r",
+   "polygons": 576,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superior labial vein.l",
+   "polygons": 576,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Superior labial vein.r",
+   "polygons": 576,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Superior lateral genicular artery.l",
+   "polygons": 864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superior lateral genicular artery.r",
+   "polygons": 864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superior lingular artery of left lung",
+   "polygons": 2016,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Superior lingular vein of left lung",
+   "polygons": 1008,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary veins"
+   ]
+  },
+  {
+   "name": "Superior lobar artery of right lung",
+   "polygons": 144,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Superior medial genicular artery.l",
+   "polygons": 2448,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superior medial genicular artery.r",
+   "polygons": 2448,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superior mesenteric artery",
+   "polygons": 6192,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superior mesenteric vein",
+   "polygons": 2880,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Superior ophthalmic vein.l",
+   "polygons": 576,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Superior ophthalmic vein.r",
+   "polygons": 576,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Superior petrosal sinus.l",
+   "polygons": 864,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Superior petrosal sinus.r",
+   "polygons": 864,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Superior phrenic arteries",
+   "polygons": 7056,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superior sagittal sinus",
+   "polygons": 3168,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Superior segmental artery of left lung",
+   "polygons": 2016,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Superior segmental artery of right lung",
+   "polygons": 4032,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary arteries"
+   ]
+  },
+  {
+   "name": "Superior thyroid vein.l",
+   "polygons": 576,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Superior thyroid vein.r",
+   "polygons": 576,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Superior ulnar collateral artery.l",
+   "polygons": 864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superior ulnar collateral artery.r",
+   "polygons": 864,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Superior vein of left lung",
+   "polygons": 4320,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary veins"
+   ]
+  },
+  {
+   "name": "Superior vein of right lung",
+   "polygons": 3600,
+   "path": [
+    "Pulmonary vessels",
+    "Pulmonary veins"
+   ]
+  },
+  {
+   "name": "Superior vena cava",
+   "polygons": 144,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Supra-orbital artery.l",
+   "polygons": 4176,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Supra-orbital artery.r",
+   "polygons": 4176,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Suprascapular artery.l",
+   "polygons": 1584,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Suprascapular artery.r",
+   "polygons": 1584,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Suprascapular vein.l",
+   "polygons": 1296,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Suprascapular vein.r",
+   "polygons": 1296,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Supratrochlear artery.l",
+   "polygons": 2880,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Supratrochlear artery.r",
+   "polygons": 2880,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Supreme intercostal artery.l",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Supreme intercostal artery.r",
+   "polygons": 288,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Temporal branches of middle cerebral artery.l",
+   "polygons": 2592,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Temporal branches of middle cerebral artery.r",
+   "polygons": 2592,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Temporo-occipital branch.l",
+   "polygons": 4176,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Temporo-occipital branch.r",
+   "polygons": 4176,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Thoracic aorta",
+   "polygons": 432,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Thoraco-acromial artery.l",
+   "polygons": 144,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Thoraco-acromial artery.r",
+   "polygons": 144,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Thoracodorsal artery.l",
+   "polygons": 720,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Thoracodorsal artery.r",
+   "polygons": 720,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Thoracodorsal vein.l",
+   "polygons": 1008,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Thoracodorsal vein.r",
+   "polygons": 1008,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Thyrocervical trunk.l",
+   "polygons": 144,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Thyrocervical trunk.r",
+   "polygons": 144,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Transverse cervical artery.l",
+   "polygons": 1584,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Transverse cervical artery.r",
+   "polygons": 1584,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Transverse facial artery.l",
+   "polygons": 2016,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Transverse facial artery.r",
+   "polygons": 2016,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Transverse sinus.l",
+   "polygons": 1008,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Transverse sinus.r",
+   "polygons": 1008,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Ulnar artery.l",
+   "polygons": 1008,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Ulnar artery.r",
+   "polygons": 1008,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Ulnar veins.l",
+   "polygons": 1296,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Ulnar veins.r",
+   "polygons": 1296,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Vertebral artery.l",
+   "polygons": 2448,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Vertebral artery.r",
+   "polygons": 2448,
+   "path": [
+    "Systemic arteries"
+   ]
+  },
+  {
+   "name": "Vertebral vein.l",
+   "polygons": 1728,
+   "path": [
+    "Systemic veins"
+   ]
+  },
+  {
+   "name": "Vertebral vein.r",
+   "polygons": 1728,
+   "path": [
+    "Systemic veins"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,791 @@
+{
+ "system": "visceral",
+ "collections": [
+  "8: Visceral systems"
+ ],
+ "output": "C:\\Users\\TrendingPC\\Documents\\Anatria3D\\public\\anatomy\\visceral_male.glb",
+ "draco": true,
+ "object_count": 120,
+ "skipped_count": 177,
+ "skipped": [
+  "(Pyramidal lobe).j",
+  "Abdominopelvic cavity.j",
+  "Angular incisure.j",
+  "Anterior basal segment of left lung (SVIII).j",
+  "Anterior basal segment of right lung (SVIII).j",
+  "Anterior border of lung.j",
+  "Anterior border of pancreas.j",
+  "Anterior border of testis.j",
+  "Anterior lateral segment of liver (VI).j",
+  "Anterior medial segment of liver (V).j",
+  "Anterior segment of left lung (SIII).j",
+  "Anterior segment of right lung (SIII).j",
+  "Anterior surface of kidney.j",
+  "Anterior surface of liver.j",
+  "Anterior surface of suprarenal gland.j",
+  "Anterior wall of stomach.j",
+  "Antero-inferior surface of pancreas.j",
+  "Anterosuperior surface of pancreas.j",
+  "Apex of bladder.j",
+  "Apex of lung.j",
+  "Apical segment of right lung (SI).j",
+  "Apicoposterior segment of left lung (SI+SII).j",
+  "Bare area of liver.j",
+  "Base of lung.j",
+  "Body of bladder.j",
+  "Body of gallbladder.j",
+  "Body of pancreas.j",
+  "Body of stomach.j",
+  "Bronchi.j",
+  "Cardia.j",
+  "Cardiac impression of liver.j",
+  "Cardiac impression of lung.j",
+  "Cardiac notch of left lung.j",
+  "Cardiac notch.j",
+  "Caudate lobe.j",
+  "Colic impression of liver.j",
+  "Colon.j",
+  "Costal surface of lung.j",
+  "Diaphragmatic surface of liver.j",
+  "Diaphragmatic surface of lung.j",
+  "Digestive canal.j",
+  "Digestive system.j",
+  "Duodenal impression of liver.j",
+  "Endocrine glands.j",
+  "Extrahepatic bile ducts.j",
+  "Fauces.j",
+  "Fibrous appendix of liver.j",
+  "Fissure for ligamentum teres.j",
+  "Fissure for ligamentum venosum.j",
+  "Fossa for gallbladder.j",
+  "Fundus of bladder.j",
+  "Fundus of gallbladder.j",
+  "Fundus of stomach.j",
+  "Gastric impression of liver.j",
+  "Genital systems.j",
+  "Greater curvature of stomach.j",
+  "Head of pancreas.j",
+  "Hilum of kidney.j",
+  "Hilum of lung.j",
+  "Hilum of suprarenal gland.j",
+  "Horizontal fissure of right lung.j",
+  "Hypophysis.j",
+  "Inferior border of liver.j",
+  "Inferior border of lung.j",
+  "Inferior border of pancreas.j",
+  "Inferior lingular segment of left lung (SV).j",
+  "Inferior pole of kidney.j",
+  "Inferior pole of testis.j",
+  "Infundibular stalk.j",
+  "Infundibulum of gallbladder.j",
+  "Interlobar surface of lung.j",
+  "Isthmus of thyroid gland.j",
+  "Large intestine.j",
+  "Larynx.j",
+  "Lateral basal segment of left lung (SIX).j",
+  "Lateral basal segment of right lung (SIX).j",
+  "Lateral border of kidney.j",
+  "Lateral segment of right lung (SIV).j",
+  "Lateral surface of testis.j",
+  "Left anterior lateral segment of liver (III).j",
+  "Left lateral division of liver.j",
+  "Left lobe of liver.j",
+  "Left lung.j",
+  "Left medial division of liver.j",
+  "Left medial segment of liver (IV).j",
+  "Left part of liver.j",
+  "Left posterior lateral segment of liver (II).j",
+  "Lesser curvature of stomach.j",
+  "Lingula of left lung.j",
+  "Lobe of lung.j",
+  "Lobe of thyroid gland.j",
+  "Lungs.j",
+  "Main portal fissure.j",
+  "Major salivary glands.j",
+  "Male external genitalia.j",
+  "Male genital system.j",
+  "Male internal genitalia.j",
+  "Medial basal segment of left lung (SVII).j",
+  "Medial basal segment of right lung (SVII).j",
+  "Medial border of kidney.j",
+  "Medial border of suprarenal gland.j",
+  "Medial segment of right lung (SV).j",
+  "Medial surface of lung.j",
+  "Medial surface of testis.j",
+  "Mediastinal surface of lung.j",
+  "Mouth.j",
+  "Neck of gallbladder.j",
+  "Neck of pancreas.j",
+  "Nose.j",
+  "Notch for ligamentum teres.j",
+  "Oblique fissure of left lung.j",
+  "Oblique fissure of right lung.j",
+  "Oesophageal impression of liver.j",
+  "Omental eminence.j",
+  "Omental tuberosity of liver.j",
+  "Palate.j",
+  "Pancreas.j",
+  "Pancreatic notch.j",
+  "Papillary process.j",
+  "Paranasal sinuses.j",
+  "Parathyroid gland.j",
+  "Pars distalis of hypophysis.j",
+  "Pars intermedia of hypophysis.j",
+  "Pars nervosa of hypophysis.j",
+  "Pars tubelaris of hypophysis.j",
+  "Penis.j",
+  "Peritoneal cavity.j",
+  "Peritoneal structures.j",
+  "Peritoneum.j",
+  "Porta hepatis.j",
+  "Posterior basal segment of left lung (SX).j",
+  "Posterior basal segment of right lung (SX).j",
+  "Posterior border of testis.j",
+  "Posterior medial segment of liver (VIII).j",
+  "Posterior part of liver.j",
+  "Posterior segment of liver (I).j",
+  "Posterior segment of right lung (SII).j",
+  "Posterior surface of kidney.j",
+  "Posterior surface of liver.j",
+  "Posterior surface of pancreas.j",
+  "Posterior surface of suprarenal gland.j",
+  "Posterior wall of stomach.j",
+  "Pyloric antrum.j",
+  "Pyloric part.j",
+  "Quadrate lobe.j",
+  "Renal impression of liver.j",
+  "Renal sinus.j",
+  "Renal surface of suprarenal gland.j",
+  "Respiratory system.j",
+  "Right lateral division of liver.j",
+  "Right lobe of liver.j",
+  "Right lung.j",
+  "Right medial division of liver.j",
+  "Right part of liver.j",
+  "Right portal fissure.j",
+  "Right surface of liver.j",
+  "Root of lung.j",
+  "Salivary glands.j",
+  "Small intestine.j",
+  "Superior border of pancreas.j",
+  "Superior border of suprarenal gland.j",
+  "Superior lingular segment of left lung (SIV).j",
+  "Superior pole of kidney.j",
+  "Superior pole of testis.j",
+  "Superior segment of left lung (SVI).j",
+  "Superior segment of right lung (SVI).j",
+  "Superior surface of liver.j",
+  "Suprarenal impression of liver.j",
+  "Taeniae coli.j",
+  "Tail of pancreas.j",
+  "Thoracic cavity.j",
+  "Tracheobronchial tree.j",
+  "Umbilical fissure.j",
+  "Uncinate process of pancreas.j",
+  "Urinary system.j",
+  "Visceral fasciae of abdominopelvic cavity.j",
+  "Visceral surface of liver.j"
+ ],
+ "objects": [
+  {
+   "name": "(Accessory parotid gland).l",
+   "polygons": 106,
+   "path": []
+  },
+  {
+   "name": "(Accessory parotid gland).r",
+   "polygons": 106,
+   "path": []
+  },
+  {
+   "name": "(Anteromedial basal segmental bronchus of left lung)",
+   "polygons": 1440,
+   "path": []
+  },
+  {
+   "name": "Accessory pancreatic duct",
+   "polygons": 5688,
+   "path": []
+  },
+  {
+   "name": "Adenohypophysis",
+   "polygons": 678,
+   "path": []
+  },
+  {
+   "name": "Anterior basal segmental bronchus of left lung (BVIII)",
+   "polygons": 720,
+   "path": []
+  },
+  {
+   "name": "Anterior basal segmental bronchus of right lung (BVIII)",
+   "polygons": 1440,
+   "path": []
+  },
+  {
+   "name": "Anterior lateral segment of liver (VI)",
+   "polygons": 1676,
+   "path": []
+  },
+  {
+   "name": "Anterior medial segment of liver (V)",
+   "polygons": 1769,
+   "path": []
+  },
+  {
+   "name": "Anterior segmental bronchus of left lung (BIII)",
+   "polygons": 1728,
+   "path": []
+  },
+  {
+   "name": "Anterior segmental bronchus of right lung (BIII)",
+   "polygons": 2448,
+   "path": []
+  },
+  {
+   "name": "Apical segmental bronchus of right lung (BI)",
+   "polygons": 3312,
+   "path": []
+  },
+  {
+   "name": "Apicoposterior segmental bronchus of left lung (BI+BII)",
+   "polygons": 3744,
+   "path": []
+  },
+  {
+   "name": "Ascending colon",
+   "polygons": 8756,
+   "path": []
+  },
+  {
+   "name": "Bile duct",
+   "polygons": 1008,
+   "path": []
+  },
+  {
+   "name": "Corpus cavernosum of penis",
+   "polygons": 1288,
+   "path": []
+  },
+  {
+   "name": "Corpus spongiosum of penis",
+   "polygons": 560,
+   "path": []
+  },
+  {
+   "name": "Descending colon",
+   "polygons": 12372,
+   "path": []
+  },
+  {
+   "name": "Ductus deferens.l",
+   "polygons": 2448,
+   "path": []
+  },
+  {
+   "name": "Ductus deferens.r",
+   "polygons": 2448,
+   "path": []
+  },
+  {
+   "name": "Duodenum",
+   "polygons": 1737,
+   "path": []
+  },
+  {
+   "name": "Ejaculatory duct.l",
+   "polygons": 432,
+   "path": []
+  },
+  {
+   "name": "Ejaculatory duct.r",
+   "polygons": 432,
+   "path": []
+  },
+  {
+   "name": "Epididymis.l",
+   "polygons": 216,
+   "path": []
+  },
+  {
+   "name": "Epididymis.r",
+   "polygons": 216,
+   "path": []
+  },
+  {
+   "name": "Epiglottis",
+   "polygons": 3326,
+   "path": []
+  },
+  {
+   "name": "Free taenia",
+   "polygons": 3356,
+   "path": []
+  },
+  {
+   "name": "Gallbladder",
+   "polygons": 368,
+   "path": []
+  },
+  {
+   "name": "Gingiva",
+   "polygons": 12298,
+   "path": []
+  },
+  {
+   "name": "Glans penis",
+   "polygons": 1391,
+   "path": []
+  },
+  {
+   "name": "Greater omentum",
+   "polygons": 38984,
+   "path": []
+  },
+  {
+   "name": "Inferior lingular segmental bronchus of left lung (BV)",
+   "polygons": 1008,
+   "path": []
+  },
+  {
+   "name": "Inferior lobe of left lung",
+   "polygons": 4629,
+   "path": []
+  },
+  {
+   "name": "Inferior lobe of right lung",
+   "polygons": 4226,
+   "path": []
+  },
+  {
+   "name": "Inferior parathyroid gland.l",
+   "polygons": 64,
+   "path": []
+  },
+  {
+   "name": "Inferior parathyroid gland.r",
+   "polygons": 64,
+   "path": []
+  },
+  {
+   "name": "Intermediate bronchus.r",
+   "polygons": 144,
+   "path": []
+  },
+  {
+   "name": "Jejunum",
+   "polygons": 13824,
+   "path": []
+  },
+  {
+   "name": "Kidney.l",
+   "polygons": 2982,
+   "path": []
+  },
+  {
+   "name": "Kidney.r",
+   "polygons": 2319,
+   "path": []
+  },
+  {
+   "name": "Laryngopharynx",
+   "polygons": 1238,
+   "path": []
+  },
+  {
+   "name": "Lateral basal segmental bronchus of left lung (BIX)",
+   "polygons": 1152,
+   "path": []
+  },
+  {
+   "name": "Lateral basal segmental bronchus of right lung (BIX)",
+   "polygons": 2304,
+   "path": []
+  },
+  {
+   "name": "Lateral segmental bronchus of right lung (BIV)",
+   "polygons": 1584,
+   "path": []
+  },
+  {
+   "name": "Left anterior lateral segment of liver (III)",
+   "polygons": 1722,
+   "path": []
+  },
+  {
+   "name": "Left inferior lobar bronchus",
+   "polygons": 432,
+   "path": []
+  },
+  {
+   "name": "Left main bronchus",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Left medial segment of liver (IV)",
+   "polygons": 2386,
+   "path": []
+  },
+  {
+   "name": "Left posterior lateral segment of liver (II)",
+   "polygons": 1658,
+   "path": []
+  },
+  {
+   "name": "Left superior lobar bronchus",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Lesser omentum",
+   "polygons": 2380,
+   "path": []
+  },
+  {
+   "name": "Liver",
+   "polygons": 6135,
+   "path": []
+  },
+  {
+   "name": "Medial basal segmental bronchus of left lung (BVII)",
+   "polygons": 2880,
+   "path": []
+  },
+  {
+   "name": "Medial basal segmental bronchus of right lung (BVII)",
+   "polygons": 864,
+   "path": []
+  },
+  {
+   "name": "Medial segmental bronchus of right lung (BV)",
+   "polygons": 1584,
+   "path": []
+  },
+  {
+   "name": "Meso-appendix",
+   "polygons": 424,
+   "path": []
+  },
+  {
+   "name": "Mesocolic taenia",
+   "polygons": 3396,
+   "path": []
+  },
+  {
+   "name": "Mesocolon",
+   "polygons": 7884,
+   "path": []
+  },
+  {
+   "name": "Middle lobar bronchus.r",
+   "polygons": 144,
+   "path": []
+  },
+  {
+   "name": "Middle lobe of right lung",
+   "polygons": 3698,
+   "path": []
+  },
+  {
+   "name": "Mucosa of nasal cavity",
+   "polygons": 4904,
+   "path": []
+  },
+  {
+   "name": "Mucosa of stomach",
+   "polygons": 4874,
+   "path": []
+  },
+  {
+   "name": "Nasopharynx",
+   "polygons": 976,
+   "path": []
+  },
+  {
+   "name": "Neurohypophysis",
+   "polygons": 592,
+   "path": []
+  },
+  {
+   "name": "Oesophagus",
+   "polygons": 8160,
+   "path": []
+  },
+  {
+   "name": "Omental taenia",
+   "polygons": 3116,
+   "path": []
+  },
+  {
+   "name": "Oropharynx",
+   "polygons": 1272,
+   "path": []
+  },
+  {
+   "name": "Pancreas",
+   "polygons": 5056,
+   "path": []
+  },
+  {
+   "name": "Pancreatic duct",
+   "polygons": 27912,
+   "path": []
+  },
+  {
+   "name": "Parotid duct.l",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Parotid duct.r",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Parotid gland.l",
+   "polygons": 852,
+   "path": []
+  },
+  {
+   "name": "Parotid gland.r",
+   "polygons": 852,
+   "path": []
+  },
+  {
+   "name": "Pharynx.j",
+   "polygons": 1,
+   "path": []
+  },
+  {
+   "name": "Pineal gland",
+   "polygons": 592,
+   "path": []
+  },
+  {
+   "name": "Pleura",
+   "polygons": 56144,
+   "path": []
+  },
+  {
+   "name": "Posterior basal segmental bronchus of left lung (BX)",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Posterior basal segmental bronchus of right lung (BX)",
+   "polygons": 2160,
+   "path": []
+  },
+  {
+   "name": "Posterior lateral segment of liver (VII)",
+   "polygons": 1194,
+   "path": []
+  },
+  {
+   "name": "Posterior medial segment of liver (VIII)",
+   "polygons": 1780,
+   "path": []
+  },
+  {
+   "name": "Posterior segment of liver (I)",
+   "polygons": 1304,
+   "path": []
+  },
+  {
+   "name": "Posterior segmental bronchus of right lung (BII)",
+   "polygons": 2448,
+   "path": []
+  },
+  {
+   "name": "Prostate",
+   "polygons": 468,
+   "path": []
+  },
+  {
+   "name": "Renal pelvis.l",
+   "polygons": 1450,
+   "path": []
+  },
+  {
+   "name": "Renal pelvis.r",
+   "polygons": 1262,
+   "path": []
+  },
+  {
+   "name": "Right inferior lobar bronchus",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Right main bronchus",
+   "polygons": 144,
+   "path": []
+  },
+  {
+   "name": "Right superior lobar bronchus",
+   "polygons": 144,
+   "path": []
+  },
+  {
+   "name": "Seminal gland.l",
+   "polygons": 360,
+   "path": []
+  },
+  {
+   "name": "Seminal gland.r",
+   "polygons": 360,
+   "path": []
+  },
+  {
+   "name": "Sigmoid colon",
+   "polygons": 3377,
+   "path": []
+  },
+  {
+   "name": "Soft palate",
+   "polygons": 1882,
+   "path": []
+  },
+  {
+   "name": "Stomach",
+   "polygons": 4734,
+   "path": []
+  },
+  {
+   "name": "Sublingual gland.l",
+   "polygons": 324,
+   "path": []
+  },
+  {
+   "name": "Sublingual gland.r",
+   "polygons": 324,
+   "path": []
+  },
+  {
+   "name": "Submandibular duct.l",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Submandibular duct.r",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Submandibular gland.l",
+   "polygons": 392,
+   "path": []
+  },
+  {
+   "name": "Submandibular gland.r",
+   "polygons": 392,
+   "path": []
+  },
+  {
+   "name": "Superior lingular segmental bronchus of left lung (BIV)",
+   "polygons": 1008,
+   "path": []
+  },
+  {
+   "name": "Superior lobe of left lung",
+   "polygons": 4645,
+   "path": []
+  },
+  {
+   "name": "Superior lobe of right lung",
+   "polygons": 3874,
+   "path": []
+  },
+  {
+   "name": "Superior parathyroid gland.l",
+   "polygons": 64,
+   "path": []
+  },
+  {
+   "name": "Superior parathyroid gland.r",
+   "polygons": 64,
+   "path": []
+  },
+  {
+   "name": "Superior segmental bronchus of left lung (BVI)",
+   "polygons": 2160,
+   "path": []
+  },
+  {
+   "name": "Superior segmental bronchus of right lung (BVI)",
+   "polygons": 4464,
+   "path": []
+  },
+  {
+   "name": "Suprarenal gland.l",
+   "polygons": 3996,
+   "path": []
+  },
+  {
+   "name": "Suprarenal gland.r",
+   "polygons": 2294,
+   "path": []
+  },
+  {
+   "name": "Testis.l",
+   "polygons": 678,
+   "path": []
+  },
+  {
+   "name": "Testis.r",
+   "polygons": 678,
+   "path": []
+  },
+  {
+   "name": "Thyroid gland",
+   "polygons": 1300,
+   "path": []
+  },
+  {
+   "name": "Tongue",
+   "polygons": 602,
+   "path": []
+  },
+  {
+   "name": "Trachea",
+   "polygons": 4516,
+   "path": []
+  },
+  {
+   "name": "Transverse colon",
+   "polygons": 8308,
+   "path": []
+  },
+  {
+   "name": "Ureter.l",
+   "polygons": 1440,
+   "path": []
+  },
+  {
+   "name": "Ureter.r",
+   "polygons": 1584,
+   "path": []
+  },
+  {
+   "name": "Urethra",
+   "polygons": 1440,
+   "path": []
+  },
+  {
+   "name": "Urinary bladder",
+   "polygons": 1518,
+   "path": []
+  },
+  {
+   "name": "Uvula of palate",
+   "polygons": 1502,
+   "path": []
+  },
+  {
+   "name": "Vermiform appendix",
+   "polygons": 442,
+   "path": []
+  }
+ ]
+}

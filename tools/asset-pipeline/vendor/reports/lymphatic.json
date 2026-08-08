@@ -1,0 +1,886 @@
+{
+ "system": "lymphatic",
+ "collections": [
+  "Bonus collection/Visceral systems/Lymphoid system",
+  "6: Lymphoid organs"
+ ],
+ "output": "C:\\Users\\TrendingPC\\Documents\\Anatria3D\\public\\anatomy\\lymphatic_male.glb",
+ "draco": true,
+ "object_count": 163,
+ "skipped_count": 56,
+ "skipped": [
+  "(Pancreatic impression of spleen).j",
+  "Abdominal lymph nodes.j",
+  "Anterior cervical nodes.j",
+  "Anterior extremity of spleen.j",
+  "Axillary nodes.j",
+  "Colic impression of spleen.j",
+  "Common iliac nodes.j",
+  "Deep anterior cervical nodes.j",
+  "Deep inguinal nodes.j",
+  "Deep parotid nodes.j",
+  "Diaphragmatic surface of spleen.j",
+  "External iliac nodes.j",
+  "Facial nodes.j",
+  "Gastric impression of spleen.j",
+  "Gluteal nodes.j",
+  "Hepatic nodes.j",
+  "Hilum of spleen.j",
+  "Inferior border of spleen.j",
+  "Inferior deep lateral cervical nodes.j",
+  "Inferior mesenteric nodes.j",
+  "Infrahyoid nodes.j",
+  "Inguinal nodes.j",
+  "Internal iliac nodes.j",
+  "Lateral cervical nodes.j",
+  "Left lumbar nodes.j",
+  "Lymph nodes of head.j",
+  "Lymph nodes of lower limb.j",
+  "Lymph nodes of neck.j",
+  "Lymph nodes of upper limb.j",
+  "Lymph nodes.j",
+  "Mediastinal lymph nodes.j",
+  "Pancreatic nodes.j",
+  "Pancreaticoduodenal nodes.j",
+  "Paravesical nodes.j",
+  "Parietal abdominal lymph nodes.j",
+  "Parietal pelvic lymph nodes.j",
+  "Parietal thoracic lymph nodes.j",
+  "Pelvic lymph nodes.j",
+  "Pharyngeal lymphoid ring.j",
+  "Popliteal nodes.j",
+  "Posterior extremity of spleen.j",
+  "Primary lymphoid organs.j",
+  "Pulmonary lymph nodes.j",
+  "Pyloric nodes.j",
+  "Renal impression of spleen.j",
+  "Right lumbar nodes.j",
+  "Secondary lymphoid organs.j",
+  "Superficial inguinal nodes.j",
+  "Superior border of spleen.j",
+  "Superior deep lateral cervical nodes.j",
+  "Superior mesenteric nodes.j",
+  "Thoracic lymph node.j",
+  "Thymus.j",
+  "Visceral abdominal lymph nodes.j",
+  "Visceral pelvic lymph nodes.j",
+  "Visceral surface of spleen.j"
+ ],
+ "objects": [
+  {
+   "name": "(Anterior tibial node).l",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "(Anterior tibial node).r",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "(Fibular node).l",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "(Fibular node).r",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "(Intermediate deep inguinal node).l",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "(Intermediate deep inguinal node).r",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "(Intermediate lacunar node).l",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "(Intermediate lacunar node).r",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "(Lateral lacunar node).l",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "(Lateral lacunar node).r",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "(Medial lacunar node).l",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "(Medial lacunar node).r",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "(Posterior tibial node).l",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "(Posterior tibial node).r",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "(Proximal deep inguinal node).l",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "(Proximal deep inguinal node).r",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "(Retropyloric nodes)",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "(Subpyloric nodes)",
+   "polygons": 192,
+   "path": []
+  },
+  {
+   "name": "(Suprapyloric node)",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "Anterior axillary nodes.l",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Anterior axillary nodes.r",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Anterior inferior jugular nodes.l",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Anterior inferior jugular nodes.r",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Apical axillary nodes.l",
+   "polygons": 192,
+   "path": []
+  },
+  {
+   "name": "Apical axillary nodes.r",
+   "polygons": 192,
+   "path": []
+  },
+  {
+   "name": "Appendicular nodes",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Brachial nodes.l",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Brachial nodes.r",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Brachiocephalic nodes",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Bucinator node.l",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Bucinator node.r",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Central axillary nodes.l",
+   "polygons": 192,
+   "path": []
+  },
+  {
+   "name": "Central axillary nodes.r",
+   "polygons": 192,
+   "path": []
+  },
+  {
+   "name": "Central superior mesenteric nodes",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Coeliac nodes",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Cubital nodes.l",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Cubital nodes.r",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Cystic node",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "Deep popliteal nodes.l",
+   "polygons": 192,
+   "path": []
+  },
+  {
+   "name": "Deep popliteal nodes.r",
+   "polygons": 192,
+   "path": []
+  },
+  {
+   "name": "Ileocolic nodes",
+   "polygons": 192,
+   "path": []
+  },
+  {
+   "name": "Inferior deep lateral cervical nodes.l",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Inferior deep lateral cervical nodes.r",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Inferior diaphragmatic nodes",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Inferior epigastric nodes.l",
+   "polygons": 192,
+   "path": []
+  },
+  {
+   "name": "Inferior epigastric nodes.r",
+   "polygons": 192,
+   "path": []
+  },
+  {
+   "name": "Inferior gluteal nodes.l",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Inferior gluteal nodes.r",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Inferior pancreatic nodes",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Inferior superficial inguinal nodes.l",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Inferior superficial inguinal nodes.r",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Inferior tracheobronchial nodes",
+   "polygons": 960,
+   "path": []
+  },
+  {
+   "name": "Infra-auricular nodes.l",
+   "polygons": 192,
+   "path": []
+  },
+  {
+   "name": "Infra-auricular nodes.r",
+   "polygons": 192,
+   "path": []
+  },
+  {
+   "name": "Infraclavicular nodes.l",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Infraclavicular nodes.r",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Intercostal nodes.l",
+   "polygons": 1152,
+   "path": []
+  },
+  {
+   "name": "Intercostal nodes.r",
+   "polygons": 1152,
+   "path": []
+  },
+  {
+   "name": "Intermediate common iliac nodes",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Intermediate external iliac nodes.l",
+   "polygons": 672,
+   "path": []
+  },
+  {
+   "name": "Intermediate external iliac nodes.r",
+   "polygons": 672,
+   "path": []
+  },
+  {
+   "name": "Intermediate lumbar nodes",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Interpectoral nodes.l",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Interpectoral nodes.r",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Intraglandular parotid nodes.l",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Intraglandular parotid nodes.r",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Intrapulmonary nodes",
+   "polygons": 2208,
+   "path": []
+  },
+  {
+   "name": "Jugulodigastric node.l",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "Jugulodigastric node.r",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "Juxta-intestinal mesenteric nodes",
+   "polygons": 1440,
+   "path": []
+  },
+  {
+   "name": "Juxta-oesophageal nodes",
+   "polygons": 960,
+   "path": []
+  },
+  {
+   "name": "Lateral aortic nodes",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Lateral axillary nodes.l",
+   "polygons": 192,
+   "path": []
+  },
+  {
+   "name": "Lateral axillary nodes.r",
+   "polygons": 192,
+   "path": []
+  },
+  {
+   "name": "Lateral caval nodes",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Lateral common iliac nodes",
+   "polygons": 768,
+   "path": []
+  },
+  {
+   "name": "Lateral pericardial nodes",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Lateral sacral nodes.l",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Lateral sacral nodes.r",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Lateral superior jugular node.l",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Lateral superior jugular node.r",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Lateral vesical nodes.l",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Lateral vesical nodes.r",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Left colic nodes",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Left lobe of thymus",
+   "polygons": 9188,
+   "path": []
+  },
+  {
+   "name": "Mandibular node.l",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Mandibular node.r",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Mastoid nodes.l",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Mastoid nodes.r",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Medial common iliac nodes",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Medial external iliac nodes.l",
+   "polygons": 768,
+   "path": []
+  },
+  {
+   "name": "Medial external iliac nodes.r",
+   "polygons": 768,
+   "path": []
+  },
+  {
+   "name": "Median sacral nodes",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Middle colic nodes",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Nasolabial node.l",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "Nasolabial node.r",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "Node of arch of azygos vein",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "Node of ligamentum arteriosum",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "Obturator nodes.l",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Obturator nodes.r",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Occipital nodes.l",
+   "polygons": 192,
+   "path": []
+  },
+  {
+   "name": "Occipital nodes.r",
+   "polygons": 192,
+   "path": []
+  },
+  {
+   "name": "Palatine tonsil.l",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "Palatine tonsil.r",
+   "polygons": 96,
+   "path": []
+  },
+  {
+   "name": "Paracolic superior mesenteric nodes",
+   "polygons": 1632,
+   "path": []
+  },
+  {
+   "name": "Pararectal nodes",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Parasternal nodes.l",
+   "polygons": 768,
+   "path": []
+  },
+  {
+   "name": "Parasternal nodes.r",
+   "polygons": 768,
+   "path": []
+  },
+  {
+   "name": "Paratracheal cervical nodes",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Paratracheal thoracic nodes",
+   "polygons": 960,
+   "path": []
+  },
+  {
+   "name": "Posterior axillary nodes.l",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Posterior axillary nodes.r",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Postvesical nodes",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Pre-aortic nodes",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Pre-auricular nodes.l",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Pre-auricular nodes.r",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Precaecal nodes",
+   "polygons": 192,
+   "path": []
+  },
+  {
+   "name": "Precaval nodes",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Prepericardial nodes",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Pretracheal nodes.l",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Pretracheal nodes.r",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Prevertebral nodes",
+   "polygons": 960,
+   "path": []
+  },
+  {
+   "name": "Prevesical nodes",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Retro-aortic nodes",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Retrocaecal nodes",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Retrocaval nodes",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Retropharyngeal nodes.l",
+   "polygons": 192,
+   "path": []
+  },
+  {
+   "name": "Retropharyngeal nodes.r",
+   "polygons": 192,
+   "path": []
+  },
+  {
+   "name": "Right colic nodes",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Right gastric nodes",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Right gastro-omental nodes",
+   "polygons": 672,
+   "path": []
+  },
+  {
+   "name": "Right lobe of thymus",
+   "polygons": 6452,
+   "path": []
+  },
+  {
+   "name": "Sigmoid nodes",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Spleen",
+   "polygons": 1330,
+   "path": []
+  },
+  {
+   "name": "Splenic nodes",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Subaortic nodes",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Submandibular nodes.l",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Submandibular nodes.r",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Submental nodes.l",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Submental nodes.r",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Superficial anterior cervical nodes",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Superficial lateral cervical nodes.l",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Superficial lateral cervical nodes.r",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Superficial parotid nodes.l",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Superficial parotid nodes.r",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Superficial popliteal nodes.l",
+   "polygons": 192,
+   "path": []
+  },
+  {
+   "name": "Superficial popliteal nodes.r",
+   "polygons": 192,
+   "path": []
+  },
+  {
+   "name": "Superior diaphragmatic nodes",
+   "polygons": 576,
+   "path": []
+  },
+  {
+   "name": "Superior gluteal nodes.l",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Superior gluteal nodes.r",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Superior pancreatic nodes",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Superior pancreaticoduodenal nodes",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Superior tracheobronchial nodes",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Superolateral superficial inguinal nodes.l",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Superolateral superficial inguinal nodes.r",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Superomedial superficial inguinal nodes.l",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Superomedial superficial inguinal nodes.r",
+   "polygons": 288,
+   "path": []
+  },
+  {
+   "name": "Supraclavicular nodes.l",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Supraclavicular nodes.r",
+   "polygons": 384,
+   "path": []
+  },
+  {
+   "name": "Supratrochlear nodes.l",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Supratrochlear nodes.r",
+   "polygons": 480,
+   "path": []
+  },
+  {
+   "name": "Thyroid nodes.l",
+   "polygons": 192,
+   "path": []
+  },
+  {
+   "name": "Thyroid nodes.r",
+   "polygons": 192,
+   "path": []
+  }
+ ]
+}

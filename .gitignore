@@ -1,0 +1,54 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+dist-ssr/
+build/
+*.local
+
+# Rust / Tauri
+src-tauri/target/
+src-tauri/gen/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+engine/build/
+engine/dist/
+engine/*.spec
+.pytest_cache/
+.ruff_cache/
+
+# Secrets — API keys live in the OS keyring, never on disk
+.env
+.env.*
+!.env.example
+
+# Business strategy and other non-public notes (PYSBG repo hygiene)
+*.local.md
+
+# Editors / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# Test artifacts
+coverage/
+playwright-report/
+test-results/
+
+# Upstream anatomy source — fetched, never vendored.
+#
+# Startup.blend alone is ~293 MB, past GitHub's hard 100 MB per-file limit, and
+# the push would be rejected outright. Both are downloads anyone can repeat from
+# the Z-Anatomy project, and the README's asset-pipeline section says exactly
+# where to put them. What this repository ships is the *output*: the .glb files
+# in public/anatomy/ and the reports the manifest is built from.
+tools/asset-pipeline/vendor/Z-Anatomy/
+tools/asset-pipeline/vendor/Z-Anatomy.zip

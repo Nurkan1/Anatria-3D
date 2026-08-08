@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Anatria3D</title>
+    <!--
+      Inline, and before anything else loads. The white flash at startup is the
+      webview painting the document's default background in the window between
+      the window opening and the CSS bundle arriving — so the cure has to be in
+      the first bytes of the document, not in a stylesheet it has to fetch.
+      Matches the viewport's own clear colour, so there is no seam either.
+    -->
+    <style>
+      html,
+      body {
+        margin: 0;
+        background: #0b1220;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

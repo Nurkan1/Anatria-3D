@@ -1,0 +1,55 @@
+[package]
+name = "anatria3d"
+version = "0.1.0"
+description = "Interactive anatomy and AI insights"
+authors = ["PYSBG"]
+edition = "2021"
+rust-version = "1.82"
+license = "Apache-2.0"
+
+[lib]
+name = "anatria3d_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+# No `protocol-asset`: the anatomy meshes live in `public/` and ship inside the
+# web bundle, so the viewer fetches them as ordinary same-origin URLs. They are
+# ~300 KB — small enough that giving the webview filesystem read access to load
+# them would be a poor trade.
+tauri = { version = "2", features = [] }
+# Deliberately no `tauri-plugin-shell`: the engine is spawned with
+# `std::process::Command` from Rust (see src/sidecar.rs), so the webview is
+# granted no ability to execute anything at all.
+tauri-plugin-store = "2"
+tauri-plugin-dialog = "2"
+tauri-plugin-opener = "2"
+
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+
+# Default features give the platform-native credential store on every target
+# we ship: Keychain on macOS, Credential Manager on Windows, Secret Service on
+# Linux. No secrets are written to application storage or to disk by us.
+keyring = "4"
+
+# The study journal (notes, saved sessions, case drills). `bundled` compiles
+# SQLite into the binary, so there is no system library to find on a student's
+# machine and no version skew between the three platforms we ship.
+#
+# It lives in Rust rather than in the Python sidecar on purpose. The sidecar is
+# the process that holds API keys and talks to the network, and it is the one we
+# kill and restart on a crash — the user's own notes should share neither
+# property.
+rusqlite = { version = "0.40.1", features = ["bundled"] }
+
+# Exported view images cross the IPC boundary as base64. A multi-megabyte PNG
+# sent as a JSON array of bytes is not a payload, it is a stall.
+base64 = "0.23.1"
+
+[features]
+# Enabled by `tauri build --features custom-protocol`.
+custom-protocol = ["tauri/custom-protocol"]
