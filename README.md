@@ -13,19 +13,60 @@ actually loaded.
 
 ---
 
+![The atlas with the body surface ghosted, showing the brain and the cerebral
+vessels, while the assistant explains why a smell recalls a memory. Numbered
+pins in the answer link each named structure to the model.](docs/screenshots/atlas-and-tutor.png)
+
+**Ask, and the model answers with you.** The assistant moves the camera, ghosts
+the layers in the way and marks what it is naming, so the explanation and the
+thing being explained are on screen together. Every structure it names carries a
+numbered pin: hover to highlight it, click to fly there.
+
+![The heart isolated with sixty-two vessels folded in, every structure labelled
+in Terminologia Anatomica Latin with leader lines into the
+margins.](docs/screenshots/heart-with-its-vessels.png)
+
+**An organ is studied with its supply, or it is not studied.** The atlas files
+structures by system, so isolating the heart leaves the coronary arteries behind
+under *Systemic arteries*. One button folds in every vessel that reaches what
+you are studying — here, sixty-two of them — and the labelled view turns it into
+a plate you can print.
+
+![The revision coverage map: the body coloured by the reader's own notes and
+sessions, with a legend reading not yet, been here,
+most.](docs/screenshots/revision-coverage.png)
+
+**And it knows what you have already studied.** Notes and sessions are filed
+locally against the structures they were about, so the atlas can be coloured by
+your own revision. Forty notes on the thorax and nothing on the pelvis is
+invisible in a list, and impossible to miss as a shape on a body.
+
+---
+
 ## Status
 
 | Phase | Scope | State |
 |---|---|---|
 | 1 | Tauri shell, IPC chain, OS-keyring credentials, Python sidecar | **Done** |
 | 2 | 3D engine, Z-Anatomy asset pipeline, scene store | **Done** |
-| 3 | Pydantic AI agent, scene-control tools, compliance guardrails | **Done** (report is Markdown-only) |
-| 4 | Chat panel, model discovery, text↔model references, resizable shell | **Done** — i18n chrome and packaging still open |
+| 3 | Pydantic AI agent, scene-control tools, compliance guardrails | **Done** |
+| 4 | Chat panel, model discovery, text↔model references, resizable shell | **Done** |
+| 5 | Study journal, printing, exploded view, depth probe, revision map | **Done** |
 
-All three panels are production components. What remains is the localised UI
-chrome (i18next for buttons and headings — organ names are the assistant's job,
-not a translation table), the first-run disclaimer modal, and installer
-packaging.
+Every panel is a production component and the quality gates are green across
+TypeScript, Rust and Python.
+
+**The interface is English only, by decision rather than omission.** Translating
+the chrome would leave the anatomy untranslated beside it, which is the harder
+half and the one that must not be a frozen lookup table — rendering a structure
+for a layperson, a student and a clinician needs three different explanations per
+language. That is the assistant's job, done per turn with the reader's profile in
+hand, and it already answers in the reader's own language even when the
+interface does not offer it.
+
+Open: a female atlas, which needs a female source model rather than extra
+organs — see
+[The atlas is male, and that is a source limitation](#the-atlas-is-male-and-that-is-a-source-limitation).
 
 ---
 
@@ -68,9 +109,14 @@ from deep inside pydantic-ai's imports, and symbols re-exported through a module
 ## Checks
 
 ```bash
-pnpm typecheck                      # TypeScript
-pnpm test                           # includes the IPC contract test
-cd src-tauri && cargo check         # Rust
+pnpm typecheck                                    # TypeScript
+pnpm test                                         # includes the IPC contract test
+
+cd engine && .venv/Scripts/python -m pytest -q    # POSIX: .venv/bin/python
+cd engine && .venv/Scripts/python -m ruff check .
+
+cd src-tauri && cargo test
+cd src-tauri && cargo clippy --all-targets -- -D warnings
 ```
 
 `tests/protocol-contract.test.ts` spawns the project virtualenv to compare the
