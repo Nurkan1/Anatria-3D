@@ -13,11 +13,13 @@ dependencies = [
     "pydantic-ai-slim[anthropic,google,openai]>=2.25.0",
 ]
 
-# NOTE: the Markdown -> PDF renderer is deliberately absent. The obvious
-# candidates each carry a constraint worth an explicit decision rather than a
-# default: PyMuPDF (markdown-pdf's backend) is AGPL unless commercially
-# licensed, and WeasyPrint needs a GTK runtime on Windows that we would have to
-# ship. Phase 3 picks one; until then the engine emits Markdown only.
+# NOTE: there is no PDF renderer here, and there will not be one. Printing is
+# done by the webview — see `src/features/study/PrintSheet.tsx`. Every Python
+# candidate carried a constraint worth refusing: PyMuPDF is AGPL unless
+# licensed, WeasyPrint needs a GTK runtime shipped on Windows, and ReportLab
+# would need a bundled font per script the assistant can answer in, with no
+# answer at all for right-to-left. The browser engine already has the system's
+# fonts and the layout engine, and costs nothing in the installer.
 
 [project.optional-dependencies]
 dev = [

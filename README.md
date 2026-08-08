@@ -1,5 +1,9 @@
 # Anatria3D
 
+[![Gates](https://github.com/Nurkan1/Anatria-3D/actions/workflows/gates.yml/badge.svg)](https://github.com/Nurkan1/Anatria-3D/actions/workflows/gates.yml)
+[![License](https://img.shields.io/badge/code-Apache--2.0-blue)](LICENSE)
+[![Atlas](https://img.shields.io/badge/atlas-CC%20BY--SA%204.0-blue)](public/anatomy/NOTICE)
+
 Interactive anatomy and AI insights — a local-first desktop application.
 
 An educational anatomy atlas whose AI assistant can drive the 3D viewport
@@ -68,7 +72,10 @@ There is **no auto-updater**, on purpose: the application never reaches the
 network by itself. New versions appear on the releases page, and nowhere else —
 Anatria3D is not distributed by email or on request.
 
-Releases are cut following [RELEASING.md](RELEASING.md).
+Every installer is built by
+[GitHub Actions](https://github.com/Nurkan1/Anatria-3D/actions/workflows/release.yml)
+from the tag it is named after, so the path from this source to that file is
+public and checkable. Releases are cut following [RELEASING.md](RELEASING.md).
 
 ---
 

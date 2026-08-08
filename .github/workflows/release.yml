@@ -1,0 +1,115 @@
+# Build the installers from a tag, and publish them with their checksums.
+#
+# This workflow is what makes the download trustworthy. Anatria3D is not
+# code-signed, so the only thing a reader can verify is that the file they have
+# is the file this pipeline produced from this public source — which is exactly
+# what a build on a maintainer's laptop cannot demonstrate.
+#
+# It is also the prerequisite for free code signing: the open-source signing
+# programmes sign what a public CI built, never an artefact uploaded by hand.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write # to create the release and attach the installers
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Install JS dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Create the engine virtualenv
+        run: |
+          python -m venv .venv
+          .venv/Scripts/python -m pip install --upgrade pip
+          .venv/Scripts/python -m pip install -e "engine[dev]"
+
+      # The gates again, on the exact commit being released. A tag is the one
+      # moment where "it passed on main yesterday" is not good enough.
+      - name: Gates
+        run: |
+          pnpm typecheck
+          pnpm test
+          .venv/Scripts/python -m pytest engine -q
+          .venv/Scripts/python -m ruff check engine
+          cargo test --manifest-path src-tauri/Cargo.toml
+
+      # First, always. The sidecar is compiled separately and bundled as a Tauri
+      # resource, so anything that changed under engine/ — prompt text included,
+      # which is the easiest to forget because it is "just words" — ships stale
+      # otherwise.
+      - name: Build the Python sidecar
+        run: .venv/Scripts/python engine/build_sidecar.py --clean
+
+      - name: Build the installers
+        run: pnpm tauri build
+
+      # Published beside the files. With an unsigned installer this is the whole
+      # of what a university's IT department can check, and it is what lets them
+      # allowlist the build by hash.
+      - name: Checksums
+        shell: pwsh
+        run: |
+          $out = "checksums.txt"
+          Get-ChildItem -Recurse -Include *.msi, *.exe `
+            -Path src-tauri/target/release/bundle |
+            ForEach-Object {
+              $hash = (Get-FileHash $_.FullName -Algorithm SHA256).Hash
+              "$hash  $($_.Name)" | Tee-Object -FilePath $out -Append
+            }
+
+      - name: Publish
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true # reviewed before anyone can download it
+          files: |
+            src-tauri/target/release/bundle/nsis/*-setup.exe
+            src-tauri/target/release/bundle/msi/*.msi
+            checksums.txt
+          body: |
+            Windows, 64-bit. Installs without administrator rights.
+
+            | File | Take this one if |
+            |---|---|
+            | `*-setup.exe` | You are installing on your own machine. |
+            | `*.msi` | You are deploying across a faculty or a lab. |
+
+            **Windows will warn you the first time**, because Anatria3D is not
+            code-signed. Click **More info**, then **Run anyway**. To verify
+            first, compare against `checksums.txt`:
+            `certutil -hashfile <file> SHA256`.
+
+            Built by GitHub Actions from this tag — the run is public, so the
+            path from source to installer can be checked.
+
+            There is no auto-updater: the application never reaches the network
+            on its own. New versions appear here and nowhere else.

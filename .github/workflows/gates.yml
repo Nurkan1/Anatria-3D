@@ -1,0 +1,85 @@
+# Every quality gate, on a clean machine.
+#
+# The point is not to duplicate what a developer runs locally — it is that a
+# laptop accumulates state. A gate that passes only because something is already
+# installed, cached or half-built is not a gate.
+name: Gates
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# A second push supersedes the first: nobody needs the results of a commit that
+# has already been replaced.
+concurrency:
+  group: gates-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  gates:
+    # Windows, because that is what ships. The Rust dependency tree differs by
+    # platform — GTK on Linux, WebView2 here — so a green Linux build would be
+    # proving something about a binary nobody installs.
+    runs-on: windows-latest
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Install JS dependencies
+        run: pnpm install --frozen-lockfile
+
+      # At the repository root, and that is not arbitrary: the IPC contract test
+      # spawns `.venv` from here to generate the Pydantic side of the protocol
+      # surface. Put it anywhere else and that test cannot run.
+      - name: Create the engine virtualenv
+        run: |
+          python -m venv .venv
+          .venv/Scripts/python -m pip install --upgrade pip
+          .venv/Scripts/python -m pip install -e "engine[dev]"
+
+      - name: TypeScript
+        run: pnpm typecheck
+
+      # Includes the IPC contract test, which is the only thing standing between
+      # the Zod and Pydantic definitions of the wire format drifting apart.
+      - name: TypeScript tests
+        run: pnpm test
+
+      - name: Python tests
+        run: .venv/Scripts/python -m pytest engine -q
+
+      - name: Python lint
+        run: .venv/Scripts/python -m ruff check engine
+
+      - name: Rust tests
+        run: cargo test --manifest-path src-tauri/Cargo.toml
+
+      - name: Rust lint
+        run: cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets -- -D warnings
