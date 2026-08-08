@@ -3,7 +3,7 @@
  "collections": [
   "Bonus collection/Visceral systems/Genital systems'"
  ],
- "output": "C:\\Users\\TrendingPC\\Documents\\Anatria3D\\public\\anatomy\\reproductive_male.glb",
+ "output": "reproductive_male.glb",
  "draco": true,
  "object_count": 14,
  "skipped_count": 5,

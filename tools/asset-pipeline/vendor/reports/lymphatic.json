@@ -4,7 +4,7 @@
   "Bonus collection/Visceral systems/Lymphoid system",
   "6: Lymphoid organs"
  ],
- "output": "C:\\Users\\TrendingPC\\Documents\\Anatria3D\\public\\anatomy\\lymphatic_male.glb",
+ "output": "lymphatic_male.glb",
  "draco": true,
  "object_count": 163,
  "skipped_count": 56,

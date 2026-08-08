@@ -4,7 +4,7 @@
   "Bonus collection/Skeletal system",
   "1: Skeletal system"
  ],
- "output": "C:\\Users\\TrendingPC\\Documents\\Anatria3D\\public\\anatomy\\skeletal_male.glb",
+ "output": "skeletal_male.glb",
  "draco": true,
  "object_count": 335,
  "skipped_count": 977,

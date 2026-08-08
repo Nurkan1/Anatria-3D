@@ -3,7 +3,7 @@
  "collections": [
   "9: Regions of human body"
  ],
- "output": "C:\\Users\\TrendingPC\\Documents\\Anatria3D\\public\\anatomy\\regional_male.glb",
+ "output": "regional_male.glb",
  "draco": true,
  "object_count": 256,
  "skipped_count": 42,

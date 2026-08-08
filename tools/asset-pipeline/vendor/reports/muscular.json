@@ -5,7 +5,7 @@
   "4: Muscular system",
   "2: Muscular insertions"
  ],
- "output": "C:\\Users\\TrendingPC\\Documents\\Anatria3D\\public\\anatomy\\muscular_male.glb",
+ "output": "muscular_male.glb",
  "draco": true,
  "object_count": 1388,
  "skipped_count": 105,

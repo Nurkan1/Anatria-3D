@@ -3,7 +3,7 @@
  "collections": [
   "Bonus collection/Visceral systems/Urinary system"
  ],
- "output": "C:\\Users\\TrendingPC\\Documents\\Anatria3D\\public\\anatomy\\renal_male.glb",
+ "output": "renal_male.glb",
  "draco": true,
  "object_count": 8,
  "skipped_count": 1,

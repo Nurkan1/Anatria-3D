@@ -4,7 +4,7 @@
   "Bonus collection/Arthrology",
   "3: Joints"
  ],
- "output": "C:\\Users\\TrendingPC\\Documents\\Anatria3D\\public\\anatomy\\articular_male.glb",
+ "output": "articular_male.glb",
  "draco": true,
  "object_count": 413,
  "skipped_count": 66,

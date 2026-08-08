@@ -12,6 +12,7 @@ geometry instead of guessing.
 """
 
 import json
+from pathlib import Path
 import sys
 
 import bpy  # type: ignore[import-not-found]  # provided by Blender's runtime
@@ -84,7 +85,7 @@ def main() -> None:
         )
 
     payload = {
-        "blend_file": bpy.data.filepath,
+        "blend_file": Path(bpy.data.filepath).name,
         "collection_count": len(collections),
         "mesh_object_count": len(objects),
         "collections": sorted(collections, key=lambda c: c["path"]),

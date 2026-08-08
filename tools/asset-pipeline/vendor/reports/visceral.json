@@ -3,7 +3,7 @@
  "collections": [
   "8: Visceral systems"
  ],
- "output": "C:\\Users\\TrendingPC\\Documents\\Anatria3D\\public\\anatomy\\visceral_male.glb",
+ "output": "visceral_male.glb",
  "draco": true,
  "object_count": 120,
  "skipped_count": 177,

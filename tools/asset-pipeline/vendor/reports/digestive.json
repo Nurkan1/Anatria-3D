@@ -3,7 +3,7 @@
  "collections": [
   "Bonus collection/Visceral systems/Digestive system"
  ],
- "output": "C:\\Users\\TrendingPC\\Documents\\Anatria3D\\public\\anatomy\\digestive_male.glb",
+ "output": "digestive_male.glb",
  "draco": true,
  "object_count": 75,
  "skipped_count": 13,

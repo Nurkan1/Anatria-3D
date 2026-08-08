@@ -26,6 +26,7 @@ Design notes:
 
 import json
 import sys
+from pathlib import Path
 
 import bpy  # type: ignore[import-not-found]  # provided by Blender's runtime
 
@@ -296,7 +297,11 @@ def main() -> None:
     report = {
         "system": args["system"],
         "collections": args["collections"],
-        "output": args["out"],
+        # The file name, never the path it was written to. These reports are
+        # committed — `build-manifest.mjs` reads them — and an absolute path
+        # would publish the operator's account name and directory layout with
+        # every regeneration. The manifest build only ever takes the basename.
+        "output": Path(args["out"]).name,
         "draco": args["draco"],
         "object_count": len(exported),
         "skipped_count": len(skipped),
