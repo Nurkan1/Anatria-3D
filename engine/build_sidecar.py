@@ -56,11 +56,45 @@ COPY_METADATA = [
 ]
 
 
+def _venv_python() -> Path | None:
+    """The repository's own interpreter, if it has been created.
+
+    `.venv` at the repository root — not inside `engine/` — because
+    `tests/protocol-contract.test.ts` spawns it from there to generate the
+    Pydantic half of the wire format. One virtualenv, one location, both jobs.
+    """
+    root = ENGINE_DIR.parent
+    for candidate in (
+        root / ".venv" / "Scripts" / "python.exe",  # Windows
+        root / ".venv" / "bin" / "python",  # POSIX
+    ):
+        if candidate.is_file():
+            return candidate
+    return None
+
+
 def build(clean: bool) -> int:
-    if shutil.which("pyinstaller") is None and not _module_available("PyInstaller"):
+    # PyInstaller lives in the virtualenv, and `pnpm sidecar:build` runs
+    # whichever `python` is first on PATH — which on a machine that has not
+    # activated the venv is a system interpreter that has never heard of it.
+    # Re-exec under the repository's own interpreter rather than failing with
+    # advice, because the advice is "use the interpreter you already created"
+    # and we know where it is.
+    #
+    # Only the *module* is tested, never `shutil.which("pyinstaller")`: the
+    # build below runs `sys.executable -m PyInstaller`, so a console script
+    # sitting on PATH from some other environment proves nothing about whether
+    # this interpreter can import it.
+    if not _module_available("PyInstaller"):
+        venv = _venv_python()
+        if venv is not None and venv.resolve() != Path(sys.executable).resolve():
+            print(f"PyInstaller is not in {sys.executable}; retrying with {venv}")
+            return subprocess.run([str(venv), __file__, *sys.argv[1:]], check=False).returncode
         print(
             "PyInstaller is not installed.\n"
-            "  pip install -e 'engine[dev]'   (or)   pip install pyinstaller",
+            "  python -m venv .venv                 (from the repository root)\n"
+            "  .venv/Scripts/python -m pip install -e 'engine[dev]'   # Windows\n"
+            "  .venv/bin/python -m pip install -e 'engine[dev]'       # Linux, macOS",
             file=sys.stderr,
         )
         return 1
