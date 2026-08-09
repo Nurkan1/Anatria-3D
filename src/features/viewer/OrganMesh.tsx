@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 import { GHOST_CLICK_THROUGH, type PathologyOverlay } from "@/stores/sceneStore";
@@ -155,6 +155,35 @@ export const OrganMesh = memo(function OrganMesh({
   const clickThrough = opacity < GHOST_CLICK_THROUGH;
   const ghosted = opacity < 1;
   const depthBias = tissueDepthBias(organ);
+
+  /**
+   * Recompile the shader when a structure crosses between solid and see-through.
+   *
+   * **Without this, ghosting a structure that was already on screen does
+   * nothing at all.** three.js bakes the decision into the program: a material
+   * compiled while `transparent` is false gets `#define OPAQUE`, and that define
+   * is `diffuseColor.a = 1.0` inside the fragment shader — the alpha is
+   * discarded before blending ever sees it. Setting `transparent` and `opacity`
+   * afterwards changes two properties the compiled program no longer reads.
+   *
+   * Only `needsUpdate` bumps the material's version, which is what makes the
+   * renderer recompute its parameters. React Three Fiber assigns props straight
+   * onto the material and never sets it, so nothing else will.
+   *
+   * The symptom is confusing rather than obviously broken: structures that were
+   * *already* translucent — a cornea, a system the reader had ghosted earlier —
+   * compiled without the define and respond immediately, so the view goes half
+   * glass and half solid. Restarting the app appears to "fix" it, because the
+   * meshes are then built see-through from the start.
+   *
+   * Cheap despite running across the whole atlas: three caches programs by
+   * their parameters, so thousands of materials crossing together share one
+   * compile and the rest are cache hits.
+   */
+  const material = useRef<THREE.MeshStandardMaterial>(null);
+  useEffect(() => {
+    if (material.current) material.current.needsUpdate = true;
+  }, [ghosted]);
   const { color, emissive, emissiveIntensity } = useMemo(() => {
     // The revision map replaces the tissue colour outright rather than tinting
     // it. Mixing the two would make "muscle I have studied" and "bone I have
@@ -301,6 +330,7 @@ export const OrganMesh = memo(function OrganMesh({
       }}
     >
       <meshStandardMaterial
+        ref={material}
         color={color}
         emissive={emissive}
         emissiveIntensity={emissiveIntensity}
