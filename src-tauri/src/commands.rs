@@ -250,12 +250,31 @@ pub fn study_coverage(db: State<'_, StudyDb>) -> CommandResult<Vec<StudyCoverage
 // renderer, which is precisely what this app has spent its whole design
 // avoiding. The dialog is opened here; the frontend never learns a path and
 // cannot name one.
+//
+// **Every command in this section is `async`, and that is not decoration.**
+// Tauri runs a non-async command on the main thread. `blocking_save_file` and
+// `blocking_pick_file` queue the dialog *onto* the main thread and then block
+// the calling thread until it answers — so calling one from the main thread
+// leaves it waiting for a message only it could deliver, and the window freezes
+// with no dialog and no error. `async` moves the command onto the async
+// runtime, which is what the plugin's own documentation prescribes:
+//
+//   > This is a blocking operation, and should *NOT* be used when running on
+//   > the main thread.
+//
+// Windows tolerated the mistake and Linux did not, which is the worst shape a
+// bug can have: it shipped looking tested. Do not drop the `async` back to `fn`
+// because the body contains no `.await` — the keyword is load-bearing here for
+// where the body runs, not for what it awaits.
 // ---------------------------------------------------------------------------
 
 const JOURNAL_EXTENSION: &str = "anatria-journal.json";
 
 #[tauri::command]
-pub fn export_journal(app: tauri::AppHandle, db: State<'_, StudyDb>) -> CommandResult<Option<String>> {
+pub async fn export_journal(
+    app: tauri::AppHandle,
+    db: State<'_, StudyDb>,
+) -> CommandResult<Option<String>> {
     use tauri_plugin_dialog::DialogExt;
 
     let journal = db.export()?;
@@ -287,7 +306,7 @@ pub fn export_journal(app: tauri::AppHandle, db: State<'_, StudyDb>) -> CommandR
 /// the renderer. The extension is forced rather than trusted — this writes PNG
 /// bytes, so the file has to be named like one however the dialog came back.
 #[tauri::command]
-pub fn save_view_image(
+pub async fn save_view_image(
     app: tauri::AppHandle,
     png_base64: String,
 ) -> CommandResult<Option<String>> {
@@ -319,7 +338,7 @@ pub fn save_view_image(
 }
 
 #[tauri::command]
-pub fn import_journal(
+pub async fn import_journal(
     app: tauri::AppHandle,
     db: State<'_, StudyDb>,
 ) -> CommandResult<Option<ImportSummary>> {
