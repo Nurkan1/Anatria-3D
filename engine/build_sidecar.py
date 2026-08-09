@@ -16,6 +16,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import importlib.metadata
 import shutil
 import subprocess
 import sys
@@ -73,25 +74,47 @@ def _venv_python() -> Path | None:
     return None
 
 
+def missing_requirements() -> list[str]:
+    """What this interpreter still lacks for the freeze below to succeed.
+
+    **Asks for everything the build consumes, not for a proxy.** "PyInstaller
+    imports" does not mean "the engine's dependencies are here": Debian and Kali
+    ship `python3-pyinstaller` as a system package, so a system interpreter
+    passes a PyInstaller-only probe, is judged ready, and then dies part-way
+    through the freeze with `PackageNotFoundError: pydantic-ai-slim`. The first
+    version of this check made exactly that assumption.
+
+    So the probe is derived from `COPY_METADATA` rather than written out
+    separately — a distribution added there is a distribution checked here, and
+    the two cannot drift apart.
+
+    Never `shutil.which("pyinstaller")`: the build runs
+    `sys.executable -m PyInstaller`, so a console script on PATH from some other
+    environment says nothing about *this* interpreter.
+    """
+    missing = [] if _module_available("PyInstaller") else ["PyInstaller"]
+    for distribution in COPY_METADATA:
+        try:
+            importlib.metadata.distribution(distribution)
+        except importlib.metadata.PackageNotFoundError:
+            missing.append(distribution)
+    return missing
+
+
 def build(clean: bool) -> int:
-    # PyInstaller lives in the virtualenv, and `pnpm sidecar:build` runs
-    # whichever `python` is first on PATH — which on a machine that has not
-    # activated the venv is a system interpreter that has never heard of it.
-    # Re-exec under the repository's own interpreter rather than failing with
-    # advice, because the advice is "use the interpreter you already created"
-    # and we know where it is.
-    #
-    # Only the *module* is tested, never `shutil.which("pyinstaller")`: the
-    # build below runs `sys.executable -m PyInstaller`, so a console script
-    # sitting on PATH from some other environment proves nothing about whether
-    # this interpreter can import it.
-    if not _module_available("PyInstaller"):
+    # `pnpm sidecar:build` runs whichever `python` is first on PATH, which on a
+    # machine that has not activated the venv is an interpreter that has never
+    # heard of this project. Re-exec under the repository's own interpreter
+    # rather than failing with advice, because the advice is "use the
+    # interpreter you already created" and we know where it is.
+    missing = missing_requirements()
+    if missing:
         venv = _venv_python()
         if venv is not None and venv.resolve() != Path(sys.executable).resolve():
-            print(f"PyInstaller is not in {sys.executable}; retrying with {venv}")
+            print(f"{sys.executable} is missing {', '.join(missing)}; retrying with {venv}")
             return subprocess.run([str(venv), __file__, *sys.argv[1:]], check=False).returncode
         print(
-            "PyInstaller is not installed.\n"
+            f"This environment is missing: {', '.join(missing)}\n"
             "  python -m venv .venv                 (from the repository root)\n"
             "  .venv/Scripts/python -m pip install -e 'engine[dev]'   # Windows\n"
             "  .venv/bin/python -m pip install -e 'engine[dev]'       # Linux, macOS",
