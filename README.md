@@ -437,6 +437,61 @@ scene tools depend on. A mesh dump without that labelling would give none of it.
 This is stated in the first screen of the in-app guide too. Someone teaching from
 it should read it from us, not discover it in front of a class.
 
+#### It is not fixable from upstream, and here is the check
+
+The obvious hope is that the geometry exists further up the chain — Z-Anatomy
+derives from BodyParts3D, which is indexed by FMA identifiers, so a script could
+map them across. That hope does not survive contact with the data.
+
+BodyParts3D publishes the index of every organ it holds a mesh for. Both trees
+together are **4,273 entries**, and they contain **no female reproductive
+structure at all** — no uterus, ovary, vagina, vulva, clitoris, uterine tube,
+endometrium, cervix or broad ligament. The male ones are there with their mesh
+ids, which is what proves the search rather than the spelling:
+
+```
+FMA7210   BP8579   testis
+FMA9600   BP8469   prostate
+FMA18247  BP8793   glans penis
+FMA18255  BP8142   epididymis
+FMA19386  BP8531   seminal vesicle
+```
+
+Checkable in a browser:
+[`isa_parts_list_e.txt`](https://dbarchive.biosciencedbc.jp/data/bodyparts3d/LATEST/isa_parts_list_e.txt)
+and
+[`partof_parts_list_e.txt`](https://dbarchive.biosciencedbc.jp/data/bodyparts3d/LATEST/partof_parts_list_e.txt).
+
+**The trap is that FMA is an ontology, not a mesh library.** It carries a
+concept id for the uterus whether or not anybody ever modelled one, so a
+documentation search finds the identifiers and reports success. Z-Anatomy fell
+into the same gap from the other side: its blend declares twelve female
+collections — `Uterus'`, `Ovary'`, `Vagina'`, `Vulva'`, `Clitoris'`,
+`Uterine tube'`, `Broad ligament of uterus`, `Uterovaginal plexus`,
+`Uterine artery'`, `Ovarian artery'`, `Vaginal artery'` — and every one of them
+holds zero objects. They built the taxonomy from the concepts and had nothing to
+put in it.
+
+So the limitation is not a gap in this pipeline. **BodyParts3D was built from a
+male body**, and everything downstream of it inherits that.
+
+#### What would actually unblock it
+
+A different source, and the obstacle there is licensing rather than geometry.
+Open female pelvic models do exist, but the ones that are freely available are
+largely **CC BY-NC-SA** — the non-commercial clause is incompatible with both
+the Apache-2.0 code and the CC BY-SA atlas, and it would withdraw the right this
+project exists to grant. A dataset derived from the Visible Human Female is the
+most promising direction; it is a segmentation project rather than a mesh
+download, and its terms would have to be established first.
+
+Two things are worth saying plainly to anyone picking this up. **A female
+reproductive module is not a female model** — dropping a uterus into a male
+pelvis produces wrong relations, and spatial relations are what this application
+is for. And when a compatible source does appear, the work is already waiting
+for it: the manifest carries `gender_model`, the protocol accepts `"female"`,
+and the mesh files are already named `*_male.glb`.
+
 ### What else is missing, and what is complete
 
 Audited against the source blend, not from memory. Everything below is absent
