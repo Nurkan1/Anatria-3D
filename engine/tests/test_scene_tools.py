@@ -205,27 +205,39 @@ async def test_rejection_names_close_matches() -> None:
     assert "left_ventricle" in retry_text
 
 
+#: How many times the ordering test replays its walkthrough.
+#:
+#: One run is not a test of this property. The three calls arrive in a single
+#: model response, so pydantic-ai dispatches them concurrently and the sync
+#: tools land in a thread pool; a single pass agrees with the intended order by
+#: luck often enough to look green while the behaviour is broken. Measured with
+#: `sequential=True` removed, the intended order came up 21% of the time — which
+#: this many replays turns into a certainty rather than a coin toss.
+ORDER_REPLAYS = 25
+
+
 async def test_sequential_focus_preserves_order() -> None:
-    """A walkthrough is a sequence of focuses, and the order is the teaching."""
-    scene = make_scene()
-    agent = build(
-        scene,
-        scripted(
-            [
-                ToolCallPart("focus_organ", {"organ_id": "right_atrium"}),
-                ToolCallPart("focus_organ", {"organ_id": "left_atrium"}),
-                ToolCallPart("focus_organ", {"organ_id": "left_ventricle"}),
-            ]
-        ),
-    )
+    """A walkthrough is a sequence of focuses, and the order is the teaching.
 
-    await agent.run("How does blood move through the heart?", deps=scene)
+    Guards `sequential=True` on the scene tools. Without it the camera visits
+    the chambers in a shuffled order — every command individually valid, the
+    lesson silently wrong.
+    """
+    walkthrough = ["right_atrium", "left_atrium", "left_ventricle"]
+    expected = [FocusOrgan(organ_id=organ_id) for organ_id in walkthrough]
 
-    assert scene.emitted == [
-        FocusOrgan(organ_id="right_atrium"),
-        FocusOrgan(organ_id="left_atrium"),
-        FocusOrgan(organ_id="left_ventricle"),
-    ]
+    for replay in range(ORDER_REPLAYS):
+        scene = make_scene()
+        agent = build(
+            scene,
+            scripted(
+                [ToolCallPart("focus_organ", {"organ_id": organ_id}) for organ_id in walkthrough]
+            ),
+        )
+
+        await agent.run("How does blood move through the heart?", deps=scene)
+
+        assert scene.emitted == expected, f"order broke on replay {replay}"
 
 
 async def test_isolation_validates_every_id() -> None:
