@@ -78,10 +78,14 @@ jobs:
       # Published beside the files. With an unsigned installer this is the whole
       # of what a university's IT department can check, and it is what lets them
       # allowlist the build by hash.
+      # Per-platform filename, and that is not tidiness. Both jobs attach to the
+      # same release, and two assets called `checksums.txt` do not merge — the
+      # second upload replaces the first, silently taking the other platform's
+      # hashes with it.
       - name: Checksums
         shell: pwsh
         run: |
-          $out = "checksums.txt"
+          $out = "checksums-windows.txt"
           Get-ChildItem -Recurse -Include *.msi, *.exe `
             -Path src-tauri/target/release/bundle |
             ForEach-Object {
@@ -89,6 +93,9 @@ jobs:
               "$hash  $($_.Name)" | Tee-Object -FilePath $out -Append
             }
 
+      # Only this job writes `body`. The Linux job omits it, which leaves
+      # whatever is already there alone — otherwise whichever finished last
+      # would overwrite the other's notes, and which one that is varies per run.
       - name: Publish
         uses: softprops/action-gh-release@v2
         with:
@@ -96,7 +103,7 @@ jobs:
           files: |
             src-tauri/target/release/bundle/nsis/*-setup.exe
             src-tauri/target/release/bundle/msi/*.msi
-            checksums.txt
+            checksums-windows.txt
           body: |
             Windows, 64-bit. Installs without administrator rights.
 
@@ -107,11 +114,115 @@ jobs:
 
             **Windows will warn you the first time**, because Anatria3D is not
             code-signed. Click **More info**, then **Run anyway**. To verify
-            first, compare against `checksums.txt`:
+            first, compare against `checksums-windows.txt`:
             `certutil -hashfile <file> SHA256`.
+
+            Linux builds are attached too — a `.deb` and an `.AppImage`, with
+            their own checksum file.
 
             Built by GitHub Actions from this tag — the run is public, so the
             path from source to installer can be checked.
 
             There is no auto-updater: the application never reaches the network
             on its own. New versions appear here and nowhere else.
+
+  linux:
+    # **22.04 on purpose, not `ubuntu-latest`.** A binary linked against an
+    # older glibc runs on newer distributions; the reverse does not hold. Built
+    # on 24.04 these packages would refuse to start on Ubuntu 22.04 LTS, which
+    # is what a great many university machines are still running — and the
+    # failure would land on the student as "it does not open", with nothing to
+    # tell them why.
+    #
+    # When this runner image is retired, moving to the next LTS is the change,
+    # and it drops support for everything older on that day. Not a silent bump.
+    runs-on: ubuntu-22.04
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Tauri v2's Linux prerequisites. `patchelf` and `librsvg2-dev` are the
+      # two the AppImage bundler needs and the deb does not, so a missing one
+      # fails only the second artefact.
+      - name: Install the system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev \
+            libxdo-dev \
+            libssl-dev \
+            patchelf \
+            build-essential \
+            curl wget file
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Install JS dependencies
+        run: pnpm install --frozen-lockfile
+
+      # At the repository root, and `bin` rather than `Scripts`. The contract
+      # test spawns it from here too.
+      - name: Create the engine virtualenv
+        run: |
+          python -m venv .venv
+          .venv/bin/python -m pip install --upgrade pip
+          .venv/bin/python -m pip install -e "engine[dev]"
+
+      # Before any Rust step, for the same reason as on Windows: Tauri's build
+      # script validates the resources declared in tauri.conf.json, and the
+      # sidecar is one of them.
+      - name: Build the Python sidecar
+        run: .venv/bin/python engine/build_sidecar.py --clean
+
+      - name: Gates
+        run: |
+          pnpm typecheck
+          pnpm test
+          .venv/bin/python -m pytest engine -q
+          .venv/bin/python -m ruff check engine
+          cargo test --manifest-path src-tauri/Cargo.toml
+
+      - name: Build the packages
+        run: pnpm tauri build
+
+      # `hash  basename`, matching the Windows file. Written out longhand
+      # because `sha256sum` prints the path it was given: stripping that with a
+      # greedy substitution takes the hash with it.
+      - name: Checksums
+        run: |
+          find src-tauri/target/release/bundle \
+            \( -name '*.deb' -o -name '*.AppImage' \) -type f |
+            while read -r file; do
+              printf '%s  %s\n' "$(sha256sum "$file" | cut -d' ' -f1)" "$(basename "$file")"
+            done > checksums-linux.txt
+          cat checksums-linux.txt
+
+      # No `body` here — see the note on the Windows job.
+      - name: Publish
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          files: |
+            src-tauri/target/release/bundle/deb/*.deb
+            src-tauri/target/release/bundle/appimage/*.AppImage
+            checksums-linux.txt

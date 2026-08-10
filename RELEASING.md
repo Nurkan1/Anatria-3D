@@ -70,6 +70,29 @@ Publish both.
 platform. A Windows machine produces MSI and NSIS and nothing else — do not
 promise Linux or macOS builds from this box.
 
+**The pipeline does build Linux**, on a second runner, and attaches a `.deb`
+and an `.AppImage` to the same release. Two things about that job are load
+bearing:
+
+- **It runs on `ubuntu-22.04`, deliberately, not `ubuntu-latest`.** A binary
+  linked against an older glibc runs on newer distributions and not the other
+  way round, so building on the newest image would produce packages that refuse
+  to start on Ubuntu 22.04 LTS — still the desktop in a great many faculties.
+  Moving to the next LTS is a decision that drops those machines on the day it
+  happens, not a version bump to make quietly.
+- **Each platform writes its own checksum file.** Two assets named
+  `checksums.txt` do not merge: the second upload replaces the first and takes
+  the other platform's hashes with it. Hence `checksums-windows.txt` and
+  `checksums-linux.txt`.
+
+Only the Windows job writes the release `body`. If both did, whichever finished
+last would overwrite the other's notes, and which one that is varies per run.
+
+A locally built `.deb` is for testing on your own machine and nothing else.
+Publishing one would put an artefact from a maintainer's laptop beside artefacts
+a reader can trace to a public build — and on a rolling distribution such as
+Kali it would link against a glibc almost nobody has.
+
 ## Checksums
 
 Publish them. They are the only way anyone can prove the file they downloaded is
@@ -80,7 +103,10 @@ certutil -hashfile Anatria3D_<version>_x64-setup.exe SHA256
 certutil -hashfile Anatria3D_<version>_x64_en-US.msi SHA256
 ```
 
-Paste both into the release notes verbatim, beside the file they belong to.
+The pipeline computes these itself and attaches them as
+`checksums-windows.txt` and `checksums-linux.txt`. Paste the Windows pair into
+the release notes verbatim, beside the file they belong to — a reader checking a
+download should not have to open a second file first.
 
 ## Tag and publish
 
