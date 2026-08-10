@@ -477,13 +477,42 @@ male body**, and everything downstream of it inherits that.
 
 #### What would actually unblock it
 
-A different source, and the obstacle there is licensing rather than geometry.
-Open female pelvic models do exist, but the ones that are freely available are
-largely **CC BY-NC-SA** — the non-commercial clause is incompatible with both
-the Apache-2.0 code and the CC BY-SA atlas, and it would withdraw the right this
-project exists to grant. A dataset derived from the Visible Human Female is the
-most promising direction; it is a segmentation project rather than a mesh
-download, and its terms would have to be established first.
+A different source, and the obstacle is licensing rather than geometry.
+
+This has now been searched rather than assumed. The test was deliberately
+narrow, because it is the conjunction that matters and every near-miss passes
+one half of it: **a model must carry uterus, ovaries, uterine tubes and cervix
+as separate named meshes, *and* be available under CC0, CC BY or CC BY-SA** —
+no non-commercial clause, no agreement to sign, no fee.
+
+**Nothing found meets both.** The two that come closest:
+
+| Candidate | Has the organs | Licence | Verdict |
+|---|---|---|---|
+| [**Ella**, IT'IS Virtual Population](https://itis.swiss/virtual-population/) | Yes — uterus, ovaries, uterine tubes and cervix, fully segmented | Signed agreement, non-commercial, paid commercial tiers | Fails on licence |
+| [**Maastricht pelvis**, AnatomyTOOL](https://anatomytool.org/) | Yes, but pelvis only | CC BY-NC-SA 4.0 | Fails on licence *and* scope |
+
+Both fail on the same clause, and that is not bad luck. A detailed female model
+is expensive to produce, so the people who produce them monetise them. The
+consequence is worth stating: **this will not resolve by waiting.**
+
+One misreading to head off, because it is the common one. *"Anatria3D is given
+away, so a non-commercial source is fine"* — it is not. **NC does not restrict
+what you charge; it restricts what you may grant onward.** This atlas is
+published under CC BY-SA 4.0, which permits commercial use, and that permission
+cannot be granted over material that withholds it. The conflict is between the
+two licences, not between the licence and a price.
+
+Worth recording from the same search: IT'IS require the face and the genitals to
+be pixelated in published images of Ella. People who work with models derived
+from real individuals treat re-identification as binding, and anyone reaching
+for medical imaging as a shortcut — segmenting a CT and shipping the result —
+inherits that obligation along with the geometry.
+
+With the dataset route closed, one path remains: **commissioning the work.** An
+anatomist and a 3D artist, built from published atlases, licensed CC BY-SA from
+the first commit. It is slow and it costs money, and it is the only door not
+shut by a licence.
 
 Two things are worth saying plainly to anyone picking this up. **A female
 reproductive module is not a female model** — dropping a uterus into a male
