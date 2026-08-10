@@ -248,9 +248,23 @@ def register_scene_tools(agent: Agent[SceneContext, str]) -> None:
 
     @agent.tool(sequential=True)
     def show_all_structures(ctx: RunContext[SceneContext]) -> str:
-        """Clear any isolation and show the whole loaded scene again."""
+        """Clear any isolation and show the whole loaded scene again.
+
+        Undoes what has been *hidden or drawn* — isolation, cross-sections,
+        pathology overlays, traced pathways. It deliberately leaves the reader's
+        own way of looking alone: if they have made the body transparent or
+        drained its colour, it stays that way. Those are their settings, not
+        yours, and they are usually the reason they can see what you are
+        explaining at all.
+
+        To undo transparency that *you* applied, use `set_layer_opacity` on the
+        system you ghosted rather than reaching for this.
+        """
         ctx.deps.dispatch(ResetView())
-        return "Cleared isolation and section; the full scene is visible."
+        return (
+            "Cleared isolation, section and overlays; the full scene is visible. "
+            "The reader's own transparency and colour settings are unchanged."
+        )
 
     @agent.tool(sequential=True)
     def set_layer_visibility(

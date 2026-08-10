@@ -6,6 +6,7 @@ import {
   applySceneCommand,
   GHOST_CLICK_THROUGH,
   GHOST_STOPS,
+  GLASS_OPACITY,
   initialViewState,
   organOpacity,
   regionMembers,
@@ -826,5 +827,53 @@ describe("multi-selection", () => {
     useSceneStore.getState().hideSelection();
     useSceneStore.getState().unhideAll();
     expect(useSceneStore.getState().hiddenOrganIds).toEqual([]);
+  });
+});
+
+describe("the scan view", () => {
+  beforeEach(() => {
+    useSceneStore.setState({ ...initialViewState });
+  });
+
+  it("starts off", () => {
+    expect(useSceneStore.getState().scan).toBe(false);
+  });
+
+  it("toggles both ways from the same control", () => {
+    const { toggleScan } = useSceneStore.getState();
+
+    toggleScan();
+    expect(useSceneStore.getState().scan).toBe(true);
+
+    toggleScan();
+    expect(useSceneStore.getState().scan).toBe(false);
+  });
+
+  it("survives the assistant showing everything again", () => {
+    // The regression this exists for. `show_all_structures` is housekeeping the
+    // assistant does between demonstrations — once before drawing a new
+    // pathway — and it used to reset the whole view, so the body snapped back
+    // to solid, full-colour and opaque in the middle of an explanation the
+    // reader was following through the scan. Nothing the assistant can call
+    // turns the scan on, so nothing it calls may turn it off.
+    useSceneStore.getState().toggleScan();
+    useSceneStore.setState({ systemOpacity: { muscular: GLASS_OPACITY } });
+
+    const state = applySceneCommand(useSceneStore.getState(), { action: "reset_view" });
+
+    expect(state.scan).toBe(true);
+    expect(state.systemOpacity).toEqual({ muscular: GLASS_OPACITY });
+  });
+
+  it("but the reader's own Reset view button clears it", () => {
+    // A different intention wearing the same name. Someone pressing a button
+    // labelled Reset view is asking for the body they started with.
+    useSceneStore.getState().toggleScan();
+    useSceneStore.setState({ systemOpacity: { muscular: GLASS_OPACITY } });
+
+    useSceneStore.getState().resetView();
+
+    expect(useSceneStore.getState().scan).toBe(false);
+    expect(useSceneStore.getState().systemOpacity).toEqual({});
   });
 });

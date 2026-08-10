@@ -23,6 +23,7 @@ import { framingDistance, lateralSign, viewDirection } from "./cameraViews";
 import { busiestTouches } from "./coverage";
 import { explodeMembers, explodeOffsets } from "./explode";
 import { studioLightDirections } from "./lighting";
+import { keepsColour } from "./scan";
 import {
   collectSupply,
   isSystemMeasured,
@@ -440,10 +441,35 @@ function SystemMeshes({
    */
   const depthStack = useSceneStore((s) => s.depthStack);
   const illuminated = useSceneStore((s) => s.illuminated);
-  const probeDepth = useMemo(() => {
-    const lit = illuminated.length > 0 ? illuminated : depthStack;
-    return new Map(lit.map((organId, index) => [organId, index]));
-  }, [illuminated, depthStack]);
+  const scan = useSceneStore((s) => s.scan);
+  /**
+   * What the assistant has pointed at, and how deep into the list each one sits.
+   *
+   * Kept apart from the cursor's stack below rather than merged into it. They
+   * are two different statements — "the explanation is about this" against
+   * "your hand is over this" — and only the first of them outranks the reader's
+   * own selection. Merged, a pointer move across the model would wash out a
+   * selection the reader made deliberately.
+   */
+  const litDepth = useMemo(
+    () => new Map(illuminated.map((organId, index) => [organId, index])),
+    [illuminated],
+  );
+
+  /**
+   * What the cursor is over, when the assistant is not pointing at anything.
+   *
+   * Suppressed entirely while something is illuminated: the assistant's light
+   * outranks the cursor's, so the first pointer move must not take over the
+   * structure being explained.
+   */
+  const probeDepth = useMemo(
+    () =>
+      illuminated.length > 0
+        ? new Map<string, number>()
+        : new Map(depthStack.map((organId, index) => [organId, index])),
+    [illuminated, depthStack],
+  );
 
   /**
    * The reader's revision, or nothing at all.
@@ -604,6 +630,15 @@ function SystemMeshes({
         coverageTouches={coverage ? (coverage.byOrgan[organ.organ_id] ?? 0) : undefined}
         coverageBusiest={coverage?.busiest}
         probeDepth={probeDepth.get(organ.organ_id)}
+        litDepth={litDepth.get(organ.organ_id)}
+        scanned={
+          scan &&
+          !keepsColour({
+            lit: litDepth.has(organ.organ_id),
+            selected: selectedOrganIds.includes(organ.organ_id),
+            isolated: isolatedOrganIds?.includes(organ.organ_id) ?? false,
+          })
+        }
         clippingPlanes={clippingPlanes}
         onHover={setHovered}
         onSelect={selectOrgan}

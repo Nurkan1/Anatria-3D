@@ -224,6 +224,8 @@ export function AnatomyTree() {
   const xraySystem = useSceneStore((s) => s.xraySystem);
   const clearGhosting = useSceneStore((s) => s.clearGhosting);
   const glassBody = useSceneStore((s) => s.glassBody);
+  const scan = useSceneStore((s) => s.scan);
+  const toggleScan = useSceneStore((s) => s.toggleScan);
   const manifest = useSceneStore((s) => s.manifest);
   // Every system at the glass setting, which is what the button both makes and
   // undoes. Derived rather than stored: a flag could disagree with the
@@ -560,6 +562,26 @@ export function AnatomyTree() {
           }`}
         >
           Glass body
+        </button>
+        {/*
+          Beside Glass body rather than as another checkbox above, because it
+          answers the same question those buttons do — *how* the body is drawn,
+          not *what* is drawn. There are already several ways to play down the
+          anatomy, and grouping the ones that change its appearance keeps them
+          from reading as five unrelated switches.
+        */}
+        <button
+          type="button"
+          onClick={toggleScan}
+          title="Drain the colour from everything except what is marked, selected or isolated"
+          aria-pressed={scan}
+          className={`rounded border px-2 py-1 text-xs ${
+            scan
+              ? "border-slate-300/70 bg-slate-200/15 text-slate-100"
+              : "border-slate-700 text-slate-400"
+          }`}
+        >
+          Scan
         </button>
         {Object.keys(systemOpacity).length > 0 && (
           <button

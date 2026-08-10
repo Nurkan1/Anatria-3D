@@ -180,6 +180,14 @@ export interface SceneViewState {
    * session. See `explode.ts` for what "the current group" resolves to.
    */
   explode: number;
+  /**
+   * Whether the body is drained of colour so that what is marked stands out.
+   *
+   * Working state rather than a preference, like `explode` and the ghosting:
+   * it is a way of looking at one thing, and "show me everything again" should
+   * put the colour back. See `scan.ts` for what keeps its own.
+   */
+  scan: boolean;
 }
 
 export const initialViewState: SceneViewState = {
@@ -194,6 +202,7 @@ export const initialViewState: SceneViewState = {
   viewpoint: null,
   pathway: null,
   explode: 0,
+  scan: false,
   supplyRequest: null,
   supplyResult: null,
   illuminated: [],
@@ -301,9 +310,33 @@ export function applySceneCommand(
       };
 
     case "reset_view":
-      // Selection survives a reset: the user's place in the anatomy is theirs,
-      // not part of the visual state the AI is rearranging.
-      return { ...initialViewState, selectedOrganIds: state.selectedOrganIds };
+      // What the assistant is allowed to undo is *what is shown* — the
+      // isolation it made, the section it cut, the overlays and routes it drew.
+      // Not *how the reader is looking at it*.
+      //
+      // Three things therefore survive, and it is the same argument three
+      // times: the reader put them there and the assistant did not.
+      //
+      // - `selectedOrganIds`, because the reader's place in the anatomy is
+      //   theirs.
+      // - `systemOpacity`, because the glass body is a way of seeing that the
+      //   reader turned on, and the assistant calls this tool routinely — once
+      //   before drawing a new pathway, say — so wiping it means the body snaps
+      //   back to solid in the middle of an explanation the reader was
+      //   following through it. The assistant can still undo ghosting it
+      //   applied itself, precisely, with `set_layer_opacity`.
+      // - `scan`, for which there is not even a tool: nothing the assistant can
+      //   call turns it on, so nothing it calls should turn it off.
+      //
+      // The reader's own *Reset view* button is a different intention and
+      // clears all of it — see `resetView` below. This is the one place the two
+      // must not share an implementation.
+      return {
+        ...initialViewState,
+        selectedOrganIds: state.selectedOrganIds,
+        systemOpacity: state.systemOpacity,
+        scan: state.scan,
+      };
   }
 }
 
@@ -353,6 +386,7 @@ interface SceneStore extends SceneViewState {
   setDepthStack: (organIds: string[]) => void;
   setEyeTracking: (enabled: boolean) => void;
   setLabelsVisible: (visible: boolean) => void;
+  toggleScan: () => void;
   setBackground: (mode: BackgroundMode) => void;
   /** Apply the view settings carried over from the last session. */
   restoreView: (preferences: Partial<ViewPreferences>) => void;
@@ -453,6 +487,8 @@ export const useSceneStore = create<SceneStore>()((set) => ({
   setEyeTracking: (enabled) => set({ eyeTracking: enabled }),
 
   setLabelsVisible: (visible) => set({ labelsVisible: visible }),
+
+  toggleScan: () => set((state) => ({ scan: !state.scan })),
 
   setBackground: (mode) => set({ background: mode }),
 
@@ -735,7 +771,21 @@ export const useSceneStore = create<SceneStore>()((set) => ({
       };
     }),
 
-  resetView: () => set((state) => applySceneCommand(state, { action: "reset_view" })),
+  /**
+   * The reader's own reset, which really does put everything back.
+   *
+   * Deliberately more than the assistant's `reset_view`: someone who presses a
+   * button labelled *Reset view* is asking for the body they started with,
+   * including the ghosting and the scan they themselves switched on. The
+   * assistant calls the same command as a housekeeping step between
+   * demonstrations, and must not take those with it.
+   */
+  resetView: () =>
+    set((state) => ({
+      ...applySceneCommand(state, { action: "reset_view" }),
+      systemOpacity: {},
+      scan: false,
+    })),
 }));
 
 // ---------------------------------------------------------------------------
