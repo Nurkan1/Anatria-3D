@@ -11,6 +11,7 @@ It lives beside the package rather than inside it, so it is loaded by path.
 from __future__ import annotations
 
 import importlib.util
+import sys
 from pathlib import Path
 from types import ModuleType
 
@@ -88,3 +89,40 @@ def test_the_virtualenv_is_looked_for_at_the_repository_root(
 
     assert found is not None, "the repository virtualenv is missing"
     assert found.parent.parent.parent == ENGINE_DIR.parent
+
+
+def test_the_repository_virtualenv_recognises_itself(build_sidecar: ModuleType) -> None:
+    assert build_sidecar.running_in_repo_venv(str(build_sidecar.venv_root())) is True
+
+
+def test_the_base_installation_is_not_mistaken_for_the_virtualenv(
+    build_sidecar: ModuleType,
+) -> None:
+    """The regression test for the fallback that never fired on Linux.
+
+    `sys.base_prefix` is the installation a virtualenv was *built from*, and on
+    POSIX `.venv/bin/python` is a symlink straight into it. The first version of
+    the guard compared resolved interpreter paths, so both sides landed on the
+    same `/usr/bin/python3.x`, the script concluded it was already running
+    inside the virtualenv, and refused to re-exec into it — on Kali the build
+    stopped with instructions for a virtualenv that was sitting right there.
+
+    Windows could not see the bug at all, because `python.exe` is copied rather
+    than linked. Asking about the base prefix reproduces the confusion on every
+    platform.
+    """
+    assert build_sidecar.running_in_repo_venv(sys.base_prefix) is False
+
+
+def test_an_unreadable_prefix_stops_rather_than_looping(
+    build_sidecar: ModuleType,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Failing toward "do not re-exec", because the other way is a fork bomb."""
+
+    def explode(*_args: object, **_kwargs: object) -> Path:
+        raise OSError("nope")
+
+    monkeypatch.setattr(build_sidecar.Path, "resolve", explode)
+
+    assert build_sidecar.running_in_repo_venv("/anything") is True

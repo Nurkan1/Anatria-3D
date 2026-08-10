@@ -57,21 +57,53 @@ COPY_METADATA = [
 ]
 
 
-def _venv_python() -> Path | None:
-    """The repository's own interpreter, if it has been created.
+def venv_root() -> Path:
+    """Where the repository keeps its virtualenv.
 
-    `.venv` at the repository root — not inside `engine/` — because
+    At the repository root — not inside `engine/` — because
     `tests/protocol-contract.test.ts` spawns it from there to generate the
     Pydantic half of the wire format. One virtualenv, one location, both jobs.
     """
-    root = ENGINE_DIR.parent
+    return ENGINE_DIR.parent / ".venv"
+
+
+def _venv_python() -> Path | None:
+    """The repository's own interpreter, if it has been created."""
     for candidate in (
-        root / ".venv" / "Scripts" / "python.exe",  # Windows
-        root / ".venv" / "bin" / "python",  # POSIX
+        venv_root() / "Scripts" / "python.exe",  # Windows
+        venv_root() / "bin" / "python",  # POSIX
     ):
         if candidate.is_file():
             return candidate
     return None
+
+
+def running_in_repo_venv(prefix: str = sys.prefix) -> bool:
+    """Whether this interpreter *is* the repository's virtualenv.
+
+    The guard that stops the re-exec below from recurring forever, and it has to
+    ask about the environment rather than about the executable.
+
+    **Comparing the interpreter paths is wrong on POSIX**, which is how the
+    first version of this shipped broken. `.venv/bin/python` there is a symlink
+    to the base interpreter, so resolving it and resolving `sys.executable`
+    both arrive at `/usr/bin/python3.x` — identical, and the guard concludes it
+    is already inside the virtualenv when it is not. The fallback then never
+    fires and the build stops with setup advice for a virtualenv that exists.
+    Windows hid it completely: there `python.exe` is a real copy, so the two
+    paths differ and the comparison happened to work.
+
+    `sys.prefix` has no such ambiguity. Inside a virtualenv it is the
+    virtualenv's own directory; outside one it is the installation the
+    interpreter came from.
+    """
+    try:
+        return Path(prefix).resolve() == venv_root().resolve()
+    except OSError:
+        # An unreadable path is not this virtualenv, and refusing to re-exec is
+        # the safe way to be wrong: the build stops with advice rather than
+        # spawning itself in a loop.
+        return True
 
 
 def missing_requirements() -> list[str]:
@@ -110,7 +142,7 @@ def build(clean: bool) -> int:
     missing = missing_requirements()
     if missing:
         venv = _venv_python()
-        if venv is not None and venv.resolve() != Path(sys.executable).resolve():
+        if venv is not None and not running_in_repo_venv():
             print(f"{sys.executable} is missing {', '.join(missing)}; retrying with {venv}")
             return subprocess.run([str(venv), __file__, *sys.argv[1:]], check=False).returncode
         print(
