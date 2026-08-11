@@ -27,6 +27,25 @@ body {
 }
 
 /*
+ * Tailwind v4 dropped `cursor: pointer` on buttons from its preflight, matching
+ * the browser default rather than the convention every web interface has taught
+ * people to expect. Every control in this application lost its affordance in
+ * that upgrade, silently — nothing looks broken, things just stop inviting the
+ * click.
+ *
+ * The numbered pins in the assistant's answers are what made it visible. They
+ * had always been buttons that fly the camera to a structure, and they read as
+ * decorative superscripts, so nobody pressed them.
+ *
+ * Restored once here rather than as a utility class on eighty elements, because
+ * the next button someone adds should not have to remember.
+ */
+button:not(:disabled),
+[role="button"]:not(:disabled) {
+  cursor: pointer;
+}
+
+/*
  * The opening screen's cardiac trace: a bright segment sweeping a dim line, the
  * way a monitor draws it.
  *
