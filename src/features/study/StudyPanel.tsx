@@ -384,6 +384,21 @@ function NoteCard({ note }: { note: StudyNote }) {
   const removeNote = useStudyStore((s) => s.removeNote);
 
   const [draft, setDraft] = useState<string | null>(null);
+  /**
+   * Whether a long note is showing in full.
+   *
+   * Notes are not all the same size. One is "mitral has two leaflets"; the next
+   * is a whole answer saved from the assistant, which can run to a screen and a
+   * half of Bulgarian. Left unclamped, two of those bury every other note in
+   * the journal and the list stops being scannable — which is the one thing a
+   * list of notes has to be.
+   *
+   * Clamped rather than truncated, so nothing is thrown away and expanding
+   * costs one click. Short notes get no control at all: a "Show more" under two
+   * lines is noise pretending to be a feature.
+   */
+  const [open, setOpen] = useState(false);
+  const long = isLongNote(note.body);
   // A note may name a structure whose system is currently switched off, or one
   // from an older atlas build. The stored label still reads correctly; only
   // flying to it needs the mesh to be there.
@@ -438,7 +453,24 @@ function NoteCard({ note }: { note: StudyNote }) {
       )}
 
       {draft === null ? (
-        <p className="whitespace-pre-wrap text-[12px] text-slate-300">{note.body}</p>
+        <>
+          <p
+            className={`whitespace-pre-wrap text-[12px] text-slate-300 ${
+              long && !open ? "line-clamp-4" : ""
+            }`}
+          >
+            {note.body}
+          </p>
+          {long && (
+            <button
+              type="button"
+              onClick={() => setOpen(!open)}
+              className="mt-0.5 text-[10px] text-slate-500 hover:text-sky-300"
+            >
+              {open ? "Show less" : "Show more"}
+            </button>
+          )}
+        </>
       ) : (
         <textarea
           value={draft}
@@ -636,6 +668,34 @@ function SessionRow({ session }: { session: SessionSummary }) {
 export function preview(body: string, limit = 140): string {
   const flat = body.replace(/\s+/g, " ").trim();
   return flat.length <= limit ? flat : `${flat.slice(0, limit - 1)}…`;
+}
+
+/** How many lines a clamped note shows. Matches `line-clamp-4` in the markup. */
+export const NOTE_CLAMP_LINES = 4;
+
+/**
+ * Roughly how many characters fit on one line of the notes column.
+ *
+ * An estimate, and it only has to be a good one. The clamp itself is done in
+ * CSS, which counts *rendered* lines and so gets it exactly right whatever the
+ * script — Cyrillic and Latin do not fit the same number of characters. This
+ * decides only whether to **offer** the control, and being a line out shows a
+ * "Show more" on a note that happened to fit, which costs nothing.
+ */
+const CHARS_PER_LINE = 55;
+
+/**
+ * Whether a note needs the clamp at all.
+ *
+ * Counted per written line and then wrapped, rather than from the total length.
+ * A note written as five short bullets fills five lines while barely passing
+ * any character count, and lines are what the clamp cuts.
+ */
+export function isLongNote(body: string, limit = NOTE_CLAMP_LINES): boolean {
+  const rendered = body
+    .split("\n")
+    .reduce((total, line) => total + Math.max(1, Math.ceil(line.length / CHARS_PER_LINE)), 0);
+  return rendered > limit;
 }
 
 function scoreTone(score: number): string {

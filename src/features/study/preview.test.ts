@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { preview } from "./StudyPanel";
+import { isLongNote, NOTE_CLAMP_LINES, preview } from "./StudyPanel";
 
 describe("preview", () => {
   it("shows a short note whole", () => {
@@ -31,5 +31,46 @@ describe("preview", () => {
   it("does not truncate a note that exactly fits", () => {
     const exact = "b".repeat(20);
     expect(preview(exact, 20)).toBe(exact);
+  });
+});
+
+describe("deciding when a note needs clamping", () => {
+  it("leaves a short note alone", () => {
+    // A "Show more" under two lines is noise pretending to be a feature.
+    expect(isLongNote("Mitral valve has two leaflets, not three.")).toBe(false);
+  });
+
+  it("offers the control on an answer saved from the assistant", () => {
+    expect(isLongNote("x".repeat(400))).toBe(true);
+  });
+
+  it("counts a bulleted note by its lines, not its characters", () => {
+    // Five short bullets are five lines and barely thirty characters. Length
+    // alone would call this short and clamp it anyway, cutting a bullet off
+    // with no way to see it.
+    const bullets = ["- one", "- two", "- three", "- four", "- five"].join("\n");
+
+    expect(bullets.length).toBeLessThan(40);
+    expect(isLongNote(bullets)).toBe(true);
+  });
+
+  it("counts a paragraph by how many lines it wraps to", () => {
+    const oneLine = "x".repeat(50);
+    const fiveLines = "x".repeat(50 * 5);
+
+    expect(isLongNote(oneLine)).toBe(false);
+    expect(isLongNote(fiveLines)).toBe(true);
+  });
+
+  it("lets exactly the clamped number of lines through unclamped", () => {
+    const exactly = Array.from({ length: NOTE_CLAMP_LINES }, () => "short").join("\n");
+    const oneMore = Array.from({ length: NOTE_CLAMP_LINES + 1 }, () => "short").join("\n");
+
+    expect(isLongNote(exactly)).toBe(false);
+    expect(isLongNote(oneMore)).toBe(true);
+  });
+
+  it("counts a blank line, because the clamp does", () => {
+    expect(isLongNote("a\n\nb\n\nc")).toBe(true);
   });
 });
