@@ -1,0 +1,57 @@
+# How to cite Anatria3D.
+#
+# Citation File Format 1.2.0 — https://citation-file-format.github.io
+# GitHub reads this to render "Cite this repository", and Zenodo reads it when
+# minting a DOI for a release.
+#
+# `version` and `date-released` describe the release this file ships in, so
+# they belong to the release checklist alongside package.json, Cargo.toml and
+# tauri.conf.json. A stale version here is worse than none: it would tell a
+# reader to cite a build they are not running.
+cff-version: 1.2.0
+title: Anatria3D
+message: If you use this software, please cite it.
+type: software
+
+authors:
+  - family-names: Kerimov
+    given-names: Nurdzhan
+    affiliation: Digital Rose
+    email: info@digitalrose.org
+    # orcid: "https://orcid.org/0000-0000-0000-0000"
+
+abstract: >-
+  A local-first 3D human anatomy atlas for education, with an assistant that
+  controls the viewport as it explains — isolating a structure, ghosting a
+  layer, marking a pathway — so the explanation and the anatomy are on screen
+  together. Structures are named in Terminologia Anatomica (TA2). The
+  application runs entirely on the user's machine and holds no patient data.
+  It is educational material and is not a medical device.
+
+keywords:
+  - anatomy
+  - medical education
+  - 3D visualisation
+  - Terminologia Anatomica
+  - local-first software
+  - open educational resources
+
+license: Apache-2.0
+repository-code: https://github.com/Nurkan1/Anatria-3D
+version: 0.1.5
+date-released: "2026-08-12"
+
+# The anatomical meshes and nomenclature are not ours and are not covered by
+# the Apache licence. Anyone citing this work should carry their attribution
+# chain too — see NOTICE and public/anatomy/NOTICE.
+references:
+  - type: data
+    title: Z-Anatomy — the libre 3D atlas of anatomy
+    notes: Derived from BodyParts3D. Licensed CC BY-SA 4.0.
+    authors:
+      - name: The Z-Anatomy project
+  - type: data
+    title: BodyParts3D
+    notes: Licensed CC BY-SA 2.1 Japan.
+    authors:
+      - name: Database Center for Life Science (DBCLS), Japan
