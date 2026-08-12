@@ -5,6 +5,7 @@ import remarkGfm from "remark-gfm";
 import { organLabel, useSceneStore } from "@/stores/sceneStore";
 
 import { collectOrganRefs, linkifyOrganRefs, REF_SCHEME } from "./organRefs";
+import { repairGluedHeadings } from "./repairMarkdown";
 import { useCopy } from "./useCopy";
 
 /**
@@ -89,9 +90,14 @@ export const Markdown = memo(function Markdown({ children }: { children: string 
 
   // Markers are resolved against the structures actually loaded, so an id the
   // model invented disappears instead of surfacing as literal brackets.
+  //
+  // Headings are repaired first, before the markers become links: the repair
+  // reads punctuation, and a marker resolved into `[3](anatria-ref:…)` puts a
+  // bracket between the full stop and the hashes where there was none.
   const source = useMemo(() => {
-    const refs = collectOrganRefs(children, (organId) => organId in organs);
-    return refs.length > 0 ? linkifyOrganRefs(children, refs) : children;
+    const repaired = repairGluedHeadings(children);
+    const refs = collectOrganRefs(repaired, (organId) => organId in organs);
+    return refs.length > 0 ? linkifyOrganRefs(repaired, refs) : repaired;
   }, [children, organs]);
 
   return (

@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+import { repairGluedHeadings } from "@/features/chat/repairMarkdown";
 import { usePrintStore } from "@/stores/printStore";
 
 import { disclaimers, isPrintable, type PrintDocument } from "./printDocument";
@@ -260,7 +261,7 @@ function Transcript({ document }: { document: PrintDocument }) {
                   : "mt-1 text-[13px] leading-relaxed"
               }
             >
-              <PrintMarkdown>{exchange.body}</PrintMarkdown>
+              <PrintMarkdown>{repairGluedHeadings(exchange.body)}</PrintMarkdown>
             </div>
           </div>
         ))}
@@ -289,6 +290,10 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
 function PrintMarkdown({ children }: { children: string }) {
   return (
     <ReactMarkdown
+      // Same repair as the chat panel. A heading the model welded to the
+      // previous sentence would otherwise print two literal hashes mid-
+      // paragraph, on the one artefact here that cannot be corrected after the
+      // fact — paper.
       remarkPlugins={[remarkGfm]}
       components={{
         h1: ({ children }) => <h3 className="mt-3 text-sm font-semibold">{children}</h3>,

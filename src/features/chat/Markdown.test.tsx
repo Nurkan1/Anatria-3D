@@ -18,6 +18,24 @@ describe("Markdown", () => {
     expect(screen.getAllByRole("listitem")).toHaveLength(2);
   });
 
+  /**
+   * Seen in a real answer, at every heading: the model welded the section title
+   * to the end of the sentence before it. CommonMark needs an ATX heading to
+   * begin a line, so the reader got two literal hashes mid-paragraph and no
+   * heading at all. Repaired before parsing — see `repairMarkdown.ts`.
+   */
+  it("renders a heading the model welded to the previous sentence", () => {
+    render(
+      <Markdown>{`...durante uno spavento.## 3. Il quadro comando
+
+Nel bulbo.`}</Markdown>,
+    );
+
+    const heading = screen.getByText("3. Il quadro comando");
+    expect(heading.tagName).toMatch(/^H[1-6]$/);
+    expect(screen.queryByText(/##/)).toBeNull();
+  });
+
   it("renders tables, which clinician answers lean on", () => {
     render(
       <Markdown>{`| Finding | Value |\n| --- | --- |\n| EF | 35% |`}</Markdown>,
