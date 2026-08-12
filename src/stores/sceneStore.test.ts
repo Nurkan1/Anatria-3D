@@ -15,6 +15,7 @@ import {
   useSceneStore,
   isOrganVisible,
   organLabel,
+  organSide,
   organSubtitle,
   type SceneViewState,
 } from "./sceneStore";
@@ -317,6 +318,43 @@ describe("organLabel", () => {
     const heart = organ();
     expect(organLabel(heart)).toBe("Ventriculus sinister");
     expect(organSubtitle(heart)).toBe("Left ventricle");
+  });
+
+  /**
+   * 3,024 of the atlas's 3,478 structures are one half of a pair, and
+   * `ta2_latin` is the same string for both. Without the side the reader got
+   * two identical chips under an answer, two identical labels on the model,
+   * and a note about the left vagus filed under a name that also described the
+   * right one.
+   */
+  it.each([
+    ["Vagus nerve (X) (left)", "Nervus vagus (X) · left"],
+    ["Vagus nerve (X) (right)", "Nervus vagus (X) · right"],
+  ])("names the side that %s is on", (name_en, expected) => {
+    expect(organLabel(organ({ ta2_latin: "Nervus vagus (X)", name_en }))).toBe(expected);
+  });
+
+  it("adds nothing to a midline structure", () => {
+    const midline = organ({ ta2_latin: "Corpus callosum", name_en: "Corpus callosum" });
+    expect(organLabel(midline)).toBe("Corpus callosum");
+    expect(organSide(midline)).toBeNull();
+  });
+
+  /**
+   * The suffix is a marker the pipeline appends, not a word in the name. A
+   * structure whose English merely mentions a side keeps its name intact.
+   */
+  it.each([
+    "Left ventricle",
+    "Left coronary artery",
+    "Ligament of the left lung (leftish)",
+    "Right atrium of heart",
+  ])("does not mistake %p for a side marker", (name_en) => {
+    expect(organSide(organ({ name_en }))).toBeNull();
+  });
+
+  it("reads the marker whatever its case", () => {
+    expect(organSide(organ({ name_en: "Vagus nerve (LEFT)" }))).toBe("left");
   });
 });
 

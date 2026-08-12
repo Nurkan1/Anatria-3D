@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from "react";
 
-import { regionMembersByNode, useSceneStore } from "@/stores/sceneStore";
+import { organLabel, regionMembersByNode, useSceneStore } from "@/stores/sceneStore";
 
 export interface MenuTarget {
   organId: string;
@@ -88,7 +88,7 @@ export function StructureMenu({
       role="menu"
     >
       <div className="border-b border-slate-800 px-3 py-1.5">
-        <p className="truncate italic text-slate-200">{organ.ta2_latin}</p>
+        <p className="truncate italic text-slate-200">{organLabel(organ)}</p>
         <p className="truncate text-[10px] text-slate-500">{organ.name_en}</p>
       </div>
 

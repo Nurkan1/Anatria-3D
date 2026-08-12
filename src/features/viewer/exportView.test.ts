@@ -5,7 +5,13 @@ vi.mock("@tauri-apps/api/core", () => ({ invoke: vi.fn() }));
 const { encodeImageBytes, IMAGE_FOOTER } = await import("./exportView");
 const { labelTargets } = await import("./LabelOverlay");
 
-const organ = (organ_id: string, ta2_latin: string) => ({ organ_id, ta2_latin });
+// `name_en` is what carries the side, so a label fixture without it cannot
+// exercise the thing labels are for.
+const organ = (organ_id: string, ta2_latin: string, name_en = ta2_latin) => ({
+  organ_id,
+  ta2_latin,
+  name_en,
+});
 
 describe("labelTargets", () => {
   const organs = {
@@ -13,6 +19,19 @@ describe("labelTargets", () => {
     b: organ("b", "Musculus biceps brachii"),
     c: organ("c", "Humerus"),
   };
+
+  it("names the side of a paired structure, which the Latin does not carry", () => {
+    // Two identical labels on one screen is the failure this prevents: the
+    // atlas holds a left and a right vagus under the same Latin term.
+    const paired = {
+      l: organ("l", "Nervus vagus (X)", "Vagus nerve (X) (left)"),
+      r: organ("r", "Nervus vagus (X)", "Vagus nerve (X) (right)"),
+    };
+    expect(labelTargets(paired, ["l", "r"], null).map((t) => t.text)).toEqual([
+      "Nervus vagus (X) · left",
+      "Nervus vagus (X) · right",
+    ]);
+  });
 
   it("names what is selected", () => {
     expect(labelTargets(organs, ["a", "b"], null).map((t) => t.id)).toEqual(["a", "b"]);

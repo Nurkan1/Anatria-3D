@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef } from "react";
 
+import type { ManifestOrgan } from "@/lib/schemas";
 import { organLabel, useSceneStore } from "@/stores/sceneStore";
 
 import { backgroundTheme } from "./background";
@@ -155,7 +156,9 @@ export function LabelOverlay() {
  * that appears to do nothing.
  */
 export function labelTargets(
-  organs: Record<string, { organ_id: string; ta2_latin: string }>,
+  // `name_en` is here because the label carries the side, which only that
+  // field has. Narrowing it away is what let the cast below hide the fact.
+  organs: Record<string, { organ_id: string; ta2_latin: string; name_en: string }>,
   selectedOrganIds: string[],
   isolatedOrganIds: string[] | null,
 ): { id: string; text: string }[] {
@@ -168,5 +171,5 @@ export function labelTargets(
     .slice(0, MAX_LABELS)
     .map((id) => organs[id])
     .filter((organ) => !!organ)
-    .map((organ) => ({ id: organ.organ_id, text: organLabel(organ as never) }));
+    .map((organ) => ({ id: organ.organ_id, text: organLabel(organ as ManifestOrgan) }));
 }

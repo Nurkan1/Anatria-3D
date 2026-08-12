@@ -145,7 +145,7 @@ function ReferenceLegend({ content }: { content: string }) {
             <span className="flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-sky-500/20 px-0.5 text-[8px] font-semibold text-sky-300">
               {ref.index}
             </span>
-            <span className="italic">{organ.ta2_latin}</span>
+            <span className="italic">{organLabel(organ)}</span>
           </button>
         );
       })}

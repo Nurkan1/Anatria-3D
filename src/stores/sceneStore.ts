@@ -867,8 +867,43 @@ export function regionMembersByNode(
   return members;
 }
 
+/**
+ * ` (left)` / ` (right)`, as the asset pipeline writes it into the English name.
+ *
+ * The Latin does not carry it. Z-Anatomy encodes the side in the mesh node
+ * (`Vagus nerve (X).l`) and the pipeline surfaces it in `name_en`; `ta2_latin`
+ * stays the bare term, identical for both halves of a pair.
+ */
+const SIDE = /\s\((left|right)\)$/i;
+
+/** Which side of the body a structure is on. Null for the midline ones. */
+export function organSide(organ: Pick<ManifestOrgan, "name_en">): "left" | "right" | null {
+  const match = SIDE.exec(organ.name_en);
+  return match ? (match[1]!.toLowerCase() as "left" | "right") : null;
+}
+
+/**
+ * What a structure is called on screen.
+ *
+ * # Why the side is appended rather than left to the Latin
+ *
+ * 3,024 of the atlas's 3,478 structures are one half of a bilateral pair, and
+ * `ta2_latin` is the same string for both. Showing it alone put two identical
+ * chips under an answer, two identical labels on the model, and two
+ * indistinguishable rows in the study bar — and filed a note about the left
+ * vagus under a name that also described the right one. In anatomy that is not
+ * a cosmetic loss: the left recurrent laryngeal hooks under the aortic arch and
+ * the right under the subclavian, and "which one" is the question.
+ *
+ * The side is appended in English rather than declined into Latin on purpose.
+ * `Truncus sympathicus sinister` is correct and `Nervus vagus (X) sinister` is
+ * correct, but agreement follows the noun's gender — *sinister*, *sinistra*,
+ * *sinistrum* — and that cannot be recovered from the string. Mis-declined
+ * Latin in an anatomy atlas would be a worse fault than the one being fixed.
+ */
 export function organLabel(organ: ManifestOrgan): string {
-  return organ.ta2_latin;
+  const side = organSide(organ);
+  return side ? `${organ.ta2_latin} · ${side}` : organ.ta2_latin;
 }
 
 /** Clinical English, shown as a secondary line under the Latin. */

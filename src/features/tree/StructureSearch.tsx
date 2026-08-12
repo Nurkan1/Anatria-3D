@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 
 import type { ManifestOrgan } from "@/lib/schemas";
-import { useSceneStore } from "@/stores/sceneStore";
+import { organLabel, useSceneStore } from "@/stores/sceneStore";
 
 /** Enough to choose from without turning the panel into a scroll marathon. */
 const MAX_RESULTS = 40;
@@ -95,7 +95,7 @@ export function StructureSearch() {
                   </span>
                 )}
                 <span className="w-full truncate text-[11px] italic text-slate-200">
-                  {organ.ta2_latin}
+                  {organLabel(organ)}
                 </span>
                 <span className="flex w-full items-center gap-1.5">
                   <span className="min-w-0 flex-1 truncate text-[10px] text-slate-500">
