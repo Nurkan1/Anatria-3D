@@ -97,7 +97,13 @@ export const Markdown = memo(function Markdown({ children }: { children: string 
   const source = useMemo(() => {
     const repaired = repairGluedHeadings(children);
     const refs = collectOrganRefs(repaired, (organId) => organId in organs);
-    return refs.length > 0 ? linkifyOrganRefs(repaired, refs) : repaired;
+    // Always, even with nothing to link. Skipping this when no marker resolved
+    // was a cheap-looking guard that switched off the cleanup in precisely the
+    // case that needed it: an answer whose *only* marker is one the model
+    // invented rendered it raw, and `[[heart]]` appeared in the prose. The
+    // atlas has no single heart mesh — it is seventeen parts — so that is not
+    // even an unlikely id for a model to reach for.
+    return linkifyOrganRefs(repaired, refs);
   }, [children, organs]);
 
   return (

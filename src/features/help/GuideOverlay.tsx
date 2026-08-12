@@ -393,6 +393,12 @@ const SECTIONS: Section[] = [
           next launch opens on them.
         </p>
         <p>
+          <Ui>New</Ui> at the top of the panel puts the conversation away and starts a
+          clean one. Nothing is lost — every exchange is already filed in{" "}
+          <Ui>Study</Ui> and can be reopened. It sits at the top, well away from{" "}
+          <Ui>Send</Ui>, on purpose.
+        </p>
+        <p>
           The names on the model are always in Terminologia Anatomica Latin. That is
           the profession's nomenclature and it does not change by country — translating
           it for your level and language is the assistant's job, done per question.

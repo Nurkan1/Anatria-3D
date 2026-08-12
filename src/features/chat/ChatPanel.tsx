@@ -239,22 +239,71 @@ function MessageBubble({ message }: { message: ChatMessage }) {
 }
 
 /**
- * Lesson or drill, and the way to start a fresh conversation.
+ * Put the conversation away and start a clean one.
  *
- * The two are one control because a session is one or the other for its whole
- * life — the journal files it under a single kind, and a transcript that is
- * half explanation and half graded drill is not something either view can
- * present honestly. Pressing the mode you are already in starts a new session
- * of it, which is what the old "New chat" button did.
+ * # Nothing is destroyed, and that is why there is no confirmation
+ *
+ * Every finished exchange is already in the study journal, filed under the
+ * structures it was about, reopenable from the **Study** tab. This starts a new
+ * transcript; it does not delete the old one. A confirmation dialog would teach
+ * the opposite — that something is at stake here — and the dialogs in this app
+ * are reserved for the things that genuinely are.
+ *
+ * # Why it is at the top
+ *
+ * Deliberately far from the composer. The one control it must never sit beside
+ * is **Send**: a misfire there costs you the answer you were part-way through
+ * reading, and the recovery — find it in Study, reopen it — is exactly the
+ * detour the button exists to save. Disabled rather than hidden while the
+ * transcript is empty, so the header does not reflow as you use it.
+ */
+function NewSessionButton({
+  mode,
+  onStart,
+  disabled,
+}: {
+  mode: SessionMode;
+  onStart: (mode: SessionMode) => void;
+  disabled: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={() => onStart(mode)}
+      disabled={disabled}
+      title={
+        disabled
+          ? "This conversation is already empty"
+          : "Start a fresh conversation — this one is kept in Study"
+      }
+      className="rounded border border-slate-700 px-1.5 py-0.5 text-[10px] text-slate-400 transition hover:border-sky-600 hover:text-sky-300 disabled:cursor-default disabled:border-slate-800 disabled:text-slate-700 disabled:hover:border-slate-800 disabled:hover:text-slate-700"
+    >
+      New
+    </button>
+  );
+}
+
+/**
+ * Lesson or drill.
+ *
+ * Switching kind necessarily starts a new session: a session is one or the
+ * other for its whole life, the journal files it under a single kind, and a
+ * transcript half explanation and half graded drill is not something either
+ * view can present honestly.
+ *
+ * Pressing the kind you are *already* in used to start a fresh session too —
+ * this control had absorbed the old "New chat" button. It was a mistake, and
+ * the evidence was the heaviest user of the app asking for a button that had
+ * been there all along: a capability reachable only by pressing something that
+ * looks inert, and explained only in a tooltip, is not a capability. It is now
+ * a no-op, and starting fresh has its own control again.
  */
 function ModeSwitch({
   mode,
   onChange,
-  dirty,
 }: {
   mode: SessionMode;
   onChange: (mode: SessionMode) => void;
-  dirty: boolean;
 }) {
   const options: { value: SessionMode; label: string }[] = [
     { value: "tutor", label: "Tutor" },
@@ -269,13 +318,11 @@ function ModeSwitch({
           <button
             key={option.value}
             type="button"
-            onClick={() => onChange(option.value)}
+            onClick={() => !active && onChange(option.value)}
             aria-pressed={active}
             title={
               active
-                ? dirty
-                  ? `Start a new ${option.label.toLowerCase()} session`
-                  : option.label
+                ? option.label
                 : `Switch to ${option.label.toLowerCase()} — starts a new session`
             }
             className={`px-2 py-0.5 text-[10px] transition ${
@@ -676,12 +723,13 @@ export function ChatPanel() {
             Restart engine
           </button>
         )}
-        <div className={engineReady ? "ml-auto" : ""}>
-          <ModeSwitch
+        <div className={`flex items-center gap-1.5 ${engineReady ? "ml-auto" : ""}`}>
+          <NewSessionButton
             mode={mode}
-            onChange={beginSession}
-            dirty={messages.length > 0}
+            onStart={beginSession}
+            disabled={messages.length === 0}
           />
+          <ModeSwitch mode={mode} onChange={beginSession} />
         </div>
       </header>
 

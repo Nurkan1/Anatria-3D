@@ -36,6 +36,20 @@ Nel bulbo.`}</Markdown>,
     expect(screen.queryByText(/##/)).toBeNull();
   });
 
+  /**
+   * Seen in a real answer: the model wrote `[[heart]]`, which is not an id the
+   * atlas has — the heart is seventeen separate meshes — and the raw marker
+   * rendered in the prose. The stripping always worked; a `refs.length > 0`
+   * guard above it switched it off in exactly the case that needed it, when
+   * the invented marker was the only one in the answer.
+   */
+  it("removes a marker the model invented, even when it is the only one", () => {
+    render(<Markdown>{`El corazón [[heart]], como músculo, necesita oxígeno.`}</Markdown>);
+
+    expect(screen.queryByText(/\[\[/)).toBeNull();
+    expect(screen.getByText(/como músculo, necesita oxígeno/)).toBeDefined();
+  });
+
   it("renders tables, which clinician answers lean on", () => {
     render(
       <Markdown>{`| Finding | Value |\n| --- | --- |\n| EF | 35% |`}</Markdown>,
