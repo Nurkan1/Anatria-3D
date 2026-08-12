@@ -9,6 +9,7 @@ tour, not a wall of text followed by a jump.
 
 from __future__ import annotations
 
+import sys
 from collections.abc import AsyncIterator
 from dataclasses import dataclass
 
@@ -154,12 +155,47 @@ async def run_agent(
 
 
 def _usage_of(event: AgentRunResultEvent) -> TokenUsage | None:
-    """Best-effort token accounting; a missing count must not fail the turn."""
-    try:
-        usage = event.result.usage()
-        return TokenUsage(
-            input_tokens=int(getattr(usage, "input_tokens", 0) or 0),
-            output_tokens=int(getattr(usage, "output_tokens", 0) or 0),
-        )
-    except Exception:  # usage is telemetry, never load-bearing
+    """Token accounting; a missing count must not fail the turn.
+
+    # Why there is no `except Exception` here any more
+
+    There was, and it hid a bug for the whole life of the feature. `usage` on
+    an `AgentRunResult` is an **attribute**, not a method; the code called it,
+    every single turn raised `TypeError: 'RunUsage' object is not callable`,
+    and the blanket catch reported that as "the provider did not tell us what
+    this cost". A total failure wearing the costume of a legitimately empty
+    result — and nothing upstream could tell the difference, because the two
+    are the same value.
+
+    So every branch below is explicit and none of them can raise. A shape this
+    function genuinely does not recognise says so on stderr instead of
+    returning `None` with a shrug, because that is the difference between a
+    provider that reports nothing and a library that moved its API again.
+    """
+    usage = getattr(event.result, "usage", None)
+    # Tolerated because pydantic-ai exposed this as a method before 2.x, and a
+    # turn is not the place to find out which one is installed.
+    if callable(usage):
+        usage = usage()
+    if usage is None:
         return None
+
+    input_tokens = _count(getattr(usage, "input_tokens", None))
+    output_tokens = _count(getattr(usage, "output_tokens", None))
+    if input_tokens is None or output_tokens is None:
+        print(
+            f"[engine] {type(usage).__name__} carries no readable token counts; "
+            "this turn will be reported as uncosted",
+            file=sys.stderr,
+            flush=True,
+        )
+        return None
+
+    return TokenUsage(input_tokens=input_tokens, output_tokens=output_tokens)
+
+
+def _count(value: object) -> int | None:
+    """A non-negative token count, or `None` for anything that is not one."""
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return None
+    return int(value) if value >= 0 else None
