@@ -185,6 +185,28 @@ describe("disclaimers", () => {
   it("does not print the English notice twice", () => {
     expect(disclaimers("en")).toHaveLength(1);
   });
+
+  /**
+   * Under `auto` the answers came back in whatever the student wrote in, which
+   * may be a language there is no notice for. The regulatory sentence cannot be
+   * translated at runtime — what it says is the product's position, not copy —
+   * so the choice is between the fewest lines and the most likely to be read.
+   * For this one sentence that is not a close call.
+   */
+  it("prints every notice it has when the language was left automatic", () => {
+    const lines = disclaimers("auto");
+    expect(lines).toHaveLength(3);
+    expect(lines.at(-1)).toContain("Not a medical device");
+    expect(lines.some((line) => line.includes("медицинско изделие"))).toBe(true);
+    expect(lines.some((line) => line.includes("producto sanitario"))).toBe(true);
+  });
+
+  it.each(["auto", "bg", "es", "en"] as const)(
+    "always ends with the English notice, whatever %s prints first",
+    (language) => {
+      expect(disclaimers(language).at(-1)).toContain("Not a medical device");
+    },
+  );
 });
 
 describe("journalLanguage", () => {

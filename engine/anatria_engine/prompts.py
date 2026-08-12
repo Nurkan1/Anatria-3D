@@ -226,6 +226,54 @@ LANGUAGE_NAMES: dict[Language, str] = {
     "en": "English",
 }
 
+#: Shared by both language rules: once the output language is settled, the
+#: nomenclature rules are the same whether it was chosen or detected.
+_NOMENCLATURE_RULE = """\
+Whichever language you land on, everything below applies to it. Below, "the
+reader's language" means the one you are actually answering in.
+
+The scene data you are given names structures in Terminologia Anatomica Latin
+and clinical English, because that is the profession's nomenclature and it does
+not vary by locale. Translating it for this reader is your job:
+
+- Give the structure's name in the reader's language, and keep the Latin term
+  alongside it on first mention so the reader can carry it across sources.
+- For the layperson profile, lead with the everyday name and keep the Latin as
+  a parenthetical. For student and clinician profiles, lead with the precise
+  term.
+- If the reader's language has no settled everyday word for a structure, use
+  the Latin and explain it in a clause rather than inventing a translation.
+- `organ_id` values are internal identifiers for the tools. Never show one to
+  the user.
+"""
+
+_AUTO_LANGUAGE_RULE = f"""\
+**Answer in the language the reader writes to you in.** They have chosen not to
+fix one, so their question is the instruction and there is no setting to
+override it.
+
+Once you have settled on a language, stay in it for the rest of the
+conversation unless they switch. Re-deciding every turn would answer "yes?" or
+"and the artery?" in whichever language that fragment resembles most, which is
+how a conversation ends up alternating.
+
+Three things do *not* change the language you are in:
+
+- **Anatomical Latin.** "Arteria femoralis", "Nervus vagus" and every other
+  Terminologia Anatomica term is the atlas's nomenclature, not a request. A
+  message consisting only of a structure name tells you nothing about what
+  language its author reads.
+- **A borrowed technical term** inside an otherwise ordinary question. Follow
+  the sentence, not the loanword.
+- **Too little to go on.** "?", "ok", a number, a single ambiguous word.
+  Continue in whatever language you were already using.
+
+On the very first turn of a conversation, if the question is genuinely too
+short to read a language from, answer in English and switch the moment they
+give you more.
+
+{_NOMENCLATURE_RULE}"""
+
 
 def _language_rule(language: Language) -> str:
     """The output language, and the one case where the reader overrides it.
@@ -239,7 +287,17 @@ def _language_rule(language: Language) -> str:
     This matters beyond convenience. The refusal in `SAFETY` is the sentence
     that has to land when someone asks what is wrong with them, and a refusal
     written in a language the reader does not have is not a refusal at all.
+
+    `auto` makes that override the whole rule rather than the exception. It is
+    the honest setting for anyone whose language was never on the list, and the
+    convenient one for anyone who works across two — but it is not the default,
+    because a fixed choice is the stronger promise. Under `auto` a question
+    typed in English out of habit is answered in English, which is wrong for a
+    reader who set Bulgarian on purpose and merely borrowed a term.
     """
+    if language == "auto":
+        return _AUTO_LANGUAGE_RULE
+
     return f"""\
 Write your entire answer in {LANGUAGE_NAMES[language]}. That is the language
 the reader chose in the interface, and it is the default for every turn.
@@ -264,23 +322,7 @@ Three things do *not* trigger that override:
 - **Too little to go on.** "?", "ok", a number, a single ambiguous word.
   Continue in whatever language you were already using.
 
-Whichever language you land on, everything below applies to it. Below, "the
-reader's language" means the one you are actually answering in.
-
-The scene data you are given names structures in Terminologia Anatomica Latin
-and clinical English, because that is the profession's nomenclature and it does
-not vary by locale. Translating it for this reader is your job:
-
-- Give the structure's name in the reader's language, and keep the Latin term
-  alongside it on first mention so the reader can carry it across sources.
-- For the layperson profile, lead with the everyday name and keep the Latin as
-  a parenthetical. For student and clinician profiles, lead with the precise
-  term.
-- If the reader's language has no settled everyday word for a structure, use
-  the Latin and explain it in a clause rather than inventing a translation.
-- `organ_id` values are internal identifiers for the tools. Never show one to
-  the user.
-"""
+{_NOMENCLATURE_RULE}"""
 
 
 #: Above this many loaded structures the prompt switches from a full list to a

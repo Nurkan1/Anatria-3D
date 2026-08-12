@@ -21,7 +21,9 @@ from pydantic import BaseModel, ConfigDict, Field
 PROTOCOL_VERSION = 1
 ENGINE_VERSION = "0.1.0"
 
-Language = Literal["bg", "es", "en"]
+#: `auto` is not a language, it is the absence of a choice: answer in whatever
+#: the reader wrote in. See `_language_rule` in prompts.py.
+Language = Literal["auto", "bg", "es", "en"]
 UserProfile = Literal["layperson", "student", "clinician"]
 GenderModel = Literal["male", "female"]
 AiProvider = Literal["anthropic", "openai", "google"]

@@ -23,7 +23,11 @@ export const PROTOCOL_VERSION = 1;
 // Primitives
 // ---------------------------------------------------------------------------
 
-export const LanguageSchema = z.enum(["bg", "es", "en"]);
+/**
+ * `auto` is not a language. It is the absence of a choice: the assistant
+ * answers in whatever the reader wrote in, and keeps doing so.
+ */
+export const LanguageSchema = z.enum(["auto", "bg", "es", "en"]);
 export type Language = z.infer<typeof LanguageSchema>;
 
 export const UserProfileSchema = z.enum(["layperson", "student", "clinician"]);

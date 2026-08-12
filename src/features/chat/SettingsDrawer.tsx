@@ -33,10 +33,17 @@ function KeyStatusBadge({ status }: { status: string }) {
   );
 }
 
-const LANGUAGES: { id: Language; label: string }[] = [
-  { id: "bg", label: "BG" },
-  { id: "es", label: "ES" },
-  { id: "en", label: "EN" },
+/**
+ * `Auto` first, and wider than the rest, because it is the only one of the four
+ * that describes a reader the other three cannot. Anatomy students do not come
+ * in three languages; someone whose own is not on this row has nothing to press
+ * — except this.
+ */
+const LANGUAGES: { id: Language; label: string; title: string }[] = [
+  { id: "auto", label: "Auto", title: "Answer in whatever language I write in" },
+  { id: "bg", label: "BG", title: "Always answer in Bulgarian" },
+  { id: "es", label: "ES", title: "Always answer in Spanish" },
+  { id: "en", label: "EN", title: "Always answer in English" },
 ];
 
 interface SettingsDrawerProps {
@@ -226,12 +233,16 @@ export function SettingsDrawer({
               Answer language
             </p>
             <div className="flex gap-1">
-              {LANGUAGES.map(({ id, label }) => (
+              {LANGUAGES.map(({ id, label, title }) => (
                 <button
                   key={id}
                   type="button"
                   onClick={() => onLanguageChange(id)}
-                  className={`flex-1 rounded border px-1.5 py-1 text-[11px] ${
+                  title={title}
+                  aria-pressed={language === id}
+                  className={`rounded border px-1.5 py-1 text-[11px] ${
+                    id === "auto" ? "flex-[1.4]" : "flex-1"
+                  } ${
                     language === id
                       ? "border-sky-500 bg-sky-500/10 text-sky-300"
                       : "border-slate-700 text-slate-400"
@@ -242,17 +253,20 @@ export function SettingsDrawer({
               ))}
             </div>
             <p className="mt-1 text-[10px] leading-snug text-slate-600">
-              Structures are labelled in Terminologia Anatomica Latin. The assistant
-              renders them into this language for the selected audience.
+              {language === "auto"
+                ? "The assistant answers in whatever language you write in, and stays in it."
+                : "Structures are labelled in Terminologia Anatomica Latin. The assistant renders them into this language for the selected audience."}
             </p>
-            {/* Three buttons cannot describe every reader, and the one they fail
-                is exactly the one who cannot read the sentence above. Said here
-                because this is where someone comes looking when none of the
-                three is theirs. */}
-            <p className="mt-1 text-[10px] leading-snug text-slate-600">
-              Not one of your languages? Write your question in your own and the
-              assistant will answer in it.
-            </p>
+            {/* Three fixed buttons cannot describe every reader, and the one
+                they fail is exactly the one who cannot read the sentence above.
+                Said here because this is where someone comes looking when none
+                of the three is theirs. */}
+            {language !== "auto" && (
+              <p className="mt-1 text-[10px] leading-snug text-slate-600">
+                Not one of your languages? Press <span className="text-slate-400">Auto</span>{" "}
+                — or just write in your own and the assistant will follow.
+              </p>
+            )}
           </div>
 
           <div>
@@ -332,6 +346,17 @@ export function SettingsDrawer({
                   {catalogue.models.length} models available to this key. If one answers
                   &ldquo;high demand&rdquo;, pick another — that is a busy model, not a
                   broken key.
+                </p>
+                {/* Said at the point of choosing, not only in the guide. The
+                    reader who picks the cheapest model and then judges the
+                    atlas by what it says is making an attribution error this
+                    sentence is the only chance to prevent. */}
+                <p className="mt-1 text-[10px] leading-snug text-slate-600">
+                  <span className="text-slate-400">This choice sets the quality of
+                  the answers.</span> Anatria3D supplies the anatomy, the tools and
+                  the rules; the reasoning is the model&apos;s. A small, fast model is
+                  cheaper and shallower, and it is likelier to mark the wrong
+                  structure.
                 </p>
               </>
             ) : (

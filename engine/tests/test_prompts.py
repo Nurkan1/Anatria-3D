@@ -246,3 +246,71 @@ def test_no_choice_resolves_to_the_provider_default():
 
     for provider, default in DEFAULT_MODELS.items():
         assert resolve_model_name(provider, None) == default
+
+
+# ---------------------------------------------------------------------------
+# Automatic answer language
+# ---------------------------------------------------------------------------
+
+
+def test_auto_follows_the_reader_and_names_no_fixed_language():
+    """`auto` is the absence of a choice, not a fourth language."""
+    from anatria_engine.prompts import _language_rule
+
+    rule = _language_rule("auto")
+    assert "the language the reader writes to you in" in rule
+    for named in ("Bulgarian", "Spanish (español)", "English)"):
+        assert named not in rule
+
+
+def test_auto_still_carries_the_nomenclature_rules():
+    """Once the language is settled, Latin handling is the same either way.
+
+    Guards the shared tail: it was inlined in one branch before `auto` existed,
+    and a copy-paste split would have silently dropped it from the new one.
+    """
+    from anatria_engine.prompts import _language_rule
+
+    for language in ("auto", "bg", "es", "en"):
+        rule = _language_rule(language)
+        assert "Terminologia Anatomica" in rule
+        assert "Never show one to" in rule
+
+
+def test_a_fixed_language_is_named_and_wins_over_the_question():
+    from anatria_engine.prompts import _language_rule
+
+    rule = _language_rule("bg")
+    assert "Bulgarian (български)" in rule
+    assert "The chosen language wins" in rule
+
+
+def test_latin_never_switches_the_language_under_either_setting():
+    """A message that is only a structure name says nothing about its author."""
+    from anatria_engine.prompts import _language_rule
+
+    for language in ("auto", "es"):
+        assert "Arteria femoralis" in _language_rule(language)
+
+
+def test_the_instructions_build_for_every_language_including_auto():
+    from anatria_engine.prompts import build_instructions
+    from anatria_engine.protocol import OrganMeta
+
+    organs = [
+        OrganMeta(
+            organ_id="left_ventricle",
+            ta2_latin="Ventriculus sinister",
+            name_en="Left ventricle",
+            system="cardiovascular",
+        )
+    ]
+    for language in ("auto", "bg", "es", "en"):
+        text = build_instructions(
+            profile="student",
+            language=language,
+            organs=organs,
+            selection=[],
+            mode="tutor",
+        )
+        assert "left_ventricle" in text

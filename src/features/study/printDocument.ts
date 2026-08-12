@@ -85,6 +85,9 @@ const LANGUAGE_LABEL: Record<Language, string> = {
   bg: "Bulgarian",
   es: "Spanish",
   en: "English",
+  // Not a language — the reader asked for their own to be followed, and this
+  // page cannot know which one that turned out to be.
+  auto: "The language asked in",
 };
 
 /**
@@ -98,7 +101,7 @@ const LANGUAGE_LABEL: Record<Language, string> = {
  * It is never paraphrased and never translated at runtime. What it says is the
  * product's regulatory position, not copy.
  */
-const DISCLAIMER: Record<Language, string> = {
+const DISCLAIMER: Record<Exclude<Language, "auto">, string> = {
   en: "Educational material only. Not a medical device; not for diagnosis or treatment.",
   es:
     "Material educativo únicamente. No es un producto sanitario; " +
@@ -115,8 +118,23 @@ const DISCLAIMER: Record<Language, string> = {
  * examiner picking it up may not read the language the student studies in. When
  * that language *is* English the two collapse into one line rather than
  * printing it twice.
+ *
+ * # Why `auto` prints all three
+ *
+ * Under `auto` the answers came back in whatever the student wrote in, which
+ * may be a language this application has no notice for. There is no
+ * `DISCLAIMER.auto` to reach for and translating one at runtime is not
+ * available to us — what it says is the product's regulatory position, not
+ * copy, and a machine-translated regulatory sentence is not that sentence.
+ *
+ * So the choice is between printing the fewest lines and printing the most
+ * likely to be understood, and for this particular sentence that is not a close
+ * call. Three lines at the foot of a page is a cheap price for the notice
+ * landing; a notice nobody on the page can read has failed at the only thing it
+ * exists to do.
  */
 export function disclaimers(language: Language): string[] {
+  if (language === "auto") return [DISCLAIMER.bg, DISCLAIMER.es, DISCLAIMER.en];
   return language === "en" ? [DISCLAIMER.en] : [DISCLAIMER[language], DISCLAIMER.en];
 }
 

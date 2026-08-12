@@ -333,25 +333,64 @@ const SECTIONS: Section[] = [
           visible to the app's interface. It is read only when a question is on its way
           out.
         </Callout>
+        <Callout>
+          <strong>The model you pick sets the quality of the answers.</strong> This is
+          worth being blunt about, because it is the easiest thing to get wrong about
+          the app. Anatria3D supplies the anatomy, the tools that move the model, and
+          the rules the assistant works under — the <em>reasoning</em> is the model's,
+          and nothing here can improve it.
+          <br />
+          <br />
+          A small, fast, cheap model gives shallower explanations, misses the
+          connections between systems, and is likelier to mark the wrong structure
+          while naming the right one. A strong model on the same question is a
+          different experience entirely. If the assistant seems thin, try a better
+          model before concluding the atlas is thin — and see <Ui>Usage</Ui> for what
+          that costs.
+        </Callout>
         <p>
           Set your <Ui>profile</Ui> before asking. The same structure is explained
           three different ways: everyday language for a layperson, terminology and
-          mechanism for a student, clinical density for a clinician. Set your language
-          too — answers come in Bulgarian, Spanish or English, with the Latin kept
-          alongside so the term still travels to other sources.
+          mechanism for a student, clinical density for a clinician.
+        </p>
+        <p>
+          Then set the answer language. <Ui>BG</Ui>, <Ui>ES</Ui> and <Ui>EN</Ui> fix
+          it: every answer comes back in that language whatever you type, with the
+          Latin kept alongside so the term still travels to other sources.
         </p>
         <Callout>
-          <strong>Those three are a default, not a limit.</strong> If none of them is
-          yours, write your question in your own language and the assistant will answer
-          in it, and keep doing so. There is no setting to change — three buttons cannot
-          list every reader, and the one they leave out is the one who cannot read the
-          buttons. Typing an anatomical term in Latin does not count as switching
-          language; it is the atlas's nomenclature, not a request.
+          <strong><Ui>Auto</Ui> answers in the language you write in.</strong> Ask in
+          Turkish and the answer is in Turkish; ask in Polish and it is in Polish. It
+          settles on your language from your first real question and stays there for
+          the rest of the conversation, so a follow-up of "and the artery?" does not
+          throw it off.
+          <br />
+          <br />
+          Three fixed buttons cannot list every reader, and the one they leave out is
+          exactly the one who cannot read the buttons. <Ui>Auto</Ui> is that reader's
+          setting. It is not the default, though, because a fixed choice is the
+          stronger promise: if you set Bulgarian and then type one question in English
+          out of habit, Bulgarian is what you wanted and Bulgarian is what you get.
+          <br />
+          <br />
+          Typing an anatomical term in Latin never switches the language under either
+          setting. <em>Arteria femoralis</em> is the atlas's nomenclature, not a
+          request.
         </Callout>
         <p>
           Structure names in an answer carry a small numbered pin. Hover one to
           highlight that structure in the viewport; click it to fly there. The full set
           appears as a legend under the answer.
+        </p>
+        <p>
+          Under each answer, in small grey type, is the model that produced it and what
+          it cost in tokens. It is there so two answers can be compared honestly —
+          which is impossible if you cannot see that one came from a cheap model and
+          the other did not.
+        </p>
+        <p>
+          Your provider, model, profile and language are remembered. Set them once; the
+          next launch opens on them.
         </p>
         <p>
           The names on the model are always in Terminologia Anatomica Latin. That is
@@ -448,6 +487,52 @@ const SECTIONS: Section[] = [
           <em>every</em> page, in your language and in English, because pages get
           separated from each other.
         </Callout>
+      </>
+    ),
+  },
+  {
+    id: "usage",
+    nav: "What it costs",
+    title: "Tokens, and where they went",
+    body: (
+      <>
+        <p>
+          Anatria3D is free and always will be. The <em>assistant</em> is not: it runs
+          on your own API key, and every answer is billed to you by your provider.
+          Nobody should have to find that out from a statement at the end of the month.
+        </p>
+        <p>
+          The <Ui>Usage</Ui> tab on the left is the whole picture. <Ui>Daily</Ui> covers
+          the last fortnight, <Ui>Weekly</Ui> the last twelve weeks, <Ui>Monthly</Ui>{" "}
+          the last year. Each shows the total, the trend, and how the spend divides
+          between the models you have used.
+        </p>
+        <Callout>
+          <strong>That last part is the one to look at.</strong> Answer quality and
+          answer cost are the same dial, and this is where you can see both ends of it
+          — a strong model beside a cheap one, with what each actually cost you and how
+          many questions it answered. That is a decision you can make; "the assistant
+          feels expensive" is not.
+        </Callout>
+        <p>
+          It counts tokens and not money, deliberately. Rates change without notice and
+          differ by tier, by region and by whether a request hit a cache, so any figure
+          in euros here would be quietly wrong for somebody within the month. Being
+          silent about your bill is better than being confidently wrong about it — your
+          provider's own dashboard is the authority.
+        </p>
+        <Callout>
+          A question costs far more than it looks like it should, and it is worth
+          knowing why: the assistant is sent the anatomy that is currently loaded so it
+          can only ever name structures that exist. Switching off systems you are not
+          studying makes questions cheaper as well as the model clearer.
+        </Callout>
+        <p>
+          The record is local, like everything else, and it is a ledger rather than a
+          list you curate. Deleting a conversation from <Ui>Study</Ui> removes what was
+          said; it does not remove what it cost, because a total that shrank when you
+          tidied up would be a total you could never check against your provider.
+        </p>
       </>
     ),
   },
