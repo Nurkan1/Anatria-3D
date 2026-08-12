@@ -38,11 +38,21 @@ function detail(overrides: Partial<SessionDetail> = {}): SessionDetail {
   return {
     session: SESSION,
     messages: [
-      { role: "user", content: "How does it fill?", created_at: 1_700_000_000_000 },
+      {
+        role: "user",
+        content: "How does it fill?",
+        created_at: 1_700_000_000_000,
+        model: null,
+        input_tokens: null,
+        output_tokens: null,
+      },
       {
         role: "assistant",
         content: "Blood leaves the left ventricle [[left_ventricle]] into the aorta.",
         created_at: 1_700_000_060_000,
+        model: "claude-sonnet-5",
+        input_tokens: 800,
+        output_tokens: 400,
       },
     ],
     structures: ["left_ventricle", "ascending_aorta"],
@@ -118,6 +128,20 @@ describe("buildSessionDocument", () => {
   it("leaves the score out of an ungraded session rather than printing a blank", () => {
     const document = buildSessionDocument(detail(), labelFor);
     expect(document.facts.map((fact) => fact.label)).not.toContain("Score");
+  });
+
+  /**
+   * Reported: a printed PDF did not say which model wrote the answers. A page
+   * outlives the app that made it, and which model produced an explanation is
+   * the single biggest factor in whether it is any good.
+   */
+  it("prints which model wrote each answer", () => {
+    const document = buildSessionDocument(detail(), labelFor);
+    expect(document.exchanges[1]!.model).toBe("claude-sonnet-5");
+  });
+
+  it("attributes no model to the student's own question", () => {
+    expect(buildSessionDocument(detail(), labelFor).exchanges[0]!.model).toBeNull();
   });
 
   it("prints in the language the session was answered in", () => {

@@ -26,7 +26,7 @@ use serde::{Deserialize, Serialize};
 /// Schema revision, tracked in SQLite's own `user_version` pragma. Bump it and
 /// add a step to `migrate` — never edit an existing step, or a database written
 /// by a released build becomes unreadable.
-const SCHEMA_VERSION: i32 = 3;
+const SCHEMA_VERSION: i32 = 4;
 
 /// Marker on an exported journal, so an unrelated `.json` is refused with a
 /// sentence rather than a parse error.
@@ -88,6 +88,14 @@ pub struct StoredMessage {
     pub role: String,
     pub content: String,
     pub created_at: i64,
+    /// Which model produced this answer. `None` on every question, and on any
+    /// answer written before the journal recorded it.
+    #[serde(default)]
+    pub model: Option<String>,
+    #[serde(default)]
+    pub input_tokens: Option<i64>,
+    #[serde(default)]
+    pub output_tokens: Option<i64>,
 }
 
 #[derive(Debug, Serialize)]
@@ -206,6 +214,15 @@ pub struct TurnInput {
     /// Structures the student had selected — the index behind "what have I
     /// studied about the left ventricle?".
     pub organ_ids: Vec<String>,
+    /// Which model produced the answer, and what it cost. Absent when the
+    /// provider reported nothing; recorded against the answer, never the
+    /// question, because the question is the student's own words.
+    #[serde(default)]
+    pub model: Option<String>,
+    #[serde(default)]
+    pub input_tokens: Option<i64>,
+    #[serde(default)]
+    pub output_tokens: Option<i64>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -310,10 +327,23 @@ impl StudyDb {
                 if content.is_empty() {
                     continue;
                 }
+                // Provenance belongs to the answer alone. Filing the model
+                // against the student's own question would claim it wrote it.
+                let answered = role == "assistant";
                 tx.execute(
-                    "INSERT INTO study_message (session_id, role, content, created_at)
-                     VALUES (?1, ?2, ?3, ?4)",
-                    params![id, role, content, now],
+                    "INSERT INTO study_message
+                         (session_id, role, content, created_at,
+                          model, input_tokens, output_tokens)
+                     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
+                    params![
+                        id,
+                        role,
+                        content,
+                        now,
+                        answered.then(|| turn.model.clone()).flatten(),
+                        answered.then_some(turn.input_tokens).flatten(),
+                        answered.then_some(turn.output_tokens).flatten(),
+                    ],
                 )?;
             }
 
@@ -418,8 +448,8 @@ impl StudyDb {
             };
 
             let mut stmt = conn.prepare(
-                "SELECT role, content, created_at FROM study_message
-                 WHERE session_id = ?1 ORDER BY id",
+                "SELECT role, content, created_at, model, input_tokens, output_tokens
+                 FROM study_message WHERE session_id = ?1 ORDER BY id",
             )?;
             let messages = stmt
                 .query_map(params![id], |row| {
@@ -427,6 +457,9 @@ impl StudyDb {
                         role: row.get(0)?,
                         content: row.get(1)?,
                         created_at: row.get(2)?,
+                        model: row.get(3)?,
+                        input_tokens: row.get(4)?,
+                        output_tokens: row.get(5)?,
                     })
                 })?
                 .collect::<rusqlite::Result<Vec<_>>>()?;
@@ -604,8 +637,8 @@ impl StudyDb {
 
             let mut sessions = rows;
             let mut messages = conn.prepare(
-                "SELECT role, content, created_at FROM study_message
-                 WHERE session_id = ?1 ORDER BY id",
+                "SELECT role, content, created_at, model, input_tokens, output_tokens
+                 FROM study_message WHERE session_id = ?1 ORDER BY id",
             )?;
             let mut structures =
                 conn.prepare("SELECT organ_id FROM session_structure WHERE session_id = ?1")?;
@@ -616,6 +649,9 @@ impl StudyDb {
                             role: row.get(0)?,
                             content: row.get(1)?,
                             created_at: row.get(2)?,
+                            model: row.get(3)?,
+                            input_tokens: row.get(4)?,
+                            output_tokens: row.get(5)?,
                         })
                     })?
                     .collect::<rusqlite::Result<Vec<_>>>()?;
@@ -1155,6 +1191,28 @@ fn migrate(conn: &mut Connection) -> rusqlite::Result<()> {
         )?;
     }
 
+    if version < 4 {
+        // Which model produced an answer, and what it cost.
+        //
+        // On the message rather than only in `token_usage`, because the two
+        // answer different questions. That table is a ledger — it must survive
+        // the session being deleted, and it is keyed by nothing finer than the
+        // conversation. This is provenance: *this paragraph* came from that
+        // model. A student reopening a session weeks later, or printing one to
+        // revise from, is entitled to know which model told them this, and a
+        // journal that keeps only the prose cannot say.
+        //
+        // Nullable, and nothing is backfilled. Every answer written before
+        // this column existed genuinely has no recorded model, and inventing
+        // one — the current selection, the provider's default — would be worse
+        // than the blank: it would look like a fact.
+        conn.execute_batch(
+            "ALTER TABLE study_message ADD COLUMN model TEXT;
+             ALTER TABLE study_message ADD COLUMN input_tokens INTEGER;
+             ALTER TABLE study_message ADD COLUMN output_tokens INTEGER;",
+        )?;
+    }
+
     conn.pragma_update(None, "user_version", SCHEMA_VERSION)
 }
 
@@ -1169,13 +1227,17 @@ fn write_messages(tx: &rusqlite::Transaction<'_>, session: &ExportSession) -> ru
             continue;
         }
         tx.execute(
-            "INSERT INTO study_message (session_id, role, content, created_at)
-             VALUES (?1, ?2, ?3, ?4)",
+            "INSERT INTO study_message
+                 (session_id, role, content, created_at, model, input_tokens, output_tokens)
+             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
             params![
                 session.id,
                 message.role,
                 clamp(&message.content, MAX_MESSAGE),
-                message.created_at
+                message.created_at,
+                message.model,
+                message.input_tokens,
+                message.output_tokens,
             ],
         )?;
     }
@@ -1280,6 +1342,9 @@ mod tests {
             question: question.into(),
             answer: answer.into(),
             organ_ids: vec![],
+            model: None,
+            input_tokens: None,
+            output_tokens: None,
         }
     }
 
@@ -1748,10 +1813,37 @@ mod tests {
     fn notes_written_before_the_upgrade_are_given_an_identity() {
         // The v1 -> v2 step has to backfill, or every pre-existing note would
         // be unmergeable and the first import would collide them all.
-        // A database exactly as schema v1 left it: `note` with no uuid column.
+        // A database exactly as schema v1 left it. Every table, not just the
+        // one this step touches: later steps alter the others, and a fixture
+        // that omits them tests a database no release ever wrote.
         let mut conn = Connection::open_in_memory().unwrap();
         conn.execute_batch(
-            "CREATE TABLE note (
+            "CREATE TABLE study_session (
+                 id         TEXT PRIMARY KEY,
+                 kind       TEXT NOT NULL CHECK (kind IN ('tutor', 'case')),
+                 title      TEXT NOT NULL,
+                 profile    TEXT NOT NULL,
+                 language   TEXT NOT NULL,
+                 score      INTEGER,
+                 verdict    TEXT,
+                 created_at INTEGER NOT NULL,
+                 updated_at INTEGER NOT NULL
+             );
+             CREATE TABLE study_message (
+                 id         INTEGER PRIMARY KEY AUTOINCREMENT,
+                 session_id TEXT NOT NULL
+                            REFERENCES study_session(id) ON DELETE CASCADE,
+                 role       TEXT NOT NULL CHECK (role IN ('user', 'assistant')),
+                 content    TEXT NOT NULL,
+                 created_at INTEGER NOT NULL
+             );
+             CREATE TABLE session_structure (
+                 session_id TEXT NOT NULL
+                            REFERENCES study_session(id) ON DELETE CASCADE,
+                 organ_id   TEXT NOT NULL,
+                 PRIMARY KEY (session_id, organ_id)
+             );
+             CREATE TABLE note (
                  id          INTEGER PRIMARY KEY AUTOINCREMENT,
                  organ_id    TEXT,
                  organ_label TEXT,
@@ -1772,6 +1864,16 @@ mod tests {
             .query_row("SELECT uuid FROM note", [], |row| row.get(0))
             .unwrap();
         assert_eq!(uuid.map(|id| id.len()), Some(32));
+
+        // And it arrived at the current schema on the way, rather than
+        // stopping at the step this test is named after.
+        let version: i32 = conn
+            .pragma_query_value(None, "user_version", |row| row.get(0))
+            .unwrap();
+        assert_eq!(version, SCHEMA_VERSION);
+        conn.query_row("SELECT model FROM study_message", [], |_| Ok(()))
+            .optional()
+            .expect("a v1 journal should gain every later column");
     }
 
     #[test]
@@ -1837,6 +1939,56 @@ mod tests {
         assert_eq!(buckets.len(), 1);
         assert_eq!(buckets[0].input_tokens, 900);
         assert_eq!(buckets[0].model, "claude-sonnet-5");
+    }
+
+    // -- provenance --------------------------------------------------------
+
+    #[test]
+    fn an_answer_remembers_the_model_that_wrote_it() {
+        let db = StudyDb::in_memory();
+        let mut input = turn("s1", "Why does adrenaline speed the heart?", "Beta-1.");
+        input.model = Some("claude-sonnet-5".into());
+        input.input_tokens = Some(40_500);
+        input.output_tokens = Some(2_565);
+        db.save_turn(input).unwrap();
+
+        let messages = db.session("s1").unwrap().unwrap().messages;
+        let question = &messages[0];
+        let answer = &messages[1];
+
+        assert_eq!(answer.model.as_deref(), Some("claude-sonnet-5"));
+        assert_eq!(answer.input_tokens, Some(40_500));
+        assert_eq!(answer.output_tokens, Some(2_565));
+
+        // Filing it against the student's own words would claim the model
+        // wrote them.
+        assert_eq!(question.model, None);
+        assert_eq!(question.input_tokens, None);
+    }
+
+    /// A turn whose provider reported nothing has no model, and no model is
+    /// what it stores. Anything else would look like a fact.
+    #[test]
+    fn an_answer_with_no_reported_model_stores_none() {
+        let db = StudyDb::in_memory();
+        db.save_turn(turn("s1", "Q", "A")).unwrap();
+        assert_eq!(db.session("s1").unwrap().unwrap().messages[1].model, None);
+    }
+
+    #[test]
+    fn provenance_survives_an_export_and_reimport() {
+        let source = StudyDb::in_memory();
+        let mut input = turn("s1", "Q", "A");
+        input.model = Some("gpt-5.2".into());
+        input.output_tokens = Some(120);
+        source.save_turn(input).unwrap();
+
+        let target = StudyDb::in_memory();
+        target.import(source.export().unwrap()).unwrap();
+
+        let answer = &target.session("s1").unwrap().unwrap().messages[1];
+        assert_eq!(answer.model.as_deref(), Some("gpt-5.2"));
+        assert_eq!(answer.output_tokens, Some(120));
     }
 
     #[test]

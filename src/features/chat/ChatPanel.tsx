@@ -428,6 +428,13 @@ export function ChatPanel() {
         question: turn.question,
         answer: turn.answer,
         organ_ids: organIds,
+        // Filed with the answer so reopening the session — or printing it —
+        // can still say what wrote this. The ledger in `token_usage` cannot:
+        // it is keyed by conversation and survives the session's deletion,
+        // which is right for accounting and useless for provenance.
+        model: turn.model ?? null,
+        input_tokens: turn.usage?.input_tokens ?? null,
+        output_tokens: turn.usage?.output_tokens ?? null,
       })
       // Strictly after the turn, and only if it landed: the session row is
       // created by that save, so grading a failed one would raise a second,

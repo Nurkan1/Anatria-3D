@@ -38,6 +38,16 @@ export interface PrintExchange {
   role: "user" | "assistant";
   body: string;
   when: number;
+  /**
+   * Which model wrote this answer.
+   *
+   * Printed because a page outlives the app that made it. Somebody revising
+   * from a printout months later, or a supervisor reading one, is entitled to
+   * know that this explanation came from a model — and which one, since that
+   * is the single biggest factor in whether it is any good. Null on questions,
+   * and on answers written before the journal recorded it.
+   */
+  model: string | null;
 }
 
 /** A label/value pair shown under the heading. */
@@ -194,6 +204,7 @@ export function buildSessionDocument(
       role: message.role,
       body: stripOrganRefs(message.content),
       when: message.created_at,
+      model: message.model,
     })),
     language: session.language,
     createdAt: session.created_at,

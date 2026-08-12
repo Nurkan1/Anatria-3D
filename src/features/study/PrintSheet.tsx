@@ -244,6 +244,14 @@ function Transcript({ document }: { document: PrintDocument }) {
               <span className="ml-2 font-normal normal-case tracking-normal text-slate-400">
                 {moment(exchange.when)}
               </span>
+              {/* On the "Answered" line rather than in the header facts,
+                  because a session can span models: printing one name at the
+                  top would misattribute every answer that came from another. */}
+              {exchange.model && (
+                <span className="ml-2 font-normal normal-case tracking-normal text-slate-400">
+                  · by {exchange.model}
+                </span>
+              )}
             </p>
             <div
               className={

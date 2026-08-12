@@ -37,6 +37,17 @@ export interface StoredMessage {
   role: "user" | "assistant";
   content: string;
   created_at: number;
+  /**
+   * Which model produced this answer, and what it cost.
+   *
+   * Null on every question, and on any answer written before the journal
+   * recorded it. Nothing is backfilled — an old answer genuinely has no
+   * recorded model, and filling in the current selection would look like a
+   * fact rather than a guess.
+   */
+  model: string | null;
+  input_tokens: number | null;
+  output_tokens: number | null;
 }
 
 export interface SessionDetail {
@@ -72,6 +83,10 @@ export interface TurnInput {
   question: string;
   answer: string;
   organ_ids: string[];
+  /** Provenance for the answer. Absent when the provider reported none. */
+  model?: string | null;
+  input_tokens?: number | null;
+  output_tokens?: number | null;
 }
 
 export interface NoteInput {

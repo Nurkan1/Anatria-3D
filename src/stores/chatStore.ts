@@ -33,8 +33,11 @@ export interface ChatMessage {
    * Recorded per message rather than read from the settings drawer, because the
    * point of showing it is comparison: a transcript where two answers came from
    * two different models has to say so, and the drawer only ever knows what is
-   * selected *now*. Absent on a reopened turn — the journal stores prose, and
-   * inventing a model name for an old answer would be worse than silence.
+   * selected *now*.
+   *
+   * Stored in the journal and restored on reopening. Absent only where it
+   * genuinely is not known: an answer written before the journal recorded it.
+   * Nothing is backfilled — a guessed model name would look like a fact.
    */
   model?: string;
   /** Set on the assistant turn that graded a case drill. */
@@ -45,6 +48,9 @@ export interface ChatMessage {
 export interface CompletedTurn {
   question: string;
   answer: string;
+  /** Which model wrote the answer, and what it cost. Absent if unreported. */
+  model?: string;
+  usage?: TokenUsage;
 }
 
 interface ChatStore {
@@ -194,12 +200,27 @@ export const useChatStore = create<ChatStore>()((set, get) => ({
       mode: detail.session.kind,
       // Reopened turns carry no request id, so they are keyed by position.
       // Nothing can stream into them — they are finished by definition.
+      //
+      // Provenance comes back with them. An answer that said which model wrote
+      // it while it was on screen and then went blank on reopening was the
+      // journal quietly forgetting, not a deliberate silence: a student
+      // comparing two models across a week's sessions needs it most at exactly
+      // the moment they come back to them.
       messages: detail.messages.map((message) => ({
         id: nextId(),
         role: message.role,
         content: message.content,
         tools: [],
         status: "complete" as const,
+        ...(message.model ? { model: message.model } : {}),
+        ...(message.input_tokens !== null && message.output_tokens !== null
+          ? {
+              usage: {
+                input_tokens: message.input_tokens,
+                output_tokens: message.output_tokens,
+              },
+            }
+          : {}),
       })),
     }),
 
@@ -211,7 +232,12 @@ export const useChatStore = create<ChatStore>()((set, get) => ({
     // A failed or cancelled turn is not worth filing: the journal would fill
     // with half-answers that read as gaps in the student's own understanding.
     if (answer.status !== "complete" || answer.content.trim().length === 0) return null;
-    return { question: question.content, answer: answer.content };
+    return {
+      question: question.content,
+      answer: answer.content,
+      ...(answer.model ? { model: answer.model } : {}),
+      ...(answer.usage ? { usage: answer.usage } : {}),
+    };
   },
 
   history: () =>

@@ -1,5 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
+import type { SessionDetail } from "@/lib/studyDb";
+
 import { useChatStore } from "./chatStore";
 
 const store = () => useChatStore.getState();
@@ -134,32 +136,81 @@ describe("chatStore", () => {
     expect(store().messages).toEqual([]);
   });
 
-  it("reopens a session with its transcript and its mode", () => {
-    store().loadSession({
-      session: {
-        id: "s-42",
-        kind: "case",
-        title: "Anterior infarction",
-        profile: "student",
-        language: "es",
-        score: 68,
-        verdict: "Missed the timing.",
-        message_count: 2,
-        structure_count: 1,
+  /** A graded drill as the journal hands it back, provenance and all. */
+  const reopened = (): SessionDetail => ({
+    session: {
+      id: "s-42",
+      kind: "case",
+      title: "Anterior infarction",
+      profile: "student",
+      language: "es",
+      score: 68,
+      verdict: "Missed the timing.",
+      message_count: 2,
+      structure_count: 1,
+      created_at: 1,
+      updated_at: 2,
+    },
+    messages: [
+      {
+        role: "user",
+        content: "What would I do?",
         created_at: 1,
-        updated_at: 2,
+        model: null,
+        input_tokens: null,
+        output_tokens: null,
       },
-      messages: [
-        { role: "user", content: "What would I do?", created_at: 1 },
-        { role: "assistant", content: "Here is the case.", created_at: 2 },
-      ],
-      structures: ["left_ventricle"],
-    });
+      {
+        role: "assistant",
+        content: "Here is the case.",
+        created_at: 2,
+        model: "gpt-5.2",
+        input_tokens: 120,
+        output_tokens: 45,
+      },
+    ],
+    structures: ["left_ventricle"],
+  });
+
+  it("reopens a session with its transcript and its mode", () => {
+    store().loadSession(reopened());
 
     expect(store().sessionId).toBe("s-42");
     expect(store().mode).toBe("case");
     // Reopened turns are finished by definition — nothing can stream into them.
     expect(store().messages.map((m) => m.status)).toEqual(["complete", "complete"]);
+  });
+
+  /**
+   * Reported: an answer showed its model and token count while it was on
+   * screen, then came back blank after closing and reopening the session. That
+   * was the journal forgetting, not a deliberate silence — and a student
+   * comparing two models across a week of sessions needs it most at exactly the
+   * moment they return to them.
+   */
+  it("restores which model wrote a reopened answer, and what it cost", () => {
+    store().loadSession(reopened());
+    const answer = store().messages[1]!;
+    expect(answer.model).toBe("gpt-5.2");
+    expect(answer.usage).toEqual({ input_tokens: 120, output_tokens: 45 });
+  });
+
+  it("attributes nothing to the reader's own question", () => {
+    store().loadSession(reopened());
+    expect(store().messages[0]!.model).toBeUndefined();
+    expect(store().messages[0]!.usage).toBeUndefined();
+  });
+
+  /** An answer from before the journal recorded it has no model, and says so. */
+  it("leaves an unrecorded answer blank rather than guessing one", () => {
+    const detail = reopened();
+    detail.messages[1]!.model = null;
+    detail.messages[1]!.input_tokens = null;
+    detail.messages[1]!.output_tokens = null;
+
+    store().loadSession(detail);
+    expect(store().messages[1]!.model).toBeUndefined();
+    expect(store().messages[1]!.usage).toBeUndefined();
   });
 
   it("attaches a case grade to the turn that earned it", () => {
