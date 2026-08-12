@@ -203,6 +203,9 @@ Rust with `std::process::Command`, so the webview has no path to executing
 anything. See [`src-tauri/src/sidecar.rs`](src-tauri/src/sidecar.rs) for why
 that is also what makes PyInstaller `--onedir` workable.
 
+Found a hole in any of that? [`SECURITY.md`](SECURITY.md) says where to send it
+— privately, not as a public issue.
+
 ### Layout
 
 ```
