@@ -88,7 +88,11 @@ async def handle_agent_request(request: AgentRequest, transport: Transport) -> N
                     )
                 elif isinstance(event, Completed):
                     transport.emit(
-                        DoneEvent(request_id=request.request_id, usage=event.usage)
+                        DoneEvent(
+                            request_id=request.request_id,
+                            usage=event.usage,
+                            model=event.model,
+                        )
                     )
             return
 
@@ -168,7 +172,9 @@ async def handle_list_models(request: ListModelsRequest, transport: Transport) -
             request_id=request.request_id, provider=request.provider, models=models
         )
     )
-    transport.emit(DoneEvent(request_id=request.request_id, usage=None))
+    # Listing a catalogue is not a turn: it ran on no model and cost nothing
+    # attributable, so both fields are honestly empty rather than zeroed.
+    transport.emit(DoneEvent(request_id=request.request_id, usage=None, model=None))
 
 
 def _classify(exc: Exception) -> str:

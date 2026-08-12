@@ -383,9 +383,19 @@ class CaseVerdictEvent(Strict):
 
 
 class DoneEvent(Strict):
+    """The turn is over, with what it cost and what ran it.
+
+    `model` is the id the SDK was actually given, defaults resolved — not what
+    the panel had selected, which is `null` whenever the reader never chose one.
+    Both it and `usage` are nullable because a `done` also closes turns that
+    never reached a provider, and "we were not told" has to stay distinguishable
+    from "this cost nothing": only one of the two belongs in a total.
+    """
+
     type: Literal["done"] = "done"
     request_id: str
     usage: TokenUsage | None
+    model: str | None
 
 
 class ErrorEvent(Strict):

@@ -27,8 +27,20 @@ class ProviderError(RuntimeError):
     """The provider SDK could not be initialised for this request."""
 
 
+def resolve_model_name(provider: AiProvider, model: str | None) -> str:
+    """The model id actually sent to the SDK, once the default is applied.
+
+    Split out so the answer can be reported back with the turn. A usage record
+    filed against "whatever the panel had selected" would say `null` for every
+    turn that took the default, and a consumption panel that cannot name the
+    model it is counting is worse than none — it invites the reader to attribute
+    the spend to the wrong one.
+    """
+    return model or DEFAULT_MODELS[provider]
+
+
 def build_model(provider: AiProvider, api_key: str, model: str | None = None) -> Model:
-    name = model or DEFAULT_MODELS[provider]
+    name = resolve_model_name(provider, model)
 
     try:
         if provider == "anthropic":

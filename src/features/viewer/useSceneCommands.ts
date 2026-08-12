@@ -12,12 +12,18 @@ export interface SceneCommandBridgeOptions {
   /** A case drill was graded. Fires before `onDone` for the same request. */
   onCaseVerdict?: (requestId: string, score: number, verdict: string) => void;
   /**
-   * The turn finished. `usage` is null when the provider reported none — a
-   * cancelled turn, or a model that simply does not return counts — and null
-   * has to stay distinguishable from zero, because "we were not told" and "this
-   * cost nothing" are different facts and only one of them belongs in a total.
+   * The turn finished, with what it cost and which model ran it.
+   *
+   * `usage` is null when the provider reported none — a cancelled turn, or a
+   * model that simply does not return counts — and null has to stay
+   * distinguishable from zero, because "we were not told" and "this cost
+   * nothing" are different facts and only one of them belongs in a total.
+   *
+   * `model` is the id the engine actually sent, defaults resolved, so an answer
+   * can say what produced it even when the reader never chose one. Null for a
+   * `done` that closed something which never reached a provider.
    */
-  onDone?: (requestId: string, usage: TokenUsage | null) => void;
+  onDone?: (requestId: string, usage: TokenUsage | null, model: string | null) => void;
   onError?: (code: string, message: string, requestId: string | null) => void;
   onReady?: () => void;
   /**
@@ -78,7 +84,7 @@ export function useSceneCommands(options: SceneCommandBridgeOptions = {}) {
           onCaseVerdict?.(event.request_id, event.score, event.verdict);
           break;
         case "done":
-          onDone?.(event.request_id, event.usage);
+          onDone?.(event.request_id, event.usage, event.model);
           break;
         case "error":
           onError?.(event.code, event.message, event.request_id);

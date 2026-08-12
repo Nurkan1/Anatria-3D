@@ -38,7 +38,7 @@ from anatria_engine.protocol import (
     TokenUsage,
     TranscriptTurn,
 )
-from anatria_engine.providers import build_model
+from anatria_engine.providers import build_model, resolve_model_name
 from anatria_engine.scene_tools import SceneContext, register_scene_tools
 
 #: Tool retries per turn. Two is enough for the model to recover from a wrong
@@ -59,6 +59,8 @@ class ToolStarted:
 @dataclass
 class Completed:
     usage: TokenUsage | None
+    #: The model id the turn actually ran on, defaults resolved.
+    model: str
 
 
 AgentEvent = TextChunk | ToolStarted | Completed
@@ -123,6 +125,7 @@ async def run_agent(
     """Stream one turn, yielding text as it arrives and tool starts as they fire."""
     agent = build_agent(request, scene)
     history = build_history(request.history)
+    model_name = resolve_model_name(request.provider, request.model)
 
     async with agent.run_stream_events(
         request.query, deps=scene, message_history=history
@@ -147,7 +150,7 @@ async def run_agent(
                 yield ToolStarted(event.part.tool_name)
 
             elif isinstance(event, AgentRunResultEvent):
-                yield Completed(_usage_of(event))
+                yield Completed(_usage_of(event), model_name)
 
 
 def _usage_of(event: AgentRunResultEvent) -> TokenUsage | None:

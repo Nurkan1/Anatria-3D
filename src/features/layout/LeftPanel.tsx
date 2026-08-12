@@ -2,17 +2,25 @@ import { useState } from "react";
 
 import { StudyPanel } from "@/features/study/StudyPanel";
 import { AnatomyTree } from "@/features/tree/AnatomyTree";
+import { UsagePanel } from "@/features/usage/UsagePanel";
 import { useStudyStore } from "@/stores/studyStore";
 
-type Tab = "atlas" | "study";
+type Tab = "atlas" | "study" | "usage";
 
 /**
- * The left column: the atlas, and the student's own journal.
+ * The left column: the atlas, the student's own journal, and what the
+ * assistant has cost.
  *
- * Both panels stay mounted and are hidden with CSS rather than unmounted. The
- * tree carries which systems are expanded and where the list is scrolled —
+ * All three panels stay mounted and are hidden with CSS rather than unmounted.
+ * The tree carries which systems are expanded and where the list is scrolled —
  * state that is expensive to rebuild and infuriating to lose because you
  * glanced at a note. The journal, symmetrically, keeps a half-written note.
+ *
+ * Consumption is a tab here rather than anything in the assistant panel. It is
+ * a separate activity from asking a question: you come looking for it once,
+ * when a bill surprises you, and it would tax every reading of every answer if
+ * it lived alongside them. The one number that does belong next to an answer —
+ * what that answer cost — is already there, as a single faint line.
  */
 export function LeftPanel() {
   const [tab, setTab] = useState<Tab>("atlas");
@@ -32,6 +40,9 @@ export function LeftPanel() {
             </span>
           )}
         </TabButton>
+        <TabButton active={tab === "usage"} onClick={() => setTab("usage")}>
+          Usage
+        </TabButton>
       </div>
 
       <div className={`min-h-0 flex-1 ${tab === "atlas" ? "" : "hidden"}`}>
@@ -39,6 +50,9 @@ export function LeftPanel() {
       </div>
       <div className={`min-h-0 flex-1 ${tab === "study" ? "" : "hidden"}`}>
         <StudyPanel />
+      </div>
+      <div className={`min-h-0 flex-1 ${tab === "usage" ? "" : "hidden"}`}>
+        <UsagePanel />
       </div>
     </div>
   );

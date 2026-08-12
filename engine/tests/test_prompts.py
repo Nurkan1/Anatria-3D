@@ -221,3 +221,28 @@ def test_multiple_selection_is_framed_as_a_comparison() -> None:
     assert "muscle_0" in text and "muscle_3" in text
     # Without this the model answers about the first one and ignores the rest.
     assert "compare" in text.lower()
+
+
+# ---------------------------------------------------------------------------
+# Which model actually ran the turn
+# ---------------------------------------------------------------------------
+
+
+def test_an_explicit_model_is_used_as_given():
+    from anatria_engine.providers import resolve_model_name
+
+    assert resolve_model_name("anthropic", "claude-opus-5") == "claude-opus-5"
+
+
+def test_no_choice_resolves_to_the_provider_default():
+    """The reported model must be the one the SDK was given, not `None`.
+
+    A usage record filed against "whatever the panel had selected" says nothing
+    for every turn that took the default — which is most first turns — and a
+    consumption panel that cannot name the model it is counting invites the
+    reader to attribute the spend to the wrong one.
+    """
+    from anatria_engine.providers import DEFAULT_MODELS, resolve_model_name
+
+    for provider, default in DEFAULT_MODELS.items():
+        assert resolve_model_name(provider, None) == default

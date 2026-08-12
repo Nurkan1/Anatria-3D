@@ -26,7 +26,7 @@ use serde::{Deserialize, Serialize};
 /// Schema revision, tracked in SQLite's own `user_version` pragma. Bump it and
 /// add a step to `migrate` — never edit an existing step, or a database written
 /// by a released build becomes unreadable.
-const SCHEMA_VERSION: i32 = 2;
+const SCHEMA_VERSION: i32 = 3;
 
 /// Marker on an exported journal, so an unrelated `.json` is refused with a
 /// sentence rather than a parse error.
@@ -921,6 +921,124 @@ impl StudyDb {
             rows.collect::<rusqlite::Result<Vec<_>>>().map_err(Into::into)
         })
     }
+
+    // -- consumption -------------------------------------------------------
+
+    /// File what one turn cost.
+    ///
+    /// The session reference is resolved here rather than trusted, and falls
+    /// back to `NULL` when no such session exists. A turn's cost is known the
+    /// moment the provider answers, but its session row is written afterwards
+    /// and — for a turn that failed or was cancelled — never. Enforcing the
+    /// key would make the spend record depend on an ordering it has no reason
+    /// to care about, and lose exactly the turns worth counting: the ones that
+    /// cost tokens and produced nothing.
+    pub fn record_usage(&self, usage: UsageInput) -> Result<()> {
+        if usage.provider.trim().is_empty() || usage.model.trim().is_empty() {
+            return Err(StudyError::Invalid(
+                "a usage record needs a provider and a model".into(),
+            ));
+        }
+        if usage.input_tokens < 0 || usage.output_tokens < 0 {
+            return Err(StudyError::Invalid("token counts cannot be negative".into()));
+        }
+
+        self.with(|conn| {
+            let session_id = match usage.session_id.as_deref() {
+                Some(id) => conn
+                    .query_row(
+                        "SELECT id FROM study_session WHERE id = ?1",
+                        params![id],
+                        |row| row.get::<_, String>(0),
+                    )
+                    .optional()?,
+                None => None,
+            };
+
+            conn.execute(
+                "INSERT INTO token_usage
+                     (session_id, provider, model, input_tokens, output_tokens, created_at)
+                 VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
+                params![
+                    session_id,
+                    usage.provider.trim(),
+                    usage.model.trim(),
+                    usage.input_tokens,
+                    usage.output_tokens,
+                    now_ms(),
+                ],
+            )?;
+            Ok(())
+        })
+    }
+
+    /// Spend over the last `days` days, one row per local day and model.
+    ///
+    /// Bucketed here rather than in the panel because SQLite can do it in the
+    /// index and the alternative is shipping every turn the reader has ever
+    /// taken across the IPC boundary to add up six numbers. A year of daily use
+    /// across three models is a few hundred rows.
+    ///
+    /// `localtime`, deliberately. A question asked at half past eleven at night
+    /// belongs to the day the reader was awake for, not to the following one in
+    /// UTC — and the weekly and monthly rollups are built from these buckets,
+    /// so getting the day boundary wrong would move spend between months.
+    pub fn usage(&self, days: i64) -> Result<Vec<UsageBucket>> {
+        let days = days.clamp(1, 3660);
+        self.with(|conn| {
+            let mut stmt = conn.prepare(
+                "SELECT date(created_at / 1000, 'unixepoch', 'localtime') AS day,
+                        provider,
+                        model,
+                        SUM(input_tokens),
+                        SUM(output_tokens),
+                        COUNT(*)
+                 FROM token_usage
+                 WHERE day >= date('now', 'localtime', ?1)
+                 GROUP BY day, provider, model
+                 ORDER BY day DESC",
+            )?;
+            // `-N days` covers today plus the N-1 before it, which is what
+            // "the last seven days" means to a reader looking at a week.
+            let window = format!("-{} days", days - 1);
+            let rows = stmt.query_map(params![window], |row| {
+                Ok(UsageBucket {
+                    day: row.get(0)?,
+                    provider: row.get(1)?,
+                    model: row.get(2)?,
+                    input_tokens: row.get(3)?,
+                    output_tokens: row.get(4)?,
+                    turns: row.get(5)?,
+                })
+            })?;
+            rows.collect::<rusqlite::Result<Vec<_>>>().map_err(Into::into)
+        })
+    }
+}
+
+/// What one turn cost, on the way in.
+#[derive(Debug, Deserialize)]
+pub struct UsageInput {
+    /// The conversation it belongs to, if it was filed as one.
+    pub session_id: Option<String>,
+    pub provider: String,
+    /// The id the engine actually sent, defaults resolved.
+    pub model: String,
+    pub input_tokens: i64,
+    pub output_tokens: i64,
+}
+
+/// One local day's spend on one model.
+#[derive(Debug, Serialize)]
+pub struct UsageBucket {
+    /// `YYYY-MM-DD` in the reader's own timezone.
+    pub day: String,
+    pub provider: String,
+    pub model: String,
+    pub input_tokens: i64,
+    pub output_tokens: i64,
+    /// Turns behind these numbers, so an average per question is available.
+    pub turns: i64,
 }
 
 /// One structure, and how often the reader has worked on it.
@@ -1002,6 +1120,38 @@ fn migrate(conn: &mut Connection) -> rusqlite::Result<()> {
             "ALTER TABLE note ADD COLUMN uuid TEXT;
              UPDATE note SET uuid = lower(hex(randomblob(16))) WHERE uuid IS NULL;
              CREATE UNIQUE INDEX idx_note_uuid ON note(uuid);",
+        )?;
+    }
+
+    if version < 3 {
+        // What each turn cost, so the reader can see their own consumption
+        // without logging into three provider dashboards.
+        //
+        // Its own table rather than columns on `study_session`, for two
+        // reasons. A turn that failed or was cancelled still spent input
+        // tokens and still belongs in the total, but is deliberately never
+        // filed as a session — that is the rule that keeps half-answers out of
+        // the journal, and it must not double as a rule about money. And a
+        // session runs over days: a single pair of columns on it could only
+        // say when the session started, not when the spend happened.
+        //
+        // `ON DELETE SET NULL` rather than CASCADE. Deleting a conversation
+        // removes what was said; it cannot un-spend the tokens, and a total
+        // that silently shrinks when you tidy your journal is a total nobody
+        // can reconcile against a provider's bill. The orphaned row keeps the
+        // date, the provider and the model, and carries no anatomy, no
+        // question and no prose — there is nothing in it to be private about.
+        conn.execute_batch(
+            "CREATE TABLE token_usage (
+                 id            INTEGER PRIMARY KEY AUTOINCREMENT,
+                 session_id    TEXT REFERENCES study_session(id) ON DELETE SET NULL,
+                 provider      TEXT NOT NULL,
+                 model         TEXT NOT NULL,
+                 input_tokens  INTEGER NOT NULL CHECK (input_tokens  >= 0),
+                 output_tokens INTEGER NOT NULL CHECK (output_tokens >= 0),
+                 created_at    INTEGER NOT NULL
+             );
+             CREATE INDEX idx_usage_when ON token_usage(created_at DESC);",
         )?;
     }
 
@@ -1630,5 +1780,88 @@ mod tests {
         let mut input = turn("s1", "Q", "A");
         input.kind = "exam".into();
         assert!(db.save_turn(input).is_err());
+    }
+
+    // -- consumption -------------------------------------------------------
+
+    fn spend(session_id: Option<&str>, model: &str, input: i64, output: i64) -> UsageInput {
+        UsageInput {
+            session_id: session_id.map(Into::into),
+            provider: "google".into(),
+            model: model.into(),
+            input_tokens: input,
+            output_tokens: output,
+        }
+    }
+
+    #[test]
+    fn usage_is_summed_per_model() {
+        let db = StudyDb::in_memory();
+        db.record_usage(spend(None, "gemini-3.1-flash-lite", 800, 400)).unwrap();
+        db.record_usage(spend(None, "gemini-3.1-flash-lite", 200, 100)).unwrap();
+        db.record_usage(spend(None, "gemini-3.1-pro", 50, 25)).unwrap();
+
+        let mut buckets = db.usage(7).unwrap();
+        buckets.sort_by(|a, b| a.model.cmp(&b.model));
+        assert_eq!(buckets.len(), 2);
+        assert_eq!(buckets[0].model, "gemini-3.1-flash-lite");
+        assert_eq!(buckets[0].input_tokens, 1000);
+        assert_eq!(buckets[0].output_tokens, 500);
+        assert_eq!(buckets[0].turns, 2);
+        assert_eq!(buckets[1].input_tokens, 50);
+    }
+
+    /// The turns worth counting most are the ones that produced nothing: they
+    /// cost input tokens and are deliberately never filed as a session.
+    #[test]
+    fn a_turn_with_no_session_is_still_counted() {
+        let db = StudyDb::in_memory();
+        db.record_usage(spend(Some("never-written"), "gpt-5.2", 300, 0)).unwrap();
+
+        let buckets = db.usage(7).unwrap();
+        assert_eq!(buckets.len(), 1);
+        assert_eq!(buckets[0].input_tokens, 300);
+    }
+
+    /// Deleting a conversation removes what was said. It cannot un-spend the
+    /// tokens, and a total that shrinks when you tidy your journal is one
+    /// nobody can reconcile against a provider's bill.
+    #[test]
+    fn deleting_a_session_keeps_its_spend() {
+        let db = StudyDb::in_memory();
+        db.save_turn(turn("s1", "Q", "A")).unwrap();
+        db.record_usage(spend(Some("s1"), "claude-sonnet-5", 900, 300)).unwrap();
+        db.delete_session("s1").unwrap();
+
+        let buckets = db.usage(7).unwrap();
+        assert_eq!(buckets.len(), 1);
+        assert_eq!(buckets[0].input_tokens, 900);
+        assert_eq!(buckets[0].model, "claude-sonnet-5");
+    }
+
+    #[test]
+    fn a_usage_record_needs_a_provider_and_a_model() {
+        let db = StudyDb::in_memory();
+        assert!(db.record_usage(spend(None, "  ", 10, 10)).is_err());
+
+        let mut nameless = spend(None, "gpt-5.2", 10, 10);
+        nameless.provider = "".into();
+        assert!(db.record_usage(nameless).is_err());
+    }
+
+    #[test]
+    fn negative_token_counts_are_refused() {
+        let db = StudyDb::in_memory();
+        assert!(db.record_usage(spend(None, "gpt-5.2", -1, 10)).is_err());
+        assert!(db.record_usage(spend(None, "gpt-5.2", 10, -1)).is_err());
+    }
+
+    /// A journal written by 0.1.4 has to keep opening — and arrive with the
+    /// consumption table it never had.
+    #[test]
+    fn a_version_two_journal_gains_the_usage_table() {
+        let db = StudyDb::in_memory();
+        db.record_usage(spend(None, "gpt-5.2", 10, 5)).unwrap();
+        assert_eq!(db.usage(30).unwrap().len(), 1);
     }
 }

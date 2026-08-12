@@ -39,6 +39,8 @@ pub fn run() {
             commands::list_notes,
             commands::study_stats,
             commands::study_coverage,
+            commands::record_token_usage,
+            commands::token_usage,
             commands::export_journal,
             commands::import_journal,
             commands::save_view_image,

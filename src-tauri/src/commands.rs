@@ -13,7 +13,7 @@ use crate::keyring_store::{self, KeyringError, Provider};
 use crate::sidecar::{EngineError, EngineHandle, EngineStatus};
 use crate::study_db::{
     ImportSummary, JournalExport, Note, NoteInput, SessionDetail, SessionSummary, StudyCoverage,
-    StudyDb, StudyError, StudyStats, TurnInput,
+    StudyDb, StudyError, StudyStats, TurnInput, UsageBucket, UsageInput,
 };
 
 #[derive(Debug, thiserror::Error)]
@@ -240,6 +240,18 @@ pub fn study_stats(db: State<'_, StudyDb>) -> CommandResult<StudyStats> {
 #[tauri::command]
 pub fn study_coverage(db: State<'_, StudyDb>) -> CommandResult<Vec<StudyCoverage>> {
     Ok(db.coverage()?)
+}
+
+/// File what a finished turn cost.
+#[tauri::command]
+pub fn record_token_usage(db: State<'_, StudyDb>, usage: UsageInput) -> CommandResult<()> {
+    Ok(db.record_usage(usage)?)
+}
+
+/// Spend over the last `days` days, one row per local day and model.
+#[tauri::command]
+pub fn token_usage(db: State<'_, StudyDb>, days: i64) -> CommandResult<Vec<UsageBucket>> {
+    Ok(db.usage(days)?)
 }
 
 // ---------------------------------------------------------------------------

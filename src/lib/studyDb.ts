@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 
-import type { Language, SessionMode, UserProfile } from "./schemas";
+import type { AiProvider, Language, SessionMode, UserProfile } from "./schemas";
 
 /**
  * The study journal, as the renderer sees it.
@@ -169,6 +169,47 @@ export interface StudyCoverage {
  */
 export function studyCoverage(): Promise<StudyCoverage[]> {
   return invoke("study_coverage");
+}
+
+// ---------------------------------------------------------------------------
+// Consumption
+// ---------------------------------------------------------------------------
+
+/** What one finished turn cost. */
+export interface UsageInput {
+  /** The conversation it belongs to, when there is one. */
+  session_id: string | null;
+  provider: AiProvider;
+  /** The id the engine actually sent, defaults resolved. */
+  model: string;
+  input_tokens: number;
+  output_tokens: number;
+}
+
+/** One local day's spend on one model. */
+export interface UsageBucket {
+  /** `YYYY-MM-DD` in the reader's own timezone. */
+  day: string;
+  provider: AiProvider;
+  model: string;
+  input_tokens: number;
+  output_tokens: number;
+  /** Turns behind these numbers. */
+  turns: number;
+}
+
+export function recordTokenUsage(usage: UsageInput): Promise<void> {
+  return invoke("record_token_usage", { usage });
+}
+
+/**
+ * Spend over the last `days` days, already grouped by local day and model.
+ *
+ * Grouped in SQLite rather than here: the alternative is shipping every turn
+ * the reader has ever taken across this boundary to add up six numbers.
+ */
+export function tokenUsage(days: number): Promise<UsageBucket[]> {
+  return invoke("token_usage", { days });
 }
 
 // ---------------------------------------------------------------------------

@@ -27,6 +27,16 @@ export interface ChatMessage {
   status: MessageStatus;
   error?: string;
   usage?: TokenUsage;
+  /**
+   * The model that produced this answer, defaults resolved by the engine.
+   *
+   * Recorded per message rather than read from the settings drawer, because the
+   * point of showing it is comparison: a transcript where two answers came from
+   * two different models has to say so, and the drawer only ever knows what is
+   * selected *now*. Absent on a reopened turn — the journal stores prose, and
+   * inventing a model name for an old answer would be worse than silence.
+   */
+  model?: string;
   /** Set on the assistant turn that graded a case drill. */
   score?: number;
 }
@@ -49,7 +59,7 @@ interface ChatStore {
   startTurn: (requestId: string, prompt: string) => void;
   appendDelta: (requestId: string, text: string) => void;
   noteTool: (requestId: string, tool: string) => void;
-  finishTurn: (requestId: string, usage?: TokenUsage) => void;
+  finishTurn: (requestId: string, usage?: TokenUsage, model?: string) => void;
   failTurn: (requestId: string, message: string) => void;
   markCancelled: (requestId: string) => void;
   noteScore: (requestId: string, score: number) => void;
@@ -134,13 +144,16 @@ export const useChatStore = create<ChatStore>()((set, get) => ({
       })),
     })),
 
-  finishTurn: (requestId, usage) =>
+  finishTurn: (requestId, usage, model) =>
     set((state) => ({
       pendingRequestId: state.pendingRequestId === requestId ? null : state.pendingRequestId,
       messages: updateAssistant(state.messages, requestId, (message) => ({
         ...message,
         status: message.status === "streaming" ? "complete" : message.status,
+        // Spread conditionally so a `done` carrying neither — the frame that
+        // closes a model-list request — cannot blank out a real one.
         ...(usage ? { usage } : {}),
+        ...(model ? { model } : {}),
       })),
     })),
 

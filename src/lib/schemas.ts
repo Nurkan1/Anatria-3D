@@ -368,10 +368,20 @@ export const EngineEventSchema = z.discriminatedUnion("type", [
     score: z.number().int().min(0).max(100),
     verdict: z.string().min(1).max(4000),
   }),
+  /**
+   * The turn is over, with what it cost and what ran it.
+   *
+   * `model` is the id the engine actually sent to the provider, defaults
+   * resolved — not what the panel had selected, which is null whenever the
+   * reader never chose one. Both fields are nullable because a `done` also
+   * closes work that never reached a provider, and "we were not told" must stay
+   * distinguishable from "this cost nothing".
+   */
   z.object({
     type: z.literal("done"),
     request_id: z.string(),
     usage: TokenUsageSchema.nullable(),
+    model: z.string().nullable(),
   }),
   z.object({
     type: z.literal("error"),

@@ -23,6 +23,7 @@ import { chatPreferences, patchChatPreferences } from "@/stores/chatPreferences"
 import { useModelStore } from "@/stores/modelStore";
 import { organLabel, useSceneStore } from "@/stores/sceneStore";
 import { useStudyStore } from "@/stores/studyStore";
+import { useUsageStore } from "@/stores/usageStore";
 
 import { Markdown } from "./Markdown";
 import { collectOrganRefs, stripOrganRefs } from "./organRefs";
@@ -200,20 +201,37 @@ function MessageBubble({ message }: { message: ChatMessage }) {
       </div>
 
       {!empty && (
-        <div className="flex items-center gap-2 opacity-0 transition group-focus-within:opacity-100 group-hover:opacity-100">
-          {/* Copy the prose the reader sees, not the [[organ_id]] plumbing. */}
-          <CopyButton text={stripOrganRefs(message.content)} label="Copy answer" />
-          <SaveAsNoteButton content={message.content} />
-          {message.usage && (
-            <span
-              className="text-[10px] tabular-nums text-slate-600"
-              title={`${formatTokens(message.usage.input_tokens)} sent · ${formatTokens(
-                message.usage.output_tokens,
-              )} received`}
-            >
-              {formatTokens(totalTokens(message.usage))} tokens
-            </span>
-          )}
+        <div className="flex items-center gap-2">
+          {/* The actions fade in on hover; what the answer *is* does not. Which
+              model produced it only earns its place if you can scan a
+              transcript and compare two answers without pointing at each. */}
+          <div className="flex items-center gap-2 opacity-0 transition group-focus-within:opacity-100 group-hover:opacity-100">
+            {/* Copy the prose the reader sees, not the [[organ_id]] plumbing. */}
+            <CopyButton text={stripOrganRefs(message.content)} label="Copy answer" />
+            <SaveAsNoteButton content={message.content} />
+          </div>
+          {/* Pushed to the far end so the two facts about the answer sit apart
+              from the two things you can do with it. Both are faint: a reader
+              comparing models wants them, a reader learning anatomy should be
+              able to look straight past them. */}
+          <span className="ml-auto flex items-baseline gap-1.5 text-[10px] text-slate-600">
+            {message.model && (
+              <span className="max-w-[11rem] truncate" title={`Answered by ${message.model}`}>
+                {message.model}
+              </span>
+            )}
+            {message.model && message.usage && <span className="text-slate-700">·</span>}
+            {message.usage && (
+              <span
+                className="tabular-nums"
+                title={`${formatTokens(message.usage.input_tokens)} sent · ${formatTokens(
+                  message.usage.output_tokens,
+                )} received`}
+              >
+                {formatTokens(totalTokens(message.usage))} tokens
+              </span>
+            )}
+          </span>
         </div>
       )}
     </div>
@@ -372,11 +390,20 @@ export function ChatPanel() {
   const askedAboutRef = useRef(new Map<string, string[]>());
   /** Grades arrive mid-turn, before the session row exists. Applied on `done`. */
   const verdictRef = useRef(new Map<string, { score: number; verdict: string }>());
+  /**
+   * The provider each question was sent to.
+   *
+   * Per request rather than read back off the drawer when the answer lands: the
+   * reader can switch provider mid-answer, and the one thing a ledger may never
+   * do is file a turn's cost against a provider that did not serve it.
+   */
+  const askedWithRef = useRef(new Map<string, AiProvider>());
 
   /** Drop a turn's bookkeeping. A turn that failed is never going to be filed. */
   const forgetTurn = useCallback((requestId: string) => {
     askedAboutRef.current.delete(requestId);
     verdictRef.current.delete(requestId);
+    askedWithRef.current.delete(requestId);
   }, []);
 
   const persistTurn = useCallback((requestId: string) => {
@@ -411,6 +438,36 @@ export function ChatPanel() {
         }
       });
   }, []);
+
+  /**
+   * File what the turn cost, whatever became of it.
+   *
+   * Deliberately not inside `persistTurn`. That refuses to file a failed or
+   * cancelled turn, which is the right rule for a study journal — half-answers
+   * would read as gaps in the student's own understanding — but it is exactly
+   * the wrong rule for a ledger. A turn that burnt eight thousand input tokens
+   * and then hit a rate limit cost real money and belongs in the total.
+   *
+   * Both fields are required rather than defaulted. A count with no model is
+   * unattributable, and guessing at either would put a number in the panel that
+   * nobody can check against a provider's bill.
+   */
+  const recordSpend = useCallback(
+    (requestId: string, usage: TokenUsage | null, model: string | null) => {
+      const provider = askedWithRef.current.get(requestId);
+      askedWithRef.current.delete(requestId);
+      if (!usage || !model || !provider) return;
+
+      void useUsageStore.getState().record({
+        session_id: useChatStore.getState().sessionId,
+        provider,
+        model,
+        input_tokens: usage.input_tokens,
+        output_tokens: usage.output_tokens,
+      });
+    },
+    [],
+  );
 
   useSceneCommands({
     onReady: useCallback(() => setEngineReady(true), []),
@@ -448,14 +505,15 @@ export function ChatPanel() {
       [noteScore],
     ),
     onDone: useCallback(
-      (requestId: string, usage: TokenUsage | null) => {
-        finishTurn(requestId, usage ?? undefined);
+      (requestId: string, usage: TokenUsage | null, model: string | null) => {
+        finishTurn(requestId, usage ?? undefined, model ?? undefined);
         // Saving is best-effort by construction: `studyStore` swallows its own
         // failures, so a broken journal costs the student their history, never
         // the answer they are reading.
         persistTurn(requestId);
+        recordSpend(requestId, usage, model);
       },
-      [finishTurn, persistTurn],
+      [finishTurn, persistTurn, recordSpend],
     ),
     onError: useCallback(
       (code: string, message: string, requestId: string | null) => {
@@ -537,6 +595,7 @@ export function ChatPanel() {
       requestId,
       selection.map((organ) => organ.organ_id),
     );
+    askedWithRef.current.set(requestId, provider);
 
     try {
       await askAgent({
