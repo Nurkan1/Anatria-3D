@@ -1,6 +1,6 @@
 [package]
 name = "anatria3d"
-version = "0.1.4"
+version = "0.1.5"
 description = "Interactive anatomy and AI insights"
 authors = ["PYSBG"]
 edition = "2021"
