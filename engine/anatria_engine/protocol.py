@@ -395,7 +395,11 @@ class DoneEvent(Strict):
     type: Literal["done"] = "done"
     request_id: str
     usage: TokenUsage | None
-    model: str | None
+    # Defaulted to match the reader. See the Zod side for why a `done` may
+    # never fail to parse: an engine older than the window it is talking to
+    # sends this frame without the field, and dropping it would cost the turn
+    # its journal entry, its token count and the composer's ready state.
+    model: str | None = None
 
 
 class ErrorEvent(Strict):

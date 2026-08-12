@@ -376,12 +376,21 @@ export const EngineEventSchema = z.discriminatedUnion("type", [
    * reader never chose one. Both fields are nullable because a `done` also
    * closes work that never reached a provider, and "we were not told" must stay
    * distinguishable from "this cost nothing".
+   *
+   * `model` is **defaulted, not required**, and that is load-bearing. A `done`
+   * is the one frame that must never be dropped: it clears the composer, files
+   * the turn in the journal and records what it cost, so a validation failure
+   * here does not degrade anything — it loses all three at once and leaves the
+   * send button stuck on "Stop". A build whose sidecar is older than its window
+   * (the Tauri build does not rebuild the engine) sends this frame without the
+   * field, and it must still parse. **New fields on an event are optional on
+   * the way in, always.**
    */
   z.object({
     type: z.literal("done"),
     request_id: z.string(),
     usage: TokenUsageSchema.nullable(),
-    model: z.string().nullable(),
+    model: z.string().nullable().default(null),
   }),
   z.object({
     type: z.literal("error"),

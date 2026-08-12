@@ -515,6 +515,18 @@ export function ChatPanel() {
       },
       [finishTurn, persistTurn, recordSpend],
     ),
+    // A frame this build cannot read is not a quiet degradation — it is an
+    // answer that arrives looking fine while nothing behind it happens. Said
+    // out loud, with the fix, because the only people who can hit it are
+    // building from source and the cause is never obvious from the symptom.
+    onProtocolViolation: useCallback((_payload: unknown, issues: string) => {
+      console.error("[engine] protocol violation", issues);
+      setTransportError(
+        "The engine sent something this build could not read, so the last " +
+          "answer was not filed or counted. If you built from source, rebuild " +
+          "the analysis engine — it is probably older than this window.",
+      );
+    }, []),
     onError: useCallback(
       (code: string, message: string, requestId: string | null) => {
         // The engine reports its own death with no request id. Clearing the

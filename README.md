@@ -134,7 +134,11 @@ pnpm tauri dev
 ```
 
 Rebuild the sidecar after changing anything under `engine/`. Frontend changes
-hot-reload as usual; only Python needs the re-freeze.
+hot-reload as usual; only Python needs the re-freeze. Note that `pnpm tauri
+build` does **not** do it for you — `beforeBuildCommand` is only `tsc` and Vite,
+so a forgotten re-freeze pairs a new window with whatever engine was last
+frozen. The app says so in the assistant panel when a frame arrives that it
+cannot read, which is what that mismatch looks like from the inside.
 
 **Test the frozen build, not just the interpreter.** Two failure modes only
 appear after PyInstaller: distributions that read their own version through

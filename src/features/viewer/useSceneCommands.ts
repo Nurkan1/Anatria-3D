@@ -35,6 +35,17 @@ export interface SceneCommandBridgeOptions {
    * mount effect that would run inside that window.
    */
   onAttached?: () => void;
+  /**
+   * A frame arrived that this build cannot read.
+   *
+   * Worth surfacing rather than logging, because the shape it takes is not
+   * "something looks wrong" — it is silence. A dropped `done` leaves the turn
+   * unfiled, uncounted and the composer stuck on "Stop", with a streamed answer
+   * on screen that looks perfectly fine. In practice it means an engine binary
+   * older than the window: `tauri build` does not rebuild the sidecar, so a
+   * source build can pair a new frontend with a stale engine.
+   */
+  onProtocolViolation?: (payload: unknown, issues: string) => void;
 }
 
 /**
@@ -57,6 +68,7 @@ export function useSceneCommands(options: SceneCommandBridgeOptions = {}) {
     onError,
     onReady,
     onAttached,
+    onProtocolViolation,
   } = options;
 
   useEffect(() => {
@@ -90,7 +102,7 @@ export function useSceneCommands(options: SceneCommandBridgeOptions = {}) {
           onError?.(event.code, event.message, event.request_id);
           break;
       }
-    }).then(
+    }, onProtocolViolation ? { onProtocolViolation } : {}).then(
       (off) => {
         if (cancelled) {
           off();
@@ -122,5 +134,6 @@ export function useSceneCommands(options: SceneCommandBridgeOptions = {}) {
     onError,
     onReady,
     onAttached,
+    onProtocolViolation,
   ]);
 }
