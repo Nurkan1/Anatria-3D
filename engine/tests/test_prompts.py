@@ -314,3 +314,33 @@ def test_the_instructions_build_for_every_language_including_auto():
             mode="tutor",
         )
         assert "left_ventricle" in text
+
+
+# ---------------------------------------------------------------------------
+# What is, and is not, a reason to decline
+# ---------------------------------------------------------------------------
+
+
+def test_the_individual_patient_rule_is_still_the_refusal():
+    """The guardrail that keeps the product outside MDR scope. Not tunable."""
+    assert "cannot assess an individual" in SAFETY
+    assert "qualified healthcare professional" in SAFETY
+    assert "Never diagnose, triage, or recommend treatment" in SAFETY
+
+
+def test_an_unrecognised_word_is_read_as_a_typo_not_a_new_subject():
+    """Observed: a reader typed "corzano" for "corazón". A weaker model read it
+    as "corzo" — roe deer — and opened with "I cannot help with that", refusing
+    a question about veterinary medicine that nobody had asked.
+
+    The reader sees an atlas that refuses a heart question because of one
+    letter, which reads as fragility rather than as care.
+    """
+    assert "misspelling" in SAFETY
+    assert "nearest anatomical term" in SAFETY
+    assert "you will sometimes be refusing a question" in SAFETY
+
+
+def test_being_off_topic_is_a_redirection_and_not_a_refusal():
+    assert "you do not have\n  a refusal to give" in SAFETY
+    assert "reserved for the individual-patient rule" in SAFETY
