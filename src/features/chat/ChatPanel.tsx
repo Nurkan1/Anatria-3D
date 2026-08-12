@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import { formatTokens, totalTokens } from "@/features/usage/tokens";
 import { useSceneCommands } from "@/features/viewer/useSceneCommands";
 import {
   askAgent,
@@ -14,9 +15,11 @@ import type {
   Language,
   ModelInfo,
   SessionMode,
+  TokenUsage,
   UserProfile,
 } from "@/lib/schemas";
 import { useChatStore, type ChatMessage } from "@/stores/chatStore";
+import { chatPreferences, patchChatPreferences } from "@/stores/chatPreferences";
 import { useModelStore } from "@/stores/modelStore";
 import { organLabel, useSceneStore } from "@/stores/sceneStore";
 import { useStudyStore } from "@/stores/studyStore";
@@ -202,8 +205,13 @@ function MessageBubble({ message }: { message: ChatMessage }) {
           <CopyButton text={stripOrganRefs(message.content)} label="Copy answer" />
           <SaveAsNoteButton content={message.content} />
           {message.usage && (
-            <span className="text-[10px] text-slate-600">
-              {message.usage.input_tokens} in / {message.usage.output_tokens} out
+            <span
+              className="text-[10px] tabular-nums text-slate-600"
+              title={`${formatTokens(message.usage.input_tokens)} sent · ${formatTokens(
+                message.usage.output_tokens,
+              )} received`}
+            >
+              {formatTokens(totalTokens(message.usage))} tokens
             </span>
           )}
         </div>
@@ -336,9 +344,11 @@ export function ChatPanel() {
   const beginSession = useChatStore((s) => s.beginSession);
 
   const [engineReady, setEngineReady] = useState(false);
-  const [provider, setProvider] = useState<AiProvider>("google");
-  const [profile, setProfile] = useState<UserProfile>("student");
-  const [language, setLanguage] = useState<Language>("bg");
+  // Read once, synchronously, so the drawer's first paint is already the
+  // reader's own setup rather than the default flicking over to it.
+  const [provider, setProvider] = useState<AiProvider>(() => chatPreferences().provider);
+  const [profile, setProfile] = useState<UserProfile>(() => chatPreferences().profile);
+  const [language, setLanguage] = useState<Language>(() => chatPreferences().language);
   const [draft, setDraft] = useState("");
   const [transportError, setTransportError] = useState<string | null>(null);
 
@@ -438,8 +448,8 @@ export function ChatPanel() {
       [noteScore],
     ),
     onDone: useCallback(
-      (requestId: string) => {
-        finishTurn(requestId);
+      (requestId: string, usage: TokenUsage | null) => {
+        finishTurn(requestId, usage ?? undefined);
         // Saving is best-effort by construction: `studyStore` swallows its own
         // failures, so a broken journal costs the student their history, never
         // the answer they are reading.
@@ -471,6 +481,14 @@ export function ChatPanel() {
       [failTurn, failCheck, forgetTurn],
     ),
   });
+
+  // Written on every change rather than inside each handler: there is one place
+  // to look when a setting stops being remembered, and a control added later is
+  // covered without anyone having to remember to wire it up. The model id is not
+  // here — `modelStore` owns that half and merges into the same record.
+  useEffect(() => {
+    patchChatPreferences({ provider, profile, language });
+  }, [provider, profile, language]);
 
   // Follow the stream, but only when the reader is already at the bottom —
   // yanking the view away while they scroll back through an answer is worse
