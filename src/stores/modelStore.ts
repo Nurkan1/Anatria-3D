@@ -90,13 +90,19 @@ export const useModelStore = create<ModelStore>()((set, get) => ({
       // overwrite a newer catalogue.
       if (current.requestId && current.requestId !== requestId) return state;
 
-      const recommended = models.find((model) => model.recommended)?.id ?? models[0]?.id;
-      // Keep an explicit choice if that model still exists; otherwise fall back
-      // to the recommendation rather than silently sending a retired model id.
+      // Only a model the engine actually vouches for. Falling back to the
+      // first entry of the list was the same unsafe guess `_finish` used to
+      // make on the Python side, and fixing it there while leaving it here
+      // would have changed nothing: the catalogue is sorted by id, so "first"
+      // is whichever name happens to sort highest, not whichever works.
+      const recommended = models.find((model) => model.recommended)?.id ?? null;
+      // Keep an explicit choice if that model still exists; otherwise take the
+      // recommendation, and null when there is none — an empty picker the
+      // reader must answer beats a silent switch to something untested.
       const keep =
         current.selected && models.some((model) => model.id === current.selected)
           ? current.selected
-          : (recommended ?? null);
+          : recommended;
 
       return {
         byProvider: {
