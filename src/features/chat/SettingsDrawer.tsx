@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { deleteApiKey, hasApiKey, listModels, newRequestId, saveApiKey } from "@/lib/ipc";
 import type { AiProvider, Language, UserProfile } from "@/lib/schemas";
+import { chatPreferences, patchChatPreferences } from "@/stores/chatPreferences";
 import { askToConfirm } from "@/stores/confirmStore";
 import { useModelStore } from "@/stores/modelStore";
 
@@ -62,6 +63,13 @@ interface SettingsDrawerProps {
  * key: the settings are a once-per-setup concern, but a missing key is the one
  * thing that stops the panel working, so it should not be hidden behind a
  * disclosure the user has no reason to open.
+ *
+ * **Whether it is open is remembered, and the automatic open is not.** Those
+ * two rules together are the whole design. Without the first, collapsing it was
+ * a decision the application forgot immediately. Without the second, a single
+ * assist would have written itself into the reader's preferences and reopened
+ * the panel forever — and `keyring_store::exists` reports absence for *any*
+ * failed read, so "no key" is not always true.
  */
 export function SettingsDrawer({
   provider,
@@ -71,7 +79,11 @@ export function SettingsDrawer({
   language,
   onLanguageChange,
 }: SettingsDrawerProps) {
-  const [open, setOpen] = useState(false);
+  // Seeded from the reader's own last decision, not from false. The drawer can
+  // open itself when a provider has no key, and used to have no way back:
+  // whatever opened it stayed open for the session and returned at the next
+  // launch. Only the button below writes this; the automatic open does not.
+  const [open, setOpen] = useState(() => chatPreferences().settingsOpen);
   const [keyed, setKeyed] = useState<Partial<Record<AiProvider, boolean>>>({});
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
@@ -196,7 +208,12 @@ export function SettingsDrawer({
         ))}
         <button
           type="button"
-          onClick={() => setOpen((value) => !value)}
+          onClick={() =>
+            setOpen((value) => {
+              patchChatPreferences({ settingsOpen: !value });
+              return !value;
+            })
+          }
           className="ml-auto rounded border border-slate-700 px-1.5 py-1 text-[10px] text-slate-400"
           aria-expanded={open}
         >
@@ -333,8 +350,16 @@ export function SettingsDrawer({
                 <select
                   value={catalogue.selected ?? ""}
                   onChange={(event) => selectModel(provider, event.target.value)}
-                  className="w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 text-[11px] outline-none focus:border-sky-500"
+                  className={`w-full rounded border bg-slate-950 px-2 py-1 text-[11px] outline-none focus:border-sky-500 ${
+                    catalogue.selected ? "border-slate-700" : "border-amber-600/70"
+                  }`}
                 >
+                  {/* Present only while nothing is chosen. The engine marks a
+                      model as the default when it knows that model drives the
+                      scene tools; when it marks none, this is an unanswered
+                      question and should look like one rather than silently
+                      showing whichever id sorted first. */}
+                  {!catalogue.selected && <option value="">Choose a model…</option>}
                   {catalogue.models.map((model) => (
                     <option key={model.id} value={model.id}>
                       {model.label}
@@ -342,6 +367,13 @@ export function SettingsDrawer({
                     </option>
                   ))}
                 </select>
+                {!catalogue.selected && (
+                  <p className="mt-1 text-[10px] leading-snug text-amber-300/90">
+                    None of these is the model this build was tested against, so
+                    none is recommended. Pick one — if it cannot drive the 3D
+                    view, the assistant will say so rather than fail silently.
+                  </p>
+                )}
                 <p className="mt-1 text-[10px] leading-snug text-slate-600">
                   {catalogue.models.length} models available to this key. If one answers
                   &ldquo;high demand&rdquo;, pick another — that is a busy model, not a

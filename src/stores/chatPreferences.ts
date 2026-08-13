@@ -51,6 +51,21 @@ export interface ChatPreferences {
    * the first question with a 404.
    */
   model: Partial<Record<AiProvider, string>>;
+  /**
+   * Whether the settings drawer is expanded.
+   *
+   * Remembered because the drawer can open itself — it does so when the chosen
+   * provider has no key, which is the one moment a new reader needs to see the
+   * key field — but nothing ever closed it again. That made auto-open a
+   * one-way door: a single transient "no key" (the keyring reports absence for
+   * *any* failed read, including a lock that clears a second later) left the
+   * panel expanded for the rest of the session, and the reader collapsing it
+   * had no effect on the next launch.
+   *
+   * Only an explicit press is stored. The automatic open stays transient, so
+   * it can still help once without overriding a decision.
+   */
+  settingsOpen: boolean;
 }
 
 /**
@@ -65,6 +80,7 @@ export const DEFAULT_CHAT_PREFERENCES: ChatPreferences = {
   profile: "student",
   language: "bg",
   model: {},
+  settingsOpen: false,
 };
 
 /**
@@ -88,6 +104,8 @@ export function sanitiseChatPreferences(raw: unknown): Partial<ChatPreferences> 
 
   const language = LanguageSchema.safeParse(stored.language);
   if (language.success) clean.language = language.data;
+
+  if (typeof stored.settingsOpen === "boolean") clean.settingsOpen = stored.settingsOpen;
 
   if (typeof stored.model === "object" && stored.model !== null) {
     const model: Partial<Record<AiProvider, string>> = {};

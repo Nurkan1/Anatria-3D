@@ -50,6 +50,10 @@ describe("sanitiseChatPreferences", () => {
     ).toEqual({ model: { google: "gemini-3.1-flash-lite" } });
   });
 
+  it("ignores a drawer state that is not a boolean", () => {
+    expect(sanitiseChatPreferences({ settingsOpen: "yes" })).toEqual({});
+  });
+
   it("ignores a model map that is not an object", () => {
     expect(sanitiseChatPreferences({ model: "gpt-5.2" })).toEqual({});
   });
@@ -99,6 +103,29 @@ describe("the stored snapshot", () => {
       google: "gemini-3.1-pro",
       openai: "gpt-5.2",
     });
+  });
+
+  /**
+   * The drawer can open itself when a provider reports no key, and used to have
+   * no way back — whatever opened it stayed open for the session and returned
+   * at the next launch. Collapsing it has to be a decision that sticks.
+   */
+  it("remembers the drawer collapsed", () => {
+    patchChatPreferences({ settingsOpen: true });
+    patchChatPreferences({ settingsOpen: false });
+    reloadChatPreferences();
+    expect(chatPreferences().settingsOpen).toBe(false);
+  });
+
+  it("starts collapsed when nothing has been decided", () => {
+    expect(chatPreferences().settingsOpen).toBe(false);
+  });
+
+  it("keeps the drawer state independent of the other settings", () => {
+    patchChatPreferences({ settingsOpen: true });
+    patchChatPreferences({ provider: "openai" });
+    reloadChatPreferences();
+    expect(chatPreferences()).toMatchObject({ settingsOpen: true, provider: "openai" });
   });
 
   it("falls back to the defaults when the stored value is not JSON", () => {
