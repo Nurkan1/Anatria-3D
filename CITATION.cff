@@ -36,6 +36,15 @@ keywords:
   - local-first software
   - open educational resources
 
+# The **concept** DOI, not the version one. Zenodo mints both: this resolves to
+# whichever release is newest, while 10.5281/zenodo.21921086 is frozen at
+# v0.1.6 and would quietly go stale. Same rule as linking /releases/latest
+# rather than a tag.
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.21921085
+    description: Concept DOI — always resolves to the latest archived version.
+
 license: Apache-2.0
 repository-code: https://github.com/Nurkan1/Anatria-3D
 version: 0.1.6

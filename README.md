@@ -3,6 +3,7 @@
 [![Gates](https://github.com/Nurkan1/Anatria-3D/actions/workflows/gates.yml/badge.svg)](https://github.com/Nurkan1/Anatria-3D/actions/workflows/gates.yml)
 [![License](https://img.shields.io/badge/code-Apache--2.0-blue)](LICENSE)
 [![Atlas](https://img.shields.io/badge/atlas-CC%20BY--SA%204.0-blue)](public/anatomy/NOTICE)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21921085.svg)](https://doi.org/10.5281/zenodo.21921085)
 
 Interactive anatomy and AI insights — a local-first desktop application.
 
@@ -50,15 +51,26 @@ invisible in a list, and impossible to miss as a shape on a body.
 ## Download
 
 **[Latest release](https://github.com/Nurkan1/Anatria-3D/releases/latest)** —
-Windows, 64-bit. Two files, for two situations:
+Windows and Linux, 64-bit. Four files, for four situations:
 
 | File | Take this one if |
 |---|---|
-| `Anatria3D_<version>_x64-setup.exe` | You are installing it on your own machine. |
-| `Anatria3D_<version>_x64_en-US.msi` | You are deploying it across a faculty or a lab, through Group Policy or Intune. |
+| `Anatria3D_<version>_x64-setup.exe` | Windows, on your own machine. |
+| `Anatria3D_<version>_x64_en-US.msi` | Windows, deploying across a faculty or a lab through Group Policy or Intune. |
+| `Anatria3D_<version>_amd64.deb` | Debian, Ubuntu, Mint, Kali. Installs to your applications menu. |
+| `Anatria3D_<version>_amd64.AppImage` | Any Linux. No installation and no root — `chmod +x` and run it. |
 
-**It installs without administrator rights.** On a university laptop where you
-are not an administrator, you can still install it.
+The Linux packages are built on Ubuntu 22.04 deliberately, so they also run on
+newer distributions.
+
+**Windows installs without administrator rights.** On a university laptop where
+you are not an administrator, you can still install it.
+
+**No account, no key and no internet are needed to start.** All 3,478
+structures, the labelling, cross-sections, exploded views and image export work
+offline the moment you install. Only the AI tutor needs an API key of your own —
+which also means your questions go straight to your provider, never through a
+server of ours.
 
 > **Windows will warn you the first time.** Anatria3D is not code-signed — a
 > certificate costs money the project does not spend — so you will see *"Windows
