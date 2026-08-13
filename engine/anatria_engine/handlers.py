@@ -177,6 +177,40 @@ async def handle_list_models(request: ListModelsRequest, transport: Transport) -
     transport.emit(DoneEvent(request_id=request.request_id, usage=None, model=None))
 
 
+#: Phrases a provider uses when *this model* cannot do what we are asking of
+#: it — tools, streaming, or a combination it refuses on this endpoint.
+#:
+#: Observed with GPT-5.6 Terra, which reasons by default and which OpenAI will
+#: not serve function tools to over `/v1/chat/completions`:
+#:
+#:     Function tools with reasoning_effort are not supported for
+#:     gpt-5.6-terra in /v1/chat/completions. To use function tools, use
+#:     /v1/responses or set reasoning_effort to 'none'.
+#:
+#: The provider is being precise and helpful. We reported it as
+#: `internal_error`, which sends the reader — and whoever supports them — to
+#: look for a fault in this application that is not there.
+_INCOMPATIBLE_MODEL = (
+    "not supported for",
+    "does not support",
+    "is not supported",
+    "unsupported",
+    "not compatible",
+    "does not exist",
+)
+
+
+def _model_is_incompatible(text: str) -> bool:
+    """A 400 that means "not this model", rather than "not this request".
+
+    Both halves are required. A bare 400 can equally be a malformed request of
+    ours, and calling that a model problem would send someone switching models
+    to fix a bug in here.
+    """
+    rejected = "invalid_request" in text or "400" in text
+    return rejected and any(phrase in text for phrase in _INCOMPATIBLE_MODEL)
+
+
 def _classify(exc: Exception) -> str:
     """Map a provider exception onto a code the UI can act on.
 
@@ -192,6 +226,10 @@ def _classify(exc: Exception) -> str:
         return "invalid_api_key"
     if "rate limit" in text or "429" in text or "quota" in text:
         return "rate_limited"
+    # Checked before the generic buckets: this text often also carries "400",
+    # and it is the one 400 with a move the reader can make.
+    if _model_is_incompatible(text):
+        return "invalid_request"
     # A saturated model answers 503/UNAVAILABLE/overloaded. The provider is up;
     # this model is not. Retrying or switching model both work, so it must not
     # read as an internal fault.
@@ -206,6 +244,19 @@ def _classify(exc: Exception) -> str:
 
 
 def _readable(exc: Exception) -> str:
-    """Trim provider tracebacks to something a UI can show."""
+    """Trim provider tracebacks to something a UI can show.
+
+    An incompatible model gets a sentence in front of the provider's own text.
+    The provider's wording is accurate and is kept — it names the model and the
+    endpoint, which is what a bug report needs — but it opens by talking about
+    `/v1/chat/completions`, and the reader is a medical student who wants to
+    know what to press. Tell them that first.
+    """
     message = str(exc).strip() or type(exc).__name__
+    if _model_is_incompatible(f"{type(exc).__name__} {message}".lower()):
+        message = (
+            "This model cannot be driven by Anatria3D's scene tools. "
+            "Choose another model under Settings — the one marked as the "
+            "default is known to work. Provider said: " + message
+        )
     return message if len(message) <= 400 else message[:397] + "…"

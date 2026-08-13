@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from pydantic_ai.models import Model
 
+from anatria_engine.model_capability import endpoint_for
 from anatria_engine.protocol import AiProvider
 
 # Starting point only — the settings drawer lists what the key can actually
@@ -50,8 +51,27 @@ def build_model(provider: AiProvider, api_key: str, model: str | None = None) ->
             return AnthropicModel(name, provider=AnthropicProvider(api_key=api_key))
 
         if provider == "openai":
-            from pydantic_ai.models.openai import OpenAIChatModel
             from pydantic_ai.providers.openai import OpenAIProvider
+
+            if endpoint_for("openai", name) == "responses":
+                from pydantic_ai.models.openai import (
+                    OpenAIResponsesModel,
+                    OpenAIResponsesModelSettings,
+                )
+
+                return OpenAIResponsesModel(
+                    name,
+                    provider=OpenAIProvider(api_key=api_key),
+                    # The Responses API keeps conversation state server-side by
+                    # default. Anatria3D owns its history — `build_history`
+                    # replays prior turns deliberately, and the journal is the
+                    # record — so storing a second copy on OpenAI's side would
+                    # put the reader's questions somewhere this application
+                    # does not manage and cannot delete.
+                    settings=OpenAIResponsesModelSettings(openai_store=False),
+                )
+
+            from pydantic_ai.models.openai import OpenAIChatModel
 
             return OpenAIChatModel(name, provider=OpenAIProvider(api_key=api_key))
 
