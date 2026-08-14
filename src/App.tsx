@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { ChatPanel } from "@/features/chat/ChatPanel";
 import { GuideOverlay } from "@/features/help/GuideOverlay";
 import { useFirstRun } from "@/features/help/useFirstRun";
+import { IdleScreen } from "@/features/idle/IdleScreen";
+import { useIdleScreen } from "@/features/idle/useIdleScreen";
 import { LeftPanel } from "@/features/layout/LeftPanel";
 import { SplashScreen } from "@/features/splash/SplashScreen";
 import { useSplash } from "@/features/splash/useSplash";
@@ -11,6 +13,7 @@ import { CHAT_LIMITS, TREE_LIMITS, useLayout } from "@/features/layout/useLayout
 import { ConfirmDialog } from "@/features/common/ConfirmDialog";
 import { PrintSheet } from "@/features/study/PrintSheet";
 import { AnatomyViewer } from "@/features/viewer/AnatomyViewer";
+import { useChatStore } from "@/stores/chatStore";
 import { startViewPersistence } from "@/stores/persistView";
 import { useSceneStore } from "@/stores/sceneStore";
 
@@ -40,6 +43,16 @@ export default function App() {
   // Remember how the reader left the view, so the next launch opens on it.
   useEffect(startViewPersistence, []);
 
+  /**
+   * The resting screen waits for the app to be genuinely idle.
+   *
+   * Not while an answer is still arriving, and — checked inside the hook —
+   * not while a question sits typed and unsent. Someone who walks away
+   * mid-answer comes back to the answer.
+   */
+  const answering = useChatStore((s) => s.pendingRequestId !== null);
+  const idle = useIdleScreen({ armed: atlasReady && !splash.visible && !answering });
+
   const closeGuide = () => {
     setGuideOpen(false);
     markSeen();
@@ -48,6 +61,7 @@ export default function App() {
   return (
     <div className="flex h-full bg-slate-950 text-slate-200">
       {splash.visible && <SplashScreen leaving={splash.leaving} />}
+      {idle.showing && <IdleScreen onDismiss={idle.dismiss} />}
       {/* Renders through a portal into `<body>`, outside this tree: the print
           stylesheet hides `#root` so the sheet is the whole page. */}
       <PrintSheet />
