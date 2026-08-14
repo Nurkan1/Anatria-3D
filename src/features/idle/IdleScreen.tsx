@@ -66,31 +66,87 @@ export const LOOK = {
    * brain rather than its outline, and forty layers of "most" is white.
    */
   rimSharpness: 5.2,
-  /** The travelling bands, as a fraction of the rim. Ornament, not signal. */
-  pulseUp: 0.3,
-  pulseAcross: 0.16,
   /**
    * The mesh over the top, and the value that needed cutting hardest.
    *
    * Drawn on the merged geometry, `wireframe` is every edge of every triangle
    * of a hundred anatomical meshes. At that density it stops reading as a
    * lattice and becomes fog — it was most of the brightness, not a detail on
-   * top of it. Three thousandths of full is a suggestion of structure, which
-   * is all it was ever meant to be.
+   * top of it.
    */
   wireOpacity: 0.009,
+
+  /**
+   * The waves, which are the whole character of the thing.
+   *
+   * Each is a front expanding from one point on the cortex, not a band
+   * sweeping the whole shape. That difference is what makes it read as
+   * something starting *somewhere* rather than as a scanner passing over —
+   * and it is the only reason the effect suggests a thought at all.
+   */
+  waves: 3,
+  /**
+   * Seconds a wave takes to cross and fade.
+   *
+   * Bounded by the stagger, not by taste: with three waves evenly spread round
+   * `waveLife + waveRest`, a life longer than twice the gap puts all three in
+   * flight together, and three fronts at once is a flash rather than a
+   * procession. At 4.6 against a 2.33 gap there are never more than two.
+   */
+  waveLife: 4.6,
+  /** Seconds of quiet after it, so the procession breathes. */
+  waveRest: 2.4,
+  /**
+   * Front speed, in brain radii per second.
+   *
+   * Fast enough that a front clears the far side within its life — 4.6 s at
+   * 0.46 covers 2.1 radii against a diameter of 2. Slower and every wave dies
+   * halfway across, which looks like it ran out rather than like it arrived.
+   */
+  waveSpeed: 0.46,
+  /** Thickness of the front, in brain radii. Thin reads as a pulse. */
+  waveWidth: 0.13,
+  /** How bright a front gets, against a rim of 1.0. */
+  waveStrength: 1.35,
+
   /**
    * The wordmark the light writes, and how rarely it does it.
    *
-   * Rare on purpose. A mark that appears every few seconds is a logo animation;
-   * one that surfaces roughly twice a minute, at an angle you did not choose,
-   * reads as something the light happened to trace. The second is the effect
-   * worth having, and the difference is entirely in these two numbers.
+   * Rare on purpose. A mark that appears every few seconds is a logo
+   * animation; one that surfaces roughly twice a minute, at an angle you did
+   * not choose, reads as something the light happened to trace.
    */
   wordEvery: 34,
   wordVisible: 5.5,
   wordStrength: 0.38,
 } as const;
+
+/**
+ * Where one wave is in its life, at a given moment.
+ *
+ * Pure, and deliberately not random: the waves are evenly staggered around a
+ * shared period so there is always one in flight and never all three at once.
+ * Reaching for `Math.random` per frame would restart a front every frame; per
+ * emission it would be untestable. A phase offset gives a procession that can
+ * be reasoned about and checked.
+ *
+ * `emission` counts which wave this is, so the caller knows when to choose a
+ * new starting point on the cortex.
+ */
+export function waveState(
+  index: number,
+  seconds: number,
+  life = LOOK.waveLife,
+  rest = LOOK.waveRest,
+  count = LOOK.waves,
+): { age: number; emission: number; active: boolean } {
+  const period = life + rest;
+  const shifted = seconds - (index * period) / count;
+  if (shifted < 0) return { age: 0, emission: 0, active: false };
+  const emission = Math.floor(shifted / period);
+  const age = shifted - emission * period;
+  return { age, emission, active: age <= life };
+}
 
 const NERVOUS_MESH = "nervous_male.glb";
 const DRACO_DECODER_PATH = "/draco/";
@@ -119,31 +175,63 @@ const SHELL_VERTEX = /* glsl */ `
 
 const SHELL_FRAGMENT = /* glsl */ `
   uniform float uTime;
-  uniform vec3 uCool;
-  uniform vec3 uWarm;
+  uniform vec3 uBody;
+  uniform vec3 uPulse;
   uniform float uOpacity;
   uniform float uRimSharpness;
-  uniform float uPulseUp;
-  uniform float uPulseAcross;
+  uniform float uRadius;
+
+  uniform vec3 uWaveSeed[WAVE_COUNT];
+  uniform float uWaveAge[WAVE_COUNT];
+  uniform float uWaveSpeed;
+  uniform float uWaveWidth;
+  uniform float uWaveStrength;
+  uniform float uWaveLife;
+
   uniform sampler2D uWord;
   uniform float uWordStrength;
   uniform float uWordAngle;
-  uniform float uRadius;
 
   varying vec3 vNormalW;
   varying vec3 vViewW;
   varying vec3 vLocal;
 
+  /**
+   * One thought: a front leaving a point on the cortex, and the flash it left.
+   *
+   * Two terms rather than one. The ring alone is a ripple in water; the ignition
+   * at the origin is what makes it read as something starting *there* — the
+   * difference between a wave passing over the brain and a wave coming out of it.
+   */
+  float wave(vec3 p, vec3 seed, float age) {
+    if (age < 0.0) return 0.0;
+
+    float distance = length(p - seed);
+    float front = age * uWaveSpeed * uRadius;
+    float width = uWaveWidth * uRadius;
+
+    // The expanding ring, thinning as it goes: a front that keeps its
+    // brightness across the whole brain looks like a sweep, not a pulse.
+    float ring = 1.0 - smoothstep(0.0, width, abs(distance - front));
+
+    // The ignition, brief and only at the source.
+    float spark = (1.0 - smoothstep(0.0, width * 1.6, distance))
+                * (1.0 - smoothstep(0.0, uWaveLife * 0.22, age));
+
+    // Out over its life, so nothing ever switches off with an edge.
+    float fade = 1.0 - smoothstep(0.0, uWaveLife, age);
+
+    return (ring * fade + spark) * uWaveStrength;
+  }
+
   void main() {
     float facing = abs(dot(normalize(vNormalW), normalize(vViewW)));
     float rim = pow(1.0 - facing, uRimSharpness);
 
-    // Two bands at different speeds and axes. Their beat is what stops the
-    // motion reading as a loop, at the cost of one extra sine.
-    float up = sin(vLocal.y * 26.0 - uTime * 1.15);
-    float across = sin(vLocal.z * 17.0 - uTime * 0.63);
-    float pulse =
-      smoothstep(0.90, 1.0, up) * uPulseUp + smoothstep(0.93, 1.0, across) * uPulseAcross;
+    float thought = 0.0;
+    for (int i = 0; i < WAVE_COUNT; i++) {
+      thought += wave(vLocal, uWaveSeed[i], uWaveAge[i]);
+    }
 
     // The wordmark, painted by the light rather than drawn over it.
     //
@@ -164,14 +252,19 @@ const SHELL_FRAGMENT = /* glsl */ `
       }
     }
 
+    float lit = thought + word;
+
     // **No constant term.** Anything added here is added again for every shell
     // the eye looks through, and the brain is about forty deep through the
     // middle — a base glow of 0.35 is white before the rim contributes at all.
-    float strength = rim + pulse + word;
+    float glow = rim + lit;
 
-    vec3 colour = mix(uCool, uWarm, clamp(rim + pulse * 0.5 + word, 0.0, 1.0));
+    // Grey where it is only shape, green where something is passing through.
+    // Saturating the mix well before the light peaks keeps the colour of a
+    // front constant while its brightness still climbs.
+    vec3 colour = mix(uBody, uPulse, clamp(lit * 2.2, 0.0, 1.0));
 
-    gl_FragColor = vec4(colour * strength, uOpacity * strength);
+    gl_FragColor = vec4(colour * glow, uOpacity * glow);
   }
 `;
 
@@ -314,19 +407,45 @@ function Brain({ organIds, still }: { organIds: string[]; still: boolean }) {
   const wordAngle = useMemo(() => ({ value: 0 }), []);
   const word = useMemo(() => wordmarkTexture(), []);
 
+  /**
+   * Where each wave is starting from, and how far into its life it is.
+   *
+   * Arrays of uniforms rather than three sets: the shader loops over them, and
+   * a negative age is how a wave says it is resting. Held in refs beside them
+   * so the frame loop can tell when an emission has rolled over and it is time
+   * to choose somewhere new.
+   */
+  const waveSeeds = useMemo(
+    () => ({
+      value: Array.from({ length: LOOK.waves }, () => new THREE.Vector3()),
+    }),
+    [],
+  );
+  const waveAges = useMemo(
+    () => ({ value: Array.from({ length: LOOK.waves }, () => -1) }),
+    [],
+  );
+  const emissions = useRef<number[]>(Array.from({ length: LOOK.waves }, () => -1));
+
   const material = useMemo(
     () =>
       new THREE.ShaderMaterial({
         vertexShader: SHELL_VERTEX,
-        fragmentShader: SHELL_FRAGMENT,
+        // GLSL needs the array bound at compile time, so the count is
+        // substituted rather than passed — one source of truth, still `LOOK`.
+        fragmentShader: SHELL_FRAGMENT.replaceAll("WAVE_COUNT", String(LOOK.waves)),
         uniforms: {
           uTime: time,
-          uCool: { value: new THREE.Color("#1b4fd8") },
-          uWarm: { value: new THREE.Color("#67e8f9") },
+          uBody: { value: new THREE.Color("#9aa3b0") },
+          uPulse: { value: new THREE.Color("#3ddc84") },
           uOpacity: { value: LOOK.opacity },
           uRimSharpness: { value: LOOK.rimSharpness },
-          uPulseUp: { value: LOOK.pulseUp },
-          uPulseAcross: { value: LOOK.pulseAcross },
+          uWaveSeed: waveSeeds,
+          uWaveAge: waveAges,
+          uWaveSpeed: { value: LOOK.waveSpeed },
+          uWaveWidth: { value: LOOK.waveWidth },
+          uWaveStrength: { value: LOOK.waveStrength },
+          uWaveLife: { value: LOOK.waveLife },
           uWord: { value: word },
           uWordStrength: wordStrength,
           uWordAngle: wordAngle,
@@ -346,7 +465,7 @@ function Brain({ organIds, still }: { organIds: string[]; still: boolean }) {
         side: THREE.FrontSide,
         blending: THREE.AdditiveBlending,
       }),
-    [time, word, wordStrength, wordAngle],
+    [time, word, wordStrength, wordAngle, waveSeeds, waveAges],
   );
 
   const wireframe = useMemo(
@@ -382,6 +501,21 @@ function Brain({ organIds, still }: { organIds: string[]; still: boolean }) {
     if (still) return;
     const seconds = state.clock.elapsedTime;
     time.value = seconds;
+
+    const positions = geometry?.getAttribute("position");
+    for (let index = 0; index < LOOK.waves; index += 1) {
+      const wave = waveState(index, seconds);
+      waveAges.value[index] = wave.active ? wave.age : -1;
+      // A new emission gets a new origin, chosen from the cortex itself rather
+      // than from a box around it: a front starting in the empty space between
+      // the lobes would expand into view from nowhere.
+      if (wave.emission !== emissions.current[index] && positions) {
+        emissions.current[index] = wave.emission;
+        const vertex = Math.floor(Math.random() * positions.count);
+        waveSeeds.value[index]!.fromBufferAttribute(positions, vertex);
+      }
+    }
+
     const mark = wordmarkAt(seconds);
     wordStrength.value = mark.strength;
     wordAngle.value = mark.angle;
