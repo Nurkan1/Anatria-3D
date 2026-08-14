@@ -1,6 +1,6 @@
 import { stripOrganRefs } from "@/features/chat/organRefs";
-import type { Language, SessionMode, UserProfile } from "@/lib/schemas";
-import type { SessionDetail, SessionSummary, StudyNote } from "@/lib/studyDb";
+import type { FiledMode, Language, UserProfile } from "@/lib/schemas";
+import type { CaseDigest, SessionDetail, SessionSummary, StudyNote } from "@/lib/studyDb";
 
 /**
  * Turning the journal into something printable.
@@ -57,6 +57,47 @@ export interface PrintFact {
 }
 
 /**
+ * A complaint, as it was marked on the body.
+ *
+ * `structure` is **where the reader marked it**, not where the cause turned out
+ * to be. On paper that distinction has to survive, because the whole record is
+ * unreadable without it: "pain, left upper limb" against an answer of inferior
+ * myocardial infarction is the reasoning, not a contradiction.
+ */
+export interface PrintSymptom {
+  when: number;
+  /** A name, never an id — same rule as everything else on the page. */
+  structure: string | null;
+  symptom: string;
+  /** 0–10, or null when it was not asked. */
+  severity: number | null;
+}
+
+/**
+ * Something learned after the case was opened.
+ *
+ * Printed as its own list under the findings, in visit order, because that
+ * order is the clinical content: a figure that moved between visits is a
+ * different case from one that was always there, and a history that flattens
+ * them into one paragraph loses exactly that.
+ */
+export interface PrintRecordUpdate {
+  visitNo: number;
+  when: number;
+  body: string;
+}
+
+/** One visit, with what was said and how it was graded. */
+export interface PrintVisit {
+  visitNo: number;
+  when: number;
+  score: number | null;
+  verdict: string | null;
+  structures: string[];
+  exchanges: PrintExchange[];
+}
+
+/**
  * Everything the printed page shows.
  *
  * Dates are epoch numbers rather than formatted strings: rendering them is the
@@ -65,7 +106,7 @@ export interface PrintFact {
  */
 export interface PrintDocument {
   heading: string;
-  kind: "session" | "notes";
+  kind: "session" | "notes" | "case";
   facts: PrintFact[];
   /** The assistant's closing assessment of a case drill, if it was graded. */
   verdict: string | null;
@@ -73,6 +114,35 @@ export interface PrintDocument {
   structures: string[];
   notes: PrintNote[];
   exchanges: PrintExchange[];
+  /** The presentation, oldest first. Empty on every document but a case. */
+  symptoms: PrintSymptom[];
+  /** The visits in order. Empty on every document but a case. */
+  visits: PrintVisit[];
+  /**
+   * Vitals, history and results the case was given.
+   *
+   * Printed under the heading rather than at the foot beside the sealed
+   * answer, because these are not a secret: they are what the reader was told
+   * from the start, and a history that omits them cannot be followed.
+   */
+  findings: string | null;
+  /**
+   * What was added to the record after the opening, oldest first.
+   *
+   * Beside `findings` and not merged into it: these were learned later, and
+   * the reader's answer at each visit can only be judged against what that
+   * visit had been told.
+   */
+  recordUpdates: PrintRecordUpdate[];
+  /**
+   * The answer the case was sealed with.
+   *
+   * On the page because this is the record of a finished case, and a history
+   * that omits what it turned out to be cannot be revised from. It is printed
+   * under its own heading at the foot, so nobody hands out a case sheet without
+   * seeing that the answer is on it.
+   */
+  sealedAnswer: string | null;
   /** Which language the compliance notice is printed in, besides English. */
   language: Language;
   createdAt: number | null;
@@ -80,7 +150,7 @@ export interface PrintDocument {
   producedAt: number;
 }
 
-const KIND_LABEL: Record<SessionMode, string> = {
+const KIND_LABEL: Record<FiledMode, string> = {
   tutor: "Tutor session",
   case: "Case drill",
 };
@@ -197,6 +267,11 @@ export function buildSessionDocument(
       .filter((label): label is string => label !== null)
       .sort((a, b) => a.localeCompare(b)),
     notes: [],
+    findings: null,
+    recordUpdates: [],
+    symptoms: [],
+    visits: [],
+    sealedAnswer: null,
     // The assistant marks structures it names with `[[organ_id]]`, which the
     // chat panel turns into clickable pins. On paper there is nothing to click,
     // so the markers come out — the same strip the copy-to-clipboard path uses.
@@ -239,6 +314,11 @@ export function buildNotesDocument(
       body: note.body,
     })),
     exchanges: [],
+    findings: null,
+    recordUpdates: [],
+    symptoms: [],
+    visits: [],
+    sealedAnswer: null,
     language,
     createdAt: null,
     updatedAt: null,
@@ -246,7 +326,103 @@ export function buildNotesDocument(
   };
 }
 
+/**
+ * A whole case, as a page: who the invented patient is, what was marked on
+ * them, every visit in order, and the answer it was sealed with.
+ *
+ * Built from the journal alone, like everything else here — a history that
+ * regenerated itself at print time would not be a record.
+ *
+ * `details` maps a visit's `session_id` to its transcript. A visit with no
+ * entry keeps its heading, score and verdict: those live on the visit itself,
+ * and dropping the whole visit because its conversation could not be loaded
+ * would silently renumber the history.
+ */
+export function buildCaseDocument(
+  digest: CaseDigest,
+  details: ReadonlyMap<string, SessionDetail>,
+  labelFor: (organId: string) => string | null,
+  producedAt: number = Date.now(),
+): PrintDocument {
+  const record = digest.case;
+
+  const facts: PrintFact[] = [
+    // First, and phrased so no reader can mistake the page for a patient
+    // record. The page travels further than the app it came from.
+    { label: "Record", value: "Simulated case — no real patient" },
+    { label: "Sex", value: record.sex === "female" ? "Female" : "Male" },
+  ];
+  if (record.age_years !== null) facts.push({ label: "Age", value: `${record.age_years}` });
+  if (record.height_cm !== null) {
+    facts.push({ label: "Height", value: `${record.height_cm} cm` });
+  }
+  if (record.weight_kg !== null) facts.push({ label: "Weight", value: `${record.weight_kg} kg` });
+  facts.push({ label: "Visits", value: `${digest.visits.length}` });
+  facts.push({ label: "Level", value: PROFILE_LABEL[record.profile] });
+  facts.push({ label: "Answered in", value: LANGUAGE_LABEL[record.language] });
+
+  const graded = digest.visits.filter((visit) => visit.score !== null);
+  if (graded.length > 0) {
+    const mean =
+      graded.reduce((total, visit) => total + (visit.score ?? 0), 0) / graded.length;
+    facts.push({ label: "Average score", value: `${Math.round(mean)} / 100` });
+  }
+
+  return {
+    heading: record.title,
+    kind: "case",
+    facts,
+    verdict: null,
+    structures: [],
+    notes: [],
+    exchanges: [],
+    findings: record.findings.trim() === "" ? null : record.findings,
+    recordUpdates: digest.record_updates.map((entry) => ({
+      visitNo: entry.visit_no,
+      when: entry.created_at,
+      body: entry.body,
+    })),
+    symptoms: digest.symptoms.map((symptom) => ({
+      when: symptom.created_at,
+      // Stored beside the id when it was marked, so it survives the atlas
+      // changing and the system it belongs to being switched off.
+      structure: symptom.organ_label,
+      symptom: symptom.symptom,
+      severity: symptom.severity,
+    })),
+    visits: digest.visits.map((visit) => ({
+      visitNo: visit.visit_no,
+      when: visit.created_at,
+      score: visit.score,
+      verdict: visit.verdict,
+      structures: visit.structures
+        .map(labelFor)
+        .filter((label): label is string => label !== null)
+        .sort((a, b) => a.localeCompare(b)),
+      exchanges: (details.get(visit.session_id)?.messages ?? []).map((message) => ({
+        role: message.role,
+        body: stripOrganRefs(message.content),
+        when: message.created_at,
+        model: message.model,
+      })),
+    })),
+    sealedAnswer: digest.ground_truth,
+    language: record.language,
+    createdAt: record.created_at,
+    updatedAt: record.updated_at,
+    producedAt,
+  };
+}
+
 /** Whether there is anything on the page besides its own heading. */
 export function isPrintable(document: PrintDocument): boolean {
-  return document.notes.length > 0 || document.exchanges.length > 0;
+  return (
+    document.notes.length > 0 ||
+    document.exchanges.length > 0 ||
+    document.visits.length > 0 ||
+    document.symptoms.length > 0 ||
+    // A case can be caught up on before it is ever asked about, and a page
+    // holding a history is worth printing whether or not anyone has answered.
+    document.recordUpdates.length > 0
+  );
 }

@@ -17,7 +17,7 @@ import { z } from "zod";
  * only thing standing between us and the two sides drifting apart silently.
  */
 
-export const PROTOCOL_VERSION = 1;
+export const PROTOCOL_VERSION = 2;
 
 // ---------------------------------------------------------------------------
 // Primitives
@@ -52,9 +52,25 @@ export type AiProvider = z.infer<typeof AiProviderSchema>;
  * the student what they would do — then grades the answer instead of supplying
  * it. The difference is entirely in the instructions and in one extra tool, so
  * a drill keeps the same scene control and the same safety layer as a lesson.
+ *
+ * `review` reads a case back — what was presented, what was reasoned, where the
+ * gaps are. It writes nothing: the journal's `kind` column accepts only `tutor`
+ * and `case`, so a review cannot be filed as a visit even by accident. That is
+ * the intent. A summary is generated prose, and the journal holds what the
+ * reader actually did.
  */
-export const SessionModeSchema = z.enum(["tutor", "case"]);
+export const SessionModeSchema = z.enum(["tutor", "case", "review"]);
 export type SessionMode = z.infer<typeof SessionModeSchema>;
+
+/**
+ * The modes the journal can actually hold.
+ *
+ * `review` is missing on purpose, and the SQLite table says the same thing with
+ * `CHECK (kind IN ('tutor', 'case'))`. A summary is generated prose; the
+ * journal records what the reader did. Stating it in the type means a printed
+ * page cannot be asked to label a session kind that can never exist.
+ */
+export type FiledMode = Exclude<SessionMode, "review">;
 
 export const AnatomicalSystemSchema = z.enum([
   "cardiovascular",
@@ -242,6 +258,87 @@ export type ChatTurn = z.infer<typeof ChatTurnSchema>;
  * Note the absence of `api_key`. This is deliberate and load-bearing — see the
  * file header. Rust adds the key on the way to the sidecar.
  */
+/**
+ * Something the reader marked on the body.
+ *
+ * `organ_id` is where they marked it, not where the cause is — the assistant is
+ * told in as many words not to relocate it to the organ it suspects.
+ */
+export const CaseComplaintSchema = z.object({
+  organ_id: z.string().min(1),
+  /** The structure's name, so the assistant can speak it without leaking an id. */
+  label: z.string().min(1),
+  symptom: z.string().min(1).max(200),
+  severity: z.number().int().min(0).max(10).nullable().optional(),
+});
+
+/**
+ * Something learned about the patient after the case was opened.
+ *
+ * `findings` is what was sealed on day one. These accumulate beside it, each
+ * stamped with the visit it was known at — a weight coming down over four
+ * visits is a different case from a weight that was always low.
+ */
+export const CaseRecordUpdateSchema = z.object({
+  visit_no: z.number().int().min(1),
+  body: z.string().min(1).max(20_000),
+});
+export type CaseRecordUpdate = z.infer<typeof CaseRecordUpdateSchema>;
+
+export const CaseVisitSummarySchema = z.object({
+  visit_no: z.number().int().min(1),
+  score: z.number().int().min(0).max(100).nullable().optional(),
+  verdict: z.string().max(4000).nullable().optional(),
+});
+
+/**
+ * The simulated patient a drill is a visit to.
+ *
+ * **No name, and no free-text identity of any kind** — the journal behind this
+ * has no column for one, so the shape itself is the guarantee.
+ *
+ * Sending it is what stops the safety layer misfiring. Without it the engine
+ * cannot tell an invented patient from a real one, and a reader typing "he has
+ * neck pain" is told to see a doctor about someone who does not exist.
+ */
+export const VirtualPatientSchema = z.object({
+  title: z.string().min(1).max(200),
+  sex: z.enum(["male", "female"]),
+  age_years: z.number().int().min(0).max(130).nullable().optional(),
+  height_cm: z.number().int().min(30).max(260).nullable().optional(),
+  weight_kg: z.number().positive().max(400).nullable().optional(),
+  /**
+   * Vitals, history and results the reader is **given**.
+   *
+   * Split out from the sealed answer because one field could not do both jobs:
+   * an author wrote the facts the reader needs to reason at all into the half
+   * that may never be spoken, and the assistant handed them over anyway.
+   */
+  findings: z.string().max(20_000).default(""),
+  /**
+   * What has been added to the record since, oldest first.
+   *
+   * Given to the reader exactly as `findings` is — these are not secret. They
+   * are separate only because they were learned later, and that ordering is
+   * itself clinical information.
+   */
+  record_updates: z.array(CaseRecordUpdateSchema).max(200).default([]),
+  /** Sealed before anything was attempted. The assistant steers by it, never states it. */
+  /**
+   * May be sent empty, and that is a deliberate act by the caller: a review of
+   * a case with an ungraded visit goes without it, so the summary physically
+   * cannot contain the answer.
+   */
+  ground_truth: z.string().max(20_000).default(""),
+  visit_no: z.number().int().min(1),
+  /** `.default([])` mirrors Pydantic's `default_factory=list`: a field with a
+   *  default reads as optional on both sides, and the contract test compares
+   *  exactly that. */
+  complaints: z.array(CaseComplaintSchema).max(200).default([]),
+  earlier_visits: z.array(CaseVisitSummarySchema).max(20).default([]),
+});
+export type VirtualPatient = z.infer<typeof VirtualPatientSchema>;
+
 export const AgentRequestSchema = z.object({
   request_id: z.string().min(1),
   query: z.string().min(1).max(8000),
@@ -272,6 +369,14 @@ export const AgentRequestSchema = z.object({
    * validate every organ_id against this list, so it cannot invent anatomy.
    */
   available_organs: z.array(OrganMetaSchema),
+  /**
+   * The virtual patient this drill belongs to, when there is one.
+   *
+   * Optional on purpose, and the Pydantic side defaults it the same way: a new
+   * field on an existing event must be optional on the way in, or every frame
+   * from a build that predates it fails validation and is silently dropped.
+   */
+  case: VirtualPatientSchema.optional(),
 });
 export type AgentRequest = z.infer<typeof AgentRequestSchema>;
 

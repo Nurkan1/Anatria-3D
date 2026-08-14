@@ -400,6 +400,7 @@ function SystemMeshes({
   const selectedOrganIds = useSceneStore((s) => s.selectedOrganIds);
   const hiddenOrganIds = useSceneStore((s) => s.hiddenOrganIds);
   const overlays = useSceneStore((s) => s.pathologyOverlays);
+  const caseMarks = useSceneStore((s) => s.caseMarks);
   const hiddenSystems = useSceneStore((s) => s.hiddenSystems);
   const systemOpacity = useSceneStore((s) => s.systemOpacity);
   const isolatedOrganIds = useSceneStore((s) => s.isolatedOrganIds);
@@ -624,7 +625,10 @@ function SystemMeshes({
         opacity={organOpacity({ systemOpacity }, organ)}
         hovered={hoveredOrganId === organ.organ_id}
         selected={selectedOrganIds.includes(organ.organ_id)}
-        overlay={overlays[organ.organ_id]}
+        // The assistant's overlay wins when both exist: one is what is being
+        // explained right now, the other is the standing presentation. The
+        // mark shows through the moment the explanation moves on.
+        overlay={overlays[organ.organ_id] ?? caseMarks[organ.organ_id]}
         // Two numbers rather than one object: an object built here would be a
         // new identity on every render and would defeat the memo below it.
         coverageTouches={coverage ? (coverage.byOrgan[organ.organ_id] ?? 0) : undefined}

@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
+import { MAX_SEVERITY, MAX_VISITS } from "@/lib/studyDb";
+
 /**
  * How the app works, for someone opening it for the first time.
  *
@@ -429,6 +431,191 @@ const SECTIONS: Section[] = [
           teaching and says so in its opening line. If you describe someone real, the
           drill ends and the assistant goes back to the rules above.
         </Callout>
+        <p>
+          A drill on its own is one question and one answer. If you want a patient you
+          can follow — several visits, a presentation that develops, a record that
+          remembers — that is the next section.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: "patients",
+    nav: "Virtual patients",
+    title: "A case you can follow across visits",
+    body: (
+      <>
+        <p>
+          A single drill is over when you answer it. A <em>virtual patient</em> is a case
+          you come back to: you write it, mark what it reports on the body, and work
+          through it over several visits. What you learned at visit 2 is still on the
+          file at visit 7, and the assistant reasons from the whole course rather than
+          from the last thing you typed.
+        </p>
+        <Callout>
+          <strong>Nobody here is real.</strong> There is no name field and nothing asks
+          who the patient is — you invent the case yourself, for teaching. It is not a
+          digital twin either: a twin is a model of a real person kept in step with data
+          from them, and nothing here is connected to anyone or ever will be. The
+          boundary in the first section applies to every word of it, so do not write a
+          real person's details into a case — not because they would leave your machine,
+          but because that is not what this is for, and the assistant will stop when it
+          notices.
+        </Callout>
+
+        <Sub>Opening one</Sub>
+        <p>
+          In <Ui>Case drill</Ui> mode, the bar under the header is where the patient
+          lives. <Ui>New patient</Ui> opens the composer. You give it a title, a sex, and
+          whichever of age, height and weight matter to the case — then two pieces of
+          writing that do very different jobs.
+        </p>
+        <Rows
+          rows={[
+            [
+              "On the record",
+              "Vitals, history, what the results said. You are told this from the start — a case with no findings cannot be reasoned about.",
+            ],
+            [
+              "The answer",
+              "What it actually turns out to be. Sealed the moment you press Seal and open.",
+            ],
+          ]}
+        />
+        <Callout>
+          <strong>The answer is written before anything has been attempted, and there
+          is no way to edit it afterwards.</strong> That is the whole discipline. An
+          answer decided once you have your reasoning in hand grades nothing — in the
+          same way a prediction recorded only on the occasions it turned out right
+          proves nothing. There is no button that changes it, and there is no column to
+          change it through.
+        </Callout>
+        <Callout>
+          <strong>Sex drives the reasoning; the model does not follow it.</strong> The
+          atlas ships a male body whichever sex you choose, for the reason given in the
+          first section. The assistant reasons from the sex on the file and will not
+          describe the model as female — worth knowing before you write a case that
+          turns on the pelvis.
+        </Callout>
+
+        <Sub>Marking what the patient reports</Sub>
+        <p>
+          Right-click any structure with a patient open and choose{" "}
+          <Ui>Mark a complaint here</Ui>. Write what they report and how bad it is, from
+          0 to {MAX_SEVERITY}. The region lights up on the body and stays lit for the
+          whole case.
+        </p>
+        <Callout>
+          <strong>Mark it where it is felt, not where you think the cause is.</strong>{" "}
+          Nothing here quietly relocates a complaint to the organ it suggests, and that
+          is deliberate: pain down the left arm belonging to a heart is exactly the
+          reasoning a case exists to teach, and filing it under the heart would delete
+          the exercise before it started. The assistant is told the same thing, in the
+          same words.
+        </Callout>
+        <p>
+          The marks are the patient's, not the assistant's. Nothing it does to the
+          model while explaining — clearing overlays, isolating, cutting a section —
+          can erase them. Click a complaint in the patient record to fly to where it
+          was marked; press <Ui>✕</Ui> beside it in the right-click menu to remove one.
+        </p>
+
+        <Sub>The record keeps learning</Sub>
+        <p>
+          Cases develop. A weight comes down, a pressure does not, imaging comes back.{" "}
+          <Ui>+ Add to the record</Ui> in the patient record writes what is known now,
+          and the journal stamps it with the visit you are on.
+        </p>
+        <Callout>
+          <strong>Entries are added, never edited.</strong> What you had been told going
+          into visit 3 is part of what your answer at visit 3 should be judged against,
+          so the record only ever grows — the same reasoning the sealed answer rests on.
+          Where a later entry contradicts an earlier one, the assistant is required to
+          say what changed rather than quietly using the newer number. That ordering is
+          the clinical content: a figure that moved across four visits is a different
+          case from one that was always there.
+        </Callout>
+
+        <Sub>Visits</Sub>
+        <p>
+          Every conversation you have with a patient open is filed as a visit, numbered
+          in order. A patient holds {MAX_VISITS}; after that the case is marked complete
+          and can only be read and printed, not continued.
+        </p>
+        <Callout>
+          <strong>Starting a new visit is also how you keep the cost down.</strong> Each
+          question re-sends the whole conversation, so a long visit gets expensive —
+          the notice above the box says so once it is true. A new visit drops the
+          transcript and keeps the record, because the record is read from the journal
+          and costs nothing to carry. You lose the wording of what was said; you lose
+          none of the case.
+        </Callout>
+        <p>
+          In the <Ui>Study</Ui> tab, every session that belongs to a patient is badged
+          with which one and which visit, and <Ui>Virtual patients</Ui> lists them
+          above. Click a patient there to narrow the whole journal to their visits —
+          the search box and the structure filter still work inside it, so “what did we
+          cover about the aorta with this patient” is one question. Click a visit in
+          the patient record to reopen it with the structures it was about.
+        </p>
+
+        <Sub>Reading the case back</Sub>
+        <p>
+          <Ui>Review this case</Ui> starts a separate conversation whose only subject is
+          the file: what was presented, what has been reasoned, and where the gaps are.
+          It is not a drill — it asks you nothing and grades nothing — and it writes
+          nothing into the record.
+        </p>
+        <Callout>
+          <strong>While any visit is ungraded, the answer stays sealed — and so do the
+          verdicts.</strong> Not by asking the assistant to keep quiet: the sealed answer
+          is simply never sent, so a summary physically cannot contain it. Grade every
+          visit and a review is given both, because a written verdict already contains
+          the reasoning you should have reached and withholding the answer at that point
+          protects nothing.
+        </Callout>
+        <Callout>
+          <strong>And you can always open it yourself.</strong>{" "}
+          <Ui>Reveal the sealed answer</Ui> in the patient record shows what you wrote
+          when the case was opened. It asks first, because that is the only thing the
+          seal was ever for — not keeping you from your own writing, but stopping you
+          tripping over it while a question is still in front of you.
+          <br />
+          <br />
+          It is recorded rather than remembered: from then on the case reads as opened,
+          and a review of it may use the answer and the verdicts. That is deliberate —
+          a summary that included the answer today and withheld it tomorrow would be
+          worse than either. Nothing is deleted, and the answer itself still cannot be
+          edited by anything.
+        </Callout>
+        <p>
+          A review reads past visits as their grades and verdicts, <em>not</em> as their
+          transcripts — reopen a visit to read what was actually said. The panel tells
+          you before you spend a question what it will and will not have, so a thin
+          summary is never a mystery.
+        </p>
+
+        <Sub>Printing, deleting, carrying it</Sub>
+        <p>
+          <Ui>⎙</Ui> on a patient prints the whole case history: the parameters, the
+          findings, everything added to the record in visit order, every complaint, and
+          every visit with its transcript and its grade. <strong>The sealed answer is on
+          that page</strong>, under its own heading at the foot, so nobody hands the
+          sheet to a student without passing it on the way down.
+        </p>
+        <Callout>
+          <strong>Deleting a patient is not symmetrical, and the confirmation says
+          so.</strong> The case goes, the complaints go, and the sealed answer goes with
+          it — but the visits stay in your journal as ordinary sessions, with their
+          transcripts and their scores. Your own work is never destroyed to tidy up a
+          case. It cannot be undone.
+        </Callout>
+        <p>
+          <Ui>Leave</Ui> beside the patient chip only stops filing new drills against
+          them. Nothing is deleted, and you can pick them up again from the same list.
+          Patients travel in the journal export like everything else — see the next
+          section.
+        </p>
       </>
     ),
   },
@@ -458,11 +645,20 @@ const SECTIONS: Section[] = [
         </p>
         <p>
           Because it is local, it is yours to carry. <Ui>Export</Ui> writes the whole
-          journal to one file; <Ui>Import</Ui> on another machine folds it back in.
-          Importing <em>merges</em> — it adds to what is already there, never
-          overwrites a note you edited more recently, and doing it twice does nothing
-          the second time.
+          journal to one file — sessions, notes, and every virtual patient with its
+          complaints, its record and its sealed answer. <Ui>Import</Ui> on another
+          machine folds it back in. Importing <em>merges</em> — it adds to what is
+          already there, never overwrites a note you edited more recently, and doing it
+          twice does nothing the second time.
         </p>
+        <Callout>
+          <strong>A case is sealed, so a restore only ever adds one back, never
+          rewrites one.</strong> If a patient is already here, the copy on this machine
+          is the one your grades were judged against and it wins. If you deleted one,
+          restoring brings back the case, its complaints and its record, and re-attaches
+          the visits that were left behind as ordinary sessions — a visit that already
+          belongs to a patient is never moved to another.
+        </Callout>
         <Callout>
           <strong>And you can see your revision on the body itself.</strong> Switch on{" "}
           <Ui>Show what I have studied</Ui> in the left panel and the model is
@@ -750,6 +946,17 @@ export function GuideOverlay({ onClose }: { onClose: () => void }) {
       </div>
     </div>
   );
+}
+
+/**
+ * A heading inside a section.
+ *
+ * `h4`, because the section's own title is already the `h3` on the page — and
+ * only the virtual-patient section is long enough to earn any: a walkthrough
+ * that needs subheadings to be followed is one, and the rest are not.
+ */
+function Sub({ children }: { children: React.ReactNode }) {
+  return <h4 className="pt-1.5 text-[12px] font-semibold text-slate-200">{children}</h4>;
 }
 
 function Callout({ children }: { children: React.ReactNode }) {

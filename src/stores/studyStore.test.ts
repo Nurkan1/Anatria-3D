@@ -16,16 +16,22 @@ vi.mock("@/lib/studyDb", () => ({
   getStudySession: vi.fn(),
   exportJournal: vi.fn(),
   importJournal: vi.fn(),
+  // Reached through the case store, which a restore also has to reload.
+  listCases: vi.fn(),
+  caseDigest: vi.fn(),
+  MAX_VISITS: 20,
 }));
 
 const db = vi.mocked(await import("@/lib/studyDb"));
 const { useStudyStore, describeImport } = await import("./studyStore");
+const { useCaseStore } = await import("./caseStore");
 
 const merge = (over: Partial<ImportSummary> = {}): ImportSummary => ({
   sessions_added: 0,
   sessions_updated: 0,
   notes_added: 0,
   notes_updated: 0,
+  cases_added: 0,
   skipped: 0,
   ...over,
 });
@@ -41,6 +47,8 @@ const SESSION: SessionSummary = {
   score: null,
   verdict: null,
   message_count: 2,
+  case_id: null,
+  visit_no: null,
   structure_count: 1,
   created_at: 1,
   updated_at: 2,
@@ -77,6 +85,8 @@ const TURN = {
 
 beforeEach(() => {
   vi.clearAllMocks();
+  db.listCases.mockResolvedValue([]);
+  db.caseDigest.mockResolvedValue(null);
   db.listStudySessions.mockResolvedValue([SESSION]);
   db.listNotes.mockResolvedValue([NOTE]);
   db.studyStats.mockResolvedValue(STATS);
@@ -114,14 +124,14 @@ describe("studyStore", () => {
 
     // Both filters reach both lists: narrowing to a structure and then
     // searching within it is the natural follow-up question.
-    expect(db.listStudySessions).toHaveBeenLastCalledWith("myocardium", "aorta");
+    expect(db.listStudySessions).toHaveBeenLastCalledWith("myocardium", "aorta", null);
     expect(db.listNotes).toHaveBeenLastCalledWith("aorta", "myocardium");
   });
 
   it("treats an empty search as no filter", async () => {
     await store().setQuery("   ");
 
-    expect(db.listStudySessions).toHaveBeenLastCalledWith(null, null);
+    expect(db.listStudySessions).toHaveBeenLastCalledWith(null, null, null);
   });
 
   it("keeps the structure's name beside its id", async () => {
@@ -205,11 +215,25 @@ describe("studyStore", () => {
     expect(store().notes).toEqual([NOTE]);
   });
 
+  it("reloads the patients too, not only the sessions", async () => {
+    // A restore writes into both stores. Reloading one left the patient picker
+    // and the virtual-patient list showing what was there before the import
+    // until the app was restarted — which reads exactly like a restore that
+    // did nothing, and is how this was reported.
+    db.importJournal.mockResolvedValue(merge({ cases_added: 2 }));
+
+    await store().importJournal();
+
+    expect(db.listCases).toHaveBeenCalled();
+    expect(useCaseStore.getState().loaded).toBe(true);
+  });
+
   it("does not reload when the import dialog is cancelled", async () => {
     db.importJournal.mockResolvedValue(null);
     await store().importJournal();
 
     expect(db.listNotes).not.toHaveBeenCalled();
+    expect(db.listCases).not.toHaveBeenCalled();
     expect(store().transfer).toBeNull();
   });
 
@@ -263,5 +287,49 @@ describe("describeImport", () => {
 
   it("still reports a merge that only updated things", () => {
     expect(describeImport(merge({ notes_updated: 2 }))).toContain("updated 2");
+  });
+
+  it("counts restored patients, which it silently did not", () => {
+    // The failure that made a working restore look like a broken one: the
+    // journal wrote 26 patients, this looked at sessions and notes alone, and
+    // told the reader their backup was empty.
+    const text = describeImport(merge({ cases_added: 26 }));
+
+    expect(text).toContain("26 patients");
+    expect(text).not.toContain("Nothing new");
+  });
+
+  it("says patient, not patients, for one", () => {
+    expect(describeImport(merge({ cases_added: 1 }))).toContain("1 patient");
+  });
+
+  it("still calls a genuine repeat import a no-op", () => {
+    // The other direction, and the one this must not break: restoring the
+    // same file twice has to stay visibly nothing.
+    expect(describeImport(merge({ skipped: 26 }))).toBe(
+      "Nothing new — that journal is already here.",
+    );
+  });
+});
+
+describe("narrowing to one virtual patient", () => {
+  it("composes with the structure and text filters rather than replacing them", async () => {
+    // Three filters, one query. "What did we cover about the aorta with this
+    // patient" is a question the reader can actually ask.
+    useStudyStore.setState({ query: "myocardium", organFilter: "aorta" });
+
+    await store().setCaseFilter("c1");
+
+    expect(db.listStudySessions).toHaveBeenLastCalledWith("myocardium", "aorta", "c1");
+    expect(store().caseFilter).toBe("c1");
+  });
+
+  it("clears back to the whole journal", async () => {
+    useStudyStore.setState({ caseFilter: "c1" });
+
+    await store().setCaseFilter(null);
+
+    expect(db.listStudySessions).toHaveBeenLastCalledWith(null, null, null);
+    expect(store().caseFilter).toBeNull();
   });
 });

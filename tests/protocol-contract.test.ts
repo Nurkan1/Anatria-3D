@@ -7,6 +7,10 @@ import { z } from "zod";
 
 import {
   AgentRequestSchema,
+  CaseComplaintSchema,
+  CaseRecordUpdateSchema,
+  CaseVisitSummarySchema,
+  VirtualPatientSchema,
   AiProviderSchema,
   AnatomicalSystemSchema,
   EngineErrorCodeSchema,
@@ -92,6 +96,12 @@ function typescriptSurface(): ProtocolSurface {
         z.object({ role: z.enum(["user", "assistant"]), content: z.string() }),
       ),
       AgentRequest: fieldsOf(AgentRequestSchema),
+      // Nested inside AgentRequest. `case` matching on both sides proves
+      // nothing about what travels inside it.
+      VirtualPatient: fieldsOf(VirtualPatientSchema),
+      CaseComplaint: fieldsOf(CaseComplaintSchema),
+      CaseVisitSummary: fieldsOf(CaseVisitSummarySchema),
+      CaseRecordUpdate: fieldsOf(CaseRecordUpdateSchema),
     },
     unions: {
       SceneCommand: variantsOf(SceneCommandSchema, "action"),

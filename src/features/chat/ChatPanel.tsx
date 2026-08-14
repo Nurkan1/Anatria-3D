@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { formatTokens, totalTokens } from "@/features/usage/tokens";
+import {
+  conversationIsCostly,
+  formatTokens,
+  totalTokens,
+} from "@/features/usage/tokens";
 import { useSceneCommands } from "@/features/viewer/useSceneCommands";
 import {
   askAgent,
@@ -9,6 +13,7 @@ import {
   newRequestId,
   restartEngine,
 } from "@/lib/ipc";
+import { PROTOCOL_VERSION } from "@/lib/schemas";
 import type {
   AiProvider,
   AnatomicalSystem,
@@ -18,6 +23,12 @@ import type {
   TokenUsage,
   UserProfile,
 } from "@/lib/schemas";
+import {
+  activeCase,
+  reviewReadiness,
+  useCaseStore,
+  virtualPatientContext,
+} from "@/stores/caseStore";
 import { useChatStore, type ChatMessage } from "@/stores/chatStore";
 import { chatPreferences, patchChatPreferences } from "@/stores/chatPreferences";
 import { useModelStore } from "@/stores/modelStore";
@@ -25,6 +36,7 @@ import { organLabel, useSceneStore } from "@/stores/sceneStore";
 import { useStudyStore } from "@/stores/studyStore";
 import { useUsageStore } from "@/stores/usageStore";
 
+import { CaseBar } from "./CaseBar";
 import { Markdown } from "./Markdown";
 import { collectOrganRefs, stripOrganRefs } from "./organRefs";
 import { SettingsDrawer } from "./SettingsDrawer";
@@ -72,6 +84,36 @@ const CASE_STARTERS: { label: string; system: AnatomicalSystem; prompt: string }
     prompt: "Start a case drill: acute abdominal pain.",
   },
 ];
+
+/**
+ * Why the answers here are getting expensive, said once it is true.
+ *
+ * Nothing about a chat box suggests that the same question costs more later
+ * than it does now — but every turn re-sends the whole transcript, so it does.
+ * The reader pays for that with their own key, and it is not something anyone
+ * can be expected to deduce.
+ *
+ * Placed above the composer rather than in a settings page or the help panel,
+ * because that is where the reader is when the next question is about to be
+ * asked. And it names the way out, which is the only reason to say it at all:
+ * a fresh session drops the transcript while the case keeps its record, since
+ * the record is read from the journal and costs nothing to carry.
+ */
+function CostNotice({ messages, mode }: { messages: ChatMessage[]; mode: SessionMode }) {
+  const patient = useCaseStore(activeCase);
+  const last = [...messages].reverse().find((message) => message.usage)?.usage;
+  if (!conversationIsCostly(last)) return null;
+
+  return (
+    <p className="mx-3 mb-2 rounded border border-slate-700/70 bg-slate-800/40 px-2 py-1 text-[10px] leading-snug text-slate-400">
+      Each question re-sends this whole conversation, so answers cost more the
+      longer it runs — this one was {formatTokens(totalTokens(last!))} tokens.{" "}
+      {mode === "case" && patient
+        ? "Starting a new visit keeps this patient's record and their marked complaints, and drops the transcript."
+        : "Starting a new session drops the transcript."}
+    </p>
+  );
+}
 
 function CopyButton({ text, label = "Copy" }: { text: string; label?: string }) {
   const { copied, copy } = useCopy();
@@ -391,6 +433,111 @@ function SaveAsNoteButton({ content }: { content: string }) {
   );
 }
 
+/**
+ * What a review is about to read, said before it reads it.
+ *
+ * `Review this case` used to switch the mode and leave this space blank. The
+ * mode had changed, the placeholder had changed, and nothing else had — which
+ * is indistinguishable from a broken button. The fix is not a spinner but the
+ * truth about the file: what the summary will be built from, and what it will
+ * not have. A review of a case with no findings and nothing graded is thin
+ * because the file is thin, and the reader should learn that here rather than
+ * from a disappointing answer they paid for.
+ */
+function ReviewIntro({ onAsk, disabled }: { onAsk: () => void; disabled: boolean }) {
+  const patient = useCaseStore(activeCase);
+  const symptoms = useCaseStore((s) => s.symptoms);
+  const visits = useCaseStore((s) => s.visits);
+  const record = useCaseStore((s) => s.record);
+
+  // Reachable: leaving the patient while a review is open drops the file out
+  // from under it. Nothing is wrong, there is simply nothing to summarise.
+  if (!patient) {
+    return (
+      <div className="space-y-2 pt-6 text-center text-xs text-slate-500">
+        <p>No patient is open.</p>
+        <p className="text-slate-600">
+          A review is always about a case. Pick one above, or start a new
+          conversation.
+        </p>
+      </div>
+    );
+  }
+
+  const file = reviewReadiness(patient, symptoms, visits, record);
+  const sources = [
+    file.complaints > 0 &&
+      `${file.complaints} ${file.complaints === 1 ? "complaint" : "complaints"} marked on the body`,
+    !file.bare && "the findings on the record",
+    file.updates > 0 &&
+      `${file.updates} later ${file.updates === 1 ? "entry" : "entries"}`,
+    file.visits > 0 && `${file.visits} ${file.visits === 1 ? "visit" : "visits"}`,
+  ].filter((entry): entry is string => typeof entry === "string");
+
+  return (
+    <div className="space-y-3 pt-6 text-center text-xs text-slate-500">
+      <p>Reading the file back on {patient.title}.</p>
+      <p className="text-slate-600">
+        What was presented, what has been reasoned, and where the gaps are.
+        Nothing is written into the record.
+      </p>
+
+      <div className="flex justify-center pt-1">
+        <button
+          type="button"
+          disabled={disabled}
+          onClick={onAsk}
+          className="rounded-full border border-slate-700 px-2.5 py-1 text-[11px] text-slate-300 transition hover:border-sky-600 hover:text-sky-200 disabled:opacity-30"
+        >
+          Summarise this case
+        </button>
+      </div>
+
+      {/*
+        The limits, stated before the summary rather than discovered in it.
+        Each one is a fact about this file, not a warning about the software.
+      */}
+      <div className="mx-auto max-w-[19rem] space-y-1.5 pt-1 text-left text-[10px] leading-snug text-slate-600">
+        {sources.length > 0 && <p>It reads {sources.join(", ")}.</p>}
+
+        {file.visits === 0 && (
+          <p className="text-amber-500/70">
+            No visit has been recorded yet, so there is no reasoning to review —
+            only what you have marked.
+          </p>
+        )}
+
+        {file.bare && (
+          <p className="text-amber-500/70">
+            This case carries no findings, so the summary has the complaints and
+            the visits and nothing else to reason from. Add what is known from
+            the patient record above — the sealed answer stays sealed either
+            way.
+          </p>
+        )}
+
+        {file.ungraded > 0 && (
+          <p>
+            The sealed answer stays sealed: {file.ungraded} of {file.visits}{" "}
+            {file.visits === 1 ? "visit is" : "visits are"} ungraded, and so are
+            their verdicts. Grade them and a review may use both.
+          </p>
+        )}
+
+        {file.visits > 0 && file.ungraded === 0 && (
+          <p>Every visit is graded, so the sealed answer is included.</p>
+        )}
+
+        <p className="text-slate-700">
+          Past visits are read as their grades and verdicts, not as their
+          transcripts. Reopen a visit from the record above to read what was
+          said.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export function ChatPanel() {
   const organs = useSceneStore((s) => s.organs);
   const selectedOrganIds = useSceneStore((s) => s.selectedOrganIds);
@@ -462,6 +609,12 @@ export function ChatPanel() {
     verdictRef.current.delete(requestId);
     if (!turn) return;
 
+    // A review is a reading of the journal, not work in it. Filing one would
+    // put generated prose into a record that otherwise holds only what the
+    // reader did — and the journal's own CHECK on `kind` would refuse it
+    // anyway. What it *does* cost is tokens, and `recordSpend` still runs.
+    if (chat.mode === "review") return;
+
     const study = useStudyStore.getState();
     const { profile: askedProfile, language: askedLanguage } = turnContextRef.current;
 
@@ -482,13 +635,29 @@ export function ChatPanel() {
         model: turn.model ?? null,
         input_tokens: turn.usage?.input_tokens ?? null,
         output_tokens: turn.usage?.output_tokens ?? null,
+        // Which virtual patient this conversation is a visit to, if any. Read
+        // by the journal only when the session row is created: the visit
+        // number is fixed then, and a conversation cannot change case halfway
+        // through without every later digest silently changing meaning.
+        //
+        // Only in case mode. A tutor conversation that happened to be open
+        // while a case was selected is not a consultation.
+        case_id: chat.mode === "case" ? useCaseStore.getState().activeCaseId : null,
       })
       // Strictly after the turn, and only if it landed: the session row is
       // created by that save, so grading a failed one would raise a second,
       // unrelated error about a session that was never written.
       .then((saved) => {
-        if (saved && grade) {
+        if (!saved) return;
+        if (grade) {
           void study.recordVerdict(chat.sessionId, grade.score, grade.verdict);
+        }
+        // The case store holds `visit_count`, and filing a visit is what
+        // changes it. Reloading only the study store left the chip saying
+        // "visit 8" while the journal beside it listed visit 10 — the same
+        // two-stores-one-write mistake the journal restore made.
+        if (chat.mode === "case" && useCaseStore.getState().activeCaseId) {
+          void useCaseStore.getState().refresh();
         }
       });
   }, []);
@@ -523,8 +692,37 @@ export function ChatPanel() {
     [],
   );
 
+  /**
+   * Whether the engine on disk speaks the protocol this build was compiled
+   * against.
+   *
+   * The two are built from one repository and shipped in one installer, so a
+   * disagreement is never something a reader configured — it is a build that
+   * froze one side and not the other. That happened: `tauri build` rebuilt the
+   * frontend and left a two-hour-old engine in place, and the only symptom was
+   * a validation error in the middle of a question, naming a field the reader
+   * had never heard of. Refusing at boot with a sentence costs one comparison.
+   *
+   * Both directions are wrong, and neither is recoverable from in the app, so
+   * neither gets a "continue anyway": an older engine rejects requests it
+   * cannot parse, and a newer one sends events this build cannot read.
+   */
+  const acceptEngine = useCallback((protocolVersion: number) => {
+    if (protocolVersion === PROTOCOL_VERSION) {
+      setEngineReady(true);
+      return;
+    }
+    setEngineReady(false);
+    setTransportError(
+      `This build of Anatria3D speaks protocol ${PROTOCOL_VERSION}, but the ` +
+        `engine bundled with it speaks ${protocolVersion}. That is a broken ` +
+        `installation rather than anything you did — reinstall from a single ` +
+        `release, and if it persists please report it.`,
+    );
+  }, []);
+
   useSceneCommands({
-    onReady: useCallback(() => setEngineReady(true), []),
+    onReady: acceptEngine,
     // The engine boots before the window does, so its `ready` frame — or the
     // reason it never came — is usually already gone by the time we are
     // listening. Asking, once attached, is what makes the composer's enabled
@@ -532,12 +730,21 @@ export function ChatPanel() {
     onAttached: useCallback(() => {
       void engineStatus().then(
         (status) => {
-          if (status.ready) setEngineReady(true);
-          else if (status.error) setTransportError(status.error);
+          // The usual path, not the exception: the engine boots before the
+          // window, so its `ready` frame is normally already gone. The version
+          // has to be checked from here too, or the check only fires in the
+          // rare case where the race was won.
+          if (status.ready && status.protocol_version !== null) {
+            acceptEngine(status.protocol_version);
+          } else if (status.ready) {
+            setEngineReady(true);
+          } else if (status.error) {
+            setTransportError(status.error);
+          }
         },
         () => undefined,
       );
-    }, []),
+    }, [acceptEngine]),
     onTextDelta: useCallback(
       (requestId: string, text: string) => appendDelta(requestId, text),
       [appendDelta],
@@ -678,6 +885,19 @@ export function ChatPanel() {
         // The engine validates every organ_id the model produces against this
         // list, so its scene tools cannot reference anatomy that is not loaded.
         available_organs: structures.map(({ mesh_file: _f, node: _n, ...meta }) => meta),
+        // Who the drill is about, when it is about anyone. Read fresh at send
+        // time rather than captured, because the reader can pick a patient
+        // between one question and the next.
+        ...(mode === "case" || mode === "review"
+          ? await virtualPatientContext(
+              useChatStore.getState().sessionId,
+              (organId) => {
+                const organ = useSceneStore.getState().organs[organId];
+                return organ ? organLabel(organ) : null;
+              },
+              mode,
+            )
+          : {}),
       });
     } catch (err) {
       failTurn(requestId, String(err));
@@ -732,6 +952,12 @@ export function ChatPanel() {
           <ModeSwitch mode={mode} onChange={beginSession} />
         </div>
       </header>
+
+      {/* Only in case mode: a one-off drill has no patient to belong to, and a
+          tutor conversation is not a consultation. */}
+      {(mode === "case" || mode === "review") && (
+        <CaseBar profile={profile} language={language} />
+      )}
 
       <SettingsDrawer
         provider={provider}
@@ -796,6 +1022,19 @@ export function ChatPanel() {
             </p>
           </div>
         )}
+
+        {messages.length === 0 && mode === "review" && (
+          <ReviewIntro
+            disabled={!engineReady}
+            onAsk={() =>
+              void send(
+                "Summarise this case: what was presented, what has been reasoned " +
+                  "across the visits, and where the gaps are.",
+              )
+            }
+          />
+        )}
+
         {messages.map((message) => (
           <MessageBubble key={message.id} message={message} />
         ))}
@@ -806,6 +1045,8 @@ export function ChatPanel() {
           {transportError}
         </p>
       )}
+
+      <CostNotice messages={messages} mode={mode} />
 
       <div className="border-t border-slate-800 p-3">
         <div className="relative">
@@ -824,8 +1065,10 @@ export function ChatPanel() {
             placeholder={
               !engineReady
                 ? "Waiting for the engine…"
-                : mode === "case"
-                  ? "Answer the case, or ask for a new one…"
+                : mode === "review"
+                  ? "Ask for the summary, or about anything in the file…"
+                  : mode === "case"
+                    ? "Answer the case, or ask for a new one…"
                   : "Ask about the anatomy…"
             }
             disabled={!engineReady}

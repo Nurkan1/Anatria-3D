@@ -25,7 +25,7 @@ export interface SceneCommandBridgeOptions {
    */
   onDone?: (requestId: string, usage: TokenUsage | null, model: string | null) => void;
   onError?: (code: string, message: string, requestId: string | null) => void;
-  onReady?: () => void;
+  onReady?: (protocolVersion: number) => void;
   /**
    * The listener is now attached and no further frame can be missed.
    *
@@ -78,7 +78,7 @@ export function useSceneCommands(options: SceneCommandBridgeOptions = {}) {
     onEngineEvent((event: EngineEvent) => {
       switch (event.type) {
         case "ready":
-          onReady?.();
+          onReady?.(event.protocol_version);
           break;
         case "scene_command":
           applyCommand(event.command);

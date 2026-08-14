@@ -9,13 +9,24 @@ from __future__ import annotations
 
 import pytest
 
-from anatria_engine.prompts import CASE, PROFILES, SAFETY, SCENE, build_instructions
+from anatria_engine.prompts import (
+    CASE,
+    PROFILES,
+    REVIEW,
+    SAFETY,
+    SCENE,
+    build_instructions,
+)
 from anatria_engine.protocol import (
+    CaseComplaint,
+    CaseRecordUpdate,
+    CaseVisitSummary,
     Language,
     OrganContext,
     OrganMeta,
     SessionMode,
     UserProfile,
+    VirtualPatient,
 )
 
 PROFILES_ALL: list[UserProfile] = ["layperson", "student", "clinician"]
@@ -344,3 +355,398 @@ def test_an_unrecognised_word_is_read_as_a_typo_not_a_new_subject():
 def test_being_off_topic_is_a_redirection_and_not_a_refusal():
     assert "you do not have\n  a refusal to give" in SAFETY
     assert "reserved for the individual-patient rule" in SAFETY
+
+
+# ---------------------------------------------------------------------------
+# The virtual patient layer
+# ---------------------------------------------------------------------------
+
+PATIENT = VirtualPatient(
+    title="Neck and lumbar pain, 46",
+    sex="male",
+    age_years=46,
+    height_cm=171,
+    weight_kg=98,
+    ground_truth="L5-S1 disc protrusion with radicular compression.",
+    visit_no=2,
+    complaints=[
+        CaseComplaint(
+            organ_id="free_upper_limb_l",
+            label="Left upper limb",
+            symptom="Pain radiating down the arm",
+            severity=7,
+        )
+    ],
+    earlier_visits=[
+        CaseVisitSummary(
+            visit_no=1,
+            score=72,
+            verdict="Read the level correctly, missed the radicular pattern.",
+        )
+    ],
+)
+
+
+def test_the_grade_is_named_as_a_tool_call_and_not_as_output() -> None:
+    """A weak model printed the call instead of making it.
+
+    `gemini-3.1-flash-lite` finished a correct evaluation with the literal
+    text `{"score": 100, "verdict": "..."}`. The tool was registered and
+    available; it simply wrote it. The student saw JSON at the end of their
+    feedback, the journal recorded nothing, and the review that followed
+    reported — truthfully — that no visit had been graded.
+    """
+    text = build_instructions(
+        profile="student",
+        language="es",
+        organs=ORGANS,
+        selection=[],
+        mode="case",
+        patient=None,
+    )
+
+    assert "is a tool call, not something you write" in text
+    assert '{"score": ..., "verdict": ...}' in text
+    # And the way out when it genuinely cannot: say so, rather than print it.
+    assert "could not record the grade rather than printing it" in text
+
+
+def test_a_perfect_score_is_defined_by_checking_not_by_being_impressed() -> None:
+    # The same run scored 100 on an answer with three real omissions and said
+    # "nothing to add". The band already said "nothing important missing";
+    # what it lacked was an instruction to go and look before awarding it.
+    text = build_instructions(
+        profile="student",
+        language="es",
+        organs=ORGANS,
+        selection=[],
+        mode="case",
+        patient=None,
+    )
+
+    assert "Most good answers are 71–89." in text or "Most good answers are 71–89." in text
+    assert "name to yourself what a complete answer would have" in text
+
+
+def test_the_record_is_given_to_the_reader_with_its_visit_stamps() -> None:
+    """The interval history, and the order that makes it one.
+
+    A figure that moved between visits is a different case from one that was
+    always there, so the stamp has to survive into the prompt — otherwise the
+    assistant reads four observations as one contradictory paragraph.
+    """
+    patient = PATIENT.model_copy(
+        update={
+            "findings": "BMI 33. BP 158/94.",
+            "record_updates": [
+                CaseRecordUpdate(visit_no=6, body="Weight down 5 kg on diet."),
+                CaseRecordUpdate(visit_no=7, body="BP down to 130/85."),
+            ],
+        }
+    )
+    text = build_instructions(
+        profile="student",
+        language="es",
+        organs=ORGANS,
+        selection=[],
+        mode="case",
+        patient=patient,
+    )
+
+    assert "Visit 6" in text and "Weight down 5 kg on diet." in text
+    assert "Visit 7" in text and "BP down to 130/85." in text
+    # Said freely, exactly as the opening findings are: these are what the
+    # reader was told, not what the case turns out to be.
+    assert "Say these freely too" in text
+    assert text.index("BMI 33") < text.index("Weight down 5 kg")
+
+
+def test_a_case_with_no_interval_history_gains_no_section() -> None:
+    # Every layer costs tokens on every turn. An empty heading is a heading
+    # the reader pays for on each question for the life of the case.
+    assert "Added to the record since" not in with_patient()
+
+
+def test_an_ungraded_visit_is_named_as_ungraded_not_left_blank() -> None:
+    """The defect this fixes told the reader their software was broken.
+
+    A bare bullet reads as missing data, and the assistant said so — "the
+    history has not loaded completely" — which sends someone to debug a
+    database that is working exactly as designed.
+    """
+    patient = PATIENT.model_copy(
+        update={
+            "earlier_visits": [
+                CaseVisitSummary(visit_no=1, score=None, verdict=None),
+            ]
+        }
+    )
+    text = build_instructions(
+        profile="student",
+        language="es",
+        organs=ORGANS,
+        selection=[],
+        mode="review",
+        patient=patient,
+    )
+
+    assert "**Visit 1** — not graded" in text
+    assert "not a failure to load" in text
+    assert "Never blame the software for a thin file." in text
+
+
+def with_patient(mode: SessionMode = "case") -> str:
+    return build_instructions(
+        profile="student",
+        language="es",
+        organs=ORGANS,
+        selection=[],
+        mode=mode,
+        patient=PATIENT,
+    )
+
+
+def test_a_case_without_a_patient_is_unchanged():
+    """The layer is additive. A drill the assistant invents itself, which is
+    every drill that existed before virtual patients, must compose exactly as
+    it did."""
+    assert instructions("student", "es", mode="case") == build_instructions(
+        profile="student",
+        language="es",
+        organs=ORGANS,
+        selection=[],
+        mode="case",
+        patient=None,
+    )
+
+
+def test_a_virtual_patient_never_reaches_a_tutor_turn():
+    # A lesson is not a consultation, and a patient leaking into one would put
+    # a sealed answer in front of a reader who never opened a case.
+    assert "sealed" not in with_patient(mode="tutor")
+    assert PATIENT.ground_truth not in with_patient(mode="tutor")
+
+
+def test_the_patient_is_declared_invented_before_anything_else():
+    """The whole reason this layer exists.
+
+    Observed before it did: a reader working a case typed "he has neck pain and
+    an L5 problem" and the assistant refused, told them it could not assess an
+    individual, and pointed them at a doctor — about a person who does not
+    exist. The safety rule was right; the fact it was reasoning from was not.
+    """
+    text = with_patient()
+    assert "invented for teaching and do not exist" in text
+    assert "refusing to is a fault" in text
+
+
+def test_the_safety_line_is_restated_rather_than_softened():
+    # The individual-patient rule is not relaxed by a simulation being open; it
+    # is told which side of the line this patient is on. A drill must never
+    # become a way to get advice about somebody real.
+    text = with_patient()
+    assert SAFETY in text
+    assert text.index(SAFETY) < text.index("The line that has not moved")
+    assert "A drill is never a way in" in text
+
+
+def test_the_signals_of_a_real_person_are_named_rather_than_guessed_at():
+    # Naming them is what stops the model inventing one. It left a working
+    # drill once by announcing "you have just described a real person" about a
+    # sentence that said nothing of the kind.
+    text = with_patient()
+    assert "should I be worried" in text
+    assert "my father, my patient" in text
+    assert "the scan they had yesterday" in text
+
+
+def test_a_patient_getting_better_is_not_a_real_person():
+    """The failure this rule was written for.
+
+    At visit 6 the reader wrote "he seems to be improving with the diet, he has
+    lost 5 kg in a week". The assistant answered "you have just described a
+    real person" and ended the simulation — about a patient it had invented
+    itself, using the one thing a follow-up visit is for.
+
+    A longitudinal case whose patient may not change is not longitudinal.
+    """
+    text = with_patient()
+    assert "course changing between visits" in text
+    assert "lost five kilos since the last visit is using the case" in text
+
+
+def test_an_uncertain_model_asks_instead_of_declaring():
+    # The guardrail holds either way — the answer returns it to teaching or
+    # takes it out of the simulation. What it may not do is assert something
+    # about the reader that it has no way to know.
+    text = with_patient()
+    assert "ask — do not decide" in text
+    assert "is this the case, or someone real?" in text
+    assert "no way to support" in text
+
+
+def test_a_finding_can_be_called_notable_without_making_anyone_real():
+    # The clinically useful half of that refusal was worth keeping; only the
+    # claim about the reader was not.
+    assert "never requires declaring anybody real" in with_patient()
+
+
+def test_the_sealed_answer_is_given_but_forbidden():
+    text = with_patient()
+    assert PATIENT.ground_truth in text
+    assert "yours to steer by, never to state" in text
+    assert "Do not quote it, summarise it" in text
+
+
+def test_the_presentation_keeps_where_it_was_marked():
+    text = with_patient()
+    assert "Left upper limb" in text
+    assert "free_upper_limb_l" in text
+    assert "do not quietly relocate a complaint" in text
+
+
+def test_earlier_visits_arrive_as_record_not_memory():
+    text = with_patient()
+    assert "Visit 1" in text
+    assert "scored 72/100" in text
+    assert "missed the radicular pattern" in text
+
+
+def test_the_model_is_male_whatever_the_case_says():
+    female = PATIENT.model_copy(update={"sex": "female"})
+    text = build_instructions(
+        profile="student",
+        language="es",
+        organs=ORGANS,
+        selection=[],
+        mode="case",
+        patient=female,
+    )
+    assert "Sex: female" in text
+    assert "do not describe the model as female" in text
+
+
+def test_findings_are_given_and_the_answer_is_still_sealed():
+    """The failure that split the field in two.
+
+    Observed: an author wrote "overweight, high blood pressure" — facts the
+    reader must have to reason at all — into the only field there was, which
+    was the sealed one. The assistant handed them over anyway, quoting the seal
+    back as "according to the record". The rule was right; the field was wrong.
+    """
+    patient = PATIENT.model_copy(
+        update={"findings": "BMI 33. BP 158/94. Sedentary."}
+    )
+    text = build_instructions(
+        profile="student",
+        language="es",
+        organs=ORGANS,
+        selection=[],
+        mode="case",
+        patient=patient,
+    )
+
+    assert "What is on the record" in text
+    assert "BP 158/94" in text
+    assert "Say these freely" in text
+    # And the two halves are still on opposite sides of the line.
+    assert text.index("Say these freely") < text.index("yours to steer by, never to state")
+
+
+def test_a_case_with_no_findings_gets_no_empty_heading():
+    # Every case authored before the split has none, and a heading over nothing
+    # invites the model to fill it.
+    text = with_patient()
+    assert "What is on the record" not in text
+
+
+def test_the_tool_narration_rule_names_the_artefact_it_produces():
+    """Observed in a printed journal, welded together with no spaces:
+
+        …the structures involved:Perfect. Now I will show you:Let me find the
+        heart properly:Now I will mark it:
+
+    "Do not narrate the tool calls" alone did not hold. The rule now shows the
+    model what the fragments look like once concatenated, and says to emit
+    nothing at all until the calls are done.
+    """
+    assert "welded together" in SCENE
+    assert "write nothing at all before or between tool calls" in SCENE
+    assert "first words of the answer" in SCENE
+
+
+# ---------------------------------------------------------------------------
+# Review mode
+# ---------------------------------------------------------------------------
+
+
+def review(patient: VirtualPatient | None = None) -> str:
+    return build_instructions(
+        profile="student",
+        language="es",
+        organs=ORGANS,
+        selection=[],
+        mode="review",
+        patient=patient,
+    )
+
+
+def test_review_is_not_a_drill():
+    # A review reads the file back. Presenting a scenario and asking for an
+    # answer would be a second drill wearing a summary's clothes.
+    text = review()
+    assert REVIEW in text
+    assert CASE not in text
+    assert "Nothing here is a drill" in text
+    assert "do not grade" in text
+
+
+def test_review_never_reaches_an_ordinary_lesson():
+    assert REVIEW not in instructions("student", "es", mode="tutor")
+    assert REVIEW not in instructions("student", "es", mode="case")
+
+
+def test_a_review_summarises_the_case_and_not_the_patient():
+    """The distinction that keeps this on the right side of the line.
+
+    "The state of the patient" is a clinical judgement about somebody. "The
+    state of the case" is a reading of a record, and it is also the more useful
+    of the two for a student.
+    """
+    text = review()
+    assert "summarising **a case**, not assessing a patient" in text
+    assert "clinical judgement about" in text
+    assert "study aid" in text
+
+
+def test_the_gaps_are_the_part_worth_reading():
+    text = review()
+    assert "Where the gaps are" in text
+    assert "A gap is more useful to a student than a recap" in text
+
+
+def test_a_review_may_not_invent_what_the_record_does_not_hold():
+    text = review()
+    assert "Never invent" in text
+    assert "say it is ungraded rather than" in text
+
+
+def test_a_redacted_review_is_told_the_answer_was_withheld():
+    """The seal protects a visit until it is graded, so a case with an ungraded
+    visit is reviewed without its answer at all. The prompt has to say the
+    answer is absent rather than let the model conclude it was never written.
+    """
+    open_case = PATIENT.model_copy(update={"ground_truth": ""})
+    text = review(open_case)
+
+    assert "The answer is sealed and you do not have it" in text
+    assert "Do not reconstruct it" in text
+    assert "sealed until the visit is graded" in text
+    # And nothing pretending to be the answer is anywhere on the page.
+    assert "What this case turned out to be" not in text
+
+
+def test_a_finished_case_is_reviewed_with_everything():
+    text = review(PATIENT)
+    assert PATIENT.ground_truth in text
+    assert "The answer is sealed and you do not have it" not in text

@@ -21,7 +21,7 @@
 use std::io::{BufRead, BufReader, Write};
 use std::path::PathBuf;
 use std::process::{Child, ChildStdin, Command, Stdio};
-use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicI64, Ordering};
 use std::sync::Mutex;
 
 use serde_json::Value;
@@ -62,7 +62,6 @@ impl serde::Serialize for EngineError {
 }
 
 /// Managed state holding the running child process and its stdin.
-#[derive(Default)]
 pub struct EngineHandle {
     inner: Mutex<Option<Running>>,
     /// Whether the engine has announced itself.
@@ -81,6 +80,35 @@ pub struct EngineHandle {
     /// any JavaScript, so that event is *always* lost. Without this, a missing
     /// engine binary shows as a bare "offline" badge with nothing to act on.
     last_error: Mutex<Option<String>>,
+    /// Which protocol the engine announced, remembered for the same race.
+    ///
+    /// The engine and the app are built from one repository and shipped in one
+    /// installer, so a disagreement here is never a user's configuration — it
+    /// is a build that froze one side and not the other. That happened: the
+    /// frozen engine was two hours older than the schema, and the only symptom
+    /// was a validation error halfway through a question, naming a field
+    /// nobody had heard of. A number compared at boot says it in one sentence,
+    /// before anything is typed or paid for.
+    protocol: AtomicI64,
+}
+
+/// Written by hand rather than derived, for one field.
+///
+/// `AtomicI64::default()` is zero, and zero is a protocol version somebody
+/// could plausibly announce — a derived default would have the app start life
+/// believing the engine had already spoken and claimed version 0. `NO_PROTOCOL`
+/// cannot be confused with an answer.
+const NO_PROTOCOL: i64 = -1;
+
+impl Default for EngineHandle {
+    fn default() -> Self {
+        Self {
+            inner: Mutex::new(None),
+            ready: AtomicBool::new(false),
+            last_error: Mutex::new(None),
+            protocol: AtomicI64::new(NO_PROTOCOL),
+        }
+    }
 }
 
 /// What the frontend needs to render the engine's state honestly.
@@ -88,6 +116,8 @@ pub struct EngineHandle {
 pub struct EngineStatus {
     pub ready: bool,
     pub error: Option<String>,
+    /// What the engine announced, or `None` before it has said anything.
+    pub protocol_version: Option<i64>,
 }
 
 struct Running {
@@ -98,10 +128,19 @@ struct Running {
 impl EngineHandle {
     /// Whether the engine is up, and if not, why.
     pub fn status(&self) -> EngineStatus {
+        let protocol = self.protocol.load(Ordering::Acquire);
         EngineStatus {
             ready: self.ready.load(Ordering::Acquire),
             error: self.last_error.lock().ok().and_then(|held| held.clone()),
+            // `NO_PROTOCOL` covers "has not spoken yet" in the same atomic,
+            // so the boot path takes no extra lock.
+            protocol_version: (protocol != NO_PROTOCOL).then_some(protocol),
         }
+    }
+
+    fn note_protocol(&self, version: Option<i64>) {
+        self.protocol
+            .store(version.unwrap_or(NO_PROTOCOL), Ordering::Release);
     }
 
     fn set_ready(&self, ready: bool) {
@@ -207,7 +246,9 @@ pub fn restart(app: &AppHandle) -> Result<(), EngineError> {
 pub fn spawn(app: &AppHandle) -> Result<(), EngineError> {
     // Cleared up front: a restart must not leave the previous engine's "ready"
     // standing while the new one is still booting.
-    app.state::<EngineHandle>().set_ready(false);
+    let starting = app.state::<EngineHandle>();
+    starting.set_ready(false);
+    starting.note_protocol(None);
     match start(app) {
         Ok(()) => Ok(()),
         Err(err) => {
@@ -321,7 +362,12 @@ fn forward_frame(app: &AppHandle, line: &str) {
             // Recorded before the emit, so a frontend that queries the moment
             // it receives the event never sees a stale `false`.
             if value.get("type").and_then(Value::as_str) == Some("ready") {
-                app.state::<EngineHandle>().set_ready(true);
+                let handle = app.state::<EngineHandle>();
+                // Before `set_ready`, so a frontend that asks the instant the
+                // event lands never reads "ready with no version" and
+                // concludes the build is broken.
+                handle.note_protocol(value.get("protocol_version").and_then(Value::as_i64));
+                handle.set_ready(true);
             }
             let _ = app.emit(ENGINE_EVENT, value);
         }
@@ -331,5 +377,56 @@ fn forward_frame(app: &AppHandle, line: &str) {
             // keep going rather than tearing down a working session.
             eprintln!("[engine] non-protocol stdout line ({err}): {line}");
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// The handle's own state machine, which is all this needs to be right.
+    ///
+    /// No process is spawned: what matters is that "has not spoken yet" and
+    /// "announced a version" stay distinguishable across a restart, because the
+    /// frontend refuses to run on a mismatch and must not refuse on a silence.
+    #[test]
+    fn a_fresh_handle_has_heard_no_version() {
+        let handle = EngineHandle::default();
+        assert_eq!(handle.status().protocol_version, None);
+    }
+
+    #[test]
+    fn the_announced_version_is_remembered_for_whoever_asks_later() {
+        // The race this exists for: the engine boots before the window, so the
+        // `ready` frame is normally gone before anyone is listening.
+        let handle = EngineHandle::default();
+        handle.note_protocol(Some(2));
+        handle.set_ready(true);
+
+        let status = handle.status();
+        assert!(status.ready);
+        assert_eq!(status.protocol_version, Some(2));
+    }
+
+    #[test]
+    fn protocol_zero_is_an_answer_and_not_a_silence() {
+        // Why `Default` is written by hand. A derived one would start at zero,
+        // and zero is a version somebody could announce — the app would begin
+        // life believing the engine had already spoken.
+        let handle = EngineHandle::default();
+        handle.note_protocol(Some(0));
+
+        assert_eq!(handle.status().protocol_version, Some(0));
+    }
+
+    #[test]
+    fn a_restart_forgets_the_previous_engine_s_version() {
+        // A restart may be swapping in a different binary. Carrying the old
+        // number over would let a mismatched engine pass the check once.
+        let handle = EngineHandle::default();
+        handle.note_protocol(Some(2));
+        handle.note_protocol(None);
+
+        assert_eq!(handle.status().protocol_version, None);
     }
 }

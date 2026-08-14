@@ -76,6 +76,12 @@ def build_surface() -> dict[str, Any]:
             "TokenUsage": fields_of(p.TokenUsage),
             "TranscriptTurn": fields_of(p.TranscriptTurn),
             "AgentRequest": fields_of(p.AgentRequest),
+            # Nested inside AgentRequest, so joined explicitly: the outer field
+            # agreeing on both sides says nothing about the shape it carries.
+            "VirtualPatient": fields_of(p.VirtualPatient),
+            "CaseComplaint": fields_of(p.CaseComplaint),
+            "CaseVisitSummary": fields_of(p.CaseVisitSummary),
+            "CaseRecordUpdate": fields_of(p.CaseRecordUpdate),
         },
         "unions": {
             "SceneCommand": variants_of(p.SceneCommand, "action"),

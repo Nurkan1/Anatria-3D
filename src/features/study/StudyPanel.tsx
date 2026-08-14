@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 
-import { getStudySession, type SessionSummary, type StudyNote } from "@/lib/studyDb";
+import {
+  caseDigest,
+  getStudySession,
+  type CaseFile,
+  type SessionDetail,
+  type SessionSummary,
+  type StudyNote,
+} from "@/lib/studyDb";
+import { matchesQuery, useCaseStore, visitLabel } from "@/stores/caseStore";
 import { useChatStore } from "@/stores/chatStore";
 import { askToConfirm } from "@/stores/confirmStore";
 import { usePrintStore } from "@/stores/printStore";
@@ -8,6 +16,7 @@ import { organLabel, useSceneStore } from "@/stores/sceneStore";
 import { useStudyStore } from "@/stores/studyStore";
 
 import {
+  buildCaseDocument,
   buildNotesDocument,
   buildSessionDocument,
   journalLanguage,
@@ -36,6 +45,9 @@ export function StudyPanel() {
   const refresh = useStudyStore((s) => s.refresh);
   const setQuery = useStudyStore((s) => s.setQuery);
   const setOrganFilter = useStudyStore((s) => s.setOrganFilter);
+  const caseFilter = useStudyStore((s) => s.caseFilter);
+  const setCaseFilter = useStudyStore((s) => s.setCaseFilter);
+  const cases = useCaseStore((s) => s.cases);
   const dismissError = useStudyStore((s) => s.dismissError);
 
   useEffect(() => {
@@ -49,9 +61,22 @@ export function StudyPanel() {
         <input
           value={query}
           onChange={(event) => void setQuery(event.target.value)}
-          placeholder="Search notes and sessions…"
+          placeholder="Search notes, sessions and patients…"
           className="mt-2 w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 text-xs outline-none placeholder:text-slate-600 focus:border-sky-600"
         />
+        {caseFilter && (
+          <button
+            type="button"
+            onClick={() => void setCaseFilter(null)}
+            title="Show every session again"
+            className="mt-1.5 flex w-full items-center gap-1 rounded bg-amber-600/15 px-2 py-0.5 text-[10px] text-amber-300"
+          >
+            <span className="truncate">
+              {cases.find((entry) => entry.id === caseFilter)?.title ?? "This patient"}
+            </span>
+            <span className="ml-auto shrink-0 text-amber-500">clear ✕</span>
+          </button>
+        )}
         {organFilter && (
           <button
             type="button"
@@ -105,6 +130,8 @@ export function StudyPanel() {
             ))}
           </div>
         </section>
+
+        <CaseSection />
 
         <section>
           <SectionTitle label="Sessions" count={sessions.length} />
@@ -531,9 +558,13 @@ function SessionRow({ session }: { session: SessionSummary }) {
   const selectMany = useSceneStore((s) => s.selectMany);
   const removeSession = useStudyStore((s) => s.removeSession);
   const showPrint = usePrintStore((s) => s.show);
+  const cases = useCaseStore((s) => s.cases);
   const [busy, setBusy] = useState(false);
 
   const active = session.id === currentId;
+  const patient = session.case_id
+    ? cases.find((entry) => entry.id === session.case_id)
+    : undefined;
 
   /**
    * Reopening restores the structures too. A transcript without the anatomy it
@@ -616,8 +647,17 @@ function SessionRow({ session }: { session: SessionSummary }) {
       >
         <p className="truncate text-[12px] text-slate-300">{session.title}</p>
         <p className="mt-0.5 flex items-center gap-1.5 text-[9px] text-slate-600">
-          {session.kind === "case" && (
-            <span className="rounded-full bg-amber-500/15 px-1 text-amber-300">case</span>
+          {/* Whose visit this was, when it was one. The plain `case` badge
+              stays for drills that belong to nobody — most of the journal. */}
+          {patient ? (
+            <span className="truncate rounded-full bg-sky-600/15 px-1 text-sky-300">
+              {patient.title}
+              {session.visit_no !== null && ` · visit ${session.visit_no}`}
+            </span>
+          ) : (
+            session.kind === "case" && (
+              <span className="rounded-full bg-amber-500/15 px-1 text-amber-300">case</span>
+            )
           )}
           <span>{whenLabel(session.updated_at)}</span>
           <span>· {session.message_count} messages</span>
@@ -646,6 +686,179 @@ function SessionRow({ session }: { session: SessionSummary }) {
           onClick={() => void print()}
           disabled={busy}
           title="Print this session, or save it as a PDF"
+          className="text-[10px] text-slate-700 opacity-0 transition hover:text-sky-300 disabled:opacity-30 group-hover:opacity-100"
+        >
+          ⎙
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Case files
+// ---------------------------------------------------------------------------
+
+/**
+ * Virtual patients, each with its visits.
+ *
+ * "Virtual patient" is the term used deliberately, and not "digital twin": a
+ * twin is a model of a *real* entity kept in step with data from it, which is
+ * the one thing this must never be mistaken for. Nobody here is real and no
+ * data comes from anyone.
+ *
+ * Hidden entirely when there are none. A reader who has never opened a case
+ * gains nothing from an empty heading explaining a feature they have not asked
+ * for — the picker in the assistant is where cases begin.
+ */
+function CaseSection() {
+  const cases = useCaseStore((s) => s.cases);
+  const refresh = useCaseStore((s) => s.refresh);
+  // The same box that narrows notes and sessions. A second search field for a
+  // third list would make the reader choose which one they meant.
+  const query = useStudyStore((s) => s.query);
+
+  useEffect(() => {
+    void refresh();
+  }, [refresh]);
+
+  if (cases.length === 0) return null;
+  const shown = cases.filter((entry) => matchesQuery(entry, query));
+
+  return (
+    <section>
+      <SectionTitle label="Virtual patients" count={shown.length} />
+      {shown.length === 0 && (
+        <p className="mt-2 text-[11px] text-slate-600">
+          No patient matches that. The notes and sessions below are narrowed too.
+        </p>
+      )}
+      <div className="mt-2 space-y-1">
+        {shown.map((entry) => (
+          <CaseRow key={entry.id} entry={entry} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function CaseRow({ entry }: { entry: CaseFile }) {
+  const removeCase = useCaseStore((s) => s.remove);
+  const activeCaseId = useCaseStore((s) => s.activeCaseId);
+  const caseFilter = useStudyStore((s) => s.caseFilter);
+  const setCaseFilter = useStudyStore((s) => s.setCaseFilter);
+  const filtered = caseFilter === entry.id;
+  const showPrint = usePrintStore((s) => s.show);
+  const [busy, setBusy] = useState(false);
+
+  const active = entry.id === activeCaseId;
+
+  /**
+   * The two halves of this case go different ways, and the reader has to be
+   * told which before they answer.
+   *
+   * Visits survive as ordinary sessions — `ON DELETE SET NULL`, the same call
+   * the journal makes everywhere the reader's own work is involved. The marked
+   * complaints do not: they described the invented patient and mean nothing
+   * without them, so their key cascades. That asymmetry is invisible from the
+   * outside and is exactly the sort of thing a confirmation exists to surface.
+   */
+  async function askThenRemove() {
+    const confirmed = await askToConfirm({
+      title: "Delete this virtual patient?",
+      subject: entry.title,
+      body:
+        `The case goes, along with everything marked on the body — ` +
+        `${entry.visit_count === 1 ? "the visit" : `all ${entry.visit_count} visits`} ` +
+        "stay in your journal as ordinary sessions, with their transcripts and " +
+        "scores. The sealed answer goes with the case. It cannot be brought back.",
+      confirmLabel: "Delete patient",
+    });
+    if (confirmed) await removeCase(entry.id);
+  }
+
+  /**
+   * The whole history, as a page.
+   *
+   * Each visit's transcript has to be fetched — the digest carries the scores
+   * and the verdicts, which is all the *next visit* needs, but a record someone
+   * revises from needs what was actually said. A visit whose transcript cannot
+   * be loaded still prints: dropping it would renumber the history.
+   */
+  async function print() {
+    setBusy(true);
+    try {
+      const digest = await caseDigest(entry.id);
+      if (!digest) {
+        useStudyStore.setState({ error: "That case is no longer in the journal." });
+        return;
+      }
+
+      const details = new Map<string, SessionDetail>();
+      const loaded = await Promise.all(
+        digest.visits.map((visit) =>
+          getStudySession(visit.session_id).catch(() => null),
+        ),
+      );
+      loaded.forEach((detail) => {
+        if (detail) details.set(detail.session.id, detail);
+      });
+
+      const organs = useSceneStore.getState().organs;
+      showPrint(
+        buildCaseDocument(digest, details, (organId) => {
+          const organ = organs[organId];
+          return organ ? organLabel(organ) : null;
+        }),
+      );
+    } catch {
+      useStudyStore.setState({ error: "Could not prepare that case for printing." });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div
+      className={`group flex items-start gap-2 rounded border px-2 py-1.5 ${
+        active ? "border-sky-700/60 bg-sky-600/10" : "border-slate-800 hover:border-slate-700"
+      }`}
+    >
+      <button
+        type="button"
+        onClick={() => void setCaseFilter(filtered ? null : entry.id)}
+        title={
+          filtered
+            ? "Show every session again"
+            : "Show only this patient's visits below"
+        }
+        className="min-w-0 flex-1 text-left"
+      >
+        <p className="truncate text-[12px] text-slate-300">{entry.title}</p>
+        <p className="mt-0.5 flex flex-wrap items-center gap-1.5 text-[9px] text-slate-600">
+          <span className="rounded-full bg-slate-700/40 px-1 text-slate-400">
+            {entry.sex === "female" ? "female" : "male"}
+          </span>
+          {entry.age_years !== null && <span>{entry.age_years}y</span>}
+          <span>· {visitLabel(entry)}</span>
+          <span>· {whenLabel(entry.updated_at)}</span>
+          {filtered && <span className="text-amber-400">· showing visits</span>}
+        </p>
+      </button>
+      <div className="flex shrink-0 flex-col items-end gap-1">
+        <button
+          type="button"
+          onClick={() => void askThenRemove()}
+          title="Delete this virtual patient"
+          className="text-[10px] text-slate-700 opacity-0 transition hover:text-rose-400 group-hover:opacity-100"
+        >
+          ✕
+        </button>
+        <button
+          type="button"
+          onClick={() => void print()}
+          disabled={busy}
+          title="Print the whole history, or save it as a PDF — includes the sealed answer"
           className="text-[10px] text-slate-700 opacity-0 transition hover:text-sky-300 disabled:opacity-30 group-hover:opacity-100"
         >
           ⎙

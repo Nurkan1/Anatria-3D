@@ -18,7 +18,7 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-PROTOCOL_VERSION = 1
+PROTOCOL_VERSION = 2
 ENGINE_VERSION = "0.1.0"
 
 #: `auto` is not a language, it is the absence of a choice: answer in whatever
@@ -36,7 +36,13 @@ SectionPlane = Literal["axial", "coronal", "sagittal"]
 #: the answer rather than supply it. The difference lives in the instructions
 #: and one extra tool, so a drill keeps the same scene control and the same
 #: safety layer as a lesson.
-SessionMode = Literal["tutor", "case"]
+#:
+#: "review" reads a case back: what was presented, what the reader reasoned,
+#: and where the gaps are. It writes nothing — the journal's own CHECK
+#: constraint allows only 'tutor' and 'case', so a review cannot be filed as a
+#: visit even by accident, which is the intent rather than a limitation. A
+#: summary is generated prose, and the journal holds what the reader did.
+SessionMode = Literal["tutor", "case", "review"]
 
 AnatomicalSystem = Literal[
     "cardiovascular",
@@ -110,6 +116,93 @@ class OrganContext(Strict):
 
     def describe(self) -> str:
         return f"{self.ta2_latin} ({self.name_en})"
+
+
+class CaseComplaint(Strict):
+    """Something the reader marked on the body.
+
+    `organ_id` is **where they marked it**, not where the cause is. Referred
+    pain runs the wrong way round for a static atlas to teach, and keeping the
+    two apart is the whole point of recording one.
+    """
+
+    organ_id: str = Field(min_length=1)
+    #: The structure's name, so the assistant can speak it without leaking an id.
+    label: str = Field(min_length=1)
+    symptom: str = Field(min_length=1, max_length=200)
+    #: 0–10, the reader's own scale. Absent when it was not asked.
+    severity: int | None = Field(default=None, ge=0, le=10)
+
+
+class CaseVisitSummary(Strict):
+    """A past visit, as the current one needs to remember it."""
+
+    visit_no: int = Field(ge=1)
+    score: int | None = Field(default=None, ge=0, le=100)
+    verdict: str | None = Field(default=None, max_length=4000)
+
+
+class CaseRecordUpdate(Strict):
+    """Something learned about the patient after the case was opened.
+
+    The interval history. `findings` is what was sealed on day one and never
+    changes; these accumulate, each stamped with the visit it was known at, so
+    a course that developed reads as one — a weight coming down over four
+    visits is a different case from a weight that was always low.
+    """
+
+    visit_no: int = Field(ge=1)
+    body: str = Field(min_length=1, max_length=20_000)
+
+
+class VirtualPatient(Strict):
+    """The simulated patient this drill is a visit to.
+
+    **Nobody described here is real, and the field list is what guarantees it:**
+    there is no name, and no free-text identity of any kind, because the journal
+    that stores this has no column for one. These are the parameters of a
+    teaching scenario.
+
+    Its presence is what stops the safety layer misfiring. Without it the engine
+    cannot tell an invented patient from a real one, so a reader typing "he has
+    neck pain" gets a refusal that is correct in form and wrong in fact — which
+    is exactly what happened before this field existed.
+    """
+
+    title: str = Field(min_length=1, max_length=200)
+    sex: Literal["male", "female"]
+    age_years: int | None = Field(default=None, ge=0, le=130)
+    height_cm: int | None = Field(default=None, ge=30, le=260)
+    weight_kg: float | None = Field(default=None, gt=0, le=400)
+    #: Vitals, history and results the reader is **given**.
+    #:
+    #: The counterpart to `ground_truth`, and split from it because one field
+    #: could not do both jobs: an author wrote "overweight, high blood
+    #: pressure" — facts the reader needs to reason at all — into the half that
+    #: may never be spoken, and the assistant quoted the seal back to them.
+    findings: str = Field(default="", max_length=20_000)
+    #: What has been added to the record since, oldest first.
+    #:
+    #: Given to the reader in the same way `findings` is — these are not
+    #: secret. They are separate from it only because they were learned later,
+    #: and that ordering is itself clinical information.
+    record_updates: list[CaseRecordUpdate] = Field(default_factory=list, max_length=200)
+    #: What the case was sealed with, before anything was attempted. The
+    #: assistant needs it to keep the course coherent across visits and must
+    #: never say it — see the prompt layer, which spends a paragraph on that.
+    #:
+    #: **May arrive empty, and that is a deliberate act by the caller.** A
+    #: review of a case that still has an ungraded visit is sent without it, so
+    #: the summary physically cannot contain the answer. What is not given
+    #: cannot be leaked, which is a stronger guarantee than an instruction not
+    #: to mention it.
+    ground_truth: str = Field(default="", max_length=20_000)
+    #: Which visit this turn belongs to, counting from one.
+    visit_no: int = Field(ge=1)
+    #: The presentation so far, oldest first.
+    complaints: list[CaseComplaint] = Field(default_factory=list, max_length=200)
+    #: Earlier visits, oldest first. Read from the journal, never generated.
+    earlier_visits: list[CaseVisitSummary] = Field(default_factory=list, max_length=20)
 
 
 # ---------------------------------------------------------------------------
@@ -278,6 +371,13 @@ class AgentRequest(Strict):
     #: structure because comparing is the everyday study move.
     selection: list[OrganContext] = Field(max_length=64)
     available_organs: list[OrganMeta]
+    #: The virtual patient this drill belongs to, when there is one.
+    #:
+    #: Defaulted, not required — a new field on an existing event is optional on
+    #: the way in, or every frame from an older client fails validation and is
+    #: dropped. That rule was learned the expensive way when token accounting
+    #: vanished for a release.
+    case: VirtualPatient | None = None
     # Injected by Rust from the OS keyring — never present on the frontend side.
     api_key: str = Field(min_length=1, repr=False)
 

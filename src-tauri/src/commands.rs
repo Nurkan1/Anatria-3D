@@ -12,8 +12,9 @@ use tauri::State;
 use crate::keyring_store::{self, KeyringError, Provider};
 use crate::sidecar::{EngineError, EngineHandle, EngineStatus};
 use crate::study_db::{
-    ImportSummary, JournalExport, Note, NoteInput, SessionDetail, SessionSummary, StudyCoverage,
-    StudyDb, StudyError, StudyStats, TurnInput, UsageBucket, UsageInput,
+    CaseDigest, CaseFile, CaseFinding, CaseInput, CaseSymptom, FindingInput, ImportSummary,
+    JournalExport, Note, NoteInput, SessionDetail, SessionSummary, StudyCoverage, StudyDb,
+    StudyError, StudyStats, SymptomInput, TurnInput, UsageBucket, UsageInput,
 };
 
 #[derive(Debug, thiserror::Error)]
@@ -175,9 +176,10 @@ pub fn list_study_sessions(
     db: State<'_, StudyDb>,
     query: Option<String>,
     organ_id: Option<String>,
+    case_id: Option<String>,
     limit: i64,
 ) -> CommandResult<Vec<SessionSummary>> {
-    Ok(db.list_sessions(query.as_deref(), organ_id.as_deref(), limit)?)
+    Ok(db.list_sessions(query.as_deref(), organ_id.as_deref(), case_id.as_deref(), limit)?)
 }
 
 #[tauri::command]
@@ -201,6 +203,80 @@ pub fn rename_study_session(
 #[tauri::command]
 pub fn delete_study_session(db: State<'_, StudyDb>, session_id: String) -> CommandResult<()> {
     db.delete_session(&session_id)?;
+    Ok(())
+}
+
+#[tauri::command]
+pub fn create_case(db: State<'_, StudyDb>, case: CaseInput) -> CommandResult<CaseFile> {
+    Ok(db.create_case(case)?)
+}
+
+#[tauri::command]
+pub fn list_cases(db: State<'_, StudyDb>) -> CommandResult<Vec<CaseFile>> {
+    Ok(db.list_cases()?)
+}
+
+/// Reveal the sealed answer.
+///
+/// Its own command, and never folded into `list_cases`, so that opening a case
+/// cannot spoil it. Revealing is something the reader does on purpose.
+#[tauri::command]
+pub fn reveal_case_answer(
+    db: State<'_, StudyDb>,
+    case_id: String,
+) -> CommandResult<Option<String>> {
+    Ok(db.case_answer(&case_id)?)
+}
+
+/// What the next visit carries forward. Read from the journal, never generated.
+#[tauri::command]
+pub fn case_digest(db: State<'_, StudyDb>, case_id: String) -> CommandResult<Option<CaseDigest>> {
+    Ok(db.case_digest(&case_id)?)
+}
+
+#[tauri::command]
+pub fn delete_case(db: State<'_, StudyDb>, case_id: String) -> CommandResult<()> {
+    db.delete_case(&case_id)?;
+    Ok(())
+}
+
+/// Mark a complaint where the reader points, not where the cause is.
+#[tauri::command]
+pub fn add_case_symptom(
+    db: State<'_, StudyDb>,
+    symptom: SymptomInput,
+) -> CommandResult<CaseSymptom> {
+    Ok(db.add_symptom(symptom)?)
+}
+
+#[tauri::command]
+pub fn case_symptoms(db: State<'_, StudyDb>, case_id: String) -> CommandResult<Vec<CaseSymptom>> {
+    Ok(db.symptoms(&case_id)?)
+}
+
+#[tauri::command]
+pub fn delete_case_symptom(db: State<'_, StudyDb>, id: i64) -> CommandResult<()> {
+    db.delete_symptom(id)?;
+    Ok(())
+}
+
+/// Add to the record. The sealed answer has no equivalent and never will.
+#[tauri::command]
+pub fn add_case_finding(
+    db: State<'_, StudyDb>,
+    finding: FindingInput,
+) -> CommandResult<CaseFinding> {
+    Ok(db.add_finding(finding)?)
+}
+
+#[tauri::command]
+pub fn case_findings(db: State<'_, StudyDb>, case_id: String) -> CommandResult<Vec<CaseFinding>> {
+    Ok(db.findings(&case_id)?)
+}
+
+#[tauri::command]
+pub fn delete_case_finding(db: State<'_, StudyDb>, id: i64) -> CommandResult<()> {
+    db.delete_finding(id)?;
     Ok(())
 }
 

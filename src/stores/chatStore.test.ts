@@ -147,6 +147,8 @@ describe("chatStore", () => {
       score: 68,
       verdict: "Missed the timing.",
       message_count: 2,
+      case_id: null,
+      visit_no: null,
       structure_count: 1,
       created_at: 1,
       updated_at: 2,

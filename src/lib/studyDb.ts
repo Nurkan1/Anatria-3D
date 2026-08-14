@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 
-import type { AiProvider, Language, SessionMode, UserProfile } from "./schemas";
+import type { AiProvider, FiledMode, Language, UserProfile } from "./schemas";
 
 /**
  * The study journal, as the renderer sees it.
@@ -19,7 +19,7 @@ import type { AiProvider, Language, SessionMode, UserProfile } from "./schemas";
 
 export interface SessionSummary {
   id: string;
-  kind: SessionMode;
+  kind: FiledMode;
   title: string;
   profile: UserProfile;
   language: Language;
@@ -28,6 +28,15 @@ export interface SessionSummary {
   verdict: string | null;
   message_count: number;
   structure_count: number;
+  /**
+   * The virtual patient this was a visit to, and which visit.
+   *
+   * Null on every ordinary conversation, which is most of them. Carried on the
+   * summary so a list of sixty rows can say which belong to whom without a
+   * query per row.
+   */
+  case_id: string | null;
+  visit_no: number | null;
   /** Epoch milliseconds — sortable without parsing, and no date library. */
   created_at: number;
   updated_at: number;
@@ -76,7 +85,7 @@ export interface StudyStats {
 
 export interface TurnInput {
   session_id: string;
-  kind: SessionMode;
+  kind: FiledMode;
   title: string;
   profile: UserProfile;
   language: Language;
@@ -87,6 +96,12 @@ export interface TurnInput {
   model?: string | null;
   input_tokens?: number | null;
   output_tokens?: number | null;
+  /**
+   * The case this session is a visit to. Read only when the session is first
+   * created — a conversation cannot change which case it belongs to halfway
+   * through, because its visit number would have to be invented.
+   */
+  case_id?: string | null;
 }
 
 export interface NoteInput {
@@ -120,9 +135,10 @@ export function recordCaseResult(
 export function listStudySessions(
   query: string | null,
   organId: string | null,
+  caseId: string | null,
   limit = 100,
 ): Promise<SessionSummary[]> {
-  return invoke("list_study_sessions", { query, organId, limit });
+  return invoke("list_study_sessions", { query, organId, caseId, limit });
 }
 
 export function getStudySession(sessionId: string): Promise<SessionDetail | null> {
@@ -135,6 +151,199 @@ export function renameStudySession(sessionId: string, title: string): Promise<vo
 
 export function deleteStudySession(sessionId: string): Promise<void> {
   return invoke("delete_study_session", { sessionId });
+}
+
+// ---------------------------------------------------------------------------
+// Case files
+// ---------------------------------------------------------------------------
+
+/**
+ * The sex a case is reasoned about.
+ *
+ * Not the sex of the model on screen: this build ships a male mesh whichever is
+ * chosen, and the interface has to say so where the choice is made. Presentation
+ * differs by sex in exactly the systems these cases are for — a case that
+ * reasons about it while showing a male body is honest; one that hides the
+ * limitation is not.
+ */
+export type CaseSex = "male" | "female";
+
+/** A case file, without its sealed answer. See `revealCaseAnswer`. */
+export interface CaseFile {
+  id: string;
+  title: string;
+  sex: CaseSex;
+  age_years: number | null;
+  height_cm: number | null;
+  weight_kg: number | null;
+  /**
+   * Vitals, history and results the reader is given.
+   *
+   * On the summary, unlike the sealed answer, precisely because they are not
+   * secret — a case whose findings were withheld could not be reasoned about.
+   */
+  findings: string;
+  /** When the answer was sealed — always at creation. */
+  sealed_at: number;
+  /**
+   * When the reader opened the answer themselves, or null while sealed.
+   *
+   * A door, not a leak. Recorded in the file rather than held in the window,
+   * so a case that has been opened stays open — otherwise a summary would
+   * include the answer today and withhold it tomorrow.
+   */
+  revealed_at: number | null;
+  profile: UserProfile;
+  language: Language;
+  created_at: number;
+  updated_at: number;
+  visit_count: number;
+}
+
+export interface CaseInput {
+  id: string;
+  title: string;
+  sex: CaseSex;
+  age_years?: number | null;
+  height_cm?: number | null;
+  weight_kg?: number | null;
+  findings: string;
+  ground_truth: string;
+  profile: UserProfile;
+  language: Language;
+}
+
+export interface CaseVisit {
+  session_id: string;
+  visit_no: number;
+  score: number | null;
+  verdict: string | null;
+  structures: string[];
+  created_at: number;
+}
+
+/**
+ * A complaint marked on the body.
+ *
+ * `organ_id` is **where the reader marked it**, not where the cause is. Those
+ * are often different, and working the second out from the first is the
+ * reasoning being taught — pain down the left arm belongs to the heart, and no
+ * static atlas can show that.
+ */
+export interface CaseSymptom {
+  id: number;
+  organ_id: string;
+  /** Kept alongside: the structure's system may be switched off. */
+  organ_label: string | null;
+  symptom: string;
+  /** 0–10, the scale the reader already knows. Null when not asked. */
+  severity: number | null;
+  session_id: string | null;
+  created_at: number;
+}
+
+export interface SymptomInput {
+  case_id: string;
+  session_id?: string | null;
+  organ_id: string;
+  organ_label?: string | null;
+  symptom: string;
+  severity?: number | null;
+}
+
+/**
+ * Something learned about the patient after the case was opened.
+ *
+ * The opening findings on `CaseFile` are sealed where they were written; these
+ * accumulate beside them, each stamped with the visit it was known at. That
+ * ordering is clinical information in itself — a weight that came down over
+ * four visits is a different case from a weight that was always low.
+ */
+export interface CaseFinding {
+  id: number;
+  /** Counted by the journal at insert time, never passed in. */
+  visit_no: number;
+  body: string;
+  created_at: number;
+}
+
+export interface FindingInput {
+  case_id: string;
+  body: string;
+}
+
+export interface CaseDigest {
+  case: CaseFile;
+  /** Bound for the engine, which needs the script to keep the course coherent. */
+  ground_truth: string;
+  visits: CaseVisit[];
+  /** Oldest first — the presentation as it developed. */
+  symptoms: CaseSymptom[];
+  /** Oldest first — what has been added to the record since it was opened. */
+  record_updates: CaseFinding[];
+}
+
+/** Highest severity a complaint may carry, mirroring the journal's check. */
+export const MAX_SEVERITY = 10;
+
+/** Mark a complaint where the reader points. */
+export function addCaseSymptom(symptom: SymptomInput): Promise<CaseSymptom> {
+  return invoke("add_case_symptom", { symptom });
+}
+
+export function caseSymptoms(caseId: string): Promise<CaseSymptom[]> {
+  return invoke("case_symptoms", { caseId });
+}
+
+export function deleteCaseSymptom(id: number): Promise<void> {
+  return invoke("delete_case_symptom", { id });
+}
+
+/** Add to the record. There is no equivalent for the sealed answer. */
+export function addCaseFinding(finding: FindingInput): Promise<CaseFinding> {
+  return invoke("add_case_finding", { finding });
+}
+
+export function caseFindings(caseId: string): Promise<CaseFinding[]> {
+  return invoke("case_findings", { caseId });
+}
+
+export function deleteCaseFinding(id: number): Promise<void> {
+  return invoke("delete_case_finding", { id });
+}
+
+/** Visits one case may hold, mirroring `MAX_VISITS` in the journal. */
+export const MAX_VISITS = 20;
+
+/**
+ * Open a case and seal its answer, now, before anything has been attempted.
+ *
+ * There is no call that edits `ground_truth` afterwards and no column to put a
+ * person's name in. Both are deliberate: an answer written once the attempt is
+ * in hand grades nothing, and a case file that cannot hold a person cannot
+ * become a medical record.
+ */
+export function createCase(kase: CaseInput): Promise<CaseFile> {
+  return invoke("create_case", { case: kase });
+}
+
+export function listCases(): Promise<CaseFile[]> {
+  return invoke("list_cases");
+}
+
+/** Its own call, so opening a case can never spoil it. */
+export function revealCaseAnswer(caseId: string): Promise<string | null> {
+  return invoke("reveal_case_answer", { caseId });
+}
+
+/** What the next visit carries forward. Read from the journal, never generated. */
+export function caseDigest(caseId: string): Promise<CaseDigest | null> {
+  return invoke("case_digest", { caseId });
+}
+
+/** The visits survive as ordinary sessions. */
+export function deleteCase(caseId: string): Promise<void> {
+  return invoke("delete_case", { caseId });
 }
 
 // ---------------------------------------------------------------------------
@@ -237,6 +446,15 @@ export interface ImportSummary {
   sessions_updated: number;
   notes_added: number;
   notes_updated: number;
+  /**
+   * Cases are sealed, so they are only ever added, never updated.
+   *
+   * Missing from this interface until a reader restored a backup of 26
+   * patients and was told "nothing new". The journal had counted them all
+   * along; the field the count arrived in did not exist on this side, so
+   * `describeImport` could not have reported it however hard it tried.
+   */
+  cases_added: number;
   /** Already present and not newer — what makes a repeat import visibly a no-op. */
   skipped: number;
 }

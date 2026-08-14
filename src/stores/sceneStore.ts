@@ -147,6 +147,19 @@ export interface SceneViewState {
   /** `null` means nothing is isolated; a list means show only these. */
   isolatedOrganIds: string[] | null;
   pathologyOverlays: Record<string, PathologyOverlay>;
+  /**
+   * Where the reader marked a complaint on the open virtual patient.
+   *
+   * Its own slice rather than more `pathologyOverlays`, and the reason is the
+   * command right below them: `clear_pathology_overlays` is the assistant's to
+   * call whenever a topic moves on, and the patient's presentation is not the
+   * assistant's to erase. One is transient teaching, the other is recorded
+   * state that outlives the conversation.
+   *
+   * They share the *look* deliberately — a marked complaint should read as
+   * "this structure, affected", which is exactly what the overlay colour says.
+   */
+  caseMarks: Record<string, PathologyOverlay>;
   crossSection: CrossSection | null;
   focusRequest: FocusRequest | null;
   /** An outstanding camera move; `null` when the reader has not asked for one. */
@@ -197,6 +210,7 @@ export const initialViewState: SceneViewState = {
   systemOpacity: {},
   isolatedOrganIds: null,
   pathologyOverlays: {},
+  caseMarks: {},
   crossSection: null,
   focusRequest: null,
   viewpoint: null,
@@ -397,6 +411,14 @@ interface SceneStore extends SceneViewState {
   /** Fold a group into the selection, keeping what was already there. */
   addToSelection: (organIds: string[]) => void;
   clearSelection: () => void;
+  /**
+   * Light up the open patient's complaints, replacing whatever was lit before.
+   *
+   * A whole-set replacement rather than add/remove, because the marks are a
+   * projection of the journal: whenever the presentation changes, this is
+   * recomputed from it. Nothing here is the source of truth.
+   */
+  setCaseMarks: (marks: Record<string, PathologyOverlay>) => void;
   /** Show only the current selection. */
   isolateSelection: () => void;
   /** Take the current selection out of the way, dissection-style. */
@@ -541,6 +563,8 @@ export const useSceneStore = create<SceneStore>()((set) => ({
     }),
 
   clearSelection: () => set({ selectedOrganIds: [] }),
+
+  setCaseMarks: (marks) => set({ caseMarks: marks }),
 
   isolateSelection: () =>
     set((state) =>

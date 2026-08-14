@@ -20,6 +20,26 @@ export function totalTokens(usage: TokenUsage): number {
 }
 
 /**
+ * Where a conversation is worth mentioning the cost of.
+ *
+ * Nothing about a chat box suggests that asking the same question later costs
+ * more than asking it now, and yet it does: every turn re-sends the whole
+ * transcript, so the price of a question is set by the length of the
+ * conversation it is asked in. That is not something a reader can be expected
+ * to work out, and they are paying for it with their own key.
+ *
+ * 30,000 is a threshold, not a limit, and it is deliberately high — it is
+ * roughly where a turn stops being dominated by the anatomy inventory and
+ * starts being dominated by the transcript, which is the part the reader can
+ * actually do something about. Warning earlier would train people to ignore it.
+ */
+export const LONG_CONVERSATION_TOKENS = 30_000;
+
+export function conversationIsCostly(usage: TokenUsage | null | undefined): boolean {
+  return usage ? totalTokens(usage) >= LONG_CONVERSATION_TOKENS : false;
+}
+
+/**
  * A count at a glance: `1,240`, `12.4k`, `1.2M`.
  *
  * Grouped below ten thousand because at that size the exact number is still

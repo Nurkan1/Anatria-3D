@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 import * as db from "@/lib/studyDb";
+import { useCaseStore } from "@/stores/caseStore";
 import type {
   ImportSummary,
   NoteInput,
@@ -30,6 +31,8 @@ interface StudyStore {
   organFilter: string | null;
   /** Its name, kept alongside: the structure may not be loaded to look up. */
   organFilterLabel: string | null;
+  /** When set, the session list shows only one virtual patient's visits. */
+  caseFilter: string | null;
   error: string | null;
   /** False until the first successful load, so the panel can say "loading". */
   loaded: boolean;
@@ -37,6 +40,7 @@ interface StudyStore {
   refresh: () => Promise<void>;
   setQuery: (query: string) => Promise<void>;
   setOrganFilter: (organId: string | null, label?: string | null) => Promise<void>;
+  setCaseFilter: (caseId: string | null) => Promise<void>;
   dismissError: () => void;
 
   /**
@@ -74,12 +78,24 @@ interface StudyStore {
   dismissTransfer: () => void;
 }
 
-/** Plain English for what a merge actually did. */
+/**
+ * Plain English for what a merge actually did.
+ *
+ * Every kind of thing the journal restores has to be counted here. Cases were
+ * not, and the failure was the worst shape available: a reader restored a
+ * backup holding their patients, the journal wrote all of them, and this
+ * function looked at sessions and notes alone and answered "nothing new —
+ * that journal is already here". The import had worked. The report said it
+ * had not, so the reader believed the backup was empty.
+ */
 export function describeImport(summary: ImportSummary): string {
   const parts: string[] = [];
-  const added = summary.sessions_added + summary.notes_added;
+  const added = summary.sessions_added + summary.notes_added + summary.cases_added;
   const updated = summary.sessions_updated + summary.notes_updated;
   if (summary.sessions_added > 0) parts.push(`${summary.sessions_added} sessions`);
+  if (summary.cases_added > 0) {
+    parts.push(`${summary.cases_added} ${summary.cases_added === 1 ? "patient" : "patients"}`);
+  }
   if (summary.notes_added > 0) parts.push(`${summary.notes_added} notes`);
 
   if (added === 0 && updated === 0) {
@@ -131,6 +147,7 @@ export const useStudyStore = create<StudyStore>()((set, get) => {
     query: "",
     organFilter: null,
     organFilterLabel: null,
+    caseFilter: null,
     error: null,
     loaded: false,
 
@@ -138,11 +155,11 @@ export const useStudyStore = create<StudyStore>()((set, get) => {
     coverageVisible: false,
 
     refresh: async () => {
-      const { query, organFilter, coverageVisible } = get();
+      const { query, organFilter, caseFilter, coverageVisible } = get();
       const term = query.trim() || null;
       try {
         const [sessions, notes, stats, coverage] = await Promise.all([
-          db.listStudySessions(term, organFilter),
+          db.listStudySessions(term, organFilter, caseFilter),
           db.listNotes(organFilter, term),
           db.studyStats(),
           // Only while the map is on screen. It is a whole-journal aggregate
@@ -178,6 +195,11 @@ export const useStudyStore = create<StudyStore>()((set, get) => {
 
     setOrganFilter: async (organId, label = null) => {
       set({ organFilter: organId, organFilterLabel: organId ? label : null });
+      await get().refresh();
+    },
+
+    setCaseFilter: async (caseId) => {
+      set({ caseFilter: caseId });
       await get().refresh();
     },
 
@@ -222,7 +244,11 @@ export const useStudyStore = create<StudyStore>()((set, get) => {
       }
       if (!summary) return;
       set({ transfer: describeImport(summary), error: null });
-      await get().refresh();
+      // Both stores, because a restore writes into both. Reloading only this
+      // one left the patient picker and the virtual-patient list showing what
+      // was there before the import until the app was restarted — which reads
+      // exactly like a restore that did nothing.
+      await Promise.all([get().refresh(), useCaseStore.getState().refresh()]);
     },
 
     dismissTransfer: () => set({ transfer: null }),

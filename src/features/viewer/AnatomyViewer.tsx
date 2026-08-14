@@ -20,6 +20,7 @@ import { LassoSelect } from "./LassoSelect";
 import { PathwayBar } from "./PathwayBar";
 import { SelectionBar } from "./SelectionBar";
 import { StructureMenu, type MenuTarget } from "./StructureMenu";
+import { useCaseMarks } from "./useCaseMarks";
 import { ViewpointBar } from "./ViewpointBar";
 
 /**
@@ -66,6 +67,9 @@ export function AnatomyViewer() {
   const container = useRef<HTMLDivElement>(null);
   const pressAt = useRef<{ x: number; y: number } | null>(null);
   const setDepthStack = useSceneStore((s) => s.setDepthStack);
+  // Lights the open patient's complaints on the body. Derived from the
+  // journal, so it costs no model call and lands the moment one is selected.
+  useCaseMarks();
   const clearDepthStack = useCallback(() => setDepthStack([]), [setDepthStack]);
 
   const openMenu = useCallback((organId: string, x: number, y: number) => {

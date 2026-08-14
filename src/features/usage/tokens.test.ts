@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { formatTokens, totalTokens } from "./tokens";
+import {
+  conversationIsCostly,
+  formatTokens,
+  LONG_CONVERSATION_TOKENS,
+  totalTokens,
+} from "./tokens";
 
 describe("totalTokens", () => {
   it("adds input and output", () => {
@@ -34,5 +39,27 @@ describe("formatTokens", () => {
   it("refuses to render nonsense as a number", () => {
     expect(formatTokens(Number.NaN)).toBe("0");
     expect(formatTokens(-5)).toBe("0");
+  });
+});
+
+describe("conversationIsCostly", () => {
+  const usage = (total: number) => ({ input_tokens: total - 100, output_tokens: 100 });
+
+  it("says nothing about a conversation that has just started", () => {
+    // Warning early would train people to ignore the notice, which costs more
+    // than saying nothing.
+    expect(conversationIsCostly(usage(4_000))).toBe(false);
+  });
+
+  it("speaks up once the transcript is what a turn is made of", () => {
+    expect(conversationIsCostly(usage(LONG_CONVERSATION_TOKENS))).toBe(true);
+    expect(conversationIsCostly(usage(70_000))).toBe(true);
+  });
+
+  it("says nothing when the provider reported no usage at all", () => {
+    // Absent counts are not zero counts, and a notice built on a blank would
+    // appear at the wrong moment or never.
+    expect(conversationIsCostly(null)).toBe(false);
+    expect(conversationIsCostly(undefined)).toBe(false);
   });
 });

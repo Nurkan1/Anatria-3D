@@ -1,5 +1,7 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
+import type { ManifestOrgan } from "@/lib/schemas";
+import { activeCase, useCaseStore } from "@/stores/caseStore";
 import { organLabel, regionMembersByNode, useSceneStore } from "@/stores/sceneStore";
 
 export interface MenuTarget {
@@ -37,9 +39,15 @@ export function StructureMenu({
   const applyCommand = useSceneStore((s) => s.applyCommand);
   const showAllSystems = useSceneStore((s) => s.showAllSystems);
   const setHovered = useSceneStore((s) => s.setHovered);
+  const activePatient = useCaseStore(activeCase);
+  const symptoms = useCaseStore((s) => s.symptoms);
+  const unmark = useCaseStore((s) => s.unmark);
   const menuRef = useRef<HTMLDivElement>(null);
+  const [marking, setMarking] = useState(false);
 
   const organ = target ? organs[target.organId] : undefined;
+  /** What is already recorded here, so the menu shows it rather than duplicating it. */
+  const marked = symptoms.filter((entry) => entry.organ_id === target?.organId);
 
   /**
    * Ancestry, innermost group first. Reversed because the group that contains
@@ -134,6 +142,142 @@ export function StructureMenu({
         Fly to this structure
       </MenuItem>
       <MenuItem onClick={act(showAllSystems)}>Show everything</MenuItem>
+
+      {/* Only with a patient open: a complaint has to belong to someone, and
+          there is nowhere to file one otherwise. */}
+      {activePatient && (
+        <>
+          <div className="my-1 border-t border-slate-800" />
+          {marking ? (
+            <SymptomComposer
+              organ={organ}
+              caseId={activePatient.id}
+              onDone={() => {
+                setMarking(false);
+                setHovered(null);
+                onClose();
+              }}
+              onCancel={() => setMarking(false)}
+            />
+          ) : (
+            <>
+              <p className="px-3 pb-0.5 pt-1 text-[9px] uppercase tracking-wider text-slate-600">
+                {activePatient.title}
+              </p>
+              <MenuItem onClick={() => setMarking(true)}>Mark a complaint here</MenuItem>
+              {marked.length > 0 && (
+                <div className="px-3 pb-1.5 pt-0.5 space-y-0.5">
+                  {marked.map((entry) => (
+                    <div key={entry.id} className="flex items-center gap-1.5">
+                      <span className="min-w-0 flex-1 truncate text-[10px] text-amber-300/90">
+                        {entry.symptom}
+                        {entry.severity !== null && (
+                          <span className="text-slate-500"> · {entry.severity}/10</span>
+                        )}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => void unmark(entry.id)}
+                        title="Remove this complaint"
+                        className="shrink-0 text-[10px] text-slate-600 transition hover:text-rose-400"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Marking what the reader says hurts here.
+ *
+ * **Where they point, not where the cause is.** Nothing tries to be clever
+ * about relocating a complaint to the organ it suggests — pain down an arm
+ * belonging to a heart is the reasoning the case exists to teach, and quietly
+ * filing it under the heart would delete the exercise.
+ */
+function SymptomComposer({
+  organ,
+  caseId,
+  onDone,
+  onCancel,
+}: {
+  organ: ManifestOrgan;
+  caseId: string;
+  onDone: () => void;
+  onCancel: () => void;
+}) {
+  const mark = useCaseStore((s) => s.mark);
+  const [text, setText] = useState("");
+  const [severity, setSeverity] = useState(5);
+  const [busy, setBusy] = useState(false);
+
+  async function save() {
+    if (text.trim().length === 0) return;
+    setBusy(true);
+    const marked = await mark({
+      case_id: caseId,
+      organ_id: organ.organ_id,
+      // Stored beside the id so the complaint can still name where it was
+      // marked when this structure's system is switched off.
+      organ_label: organLabel(organ),
+      symptom: text.trim(),
+      severity,
+    });
+    setBusy(false);
+    if (marked) onDone();
+  }
+
+  return (
+    <div className="space-y-1.5 px-3 py-2">
+      <input
+        autoFocus
+        value={text}
+        onChange={(event) => setText(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter") void save();
+          if (event.key === "Escape") onCancel();
+        }}
+        placeholder="What does the patient report here?"
+        className="w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 text-[11px] outline-none placeholder:text-slate-600 focus:border-amber-600"
+      />
+      <div className="flex items-center gap-2">
+        <input
+          type="range"
+          min={0}
+          max={10}
+          value={severity}
+          onChange={(event) => setSeverity(Number(event.target.value))}
+          className="h-1 flex-1 accent-amber-500"
+        />
+        <span className="w-8 shrink-0 text-right text-[10px] tabular-nums text-slate-400">
+          {severity}/10
+        </span>
+      </div>
+      <div className="flex gap-1.5">
+        <button
+          type="button"
+          onClick={() => void save()}
+          disabled={busy || text.trim().length === 0}
+          className="flex-1 rounded border border-amber-700/60 bg-amber-500/15 px-2 py-1 text-[10px] text-amber-200 transition hover:bg-amber-500/25 disabled:opacity-40"
+        >
+          Mark it
+        </button>
+        <button
+          type="button"
+          onClick={onCancel}
+          className="rounded px-2 py-1 text-[10px] text-slate-500 transition hover:text-slate-200"
+        >
+          cancel
+        </button>
+      </div>
     </div>
   );
 }

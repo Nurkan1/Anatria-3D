@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import type { SessionDetail, SessionSummary, StudyNote } from "@/lib/studyDb";
+import type { CaseDigest, SessionDetail, SessionSummary, StudyNote } from "@/lib/studyDb";
 
 import {
+  buildCaseDocument,
   buildNotesDocument,
   buildSessionDocument,
   disclaimers,
@@ -19,6 +20,8 @@ const SESSION: SessionSummary = {
   score: null,
   verdict: null,
   message_count: 2,
+  case_id: null,
+  visit_no: null,
   structure_count: 2,
   created_at: 1_700_000_000_000,
   updated_at: 1_700_100_000_000,
@@ -56,6 +59,88 @@ function detail(overrides: Partial<SessionDetail> = {}): SessionDetail {
       },
     ],
     structures: ["left_ventricle", "ascending_aorta"],
+    ...overrides,
+  };
+}
+
+/**
+ * A case whose complaints point at the arm and whose answer is cardiac — the
+ * shape the whole feature exists for. `unknown_structure` is there so the
+ * dropping rule has something to drop.
+ */
+function digest(overrides: Partial<CaseDigest> = {}): CaseDigest {
+  return {
+    case: {
+      id: "c1",
+      title: "Chest pain, 58",
+      sex: "female",
+      age_years: 58,
+      height_cm: 164,
+      weight_kg: 71.5,
+      findings: "BMI 26. BP 158/94. Smoker, 20/day.",
+      sealed_at: 1_700_000_000_000,
+      revealed_at: null,
+      profile: "student",
+      language: "es",
+      created_at: 1_700_000_000_000,
+      updated_at: 1_700_300_000_000,
+      visit_count: 3,
+    },
+    ground_truth: "Inferior myocardial infarction; atypical presentation.",
+    visits: [
+      {
+        session_id: "v1",
+        visit_no: 1,
+        score: 72,
+        verdict: "Read the ischaemia, missed the timing.",
+        structures: [],
+        created_at: 1_700_000_000_000,
+      },
+      {
+        session_id: "v2",
+        visit_no: 2,
+        score: 88,
+        verdict: "Correct, and correctly prioritised.",
+        structures: ["left_ventricle", "unknown_structure"],
+        created_at: 1_700_100_000_000,
+      },
+      {
+        session_id: "v3",
+        visit_no: 3,
+        score: null,
+        verdict: null,
+        structures: [],
+        created_at: 1_700_200_000_000,
+      },
+    ],
+    symptoms: [
+      {
+        id: 1,
+        organ_id: "free_upper_limb_l",
+        organ_label: "Left upper limb",
+        symptom: "Pain radiating down the arm",
+        severity: 7,
+        session_id: "v1",
+        created_at: 1_700_000_000_000,
+      },
+      {
+        id: 2,
+        organ_id: "thorax",
+        organ_label: "Thorax",
+        symptom: "Breathlessness climbing stairs",
+        severity: 4,
+        session_id: "v2",
+        created_at: 1_700_100_000_000,
+      },
+    ],
+    record_updates: [
+      {
+        id: 1,
+        visit_no: 2,
+        body: "Weight down 5 kg. BP 130/85 on the home monitor.",
+        created_at: 1_700_150_000_000,
+      },
+    ],
     ...overrides,
   };
 }
@@ -247,6 +332,102 @@ describe("journalLanguage", () => {
   });
 });
 
+describe("buildCaseDocument", () => {
+  it("says on the page that nobody real is on it", () => {
+    // A printed sheet travels past the app, the disclaimer at its foot and
+    // anyone who knows what this feature is. The first fact under the heading
+    // has to answer "whose record is this?" before the reader wonders.
+    const page = buildCaseDocument(digest(), new Map(), labelFor);
+
+    expect(page.facts[0]).toEqual({
+      label: "Record",
+      value: "Simulated case — no real patient",
+    });
+  });
+
+  it("prints the findings and the sealed answer in different places", () => {
+    // The failure that split them apart: one field held both, an author put
+    // the facts the reader needs into the sealed half, and the assistant read
+    // the seal out loud. Findings go under the heading; the answer at the foot.
+    const page = buildCaseDocument(digest(), new Map(), labelFor);
+
+    expect(page.findings).toContain("158/94");
+    expect(page.sealedAnswer).toMatch(/myocardial/);
+    expect(page.findings).not.toMatch(/myocardial/);
+  });
+
+  it("omits the findings block for a case authored before the split", () => {
+    const page = buildCaseDocument(
+      digest({ case: { ...digest().case, findings: "   " } }),
+      new Map(),
+      labelFor,
+    );
+
+    expect(page.findings).toBeNull();
+  });
+
+  it("keeps where a complaint was marked, not where the cause was", () => {
+    // The lesson is that the two differ. A page that quietly relabelled the
+    // arm pain as cardiac would print the answer and delete the exercise.
+    const page = buildCaseDocument(digest(), new Map(), labelFor);
+
+    expect(page.symptoms[0]?.structure).toBe("Left upper limb");
+    expect(page.symptoms[0]?.severity).toBe(7);
+    expect(page.sealedAnswer).toMatch(/myocardial/);
+  });
+
+  it("prints the presentation in the order it developed", () => {
+    const page = buildCaseDocument(digest(), new Map(), labelFor);
+
+    expect(page.symptoms.map((entry) => entry.symptom)).toEqual([
+      "Pain radiating down the arm",
+      "Breathlessness climbing stairs",
+    ]);
+  });
+
+  it("averages only the visits that were graded", () => {
+    const page = buildCaseDocument(digest(), new Map(), labelFor);
+
+    // 72 and 88 were graded; the third visit was not, and counting it as zero
+    // would make an unfinished case look like a failed one.
+    expect(page.facts).toContainEqual({ label: "Average score", value: "80 / 100" });
+  });
+
+  it("keeps a visit whose transcript could not be loaded", () => {
+    // Dropping it would renumber the history: visit 3 would print as visit 2
+    // and the record would no longer match what the reader did.
+    const page = buildCaseDocument(digest(), new Map(), labelFor);
+
+    expect(page.visits.map((visit) => visit.visitNo)).toEqual([1, 2, 3]);
+    expect(page.visits[0]?.exchanges).toEqual([]);
+    expect(page.visits[0]?.score).toBe(72);
+  });
+
+  it("carries each visit's transcript when it is there", () => {
+    const page = buildCaseDocument(digest(), new Map([["v1", detail()]]), labelFor);
+
+    expect(page.visits[0]?.exchanges).toHaveLength(2);
+    expect(page.visits[0]?.exchanges[1]?.model).toBe("claude-sonnet-5");
+  });
+
+  it("lets no structure id reach the page", () => {
+    const page = buildCaseDocument(digest(), new Map([["v1", detail()]]), labelFor);
+    const printed = JSON.stringify(page);
+
+    expect(printed).not.toContain("left_ventricle");
+    expect(printed).not.toContain("ascending_aorta");
+    expect(printed).not.toContain("free_upper_limb_l");
+  });
+
+  it("names a visit's structures and drops the ones it cannot", () => {
+    const page = buildCaseDocument(digest(), new Map(), labelFor);
+
+    // `unknown_structure` has no label, and a reader holding paper has no way
+    // to look one up.
+    expect(page.visits[1]?.structures).toEqual(["Ventriculus sinister"]);
+  });
+});
+
 describe("isPrintable", () => {
   it("is false for a page that would be a heading and nothing else", () => {
     expect(isPrintable(buildNotesDocument([], null, "en"))).toBe(false);
@@ -254,5 +435,9 @@ describe("isPrintable", () => {
 
   it("is true once there is something on it", () => {
     expect(isPrintable(buildSessionDocument(detail(), labelFor))).toBe(true);
+  });
+
+  it("is true for a case that has visits but no transcripts loaded", () => {
+    expect(isPrintable(buildCaseDocument(digest(), new Map(), labelFor))).toBe(true);
   });
 });

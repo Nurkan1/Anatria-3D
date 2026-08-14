@@ -61,6 +61,8 @@ export interface EngineStatus {
   ready: boolean;
   /** Why it is not running — a failed spawn, or the last crash. */
   error: string | null;
+  /** What it announced at boot, or null before it has said anything. */
+  protocol_version: number | null;
 }
 
 /**

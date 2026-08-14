@@ -6,7 +6,12 @@ import remarkGfm from "remark-gfm";
 import { repairGluedHeadings } from "@/features/chat/repairMarkdown";
 import { usePrintStore } from "@/stores/printStore";
 
-import { disclaimers, isPrintable, type PrintDocument } from "./printDocument";
+import {
+  disclaimers,
+  isPrintable,
+  type PrintDocument,
+  type PrintVisit,
+} from "./printDocument";
 
 /**
  * The printable page, shown first as a preview.
@@ -73,7 +78,18 @@ export function PrintSheet() {
                   <Structures names={document.structures} />
                 )}
                 {document.notes.length > 0 && <Notes document={document} />}
+                {document.findings && <Findings text={document.findings} />}
+                {document.recordUpdates.length > 0 && (
+                  <IntervalHistory document={document} />
+                )}
+                {document.symptoms.length > 0 && <Presentation document={document} />}
+                {document.visits.map((visit) => (
+                  <Visit key={visit.visitNo} visit={visit} />
+                ))}
                 {document.exchanges.length > 0 && <Transcript document={document} />}
+                {/* Last on the page, deliberately: whoever hands this sheet to
+                    a student passes the answer on the way to the end of it. */}
+                {document.sealedAnswer && <SealedAnswer text={document.sealedAnswer} />}
                 {!isPrintable(document) && (
                   <p className="mt-8 text-sm italic text-slate-500">
                     There is nothing here yet to print.
@@ -229,6 +245,157 @@ function Notes({ document }: { document: PrintDocument }) {
           </div>
         ))}
       </div>
+    </section>
+  );
+}
+
+/** What the case was given: vitals, history, results. Never a secret. */
+function Findings({ text }: { text: string }) {
+  return (
+    <section className="mt-6 print-block">
+      <SectionHeading>On the record</SectionHeading>
+      <p className="mt-2 whitespace-pre-wrap text-[13px] leading-relaxed">{text}</p>
+    </section>
+  );
+}
+
+/**
+ * What was learned after the opening, in visit order.
+ *
+ * Its own section rather than appended to the findings, because when it was
+ * learned is part of what it says: "BP 130/85 at visit 6" and "BP 130/85" are
+ * different clinical statements, and only the first one describes a course.
+ */
+function IntervalHistory({ document }: { document: PrintDocument }) {
+  return (
+    <section className="mt-6">
+      <SectionHeading>Added to the record</SectionHeading>
+      <div className="mt-2 space-y-2">
+        {document.recordUpdates.map((entry, index) => (
+          <div key={index} className="print-block">
+            <p className="text-[10px] text-slate-500">
+              <span className="font-semibold text-slate-700">
+                Visit {entry.visitNo}
+              </span>
+              {" · "}
+              {moment(entry.when)}
+            </p>
+            <p className="whitespace-pre-wrap text-[13px] leading-relaxed">
+              {entry.body}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/**
+ * The complaints, in the order they were reported.
+ *
+ * Headed "as reported" because that is the whole content of the section: this
+ * is where the reader said it hurt, which in a case worth teaching is not
+ * where the cause is. A page that presented these as findings would invert the
+ * exercise.
+ */
+function Presentation({ document }: { document: PrintDocument }) {
+  return (
+    <section className="mt-6">
+      <SectionHeading>Presentation, as reported</SectionHeading>
+      <div className="mt-2 space-y-2">
+        {document.symptoms.map((symptom, index) => (
+          <div key={index} className="print-block">
+            <p className="text-[10px] text-slate-500">
+              {symptom.structure && (
+                <span className="italic text-slate-700">{symptom.structure} · </span>
+              )}
+              {moment(symptom.when)}
+              {symptom.severity !== null && (
+                <span className="ml-2">severity {symptom.severity}/10</span>
+              )}
+            </p>
+            <p className="mt-0.5 text-[13px] leading-relaxed">{symptom.symptom}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function Visit({ visit }: { visit: PrintVisit }) {
+  return (
+    <section className="mt-6">
+      <SectionHeading>
+        Visit {visit.visitNo}
+        <span className="ml-2 font-normal normal-case tracking-normal text-slate-400">
+          {moment(visit.when)}
+        </span>
+        {visit.score !== null && (
+          <span className="ml-2 font-normal normal-case tracking-normal text-slate-500">
+            · {visit.score} / 100
+          </span>
+        )}
+      </SectionHeading>
+
+      {visit.structures.length > 0 && (
+        <p className="mt-1 text-[11px] italic leading-relaxed text-slate-600">
+          {visit.structures.join(" · ")}
+        </p>
+      )}
+
+      <div className="mt-2 space-y-5">
+        {visit.exchanges.map((exchange, index) => (
+          <div key={index}>
+            <p className="print-keep-with-next text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+              {exchange.role === "user" ? "Asked" : "Answered"}
+              <span className="ml-2 font-normal normal-case tracking-normal text-slate-400">
+                {moment(exchange.when)}
+              </span>
+              {exchange.model && (
+                <span className="ml-2 font-normal normal-case tracking-normal text-slate-400">
+                  · by {exchange.model}
+                </span>
+              )}
+            </p>
+            <div
+              className={
+                exchange.role === "user"
+                  ? "mt-1 border-l-2 border-slate-300 pl-3 text-[13px] leading-relaxed"
+                  : "mt-1 text-[13px] leading-relaxed"
+              }
+            >
+              <PrintMarkdown>{repairGluedHeadings(exchange.body)}</PrintMarkdown>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {visit.verdict && (
+        <div className="mt-3 border-l-2 border-slate-400 pl-3">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+            Assessment
+          </p>
+          <p className="mt-0.5 whitespace-pre-wrap text-[13px] leading-relaxed">
+            {visit.verdict}
+          </p>
+        </div>
+      )}
+    </section>
+  );
+}
+
+/**
+ * What the case was sealed with, written before anyone attempted it.
+ *
+ * Labelled as authored rather than as a conclusion: nothing on this page was
+ * concluded from the presentation above it. Someone wrote it, in advance, and
+ * the point of the exercise was to arrive at it.
+ */
+function SealedAnswer({ text }: { text: string }) {
+  return (
+    <section className="mt-6 print-block">
+      <SectionHeading>Authored answer — sealed when the case opened</SectionHeading>
+      <p className="mt-2 whitespace-pre-wrap text-[13px] leading-relaxed">{text}</p>
     </section>
   );
 }
