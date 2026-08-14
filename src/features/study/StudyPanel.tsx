@@ -184,7 +184,7 @@ function TransferSection() {
 
   return (
     <section>
-      <SectionTitle label="Move it to another machine" count={0} />
+      <SectionTitle label="Move it to another machine" />
       <div className="mt-2 flex gap-1.5">
         <button
           type="button"
@@ -257,13 +257,25 @@ function PrintNotes() {
   );
 }
 
+/**
+ * A heading, and a count only where there is something to count.
+ *
+ * `count` is optional, and that is the fix rather than a nicety. It used to be
+ * required, so the one section with nothing to number — the two transfer
+ * buttons — was given a literal `0` to satisfy the type. It rendered a zero
+ * beside "Move it to another machine", and a reader who had just exported
+ * their journal read it as the export having produced nothing.
+ *
+ * A number that is always zero is not decoration. It is a wrong answer to a
+ * question the reader did not know they were asking.
+ */
 function SectionTitle({
   label,
   count,
   action,
 }: {
   label: string;
-  count: number;
+  count?: number;
   action?: React.ReactNode;
 }) {
   return (
@@ -271,7 +283,7 @@ function SectionTitle({
       <h2 className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
         {label}
       </h2>
-      <span className="text-[10px] text-slate-600">{count}</span>
+      {count !== undefined && <span className="text-[10px] text-slate-600">{count}</span>}
       <div className="ml-auto">{action}</div>
     </div>
   );
