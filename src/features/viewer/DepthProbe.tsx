@@ -109,7 +109,7 @@ export function DepthProbe() {
               </button>
               {/*
                 Its own control, not a second meaning for the row.
-                
+
                 Clicking a line still flies to it, which is what it has always
                 done and what a reader scanning the list expects. Isolating is
                 a bigger act — it empties the viewport of everything else — and
