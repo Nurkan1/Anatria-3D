@@ -7,6 +7,11 @@
 #
 # It is also the prerequisite for free code signing: the open-source signing
 # programmes sign what a public CI built, never an artefact uploaded by hand.
+#
+# Run by hand it builds everything and publishes nothing, leaving the packages
+# attached to the run. That is how a build gets tried on a real machine before
+# a tag claims it works there — the runner is Ubuntu, and the distributions
+# this has to start on are not.
 name: Release
 
 on:
@@ -93,10 +98,34 @@ jobs:
               "$hash  $($_.Name)" | Tee-Object -FilePath $out -Append
             }
 
+      # Attached to the run itself, so a `workflow_dispatch` produces something
+      # installable without a tag and without a release. That is the whole
+      # point: the only way to find out whether a package actually starts on a
+      # given distribution is to start it, and doing that from a tag means the
+      # tag exists before the answer does.
+      #
+      # Short retention deliberately. These are for trying a build out; the
+      # release is where a build is kept.
+      - name: Keep the installers on the run
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-installers
+          retention-days: 14
+          path: |
+            src-tauri/target/release/bundle/nsis/*-setup.exe
+            src-tauri/target/release/bundle/msi/*.msi
+            checksums-windows.txt
+
       # Only this job writes `body`. The Linux job omits it, which leaves
       # whatever is already there alone — otherwise whichever finished last
       # would overwrite the other's notes, and which one that is varies per run.
+      #
+      # Skipped unless a tag is what started this. `action-gh-release` falls
+      # back to whatever ref it was given, so a manual run would open a draft
+      # release named after the branch — an artefact nobody asked for, sitting
+      # in the repository looking like a release that went wrong.
       - name: Publish
+        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
           draft: true # reviewed before anyone can download it
@@ -217,8 +246,24 @@ jobs:
             done > checksums-linux.txt
           cat checksums-linux.txt
 
-      # No `body` here — see the note on the Windows job.
+      # See the note on the Windows job. This is the one that earns its keep:
+      # the runner is Ubuntu and the machines this has to work on are not, so
+      # the packages have to leave CI and be started somewhere else before a
+      # tag promises they run.
+      - name: Keep the packages on the run
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-packages
+          retention-days: 14
+          path: |
+            src-tauri/target/release/bundle/deb/*.deb
+            src-tauri/target/release/bundle/appimage/*.AppImage
+            checksums-linux.txt
+
+      # No `body` here — see the note on the Windows job, which also explains
+      # why this is skipped when no tag started the run.
       - name: Publish
+        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
           draft: true
