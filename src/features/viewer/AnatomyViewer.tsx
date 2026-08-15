@@ -229,7 +229,8 @@ function ControlsHint() {
       <p>Right-drag to pan · Double-click an organ to open it with its parts</p>
       <p>Shift+double-click to build a study set · Esc to exit</p>
       <p>Ctrl+click to select several · Ctrl+drag to draw round a region</p>
-      <p>I isolate · H hide · U restore · C clear · X explode · + − zoom</p>
+      <p>I isolate · H hide · U bring hidden back · C clear · X explode</p>
+      <p>F fit · A P L R S viewpoints · + − zoom</p>
       <p>Right-click a structure to isolate the organ it belongs to</p>
     </div>
   );

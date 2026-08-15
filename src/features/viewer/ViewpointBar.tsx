@@ -5,11 +5,14 @@ import { useSceneStore } from "@/stores/sceneStore";
 import {
   DOLLY_IN,
   DOLLY_OUT,
+  FIT_KEY,
+  VIEW_FOR_KEY,
   VIEW_HINT,
   VIEW_LABEL,
   VIEW_ORDER,
   zoomKeyFor,
 } from "./cameraViews";
+import { viewportKey } from "./viewportKeys";
 
 /**
  * Getting back to a known view, in one click.
@@ -45,25 +48,36 @@ export function ViewpointBar() {
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      const target = event.target as HTMLElement | null;
-      // Never steal a keystroke from a field. A reader typing "BP 130/85" into
-      // the record would otherwise watch the camera walk backwards.
-      if (target && /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)) return;
-      if (target?.isContentEditable) return;
-      // `Shift` is allowed, and has to be: `+` needs it on a US keyboard. The
-      // modifiers that are refused are the ones the operating system and the
-      // webview have already claimed — Ctrl and Cmd with these keys are the
-      // browser's own zoom.
-      if (event.metaKey || event.ctrlKey || event.altKey) return;
+      // One place decides whether a keystroke is the viewport's, and it is the
+      // same one the selection and explode bars ask — see `viewportKeys`.
+      // Shift survives it, which the zoom needs: there is no `+` without it on
+      // a US keyboard.
+      const key = viewportKey(event);
+      if (key === null) return;
 
+      // Zoom first, because it reads `code` as well and a numeric-pad press
+      // reports a `key` of its own that no letter should be asked about.
       const direction = zoomKeyFor(event);
-      if (direction === null) return;
-      dollyView(direction === "in" ? DOLLY_IN : DOLLY_OUT);
+      if (direction !== null) {
+        dollyView(direction === "in" ? DOLLY_IN : DOLLY_OUT);
+        event.preventDefault();
+        return;
+      }
+
+      if (key === FIT_KEY) {
+        fitView();
+        event.preventDefault();
+        return;
+      }
+
+      const view = VIEW_FOR_KEY[key];
+      if (view === undefined) return;
+      orientView(view);
       event.preventDefault();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [dollyView]);
+  }, [dollyView, fitView, orientView]);
 
   return (
     <div className="pointer-events-none absolute bottom-3 right-3">
@@ -74,8 +88,8 @@ export function ViewpointBar() {
           // isolating a heart, "frame this" means the heart.
           title={
             studying
-              ? `Frame the ${isolatedOrganIds.length} structures you are studying`
-              : "Frame the whole body"
+              ? `Frame the ${isolatedOrganIds.length} structures you are studying — key F`
+              : "Frame the whole body — key F"
           }
           wide
         >
@@ -85,7 +99,11 @@ export function ViewpointBar() {
         <span aria-hidden className="mx-0.5 h-4 w-px bg-slate-700" />
 
         {VIEW_ORDER.map((view) => (
-          <Key key={view} onClick={() => orientView(view)} title={VIEW_HINT[view]}>
+          <Key
+            key={view}
+            onClick={() => orientView(view)}
+            title={`${VIEW_HINT[view]} — key ${VIEW_LABEL[view]}`}
+          >
             {VIEW_LABEL[view]}
           </Key>
         ))}

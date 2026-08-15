@@ -764,6 +764,8 @@ const SECTIONS: Section[] = [
             ["U", "Restore everything hidden"],
             ["X", "Step the exploded view apart, and back together"],
             ["+ −", "Move closer in, or further away"],
+            ["F", "Frame the view — the body, or what you are studying"],
+            ["A P L R S", "The five anatomical viewpoints, as on the buttons"],
             ["Enter", "Send your question"],
             ["Shift+Enter", "New line instead of sending"],
             ["Ctrl+Enter", "Save the note you are writing"],

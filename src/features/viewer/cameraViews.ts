@@ -47,6 +47,24 @@ export const VIEW_HINT: Record<AnatomicalView, string> = {
   superior: "Superior — looking down from above",
 };
 
+/**
+ * The key that reaches each viewpoint, derived from the letter on its button.
+ *
+ * Built from `VIEW_LABEL` rather than written out again, so the two cannot
+ * disagree. A button reading "P" whose key was "b" would be a small betrayal
+ * of the only affordance the bar has — the letter *is* the instruction, and
+ * deriving it makes that true by construction rather than by discipline.
+ */
+export const VIEW_FOR_KEY: Record<string, AnatomicalView> = Object.fromEntries(
+  (Object.keys(VIEW_LABEL) as AnatomicalView[]).map((view) => [
+    VIEW_LABEL[view].toLowerCase(),
+    view,
+  ]),
+);
+
+/** The key for framing, which has a word on its button rather than a letter. */
+export const FIT_KEY = "f";
+
 export const VIEW_ORDER: AnatomicalView[] = [
   "anterior",
   "posterior",
