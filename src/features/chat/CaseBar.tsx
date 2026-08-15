@@ -151,6 +151,20 @@ export function CaseBar({ profile, language }: { profile: UserProfile; language:
 }
 
 /**
+ * How much of the panel the open record may take before it scrolls itself.
+ *
+ * Half, deliberately. The record is reference material and the transcript is
+ * the conversation, and a reader answering a case is going between the two —
+ * giving either one the whole panel makes the other useless. Below this the
+ * record scrolls and the transcript keeps the rest.
+ *
+ * Exported so a test can hold on to it: in jsdom a layout has no observable
+ * behaviour, and the regression this guards against is precisely the *absence*
+ * of these two rules.
+ */
+export const RECORD_MAX_HEIGHT = "max-h-[50vh]";
+
+/**
  * The patient's record, where the work is happening.
  *
  * Not in the Study tab and not over the 3D canvas: this is what a reader wants
@@ -254,7 +268,24 @@ function PatientRecord({
   ].filter((entry): entry is string => typeof entry === "string");
 
   return (
-    <div className="mt-1.5 w-full space-y-2 rounded border border-slate-800 bg-slate-950/60 p-2">
+    /*
+      Bounded, and scrolls itself.
+
+      Everything in here is written by somebody and none of it has a length:
+      the record grows a paragraph per visit, the visit list grows a row per
+      drill, and the sealed answer is whatever the reader typed — a worked
+      differential runs to a screen on its own.
+
+      Unbounded, this panel won every argument for space. It sits in a flex
+      column above the transcript, which yields (`min-h-0 flex-1`), so a long
+      case pushed the conversation down to nothing and then ran off the bottom
+      of the window. The end of the answer was not clipped by a scroll container
+      — there wasn't one — it was outside the panel entirely, and scrolling
+      anything on screen did not reach it.
+    */
+    <div
+      className={`mt-1.5 w-full shrink-0 space-y-2 overflow-y-auto rounded border border-slate-800 bg-slate-950/60 p-2 ${RECORD_MAX_HEIGHT}`}
+    >
       {measurements.length > 0 && (
         <p className="text-slate-500">{measurements.join(" · ")}</p>
       )}

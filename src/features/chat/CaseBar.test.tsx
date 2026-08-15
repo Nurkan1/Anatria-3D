@@ -22,7 +22,7 @@ vi.mock("@/lib/studyDb", () => ({
 
 const db = vi.mocked(await import("@/lib/studyDb"));
 const { useCaseStore } = await import("@/stores/caseStore");
-const { CaseBar } = await import("./CaseBar");
+const { CaseBar, RECORD_MAX_HEIGHT } = await import("./CaseBar");
 
 const PATIENT: CaseFile = {
   id: "c1",
@@ -51,7 +51,7 @@ function open() {
     error: null,
     loaded: true,
   });
-  render(<CaseBar profile="student" language="es" />);
+  return render(<CaseBar profile="student" language="es" />);
 }
 
 beforeEach(() => {
@@ -204,5 +204,33 @@ describe("reaching the record", () => {
     open();
 
     expect(screen.getByText(/visit 8/i)).toBeTruthy();
+  });
+});
+
+describe("the record panel's height", () => {
+  it("bounds itself and scrolls, rather than growing off the window", () => {
+    // The bug: nothing constrained this panel's height. The record grows a
+    // paragraph per visit and the sealed answer is a worked differential, so a
+    // real patient pushed the transcript to nothing and then ran past the
+    // bottom of the window — with the end of the answer outside the panel
+    // entirely, where no scrollbar on screen could reach it.
+    //
+    // A layout has no observable behaviour in jsdom, so this asserts the two
+    // rules themselves. That is the point: the regression being guarded is
+    // their absence, and either one alone still loses the end of the answer.
+    const { container } = open();
+    fireEvent.click(screen.getByRole("button", { name: /\+ record/i }));
+
+    const panel = container.querySelector(`.${CSS.escape(RECORD_MAX_HEIGHT)}`);
+
+    expect(panel).not.toBeNull();
+    expect(panel!.className).toMatch(/overflow-y-auto/);
+  });
+
+  it("leaves the transcript a share it cannot take", () => {
+    // Half. The reader answering a case goes between the record and the
+    // conversation, and a panel allowed the whole height makes the other
+    // useless — which is the same failure as the one above, just politer.
+    expect(RECORD_MAX_HEIGHT).toBe("max-h-[50vh]");
   });
 });
