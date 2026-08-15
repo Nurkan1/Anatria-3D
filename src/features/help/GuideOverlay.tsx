@@ -162,6 +162,12 @@ const SECTIONS: Section[] = [
           <Ui>Isolate these …</Ui>: a ray through the shoulder is a surgical
           approach written down, in the order you would meet it. <Ui>Esc</Ui> puts
           the body back.
+          <br />
+          <br />
+          <strong>Ctrl-click the lines to pick a few of them</strong> — skin, fascia
+          and the muscle, without the four things behind them. They join the same
+          selection a Ctrl-click on the body builds, so the bar at the bottom counts
+          them and <Ui>I</Ui> isolates them.
         </Callout>
         <p>
           <strong>Then press <Ui>Glass body</Ui>.</strong> The whole model turns to

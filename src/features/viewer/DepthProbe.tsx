@@ -18,6 +18,19 @@ import { tissueHex } from "./palette";
  * depth: it is the geometry a ray from the cursor actually crossed, in the
  * order it crossed it. The renderer was already computing the whole list on
  * every pointer move and discarding all but the first entry.
+ *
+ * # Picking a few of them
+ *
+ * The panel offers the whole crossing or one structure at a time, and the
+ * useful answer is often neither: "skin, fascia and the muscle, without the
+ * four things behind them" is the approach a reader wants left on screen.
+ *
+ * Ctrl-click builds that, and deliberately builds it in the *app's* selection
+ * rather than in a set of the panel's own. It is the same gesture that adds a
+ * structure by clicking the body, it feeds the same bar at the bottom, and `I`
+ * isolates it exactly as it always did. A private set here would have needed
+ * its own button, its own count and its own rules about when it empties — a
+ * parallel vocabulary for something the app already knows how to say.
  */
 export function DepthProbe() {
   const visible = useSceneStore((s) => s.depthProbeVisible);
@@ -28,12 +41,19 @@ export function DepthProbe() {
   const hovered = useSceneStore((s) => s.hoveredOrganId);
   const setHovered = useSceneStore((s) => s.setHovered);
   const applyCommand = useSceneStore((s) => s.applyCommand);
+  const selectedOrganIds = useSceneStore((s) => s.selectedOrganIds);
+  const selectOrgan = useSceneStore((s) => s.selectOrgan);
 
   // The pinned reading wins over whatever the pointer is crossing now. That
   // is the whole point of it: the journey to this panel goes over the model.
   const showing = pinned ?? stack;
   const state = depthReadingState(pinned !== null);
   const layers = showing.map((id) => organs[id]).filter((organ) => !!organ);
+  const picks = new Set(selectedOrganIds);
+  // Only the ones in *this* list. The selection may well hold structures taken
+  // from the tree or the search box, and counting those here would describe a
+  // reading the reader is not looking at.
+  const pickedHere = layers.filter((organ) => picks.has(organ.organ_id)).length;
   // Switched off from the left panel or from the structure menu. Checked here
   // rather than at the mount point so the reading itself keeps being taken —
   // the renderer computes the stack either way, and turning the panel back on
@@ -73,70 +93,108 @@ export function DepthProbe() {
         </p>
 
         <ol className="max-h-[46vh] overflow-y-auto py-1">
-          {layers.map((organ, index) => (
-            <li key={organ.organ_id} className="group flex items-stretch">
-              <button
-                type="button"
-                onMouseEnter={() => setHovered(organ.organ_id)}
-                onMouseLeave={() => setHovered(null)}
-                onClick={() =>
-                  applyCommand({ action: "focus_organ", organ_id: organ.organ_id })
-                }
-                title={organSubtitle(organ)}
-                className={`flex min-w-0 flex-1 items-center gap-2 py-1 pl-2.5 pr-1 text-left transition ${
-                  hovered === organ.organ_id ? "bg-sky-600/20" : "hover:bg-slate-800/70"
+          {layers.map((organ, index) => {
+            const picked = picks.has(organ.organ_id);
+            return (
+              <li
+                key={organ.organ_id}
+                // A border either way, transparent when unpicked, so a line
+                // joining the selection does not shift the list sideways.
+                className={`group flex items-stretch border-l-2 ${
+                  picked ? "border-sky-500/70" : "border-transparent"
                 }`}
               >
-                <span className="w-3 shrink-0 text-right text-[9px] tabular-nums text-slate-600">
-                  {index + 1}
-                </span>
-                {/* The tissue's own colour, so the list reads as the same body
-                    the viewport is showing rather than as a table about it. */}
-                <span
-                  aria-hidden
-                  className="h-2 w-2 shrink-0 rounded-full ring-1 ring-inset ring-black/40"
-                  style={{ backgroundColor: tissueHex(organ) }}
-                />
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-[11px] italic text-slate-200">
-                    {organLabel(organ)}
+                <button
+                  type="button"
+                  onMouseEnter={() => setHovered(organ.organ_id)}
+                  onMouseLeave={() => setHovered(null)}
+                  onClick={(event) => {
+                    // The same modifier that adds a structure by clicking the
+                    // body. Flying to it as well would take the camera away
+                    // from the one place the reading is about, in the middle
+                    // of building a set there.
+                    if (event.ctrlKey || event.metaKey) {
+                      selectOrgan(organ.organ_id, true);
+                      return;
+                    }
+                    applyCommand({ action: "focus_organ", organ_id: organ.organ_id });
+                  }}
+                  title={`${organSubtitle(organ)} — Ctrl-click to add it to the selection`}
+                  className={`flex min-w-0 flex-1 items-center gap-2 py-1 pl-2.5 pr-1 text-left transition ${
+                    hovered === organ.organ_id
+                      ? "bg-sky-600/20"
+                      : picked
+                        ? "bg-sky-500/10"
+                        : "hover:bg-slate-800/70"
+                  }`}
+                >
+                  <span
+                    className={`w-3 shrink-0 text-right text-[9px] tabular-nums ${
+                      picked ? "text-sky-300" : "text-slate-600"
+                    }`}
+                  >
+                    {index + 1}
                   </span>
-                  <span className="block truncate text-[9px] text-slate-500">
-                    {organSubtitle(organ)}
+                  {/* The tissue's own colour, so the list reads as the same body
+                      the viewport is showing rather than as a table about it. */}
+                  <span
+                    aria-hidden
+                    className="h-2 w-2 shrink-0 rounded-full ring-1 ring-inset ring-black/40"
+                    style={{ backgroundColor: tissueHex(organ) }}
+                  />
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-[11px] italic text-slate-200">
+                      {organLabel(organ)}
+                    </span>
+                    <span className="block truncate text-[9px] text-slate-500">
+                      {organSubtitle(organ)}
+                    </span>
                   </span>
-                </span>
-              </button>
-              {/*
-                Its own control, not a second meaning for the row.
+                </button>
+                {/*
+                  Its own control, not a second meaning for the row.
 
-                Clicking a line still flies to it, which is what it has always
-                done and what a reader scanning the list expects. Isolating is
-                a bigger act — it empties the viewport of everything else — and
-                giving one gesture both jobs would make the safe one feel
-                dangerous.
+                  Clicking a line still flies to it, which is what it has always
+                  done and what a reader scanning the list expects. Isolating is
+                  a bigger act — it empties the viewport of everything else —
+                  and giving one gesture both jobs would make the safe one feel
+                  dangerous.
 
-                `solo` because the systems list already calls it that. A panel
-                that invented a third word for hiding everything else would be
-                teaching a vocabulary the app does not use.
-              */}
-              <button
-                type="button"
-                onMouseEnter={() => setHovered(organ.organ_id)}
-                onMouseLeave={() => setHovered(null)}
-                onClick={() =>
-                  applyCommand({
-                    action: "isolate_structures",
-                    organ_ids: [organ.organ_id],
-                  })
-                }
-                title={`Show only ${organLabel(organ)} — Esc restores`}
-                className="shrink-0 px-1.5 text-[8px] uppercase tracking-wide text-slate-700 opacity-0 transition group-hover:opacity-100 hover:text-sky-300 focus-visible:opacity-100"
-              >
-                solo
-              </button>
-            </li>
-          ))}
+                  `solo` because the systems list already calls it that. A panel
+                  that invented a third word for hiding everything else would be
+                  teaching a vocabulary the app does not use.
+                */}
+                <button
+                  type="button"
+                  onMouseEnter={() => setHovered(organ.organ_id)}
+                  onMouseLeave={() => setHovered(null)}
+                  onClick={() =>
+                    applyCommand({
+                      action: "isolate_structures",
+                      organ_ids: [organ.organ_id],
+                    })
+                  }
+                  title={`Show only ${organLabel(organ)} — Esc restores`}
+                  className="shrink-0 px-1.5 text-[8px] uppercase tracking-wide text-slate-700 opacity-0 transition group-hover:opacity-100 hover:text-sky-300 focus-visible:opacity-100"
+                >
+                  solo
+                </button>
+              </li>
+            );
+          })}
         </ol>
+
+        {/*
+          Said in the panel rather than left to be discovered, because nothing
+          on screen suggests a modifier exists. The line doubles as the count
+          once picking has started: the bar at the bottom counts the whole
+          selection, and this says how much of it is in this reading.
+        */}
+        <p className="border-t border-slate-800 px-2.5 py-1 text-[9px] text-slate-600">
+          {pickedHere > 0
+            ? `${pickedHere} of these selected — press I to isolate`
+            : "Ctrl-click a line to add it to the selection"}
+        </p>
 
         {/*
           The whole crossing, which is the thing this panel is actually about.
