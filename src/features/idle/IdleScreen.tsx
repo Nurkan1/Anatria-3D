@@ -108,6 +108,15 @@ export const LOOK = {
   waveWidth: 0.13,
   /** How bright a front gets, against a rim of 1.0. */
   waveStrength: 1.35,
+  /**
+   * The ignition at the origin, as a fraction of the front behind it.
+   *
+   * Its own number because it is the one thing here that is *not* subtle by
+   * construction: the flash lands on a small patch all at once, so at parity
+   * with the ring it reads as a strobe rather than as something beginning.
+   * Well under half, and it announces the wave without starting it with a bang.
+   */
+  sparkStrength: 0.4,
 
   /**
    * The wordmark the light writes, and how rarely it does it.
@@ -186,6 +195,7 @@ const SHELL_FRAGMENT = /* glsl */ `
   uniform float uWaveSpeed;
   uniform float uWaveWidth;
   uniform float uWaveStrength;
+  uniform float uSparkStrength;
   uniform float uWaveLife;
 
   uniform sampler2D uWord;
@@ -221,7 +231,7 @@ const SHELL_FRAGMENT = /* glsl */ `
     // Out over its life, so nothing ever switches off with an edge.
     float fade = 1.0 - smoothstep(0.0, uWaveLife, age);
 
-    return (ring * fade + spark) * uWaveStrength;
+    return (ring * fade + spark * uSparkStrength) * uWaveStrength;
   }
 
   void main() {
@@ -285,8 +295,11 @@ const SHELL_FRAGMENT = /* glsl */ `
  */
 function wordmarkTexture(): THREE.CanvasTexture {
   const canvas = document.createElement("canvas");
-  canvas.width = 1024;
-  canvas.height = 1024;
+  // 512, not 1024. Four megabytes of video memory for a mark that is meant to
+  // be almost subliminal was paying full price for something nobody reads at
+  // full resolution — and at this strength the two are indistinguishable.
+  canvas.width = 512;
+  canvas.height = 512;
   const paint = canvas.getContext("2d");
   if (paint) {
     paint.clearRect(0, 0, canvas.width, canvas.height);
@@ -295,8 +308,8 @@ function wordmarkTexture(): THREE.CanvasTexture {
     paint.textBaseline = "middle";
     // Spaced like the mark in the corner, and for the same reason: at this
     // brightness the letters are read by their gaps as much as their strokes.
-    paint.letterSpacing = "26px";
-    paint.font = "600 116px ui-sans-serif, system-ui, -apple-system, sans-serif";
+    paint.letterSpacing = "13px";
+    paint.font = "600 58px ui-sans-serif, system-ui, -apple-system, sans-serif";
     paint.fillText("ANATRIA3D", canvas.width / 2, canvas.height / 2);
   }
   const texture = new THREE.CanvasTexture(canvas);
@@ -437,7 +450,7 @@ function Brain({ organIds, still }: { organIds: string[]; still: boolean }) {
         uniforms: {
           uTime: time,
           uBody: { value: new THREE.Color("#9aa3b0") },
-          uPulse: { value: new THREE.Color("#3ddc84") },
+          uPulse: { value: new THREE.Color("#38bdf8") },
           uOpacity: { value: LOOK.opacity },
           uRimSharpness: { value: LOOK.rimSharpness },
           uWaveSeed: waveSeeds,
@@ -445,6 +458,7 @@ function Brain({ organIds, still }: { organIds: string[]; still: boolean }) {
           uWaveSpeed: { value: LOOK.waveSpeed },
           uWaveWidth: { value: LOOK.waveWidth },
           uWaveStrength: { value: LOOK.waveStrength },
+          uSparkStrength: { value: LOOK.sparkStrength },
           uWaveLife: { value: LOOK.waveLife },
           uWord: { value: word },
           uWordStrength: wordStrength,
