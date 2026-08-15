@@ -75,7 +75,7 @@ export function DepthProbe() {
 
         <ol className="max-h-[46vh] overflow-y-auto py-1">
           {layers.map((organ, index) => (
-            <li key={organ.organ_id}>
+            <li key={organ.organ_id} className="group flex items-stretch">
               <button
                 type="button"
                 onMouseEnter={() => setHovered(organ.organ_id)}
@@ -84,7 +84,7 @@ export function DepthProbe() {
                   applyCommand({ action: "focus_organ", organ_id: organ.organ_id })
                 }
                 title={organSubtitle(organ)}
-                className={`flex w-full items-center gap-2 px-2.5 py-1 text-left transition ${
+                className={`flex min-w-0 flex-1 items-center gap-2 py-1 pl-2.5 pr-1 text-left transition ${
                   hovered === organ.organ_id ? "bg-sky-600/20" : "hover:bg-slate-800/70"
                 }`}
               >
@@ -107,9 +107,59 @@ export function DepthProbe() {
                   </span>
                 </span>
               </button>
+              {/*
+                Its own control, not a second meaning for the row.
+                
+                Clicking a line still flies to it, which is what it has always
+                done and what a reader scanning the list expects. Isolating is
+                a bigger act — it empties the viewport of everything else — and
+                giving one gesture both jobs would make the safe one feel
+                dangerous.
+
+                `solo` because the systems list already calls it that. A panel
+                that invented a third word for hiding everything else would be
+                teaching a vocabulary the app does not use.
+              */}
+              <button
+                type="button"
+                onMouseEnter={() => setHovered(organ.organ_id)}
+                onMouseLeave={() => setHovered(null)}
+                onClick={() =>
+                  applyCommand({
+                    action: "isolate_structures",
+                    organ_ids: [organ.organ_id],
+                  })
+                }
+                title={`Show only ${organLabel(organ)} — Esc restores`}
+                className="shrink-0 px-1.5 text-[8px] uppercase tracking-wide text-slate-700 opacity-0 transition group-hover:opacity-100 hover:text-sky-300 focus-visible:opacity-100"
+              >
+                solo
+              </button>
             </li>
           ))}
         </ol>
+
+        {/*
+          The whole crossing, which is the thing this panel is actually about.
+          A ray through the shoulder is a surgical approach written down, and
+          isolating it leaves exactly that on screen with the rest of the body
+          out of the way.
+        */}
+        {layers.length > 1 && (
+          <button
+            type="button"
+            onClick={() =>
+              applyCommand({
+                action: "isolate_structures",
+                organ_ids: layers.map((organ) => organ.organ_id),
+              })
+            }
+            title="Leave only what the ray crosses — Esc restores"
+            className="w-full border-t border-slate-800 px-2.5 py-1 text-left text-[9px] uppercase tracking-wide text-slate-500 transition hover:bg-slate-800/60 hover:text-sky-300"
+          >
+            Isolate these {layers.length}
+          </button>
+        )}
 
         {layers.length >= MAX_STACK && (
           // Said out loud rather than left as a silent truncation: a ray

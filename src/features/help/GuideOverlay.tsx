@@ -151,6 +151,16 @@ const SECTIONS: Section[] = [
           Nothing there is inferred. It is not a model of tissue layers: it is the
           geometry a ray from your cursor actually crossed, in the order it crossed
           it. Click any line to fly to that structure.
+          <br />
+          <br />
+          <strong>Click the body and the reading is pinned</strong>, so it stops
+          following the cursor and you can walk over to it — the panel sits over
+          the model, and the journey to it used to cross other structures and
+          rewrite the list on the way. Hover a line for <Ui>solo</Ui> to leave only
+          that structure, or take the whole column with{" "}
+          <Ui>Isolate these …</Ui>: a ray through the shoulder is a surgical
+          approach written down, in the order you would meet it. <Ui>Esc</Ui> puts
+          the body back.
         </Callout>
         <p>
           <strong>Then press <Ui>Glass body</Ui>.</strong> The whole model turns to
