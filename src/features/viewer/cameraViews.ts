@@ -119,3 +119,44 @@ export function framingDistance(radius: number, fovDegrees: number): number {
 /** One dolly step, and the direction of it. */
 export const DOLLY_IN = 0.7;
 export const DOLLY_OUT = 1 / DOLLY_IN;
+
+/**
+ * Which way a keystroke means to zoom, or nothing at all.
+ *
+ * # Why this is not one comparison
+ *
+ * `+` is not a key. It is a *character*, and which key produces it depends on
+ * the layout: on a Spanish keyboard it is unshifted next to the accent, on a
+ * US one it is `Shift` and the `=` key, and on either there is a numeric pad
+ * with its own dedicated `+` that reports neither. This ships for Windows and
+ * for Linux and cannot assume any of them.
+ *
+ * So three readings, and each earns its place:
+ *
+ * - **`key` for the character.** Layout-aware by definition: whatever the
+ *   reader's keyboard actually produced. This is what covers `+` and `-` on
+ *   Spanish, US, German and the rest without naming any of them.
+ * - **`=` and `_` as well**, so a US reader who reaches for the `+` key does
+ *   not have to hold `Shift` to be understood. They sit on the same physical
+ *   keys and mean the same intent.
+ * - **`code` for the numeric pad.** Those two keys report `NumpadAdd` and
+ *   `NumpadSubtract` regardless of layout, and reading `code` is right here
+ *   for exactly the reason it is wrong above: the pad's physical position is
+ *   the same everywhere.
+ *
+ * Deliberately *not* matched: `code === "Equal"` and `code === "Minus"`. That
+ * would zoom on whatever key sits in the US position, which on a Spanish
+ * layout is the apostrophe.
+ */
+export function zoomKeyFor(event: {
+  key: string;
+  code: string;
+}): "in" | "out" | null {
+  if (event.key === "+" || event.key === "=" || event.code === "NumpadAdd") {
+    return "in";
+  }
+  if (event.key === "-" || event.key === "_" || event.code === "NumpadSubtract") {
+    return "out";
+  }
+  return null;
+}

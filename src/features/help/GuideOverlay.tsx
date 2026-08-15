@@ -760,8 +760,10 @@ const SECTIONS: Section[] = [
           rows={[
             ["I", "Isolate the selection"],
             ["H", "Hide the selection"],
+            ["C", "Let go of the selection"],
             ["U", "Restore everything hidden"],
             ["X", "Step the exploded view apart, and back together"],
+            ["+ −", "Move closer in, or further away"],
             ["Enter", "Send your question"],
             ["Shift+Enter", "New line instead of sending"],
             ["Ctrl+Enter", "Save the note you are writing"],

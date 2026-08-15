@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import { useSceneStore } from "@/stores/sceneStore";
 
 import {
@@ -6,6 +8,7 @@ import {
   VIEW_HINT,
   VIEW_LABEL,
   VIEW_ORDER,
+  zoomKeyFor,
 } from "./cameraViews";
 
 /**
@@ -40,6 +43,28 @@ export function ViewpointBar() {
 
   const studying = isolatedOrganIds !== null && isolatedOrganIds.length > 0;
 
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      // Never steal a keystroke from a field. A reader typing "BP 130/85" into
+      // the record would otherwise watch the camera walk backwards.
+      if (target && /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)) return;
+      if (target?.isContentEditable) return;
+      // `Shift` is allowed, and has to be: `+` needs it on a US keyboard. The
+      // modifiers that are refused are the ones the operating system and the
+      // webview have already claimed — Ctrl and Cmd with these keys are the
+      // browser's own zoom.
+      if (event.metaKey || event.ctrlKey || event.altKey) return;
+
+      const direction = zoomKeyFor(event);
+      if (direction === null) return;
+      dollyView(direction === "in" ? DOLLY_IN : DOLLY_OUT);
+      event.preventDefault();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [dollyView]);
+
   return (
     <div className="pointer-events-none absolute bottom-3 right-3">
       <div className="pointer-events-auto flex items-center gap-1 rounded-full border border-slate-700 bg-slate-900/95 px-2 py-1 shadow-lg backdrop-blur">
@@ -67,10 +92,10 @@ export function ViewpointBar() {
 
         <span aria-hidden className="mx-0.5 h-4 w-px bg-slate-700" />
 
-        <Key onClick={() => dollyView(DOLLY_OUT)} title="Move further away">
+        <Key onClick={() => dollyView(DOLLY_OUT)} title="Move further away — key −">
           −
         </Key>
-        <Key onClick={() => dollyView(DOLLY_IN)} title="Move closer in">
+        <Key onClick={() => dollyView(DOLLY_IN)} title="Move closer in — key +">
           +
         </Key>
       </div>

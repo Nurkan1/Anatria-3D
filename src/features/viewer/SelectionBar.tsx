@@ -39,12 +39,15 @@ export function SelectionBar() {
       if (key === "i") isolateSelection();
       else if (key === "h") hideSelection();
       else if (key === "u") unhideAll();
+      // The bar offered three keys and four buttons. Letting go of a selection
+      // is the move you make most often and the only one that needed the mouse.
+      else if (key === "c") clearSelection();
       else return;
       event.preventDefault();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [isolateSelection, hideSelection, unhideAll]);
+  }, [isolateSelection, hideSelection, unhideAll, clearSelection]);
 
   const chosen = selectedOrganIds.map((id) => organs[id]).filter((organ) => !!organ);
   if (chosen.length === 0 && hiddenOrganIds.length === 0) return null;
@@ -78,7 +81,9 @@ export function SelectionBar() {
             <Action onClick={hideSelection} hint="H">
               Hide
             </Action>
-            <Action onClick={clearSelection}>Clear</Action>
+            <Action onClick={clearSelection} hint="C">
+              Clear
+            </Action>
           </>
         )}
 
