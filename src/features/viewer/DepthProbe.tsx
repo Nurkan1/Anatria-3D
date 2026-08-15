@@ -22,7 +22,6 @@ import { tissueHex } from "./palette";
 export function DepthProbe() {
   const visible = useSceneStore((s) => s.depthProbeVisible);
   const stack = useSceneStore((s) => s.depthStack);
-  const live = useSceneStore((s) => s.depthStackLive);
   const pinned = useSceneStore((s) => s.pinnedStack);
   const dismiss = useSceneStore((s) => s.dismissDepthStack);
   const organs = useSceneStore((s) => s.organs);
@@ -33,7 +32,7 @@ export function DepthProbe() {
   // The pinned reading wins over whatever the pointer is crossing now. That
   // is the whole point of it: the journey to this panel goes over the model.
   const showing = pinned ?? stack;
-  const state = depthReadingState(live, pinned !== null);
+  const state = depthReadingState(pinned !== null);
   const layers = showing.map((id) => organs[id]).filter((organ) => !!organ);
   // Switched off from the left panel or from the structure menu. Checked here
   // rather than at the mount point so the reading itself keeps being taken —

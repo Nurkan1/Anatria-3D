@@ -925,77 +925,53 @@ describe("the scan view", () => {
  * panel out from under the pointer travelling to click it. Holding rather than
  * clearing is the whole fix, and these pin its edges.
  */
-describe("holding the depth reading", () => {
+describe("the reading under the cursor", () => {
   beforeEach(() => {
-    useSceneStore.setState({ depthStack: [], depthStackLive: false });
+    useSceneStore.setState({ depthStack: [], pinnedStack: null });
   });
 
-  it("is live while a reading is arriving", () => {
+  it("goes away when the pointer leaves the body", () => {
+    // It used to be *held*, which was the first attempt at making the panel
+    // reachable — the panel is drawn over the model, so travelling to it left
+    // the body and emptied the list on the way. Pinning solved that properly,
+    // and holding then only left a panel behind after a casual sweep across
+    // the body that nobody had asked to keep.
     useSceneStore.getState().setDepthStack(["skin", "platysma"]);
+    useSceneStore.getState().clearDepthStack();
 
-    expect(useSceneStore.getState().depthStackLive).toBe(true);
+    expect(useSceneStore.getState().depthStack).toEqual([]);
   });
 
-  it("keeps the list when the pointer leaves the body", () => {
-    // The bug, in one assertion: this used to empty, and an empty list hides
-    // the panel.
+  it("leaves a pinned reading alone, because that one was asked for", () => {
+    // The whole distinction. Sweeping past clears; clicking does not.
     useSceneStore.getState().setDepthStack(["skin", "platysma"]);
-    useSceneStore.getState().holdDepthStack();
+    useSceneStore.getState().pinDepthStack();
+    useSceneStore.getState().clearDepthStack();
 
-    expect(useSceneStore.getState().depthStack).toEqual(["skin", "platysma"]);
-    expect(useSceneStore.getState().depthStackLive).toBe(false);
+    expect(useSceneStore.getState().pinnedStack).toEqual(["skin", "platysma"]);
   });
 
-  it("goes live again on returning to the same structure", () => {
-    // The subtle one. `setDepthStack` skips writing when the reading has not
-    // changed, to spare a re-render on every pointer move — so travelling back
-    // over the very structure you left would report an identical stack and,
-    // without this, leave the panel saying "held" for ever.
+  it("takes the newest reading as the pointer travels", () => {
     useSceneStore.getState().setDepthStack(["skin", "platysma"]);
-    useSceneStore.getState().holdDepthStack();
+    useSceneStore.getState().setDepthStack(["deltoid", "humerus"]);
 
-    useSceneStore.getState().setDepthStack(["skin", "platysma"]);
-
-    expect(useSceneStore.getState().depthStackLive).toBe(true);
+    expect(useSceneStore.getState().depthStack).toEqual(["deltoid", "humerus"]);
   });
 
   it("closes to nothing when the reader dismisses it", () => {
     useSceneStore.getState().setDepthStack(["skin", "platysma"]);
+    useSceneStore.getState().pinDepthStack();
     useSceneStore.getState().dismissDepthStack();
 
     expect(useSceneStore.getState().depthStack).toEqual([]);
-    expect(useSceneStore.getState().depthStackLive).toBe(false);
-  });
-
-  it("does not resurrect a dismissed panel by leaving the body again", () => {
-    useSceneStore.getState().setDepthStack(["skin", "platysma"]);
-    useSceneStore.getState().dismissDepthStack();
-    useSceneStore.getState().holdDepthStack();
-
-    expect(useSceneStore.getState().depthStack).toEqual([]);
-  });
-
-  it("holds the newest reading, not the first one taken", () => {
-    useSceneStore.getState().setDepthStack(["skin", "platysma"]);
-    useSceneStore.getState().setDepthStack(["deltoid", "humerus"]);
-    useSceneStore.getState().holdDepthStack();
-
-    expect(useSceneStore.getState().depthStack).toEqual(["deltoid", "humerus"]);
+    expect(useSceneStore.getState().pinnedStack).toBeNull();
   });
 });
 
-/**
- * Pinning the reading, which is the other half of making the panel usable.
- *
- * Holding on leaving the body got the reader *to* a list. It did not get them
- * to the right one: the panel is drawn over the model, so the journey crosses
- * other structures and the reading was rewritten on the way.
- */
 describe("pinning the depth reading", () => {
   beforeEach(() => {
     useSceneStore.setState({
       depthStack: [],
-      depthStackLive: false,
       pinnedStack: null,
       selectedOrganIds: [],
     });

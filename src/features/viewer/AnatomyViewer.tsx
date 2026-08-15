@@ -72,7 +72,7 @@ export function AnatomyViewer() {
   const [menu, setMenu] = useState<MenuTarget | null>(null);
   const container = useRef<HTMLDivElement>(null);
   const pressAt = useRef<{ x: number; y: number } | null>(null);
-  const holdDepthStack = useSceneStore((s) => s.holdDepthStack);
+  const clearDepthStack = useSceneStore((s) => s.clearDepthStack);
   const selectFromViewport = useSceneStore((s) => s.selectFromViewport);
   // Lights the open patient's complaints on the body. Derived from the
   // journal, so it costs no model call and lands the moment one is selected.
@@ -132,10 +132,9 @@ export function AnatomyViewer() {
         // the canvas fires while the event is still bubbling and React
         // dispatches to this container afterwards. So by now a structure has
         // either answered for this move or the pointer is over nothing.
-        // Held, not cleared. The panel lives inside this container, so a move
-        // towards it is a move over nothing — clearing here removed the panel
-        // from under the pointer that was travelling to click it.
-        if (!consumeDepthStackReport()) holdDepthStack();
+        // A pinned reading is untouched by this: it lives in its own field,
+        // which is what lets the panel be walked over to and clicked.
+        if (!consumeDepthStackReport()) clearDepthStack();
       }}
       onClick={(event) => {
         // The click nobody wanted.
@@ -155,16 +154,16 @@ export function AnatomyViewer() {
         // Only for clicks that landed on the canvas: the overlays are children
         // of this container too, and a click on the panel's own rows must not
         // be read as a click on the body behind it.
+        if (!(event.target instanceof HTMLCanvasElement)) return;
         // Orbiting is press, travel, release, and the browser calls the
         // release a click. Turning the body to see the back of the heart used
         // to finish by selecting a rib.
         if (pressTravelled()) return;
-        if (!(event.target instanceof HTMLCanvasElement)) return;
         if (consumeClickReport()) return;
         const nearest = useSceneStore.getState().depthStack[0];
         if (nearest) selectFromViewport(nearest, event.ctrlKey || event.metaKey);
       }}
-      onPointerLeave={holdDepthStack}
+      onPointerLeave={clearDepthStack}
       onContextMenu={(event) => event.preventDefault()}
     >
       <Canvas

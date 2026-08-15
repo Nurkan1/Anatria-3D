@@ -30,7 +30,6 @@ beforeEach(() => {
   useSceneStore.setState({
     organs: ORGANS,
     depthStack: ["skin", "fascia", "pectoralis"],
-    depthStackLive: true,
     pinnedStack: null,
     depthProbeVisible: true,
     isolatedOrganIds: null,

@@ -155,8 +155,9 @@ const SECTIONS: Section[] = [
           <br />
           <strong>Click the body and the reading is pinned</strong>, so it stops
           following the cursor and you can walk over to it — the panel sits over
-          the model, and the journey to it used to cross other structures and
-          rewrite the list on the way. Hover a line for <Ui>solo</Ui> to leave only
+          the model, and the journey to it crosses other structures that would
+          otherwise rewrite the list on the way. Without a click it simply
+          follows the pointer and goes when the pointer does. Hover a line for <Ui>solo</Ui> to leave only
           that structure, or take the whole column with{" "}
           <Ui>Isolate these …</Ui>: a ray through the shoulder is a surgical
           approach written down, in the order you would meet it. <Ui>Esc</Ui> puts
@@ -763,9 +764,9 @@ const SECTIONS: Section[] = [
             ["C", "Let go of the selection"],
             ["U", "Restore everything hidden"],
             ["X", "Step the exploded view apart, and back together"],
-            ["+ −", "Move closer in, or further away"],
             ["F", "Frame the view — the body, or what you are studying"],
             ["A P L R S", "The five anatomical viewpoints, as on the buttons"],
+            ["+ −", "Move closer in, or further away"],
             ["Enter", "Send your question"],
             ["Shift+Enter", "New line instead of sending"],
             ["Ctrl+Enter", "Save the note you are writing"],

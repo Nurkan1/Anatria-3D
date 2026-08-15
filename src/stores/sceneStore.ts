@@ -406,44 +406,24 @@ interface SceneStore extends SceneViewState {
    * travels — so it lives outside `SceneViewState` and nothing persists it.
    */
   depthStack: string[];
-  /**
-   * Whether that reading is still being taken, or is the last one held.
-   *
-   * The panel was unreachable without this, and the cause was circular: it is
-   * drawn inside the viewport, so moving the pointer towards it is a move over
-   * no structure, which emptied the list and removed the panel from under the
-   * cursor before it could be clicked. The rows had been clickable all along.
-   *
-   * So a move over nothing now **holds** the reading rather than discarding
-   * it. The list stays true — it is a record of what a ray crossed at a point,
-   * not a live measurement of where the pointer is now — and the panel says
-   * which of the two it is showing, because a stale list presented as live
-   * would be worse than no list.
-   */
-  depthStackLive: boolean;
-  /**
-   * A reading the reader clicked, kept until they let go of it.
-   *
-   * Holding on leaving the body was only half the fix. The panel is drawn
-   * *over* the model, so the journey to it crosses other structures and the
-   * list was rewritten on the way — you arrived at a different column from the
-   * one you set out for. Reaching a list and reaching the *right* list are
-   * different problems.
-   *
-   * A snapshot rather than suppressing the live reading, and the difference is
-   * load-bearing: if clicking stopped `setDepthStack` from writing, clicking a
-   * second structure would pin the first one's column, because the second
-   * reading would never have been taken. The probe keeps running; the panel
-   * simply shows this instead while it is set.
-   */
   pinnedStack: string[] | null;
 
   setManifest: (manifest: AnatomyManifest) => void;
   setHovered: (organId: string | null) => void;
   /** Ignored when the reading has not changed; see `sameStack`. */
   setDepthStack: (organIds: string[]) => void;
-  /** The pointer left the body: keep the reading, stop calling it current. */
-  holdDepthStack: () => void;
+  /**
+   * The pointer left the body, so there is no reading to show.
+   *
+   * This *held* the last one for a while, which was the first attempt at
+   * making the panel reachable — it is drawn over the model, so travelling to
+   * it left the body and emptied the list on the way. Pinning replaced that
+   * properly, and holding then became a nuisance: sweeping the pointer across
+   * the body left a panel behind that nobody had asked for.
+   *
+   * A pinned reading is unaffected. That one was asked for.
+   */
+  clearDepthStack: () => void;
   /** Freeze the current reading against the pointer wandering off it. */
   pinDepthStack: () => void;
   unpinDepthStack: () => void;
@@ -539,7 +519,6 @@ export const useSceneStore = create<SceneStore>()((set, get) => ({
   organs: {},
   hoveredOrganId: null,
   depthStack: [],
-  depthStackLive: false,
   pinnedStack: null,
   eyeTracking: true,
   depthProbeVisible: true,
@@ -563,19 +542,14 @@ export const useSceneStore = create<SceneStore>()((set, get) => ({
   setHovered: (organId) => set({ hoveredOrganId: organId }),
 
   setDepthStack: (organIds) =>
-    set((state) => {
+    set((state) =>
       // Compared before writing: the pointer emits far more moves than the
-      // reading changes, and each write re-renders the scene graph. The live
-      // flag still has to be set on an unchanged reading — travelling back
-      // over the same structure is exactly when a held panel goes live again.
-      if (sameStack(state.depthStack, organIds)) {
-        return state.depthStackLive ? state : { depthStackLive: true };
-      }
-      return { depthStack: organIds, depthStackLive: true };
-    }),
+      // reading changes, and each write re-renders the scene graph.
+      sameStack(state.depthStack, organIds) ? state : { depthStack: organIds },
+    ),
 
-  holdDepthStack: () =>
-    set((state) => (state.depthStackLive ? { depthStackLive: false } : state)),
+  clearDepthStack: () =>
+    set((state) => (state.depthStack.length === 0 ? state : { depthStack: [] })),
 
   pinDepthStack: () =>
     set((state) =>
@@ -588,8 +562,7 @@ export const useSceneStore = create<SceneStore>()((set, get) => ({
   unpinDepthStack: () =>
     set((state) => (state.pinnedStack === null ? state : { pinnedStack: null })),
 
-  dismissDepthStack: () =>
-    set({ depthStack: [], depthStackLive: false, pinnedStack: null }),
+  dismissDepthStack: () => set({ depthStack: [], pinnedStack: null }),
 
   selectFromViewport: (organId, additive = false) => {
     get().selectOrgan(organId, additive);
