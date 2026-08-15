@@ -2,6 +2,8 @@ import { useEffect } from "react";
 
 import { organLabel, organSubtitle, useSceneStore } from "@/stores/sceneStore";
 
+import { viewportKey } from "./viewportKeys";
+
 /**
  * Actions on the working selection, plus the keyboard shortcuts that drive them.
  *
@@ -28,14 +30,10 @@ export function SelectionBar() {
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      const target = event.target as HTMLElement | null;
-      // Never steal a keystroke from a field — "I" belongs to whatever the
-      // user is typing, not to the viewport.
-      if (target && /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)) return;
-      if (target?.isContentEditable) return;
-      if (event.metaKey || event.ctrlKey || event.altKey) return;
-
-      const key = event.key.toLowerCase();
+      // One place decides whether a keystroke is the viewport's — see
+      // `viewportKeys`. These letters are also letters people type.
+      const key = viewportKey(event);
+      if (key === null) return;
       if (key === "i") isolateSelection();
       else if (key === "h") hideSelection();
       else if (key === "u") unhideAll();

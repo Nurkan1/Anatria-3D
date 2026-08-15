@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSceneStore } from "@/stores/sceneStore";
 
 import { explodeScope, MAX_EXPLODE } from "./explode";
+import { viewportKey } from "./viewportKeys";
 
 /**
  * The exploded view's presence over the canvas, and the key that drives it.
@@ -55,13 +56,7 @@ export function ExplodeBar() {
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      const target = event.target as HTMLElement | null;
-      // Never steal a keystroke from a field — "X" belongs to whatever the
-      // reader is typing, not to the viewport.
-      if (target && /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)) return;
-      if (target?.isContentEditable) return;
-      if (event.metaKey || event.ctrlKey || event.altKey) return;
-      if (event.key.toLowerCase() !== "x") return;
+      if (viewportKey(event) !== "x") return;
       event.preventDefault();
       cycleExplode();
     };
