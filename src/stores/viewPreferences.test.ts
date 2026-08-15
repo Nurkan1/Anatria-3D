@@ -97,6 +97,25 @@ describe("sanitiseViewPreferences", () => {
     expect(sanitiseViewPreferences({ background: 3 }, KNOWN).background).toBeUndefined();
   });
 
+  it("carries whether the cursor list is switched off", () => {
+    // The one preference whose *false* is the interesting value: someone on a
+    // small screen turned it off because it covered the chest, and a reader
+    // who has to turn it off again on every launch will conclude it does not
+    // stay off rather than that it was never saved.
+    expect(sanitiseViewPreferences({ depthProbeVisible: false }, KNOWN).depthProbeVisible)
+      .toBe(false);
+    expect(sanitiseViewPreferences({ depthProbeVisible: true }, KNOWN).depthProbeVisible)
+      .toBe(true);
+  });
+
+  it("leaves the cursor list alone when nothing was stored", () => {
+    // Absent must not read as off. It is on by default, and a journal written
+    // by a build that predates the setting has no opinion about it.
+    expect(sanitiseViewPreferences({}, KNOWN).depthProbeVisible).toBeUndefined();
+    expect(sanitiseViewPreferences({ depthProbeVisible: "no" }, KNOWN).depthProbeVisible)
+      .toBeUndefined();
+  });
+
   it("ignores a value of the wrong type rather than storing it", () => {
     const clean = sanitiseViewPreferences(
       { eyeTracking: "yes", systemOpacity: { skeletal: "half" } },

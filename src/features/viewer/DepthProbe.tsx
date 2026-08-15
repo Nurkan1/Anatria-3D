@@ -19,6 +19,7 @@ import { tissueHex } from "./palette";
  * every pointer move and discarding all but the first entry.
  */
 export function DepthProbe() {
+  const visible = useSceneStore((s) => s.depthProbeVisible);
   const stack = useSceneStore((s) => s.depthStack);
   const organs = useSceneStore((s) => s.organs);
   const hovered = useSceneStore((s) => s.hoveredOrganId);
@@ -28,6 +29,11 @@ export function DepthProbe() {
   const layers = stack.map((id) => organs[id]).filter((organ) => !!organ);
   // One entry is the thing already named under the cursor. A panel that adds
   // nothing to the hover label is furniture.
+  // Switched off from the left panel or from the structure menu. Checked here
+  // rather than at the mount point so the reading itself keeps being taken —
+  // the renderer computes the stack either way, and turning the panel back on
+  // should show the truth immediately rather than after the next pointer move.
+  if (!visible) return null;
   if (layers.length < 2) return null;
 
   return (

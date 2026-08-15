@@ -32,7 +32,8 @@ export function startViewPersistence(): () => void {
       state.systemOpacity !== previous.systemOpacity ||
       state.eyeTracking !== previous.eyeTracking ||
       state.labelsVisible !== previous.labelsVisible ||
-      state.background !== previous.background;
+      state.background !== previous.background ||
+      state.depthProbeVisible !== previous.depthProbeVisible;
     if (!changed) return;
 
     clearTimeout(timer);
@@ -44,6 +45,7 @@ export function startViewPersistence(): () => void {
         eyeTracking: current.eyeTracking,
         labelsVisible: current.labelsVisible,
         background: current.background,
+        depthProbeVisible: current.depthProbeVisible,
       });
     }, SETTLE_MS);
   });

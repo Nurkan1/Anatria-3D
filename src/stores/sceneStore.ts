@@ -385,6 +385,19 @@ interface SceneStore extends SceneViewState {
    * A preference like the others here, so it survives `reset_view`.
    */
   background: BackgroundMode;
+  /**
+   * Whether the depth reading is drawn beside the cursor.
+   *
+   * On by default, because it answers a question no page in a book can and
+   * nobody would think to look for it. Off is for small screens, where a list
+   * that long sits over the thorax — the panel is most in the way precisely
+   * when the viewport is most cramped.
+   *
+   * A preference like `eyeTracking`: someone who turned it off wants it off
+   * for the next structure too, and `reset_view` is not a request to have it
+   * back.
+   */
+  depthProbeVisible: boolean;
 
   /**
    * Every structure under the cursor, nearest first.
@@ -479,7 +492,9 @@ export const useSceneStore = create<SceneStore>()((set) => ({
   organs: {},
   hoveredOrganId: null,
   depthStack: [],
+  depthStackLive: false,
   eyeTracking: true,
+  depthProbeVisible: true,
   labelsVisible: false,
   background: "dark",
 
@@ -500,13 +515,25 @@ export const useSceneStore = create<SceneStore>()((set) => ({
   setHovered: (organId) => set({ hoveredOrganId: organId }),
 
   setDepthStack: (organIds) =>
-    set((state) =>
+    set((state) => {
       // Compared before writing: the pointer emits far more moves than the
-      // reading changes, and each write re-renders the scene graph.
-      sameStack(state.depthStack, organIds) ? state : { depthStack: organIds },
-    ),
+      // reading changes, and each write re-renders the scene graph. The live
+      // flag still has to be set on an unchanged reading — travelling back
+      // over the same structure is exactly when a held panel goes live again.
+      if (sameStack(state.depthStack, organIds)) {
+        return state.depthStackLive ? state : { depthStackLive: true };
+      }
+      return { depthStack: organIds, depthStackLive: true };
+    }),
+
+  holdDepthStack: () =>
+    set((state) => (state.depthStackLive ? { depthStackLive: false } : state)),
+
+  dismissDepthStack: () => set({ depthStack: [], depthStackLive: false }),
 
   setEyeTracking: (enabled) => set({ eyeTracking: enabled }),
+
+  setDepthProbeVisible: (visible) => set({ depthProbeVisible: visible }),
 
   setLabelsVisible: (visible) => set({ labelsVisible: visible }),
 
@@ -526,6 +553,7 @@ export const useSceneStore = create<SceneStore>()((set) => ({
         : state.hiddenSystems,
       systemOpacity: preferences.systemOpacity ?? state.systemOpacity,
       eyeTracking: preferences.eyeTracking ?? state.eyeTracking,
+      depthProbeVisible: preferences.depthProbeVisible ?? state.depthProbeVisible,
       labelsVisible: preferences.labelsVisible ?? state.labelsVisible,
       background: preferences.background ?? state.background,
     })),

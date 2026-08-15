@@ -37,6 +37,8 @@ export function StructureMenu({
   const hideSelection = useSceneStore((s) => s.hideSelection);
   const studyGroup = useSceneStore((s) => s.studyGroup);
   const applyCommand = useSceneStore((s) => s.applyCommand);
+  const depthProbeVisible = useSceneStore((s) => s.depthProbeVisible);
+  const setDepthProbeVisible = useSceneStore((s) => s.setDepthProbeVisible);
   const showAllSystems = useSceneStore((s) => s.showAllSystems);
   const setHovered = useSceneStore((s) => s.setHovered);
   const activePatient = useCaseStore(activeCase);
@@ -142,6 +144,18 @@ export function StructureMenu({
         Fly to this structure
       </MenuItem>
       <MenuItem onClick={act(showAllSystems)}>Show everything</MenuItem>
+      {/*
+        Here as well as in the left panel, and not as duplication.
+
+        The panel is most in the way exactly when the viewport is most cramped,
+        and at that moment the reader is holding a right-click over the body
+        with the list sitting on top of what they were trying to see. Sending
+        them to the far side of the window to find a checkbox is asking them to
+        cross the thing that is bothering them.
+      */}
+      <MenuItem onClick={act(() => setDepthProbeVisible(!depthProbeVisible))}>
+        {depthProbeVisible ? "Hide the cursor list" : "Show the cursor list"}
+      </MenuItem>
 
       {/* Only with a patient open: a complaint has to belong to someone, and
           there is nowhere to file one otherwise. */}

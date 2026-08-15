@@ -254,6 +254,8 @@ export function AnatomyTree() {
     );
   const eyeTracking = useSceneStore((s) => s.eyeTracking);
   const setEyeTracking = useSceneStore((s) => s.setEyeTracking);
+  const depthProbeVisible = useSceneStore((s) => s.depthProbeVisible);
+  const setDepthProbeVisible = useSceneStore((s) => s.setDepthProbeVisible);
   const labelsVisible = useSceneStore((s) => s.labelsVisible);
   const setLabelsVisible = useSceneStore((s) => s.setLabelsVisible);
   const background = useSceneStore((s) => s.background);
@@ -468,6 +470,22 @@ export function AnatomyTree() {
         <p className="text-[10px] leading-snug text-slate-600">
           Names in the margins with a leader line to each structure, the way an atlas
           plate does it. Select structures — or isolate a region — to name them.
+        </p>
+
+        <label className="flex cursor-pointer items-center gap-2 pt-1 text-xs text-slate-300">
+          <input
+            type="checkbox"
+            checked={depthProbeVisible}
+            onChange={(event) => setDepthProbeVisible(event.target.checked)}
+            className="accent-sky-500"
+          />
+          <span>List what is under the cursor</span>
+        </label>
+        <p className="text-[10px] leading-snug text-slate-600">
+          The panel on the right, naming everything the cursor passes through from
+          the surface inwards. It is the one thing here no page in a book can
+          answer — but on a small screen it sits over the chest, so it comes off
+          from here or from the right-click menu.
         </p>
 
         <div className="flex items-center gap-2 pt-1">

@@ -32,6 +32,7 @@ export interface ViewPreferences {
   eyeTracking: boolean;
   labelsVisible: boolean;
   background: BackgroundMode;
+  depthProbeVisible: boolean;
 }
 
 const clamp = (value: number, low: number, high: number) =>
@@ -79,6 +80,9 @@ export function sanitiseViewPreferences(
 
   if (typeof stored.eyeTracking === "boolean") clean.eyeTracking = stored.eyeTracking;
   if (typeof stored.labelsVisible === "boolean") clean.labelsVisible = stored.labelsVisible;
+  if (typeof stored.depthProbeVisible === "boolean") {
+    clean.depthProbeVisible = stored.depthProbeVisible;
+  }
   if (stored.background === "dark" || stored.background === "light") {
     clean.background = stored.background;
   }
