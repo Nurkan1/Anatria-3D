@@ -20,13 +20,29 @@ import { useStudyStore } from "@/stores/studyStore";
 const PLANES: SectionPlane[] = ["axial", "coronal", "sagittal"];
 
 /**
- * How many structures a system may have before it starts collapsed.
+ * Whether a system's structures are listed.
  *
- * The nervous system alone carries over 1,600 structures. Rendering every one
- * as a button on mount costs a visible freeze and buries the systems list under
- * a wall of names, so large systems open on demand.
+ * **Everything starts closed, and nothing is remembered.** There used to be a
+ * size threshold: systems under sixty structures opened on mount, which meant
+ * five of them did, and every launch began by pressing "Collapse all". A
+ * default that has to be undone on every start is not a default.
+ *
+ * Closed also removes the reason the threshold existed. The nervous system
+ * alone carries over five hundred rows, and rendering them as buttons on mount
+ * cost a visible freeze; with nothing open there is nothing to render until
+ * somebody asks for it.
+ *
+ * A function rather than the expression written twice: the global toggle reads
+ * the same state to decide whether it says "expand" or "collapse", and a
+ * default that disagreed between the two would make the button lie about what
+ * it is about to do.
  */
-const AUTO_COLLAPSE_ABOVE = 60;
+export function systemIsOpen(
+  expanded: Record<string, boolean>,
+  system: string,
+): boolean {
+  return expanded[system] === true;
+}
 
 /**
  * Take the current view out of the app as an image.
@@ -267,9 +283,7 @@ export function AnatomyTree() {
    * closing it, and a toggle keyed on *all* being open would make the button
    * say "expand" while the thing in your way is still on screen.
    */
-  const anyOpen = bySystem.some(
-    ([system, list]) => expanded[system] ?? list.length <= AUTO_COLLAPSE_ABOVE,
-  );
+  const anyOpen = bySystem.some(([system]) => systemIsOpen(expanded, system));
   const totalStructures = bySystem.reduce((sum, [, list]) => sum + list.length, 0);
 
   return (
@@ -302,7 +316,7 @@ export function AnatomyTree() {
           )}
         </div>
         {bySystem.map(([system, list]) => {
-          const isOpen = expanded[system] ?? list.length <= AUTO_COLLAPSE_ABOVE;
+          const isOpen = systemIsOpen(expanded, system);
           return (
           <div key={system} className="mb-3">
             <div className="mb-1 flex items-center gap-2 text-sm font-medium text-slate-200">
