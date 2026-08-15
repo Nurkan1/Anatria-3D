@@ -21,29 +21,50 @@ import { tissueHex } from "./palette";
 export function DepthProbe() {
   const visible = useSceneStore((s) => s.depthProbeVisible);
   const stack = useSceneStore((s) => s.depthStack);
+  const live = useSceneStore((s) => s.depthStackLive);
+  const dismiss = useSceneStore((s) => s.dismissDepthStack);
   const organs = useSceneStore((s) => s.organs);
   const hovered = useSceneStore((s) => s.hoveredOrganId);
   const setHovered = useSceneStore((s) => s.setHovered);
   const applyCommand = useSceneStore((s) => s.applyCommand);
 
   const layers = stack.map((id) => organs[id]).filter((organ) => !!organ);
-  // One entry is the thing already named under the cursor. A panel that adds
-  // nothing to the hover label is furniture.
   // Switched off from the left panel or from the structure menu. Checked here
   // rather than at the mount point so the reading itself keeps being taken —
   // the renderer computes the stack either way, and turning the panel back on
   // should show the truth immediately rather than after the next pointer move.
   if (!visible) return null;
+  // One entry is the thing already named under the cursor. A panel that adds
+  // nothing to the hover label is furniture.
   if (layers.length < 2) return null;
 
   return (
     <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
-      <div className="pointer-events-auto w-60 overflow-hidden rounded-lg border border-slate-700/80 bg-slate-900/90 shadow-lg backdrop-blur">
-        <p className="border-b border-slate-800 px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
-          Under the cursor
-          <span className="ml-1.5 font-normal normal-case tracking-normal text-slate-600">
-            surface inwards
+      <div
+        className={`pointer-events-auto w-60 overflow-hidden rounded-lg border bg-slate-900/90 shadow-lg backdrop-blur transition-colors ${
+          live ? "border-slate-700/80" : "border-sky-700/70"
+        }`}
+      >
+        <p className="flex items-center gap-1.5 border-b border-slate-800 px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+          {/*
+            The heading changes with the state, rather than a badge appearing
+            beside a fixed one. "Under the cursor" is a claim about where the
+            pointer is, and the moment the pointer is elsewhere it stops being
+            true — a list that says it while pointing at nothing is the kind of
+            small lie that costs an interface its credibility.
+          */}
+          {live ? "Under the cursor" : "Where you last pointed"}
+          <span className="font-normal normal-case tracking-normal text-slate-600">
+            {live ? "surface inwards" : "held — click any layer"}
           </span>
+          <button
+            type="button"
+            onClick={dismiss}
+            title="Close this reading"
+            className="ml-auto rounded px-1 text-slate-600 transition hover:text-slate-200"
+          >
+            ✕
+          </button>
         </p>
 
         <ol className="max-h-[46vh] overflow-y-auto py-1">

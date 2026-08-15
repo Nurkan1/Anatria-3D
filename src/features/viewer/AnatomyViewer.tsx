@@ -66,11 +66,10 @@ export function AnatomyViewer() {
   const [menu, setMenu] = useState<MenuTarget | null>(null);
   const container = useRef<HTMLDivElement>(null);
   const pressAt = useRef<{ x: number; y: number } | null>(null);
-  const setDepthStack = useSceneStore((s) => s.setDepthStack);
+  const holdDepthStack = useSceneStore((s) => s.holdDepthStack);
   // Lights the open patient's complaints on the body. Derived from the
   // journal, so it costs no model call and lands the moment one is selected.
   useCaseMarks();
-  const clearDepthStack = useCallback(() => setDepthStack([]), [setDepthStack]);
 
   const openMenu = useCallback((organId: string, x: number, y: number) => {
     // Right-drag pans the camera, and the browser fires `contextmenu` at the
@@ -122,9 +121,12 @@ export function AnatomyViewer() {
         // the canvas fires while the event is still bubbling and React
         // dispatches to this container afterwards. So by now a structure has
         // either answered for this move or the pointer is over nothing.
-        if (!consumeDepthStackReport()) clearDepthStack();
+        // Held, not cleared. The panel lives inside this container, so a move
+        // towards it is a move over nothing — clearing here removed the panel
+        // from under the pointer that was travelling to click it.
+        if (!consumeDepthStackReport()) holdDepthStack();
       }}
-      onPointerLeave={clearDepthStack}
+      onPointerLeave={holdDepthStack}
       onContextMenu={(event) => event.preventDefault()}
     >
       <Canvas

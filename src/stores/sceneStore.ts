@@ -406,12 +406,32 @@ interface SceneStore extends SceneViewState {
    * travels — so it lives outside `SceneViewState` and nothing persists it.
    */
   depthStack: string[];
+  /**
+   * Whether that reading is still being taken, or is the last one held.
+   *
+   * The panel was unreachable without this, and the cause was circular: it is
+   * drawn inside the viewport, so moving the pointer towards it is a move over
+   * no structure, which emptied the list and removed the panel from under the
+   * cursor before it could be clicked. The rows had been clickable all along.
+   *
+   * So a move over nothing now **holds** the reading rather than discarding
+   * it. The list stays true — it is a record of what a ray crossed at a point,
+   * not a live measurement of where the pointer is now — and the panel says
+   * which of the two it is showing, because a stale list presented as live
+   * would be worse than no list.
+   */
+  depthStackLive: boolean;
 
   setManifest: (manifest: AnatomyManifest) => void;
   setHovered: (organId: string | null) => void;
   /** Ignored when the reading has not changed; see `sameStack`. */
   setDepthStack: (organIds: string[]) => void;
+  /** The pointer left the body: keep the reading, stop calling it current. */
+  holdDepthStack: () => void;
+  /** The reader closed the panel. Nothing to hold on to. */
+  dismissDepthStack: () => void;
   setEyeTracking: (enabled: boolean) => void;
+  setDepthProbeVisible: (visible: boolean) => void;
   setLabelsVisible: (visible: boolean) => void;
   toggleScan: () => void;
   setBackground: (mode: BackgroundMode) => void;

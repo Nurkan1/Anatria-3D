@@ -915,3 +915,71 @@ describe("the scan view", () => {
     expect(useSceneStore.getState().systemOpacity).toEqual({});
   });
 });
+
+/**
+ * The reading under the cursor, and the state that made the panel usable.
+ *
+ * The rows were clickable from the day the panel was written; nobody could
+ * reach them. The panel is drawn inside the viewport, so moving the pointer
+ * towards it is a move over no structure — which emptied the list and took the
+ * panel out from under the pointer travelling to click it. Holding rather than
+ * clearing is the whole fix, and these pin its edges.
+ */
+describe("holding the depth reading", () => {
+  beforeEach(() => {
+    useSceneStore.setState({ depthStack: [], depthStackLive: false });
+  });
+
+  it("is live while a reading is arriving", () => {
+    useSceneStore.getState().setDepthStack(["skin", "platysma"]);
+
+    expect(useSceneStore.getState().depthStackLive).toBe(true);
+  });
+
+  it("keeps the list when the pointer leaves the body", () => {
+    // The bug, in one assertion: this used to empty, and an empty list hides
+    // the panel.
+    useSceneStore.getState().setDepthStack(["skin", "platysma"]);
+    useSceneStore.getState().holdDepthStack();
+
+    expect(useSceneStore.getState().depthStack).toEqual(["skin", "platysma"]);
+    expect(useSceneStore.getState().depthStackLive).toBe(false);
+  });
+
+  it("goes live again on returning to the same structure", () => {
+    // The subtle one. `setDepthStack` skips writing when the reading has not
+    // changed, to spare a re-render on every pointer move — so travelling back
+    // over the very structure you left would report an identical stack and,
+    // without this, leave the panel saying "held" for ever.
+    useSceneStore.getState().setDepthStack(["skin", "platysma"]);
+    useSceneStore.getState().holdDepthStack();
+
+    useSceneStore.getState().setDepthStack(["skin", "platysma"]);
+
+    expect(useSceneStore.getState().depthStackLive).toBe(true);
+  });
+
+  it("closes to nothing when the reader dismisses it", () => {
+    useSceneStore.getState().setDepthStack(["skin", "platysma"]);
+    useSceneStore.getState().dismissDepthStack();
+
+    expect(useSceneStore.getState().depthStack).toEqual([]);
+    expect(useSceneStore.getState().depthStackLive).toBe(false);
+  });
+
+  it("does not resurrect a dismissed panel by leaving the body again", () => {
+    useSceneStore.getState().setDepthStack(["skin", "platysma"]);
+    useSceneStore.getState().dismissDepthStack();
+    useSceneStore.getState().holdDepthStack();
+
+    expect(useSceneStore.getState().depthStack).toEqual([]);
+  });
+
+  it("holds the newest reading, not the first one taken", () => {
+    useSceneStore.getState().setDepthStack(["skin", "platysma"]);
+    useSceneStore.getState().setDepthStack(["deltoid", "humerus"]);
+    useSceneStore.getState().holdDepthStack();
+
+    expect(useSceneStore.getState().depthStack).toEqual(["deltoid", "humerus"]);
+  });
+});
