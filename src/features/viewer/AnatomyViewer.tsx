@@ -11,6 +11,12 @@ import { AnatomyScene } from "./AnatomyScene";
 import { backgroundTheme } from "./background";
 import { ColourLegend } from "./ColourLegend";
 import { consumeClickReport, consumeDepthStackReport } from "./depthStack";
+import {
+  beginPress,
+  DRAG_SLOP,
+  pressTravelled,
+  trackPress as beginTrack,
+} from "./dragGuard";
 import { DepthProbe } from "./DepthProbe";
 import { ExplodeBar } from "./ExplodeBar";
 import { IlluminationBar } from "./IlluminationBar";
@@ -77,7 +83,9 @@ export function AnatomyViewer() {
     // end of that drag too. Opening a menu after a deliberate pan would be
     // maddening, so a press that travelled is treated as navigation.
     const start = pressAt.current;
-    if (start && Math.hypot(x - start.x, y - start.y) > 6) return;
+    // The same rule, and now literally the same number: a press that
+    // travelled is navigation, whichever button was held down for it.
+    if (start && Math.hypot(x - start.x, y - start.y) > DRAG_SLOP) return;
 
     const bounds = container.current?.getBoundingClientRect();
     setMenu({ organId, x: x - (bounds?.left ?? 0), y: y - (bounds?.top ?? 0) });
@@ -116,8 +124,10 @@ export function AnatomyViewer() {
       className="relative h-full w-full"
       onPointerDown={(event) => {
         if (event.button === 2) pressAt.current = { x: event.clientX, y: event.clientY };
+        beginPress(event.clientX, event.clientY);
       }}
-      onPointerMove={() => {
+      onPointerMove={(event) => {
+        beginTrack(event.clientX, event.clientY);
         // Runs after the canvas's own listener, because a native listener on
         // the canvas fires while the event is still bubbling and React
         // dispatches to this container afterwards. So by now a structure has
@@ -145,6 +155,10 @@ export function AnatomyViewer() {
         // Only for clicks that landed on the canvas: the overlays are children
         // of this container too, and a click on the panel's own rows must not
         // be read as a click on the body behind it.
+        // Orbiting is press, travel, release, and the browser calls the
+        // release a click. Turning the body to see the back of the heart used
+        // to finish by selecting a rib.
+        if (pressTravelled()) return;
         if (!(event.target instanceof HTMLCanvasElement)) return;
         if (consumeClickReport()) return;
         const nearest = useSceneStore.getState().depthStack[0];

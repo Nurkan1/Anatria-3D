@@ -4,6 +4,7 @@ import * as THREE from "three";
 import { GHOST_CLICK_THROUGH, type PathologyOverlay } from "@/stores/sceneStore";
 
 import { reportClick } from "./depthStack";
+import { pressTravelled } from "./dragGuard";
 
 import { shouldSuppressClick } from "./areaSelect";
 import { coverageColour } from "./coverage";
@@ -485,6 +486,9 @@ export const OrganMesh = memo(function OrganMesh({
         // A loop that finished over this structure must not also select it —
         // R3F raises `click` on pointer-up however far the pointer travelled.
         if (shouldSuppressClick()) return;
+        // And nor must an orbit. Same reason, wider gesture: the release at
+        // the end of a drag is a click as far as the browser is concerned.
+        if (pressTravelled()) return;
         // Ctrl/Cmd builds a set; a plain click replaces it. This is the gesture
         // every file manager and design tool already trained people on.
         reportClick();
