@@ -421,6 +421,22 @@ interface SceneStore extends SceneViewState {
    * would be worse than no list.
    */
   depthStackLive: boolean;
+  /**
+   * A reading the reader clicked, kept until they let go of it.
+   *
+   * Holding on leaving the body was only half the fix. The panel is drawn
+   * *over* the model, so the journey to it crosses other structures and the
+   * list was rewritten on the way — you arrived at a different column from the
+   * one you set out for. Reaching a list and reaching the *right* list are
+   * different problems.
+   *
+   * A snapshot rather than suppressing the live reading, and the difference is
+   * load-bearing: if clicking stopped `setDepthStack` from writing, clicking a
+   * second structure would pin the first one's column, because the second
+   * reading would never have been taken. The probe keeps running; the panel
+   * simply shows this instead while it is set.
+   */
+  pinnedStack: string[] | null;
 
   setManifest: (manifest: AnatomyManifest) => void;
   setHovered: (organId: string | null) => void;
@@ -428,6 +444,17 @@ interface SceneStore extends SceneViewState {
   setDepthStack: (organIds: string[]) => void;
   /** The pointer left the body: keep the reading, stop calling it current. */
   holdDepthStack: () => void;
+  /** Freeze the current reading against the pointer wandering off it. */
+  pinDepthStack: () => void;
+  unpinDepthStack: () => void;
+  /**
+   * Select by clicking the body, which also pins the reading at that point.
+   *
+   * Its own action rather than a flag on `selectOrgan`: the tree and the search
+   * box select too, and pinning a depth reading taken wherever the pointer
+   * happened to be resting would be a reading of nothing in particular.
+   */
+  selectFromViewport: (organId: string | null, additive?: boolean) => void;
   /** The reader closed the panel. Nothing to hold on to. */
   dismissDepthStack: () => void;
   setEyeTracking: (enabled: boolean) => void;
@@ -506,13 +533,14 @@ interface SceneStore extends SceneViewState {
   resetView: () => void;
 }
 
-export const useSceneStore = create<SceneStore>()((set) => ({
+export const useSceneStore = create<SceneStore>()((set, get) => ({
   ...initialViewState,
   manifest: null,
   organs: {},
   hoveredOrganId: null,
   depthStack: [],
   depthStackLive: false,
+  pinnedStack: null,
   eyeTracking: true,
   depthProbeVisible: true,
   labelsVisible: false,
@@ -549,7 +577,27 @@ export const useSceneStore = create<SceneStore>()((set) => ({
   holdDepthStack: () =>
     set((state) => (state.depthStackLive ? { depthStackLive: false } : state)),
 
-  dismissDepthStack: () => set({ depthStack: [], depthStackLive: false }),
+  pinDepthStack: () =>
+    set((state) =>
+      // Nothing under the pointer is nothing worth pinning: a click that
+      // landed on a structure the ray never reported would freeze an empty
+      // panel open with no way to tell why.
+      state.depthStack.length > 0 ? { pinnedStack: state.depthStack } : state,
+    ),
+
+  unpinDepthStack: () =>
+    set((state) => (state.pinnedStack === null ? state : { pinnedStack: null })),
+
+  dismissDepthStack: () =>
+    set({ depthStack: [], depthStackLive: false, pinnedStack: null }),
+
+  selectFromViewport: (organId, additive = false) => {
+    get().selectOrgan(organId, additive);
+    // Only a click on the body pins. Selecting from the tree or the search box
+    // reaches `selectOrgan` directly and leaves the panel live, because there
+    // is no reading behind those — the pointer was never over the model.
+    if (organId !== null) get().pinDepthStack();
+  },
 
   setEyeTracking: (enabled) => set({ eyeTracking: enabled }),
 
@@ -610,7 +658,7 @@ export const useSceneStore = create<SceneStore>()((set) => ({
       return { selectedOrganIds: [...merged] };
     }),
 
-  clearSelection: () => set({ selectedOrganIds: [] }),
+  clearSelection: () => set({ selectedOrganIds: [], pinnedStack: null }),
 
   setCaseMarks: (marks) => set({ caseMarks: marks }),
 

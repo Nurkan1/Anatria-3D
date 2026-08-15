@@ -135,7 +135,9 @@ const SECTIONS: Section[] = [
         </p>
         <p>
           A ghosted structure stops catching clicks, so you can reach what is under
-          it. Select it from this panel instead when you want the ghost itself.
+          it. When <em>everything</em> is ghosted there is nothing solid left to
+          catch one, and a click then picks the nearest thing the cursor is
+          crossing — the same structure the panel on the right names first.
         </p>
         <Callout>
           <strong>Point at the body and look at the panel on the right.</strong> It

@@ -3,6 +3,8 @@ import * as THREE from "three";
 
 import { GHOST_CLICK_THROUGH, type PathologyOverlay } from "@/stores/sceneStore";
 
+import { reportClick } from "./depthStack";
+
 import { shouldSuppressClick } from "./areaSelect";
 import { coverageColour } from "./coverage";
 import { scanColour } from "./scan";
@@ -485,6 +487,7 @@ export const OrganMesh = memo(function OrganMesh({
         if (shouldSuppressClick()) return;
         // Ctrl/Cmd builds a set; a plain click replaces it. This is the gesture
         // every file manager and design tool already trained people on.
+        reportClick();
         onSelect(organ.organ_id, event.ctrlKey || event.metaKey);
       }}
       onContextMenu={(event) => {

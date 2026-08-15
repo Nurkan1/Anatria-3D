@@ -1,10 +1,12 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
 import {
+  consumeClickReport,
   consumeDepthStackReport,
   MAX_STACK,
   probeGlow,
   PROBE_REACH,
+  reportClick,
   reportDepthStack,
   sameStack,
   stackFromCrossings,
@@ -119,5 +121,42 @@ describe("the report flag", () => {
     // Which is how the panel learns to clear: over the background no structure
     // runs a handler at all, so nothing answers for that move.
     expect(consumeDepthStackReport()).toBe(false);
+  });
+});
+
+/**
+ * The click flag, and the gap it closes.
+ *
+ * A structure faded past `GHOST_CLICK_THROUGH` declines clicks so the event can
+ * carry on to the first thing solid enough to take it. Ghost the whole body and
+ * there is no such thing: every handler along the ray declines, and a single
+ * click did nothing at all — while double-click, which never carried that
+ * guard, went on isolating. The viewport now answers the unclaimed click from
+ * the reading it is already taking, and this is how it learns nobody else did.
+ */
+describe("the click flag", () => {
+  beforeEach(() => {
+    consumeClickReport();
+  });
+
+  it("is consumed exactly once", () => {
+    // Two clicks answered by one report would let the viewport select twice
+    // for a single press.
+    reportClick();
+    expect(consumeClickReport()).toBe(true);
+    expect(consumeClickReport()).toBe(false);
+  });
+
+  it("starts false, so an unclaimed click is answered", () => {
+    expect(consumeClickReport()).toBe(false);
+  });
+
+  it("is independent of the depth-stack flag", () => {
+    // They ride on different events — one on every pointer move, one on a
+    // press — and a shared flag would have each consuming the other's answer.
+    reportDepthStack();
+
+    expect(consumeClickReport()).toBe(false);
+    expect(consumeDepthStackReport()).toBe(true);
   });
 });

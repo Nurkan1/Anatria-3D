@@ -405,7 +405,11 @@ function SystemMeshes({
   const systemOpacity = useSceneStore((s) => s.systemOpacity);
   const isolatedOrganIds = useSceneStore((s) => s.isolatedOrganIds);
   const setHovered = useSceneStore((s) => s.setHovered);
-  const selectOrgan = useSceneStore((s) => s.selectOrgan);
+  // The viewport's own select: it pins the depth reading as well, so the
+  // panel still shows the column you clicked once the pointer has travelled
+  // over other structures to reach it. The tree and the search box keep
+  // using `selectOrgan`, which has no reading behind it to pin.
+  const selectOrgan = useSceneStore((s) => s.selectFromViewport);
   const studyOrgan = useSceneStore((s) => s.studyOrgan);
   const studyRegion = useSceneStore((s) => s.studyRegion);
   const setDepthStack = useSceneStore((s) => s.setDepthStack);

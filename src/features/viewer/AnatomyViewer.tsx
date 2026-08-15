@@ -10,7 +10,7 @@ import { readStoredView, sanitiseViewPreferences } from "@/stores/viewPreference
 import { AnatomyScene } from "./AnatomyScene";
 import { backgroundTheme } from "./background";
 import { ColourLegend } from "./ColourLegend";
-import { consumeDepthStackReport } from "./depthStack";
+import { consumeClickReport, consumeDepthStackReport } from "./depthStack";
 import { DepthProbe } from "./DepthProbe";
 import { ExplodeBar } from "./ExplodeBar";
 import { IlluminationBar } from "./IlluminationBar";
@@ -67,6 +67,7 @@ export function AnatomyViewer() {
   const container = useRef<HTMLDivElement>(null);
   const pressAt = useRef<{ x: number; y: number } | null>(null);
   const holdDepthStack = useSceneStore((s) => s.holdDepthStack);
+  const selectFromViewport = useSceneStore((s) => s.selectFromViewport);
   // Lights the open patient's complaints on the body. Derived from the
   // journal, so it costs no model call and lands the moment one is selected.
   useCaseMarks();
@@ -125,6 +126,29 @@ export function AnatomyViewer() {
         // towards it is a move over nothing — clearing here removed the panel
         // from under the pointer that was travelling to click it.
         if (!consumeDepthStackReport()) holdDepthStack();
+      }}
+      onClick={(event) => {
+        // The click nobody wanted.
+        //
+        // A structure faded past `GHOST_CLICK_THROUGH` declines clicks so the
+        // event can carry on to the first thing solid enough to take it. With
+        // the whole body ghosted there is no such thing, so every handler
+        // along the ray declines and a single click did nothing at all — while
+        // double-click, which never had that guard, went on isolating.
+        //
+        // The reading is still being taken: `onPointerMove` has no guard
+        // either, which is why the panel keeps listing what is under the
+        // cursor. So answer from that. `depthStack[0]` is the nearest crossing
+        // — the very structure the panel names first, and the one a reader
+        // pointing at the body means.
+        //
+        // Only for clicks that landed on the canvas: the overlays are children
+        // of this container too, and a click on the panel's own rows must not
+        // be read as a click on the body behind it.
+        if (!(event.target instanceof HTMLCanvasElement)) return;
+        if (consumeClickReport()) return;
+        const nearest = useSceneStore.getState().depthStack[0];
+        if (nearest) selectFromViewport(nearest, event.ctrlKey || event.metaKey);
       }}
       onPointerLeave={holdDepthStack}
       onContextMenu={(event) => event.preventDefault()}

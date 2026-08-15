@@ -1,5 +1,6 @@
 import { organLabel, organSubtitle, useSceneStore } from "@/stores/sceneStore";
 
+import { depthReadingState, DISMISS_HINT, HEADING, SUBHEADING } from "./depthReading";
 import { MAX_STACK } from "./depthStack";
 import { tissueHex } from "./palette";
 
@@ -22,13 +23,18 @@ export function DepthProbe() {
   const visible = useSceneStore((s) => s.depthProbeVisible);
   const stack = useSceneStore((s) => s.depthStack);
   const live = useSceneStore((s) => s.depthStackLive);
+  const pinned = useSceneStore((s) => s.pinnedStack);
   const dismiss = useSceneStore((s) => s.dismissDepthStack);
   const organs = useSceneStore((s) => s.organs);
   const hovered = useSceneStore((s) => s.hoveredOrganId);
   const setHovered = useSceneStore((s) => s.setHovered);
   const applyCommand = useSceneStore((s) => s.applyCommand);
 
-  const layers = stack.map((id) => organs[id]).filter((organ) => !!organ);
+  // The pinned reading wins over whatever the pointer is crossing now. That
+  // is the whole point of it: the journey to this panel goes over the model.
+  const showing = pinned ?? stack;
+  const state = depthReadingState(live, pinned !== null);
+  const layers = showing.map((id) => organs[id]).filter((organ) => !!organ);
   // Switched off from the left panel or from the structure menu. Checked here
   // rather than at the mount point so the reading itself keeps being taken —
   // the renderer computes the stack either way, and turning the panel back on
@@ -42,7 +48,7 @@ export function DepthProbe() {
     <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
       <div
         className={`pointer-events-auto w-60 overflow-hidden rounded-lg border bg-slate-900/90 shadow-lg backdrop-blur transition-colors ${
-          live ? "border-slate-700/80" : "border-sky-700/70"
+          state === "live" ? "border-slate-700/80" : "border-sky-700/70"
         }`}
       >
         <p className="flex items-center gap-1.5 border-b border-slate-800 px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
@@ -53,14 +59,14 @@ export function DepthProbe() {
             true — a list that says it while pointing at nothing is the kind of
             small lie that costs an interface its credibility.
           */}
-          {live ? "Under the cursor" : "Where you last pointed"}
+          {HEADING[state]}
           <span className="font-normal normal-case tracking-normal text-slate-600">
-            {live ? "surface inwards" : "held — click any layer"}
+            {SUBHEADING[state]}
           </span>
           <button
             type="button"
             onClick={dismiss}
-            title="Close this reading"
+            title={DISMISS_HINT[state]}
             className="ml-auto rounded px-1 text-slate-600 transition hover:text-slate-200"
           >
             ✕

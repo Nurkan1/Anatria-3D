@@ -118,3 +118,33 @@ export function consumeDepthStackReport(): boolean {
   reported = false;
   return answered;
 }
+
+let clicked = false;
+
+/**
+ * A structure took the click, so the viewport does not have to.
+ *
+ * The same shape as the flag above, for a different gap. A structure faded
+ * past `GHOST_CLICK_THROUGH` refuses clicks on purpose — that is what lets you
+ * ghost the skin and pick the muscle under it, because the event carries on
+ * down the ray to the first thing solid enough to want it.
+ *
+ * With the whole body ghosted there is no such thing, and every handler along
+ * the ray declines in turn. Single-click selection simply stopped working,
+ * while double-click — which never had the guard — went on isolating, so the
+ * viewport looked like it was ignoring one gesture and not the other.
+ *
+ * The reading is still being taken the whole time: `onPointerMove` has no
+ * guard either, which is why the panel keeps listing what is there. So the
+ * viewport can answer the click from what it already knows, and this flag is
+ * how it learns nobody else did.
+ */
+export function reportClick(): void {
+  clicked = true;
+}
+
+export function consumeClickReport(): boolean {
+  const answered = clicked;
+  clicked = false;
+  return answered;
+}

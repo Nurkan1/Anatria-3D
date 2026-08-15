@@ -983,3 +983,104 @@ describe("holding the depth reading", () => {
     expect(useSceneStore.getState().depthStack).toEqual(["deltoid", "humerus"]);
   });
 });
+
+/**
+ * Pinning the reading, which is the other half of making the panel usable.
+ *
+ * Holding on leaving the body got the reader *to* a list. It did not get them
+ * to the right one: the panel is drawn over the model, so the journey crosses
+ * other structures and the reading was rewritten on the way.
+ */
+describe("pinning the depth reading", () => {
+  beforeEach(() => {
+    useSceneStore.setState({
+      depthStack: [],
+      depthStackLive: false,
+      pinnedStack: null,
+      selectedOrganIds: [],
+    });
+  });
+
+  it("keeps the clicked reading while the pointer crosses other structures", () => {
+    useSceneStore.getState().setDepthStack(["skin", "platysma", "carotid"]);
+    useSceneStore.getState().selectFromViewport("platysma");
+
+    // The journey to the panel, passing over an arm on the way.
+    useSceneStore.getState().setDepthStack(["deltoid", "humerus"]);
+
+    expect(useSceneStore.getState().pinnedStack).toEqual([
+      "skin",
+      "platysma",
+      "carotid",
+    ]);
+  });
+
+  it("does not stop the probe running underneath", () => {
+    // Load-bearing. Suppressing the live reading while pinned would mean the
+    // next click pinned the *previous* column, because the new reading would
+    // never have been taken.
+    useSceneStore.getState().setDepthStack(["skin", "platysma"]);
+    useSceneStore.getState().selectFromViewport("platysma");
+    useSceneStore.getState().setDepthStack(["deltoid", "humerus"]);
+
+    expect(useSceneStore.getState().depthStack).toEqual(["deltoid", "humerus"]);
+  });
+
+  it("moves the pin to the second structure clicked, not the first", () => {
+    useSceneStore.getState().setDepthStack(["skin", "platysma"]);
+    useSceneStore.getState().selectFromViewport("platysma");
+
+    useSceneStore.getState().setDepthStack(["deltoid", "humerus"]);
+    useSceneStore.getState().selectFromViewport("deltoid");
+
+    expect(useSceneStore.getState().pinnedStack).toEqual(["deltoid", "humerus"]);
+  });
+
+  it("still selects the structure it was asked to select", () => {
+    // The regression that would matter most: this action replaced the plain
+    // one everywhere the viewport clicks, so selection has to survive intact.
+    useSceneStore.getState().setDepthStack(["skin", "platysma"]);
+    useSceneStore.getState().selectFromViewport("platysma");
+    expect(useSceneStore.getState().selectedOrganIds).toEqual(["platysma"]);
+
+    useSceneStore.getState().selectFromViewport("skin", true);
+    expect(useSceneStore.getState().selectedOrganIds).toEqual(["platysma", "skin"]);
+  });
+
+  it("pins nothing when the ray reported nothing", () => {
+    // A click that pinned an empty reading would freeze the panel shut with
+    // no visible reason and no obvious way back.
+    useSceneStore.getState().selectFromViewport("platysma");
+
+    expect(useSceneStore.getState().pinnedStack).toBeNull();
+  });
+
+  it("lets go when the selection is cleared", () => {
+    useSceneStore.getState().setDepthStack(["skin", "platysma"]);
+    useSceneStore.getState().selectFromViewport("platysma");
+
+    useSceneStore.getState().clearSelection();
+
+    expect(useSceneStore.getState().pinnedStack).toBeNull();
+  });
+
+  it("lets go when the reader closes the panel", () => {
+    useSceneStore.getState().setDepthStack(["skin", "platysma"]);
+    useSceneStore.getState().selectFromViewport("platysma");
+
+    useSceneStore.getState().dismissDepthStack();
+
+    expect(useSceneStore.getState().pinnedStack).toBeNull();
+    expect(useSceneStore.getState().depthStack).toEqual([]);
+  });
+
+  it("leaves the panel alone when the selection came from the tree", () => {
+    // `selectOrgan` is what the tree and the search box call. There is no
+    // reading behind those — the pointer was never over the model — so pinning
+    // one would freeze whatever happened to be under the cursor at the time.
+    useSceneStore.getState().setDepthStack(["skin", "platysma"]);
+    useSceneStore.getState().selectOrgan("aorta");
+
+    expect(useSceneStore.getState().pinnedStack).toBeNull();
+  });
+});
