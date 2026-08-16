@@ -31,19 +31,41 @@ git status --short --branch   # nothing uncommitted, nothing unpushed
 
 ## Version numbers
 
-Three files carry the version and **they must agree** — Tauri stamps the
-installer from `tauri.conf.json`, and a mismatch ships an installer whose file
-name contradicts the app inside it.
+### The scheme: `0.MINOR.PATCH`
 
-| File | Field |
-|---|---|
-| `package.json` | `version` |
-| `src-tauri/tauri.conf.json` | `version` |
-| `src-tauri/Cargo.toml` | `[package] version` |
+Anatria3D is **before 1.0**, and the next release after `0.1.6` is **`0.1.7`** —
+not `1.7.0`. The two are easy to transpose and they say opposite things: `0.1.x`
+says the interfaces may still move, and `1.x` is a promise of stability to
+anyone building on it. Publishing `1.0.0` is a deliberate act for the day that
+promise is meant, not a typo to arrive at.
+
+Tags are `v` plus the number: `v0.1.7`.
+
+### The five files that carry it
+
+They **must agree**. Tauri stamps the installer from `tauri.conf.json`, so a
+mismatch ships an installer whose file name contradicts the app inside it — and
+`CITATION.cff` is worse than that, because Zenodo photographs the repository at
+the tag and a stale version there tells a reader to cite a build they are not
+running.
+
+| File | Field | Written by |
+|---|---|---|
+| `package.json` | `version` | hand |
+| `src-tauri/tauri.conf.json` | `version` | hand |
+| `src-tauri/Cargo.toml` | `[package] version` | hand |
+| `src-tauri/Cargo.lock` | the `anatria3d` package entry | `cargo` — commit it |
+| `CITATION.cff` | `version` **and** `date-released` | hand |
+
+`Cargo.lock` updates itself on the next build, but it has to go into the bump
+commit or the tree is dirty at the moment of tagging. `date-released` is the
+release date, not today's date if they differ.
+
+One command prints all five, so they can be read together rather than checked
+one at a time:
 
 ```bash
-node -e "console.log(require('./package.json').version, require('./src-tauri/tauri.conf.json').version)"
-grep -m1 '^version' src-tauri/Cargo.toml
+node -e "console.log('package.json      ', require('./package.json').version); console.log('tauri.conf.json   ', require('./src-tauri/tauri.conf.json').version)" && grep -m1 '^version' src-tauri/Cargo.toml && grep -A1 '^name = "anatria3d"' src-tauri/Cargo.lock | grep '^version' && grep -E '^(version|date-released)' CITATION.cff
 ```
 
 ## Build
@@ -103,30 +125,72 @@ certutil -hashfile Anatria3D_<version>_x64-setup.exe SHA256
 certutil -hashfile Anatria3D_<version>_x64_en-US.msi SHA256
 ```
 
-The pipeline computes these itself and attaches them as
-`checksums-windows.txt` and `checksums-linux.txt`. Paste the Windows pair into
-the release notes verbatim, beside the file they belong to — a reader checking a
+The pipeline computes these itself and attaches them as `checksums-windows.txt`
+and `checksums-linux.txt`, so nothing has to be run by hand for a release — the
+command above is for checking a file you have in front of you.
+
+The notes are worth a paste of the Windows pair even so: a reader checking a
 download should not have to open a second file first.
 
+## Try the packages before the tag exists
+
+The Release workflow can be started by hand, and started that way it builds
+everything and **publishes nothing** — no tag, no release, just the packages
+attached to the run for fourteen days.
+
+```bash
+gh workflow run release.yml --ref main
+```
+
+Download `windows-installers` and `linux-packages` from the run page and install
+them. This is the only way to learn whether a package actually starts on a given
+distribution, and doing it from a tag would mean the tag exists before the
+answer does — and a tag is permanent, so a failure there has to be deleted from
+the remote, which this project does not do.
+
+The Linux job runs on Ubuntu and the machines it has to start on are not Ubuntu.
+Test at least one of them.
+
 ## Tag and publish
+
+**Do not upload installers by hand.** The workflow builds them, and that is the
+entire point: the run is public, so a reader can trace the file they downloaded
+back to this source. An artefact from a maintainer's laptop can demonstrate
+nothing of the kind, and mixing the two silently gives up the guarantee.
 
 ```bash
 git tag -a v<version> -m "Anatria3D v<version>"
 git push origin v<version>
 ```
 
-```bash
-gh release create v<version> \
-  "src-tauri/target/release/bundle/nsis/Anatria3D_<version>_x64-setup.exe" \
-  "src-tauri/target/release/bundle/msi/Anatria3D_<version>_x64_en-US.msi" \
-  --title "Anatria3D v<version>" \
-  --notes-file notes.md
-```
+That is the whole of it. Pushing the tag starts the workflow, which runs every
+gate again on the tagged commit, builds both platforms, computes the checksums,
+writes the notes, and opens a **draft** release with everything attached.
+
+Then, by hand:
+
+1. Read the draft. Check the version in the file names is the version you tagged.
+2. Install one of them.
+3. **Publish.**
+
+Publishing is the moment the release becomes real, and it is also the moment
+**Zenodo wakes up** — it listens for the published event, not for the tag, and
+mints the DOI from the repository as it stands at that tag. A draft is invisible
+to it. This is why `CITATION.cff` has to be right *before* the tag, not before
+the publish.
 
 ### What the notes must contain
 
-- **What changed**, in the reader's terms rather than commit subjects.
-- **Both SHA-256 hashes**, beside their files.
+The Windows job writes these from a template in the workflow. Read them rather
+than assume them — if a release needs something the template does not say, edit
+the draft before publishing.
+
+- **What changed**, in the reader's terms rather than commit subjects. The
+  template cannot know this; it is the one part that is always written by hand.
+- **The checksums.** They ship as attached files, `checksums-windows.txt` and
+  `checksums-linux.txt`. Pasting the two Windows hashes into the notes as well
+  is worth the minute: a reader verifying a download should not have to open a
+  second file first.
 - **The SmartScreen paragraph** (below). Every release, not just the first —
   people arrive at whichever release they land on.
 - **Which file to take**: the `.exe` for a personal machine, the `.msi` for a
