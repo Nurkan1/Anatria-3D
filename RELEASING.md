@@ -61,8 +61,21 @@ running.
 commit or the tree is dirty at the moment of tagging. `date-released` is the
 release date, not today's date if they differ.
 
-One command prints all five, so they can be read together rather than checked
-one at a time:
+**This is checked, not remembered.** `tools/check-version.mjs` reads all five and
+fails if they disagree; it runs in Gates on every push, and in the release
+workflow it is additionally handed the tag, so a `v0.1.7` pushed against files
+still saying `0.1.6` fails before anything is built.
+
+```bash
+pnpm check:version          # do the five agree?
+pnpm check:version 0.1.7    # do they agree, and on this number?
+```
+
+Use the second form on the bump commit. "Are they equal" and "are they the
+number I meant" are different questions, and only the second catches `1.7.0`
+typed where `0.1.7` was intended.
+
+Read together rather than one at a time:
 
 ```bash
 node -e "console.log('package.json      ', require('./package.json').version); console.log('tauri.conf.json   ', require('./src-tauri/tauri.conf.json').version)" && grep -m1 '^version' src-tauri/Cargo.toml && grep -A1 '^name = "anatria3d"' src-tauri/Cargo.lock | grep '^version' && grep -E '^(version|date-released)' CITATION.cff

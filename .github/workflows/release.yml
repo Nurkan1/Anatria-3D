@@ -67,6 +67,14 @@ jobs:
       - name: Build the Python sidecar
         run: .venv/Scripts/python engine/build_sidecar.py --clean
 
+      # The one check a tag needs that the others cannot make: the five files
+      # agreeing with each other says nothing about whether they agree with
+      # the tag that was pushed. `github.ref_name` is handed over unedited —
+      # the script strips the `v`. Empty on a manual run, where there is no
+      # tag to disagree with.
+      - name: Versions agree with the tag
+        run: node tools/check-version.mjs ${{ github.ref_type == 'tag' && github.ref_name || '' }}
+
       # The gates again, on the exact commit being released. A tag is the one
       # moment where "it passed on main yesterday" is not good enough.
       - name: Gates
@@ -223,6 +231,16 @@ jobs:
       - name: Build the Python sidecar
         run: .venv/bin/python engine/build_sidecar.py --clean
 
+      # The one check a tag needs that the others cannot make: the five files
+      # agreeing with each other says nothing about whether they agree with
+      # the tag that was pushed. `github.ref_name` is handed over unedited —
+      # the script strips the `v`. Empty on a manual run, where there is no
+      # tag to disagree with.
+      - name: Versions agree with the tag
+        run: node tools/check-version.mjs ${{ github.ref_type == 'tag' && github.ref_name || '' }}
+
+      # The gates again, on the exact commit being released. A tag is the one
+      # moment where "it passed on main yesterday" is not good enough.
       - name: Gates
         run: |
           pnpm typecheck

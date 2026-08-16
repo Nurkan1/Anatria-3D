@@ -64,6 +64,13 @@ jobs:
           .venv/Scripts/python -m pip install --upgrade pip
           .venv/Scripts/python -m pip install -e "engine[dev]"
 
+      # First, because it is the cheapest thing here and the only one that
+      # fails for a reason no compiler can see. Five files name the version,
+      # in four formats, and nothing else in the toolchain notices when a bump
+      # leaves one behind — see tools/check-version.mjs for what each costs.
+      - name: Versions agree
+        run: node tools/check-version.mjs
+
       - name: TypeScript
         run: pnpm typecheck
 

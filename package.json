@@ -14,7 +14,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "sidecar:build": "python engine/build_sidecar.py",
-    "manifest:build": "node tools/asset-pipeline/build-manifest.mjs"
+    "manifest:build": "node tools/asset-pipeline/build-manifest.mjs",
+    "check:version": "node tools/check-version.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.8",
