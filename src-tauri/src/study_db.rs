@@ -1113,6 +1113,32 @@ impl StudyDb {
         }
         let now = now_ms();
         self.with(|conn| {
+            // Resolved against the journal rather than trusted, the same way an
+            // imported session resolves its case — and for the same reason a
+            // dangling key must not abort the write.
+            //
+            // A conversation has an id from the moment it opens on screen, but
+            // `study_session` only gains the row when a turn is filed. So a
+            // note written before the first answer named a session that did not
+            // exist yet, and the foreign key refused the insert outright: the
+            // note composer failed with `FOREIGN KEY constraint failed` for
+            // every note started in a fresh conversation, while a note saved
+            // from an answer worked, because by then the turn was on disk.
+            //
+            // Missing means the note simply belongs to no session, which is
+            // what it is. The organ binding is the part worth keeping — that is
+            // what makes a note findable months later — and it survives.
+            let session_id = match blank_to_none(input.session_id.as_deref()) {
+                Some(named) => conn
+                    .query_row(
+                        "SELECT id FROM study_session WHERE id = ?1",
+                        params![named],
+                        |row| row.get::<_, String>(0),
+                    )
+                    .optional()?,
+                None => None,
+            };
+
             conn.execute(
                 "INSERT INTO note
                      (uuid, organ_id, organ_label, session_id, body, created_at, updated_at)
@@ -1120,7 +1146,7 @@ impl StudyDb {
                 params![
                     blank_to_none(input.organ_id.as_deref()),
                     blank_to_none(input.organ_label.as_deref()),
-                    blank_to_none(input.session_id.as_deref()),
+                    session_id,
                     body,
                     now
                 ],
@@ -1135,7 +1161,10 @@ impl StudyDb {
                 uuid,
                 organ_id: blank_to_none(input.organ_id.as_deref()),
                 organ_label: blank_to_none(input.organ_label.as_deref()),
-                session_id: blank_to_none(input.session_id.as_deref()),
+                // What was stored, not what was asked for. Returning the id the
+                // caller sent would leave the panel holding a link the row does
+                // not have, and it would survive until the next reload.
+                session_id,
                 body,
                 created_at: now,
                 updated_at: now,
@@ -4070,5 +4099,51 @@ mod tests {
         let db = StudyDb::in_memory();
         db.record_usage(spend(None, "gpt-5.2", 10, 5)).unwrap();
         assert_eq!(db.usage(30).unwrap().len(), 1);
+    }
+
+    #[test]
+    fn a_note_survives_a_conversation_that_was_never_filed() {
+        // The bug this exists for, and it made the composer useless: the panel
+        // sends the id of the conversation on screen, but a conversation only
+        // reaches `study_session` once a turn is filed. Every note started in a
+        // fresh chat therefore named a session that did not exist, and the
+        // foreign key refused the insert outright -- while saving a note from
+        // an answer worked, because that turn was already on disk. The reader
+        // met a feature that failed for them and worked for the assistant.
+        let db = StudyDb::in_memory();
+
+        let note = db
+            .create_note(NoteInput {
+                organ_id: Some("left_ventricle".into()),
+                organ_label: Some("Ventriculus sinister".into()),
+                session_id: Some("never_filed".into()),
+                body: "Thickest wall.".into(),
+            })
+            .unwrap();
+
+        // Written, and honest about what it ended up attached to.
+        assert_eq!(note.session_id, None);
+        assert_eq!(note.organ_id.as_deref(), Some("left_ventricle"));
+        assert_eq!(db.list_notes(None, None, 10).unwrap().len(), 1);
+    }
+
+    #[test]
+    fn a_note_keeps_the_session_it_was_actually_written_in() {
+        // The other half. Dropping the link whenever it was inconvenient would
+        // quietly unpick what the link is for: reading a note back beside the
+        // conversation that produced it.
+        let db = StudyDb::in_memory();
+        db.save_turn(turn("s1", "The heart?", "Yes.")).unwrap();
+
+        let note = db
+            .create_note(NoteInput {
+                organ_id: Some("aorta".into()),
+                organ_label: Some("Aorta".into()),
+                session_id: Some("s1".into()),
+                body: "Arch gives three branches.".into(),
+            })
+            .unwrap();
+
+        assert_eq!(note.session_id.as_deref(), Some("s1"));
     }
 }
