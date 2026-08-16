@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { GrowingTextarea } from "@/components/GrowingTextarea";
 import {
   caseDigest,
   getStudySession,
@@ -372,7 +373,7 @@ function NoteComposer() {
           {organLabel(subject)}
         </p>
       )}
-      <textarea
+      <GrowingTextarea
         value={body}
         onChange={(event) => setBody(event.target.value)}
         onKeyDown={(event) => {
@@ -387,7 +388,7 @@ function NoteComposer() {
         rows={3}
         autoFocus
         placeholder="What is worth remembering here?"
-        className="w-full resize-none rounded border border-slate-700 bg-slate-950 px-2 py-1 text-[12px] outline-none placeholder:text-slate-600 focus:border-sky-600"
+        className="w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 text-[12px] outline-none placeholder:text-slate-600 focus:border-sky-600"
       />
       <div className="mt-1 flex items-center gap-2">
         <button
@@ -511,7 +512,7 @@ function NoteCard({ note }: { note: StudyNote }) {
           )}
         </>
       ) : (
-        <textarea
+        <GrowingTextarea
           value={draft}
           onChange={(event) => setDraft(event.target.value)}
           onKeyDown={(event) => {
@@ -523,7 +524,7 @@ function NoteCard({ note }: { note: StudyNote }) {
           }}
           rows={3}
           autoFocus
-          className="w-full resize-none rounded border border-slate-700 bg-slate-950 px-2 py-1 text-[12px] outline-none focus:border-sky-600"
+          className="w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 text-[12px] outline-none focus:border-sky-600"
         />
       )}
 

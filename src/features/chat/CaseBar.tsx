@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { GrowingTextarea } from "@/components/GrowingTextarea";
 import type { Language, UserProfile } from "@/lib/schemas";
 import { whenLabel } from "@/features/study/whenLabel";
 import { getStudySession, type CaseFile, type CaseSex } from "@/lib/studyDb";
@@ -535,13 +536,13 @@ function RecordComposer({
 
   return (
     <div className="mt-1 space-y-1">
-      <textarea
+      <GrowingTextarea
         value={draft}
         onChange={(event) => setDraft(event.target.value)}
         autoFocus
         rows={2}
         placeholder="What is known now — a weight, a pressure, what the imaging said"
-        className="w-full resize-none rounded border border-slate-700 bg-slate-950 px-1.5 py-1 outline-none placeholder:text-slate-700 focus:border-sky-600"
+        className="w-full rounded border border-slate-700 bg-slate-950 px-1.5 py-1 outline-none placeholder:text-slate-700 focus:border-sky-600"
       />
       <div className="flex items-center gap-1.5">
         <button
@@ -713,20 +714,22 @@ function CaseComposer({
         handed them over anyway, quoting the seal back as "according to the
         record". The rule was right; the field was doing two jobs.
       */}
-      <textarea
+      <GrowingTextarea
+        limit="24vh"
         value={findings}
         onChange={(event) => setFindings(event.target.value)}
         rows={2}
         placeholder="What is on the record — vitals, history, results. The reader sees this."
-        className="w-full resize-none rounded border border-slate-700 bg-slate-950 px-2 py-1 leading-relaxed outline-none placeholder:text-slate-600 focus:border-sky-600"
+        className="w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 leading-relaxed outline-none placeholder:text-slate-600 focus:border-sky-600"
       />
 
-      <textarea
+      <GrowingTextarea
+        limit="24vh"
         value={answer}
         onChange={(event) => setAnswer(event.target.value)}
         rows={3}
         placeholder="What is actually going on. Sealed now, revealed when you ask."
-        className="w-full resize-none rounded border border-slate-700 bg-slate-950 px-2 py-1 leading-relaxed outline-none placeholder:text-slate-600 focus:border-sky-600"
+        className="w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 leading-relaxed outline-none placeholder:text-slate-600 focus:border-sky-600"
       />
       <p className="leading-snug text-slate-600">
         Written before anything is attempted, and never editable afterwards — an
