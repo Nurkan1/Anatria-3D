@@ -47,8 +47,8 @@ identifiers:
 
 license: Apache-2.0
 repository-code: https://github.com/Nurkan1/Anatria-3D
-version: 0.1.6
-date-released: "2026-08-13"
+version: 0.1.7
+date-released: "2026-08-16"
 
 # The anatomical meshes and nomenclature are not ours and are not covered by
 # the Apache licence. Anyone citing this work should carry their attribution

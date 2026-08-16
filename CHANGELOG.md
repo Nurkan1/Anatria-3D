@@ -13,7 +13,7 @@ There is **no auto-updater**, by design: the application never reaches the
 network on its own. A new version reaches you only when you download and install
 it, so this file is also the answer to "is it worth reinstalling".
 
-## [Unreleased]
+## [0.1.7] — 2026-08-16
 
 ### Added
 
