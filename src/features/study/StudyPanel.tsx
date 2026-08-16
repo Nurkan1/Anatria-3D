@@ -22,6 +22,7 @@ import {
   buildSessionDocument,
   journalLanguage,
 } from "./printDocument";
+import { foldStateFor, type StudySection } from "./sections";
 import { whenLabel } from "./whenLabel";
 
 /**
@@ -54,6 +55,25 @@ export function StudyPanel() {
   useEffect(() => {
     void refresh();
   }, [refresh]);
+
+  /**
+   * Whether anything is narrowing the panel right now.
+   *
+   * All three filters count, because all three narrow all three lists — the
+   * search box, the structure chip and the patient chip.
+   */
+  const searching = query.trim() !== "" || organFilter !== null || caseFilter !== null;
+  const [folded, setFolded] = useState(() => foldStateFor(false));
+
+  // Applied as a state rather than layered over the toggle, so the chevron
+  // never disagrees with the screen: a search opens the sections for real, and
+  // one can still be closed while it runs. Clearing it returns them to rest.
+  useEffect(() => {
+    setFolded(foldStateFor(searching));
+  }, [searching]);
+
+  const fold = (section: StudySection) =>
+    setFolded((state) => ({ ...state, [section]: !state[section] }));
 
   return (
     <div className="flex h-full min-h-0 flex-col">
@@ -117,35 +137,62 @@ export function StudyPanel() {
 
       <div className="min-h-0 flex-1 space-y-5 overflow-y-auto p-3">
         <section>
-          <SectionTitle label="Notes" count={notes.length} action={<PrintNotes />} />
+          <SectionTitle
+            label="Notes"
+            count={notes.length}
+            action={<PrintNotes />}
+            open={!folded.notes}
+            onToggle={() => fold("notes")}
+          />
+          {/*
+            Outside the fold, on purpose.
+
+            This is the way in to writing a note, and it was invisible once
+            before — behind a collapsed panel, where nobody found it, so notes
+            simply did not get written. Folding the *list* is what the reader
+            asked for; folding the door to it would undo a fix.
+          */}
           <NoteComposer />
-          {loaded && notes.length === 0 && (
-            <p className="mt-2 text-[11px] text-slate-600">
-              Nothing written down yet. Select a structure and add a note, or save an
-              answer from the assistant.
-            </p>
+          {!folded.notes && (
+            <>
+              {loaded && notes.length === 0 && (
+                <p className="mt-2 text-[11px] text-slate-600">
+                  Nothing written down yet. Select a structure and add a note, or save
+                  an answer from the assistant.
+                </p>
+              )}
+              <div className="mt-2 space-y-1.5">
+                {notes.map((note) => (
+                  <NoteCard key={note.id} note={note} />
+                ))}
+              </div>
+            </>
           )}
-          <div className="mt-2 space-y-1.5">
-            {notes.map((note) => (
-              <NoteCard key={note.id} note={note} />
-            ))}
-          </div>
         </section>
 
-        <CaseSection />
+        <CaseSection open={!folded.cases} onToggle={() => fold("cases")} />
 
         <section>
-          <SectionTitle label="Sessions" count={sessions.length} />
-          {loaded && sessions.length === 0 && (
-            <p className="mt-2 text-[11px] text-slate-600">
-              Conversations are filed here automatically as you have them.
-            </p>
+          <SectionTitle
+            label="Sessions"
+            count={sessions.length}
+            open={!folded.sessions}
+            onToggle={() => fold("sessions")}
+          />
+          {!folded.sessions && (
+            <>
+              {loaded && sessions.length === 0 && (
+                <p className="mt-2 text-[11px] text-slate-600">
+                  Conversations are filed here automatically as you have them.
+                </p>
+              )}
+              <div className="mt-2 space-y-1">
+                {sessions.map((session) => (
+                  <SessionRow key={session.id} session={session} />
+                ))}
+              </div>
+            </>
           )}
-          <div className="mt-2 space-y-1">
-            {sessions.map((session) => (
-              <SessionRow key={session.id} session={session} />
-            ))}
-          </div>
         </section>
 
         <TransferSection />
@@ -270,21 +317,57 @@ function PrintNotes() {
  * A number that is always zero is not decoration. It is a wrong answer to a
  * question the reader did not know they were asking.
  */
+/**
+ * A section heading, and the control that folds the section away.
+ *
+ * The count is deliberately part of the *button* rather than sitting beside it:
+ * folded, it is the only thing saying how much is behind the heading, and a
+ * fold that hides an unknown quantity is a fold nobody trusts enough to use.
+ *
+ * `action` stays outside, because it is a second control — printing the notes
+ * is not folding them, and nesting one button inside another is neither valid
+ * nor operable by keyboard.
+ */
 function SectionTitle({
   label,
   count,
   action,
+  open,
+  onToggle,
 }: {
   label: string;
   count?: number;
   action?: React.ReactNode;
+  open?: boolean;
+  onToggle?: () => void;
 }) {
+  const heading = (
+    <>
+      {label}
+      {count !== undefined && <span className="ml-2 text-slate-600">{count}</span>}
+    </>
+  );
+
   return (
     <div className="flex items-center gap-2 border-b border-slate-800/70 pb-1">
-      <h2 className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
-        {label}
+      <h2 className="min-w-0 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+        {onToggle ? (
+          <button
+            type="button"
+            onClick={onToggle}
+            aria-expanded={open}
+            title={open ? `Fold ${label.toLowerCase()} away` : `Show ${label.toLowerCase()}`}
+            className="flex items-center gap-1.5 transition hover:text-slate-300"
+          >
+            <span aria-hidden className="text-slate-600">
+              {open ? "▾" : "▸"}
+            </span>
+            {heading}
+          </button>
+        ) : (
+          heading
+        )}
       </h2>
-      {count !== undefined && <span className="text-[10px] text-slate-600">{count}</span>}
       <div className="ml-auto">{action}</div>
     </div>
   );
@@ -724,7 +807,7 @@ function SessionRow({ session }: { session: SessionSummary }) {
  * gains nothing from an empty heading explaining a feature they have not asked
  * for — the picker in the assistant is where cases begin.
  */
-function CaseSection() {
+function CaseSection({ open, onToggle }: { open: boolean; onToggle: () => void }) {
   const cases = useCaseStore((s) => s.cases);
   const refresh = useCaseStore((s) => s.refresh);
   // The same box that narrows notes and sessions. A second search field for a
@@ -740,17 +823,26 @@ function CaseSection() {
 
   return (
     <section>
-      <SectionTitle label="Virtual patients" count={shown.length} />
-      {shown.length === 0 && (
-        <p className="mt-2 text-[11px] text-slate-600">
-          No patient matches that. The notes and sessions below are narrowed too.
-        </p>
+      <SectionTitle
+        label="Virtual patients"
+        count={shown.length}
+        open={open}
+        onToggle={onToggle}
+      />
+      {open && (
+        <>
+          {shown.length === 0 && (
+            <p className="mt-2 text-[11px] text-slate-600">
+              No patient matches that. The notes and sessions below are narrowed too.
+            </p>
+          )}
+          <div className="mt-2 space-y-1">
+            {shown.map((entry) => (
+              <CaseRow key={entry.id} entry={entry} />
+            ))}
+          </div>
+        </>
       )}
-      <div className="mt-2 space-y-1">
-        {shown.map((entry) => (
-          <CaseRow key={entry.id} entry={entry} />
-        ))}
-      </div>
     </section>
   );
 }
