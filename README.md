@@ -82,7 +82,9 @@ server of ours.
 
 There is **no auto-updater**, on purpose: the application never reaches the
 network by itself. New versions appear on the releases page, and nowhere else —
-Anatria3D is not distributed by email or on request.
+Anatria3D is not distributed by email or on request. Because reinstalling is
+something you have to decide to do, [CHANGELOG.md](CHANGELOG.md) says what is
+different in each one.
 
 Every installer is built by
 [GitHub Actions](https://github.com/Nurkan1/Anatria-3D/actions/workflows/release.yml)

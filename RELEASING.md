@@ -57,6 +57,11 @@ running.
 | `src-tauri/Cargo.lock` | the `anatria3d` package entry | `cargo` — commit it |
 | `CITATION.cff` | `version` **and** `date-released` | hand |
 
+And in the same commit, promote `## [Unreleased]` in
+[`CHANGELOG.md`](CHANGELOG.md) to `## [<version>] — <date>`. It is not one of
+the five — nothing breaks if it is missed — but it is the only record of *why*
+somebody should reinstall, and the moment to write it is never later.
+
 `Cargo.lock` updates itself on the next build, but it has to go into the bump
 commit or the tree is dirty at the moment of tagging. `date-released` is the
 release date, not today's date if they differ.
@@ -198,8 +203,11 @@ The Windows job writes these from a template in the workflow. Read them rather
 than assume them — if a release needs something the template does not say, edit
 the draft before publishing.
 
-- **What changed**, in the reader's terms rather than commit subjects. The
-  template cannot know this; it is the one part that is always written by hand.
+- **What changed**, in the reader's terms rather than commit subjects. This is
+  written in [`CHANGELOG.md`](CHANGELOG.md), not invented at tag time — paste
+  that version's section into the draft. Writing it as the work lands is the
+  only way it gets written honestly; reconstructed from commit subjects on the
+  day, it becomes a list of what was touched rather than of what is different.
 - **The checksums.** They ship as attached files, `checksums-windows.txt` and
   `checksums-linux.txt`. Pasting the two Windows hashes into the notes as well
   is worth the minute: a reader verifying a download should not have to open a
