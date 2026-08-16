@@ -91,10 +91,10 @@ jobs:
       # Published beside the files. With an unsigned installer this is the whole
       # of what a university's IT department can check, and it is what lets them
       # allowlist the build by hash.
-      # Per-platform filename, and that is not tidiness. Both jobs attach to the
-      # same release, and two assets called `checksums.txt` do not merge — the
-      # second upload replaces the first, silently taking the other platform's
-      # hashes with it.
+      # Per-platform filename, and that is not tidiness. Both platforms' files
+      # end up in one release, and two assets called `checksums.txt` do not
+      # merge — the second upload replaces the first, silently taking the other
+      # platform's hashes with it.
       - name: Checksums
         shell: pwsh
         run: |
@@ -123,45 +123,6 @@ jobs:
             src-tauri/target/release/bundle/nsis/*-setup.exe
             src-tauri/target/release/bundle/msi/*.msi
             checksums-windows.txt
-
-      # Only this job writes `body`. The Linux job omits it, which leaves
-      # whatever is already there alone — otherwise whichever finished last
-      # would overwrite the other's notes, and which one that is varies per run.
-      #
-      # Skipped unless a tag is what started this. `action-gh-release` falls
-      # back to whatever ref it was given, so a manual run would open a draft
-      # release named after the branch — an artefact nobody asked for, sitting
-      # in the repository looking like a release that went wrong.
-      - name: Publish
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
-        with:
-          draft: true # reviewed before anyone can download it
-          files: |
-            src-tauri/target/release/bundle/nsis/*-setup.exe
-            src-tauri/target/release/bundle/msi/*.msi
-            checksums-windows.txt
-          body: |
-            Windows, 64-bit. Installs without administrator rights.
-
-            | File | Take this one if |
-            |---|---|
-            | `*-setup.exe` | You are installing on your own machine. |
-            | `*.msi` | You are deploying across a faculty or a lab. |
-
-            **Windows will warn you the first time**, because Anatria3D is not
-            code-signed. Click **More info**, then **Run anyway**. To verify
-            first, compare against `checksums-windows.txt`:
-            `certutil -hashfile <file> SHA256`.
-
-            Linux builds are attached too — a `.deb` and an `.AppImage`, with
-            their own checksum file.
-
-            Built by GitHub Actions from this tag — the run is public, so the
-            path from source to installer can be checked.
-
-            There is no auto-updater: the application never reaches the network
-            on its own. New versions appear here and nowhere else.
 
   linux:
     # **22.04 on purpose, not `ubuntu-latest`.** A binary linked against an
@@ -278,14 +239,54 @@ jobs:
             src-tauri/target/release/bundle/appimage/*.AppImage
             checksums-linux.txt
 
-      # No `body` here — see the note on the Windows job, which also explains
-      # why this is skipped when no tag started the run.
+  # One job publishes, and that is the whole fix.
+  #
+  # v0.1.7 shipped with an empty body. Both build jobs called the release action
+  # at once, each created a draft for the same tag, and the one that noticed the
+  # collision adopted the other's release and deleted its own — taking its notes
+  # with it. The comment here used to claim the second job left the first one's
+  # body alone. It did not; it raced it.
+  #
+  # It also closes a failure nobody had noticed: with each job publishing for
+  # itself, one platform failing left a release carrying only the other, looking
+  # complete. This runs only if both built.
+  publish:
+    needs: [windows, linux]
+    runs-on: ubuntu-22.04
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      # For the notes generator and the changelog it reads. The packages
+      # themselves arrive as artifacts, which is why the build jobs upload them
+      # whether or not a tag started the run.
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      # Assembled, not pasted. The words come from CHANGELOG.md, written as the
+      # work lands rather than reconstructed at tag time, and the hashes are
+      # read from the files the builds produced — so what the notes claim and
+      # what is attached cannot drift apart. It fails if the changelog has no
+      # section for this tag.
+      - name: Write the notes
+        run: |
+          node tools/release-notes.mjs "${{ github.ref_name }}" artifacts > notes.md
+          cat notes.md
+
       - name: Publish
-        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          draft: true
+          draft: true # reviewed before anyone can download it
+          name: Anatria3D ${{ github.ref_name }}
+          body_path: notes.md
+          # Named rather than globbed. `artifacts/**/*` would also match the
+          # directories the download action creates, and a release is the wrong
+          # place to find out what an action does with those.
           files: |
-            src-tauri/target/release/bundle/deb/*.deb
-            src-tauri/target/release/bundle/appimage/*.AppImage
-            checksums-linux.txt
+            artifacts/*/*-setup.exe
+            artifacts/*/*.msi
+            artifacts/*/*.deb
+            artifacts/*/*.AppImage
+            artifacts/*/checksums-*.txt

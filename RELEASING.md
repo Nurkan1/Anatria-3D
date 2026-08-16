@@ -125,8 +125,14 @@ bearing:
   the other platform's hashes with it. Hence `checksums-windows.txt` and
   `checksums-linux.txt`.
 
-Only the Windows job writes the release `body`. If both did, whichever finished
-last would overwrite the other's notes, and which one that is varies per run.
+**Neither build job publishes.** They upload their packages as artifacts, and a
+third job with `needs: [windows, linux]` creates the release once, from both.
+
+That is not tidiness either. When each job published for itself they raced: both
+created a draft for the same tag, and the one that noticed the collision adopted
+the other's release and deleted its own — with its notes inside it. v0.1.7 went
+out with an empty body that way. A single writer also means one platform failing
+can no longer leave a release carrying the other and looking complete.
 
 A locally built `.deb` is for testing on your own machine and nothing else.
 Publishing one would put an artefact from a maintainer's laptop beside artefacts
@@ -147,8 +153,9 @@ The pipeline computes these itself and attaches them as `checksums-windows.txt`
 and `checksums-linux.txt`, so nothing has to be run by hand for a release — the
 command above is for checking a file you have in front of you.
 
-The notes are worth a paste of the Windows pair even so: a reader checking a
-download should not have to open a second file first.
+They are also printed in the notes, read from those same files by
+`tools/release-notes.mjs` — a reader checking a download should not have to open
+a second file first, and hashes copied by hand are hashes that can be wrong.
 
 ## Try the packages before the tag exists
 
@@ -197,29 +204,28 @@ mints the DOI from the repository as it stands at that tag. A draft is invisible
 to it. This is why `CITATION.cff` has to be right *before* the tag, not before
 the publish.
 
-### What the notes must contain
+### What the notes say, and where it comes from
 
-The Windows job writes these from a template in the workflow. Read them rather
-than assume them — if a release needs something the template does not say, edit
-the draft before publishing.
+The body is **assembled, not written at tag time**. `tools/release-notes.mjs`
+builds it in the `publish` job, and nothing has to be pasted by hand:
 
-- **What changed**, in the reader's terms rather than commit subjects. This is
-  written in [`CHANGELOG.md`](CHANGELOG.md), not invented at tag time — paste
-  that version's section into the draft. Writing it as the work lands is the
-  only way it gets written honestly; reconstructed from commit subjects on the
-  day, it becomes a list of what was touched rather than of what is different.
-- **The checksums.** They ship as attached files, `checksums-windows.txt` and
-  `checksums-linux.txt`. Pasting the two Windows hashes into the notes as well
-  is worth the minute: a reader verifying a download should not have to open a
-  second file first.
-- **The SmartScreen paragraph** (below). Every release, not just the first —
-  people arrive at whichever release they land on.
-- **Which file to take**: the `.exe` for a personal machine, the `.msi` for a
-  managed one.
-- That it installs **without administrator rights**. On a university laptop
-  where the student is not an administrator, that is the difference between
-  being able to try it and not.
+- **What changed** is lifted from [`CHANGELOG.md`](CHANGELOG.md). The section
+  has to exist before the tag — the job fails if the changelog has no heading
+  for the version being released. Writing it as the work lands is the only way
+  it gets written honestly; reconstructed from commit subjects on the day, it
+  becomes a list of what was touched rather than of what is different.
+- **The checksums** are read from the files the builds produced, and printed in
+  the notes as well as attached, so a reader verifying a download does not have
+  to open a second file first. They cannot drift from the attachment because
+  they are the attachment.
+- **Which file to take**, all four of them, and the fact that it installs
+  without administrator rights. On a university laptop where the student is not
+  an administrator, that is the difference between being able to try it and not.
+- **The SmartScreen paragraph** (below), and the AppImage's FUSE 2 note. Every
+  release, not just the first — people arrive at whichever release they land on.
 
+Read the draft before publishing anyway. Assembled is not the same as correct,
+and this is the last point at which a wrong sentence is cheap to fix.
 ---
 
 ## The SmartScreen warning
