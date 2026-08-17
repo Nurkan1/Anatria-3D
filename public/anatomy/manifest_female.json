@@ -311,24 +311,24 @@
       ]
     },
     {
-      "organ_id": "right_renal_artery",
-      "ta2_latin": "Arteria renum dextra",
-      "name_en": "Right renal artery",
+      "organ_id": "left_renal_artery",
+      "ta2_latin": "Arteria renalis",
+      "name_en": "Left renal artery",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_female.glb",
-      "node": "VH_F_right_renal_artery",
+      "node": "VH_F_left_renal_artery",
       "path": [
         "Abdominal vessels",
         "Arteries"
       ]
     },
     {
-      "organ_id": "left_renal_artery",
-      "ta2_latin": "Arteria renum sinistra",
-      "name_en": "Left renal artery",
+      "organ_id": "right_renal_artery",
+      "ta2_latin": "Arteria renalis",
+      "name_en": "Right renal artery",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_female.glb",
-      "node": "VH_F_left_renal_artery",
+      "node": "VH_F_right_renal_artery",
       "path": [
         "Abdominal vessels",
         "Arteries"

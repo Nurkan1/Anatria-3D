@@ -4,7 +4,12 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import { AnatomyManifestSchema } from "../src/lib/schemas";
-import { parseTa2 } from "../tools/asset-pipeline/ta2.mjs";
+import {
+  ADDED_TERM_CORRECTIONS,
+  ADDED_TERM_OPEN_QUESTIONS,
+  TA2_CORRECTIONS,
+  parseTa2,
+} from "../tools/asset-pipeline/ta2.mjs";
 import {
   NOT_IN_TA2,
   OUT_OF_SCOPE,
@@ -14,6 +19,14 @@ import {
 
 const REPO = join(__dirname, "..");
 const ta2 = parseTa2(readFileSync(join(REPO, "tools/asset-pipeline/vendor/TA2.csv"), "utf8"));
+
+const MANIFESTS = ["manifest.json", "manifest_female.json"] as const;
+
+function manifestOf(file: string) {
+  return AnatomyManifestSchema.parse(
+    JSON.parse(readFileSync(join(REPO, "public/anatomy", file), "utf8")),
+  );
+}
 
 /**
  * The male atlas needs no test like this, because Z-Anatomy names its objects
@@ -189,6 +202,73 @@ describe("the vendored TA2.csv, and the typos in it", () => {
       const latin = manifest.organs.map((organ) => organ.ta2_latin);
       expect(latin, file).not.toContain("Truncus coeiiacus");
       expect(latin, file).not.toContain("Arteria mesenteries superior");
+    }
+  });
+
+  it("spells no Latin term with a diacritic", () => {
+    // The file sits the Latin column beside the French one and the accents
+    // bled across — 50 rows read `latérales`. Latin anatomical terms carry no
+    // diacritics at all, so this holds for every row rather than a listed few,
+    // and it is what makes the blanket rule in `ta2.mjs` safe to keep.
+    for (const file of MANIFESTS) {
+      const accented = manifestOf(file).organs.filter((organ) =>
+        [...organ.ta2_latin].some((character) => character.codePointAt(0)! > 127),
+      );
+      expect(accented.map((organ) => `${organ.organ_id}: ${organ.ta2_latin}`), file).toEqual([]);
+    }
+  });
+
+  it("never repeats a word back to back in a Latin term", () => {
+    // The signature of the file's other defect: a word from the row's synonym,
+    // or the term's own head noun, left stuck on — `Regio retromalleolaris
+    // lateralis regio`, `Flexor digiti minimi pedis pedis`. Every one of these
+    // was visible on screen and none was caught by a build.
+    for (const file of MANIFESTS) {
+      const doubled = manifestOf(file).organs.filter((organ) => {
+        const words = organ.ta2_latin.toLowerCase().split(/\s+/);
+        return words.some((word, index) => index > 0 && word === words[index - 1]);
+      });
+      expect(doubled.map((organ) => `${organ.organ_id}: ${organ.ta2_latin}`), file).toEqual([]);
+    }
+  });
+
+  it("names the metatarsophalangeal capsules after a joint in the foot", () => {
+    // The worst single defect found: row 7139 carried row 7138's glenohumeral
+    // Latin, so the label on a mesh in the foot named a joint in the shoulder.
+    // A reader checking the term against the model would have been told the
+    // model was wrong.
+    const capsule = manifestOf("manifest.json").organs.find(
+      (organ) => organ.organ_id === "articular_capsules_of_metatarsophalangeal_joints_l",
+    );
+    expect(capsule?.ta2_latin).toMatch(/metatarsophalange/);
+    expect(capsule?.ta2_latin).not.toMatch(/glenohumer/);
+  });
+
+  it("gives both renal arteries the term TA2 actually publishes", () => {
+    // TA2 names this vessel once, unsided, at row 4269. The vendored file adds
+    // `Arteria renum dextra/sinistra` in its own block past the standard's last
+    // term; the side already reaches the reader through `name_en`. Both atlases
+    // carry these two organs, so a divergence here would show as anatomy.
+    for (const file of MANIFESTS) {
+      const renal = manifestOf(file).organs.filter((organ) =>
+        /^(left|right)_renal_artery$/.test(organ.organ_id),
+      );
+      expect(renal, file).toHaveLength(2);
+      for (const artery of renal) expect(artery.ta2_latin, artery.organ_id).toBe("Arteria renalis");
+    }
+  });
+
+  it("keeps the standard's corrections apart from our own compositions", () => {
+    // `TA2_CORRECTIONS` restores what FIPAT published and can be checked
+    // against it. `ADDED_TERM_CORRECTIONS` covers rows that are not TA2 at all,
+    // where the replacement is composed here. A key in both lists would let a
+    // composition of ours be read as a citation of the standard.
+    for (const key of Object.keys(ADDED_TERM_CORRECTIONS)) {
+      expect(Object.keys(TA2_CORRECTIONS), key).not.toContain(key);
+    }
+    // And a term we declined to touch must not also appear as one we fixed.
+    for (const key of Object.keys(ADDED_TERM_OPEN_QUESTIONS)) {
+      expect(Object.keys(ADDED_TERM_CORRECTIONS), key).not.toContain(key);
     }
   });
 });

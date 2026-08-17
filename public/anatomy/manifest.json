@@ -2311,7 +2311,7 @@
     },
     {
       "organ_id": "anterior_interventricular_artery",
-      "ta2_latin": "Arteria interventricularis ant. arteriae coronariae sinistrae",
+      "ta2_latin": "Arteria interventricularis anterior",
       "name_en": "Anterior interventricular artery",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -2526,7 +2526,7 @@
     },
     {
       "organ_id": "musculophrenic_artery_l",
-      "ta2_latin": "Arteria musculoohrenica",
+      "ta2_latin": "Arteria musculophrenica",
       "name_en": "Musculophrenic artery (left)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -2537,7 +2537,7 @@
     },
     {
       "organ_id": "musculophrenic_artery_r",
-      "ta2_latin": "Arteria musculoohrenica",
+      "ta2_latin": "Arteria musculophrenica",
       "name_en": "Musculophrenic artery (right)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -2702,7 +2702,7 @@
     },
     {
       "organ_id": "inferior_pancreaticoduodenal_artery",
-      "ta2_latin": "Arteria pancreaticoduodenalis",
+      "ta2_latin": "Arteria pancreaticoduodenalis inferior",
       "name_en": "Inferior pancreaticoduodenal artery",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -2724,7 +2724,7 @@
     },
     {
       "organ_id": "parieto_occipital_artery_l",
-      "ta2_latin": "Arteria paritooccipitale",
+      "ta2_latin": "Arteria parietooccipitalis",
       "name_en": "Parieto-occipital artery (left)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -2735,7 +2735,7 @@
     },
     {
       "organ_id": "parieto_occipital_artery_r",
-      "ta2_latin": "Arteria paritooccipitale",
+      "ta2_latin": "Arteria parietooccipitalis",
       "name_en": "Parieto-occipital artery (right)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -3066,23 +3066,23 @@
       ]
     },
     {
-      "organ_id": "right_renal_artery",
-      "ta2_latin": "Arteria renum dextra",
-      "name_en": "Right renal artery",
+      "organ_id": "left_renal_artery",
+      "ta2_latin": "Arteria renalis",
+      "name_en": "Left renal artery",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
-      "node": "Right renal artery",
+      "node": "Left renal artery",
       "path": [
         "Systemic arteries"
       ]
     },
     {
-      "organ_id": "left_renal_artery",
-      "ta2_latin": "Arteria renum sinistra",
-      "name_en": "Left renal artery",
+      "organ_id": "right_renal_artery",
+      "ta2_latin": "Arteria renalis",
+      "name_en": "Right renal artery",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
-      "node": "Left renal artery",
+      "node": "Right renal artery",
       "path": [
         "Systemic arteries"
       ]
@@ -3767,7 +3767,7 @@
     },
     {
       "organ_id": "inferior_thyroid_artery_l",
-      "ta2_latin": "Arteria thyreoidea inferior arteria thyroidea inferior",
+      "ta2_latin": "Arteria thyreoidea inferior",
       "name_en": "Inferior thyroid artery (left)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -3778,7 +3778,7 @@
     },
     {
       "organ_id": "inferior_thyroid_artery_r",
-      "ta2_latin": "Arteria thyreoidea inferior arteria thyroidea inferior",
+      "ta2_latin": "Arteria thyreoidea inferior",
       "name_en": "Inferior thyroid artery (right)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -3833,7 +3833,7 @@
     },
     {
       "organ_id": "transverse_cervical_artery_l",
-      "ta2_latin": "Arteria transversa colli arteria transversa cervicis",
+      "ta2_latin": "Arteria transversa colli",
       "name_en": "Transverse cervical artery (left)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -3844,7 +3844,7 @@
     },
     {
       "organ_id": "transverse_cervical_artery_r",
-      "ta2_latin": "Arteria transversa colli arteria transversa cervicis",
+      "ta2_latin": "Arteria transversa colli",
       "name_en": "Transverse cervical artery (right)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -4875,28 +4875,6 @@
       ]
     },
     {
-      "organ_id": "subcutaneous_bursa_of_medial_malleolus_l",
-      "ta2_latin": "Bursa subcutanea malleoli",
-      "name_en": "Subcutaneous bursa of medial malleolus (left)",
-      "system": "muscular",
-      "mesh_file": "muscular_male.glb",
-      "node": "Subcutaneous bursa of medial malleolus.l",
-      "path": [
-        "Bursae"
-      ]
-    },
-    {
-      "organ_id": "subcutaneous_bursa_of_medial_malleolus_r",
-      "ta2_latin": "Bursa subcutanea malleoli",
-      "name_en": "Subcutaneous bursa of medial malleolus (right)",
-      "system": "muscular",
-      "mesh_file": "muscular_male.glb",
-      "node": "Subcutaneous bursa of medial malleolus.r",
-      "path": [
-        "Bursae"
-      ]
-    },
-    {
       "organ_id": "subcutaneous_bursa_of_lateral_malleolus_l",
       "ta2_latin": "Bursa subcutanea malleoli lateralis",
       "name_en": "Subcutaneous bursa of lateral malleolus (left)",
@@ -4914,6 +4892,28 @@
       "system": "muscular",
       "mesh_file": "muscular_male.glb",
       "node": "Subcutaneous bursa of lateral malleolus.r",
+      "path": [
+        "Bursae"
+      ]
+    },
+    {
+      "organ_id": "subcutaneous_bursa_of_medial_malleolus_l",
+      "ta2_latin": "Bursa subcutanea malleoli medialis",
+      "name_en": "Subcutaneous bursa of medial malleolus (left)",
+      "system": "muscular",
+      "mesh_file": "muscular_male.glb",
+      "node": "Subcutaneous bursa of medial malleolus.l",
+      "path": [
+        "Bursae"
+      ]
+    },
+    {
+      "organ_id": "subcutaneous_bursa_of_medial_malleolus_r",
+      "ta2_latin": "Bursa subcutanea malleoli medialis",
+      "name_en": "Subcutaneous bursa of medial malleolus (right)",
+      "system": "muscular",
+      "mesh_file": "muscular_male.glb",
+      "node": "Subcutaneous bursa of medial malleolus.r",
       "path": [
         "Bursae"
       ]
@@ -5462,7 +5462,7 @@
     },
     {
       "organ_id": "articular_capsule_of_acromioclavicular_joint_l",
-      "ta2_latin": "Capsula articularis articularis acromioclavicularis",
+      "ta2_latin": "Capsula articularis acromioclavicularis",
       "name_en": "Articular capsule of acromioclavicular joint (left)",
       "system": "articular",
       "mesh_file": "articular_male.glb",
@@ -5476,7 +5476,7 @@
     },
     {
       "organ_id": "articular_capsule_of_acromioclavicular_joint_r",
-      "ta2_latin": "Capsula articularis articularis acromioclavicularis",
+      "ta2_latin": "Capsula articularis acromioclavicularis",
       "name_en": "Articular capsule of acromioclavicular joint (right)",
       "system": "articular",
       "mesh_file": "articular_male.glb",
@@ -5486,34 +5486,6 @@
         "Joints of pectoral girdle",
         "Synovial joints of pectoral girdle",
         "Acromioclavicular joint"
-      ]
-    },
-    {
-      "organ_id": "articular_capsule_of_superior_tibiofibular_joint_l",
-      "ta2_latin": "Capsula articularis articularis tibiofibularis superior",
-      "name_en": "Articular capsule of superior tibiofibular joint (left)",
-      "system": "articular",
-      "mesh_file": "articular_male.glb",
-      "node": "Articular capsule of superior tibiofibular joint.l",
-      "path": [
-        "Joints of lower limb",
-        "Joints of free lower limb",
-        "Synovial joints of free lower limb",
-        "Superior tibiofibular joint"
-      ]
-    },
-    {
-      "organ_id": "articular_capsule_of_superior_tibiofibular_joint_r",
-      "ta2_latin": "Capsula articularis articularis tibiofibularis superior",
-      "name_en": "Articular capsule of superior tibiofibular joint (right)",
-      "system": "articular",
-      "mesh_file": "articular_male.glb",
-      "node": "Articular capsule of superior tibiofibular joint.r",
-      "path": [
-        "Joints of lower limb",
-        "Joints of free lower limb",
-        "Synovial joints of free lower limb",
-        "Superior tibiofibular joint"
       ]
     },
     {
@@ -5741,93 +5713,31 @@
       ]
     },
     {
-      "organ_id": "articular_capsules_of_proximal_interphalangeal_joints_l",
-      "ta2_latin": "Capsulae articulareae art. interphalangeae proximalis",
-      "name_en": "Articular capsules of proximal interphalangeal joints (left)",
+      "organ_id": "articular_capsule_of_superior_tibiofibular_joint_l",
+      "ta2_latin": "Capsula articularis tibiofibularis superior",
+      "name_en": "Articular capsule of superior tibiofibular joint (left)",
       "system": "articular",
       "mesh_file": "articular_male.glb",
-      "node": "Articular capsules of proximal interphalangeal joints.l",
-      "path": [
-        "Joints of upper limb",
-        "Joints of free upper limb",
-        "Synovial joints of free upper limb",
-        "Joints of hand",
-        "Interphalangeal joints of hand"
-      ]
-    },
-    {
-      "organ_id": "articular_capsules_of_proximal_interphalangeal_joints_r",
-      "ta2_latin": "Capsulae articulareae art. interphalangeae proximalis",
-      "name_en": "Articular capsules of proximal interphalangeal joints (right)",
-      "system": "articular",
-      "mesh_file": "articular_male.glb",
-      "node": "Articular capsules of proximal interphalangeal joints.r",
-      "path": [
-        "Joints of upper limb",
-        "Joints of free upper limb",
-        "Synovial joints of free upper limb",
-        "Joints of hand",
-        "Interphalangeal joints of hand"
-      ]
-    },
-    {
-      "organ_id": "articular_capsules_of_metatarsophalangeal_joints_l",
-      "ta2_latin": "Capsulae articulareae articulationes glenohumerae",
-      "name_en": "Articular capsules of metatarsophalangeal joints (left)",
-      "system": "articular",
-      "mesh_file": "articular_male.glb",
-      "node": "Articular capsules of metatarsophalangeal joints.l",
+      "node": "Articular capsule of superior tibiofibular joint.l",
       "path": [
         "Joints of lower limb",
         "Joints of free lower limb",
         "Synovial joints of free lower limb",
-        "Joints of foot",
-        "Metatarsophalangeal joints"
+        "Superior tibiofibular joint"
       ]
     },
     {
-      "organ_id": "articular_capsules_of_metatarsophalangeal_joints_r",
-      "ta2_latin": "Capsulae articulareae articulationes glenohumerae",
-      "name_en": "Articular capsules of metatarsophalangeal joints (right)",
+      "organ_id": "articular_capsule_of_superior_tibiofibular_joint_r",
+      "ta2_latin": "Capsula articularis tibiofibularis superior",
+      "name_en": "Articular capsule of superior tibiofibular joint (right)",
       "system": "articular",
       "mesh_file": "articular_male.glb",
-      "node": "Articular capsules of metatarsophalangeal joints.r",
+      "node": "Articular capsule of superior tibiofibular joint.r",
       "path": [
         "Joints of lower limb",
         "Joints of free lower limb",
         "Synovial joints of free lower limb",
-        "Joints of foot",
-        "Metatarsophalangeal joints"
-      ]
-    },
-    {
-      "organ_id": "articular_capsules_of_distal_interphalangeal_joints_l",
-      "ta2_latin": "Capsulae articulareae articulationes interphalangeae distalis",
-      "name_en": "Articular capsules of distal interphalangeal joints (left)",
-      "system": "articular",
-      "mesh_file": "articular_male.glb",
-      "node": "Articular capsules of distal interphalangeal joints.l",
-      "path": [
-        "Joints of upper limb",
-        "Joints of free upper limb",
-        "Synovial joints of free upper limb",
-        "Joints of hand",
-        "Interphalangeal joints of hand"
-      ]
-    },
-    {
-      "organ_id": "articular_capsules_of_distal_interphalangeal_joints_r",
-      "ta2_latin": "Capsulae articulareae articulationes interphalangeae distalis",
-      "name_en": "Articular capsules of distal interphalangeal joints (right)",
-      "system": "articular",
-      "mesh_file": "articular_male.glb",
-      "node": "Articular capsules of distal interphalangeal joints.r",
-      "path": [
-        "Joints of upper limb",
-        "Joints of free upper limb",
-        "Synovial joints of free upper limb",
-        "Joints of hand",
-        "Interphalangeal joints of hand"
+        "Superior tibiofibular joint"
       ]
     },
     {
@@ -5861,6 +5771,126 @@
       ]
     },
     {
+      "organ_id": "articular_capsules_of_distal_interphalangeal_joints_l",
+      "ta2_latin": "Capsulae articulares articulationes interphalangeae distales",
+      "name_en": "Articular capsules of distal interphalangeal joints (left)",
+      "system": "articular",
+      "mesh_file": "articular_male.glb",
+      "node": "Articular capsules of distal interphalangeal joints.l",
+      "path": [
+        "Joints of upper limb",
+        "Joints of free upper limb",
+        "Synovial joints of free upper limb",
+        "Joints of hand",
+        "Interphalangeal joints of hand"
+      ]
+    },
+    {
+      "organ_id": "articular_capsules_of_distal_interphalangeal_joints_r",
+      "ta2_latin": "Capsulae articulares articulationes interphalangeae distales",
+      "name_en": "Articular capsules of distal interphalangeal joints (right)",
+      "system": "articular",
+      "mesh_file": "articular_male.glb",
+      "node": "Articular capsules of distal interphalangeal joints.r",
+      "path": [
+        "Joints of upper limb",
+        "Joints of free upper limb",
+        "Synovial joints of free upper limb",
+        "Joints of hand",
+        "Interphalangeal joints of hand"
+      ]
+    },
+    {
+      "organ_id": "articular_capsules_of_proximal_interphalangeal_joints_l",
+      "ta2_latin": "Capsulae articulares articulationes interphalangeae proximales",
+      "name_en": "Articular capsules of proximal interphalangeal joints (left)",
+      "system": "articular",
+      "mesh_file": "articular_male.glb",
+      "node": "Articular capsules of proximal interphalangeal joints.l",
+      "path": [
+        "Joints of upper limb",
+        "Joints of free upper limb",
+        "Synovial joints of free upper limb",
+        "Joints of hand",
+        "Interphalangeal joints of hand"
+      ]
+    },
+    {
+      "organ_id": "articular_capsules_of_proximal_interphalangeal_joints_r",
+      "ta2_latin": "Capsulae articulares articulationes interphalangeae proximales",
+      "name_en": "Articular capsules of proximal interphalangeal joints (right)",
+      "system": "articular",
+      "mesh_file": "articular_male.glb",
+      "node": "Articular capsules of proximal interphalangeal joints.r",
+      "path": [
+        "Joints of upper limb",
+        "Joints of free upper limb",
+        "Synovial joints of free upper limb",
+        "Joints of hand",
+        "Interphalangeal joints of hand"
+      ]
+    },
+    {
+      "organ_id": "articular_capsules_of_metacarpophalangeal_joints_l",
+      "ta2_latin": "Capsulae articulares articulationes metacarpophalangeae",
+      "name_en": "Articular capsules of metacarpophalangeal joints (left)",
+      "system": "articular",
+      "mesh_file": "articular_male.glb",
+      "node": "Articular capsules of metacarpophalangeal joints.l",
+      "path": [
+        "Joints of upper limb",
+        "Joints of free upper limb",
+        "Synovial joints of free upper limb",
+        "Joints of hand",
+        "Metacarpophalangeal joints"
+      ]
+    },
+    {
+      "organ_id": "articular_capsules_of_metacarpophalangeal_joints_r",
+      "ta2_latin": "Capsulae articulares articulationes metacarpophalangeae",
+      "name_en": "Articular capsules of metacarpophalangeal joints (right)",
+      "system": "articular",
+      "mesh_file": "articular_male.glb",
+      "node": "Articular capsules of metacarpophalangeal joints.r",
+      "path": [
+        "Joints of upper limb",
+        "Joints of free upper limb",
+        "Synovial joints of free upper limb",
+        "Joints of hand",
+        "Metacarpophalangeal joints"
+      ]
+    },
+    {
+      "organ_id": "articular_capsules_of_metatarsophalangeal_joints_l",
+      "ta2_latin": "Capsulae articulares articulationum metatarsophalangealium",
+      "name_en": "Articular capsules of metatarsophalangeal joints (left)",
+      "system": "articular",
+      "mesh_file": "articular_male.glb",
+      "node": "Articular capsules of metatarsophalangeal joints.l",
+      "path": [
+        "Joints of lower limb",
+        "Joints of free lower limb",
+        "Synovial joints of free lower limb",
+        "Joints of foot",
+        "Metatarsophalangeal joints"
+      ]
+    },
+    {
+      "organ_id": "articular_capsules_of_metatarsophalangeal_joints_r",
+      "ta2_latin": "Capsulae articulares articulationum metatarsophalangealium",
+      "name_en": "Articular capsules of metatarsophalangeal joints (right)",
+      "system": "articular",
+      "mesh_file": "articular_male.glb",
+      "node": "Articular capsules of metatarsophalangeal joints.r",
+      "path": [
+        "Joints of lower limb",
+        "Joints of free lower limb",
+        "Synovial joints of free lower limb",
+        "Joints of foot",
+        "Metatarsophalangeal joints"
+      ]
+    },
+    {
       "organ_id": "articular_capsules_of_distal_interphalangeal_joints_of_foot_l",
       "ta2_latin": "Capsulae articulares distali art. interphalangelorum pedis",
       "name_en": "Articular capsules of distal interphalangeal joints of foot (left)",
@@ -5888,36 +5918,6 @@
         "Synovial joints of free lower limb",
         "Joints of foot",
         "Interphalangeal joints of foot"
-      ]
-    },
-    {
-      "organ_id": "articular_capsules_of_metacarpophalangeal_joints_l",
-      "ta2_latin": "Capsulae articulariae articulationes metacarpophalnageae",
-      "name_en": "Articular capsules of metacarpophalangeal joints (left)",
-      "system": "articular",
-      "mesh_file": "articular_male.glb",
-      "node": "Articular capsules of metacarpophalangeal joints.l",
-      "path": [
-        "Joints of upper limb",
-        "Joints of free upper limb",
-        "Synovial joints of free upper limb",
-        "Joints of hand",
-        "Metacarpophalangeal joints"
-      ]
-    },
-    {
-      "organ_id": "articular_capsules_of_metacarpophalangeal_joints_r",
-      "ta2_latin": "Capsulae articulariae articulationes metacarpophalnageae",
-      "name_en": "Articular capsules of metacarpophalangeal joints (right)",
-      "system": "articular",
-      "mesh_file": "articular_male.glb",
-      "node": "Articular capsules of metacarpophalangeal joints.r",
-      "path": [
-        "Joints of upper limb",
-        "Joints of free upper limb",
-        "Synovial joints of free upper limb",
-        "Joints of hand",
-        "Metacarpophalangeal joints"
       ]
     },
     {
@@ -6410,7 +6410,7 @@
     },
     {
       "organ_id": "medial_head_of_triceps_brachii_l",
-      "ta2_latin": "Caput mediale musculi tricipitis caput brachii",
+      "ta2_latin": "Caput mediale musculi tricipitis brachii",
       "name_en": "Medial head of triceps brachii (left)",
       "system": "muscular",
       "mesh_file": "muscular_male.glb",
@@ -6421,7 +6421,7 @@
     },
     {
       "organ_id": "medial_head_of_triceps_brachii_ol",
-      "ta2_latin": "Caput mediale musculi tricipitis caput brachii",
+      "ta2_latin": "Caput mediale musculi tricipitis brachii",
       "name_en": "Medial head of triceps brachii (left)",
       "system": "muscular",
       "mesh_file": "muscular_male.glb",
@@ -6430,7 +6430,7 @@
     },
     {
       "organ_id": "medial_head_of_triceps_brachii_or",
-      "ta2_latin": "Caput mediale musculi tricipitis caput brachii",
+      "ta2_latin": "Caput mediale musculi tricipitis brachii",
       "name_en": "Medial head of triceps brachii (right)",
       "system": "muscular",
       "mesh_file": "muscular_male.glb",
@@ -6439,7 +6439,7 @@
     },
     {
       "organ_id": "medial_head_of_triceps_brachii_r",
-      "ta2_latin": "Caput mediale musculi tricipitis caput brachii",
+      "ta2_latin": "Caput mediale musculi tricipitis brachii",
       "name_en": "Medial head of triceps brachii (right)",
       "system": "muscular",
       "mesh_file": "muscular_male.glb",
@@ -6936,7 +6936,7 @@
     },
     {
       "organ_id": "costal_cartilage_of_tenth_rib_l",
-      "ta2_latin": "Cartilago costae decimae costae",
+      "ta2_latin": "Cartilago costae decimae",
       "name_en": "Costal cartilage of tenth rib (left)",
       "system": "skeletal",
       "mesh_file": "skeletal_male.glb",
@@ -6947,7 +6947,7 @@
     },
     {
       "organ_id": "costal_cartilage_of_tenth_rib_r",
-      "ta2_latin": "Cartilago costae decimae costae",
+      "ta2_latin": "Cartilago costae decimae",
       "name_en": "Costal cartilage of tenth rib (right)",
       "system": "skeletal",
       "mesh_file": "skeletal_male.glb",
@@ -6958,7 +6958,7 @@
     },
     {
       "organ_id": "costal_cartilage_of_eighth_rib_l",
-      "ta2_latin": "Cartilago costae octavae costae",
+      "ta2_latin": "Cartilago costae octavae",
       "name_en": "Costal cartilage of eighth rib (left)",
       "system": "skeletal",
       "mesh_file": "skeletal_male.glb",
@@ -6969,7 +6969,7 @@
     },
     {
       "organ_id": "costal_cartilage_of_eighth_rib_r",
-      "ta2_latin": "Cartilago costae octavae costae",
+      "ta2_latin": "Cartilago costae octavae",
       "name_en": "Costal cartilage of eighth rib (right)",
       "system": "skeletal",
       "mesh_file": "skeletal_male.glb",
@@ -6980,7 +6980,7 @@
     },
     {
       "organ_id": "costal_cartilage_of_first_rib_l",
-      "ta2_latin": "Cartilago costae primae costae",
+      "ta2_latin": "Cartilago costae primae",
       "name_en": "Costal cartilage of first rib (left)",
       "system": "skeletal",
       "mesh_file": "skeletal_male.glb",
@@ -6991,7 +6991,7 @@
     },
     {
       "organ_id": "costal_cartilage_of_first_rib_r",
-      "ta2_latin": "Cartilago costae primae costae",
+      "ta2_latin": "Cartilago costae primae",
       "name_en": "Costal cartilage of first rib (right)",
       "system": "skeletal",
       "mesh_file": "skeletal_male.glb",
@@ -7002,7 +7002,7 @@
     },
     {
       "organ_id": "costal_cartilage_of_fourth_rib_l",
-      "ta2_latin": "Cartilago costae quarti costae",
+      "ta2_latin": "Cartilago costae quartae",
       "name_en": "Costal cartilage of fourth rib (left)",
       "system": "skeletal",
       "mesh_file": "skeletal_male.glb",
@@ -7013,7 +7013,7 @@
     },
     {
       "organ_id": "costal_cartilage_of_fourth_rib_r",
-      "ta2_latin": "Cartilago costae quarti costae",
+      "ta2_latin": "Cartilago costae quartae",
       "name_en": "Costal cartilage of fourth rib (right)",
       "system": "skeletal",
       "mesh_file": "skeletal_male.glb",
@@ -7024,7 +7024,7 @@
     },
     {
       "organ_id": "costal_cartilage_of_fifth_rib_l",
-      "ta2_latin": "Cartilago costae quinti costae",
+      "ta2_latin": "Cartilago costae quintae",
       "name_en": "Costal cartilage of fifth rib (left)",
       "system": "skeletal",
       "mesh_file": "skeletal_male.glb",
@@ -7035,7 +7035,7 @@
     },
     {
       "organ_id": "costal_cartilage_of_fifth_rib_r",
-      "ta2_latin": "Cartilago costae quinti costae",
+      "ta2_latin": "Cartilago costae quintae",
       "name_en": "Costal cartilage of fifth rib (right)",
       "system": "skeletal",
       "mesh_file": "skeletal_male.glb",
@@ -7046,7 +7046,7 @@
     },
     {
       "organ_id": "costal_cartilage_of_second_rib_l",
-      "ta2_latin": "Cartilago costae secundae costae",
+      "ta2_latin": "Cartilago costae secundae",
       "name_en": "Costal cartilage of second rib (left)",
       "system": "skeletal",
       "mesh_file": "skeletal_male.glb",
@@ -7057,7 +7057,7 @@
     },
     {
       "organ_id": "costal_cartilage_of_second_rib_r",
-      "ta2_latin": "Cartilago costae secundae costae",
+      "ta2_latin": "Cartilago costae secundae",
       "name_en": "Costal cartilage of second rib (right)",
       "system": "skeletal",
       "mesh_file": "skeletal_male.glb",
@@ -7068,7 +7068,7 @@
     },
     {
       "organ_id": "costal_cartilage_of_seventh_rib_l",
-      "ta2_latin": "Cartilago costae septimi costae",
+      "ta2_latin": "Cartilago costae septimae",
       "name_en": "Costal cartilage of seventh rib (left)",
       "system": "skeletal",
       "mesh_file": "skeletal_male.glb",
@@ -7079,7 +7079,7 @@
     },
     {
       "organ_id": "costal_cartilage_of_seventh_rib_r",
-      "ta2_latin": "Cartilago costae septimi costae",
+      "ta2_latin": "Cartilago costae septimae",
       "name_en": "Costal cartilage of seventh rib (right)",
       "system": "skeletal",
       "mesh_file": "skeletal_male.glb",
@@ -7090,7 +7090,7 @@
     },
     {
       "organ_id": "costal_cartilage_of_sixth_rib_l",
-      "ta2_latin": "Cartilago costae sextae costae",
+      "ta2_latin": "Cartilago costae sextae",
       "name_en": "Costal cartilage of sixth rib (left)",
       "system": "skeletal",
       "mesh_file": "skeletal_male.glb",
@@ -7101,7 +7101,7 @@
     },
     {
       "organ_id": "costal_cartilage_of_sixth_rib_r",
-      "ta2_latin": "Cartilago costae sextae costae",
+      "ta2_latin": "Cartilago costae sextae",
       "name_en": "Costal cartilage of sixth rib (right)",
       "system": "skeletal",
       "mesh_file": "skeletal_male.glb",
@@ -7112,7 +7112,7 @@
     },
     {
       "organ_id": "costal_cartilage_of_third_rib_l",
-      "ta2_latin": "Cartilago costae tertiae costae",
+      "ta2_latin": "Cartilago costae tertiae",
       "name_en": "Costal cartilage of third rib (left)",
       "system": "skeletal",
       "mesh_file": "skeletal_male.glb",
@@ -7123,7 +7123,7 @@
     },
     {
       "organ_id": "costal_cartilage_of_third_rib_r",
-      "ta2_latin": "Cartilago costae tertiae costae",
+      "ta2_latin": "Cartilago costae tertiae",
       "name_en": "Costal cartilage of third rib (right)",
       "system": "skeletal",
       "mesh_file": "skeletal_male.glb",
@@ -9009,7 +9009,7 @@
     },
     {
       "organ_id": "anterior_division_of_retromandibular_vein_l",
-      "ta2_latin": "Divisio anterior venae mandibularis",
+      "ta2_latin": "Divisio anterior venae retromandibularis",
       "name_en": "Anterior division of retromandibular vein (left)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -9020,7 +9020,7 @@
     },
     {
       "organ_id": "anterior_division_of_retromandibular_vein_r",
-      "ta2_latin": "Divisio anterior venae mandibularis",
+      "ta2_latin": "Divisio anterior venae retromandibularis",
       "name_en": "Anterior division of retromandibular vein (right)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -9031,7 +9031,7 @@
     },
     {
       "organ_id": "posterior_division_of_internal_iliac_artery_l",
-      "ta2_latin": "Divisio posterior arteriae iliacae internaecus",
+      "ta2_latin": "Divisio posterior arteriae iliacae internae",
       "name_en": "Posterior division of internal iliac artery (left)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -9042,7 +9042,7 @@
     },
     {
       "organ_id": "posterior_division_of_internal_iliac_artery_r",
-      "ta2_latin": "Divisio posterior arteriae iliacae internaecus",
+      "ta2_latin": "Divisio posterior arteriae iliacae internae",
       "name_en": "Posterior division of internal iliac artery (right)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -10315,7 +10315,7 @@
     },
     {
       "organ_id": "superficial_investing_cervical_fascia_l",
-      "ta2_latin": "Fascia investiens superficialis colli lamina",
+      "ta2_latin": "Fascia investiens superficialis colli",
       "name_en": "Superficial investing cervical fascia (left)",
       "system": "muscular",
       "mesh_file": "muscular_male.glb",
@@ -10326,7 +10326,7 @@
     },
     {
       "organ_id": "superficial_investing_cervical_fascia_r",
-      "ta2_latin": "Fascia investiens superficialis colli lamina",
+      "ta2_latin": "Fascia investiens superficialis colli",
       "name_en": "Superficial investing cervical fascia (right)",
       "system": "muscular",
       "mesh_file": "muscular_male.glb",
@@ -10690,7 +10690,7 @@
     },
     {
       "organ_id": "flexor_digiti_minimi_of_foot_el",
-      "ta2_latin": "Flexor digiti minimi pedis pedis",
+      "ta2_latin": "Flexor digiti minimi pedis",
       "name_en": "Flexor digiti minimi of foot (left)",
       "system": "muscular",
       "mesh_file": "muscular_male.glb",
@@ -10699,7 +10699,7 @@
     },
     {
       "organ_id": "flexor_digiti_minimi_of_foot_er",
-      "ta2_latin": "Flexor digiti minimi pedis pedis",
+      "ta2_latin": "Flexor digiti minimi pedis",
       "name_en": "Flexor digiti minimi of foot (right)",
       "system": "muscular",
       "mesh_file": "muscular_male.glb",
@@ -10708,7 +10708,7 @@
     },
     {
       "organ_id": "flexor_digiti_minimi_of_foot_l",
-      "ta2_latin": "Flexor digiti minimi pedis pedis",
+      "ta2_latin": "Flexor digiti minimi pedis",
       "name_en": "Flexor digiti minimi of foot (left)",
       "system": "muscular",
       "mesh_file": "muscular_male.glb",
@@ -10719,7 +10719,7 @@
     },
     {
       "organ_id": "flexor_digiti_minimi_of_foot_r",
-      "ta2_latin": "Flexor digiti minimi pedis pedis",
+      "ta2_latin": "Flexor digiti minimi pedis",
       "name_en": "Flexor digiti minimi of foot (right)",
       "system": "muscular",
       "mesh_file": "muscular_male.glb",
@@ -10908,7 +10908,7 @@
     },
     {
       "organ_id": "flexor_digitorum_superficialis_el",
-      "ta2_latin": "Flexor superficialis digitorum superficialis",
+      "ta2_latin": "Flexor superficialis digitorum",
       "name_en": "Flexor digitorum superficialis (left)",
       "system": "muscular",
       "mesh_file": "muscular_male.glb",
@@ -10917,7 +10917,7 @@
     },
     {
       "organ_id": "flexor_digitorum_superficialis_er",
-      "ta2_latin": "Flexor superficialis digitorum superficialis",
+      "ta2_latin": "Flexor superficialis digitorum",
       "name_en": "Flexor digitorum superficialis (right)",
       "system": "muscular",
       "mesh_file": "muscular_male.glb",
@@ -10926,7 +10926,7 @@
     },
     {
       "organ_id": "flexor_digitorum_superficialis_ol",
-      "ta2_latin": "Flexor superficialis digitorum superficialis",
+      "ta2_latin": "Flexor superficialis digitorum",
       "name_en": "Flexor digitorum superficialis (left)",
       "system": "muscular",
       "mesh_file": "muscular_male.glb",
@@ -10935,7 +10935,7 @@
     },
     {
       "organ_id": "flexor_digitorum_superficialis_or",
-      "ta2_latin": "Flexor superficialis digitorum superficialis",
+      "ta2_latin": "Flexor superficialis digitorum",
       "name_en": "Flexor digitorum superficialis (right)",
       "system": "muscular",
       "mesh_file": "muscular_male.glb",
@@ -24333,7 +24333,7 @@
     },
     {
       "organ_id": "lateral_aortic_nodes",
-      "ta2_latin": "Nodi aortici latérales",
+      "ta2_latin": "Nodi aortici laterales",
       "name_en": "Lateral aortic nodes",
       "system": "lymphatic",
       "mesh_file": "lymphatic_male.glb",
@@ -24351,7 +24351,7 @@
     },
     {
       "organ_id": "anterior_axillary_nodes_l",
-      "ta2_latin": "Nodi axillares anteriores nodi pectorales",
+      "ta2_latin": "Nodi axillares anteriores",
       "name_en": "Anterior axillary nodes (left)",
       "system": "lymphatic",
       "mesh_file": "lymphatic_male.glb",
@@ -24360,7 +24360,7 @@
     },
     {
       "organ_id": "anterior_axillary_nodes_r",
-      "ta2_latin": "Nodi axillares anteriores nodi pectorales",
+      "ta2_latin": "Nodi axillares anteriores",
       "name_en": "Anterior axillary nodes (right)",
       "system": "lymphatic",
       "mesh_file": "lymphatic_male.glb",
@@ -24405,7 +24405,7 @@
     },
     {
       "organ_id": "lateral_axillary_nodes_l",
-      "ta2_latin": "Nodi axillares latérales nodi humerales",
+      "ta2_latin": "Nodi axillares laterales",
       "name_en": "Lateral axillary nodes (left)",
       "system": "lymphatic",
       "mesh_file": "lymphatic_male.glb",
@@ -24414,7 +24414,7 @@
     },
     {
       "organ_id": "lateral_axillary_nodes_r",
-      "ta2_latin": "Nodi axillares latérales nodi humerales",
+      "ta2_latin": "Nodi axillares laterales",
       "name_en": "Lateral axillary nodes (right)",
       "system": "lymphatic",
       "mesh_file": "lymphatic_male.glb",
@@ -24423,7 +24423,7 @@
     },
     {
       "organ_id": "posterior_axillary_nodes_l",
-      "ta2_latin": "Nodi axillares posteriores nodi subscapulares",
+      "ta2_latin": "Nodi axillares posteriores",
       "name_en": "Posterior axillary nodes (left)",
       "system": "lymphatic",
       "mesh_file": "lymphatic_male.glb",
@@ -24432,7 +24432,7 @@
     },
     {
       "organ_id": "posterior_axillary_nodes_r",
-      "ta2_latin": "Nodi axillares posteriores nodi subscapulares",
+      "ta2_latin": "Nodi axillares posteriores",
       "name_en": "Posterior axillary nodes (right)",
       "system": "lymphatic",
       "mesh_file": "lymphatic_male.glb",
@@ -24468,7 +24468,7 @@
     },
     {
       "organ_id": "lateral_caval_nodes",
-      "ta2_latin": "Nodi cavales latérales",
+      "ta2_latin": "Nodi cavales laterales",
       "name_en": "Lateral caval nodes",
       "system": "lymphatic",
       "mesh_file": "lymphatic_male.glb",
@@ -24486,7 +24486,7 @@
     },
     {
       "organ_id": "inferior_deep_lateral_cervical_nodes_l",
-      "ta2_latin": "Nodi cervicales latérales profundi inferiores",
+      "ta2_latin": "Nodi cervicales laterales profundi inferiores",
       "name_en": "Inferior deep lateral cervical nodes (left)",
       "system": "lymphatic",
       "mesh_file": "lymphatic_male.glb",
@@ -24495,7 +24495,7 @@
     },
     {
       "organ_id": "inferior_deep_lateral_cervical_nodes_r",
-      "ta2_latin": "Nodi cervicales latérales profundi inferiores",
+      "ta2_latin": "Nodi cervicales laterales profundi inferiores",
       "name_en": "Inferior deep lateral cervical nodes (right)",
       "system": "lymphatic",
       "mesh_file": "lymphatic_male.glb",
@@ -24504,7 +24504,7 @@
     },
     {
       "organ_id": "superficial_lateral_cervical_nodes_l",
-      "ta2_latin": "Nodi cervicales latérales superficiales",
+      "ta2_latin": "Nodi cervicales laterales superficiales",
       "name_en": "Superficial lateral cervical nodes (left)",
       "system": "lymphatic",
       "mesh_file": "lymphatic_male.glb",
@@ -24513,7 +24513,7 @@
     },
     {
       "organ_id": "superficial_lateral_cervical_nodes_r",
-      "ta2_latin": "Nodi cervicales latérales superficiales",
+      "ta2_latin": "Nodi cervicales laterales superficiales",
       "name_en": "Superficial lateral cervical nodes (right)",
       "system": "lymphatic",
       "mesh_file": "lymphatic_male.glb",
@@ -24666,7 +24666,7 @@
     },
     {
       "organ_id": "lateral_common_iliac_nodes",
-      "ta2_latin": "Nodi iliaci communes latérales",
+      "ta2_latin": "Nodi iliaci communes laterales",
       "name_en": "Lateral common iliac nodes",
       "system": "lymphatic",
       "mesh_file": "lymphatic_male.glb",
@@ -24738,7 +24738,7 @@
     },
     {
       "organ_id": "infraclavicular_nodes_l",
-      "ta2_latin": "Nodi infraclaviculares nodi deltopectorales",
+      "ta2_latin": "Nodi infraclaviculares",
       "name_en": "Infraclavicular nodes (left)",
       "system": "lymphatic",
       "mesh_file": "lymphatic_male.glb",
@@ -24747,7 +24747,7 @@
     },
     {
       "organ_id": "infraclavicular_nodes_r",
-      "ta2_latin": "Nodi infraclaviculares nodi deltopectorales",
+      "ta2_latin": "Nodi infraclaviculares",
       "name_en": "Infraclavicular nodes (right)",
       "system": "lymphatic",
       "mesh_file": "lymphatic_male.glb",
@@ -25026,7 +25026,7 @@
     },
     {
       "organ_id": "paratracheal_cervical_nodes",
-      "ta2_latin": "Nodi paratrachéales colli",
+      "ta2_latin": "Nodi paratracheales colli",
       "name_en": "Paratracheal cervical nodes",
       "system": "lymphatic",
       "mesh_file": "lymphatic_male.glb",
@@ -25080,7 +25080,7 @@
     },
     {
       "organ_id": "lateral_pericardial_nodes",
-      "ta2_latin": "Nodi pericardiaci latérales",
+      "ta2_latin": "Nodi pericardiaci laterales",
       "name_en": "Lateral pericardial nodes",
       "system": "lymphatic",
       "mesh_file": "lymphatic_male.glb",
@@ -25287,7 +25287,7 @@
     },
     {
       "organ_id": "lateral_sacral_nodes_l",
-      "ta2_latin": "Nodi sacrales latérales",
+      "ta2_latin": "Nodi sacrales laterales",
       "name_en": "Lateral sacral nodes (left)",
       "system": "lymphatic",
       "mesh_file": "lymphatic_male.glb",
@@ -25296,7 +25296,7 @@
     },
     {
       "organ_id": "lateral_sacral_nodes_r",
-      "ta2_latin": "Nodi sacrales latérales",
+      "ta2_latin": "Nodi sacrales laterales",
       "name_en": "Lateral sacral nodes (right)",
       "system": "lymphatic",
       "mesh_file": "lymphatic_male.glb",
@@ -25449,7 +25449,7 @@
     },
     {
       "organ_id": "lateral_vesical_nodes_l",
-      "ta2_latin": "Nodi vesicales latérales",
+      "ta2_latin": "Nodi vesicales laterales",
       "name_en": "Lateral vesical nodes (left)",
       "system": "lymphatic",
       "mesh_file": "lymphatic_male.glb",
@@ -25458,7 +25458,7 @@
     },
     {
       "organ_id": "lateral_vesical_nodes_r",
-      "ta2_latin": "Nodi vesicales latérales",
+      "ta2_latin": "Nodi vesicales laterales",
       "name_en": "Lateral vesical nodes (right)",
       "system": "lymphatic",
       "mesh_file": "lymphatic_male.glb",
@@ -29355,7 +29355,7 @@
     },
     {
       "organ_id": "anterior_root_of_posterior_femoral_cutaneous_nerve_l",
-      "ta2_latin": "Radix anterior nervi cutanei femoris",
+      "ta2_latin": "Radix anterior nervi cutanei posterioris femoris",
       "name_en": "Anterior root of posterior femoral cutaneous nerve (left)",
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
@@ -29366,7 +29366,7 @@
     },
     {
       "organ_id": "anterior_root_of_posterior_femoral_cutaneous_nerve_r",
-      "ta2_latin": "Radix anterior nervi cutanei femoris",
+      "ta2_latin": "Radix anterior nervi cutanei posterioris femoris",
       "name_en": "Anterior root of posterior femoral cutaneous nerve (right)",
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
@@ -29841,7 +29841,7 @@
     },
     {
       "organ_id": "frontal_branches_of_callosomarginal_artery_l",
-      "ta2_latin": "Rami frontales arteriae callosomarginal",
+      "ta2_latin": "Rami frontales arteriae callosomarginalis",
       "name_en": "Frontal branches of callosomarginal artery (left)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -29852,7 +29852,7 @@
     },
     {
       "organ_id": "frontal_branches_of_callosomarginal_artery_r",
-      "ta2_latin": "Rami frontales arteriae callosomarginal",
+      "ta2_latin": "Rami frontales arteriae callosomarginalis",
       "name_en": "Frontal branches of callosomarginal artery (right)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -30028,7 +30028,7 @@
     },
     {
       "organ_id": "posterior_lateral_nasal_branches_of_sphenopalatine_artery_l",
-      "ta2_latin": "Rami nasales latérales posteriores arteriae sphenopalatinae",
+      "ta2_latin": "Rami nasales laterales posteriores arteriae sphenopalatinae",
       "name_en": "Posterior lateral nasal branches of sphenopalatine artery (left)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -30039,7 +30039,7 @@
     },
     {
       "organ_id": "posterior_lateral_nasal_branches_of_sphenopalatine_artery_r",
-      "ta2_latin": "Rami nasales latérales posteriores arteriae sphenopalatinae",
+      "ta2_latin": "Rami nasales laterales posteriores arteriae sphenopalatinae",
       "name_en": "Posterior lateral nasal branches of sphenopalatine artery (right)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -30072,7 +30072,7 @@
     },
     {
       "organ_id": "parietal_branches_of_middle_cerebral_artery_l",
-      "ta2_latin": "Rami pariétales arteriae mediae cerebri",
+      "ta2_latin": "Rami parietales arteriae mediae cerebri",
       "name_en": "Parietal branches of middle cerebral artery (left)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -30083,7 +30083,7 @@
     },
     {
       "organ_id": "parietal_branches_of_middle_cerebral_artery_r",
-      "ta2_latin": "Rami pariétales arteriae mediae cerebri",
+      "ta2_latin": "Rami parietales arteriae mediae cerebri",
       "name_en": "Parietal branches of middle cerebral artery (right)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -30137,18 +30137,6 @@
       ]
     },
     {
-      "organ_id": "septal_branches_of_anterior_interventricular_artery",
-      "ta2_latin": "Rami sept. art. Intervent. ant. sept. arteriae coron. sinis.",
-      "name_en": "Septal branches of anterior interventricular artery",
-      "system": "cardiovascular",
-      "mesh_file": "cardiovascular_male.glb",
-      "node": "Septal branches of anterior interventricular artery",
-      "path": [
-        "Cardiac vessels",
-        "Arteries of heart"
-      ]
-    },
-    {
       "organ_id": "anterior_septal_branches_of_anterior_ethmoidal_artery_l",
       "ta2_latin": "Rami septales anteriores arteriae ethmoideae anterioris",
       "name_en": "Anterior septal branches of anterior ethmoidal artery (left)",
@@ -30190,6 +30178,18 @@
       "node": "Septal branches of posterior ethmoidal artery.r",
       "path": [
         "Systemic arteries"
+      ]
+    },
+    {
+      "organ_id": "septal_branches_of_anterior_interventricular_artery",
+      "ta2_latin": "Rami septales arteriae interventricularis anterioris",
+      "name_en": "Septal branches of anterior interventricular artery",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_male.glb",
+      "node": "Septal branches of anterior interventricular artery",
+      "path": [
+        "Cardiac vessels",
+        "Arteries of heart"
       ]
     },
     {
@@ -30348,7 +30348,7 @@
     },
     {
       "organ_id": "ascending_branch_of_left_colic_artery",
-      "ta2_latin": "Ramus ascendens arteriae",
+      "ta2_latin": "Ramus ascendens arteriae colicae sinistrae",
       "name_en": "Ascending branch of left colic artery",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -30381,7 +30381,7 @@
     },
     {
       "organ_id": "palmar_carpal_branch_of_radial_artery_l",
-      "ta2_latin": "Ramus carpeus palmaris arteriae",
+      "ta2_latin": "Ramus carpeus palmaris arteriae radialis",
       "name_en": "Palmar carpal branch of radial artery (left)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -30392,7 +30392,7 @@
     },
     {
       "organ_id": "palmar_carpal_branch_of_radial_artery_r",
-      "ta2_latin": "Ramus carpeus palmaris arteriae",
+      "ta2_latin": "Ramus carpeus palmaris arteriae radialis",
       "name_en": "Palmar carpal branch of radial artery (right)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -30513,7 +30513,7 @@
     },
     {
       "organ_id": "frontal_branch_of_superficial_temporal_artery_l",
-      "ta2_latin": "Ramus fontale arteriae temporalis superficialis",
+      "ta2_latin": "Ramus frontalis arteriae temporalis superficialis",
       "name_en": "Frontal branch of superficial temporal artery (left)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -30524,7 +30524,7 @@
     },
     {
       "organ_id": "frontal_branch_of_superficial_temporal_artery_r",
-      "ta2_latin": "Ramus fontale arteriae temporalis superficialis",
+      "ta2_latin": "Ramus frontalis arteriae temporalis superficialis",
       "name_en": "Frontal branch of superficial temporal artery (right)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -31788,7 +31788,7 @@
     },
     {
       "organ_id": "lateral_retromalleolar_region_l",
-      "ta2_latin": "Regio retromalleolaris lateralis regio",
+      "ta2_latin": "Regio retromalleolaris lateralis",
       "name_en": "Lateral retromalleolar region (left)",
       "system": "regional",
       "mesh_file": "regional_male.glb",
@@ -31797,7 +31797,7 @@
     },
     {
       "organ_id": "lateral_retromalleolar_region_r",
-      "ta2_latin": "Regio retromalleolaris lateralis regio",
+      "ta2_latin": "Regio retromalleolaris lateralis",
       "name_en": "Lateral retromalleolar region (right)",
       "system": "regional",
       "mesh_file": "regional_male.glb",
@@ -31806,7 +31806,7 @@
     },
     {
       "organ_id": "medial_retromalleolar_region_l",
-      "ta2_latin": "Regio retromalleolaris medialis regio",
+      "ta2_latin": "Regio retromalleolaris medialis",
       "name_en": "Medial retromalleolar region (left)",
       "system": "regional",
       "mesh_file": "regional_male.glb",
@@ -31815,7 +31815,7 @@
     },
     {
       "organ_id": "medial_retromalleolar_region_r",
-      "ta2_latin": "Regio retromalleolaris medialis regio",
+      "ta2_latin": "Regio retromalleolaris medialis",
       "name_en": "Medial retromalleolar region (right)",
       "system": "regional",
       "mesh_file": "regional_male.glb",
@@ -34055,7 +34055,7 @@
     },
     {
       "organ_id": "medial_reticulospinal_tract",
-      "ta2_latin": "Tractus reticulospinalis medialis tractus",
+      "ta2_latin": "Tractus reticulospinalis medialis",
       "name_en": "Medial reticulospinal tract",
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
@@ -35948,7 +35948,7 @@
     },
     {
       "organ_id": "middle_cardiac_vein",
-      "ta2_latin": "Vena media cordis interventricularis inferior",
+      "ta2_latin": "Vena media cordis",
       "name_en": "Middle cardiac vein",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -35960,7 +35960,7 @@
     },
     {
       "organ_id": "medial_vein_of_right_lung",
-      "ta2_latin": "Vena medialis pulmonalis dextri",
+      "ta2_latin": "Vena medialis pulmonis dextri",
       "name_en": "Medial vein of right lung",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -36617,7 +36617,7 @@
     },
     {
       "organ_id": "lateral_circumflex_femoral_veins_l",
-      "ta2_latin": "Venae circumflexae latérales",
+      "ta2_latin": "Venae circumflexae laterales femoris",
       "name_en": "Lateral circumflex femoral veins (left)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -36628,7 +36628,7 @@
     },
     {
       "organ_id": "lateral_circumflex_femoral_veins_r",
-      "ta2_latin": "Venae circumflexae latérales",
+      "ta2_latin": "Venae circumflexae laterales femoris",
       "name_en": "Lateral circumflex femoral veins (right)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -36639,7 +36639,7 @@
     },
     {
       "organ_id": "medial_circumflex_femoral_veins_l",
-      "ta2_latin": "Venae circumflexae mediales",
+      "ta2_latin": "Venae circumflexae mediales femoris",
       "name_en": "Medial circumflex femoral veins (left)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -36650,7 +36650,7 @@
     },
     {
       "organ_id": "medial_circumflex_femoral_veins_r",
-      "ta2_latin": "Venae circumflexae mediales",
+      "ta2_latin": "Venae circumflexae mediales femoris",
       "name_en": "Medial circumflex femoral veins (right)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -37079,7 +37079,7 @@
     },
     {
       "organ_id": "lateral_plantar_veins_l",
-      "ta2_latin": "Venae plantares latérales",
+      "ta2_latin": "Venae plantares laterales",
       "name_en": "Lateral plantar veins (left)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -37090,7 +37090,7 @@
     },
     {
       "organ_id": "lateral_plantar_veins_r",
-      "ta2_latin": "Venae plantares latérales",
+      "ta2_latin": "Venae plantares laterales",
       "name_en": "Lateral plantar veins (right)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -37123,7 +37123,7 @@
     },
     {
       "organ_id": "external_pudendal_veins_l",
-      "ta2_latin": "Venae pudendales extemae",
+      "ta2_latin": "Venae pudendales externae",
       "name_en": "External pudendal veins (left)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -37134,7 +37134,7 @@
     },
     {
       "organ_id": "external_pudendal_veins_r",
-      "ta2_latin": "Venae pudendales extemae",
+      "ta2_latin": "Venae pudendales externae",
       "name_en": "External pudendal veins (right)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -37167,7 +37167,7 @@
     },
     {
       "organ_id": "lateral_sacral_veins_l",
-      "ta2_latin": "Venae sacrales latérales",
+      "ta2_latin": "Venae sacrales laterales",
       "name_en": "Lateral sacral veins (left)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -37178,7 +37178,7 @@
     },
     {
       "organ_id": "lateral_sacral_veins_r",
-      "ta2_latin": "Venae sacrales latérales",
+      "ta2_latin": "Venae sacrales laterales",
       "name_en": "Lateral sacral veins (right)",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",

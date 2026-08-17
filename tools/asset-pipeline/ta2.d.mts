@@ -15,6 +15,18 @@ export interface Ta2Term {
   la: string;
 }
 
+/** A replacement for one field of one row, keyed by English as the file spells it. */
+export type Ta2Correction = Partial<Ta2Term>;
+
+/** Typographical faults in the vendored file, against terms TA2 published. */
+export const TA2_CORRECTIONS: Record<string, Ta2Correction>;
+
+/** Faults in the rows the vendored file added past the end of TA2. */
+export const ADDED_TERM_CORRECTIONS: Record<string, Ta2Correction>;
+
+/** Added-term rows left uncorrected, mapped to what is wrong with each. */
+export const ADDED_TERM_OPEN_QUESTIONS: Record<string, string>;
+
 /** English term, lower-cased, to its TA2 entry. First occurrence wins. */
 export function parseTa2(text: string): Map<string, Ta2Term>;
 

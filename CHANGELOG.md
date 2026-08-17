@@ -144,6 +144,38 @@ search opens all three, since one box narrows all three.
 
 ### Fixed
 
+**Sixty-one Latin terms were misspelled, truncated or named the wrong
+structure.** An audit of every label in both atlases against Terminologia
+Anatomica found defects in the vendored term list that reached the screen and
+the printed plates. They fall into four kinds, and the fourth is the one that
+mattered:
+
+- **Accents that do not belong in Latin.** Fifty rows had picked up the French
+  spelling from the column beside them — `Nodi sacrales latérales` for *Nodi
+  sacrales laterales*. Latin anatomical terms carry no diacritics, so this is
+  now fixed by rule rather than row by row.
+- **A word left stuck on the end**, usually the row's synonym run into the main
+  term with no separator: `Regio retromalleolaris lateralis regio`, `Arteria
+  transversa colli arteria transversa cervicis`.
+- **Letters dropped or misread** — `Arteria musculoohrenica` for
+  *musculophrenica*, `Venae pudendales extemae` for *externae*.
+- **Terms that had lost the word identifying them**, which is worse than a
+  misspelling because what remains is a real name for something else.
+  `Arteria pancreaticoduodenalis` without *inferior* is a different vessel;
+  `Radix anterior nervi cutanei femoris` without *posterioris* is a different
+  nerve. Worst of the set, the articular capsules of the **metatarsophalangeal**
+  joints carried the **glenohumeral** capsule's Latin — a label in the foot
+  naming a joint in the shoulder.
+
+114 structures in the male atlas and 2 in the female now read differently. No
+structure was added, removed or renumbered, so nothing you had saved refers to
+anything else. Both renal arteries now read `Arteria renalis`, which is the term
+Terminologia Anatomica publishes; the side is on the English name, where it
+already was.
+
+The atlas now refuses to build if any Latin label carries a diacritic or repeats
+a word — the two signatures every one of these defects left behind.
+
 **Installers shipped a stale engine.** `tauri build` never re-froze the Python
 sidecar, so a build could carry an engine hours older than the interface it was
 bundled with — including prompt changes, which are the easiest to miss because
