@@ -32,7 +32,7 @@ import {
 import { useChatStore, type ChatMessage } from "@/stores/chatStore";
 import { chatPreferences, patchChatPreferences } from "@/stores/chatPreferences";
 import { useModelStore } from "@/stores/modelStore";
-import { organLabel, useSceneStore } from "@/stores/sceneStore";
+import { groupNames, organLabel, useSceneStore } from "@/stores/sceneStore";
 import { useStudyStore } from "@/stores/studyStore";
 import { useUsageStore } from "@/stores/usageStore";
 
@@ -47,6 +47,7 @@ import { useCopy } from "./useCopy";
 const TOOL_LABELS: Record<string, string> = {
   focus_organ: "focused a structure",
   isolate_structures: "isolated structures",
+  isolate_group: "isolated a region",
   show_all_structures: "restored the full view",
   set_layer_visibility: "toggled a system",
   set_layer_opacity: "made a layer see-through",
@@ -844,6 +845,9 @@ export function ChatPanel() {
     () => new Set(structures.map((organ) => organ.system)),
     [structures],
   );
+  // What the assistant may isolate whole. Names rather than ids, because most
+  // groups have no mesh of their own — see `isolate_group`.
+  const groups = useMemo(() => groupNames(structures), [structures]);
   const canSend = engineReady && draft.trim().length > 0 && !pendingRequestId;
 
   async function send(text?: string) {
@@ -887,6 +891,7 @@ export function ChatPanel() {
         // The engine validates every organ_id the model produces against this
         // list, so its scene tools cannot reference anatomy that is not loaded.
         available_organs: structures.map(({ mesh_file: _f, node: _n, ...meta }) => meta),
+        available_groups: groups,
         // Who the drill is about, when it is about anyone. Read fresh at send
         // time rather than captured, because the reader can pick a patient
         // between one question and the next.

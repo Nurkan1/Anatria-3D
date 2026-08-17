@@ -266,6 +266,14 @@ export function applySceneCommand(
     case "isolate_structures":
       return { ...state, isolatedOrganIds: [...command.organ_ids] };
 
+    // Handled by `applyCommand`, which has the manifest in hand. This branch
+    // exists so the switch stays total — and it deliberately changes nothing
+    // rather than guessing, because a group is a name in a hierarchy this
+    // function cannot see. If a group command ever reaches here, the viewport
+    // not moving is the correct outcome and the routing is what is wrong.
+    case "isolate_group":
+      return state;
+
     case "isolate_region":
       // Resolved by the store, which holds the manifest; the reducer is pure
       // and has no view of the hierarchy. Falling back to the structure alone
@@ -692,7 +700,18 @@ export const useSceneStore = create<SceneStore>()((set, get) => ({
 
   unhideAll: () => set({ hiddenOrganIds: [] }),
 
-  applyCommand: (command) => set((state) => applySceneCommand(state, command)),
+  applyCommand: (command) =>
+    set((state) => {
+      // The one command the pure reducer cannot serve. A group is a name in the
+      // manifest hierarchy, not an id, so expanding it needs `organs` — which
+      // `applySceneCommand` deliberately does not see, because it takes view
+      // state alone. Resolved here instead, by the same function the
+      // right-click menu calls.
+      if (command.action === "isolate_group") {
+        return isolateGroupIn(state, command.group) ?? state;
+      }
+      return applySceneCommand(state, command);
+    }),
 
   toggleSystem: (system) =>
     set((state) => {
@@ -817,15 +836,7 @@ export const useSceneStore = create<SceneStore>()((set, get) => ({
       };
     }),
 
-  studyGroup: (node) =>
-    set((state) => {
-      const members = regionMembersByNode(state.organs, node);
-      if (members.length === 0) return state;
-      return {
-        ...applySceneCommand(state, { action: "focus_organ", organ_id: members[0]! }),
-        isolatedOrganIds: members,
-      };
-    }),
+  studyGroup: (node) => set((state) => isolateGroupIn(state, node) ?? state),
 
   clearIsolation: () =>
     set({
@@ -994,6 +1005,47 @@ export function regionMembersByNode(
     if (organ.path.includes(node) || organ.node === node) members.push(organ.organ_id);
   }
   return members;
+}
+
+/**
+ * The named groups in this set of structures that are worth isolating whole.
+ *
+ * A group of one is not a group — it is that structure, which the assistant can
+ * already reach by id. Everything above one is something the reader can isolate
+ * from the right-click menu, and this is the list that lets the assistant do the
+ * same.
+ *
+ * Derived from what is *loaded*, not from the whole manifest: offering the
+ * assistant a group whose system is switched off would have it isolate an empty
+ * set and report success.
+ */
+export function groupNames(organs: ManifestOrgan[]): string[] {
+  const counts = new Map<string, number>();
+  for (const organ of organs) {
+    for (const node of organ.path) counts.set(node, (counts.get(node) ?? 0) + 1);
+  }
+  return [...counts]
+    .filter(([, count]) => count > 1)
+    .map(([node]) => node)
+    .sort();
+}
+
+/**
+ * Isolate every structure under a named group, and look at it.
+ *
+ * Shared by the right-click menu and by the assistant's `isolate_group`, so the
+ * two cannot drift into isolating different sets for the same name.
+ */
+export function isolateGroupIn(
+  state: SceneViewState & { organs: Record<string, ManifestOrgan> },
+  node: string,
+): Partial<SceneViewState> | null {
+  const members = regionMembersByNode(state.organs, node);
+  if (members.length === 0) return null;
+  return {
+    ...applySceneCommand(state, { action: "focus_organ", organ_id: members[0]! }),
+    isolatedOrganIds: members,
+  };
 }
 
 /**

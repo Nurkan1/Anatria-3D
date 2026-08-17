@@ -28,6 +28,7 @@ from anatria_engine.protocol import (
     FocusOrgan,
     HighlightPathway,
     IlluminateStructures,
+    IsolateGroup,
     IsolateRegion,
     IsolateStructures,
     Language,
@@ -88,6 +89,13 @@ class SceneContext:
     #: case mode, where `record_case_verdict` is not registered at all — so a
     #: lesson has no way to write a grade even if the model asks for one.
     emit_verdict: Callable[[int, str], None] | None = None
+    #: Named groups that can be isolated whole — "Kidney", "Muscles". Validated
+    #: against, so the model cannot invent a heading the hierarchy lacks.
+    #:
+    #: Defaulted empty, which disables `isolate_group` rather than breaking it:
+    #: a client that sends no groups gets a tool that always retries with "not a
+    #: group", and the model falls back to naming ids.
+    groups: set[str] = field(default_factory=set)
     #: Commands emitted this turn, for assertions in tests.
     emitted: list[BaseModel] = field(default_factory=list)
 
@@ -245,6 +253,30 @@ def register_scene_tools(agent: Agent[SceneContext, str]) -> None:
         organ = _resolve(ctx, organ_id)
         ctx.deps.dispatch(IsolateRegion(organ_id=organ.organ_id))
         return f"Isolated {organ.ta2_latin} and its internal structures."
+
+    @agent.tool(sequential=True)
+    def isolate_group(ctx: RunContext[SceneContext], group: str) -> str:
+        """Show every structure under a named anatomical group.
+
+        For the groups listed in your instructions — "Kidney", "Muscles",
+        "Vertebral column". Use this when the reader asks for a whole organ or
+        region that is modelled as many parts: the atlas often has no single
+        mesh for it, so `focus_organ` has nothing to point at and naming the
+        parts one by one is not an answer.
+
+        The name must be spelled exactly as listed.
+        """
+        wanted = group.strip()
+        if wanted not in ctx.deps.groups:
+            near = [name for name in sorted(ctx.deps.groups) if wanted.lower() in name.lower()]
+            hint = f" Did you mean: {', '.join(near[:5])}?" if near else ""
+            raise ModelRetry(
+                f"{group!r} is not a group in the loaded hierarchy.{hint} "
+                "Use the exact name from the list in your instructions, or "
+                "isolate_structures with organ_ids instead."
+            )
+        ctx.deps.dispatch(IsolateGroup(group=wanted))
+        return f"Isolated everything under {wanted}."
 
     @agent.tool(sequential=True)
     def show_all_structures(ctx: RunContext[SceneContext]) -> str:

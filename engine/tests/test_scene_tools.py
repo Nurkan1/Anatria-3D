@@ -605,3 +605,84 @@ async def test_lighting_the_whole_body_is_refused() -> None:
 
     assert scene.emitted == []
     assert str(MAX_ILLUMINATED) in retries(result)
+
+
+# ---------------------------------------------------------------------------
+# Isolating a group
+# ---------------------------------------------------------------------------
+
+
+def grouped_scene() -> SceneContext:
+    scene = make_scene()
+    scene.groups = {"Heart", "Kidney", "Vertebral column"}
+    return scene
+
+
+def test_isolate_group_emits_the_name() -> None:
+    """Most of what a reader asks for is a heading, not a structure.
+
+    "The kidney" is fifty meshes on the female atlas and has no organ_id at
+    all, so `focus_organ` has nothing to point at. The name is the key because
+    there is nothing else to use.
+    """
+    scene = grouped_scene()
+    agent = Agent(
+        scripted([ToolCallPart("isolate_group", {"group": "Kidney"})]),
+        deps_type=SceneContext,
+    )
+    register_scene_tools(agent)
+    agent.run_sync("show me the kidney", deps=scene)
+
+    assert [command.group for command in scene.emitted] == ["Kidney"]
+
+
+def test_isolate_group_refuses_a_name_the_hierarchy_lacks() -> None:
+    """The same rule as organ ids: the model may not invent scene targets.
+
+    A heading that does not exist would isolate nothing and report success,
+    which reads to the user as the viewport ignoring the assistant.
+    """
+    scene = grouped_scene()
+    agent = Agent(
+        scripted([ToolCallPart("isolate_group", {"group": "Spleen"})]),
+        deps_type=SceneContext,
+    )
+    register_scene_tools(agent)
+    agent.run_sync("show me the spleen", deps=scene)
+
+    assert scene.emitted == []
+
+
+def test_isolate_group_suggests_a_near_miss() -> None:
+    """Casing and wording are exactly what a model gets wrong here.
+
+    The names come from an anatomical hierarchy, not from an id scheme, so
+    "vertebral column" against "Vertebral column" is the likely failure. A
+    retry that names the candidate costs one round trip; one that does not
+    costs the whole turn.
+    """
+    scene = grouped_scene()
+    agent = Agent(
+        scripted(
+            [ToolCallPart("isolate_group", {"group": "vertebral"})],
+            [ToolCallPart("isolate_group", {"group": "Vertebral column"})],
+        ),
+        deps_type=SceneContext,
+    )
+    register_scene_tools(agent)
+    agent.run_sync("show me the spine", deps=scene)
+
+    assert [command.group for command in scene.emitted] == ["Vertebral column"]
+
+
+def test_isolate_group_is_inert_without_groups() -> None:
+    """A client that sends none disables the tool rather than breaking it."""
+    scene = make_scene()
+    agent = Agent(
+        scripted([ToolCallPart("isolate_group", {"group": "Heart"})]),
+        deps_type=SceneContext,
+    )
+    register_scene_tools(agent)
+    agent.run_sync("show me the heart", deps=scene)
+
+    assert scene.emitted == []

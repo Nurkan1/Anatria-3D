@@ -176,6 +176,23 @@ export const SceneCommandSchema = z.discriminatedUnion("action", [
     action: z.literal("isolate_region"),
     organ_id: z.string().min(1),
   }),
+  /**
+   * Isolate a named anatomical group — "Kidney", "Muscles", "Vertebral column".
+   *
+   * Most groups are not structures. The atlas has no mesh called "Kidney" on
+   * the female body: it is fifty parts under one heading, and the same is true
+   * of 109 of the male atlas's 110 groups. Until this existed the reader could
+   * isolate them by right-clicking and the assistant could not, so "show me the
+   * whole kidney" was a request it had to answer by naming fifty ids or not at
+   * all.
+   *
+   * The name is the key rather than an id, for the same reason the right-click
+   * menu uses it: there is no id to use.
+   */
+  z.object({
+    action: z.literal("isolate_group"),
+    group: z.string().min(1),
+  }),
   z.object({
     action: z.literal("apply_pathology_overlay"),
     organ_id: z.string().min(1),
@@ -373,6 +390,24 @@ export const AgentRequestSchema = z.object({
    * validate every organ_id against this list, so it cannot invent anatomy.
    */
   available_organs: z.array(OrganMetaSchema),
+  /**
+   * Named groups in the manifest hierarchy that can be isolated whole.
+   *
+   * Names, not ids, because most of them have neither: 109 of the male atlas's
+   * 110 groups have no mesh of their own. Sending the list costs a few hundred
+   * tokens and is what lets the assistant reach "the kidney" or "the muscles" —
+   * which the reader has always been able to do by right-clicking.
+   *
+   * Deliberately *not* the whole ancestry of every organ. That would be the
+   * hierarchy of several thousand structures on every turn, which is the cost
+   * the summarised inventory exists to avoid.
+   *
+   * Optional on the way in, like every field added to an existing event: an
+   * engine that predates it must not reject the frame, and a frame that omits
+   * it must not fail here. The app always sends it; absent, `isolate_group`
+   * simply has nothing to offer and the model names ids instead.
+   */
+  available_groups: z.array(z.string().min(1)).max(400).optional(),
   /**
    * The virtual patient this drill belongs to, when there is one.
    *

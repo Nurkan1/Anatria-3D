@@ -80,6 +80,7 @@ def build_agent(request: AgentRequest, scene: SceneContext) -> Agent[SceneContex
             mode=request.mode,
             patient=request.case,
             gender=request.gender_model,
+            groups=request.available_groups,
         ),
         retries=TOOL_RETRIES,
     )
@@ -95,6 +96,7 @@ def build_scene_context(request: AgentRequest, emit, emit_verdict=None) -> Scene
     systems: set[AnatomicalSystem] = {organ.system for organ in request.available_organs}
     return SceneContext(
         organs={organ.organ_id: organ for organ in request.available_organs},
+        groups=set(request.available_groups),
         systems=systems,
         profile=request.profile,
         language=request.language,

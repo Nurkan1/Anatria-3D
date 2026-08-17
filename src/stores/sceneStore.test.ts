@@ -12,6 +12,7 @@ import {
   regionMembers,
   XRAY_OPACITY,
   regionMembersByNode,
+  groupNames,
   useSceneStore,
   isOrganVisible,
   organLabel,
@@ -1163,5 +1164,83 @@ describe("naming a structure TA2 names only as a class", () => {
 
   it("leaves a structure with no qualifier exactly as it was", () => {
     expect(organLabel(organ())).toBe("Ventriculus sinister");
+  });
+});
+
+describe("isolating a named group", () => {
+  const spine = (level: string): ManifestOrgan =>
+    organ({
+      organ_id: `vertebra_${level.toLowerCase()}`,
+      ta2_latin: `Vertebra ${level}`,
+      name_en: `Vertebra ${level}`,
+      system: "skeletal",
+      node: `Vertebra ${level}`,
+      path: ["Vertebral column", "Thoracic vertebrae"],
+    });
+
+  beforeEach(() => {
+    useSceneStore.setState({
+      ...initialViewState,
+      organs: {
+        vertebra_t1: spine("T1"),
+        vertebra_t2: spine("T2"),
+        left_ventricle: organ(),
+      },
+    });
+  });
+
+  it("isolates every structure under the name", () => {
+    // The reader has always been able to do this by right-clicking. Until the
+    // command existed the assistant could not, so "show me the spine" had to
+    // be answered by naming every vertebra or not at all.
+    useSceneStore.getState().applyCommand({
+      action: "isolate_group",
+      group: "Vertebral column",
+    });
+
+    expect(useSceneStore.getState().isolatedOrganIds?.sort()).toEqual([
+      "vertebra_t1",
+      "vertebra_t2",
+    ]);
+  });
+
+  it("leaves the scene alone when nothing carries that name", () => {
+    // Not an error to surface here — the engine already rejects a name outside
+    // the hierarchy. This is the second line, and doing nothing beats isolating
+    // an empty set, which would blank the viewport.
+    useSceneStore.setState({ isolatedOrganIds: ["left_ventricle"] });
+
+    useSceneStore.getState().applyCommand({ action: "isolate_group", group: "Pancreas" });
+
+    expect(useSceneStore.getState().isolatedOrganIds).toEqual(["left_ventricle"]);
+  });
+
+  it("reaches the same set as the right-click menu", () => {
+    // Two entry points, one resolver. If they ever disagree the assistant and
+    // the reader would be isolating different anatomy under one name.
+    useSceneStore.getState().studyGroup("Vertebral column");
+    const byMenu = useSceneStore.getState().isolatedOrganIds;
+
+    useSceneStore.getState().clearIsolation();
+    useSceneStore.getState().applyCommand({
+      action: "isolate_group",
+      group: "Vertebral column",
+    });
+
+    expect(useSceneStore.getState().isolatedOrganIds).toEqual(byMenu);
+  });
+});
+
+describe("groupNames", () => {
+  it("offers only headings that hold more than one structure", () => {
+    // A group of one is that structure, which the assistant can already reach
+    // by id. Listing it would spend tokens to offer a second way to do the
+    // same thing.
+    const organs = [
+      organ({ organ_id: "a", path: ["Liver", "Lobes"] }),
+      organ({ organ_id: "b", path: ["Liver", "Lobes"] }),
+      organ({ organ_id: "c", path: ["Spleen"] }),
+    ];
+    expect(groupNames(organs)).toEqual(["Liver", "Lobes"]);
   });
 });

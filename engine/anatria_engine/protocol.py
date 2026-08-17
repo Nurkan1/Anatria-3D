@@ -258,6 +258,23 @@ class IsolateRegion(Strict):
     organ_id: str = Field(min_length=1)
 
 
+class IsolateGroup(Strict):
+    """Show every structure under a named group in the manifest hierarchy.
+
+    Most groups are not structures. The atlas has no mesh called "Kidney" on the
+    female body — it is fifty parts under one heading — and 109 of the male
+    atlas's 110 groups are the same. The reader has always been able to isolate
+    them by right-clicking; without this the assistant could not, so "show me
+    the whole kidney" had to be answered by naming fifty ids or not at all.
+
+    Expanded by the viewer, which holds the hierarchy. The name is the key
+    because there is no id to use.
+    """
+
+    action: Literal["isolate_group"] = "isolate_group"
+    group: str = Field(min_length=1)
+
+
 class ClearPathologyOverlays(Strict):
     action: Literal["clear_pathology_overlays"] = "clear_pathology_overlays"
 
@@ -328,6 +345,7 @@ SceneCommand = Annotated[
     | SetLayerOpacity
     | IsolateStructures
     | IsolateRegion
+    | IsolateGroup
     | ApplyPathologyOverlay
     | ClearPathologyOverlays
     | HighlightPathway
@@ -371,6 +389,14 @@ class AgentRequest(Strict):
     #: structure because comparing is the everyday study move.
     selection: list[OrganContext] = Field(max_length=64)
     available_organs: list[OrganMeta]
+    #: Named groups in the manifest hierarchy that can be isolated whole —
+    #: "Kidney", "Muscles", "Vertebral column". Names, not ids, because most of
+    #: them have neither.
+    #:
+    #: Defaulted for the usual reason: a new field on an existing event is
+    #: optional on the way in, or every frame from an older client fails
+    #: validation and is dropped.
+    available_groups: list[str] = Field(default_factory=list, max_length=400)
     #: The virtual patient this drill belongs to, when there is one.
     #:
     #: Defaulted, not required — a new field on an existing event is optional on

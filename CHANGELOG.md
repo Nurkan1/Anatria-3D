@@ -67,6 +67,16 @@ individually its own term is used — every vertebra is numbered there, so T7 is
 names only the class, the part is appended after it: *Os ilium · left · compact
 bone*.
 
+**The assistant can now isolate a whole organ.** Ask it for "the kidney" or "the
+spine" and it shows you all of it. That sounds like something it could always
+do, and it could not: most of what a reader asks for is a heading in the atlas
+rather than a structure with an identifier — the kidney is fifty separate meshes
+on the female body, the muscles are four hundred on the male, and 109 of the
+male atlas's 110 groups have no mesh of their own. You could isolate them by
+right-clicking; the assistant had to name every part or admit it could not.
+It now reaches the same groups you do, through the same resolver, so the two
+cannot drift into isolating different anatomy under one name.
+
 The sixth lumbar vertebra is the one place the two atlases cannot agree, and it
 is the more useful for it. TA2 stops at L5 — it does not name a sixth, because
 it does not expect one — so that vertebra alone reads *Vertebra lumbalis · L6*

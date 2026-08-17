@@ -456,6 +456,37 @@ def _body_rule(gender: GenderModel) -> str:
     )
 
 
+def _groups_rule(groups: list[str]) -> str:
+    """The named groups, and the one thing the model has to know about them.
+
+    Without this the agent can only name structures one at a time, and most of
+    what a reader asks for is not a structure. "The kidney" is fifty meshes on
+    the female atlas and "the muscles" is four hundred on the male; neither has
+    an organ_id, because neither is an organ in the manifest. The reader has
+    always been able to isolate them from the right-click menu — this is what
+    lets the assistant keep up.
+    """
+    if not groups:
+        return ""
+    listed = ", ".join(groups)
+    return _joined(
+        [
+            "GROUPS YOU CAN ISOLATE WHOLE",
+            "",
+            "Some of what a reader asks for is not one structure but a heading "
+            "over many — the kidney, the vertebral column, the muscles. Those "
+            "have no organ_id, so `focus_organ` has nothing to point at. Call "
+            "`isolate_group` with the name instead, spelled exactly as listed:",
+            "",
+            listed,
+            "",
+            "Use it when the request is for a whole organ or region. Keep "
+            "`isolate_structures` for a handful of named parts, and "
+            "`focus_organ` for one.",
+        ]
+    )
+
+
 def _scene_inventory(organs: list[OrganMeta], selection: list[OrganContext]) -> str:
     lines: list[str] = []
 
@@ -746,6 +777,10 @@ def build_instructions(
     selection: list[OrganContext],
     mode: SessionMode,
     patient: VirtualPatient | None = None,
+    #: Named groups that can be isolated whole. Defaulted for the same reason
+    #: every new field is: an older client sends none, and the tool then simply
+    #: has nothing to offer.
+    groups: list[str] | None = None,
     # Defaulted rather than required, for the same reason every new protocol
     # field is optional on the way in: a window and a sidecar do not always
     # ship together, and the male atlas is what every build before this one
@@ -778,4 +813,10 @@ def build_instructions(
         _body_rule(gender),
         _scene_inventory(organs, selection),
     ]
+    # After the inventory, because it is what the inventory cannot express: a
+    # summarised list of 3,478 structures says nothing about the headings they
+    # sit under, and those headings are most of what gets asked for.
+    grouping = _groups_rule(groups or [])
+    if grouping:
+        layers.append(grouping)
     return "\n\n".join(layers)
