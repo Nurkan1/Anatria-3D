@@ -63,8 +63,15 @@ function ViewerFallback({ message }: { message: string }) {
   );
 }
 
+/**
+ * The atlas a session opens on, and the only one stored view preferences apply
+ * to. See the restore in the effect below.
+ */
+const FIRST_ATLAS = "male";
+
 export function AnatomyViewer() {
   const setManifest = useSceneStore((s) => s.setManifest);
+  const genderModel = useSceneStore((s) => s.genderModel);
   const background = useSceneStore((s) => s.background);
   const restoreView = useSceneStore((s) => s.restoreView);
   const [manifest, setLocalManifest] = useState<AnatomyManifest | null>(null);
@@ -93,13 +100,22 @@ export function AnatomyViewer() {
 
   useEffect(() => {
     const controller = new AbortController();
-    loadManifest(controller.signal).then(
+    setLocalManifest(null);
+    setError(null);
+    loadManifest(genderModel, controller.signal).then(
       (loaded) => {
         setLocalManifest(loaded);
         setManifest(loaded);
-        // Immediately after, and validated against the manifest that just
-        // loaded: a preference naming a system this build no longer ships
-        // would otherwise hide it with no row in the tree to bring it back.
+        // Only for the atlas the session opened with. A stored preference is a
+        // record of what the reader had switched off on *that* body, and the
+        // two atlases share system names without sharing systems — restoring it
+        // onto the other one would hide the female reproductive structures
+        // because the male ones had been put away, which reads as the module
+        // failing to load.
+        if (genderModel !== FIRST_ATLAS) return;
+        // Validated against the manifest that just loaded: a preference naming
+        // a system this build no longer ships would otherwise hide it with no
+        // row in the tree to bring it back.
         restoreView(
           sanitiseViewPreferences(
             readStoredView(),
@@ -113,7 +129,7 @@ export function AnatomyViewer() {
       },
     );
     return () => controller.abort();
-  }, [setManifest, restoreView]);
+  }, [genderModel, setManifest, restoreView]);
 
   if (error) return <ViewerFallback message={error} />;
   if (!manifest) return <ViewerFallback message="Loading anatomy…" />;

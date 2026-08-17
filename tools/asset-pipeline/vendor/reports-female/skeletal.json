@@ -1,0 +1,237 @@
+{
+ "system": "skeletal",
+ "sex": "female",
+ "source": {
+  "version": "v1.5",
+  "url": "https://cdn.humanatlas.io/digital-objects/ref-organ/united-female/v1.5/assets/3d-vh-f-united.glb",
+  "metadata": "https://cdn.humanatlas.io/digital-objects/ref-organ/united-female/v1.5/metadata.json",
+  "license": "CC-BY-4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "sha256": "472567a56896b9b7890508da6501fbf858e56aaa30745365f7a71ade782b529c"
+ },
+ "output": "skeletal_female.glb",
+ "draco": true,
+ "object_count": 14,
+ "objects": [
+  {
+   "name": "Coccyx",
+   "organ_id": "coccyx",
+   "node": "VH_F_coccyx",
+   "term": "Coccyx",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001350",
+   "source_label": "coccyx",
+   "polygons": 1390,
+   "path": [
+    "Pelvic girdle"
+   ]
+  },
+  {
+   "name": "Ilium, compact bone (left)",
+   "organ_id": "ilium_compact_bone_l",
+   "node": "VH_F_ilium_compact_bone_L",
+   "term": "Ilium",
+   "qualifier": "compact bone",
+   "side": "left",
+   "ontology_id": "UBERON:0001439",
+   "source_label": "compact bone tissue",
+   "polygons": 12684,
+   "path": [
+    "Pelvic girdle",
+    "Hip bone",
+    "Ilium"
+   ]
+  },
+  {
+   "name": "Ilium, compact bone (right)",
+   "organ_id": "ilium_compact_bone_r",
+   "node": "VH_F_ilium_compact_bone_R",
+   "term": "Ilium",
+   "qualifier": "compact bone",
+   "side": "right",
+   "ontology_id": "UBERON:0001439",
+   "source_label": "compact bone tissue",
+   "polygons": 11810,
+   "path": [
+    "Pelvic girdle",
+    "Hip bone",
+    "Ilium"
+   ]
+  },
+  {
+   "name": "Ilium, spongy bone (left)",
+   "organ_id": "ilium_spongy_bone_l",
+   "node": "VH_F_ilium_spongy_bone_L",
+   "term": "Ilium",
+   "qualifier": "spongy bone",
+   "side": "left",
+   "ontology_id": "UBERON:0002483",
+   "source_label": "trabecular bone tissue",
+   "polygons": 6022,
+   "path": [
+    "Pelvic girdle",
+    "Hip bone",
+    "Ilium"
+   ]
+  },
+  {
+   "name": "Ilium, spongy bone (right)",
+   "organ_id": "ilium_spongy_bone_r",
+   "node": "VH_F_ilium_spongy_bone_R",
+   "term": "Ilium",
+   "qualifier": "spongy bone",
+   "side": "right",
+   "ontology_id": "UBERON:0002483",
+   "source_label": "trabecular bone tissue",
+   "polygons": 5597,
+   "path": [
+    "Pelvic girdle",
+    "Hip bone",
+    "Ilium"
+   ]
+  },
+  {
+   "name": "Ischium, compact bone (left)",
+   "organ_id": "ischium_compact_bone_l",
+   "node": "VH_F_ischium_compact_bone_L",
+   "term": "Ischium",
+   "qualifier": "compact bone",
+   "side": "left",
+   "ontology_id": "UBERON:0001439",
+   "source_label": "compact bone tissue",
+   "polygons": 5392,
+   "path": [
+    "Pelvic girdle",
+    "Hip bone",
+    "Ischium"
+   ]
+  },
+  {
+   "name": "Ischium, compact bone (right)",
+   "organ_id": "ischium_compact_bone_r",
+   "node": "VH_F_ischium_compact_bone_R",
+   "term": "Ischium",
+   "qualifier": "compact bone",
+   "side": "right",
+   "ontology_id": "UBERON:0001439",
+   "source_label": "compact bone tissue",
+   "polygons": 5390,
+   "path": [
+    "Pelvic girdle",
+    "Hip bone",
+    "Ischium"
+   ]
+  },
+  {
+   "name": "Ischium, spongy bone (left)",
+   "organ_id": "ischium_spongy_bone_l",
+   "node": "VH_F_ischium_spongy_bone_L",
+   "term": "Ischium",
+   "qualifier": "spongy bone",
+   "side": "left",
+   "ontology_id": "UBERON:0002483",
+   "source_label": "trabecular bone tissue",
+   "polygons": 2296,
+   "path": [
+    "Pelvic girdle",
+    "Hip bone",
+    "Ischium"
+   ]
+  },
+  {
+   "name": "Ischium, spongy bone (right)",
+   "organ_id": "ischium_spongy_bone_r",
+   "node": "VH_F_ischium_spongy_bone_R",
+   "term": "Ischium",
+   "qualifier": "spongy bone",
+   "side": "right",
+   "ontology_id": "UBERON:0002483",
+   "source_label": "trabecular bone tissue",
+   "polygons": 2291,
+   "path": [
+    "Pelvic girdle",
+    "Hip bone",
+    "Ischium"
+   ]
+  },
+  {
+   "name": "Pubis, compact bone (left)",
+   "organ_id": "pubis_compact_bone_l",
+   "node": "VH_F_pubis_compact_bone_L",
+   "term": "Pubis",
+   "qualifier": "compact bone",
+   "side": "left",
+   "ontology_id": "UBERON:0001439",
+   "source_label": "compact bone tissue",
+   "polygons": 5376,
+   "path": [
+    "Pelvic girdle",
+    "Hip bone",
+    "Pubis"
+   ]
+  },
+  {
+   "name": "Pubis, compact bone (right)",
+   "organ_id": "pubis_compact_bone_r",
+   "node": "VH_F_pubis_compact_bone_R",
+   "term": "Pubis",
+   "qualifier": "compact bone",
+   "side": "right",
+   "ontology_id": "UBERON:0001439",
+   "source_label": "compact bone tissue",
+   "polygons": 5080,
+   "path": [
+    "Pelvic girdle",
+    "Hip bone",
+    "Pubis"
+   ]
+  },
+  {
+   "name": "Pubis, spongy bone (left)",
+   "organ_id": "pubis_spongy_bone_l",
+   "node": "VH_F_pubis_spongy_bone_L",
+   "term": "Pubis",
+   "qualifier": "spongy bone",
+   "side": "left",
+   "ontology_id": "UBERON:0002483",
+   "source_label": "trabecular bone tissue",
+   "polygons": 2312,
+   "path": [
+    "Pelvic girdle",
+    "Hip bone",
+    "Pubis"
+   ]
+  },
+  {
+   "name": "Pubis, spongy bone (right)",
+   "organ_id": "pubis_spongy_bone_r",
+   "node": "VH_F_pubis_spongy_bone_R",
+   "term": "Pubis",
+   "qualifier": "spongy bone",
+   "side": "right",
+   "ontology_id": "UBERON:0002483",
+   "source_label": "trabecular bone tissue",
+   "polygons": 2172,
+   "path": [
+    "Pelvic girdle",
+    "Hip bone",
+    "Pubis"
+   ]
+  },
+  {
+   "name": "Sacrum",
+   "organ_id": "sacrum",
+   "node": "VH_F_sacrum",
+   "term": "Sacrum",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0003690",
+   "source_label": "fused sacrum",
+   "polygons": 19636,
+   "path": [
+    "Pelvic girdle"
+   ]
+  }
+ ]
+}

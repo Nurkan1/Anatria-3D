@@ -7,8 +7,11 @@ License, Version 2.0. See the LICENSE file alongside this one.
 --------------------------------------------------------------------------
 
 This product also includes anatomical 3D meshes and nomenclature that are NOT
-covered by the Apache License. They are adaptations of open anatomical datasets
-and remain under Creative Commons Attribution-ShareAlike 4.0 International:
+covered by the Apache License. They come from two unrelated open datasets, and
+they are under two different Creative Commons licences.
+
+The male atlas — `manifest.json`, `*_male.glb` —
+Creative Commons Attribution-ShareAlike 4.0 International:
 
   BodyParts3D — The Database Center for Life Science (DBCLS), Japan
                 CC BY-SA 2.1 Japan
@@ -17,8 +20,25 @@ and remain under Creative Commons Attribution-ShareAlike 4.0 International:
 
 Anatria3D's adaptations of those meshes are themselves CC BY-SA 4.0.
 Redistributing them requires preserving this attribution and keeping them under
-that licence. The full attribution ships with the data, in `anatomy/NOTICE` and
-`anatomy/LICENSE`, and is summarised for readers in THIRD-PARTY-NOTICES.txt.
+that licence.
+
+The female atlas — `manifest_female.json`, `*_female.glb` —
+Creative Commons Attribution 4.0 International:
+
+  Human Reference Atlas 3D Reference Organ Library
+              HuBMAP Consortium / NIH — https://humanatlas.io/
+              ref-organ/united-female v1.5, CC BY 4.0
+  Visible Human Female
+              U.S. National Library of Medicine, the underlying dataset
+              (Spitzer & Whitlock, 2002)
+
+Anatria3D's adaptations of those meshes remain CC BY 4.0. Redistributing them
+requires preserving this attribution; there is no share-alike obligation.
+
+The two must not be combined into one file — doing so would impose share-alike
+on material whose authors chose attribution alone. The full attribution ships
+with the data, in `anatomy/NOTICE` and `anatomy/LICENSE`, and is summarised for
+readers in THIRD-PARTY-NOTICES.txt.
 
 --------------------------------------------------------------------------
 

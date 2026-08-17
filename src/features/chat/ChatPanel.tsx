@@ -543,6 +543,7 @@ export function ChatPanel() {
   const organs = useSceneStore((s) => s.organs);
   const selectedOrganIds = useSceneStore((s) => s.selectedOrganIds);
   const hiddenSystems = useSceneStore((s) => s.hiddenSystems);
+  const genderModel = useSceneStore((s) => s.genderModel);
 
   const messages = useChatStore((s) => s.messages);
   const pendingRequestId = useChatStore((s) => s.pendingRequestId);
@@ -880,7 +881,7 @@ export function ChatPanel() {
         ...(selectedModel ? { model: selectedModel } : {}),
         profile,
         language,
-        gender_model: "male",
+        gender_model: genderModel,
         mode,
         selection,
         // The engine validates every organ_id the model produces against this

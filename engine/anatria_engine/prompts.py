@@ -22,6 +22,7 @@ their question. See `_language_rule`.
 from __future__ import annotations
 
 from anatria_engine.protocol import (
+    GenderModel,
     Language,
     OrganContext,
     OrganMeta,
@@ -384,6 +385,51 @@ Three things do *not* trigger that override:
 INLINE_INVENTORY_LIMIT = 120
 
 
+def _body_rule(gender: GenderModel) -> str:
+    """Which body is on screen, and what it does not contain.
+
+    The female atlas is a pelvic module, not a body. Without being told, the
+    agent reasons from the male atlas it has always seen and offers to show a
+    kidney or a lung — structures whose organ_id does not exist here. The tool
+    layer rejects the call, correctly, and the reader sees an assistant that
+    promised something and then did nothing. Naming the limit up front converts
+    that into a straight answer about where the structure can be found.
+    """
+    if gender == "female":
+        return _joined(
+            [
+                "THE BODY ON SCREEN",
+                "",
+                "The female atlas is loaded. It is a **pelvic and reproductive "
+                "module**, not a whole body: the uterus, uterine tubes, ovaries, "
+                "vagina, their ligaments and peritoneal folds, the bladder and "
+                "ureters, the pelvic girdle, the rectum and sigmoid colon, and the "
+                "pelvic vessels. Nothing above the pelvis is loaded.",
+                "",
+                "So do not offer to show, focus or isolate anything outside that "
+                "region — there is no thorax, no abdomen above the pelvic brim, no "
+                "limbs, no head. If the reader asks about a structure that is not "
+                "here, say plainly that it is on the male atlas and that the Body "
+                "switch above the systems list changes over. Do not guess an "
+                "organ_id, and do not apologise at length; one sentence and then "
+                "answer the anatomy question in words.",
+                "",
+                "You may of course *discuss* anything. The limit is on what can be "
+                "shown, not on what can be taught.",
+            ]
+        )
+    return _joined(
+        [
+            "THE BODY ON SCREEN",
+            "",
+            "The male atlas is loaded — a whole body, every system. Female pelvic "
+            "and reproductive anatomy is a separate atlas, reached by the Body "
+            "switch above the systems list; its structures cannot be shown while "
+            "this one is loaded.",
+        ]
+    )
+
+
 def _scene_inventory(organs: list[OrganMeta], selection: list[OrganContext]) -> str:
     lines: list[str] = []
 
@@ -674,6 +720,11 @@ def build_instructions(
     selection: list[OrganContext],
     mode: SessionMode,
     patient: VirtualPatient | None = None,
+    # Defaulted rather than required, for the same reason every new protocol
+    # field is optional on the way in: a window and a sidecar do not always
+    # ship together, and the male atlas is what every build before this one
+    # loaded.
+    gender: GenderModel = "male",
 ) -> str:
     """Compose the system instructions for one turn.
 
@@ -695,6 +746,10 @@ def build_instructions(
     layers += [
         PROFILES[profile],
         _language_rule(language),
+        # Immediately before the inventory, because it is what the inventory
+        # means: 76 structures is a complete pelvis or a broken body depending
+        # entirely on which atlas the reader has open.
+        _body_rule(gender),
         _scene_inventory(organs, selection),
     ]
     return "\n\n".join(layers)

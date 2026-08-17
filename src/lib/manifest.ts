@@ -1,4 +1,9 @@
-import { AnatomyManifestSchema, type AnatomyManifest, type ManifestOrgan } from "./schemas";
+import {
+  AnatomyManifestSchema,
+  type AnatomyManifest,
+  type GenderModel,
+  type ManifestOrgan,
+} from "./schemas";
 
 /**
  * The anatomy manifest and its meshes live in `public/`, so they ship inside
@@ -6,11 +11,28 @@ import { AnatomyManifestSchema, type AnatomyManifest, type ManifestOrgan } from 
  * protocol, no filesystem permission. At ~300 KB for a whole system that is a
  * better trade than granting the webview read access to disk.
  */
-const MANIFEST_URL = "/anatomy/manifest.json";
 const MESH_BASE = "/anatomy/";
 
-export async function loadManifest(signal?: AbortSignal): Promise<AnatomyManifest> {
-  const response = await fetch(MANIFEST_URL, signal ? { signal } : {});
+/**
+ * One manifest per body, and they are genuinely separate documents.
+ *
+ * Not a `sex` column in one file, for two reasons that both matter. The
+ * licences differ — the male atlas is CC BY-SA 4.0 through Z-Anatomy, the
+ * female CC BY 4.0 through the HRA — and a manifest carries the derived label
+ * data, so merging them would force one licence onto both. And the bodies are
+ * two different people: nothing in one is positioned to sit inside the other,
+ * so there is no view in which both are on screen at once.
+ */
+const MANIFEST_URL: Record<GenderModel, string> = {
+  male: "/anatomy/manifest.json",
+  female: "/anatomy/manifest_female.json",
+};
+
+export async function loadManifest(
+  gender: GenderModel,
+  signal?: AbortSignal,
+): Promise<AnatomyManifest> {
+  const response = await fetch(MANIFEST_URL[gender], signal ? { signal } : {});
   if (!response.ok) {
     throw new Error(`Could not load the anatomy manifest (HTTP ${response.status}).`);
   }

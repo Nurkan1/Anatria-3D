@@ -13,6 +13,35 @@ There is **no auto-updater**, by design: the application never reaches the
 network on its own. A new version reaches you only when you download and install
 it, so this file is also the answer to "is it worth reinstalling".
 
+## [Unreleased]
+
+### Added
+
+**Female pelvic and reproductive anatomy.** The atlas now has a second body.
+A Male/Female switch sits above the systems list, and choosing Female loads
+76 structures built from the NIH Human Reference Atlas: the uterus with its
+cervix and walls, both uterine tubes down to the fimbriae, the ovaries, the
+vagina, the full set of suspensory ligaments and peritoneal folds, the bladder
+and ureters, the pelvic girdle, the rectum and sigmoid colon, and seventeen
+pelvic vessels including the uterine arteries and veins.
+
+It is **not a whole female body**, and the application says so where you choose
+it. No open dataset provides one: the Human Reference Atlas models organs for
+cell mapping rather than a body for teaching, and the raw Visible Human Female
+is forty gigabytes of photographs with no meshes in it. What is here is the
+region that was genuinely missing — the male atlas had fourteen reproductive
+structures and no female counterpart at all.
+
+Every structure carries its Terminologia Anatomica Latin, matched by hand,
+because the source names anatomy with UBERON and FMA labels that are not unique
+and often word structures differently. Three structures in the source are
+deliberately not shipped, because TA2 does not list them and inventing Latin
+would be worse than leaving them out.
+
+The two atlases stay in separate files under their own licences — the male one
+share-alike through Z-Anatomy, the female attribution-only through the HRA —
+and nothing merges them.
+
 ## [0.1.7] — 2026-08-16
 
 ### Added

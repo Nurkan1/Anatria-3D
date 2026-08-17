@@ -3,6 +3,7 @@ import { create } from "zustand";
 import type {
   AnatomicalSystem,
   AnatomyManifest,
+  GenderModel,
   ManifestOrgan,
   SceneCommand,
   SectionPlane,
@@ -359,6 +360,12 @@ export function applySceneCommand(
 // ---------------------------------------------------------------------------
 
 interface SceneStore extends SceneViewState {
+  /**
+   * Which atlas is loaded. A preference, not view state: it survives
+   * `reset_view`, because "show me everything again" does not mean "and put the
+   * other body back".
+   */
+  genderModel: GenderModel;
   manifest: AnatomyManifest | null;
   organs: Record<string, ManifestOrgan>;
   hoveredOrganId: string | null;
@@ -409,6 +416,19 @@ interface SceneStore extends SceneViewState {
   pinnedStack: string[] | null;
 
   setManifest: (manifest: AnatomyManifest) => void;
+  /**
+   * Switch atlases.
+   *
+   * Everything the reader had selected, hidden, isolated or marked is dropped,
+   * and it has to be: those are organ ids, and the ids of one atlas name
+   * nothing in the other. Carrying them across would leave a selection of
+   * structures that are not on screen and cannot be brought back — the sort of
+   * state that looks like a rendering bug.
+   *
+   * The manifest is cleared too, so the viewer shows its loading state rather
+   * than drawing the old body against the new one's organ table.
+   */
+  setGenderModel: (gender: GenderModel) => void;
   setHovered: (organId: string | null) => void;
   /** Ignored when the reading has not changed; see `sameStack`. */
   setDepthStack: (organIds: string[]) => void;
@@ -515,6 +535,7 @@ interface SceneStore extends SceneViewState {
 
 export const useSceneStore = create<SceneStore>()((set, get) => ({
   ...initialViewState,
+  genderModel: "male",
   manifest: null,
   organs: {},
   hoveredOrganId: null,
@@ -538,6 +559,21 @@ export const useSceneStore = create<SceneStore>()((set, get) => ({
         .map((entry) => entry.system)
         .sort(),
     }),
+
+  setGenderModel: (gender) =>
+    set((state) =>
+      state.genderModel === gender
+        ? state
+        : {
+            ...initialViewState,
+            genderModel: gender,
+            manifest: null,
+            organs: {},
+            hoveredOrganId: null,
+            depthStack: [],
+            pinnedStack: null,
+          },
+    ),
 
   setHovered: (organId) => set({ hoveredOrganId: organId }),
 

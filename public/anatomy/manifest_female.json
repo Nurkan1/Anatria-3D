@@ -1,0 +1,927 @@
+{
+  "version": 1,
+  "gender_model": "female",
+  "attribution": "Meshes from the Human Reference Atlas (HRA) 3D Reference Organ Library, HuBMAP Consortium / NIH (CC BY 4.0), derived from the Visible Human Female dataset of the U.S. National Library of Medicine. See NOTICE.",
+  "license": "CC-BY-4.0",
+  "source": {
+    "version": "v1.5",
+    "url": "https://cdn.humanatlas.io/digital-objects/ref-organ/united-female/v1.5/assets/3d-vh-f-united.glb",
+    "metadata": "https://cdn.humanatlas.io/digital-objects/ref-organ/united-female/v1.5/metadata.json",
+    "license": "CC-BY-4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  "systems": [
+    {
+      "system": "cardiovascular",
+      "organ_count": 17,
+      "load_on_start": false
+    },
+    {
+      "system": "digestive",
+      "organ_count": 2,
+      "load_on_start": false
+    },
+    {
+      "system": "renal",
+      "organ_count": 8,
+      "load_on_start": false
+    },
+    {
+      "system": "reproductive",
+      "organ_count": 35,
+      "load_on_start": false
+    },
+    {
+      "system": "skeletal",
+      "organ_count": 14,
+      "load_on_start": true
+    }
+  ],
+  "organs": [
+    {
+      "organ_id": "ampulla_of_uterine_tube_l",
+      "ta2_latin": "Ampulla tubae uterinae",
+      "name_en": "Ampulla of uterine tube (left)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_ampulla_of_uterine_tube_L",
+      "path": [
+        "Uterine tube"
+      ]
+    },
+    {
+      "organ_id": "ampulla_of_uterine_tube_r",
+      "ta2_latin": "Ampulla tubae uterinae",
+      "name_en": "Ampulla of uterine tube (right)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_ampulla_of_uterine_tube_R",
+      "path": [
+        "Uterine tube"
+      ]
+    },
+    {
+      "organ_id": "superior_anorectal_artery",
+      "ta2_latin": "Arteria anorectalis superior",
+      "name_en": "Superior anorectal artery",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_superior_rectal_artery",
+      "path": [
+        "Pelvic vessels",
+        "Arteries"
+      ]
+    },
+    {
+      "organ_id": "uterine_artery_l",
+      "ta2_latin": "Arteria uterina",
+      "name_en": "Uterine artery (left)",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_left_uterine_artery",
+      "path": [
+        "Pelvic vessels",
+        "Arteries"
+      ]
+    },
+    {
+      "organ_id": "uterine_artery_r",
+      "ta2_latin": "Arteria uterina",
+      "name_en": "Uterine artery (right)",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_right_uterine_artery",
+      "path": [
+        "Pelvic vessels",
+        "Arteries"
+      ]
+    },
+    {
+      "organ_id": "cervix_of_uterus",
+      "ta2_latin": "Cervix uteri",
+      "name_en": "Cervix of uterus",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_cervix",
+      "path": [
+        "Uterus"
+      ]
+    },
+    {
+      "organ_id": "neck_of_bladder",
+      "ta2_latin": "Cervix vesicae",
+      "name_en": "Neck of bladder",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_urinary_bladder_neck_smooth_muscle",
+      "path": [
+        "Urinary bladder"
+      ]
+    },
+    {
+      "organ_id": "sigmoid_colon",
+      "ta2_latin": "Colon sigmoideum",
+      "name_en": "Sigmoid colon",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_sigmoid_colon",
+      "path": [
+        "Large intestine"
+      ]
+    },
+    {
+      "organ_id": "body_of_uterus",
+      "ta2_latin": "Corpus uteri",
+      "name_en": "Body of uterus",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_body_of_uterus",
+      "path": [
+        "Uterus"
+      ]
+    },
+    {
+      "organ_id": "vesico_uterine_pouch",
+      "ta2_latin": "Excavatio vesicouterina",
+      "name_en": "Vesico-uterine pouch",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_uterovesical_pouch",
+      "path": [
+        "Ligaments of uterus and ovary"
+      ]
+    },
+    {
+      "organ_id": "anterior_surface_of_uterus",
+      "ta2_latin": "Facies anterior uteri",
+      "name_en": "Anterior surface of uterus",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_anterior_wall_of_uterus",
+      "path": [
+        "Uterus"
+      ]
+    },
+    {
+      "organ_id": "posterior_surface_of_uterus",
+      "ta2_latin": "Facies posterior uteri",
+      "name_en": "Posterior surface of uterus",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_posterior_wall_of_uterus",
+      "path": [
+        "Uterus"
+      ]
+    },
+    {
+      "organ_id": "fimbriae_of_uterine_tube_l",
+      "ta2_latin": "Fimbriae tubae uterinae",
+      "name_en": "Fimbriae of uterine tube (left)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_fibria_of_uterine_tube_L",
+      "path": [
+        "Uterine tube"
+      ]
+    },
+    {
+      "organ_id": "fimbriae_of_uterine_tube_r",
+      "ta2_latin": "Fimbriae tubae uterinae",
+      "name_en": "Fimbriae of uterine tube (right)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_fibria_of_uterine_tube_R",
+      "path": [
+        "Uterine tube"
+      ]
+    },
+    {
+      "organ_id": "fundus_of_uterus",
+      "ta2_latin": "Fundus uteri",
+      "name_en": "Fundus of uterus",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_fundus_of_uterus",
+      "path": [
+        "Uterus"
+      ]
+    },
+    {
+      "organ_id": "fundus_of_bladder_base",
+      "ta2_latin": "Fundus vesicae",
+      "name_en": "Fundus of bladder, base",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_fundus_of_urinary_bladder_base",
+      "path": [
+        "Urinary bladder"
+      ]
+    },
+    {
+      "organ_id": "fundus_of_bladder_dome",
+      "ta2_latin": "Fundus vesicae",
+      "name_en": "Fundus of bladder, dome",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_fundus_of_urinary_bladder_dome",
+      "path": [
+        "Urinary bladder"
+      ]
+    },
+    {
+      "organ_id": "infundibulum_of_uterine_tube_l",
+      "ta2_latin": "Infundibulum tubae uterinae",
+      "name_en": "Infundibulum of uterine tube (left)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_uterine_tube_infundibulum_L",
+      "path": [
+        "Uterine tube"
+      ]
+    },
+    {
+      "organ_id": "infundibulum_of_uterine_tube_r",
+      "ta2_latin": "Infundibulum tubae uterinae",
+      "name_en": "Infundibulum of uterine tube (right)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_uterine_tube_infundibulum_R",
+      "path": [
+        "Uterine tube"
+      ]
+    },
+    {
+      "organ_id": "isthmus_of_uterine_tube_l",
+      "ta2_latin": "Isthmus tubae uterinae",
+      "name_en": "Isthmus of uterine tube (left)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_isthmus_of_fallopian_tube_L",
+      "path": [
+        "Uterine tube"
+      ]
+    },
+    {
+      "organ_id": "isthmus_of_uterine_tube_r",
+      "ta2_latin": "Isthmus tubae uterinae",
+      "name_en": "Isthmus of uterine tube (right)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_isthmus_of_fallopian_tube_R",
+      "path": [
+        "Uterine tube"
+      ]
+    },
+    {
+      "organ_id": "cardinal_ligament_l",
+      "ta2_latin": "Ligamentum cardinale",
+      "name_en": "Cardinal ligament (left)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_left_cardinal_ligament_of_uterus",
+      "path": [
+        "Ligaments of uterus and ovary"
+      ]
+    },
+    {
+      "organ_id": "cardinal_ligament_r",
+      "ta2_latin": "Ligamentum cardinale",
+      "name_en": "Cardinal ligament (right)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_right_cardinal_ligament_of_uterus",
+      "path": [
+        "Ligaments of uterus and ovary"
+      ]
+    },
+    {
+      "organ_id": "broad_ligament_of_uterus",
+      "ta2_latin": "Ligamentum latum uteri",
+      "name_en": "Broad ligament of uterus",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_broad_ligament",
+      "path": [
+        "Ligaments of uterus and ovary"
+      ]
+    },
+    {
+      "organ_id": "proper_ovarian_ligament_l",
+      "ta2_latin": "Ligamentum proprium ovarii",
+      "name_en": "Proper ovarian ligament (left)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_ovarian_ligament_L",
+      "path": [
+        "Ligaments of uterus and ovary"
+      ]
+    },
+    {
+      "organ_id": "proper_ovarian_ligament_r",
+      "ta2_latin": "Ligamentum proprium ovarii",
+      "name_en": "Proper ovarian ligament (right)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_ovarian_ligament_R",
+      "path": [
+        "Ligaments of uterus and ovary"
+      ]
+    },
+    {
+      "organ_id": "suspensory_ligament_of_ovary_l",
+      "ta2_latin": "Ligamentum suspensorium ovarii",
+      "name_en": "Suspensory ligament of ovary (left)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_suspensory_ligament_of_ovary_L",
+      "path": [
+        "Ligaments of uterus and ovary"
+      ]
+    },
+    {
+      "organ_id": "suspensory_ligament_of_ovary_r",
+      "ta2_latin": "Ligamentum suspensorium ovarii",
+      "name_en": "Suspensory ligament of ovary (right)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_suspensory_ligament_of_ovary_R",
+      "path": [
+        "Ligaments of uterus and ovary"
+      ]
+    },
+    {
+      "organ_id": "round_ligament_of_uterus_l",
+      "ta2_latin": "Ligamentum teres uteri",
+      "name_en": "Round ligament of uterus (left)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_left_round_ligament_of_uterus",
+      "path": [
+        "Ligaments of uterus and ovary"
+      ]
+    },
+    {
+      "organ_id": "round_ligament_of_uterus_r",
+      "ta2_latin": "Ligamentum teres uteri",
+      "name_en": "Round ligament of uterus (right)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_right_round_ligament_of_uterus",
+      "path": [
+        "Ligaments of uterus and ovary"
+      ]
+    },
+    {
+      "organ_id": "uterosacral_ligament_l",
+      "ta2_latin": "Ligamentum uterosacrale",
+      "name_en": "Uterosacral ligament (left)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_left_uterosacral_ligament",
+      "path": [
+        "Ligaments of uterus and ovary"
+      ]
+    },
+    {
+      "organ_id": "uterosacral_ligament_r",
+      "ta2_latin": "Ligamentum uterosacrale",
+      "name_en": "Uterosacral ligament (right)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_right_uterosacral_ligament",
+      "path": [
+        "Ligaments of uterus and ovary"
+      ]
+    },
+    {
+      "organ_id": "mesosalpinx_l",
+      "ta2_latin": "Mesosalpinx",
+      "name_en": "Mesosalpinx (left)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_mesosalpinx_L",
+      "path": [
+        "Ligaments of uterus and ovary",
+        "Broad ligament of uterus"
+      ]
+    },
+    {
+      "organ_id": "mesosalpinx_r",
+      "ta2_latin": "Mesosalpinx",
+      "name_en": "Mesosalpinx (right)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_mesosalpinx_R",
+      "path": [
+        "Ligaments of uterus and ovary",
+        "Broad ligament of uterus"
+      ]
+    },
+    {
+      "organ_id": "mesovarium_l",
+      "ta2_latin": "Mesovarium",
+      "name_en": "Mesovarium (left)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_mesovarium_L",
+      "path": [
+        "Ligaments of uterus and ovary",
+        "Broad ligament of uterus"
+      ]
+    },
+    {
+      "organ_id": "mesovarium_r",
+      "ta2_latin": "Mesovarium",
+      "name_en": "Mesovarium (right)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_mesovarium_R",
+      "path": [
+        "Ligaments of uterus and ovary",
+        "Broad ligament of uterus"
+      ]
+    },
+    {
+      "organ_id": "coccyx",
+      "ta2_latin": "Os coccygis",
+      "name_en": "Coccyx",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_coccyx",
+      "path": [
+        "Pelvic girdle"
+      ]
+    },
+    {
+      "organ_id": "ilium_compact_bone_l",
+      "ta2_latin": "Os ilium",
+      "name_en": "Ilium, compact bone (left)",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_ilium_compact_bone_L",
+      "path": [
+        "Pelvic girdle",
+        "Hip bone",
+        "Ilium"
+      ]
+    },
+    {
+      "organ_id": "ilium_compact_bone_r",
+      "ta2_latin": "Os ilium",
+      "name_en": "Ilium, compact bone (right)",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_ilium_compact_bone_R",
+      "path": [
+        "Pelvic girdle",
+        "Hip bone",
+        "Ilium"
+      ]
+    },
+    {
+      "organ_id": "ilium_spongy_bone_l",
+      "ta2_latin": "Os ilium",
+      "name_en": "Ilium, spongy bone (left)",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_ilium_spongy_bone_L",
+      "path": [
+        "Pelvic girdle",
+        "Hip bone",
+        "Ilium"
+      ]
+    },
+    {
+      "organ_id": "ilium_spongy_bone_r",
+      "ta2_latin": "Os ilium",
+      "name_en": "Ilium, spongy bone (right)",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_ilium_spongy_bone_R",
+      "path": [
+        "Pelvic girdle",
+        "Hip bone",
+        "Ilium"
+      ]
+    },
+    {
+      "organ_id": "ischium_compact_bone_l",
+      "ta2_latin": "Os ischii",
+      "name_en": "Ischium, compact bone (left)",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_ischium_compact_bone_L",
+      "path": [
+        "Pelvic girdle",
+        "Hip bone",
+        "Ischium"
+      ]
+    },
+    {
+      "organ_id": "ischium_compact_bone_r",
+      "ta2_latin": "Os ischii",
+      "name_en": "Ischium, compact bone (right)",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_ischium_compact_bone_R",
+      "path": [
+        "Pelvic girdle",
+        "Hip bone",
+        "Ischium"
+      ]
+    },
+    {
+      "organ_id": "ischium_spongy_bone_l",
+      "ta2_latin": "Os ischii",
+      "name_en": "Ischium, spongy bone (left)",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_ischium_spongy_bone_L",
+      "path": [
+        "Pelvic girdle",
+        "Hip bone",
+        "Ischium"
+      ]
+    },
+    {
+      "organ_id": "ischium_spongy_bone_r",
+      "ta2_latin": "Os ischii",
+      "name_en": "Ischium, spongy bone (right)",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_ischium_spongy_bone_R",
+      "path": [
+        "Pelvic girdle",
+        "Hip bone",
+        "Ischium"
+      ]
+    },
+    {
+      "organ_id": "pubis_compact_bone_l",
+      "ta2_latin": "Os pubis",
+      "name_en": "Pubis, compact bone (left)",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_pubis_compact_bone_L",
+      "path": [
+        "Pelvic girdle",
+        "Hip bone",
+        "Pubis"
+      ]
+    },
+    {
+      "organ_id": "pubis_compact_bone_r",
+      "ta2_latin": "Os pubis",
+      "name_en": "Pubis, compact bone (right)",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_pubis_compact_bone_R",
+      "path": [
+        "Pelvic girdle",
+        "Hip bone",
+        "Pubis"
+      ]
+    },
+    {
+      "organ_id": "pubis_spongy_bone_l",
+      "ta2_latin": "Os pubis",
+      "name_en": "Pubis, spongy bone (left)",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_pubis_spongy_bone_L",
+      "path": [
+        "Pelvic girdle",
+        "Hip bone",
+        "Pubis"
+      ]
+    },
+    {
+      "organ_id": "pubis_spongy_bone_r",
+      "ta2_latin": "Os pubis",
+      "name_en": "Pubis, spongy bone (right)",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_pubis_spongy_bone_R",
+      "path": [
+        "Pelvic girdle",
+        "Hip bone",
+        "Pubis"
+      ]
+    },
+    {
+      "organ_id": "sacrum",
+      "ta2_latin": "Os sacrum",
+      "name_en": "Sacrum",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_sacrum",
+      "path": [
+        "Pelvic girdle"
+      ]
+    },
+    {
+      "organ_id": "abdominal_ostium_of_uterine_tube",
+      "ta2_latin": "Ostium abdominale tubae uterinae",
+      "name_en": "Abdominal ostium of uterine tube",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_abdominal_ostium_of_uterine_tube",
+      "path": [
+        "Uterine tube"
+      ]
+    },
+    {
+      "organ_id": "external_os_of_uterus",
+      "ta2_latin": "Ostium externum uteri",
+      "name_en": "External os of uterus",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_external_cervical_os",
+      "path": [
+        "Uterus",
+        "Cervix of uterus"
+      ]
+    },
+    {
+      "organ_id": "internal_os_of_uterus",
+      "ta2_latin": "Ostium internum uteri",
+      "name_en": "Internal os of uterus",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_internal_cervical_os",
+      "path": [
+        "Uterus",
+        "Cervix of uterus"
+      ]
+    },
+    {
+      "organ_id": "ureteric_orifice_l",
+      "ta2_latin": "Ostium ureteris",
+      "name_en": "Ureteric orifice (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_ureteral_orifice_L",
+      "path": [
+        "Urinary bladder",
+        "Trigone of bladder"
+      ]
+    },
+    {
+      "organ_id": "ureteric_orifice_r",
+      "ta2_latin": "Ostium ureteris",
+      "name_en": "Ureteric orifice (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_ureteral_orifice_R",
+      "path": [
+        "Urinary bladder",
+        "Trigone of bladder"
+      ]
+    },
+    {
+      "organ_id": "ovary_l",
+      "ta2_latin": "Ovarium",
+      "name_en": "Ovary (left)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_left_ovary",
+      "path": [
+        "Ovary"
+      ]
+    },
+    {
+      "organ_id": "ovary_r",
+      "ta2_latin": "Ovarium",
+      "name_en": "Ovary (right)",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_right_ovary",
+      "path": [
+        "Ovary"
+      ]
+    },
+    {
+      "organ_id": "rectum",
+      "ta2_latin": "Rectum",
+      "name_en": "Rectum",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_rectum",
+      "path": [
+        "Large intestine"
+      ]
+    },
+    {
+      "organ_id": "trigone_of_bladder",
+      "ta2_latin": "Trigonum vesicae",
+      "name_en": "Trigone of bladder",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_trigone_of_urinary_bladder",
+      "path": [
+        "Urinary bladder"
+      ]
+    },
+    {
+      "organ_id": "ureter_l",
+      "ta2_latin": "Ureter",
+      "name_en": "Ureter (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_left_ureter",
+      "path": [
+        "Ureter"
+      ]
+    },
+    {
+      "organ_id": "ureter_r",
+      "ta2_latin": "Ureter",
+      "name_en": "Ureter (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_right_ureter",
+      "path": [
+        "Ureter"
+      ]
+    },
+    {
+      "organ_id": "vagina",
+      "ta2_latin": "Vagina",
+      "name_en": "Vagina",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_vagina",
+      "path": [
+        "Vagina"
+      ]
+    },
+    {
+      "organ_id": "superior_anorectal_vein",
+      "ta2_latin": "Vena anorectalis superior",
+      "name_en": "Superior anorectal vein",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_superior_rectal_vein",
+      "path": [
+        "Pelvic vessels",
+        "Veins"
+      ]
+    },
+    {
+      "organ_id": "common_iliac_vein_l",
+      "ta2_latin": "Vena iliaca communis",
+      "name_en": "Common iliac vein (left)",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_left_common_iliac_vein",
+      "path": [
+        "Pelvic vessels",
+        "Veins"
+      ]
+    },
+    {
+      "organ_id": "common_iliac_vein_r",
+      "ta2_latin": "Vena iliaca communis",
+      "name_en": "Common iliac vein (right)",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_right_common_iliac_vein",
+      "path": [
+        "Pelvic vessels",
+        "Veins"
+      ]
+    },
+    {
+      "organ_id": "internal_iliac_vein_l",
+      "ta2_latin": "Vena iliaca interna",
+      "name_en": "Internal iliac vein (left)",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_internal_iliac_vein_L",
+      "path": [
+        "Pelvic vessels",
+        "Veins"
+      ]
+    },
+    {
+      "organ_id": "internal_iliac_vein_r",
+      "ta2_latin": "Vena iliaca interna",
+      "name_en": "Internal iliac vein (right)",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_internal_iliac_vein_R",
+      "path": [
+        "Pelvic vessels",
+        "Veins"
+      ]
+    },
+    {
+      "organ_id": "internal_pudendal_vein_l",
+      "ta2_latin": "Vena pudendalis interna",
+      "name_en": "Internal pudendal vein (left)",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_internal_pudendal_vein_L",
+      "path": [
+        "Pelvic vessels",
+        "Veins"
+      ]
+    },
+    {
+      "organ_id": "internal_pudendal_vein_r",
+      "ta2_latin": "Vena pudendalis interna",
+      "name_en": "Internal pudendal vein (right)",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_internal_pudendal_vein_R",
+      "path": [
+        "Pelvic vessels",
+        "Veins"
+      ]
+    },
+    {
+      "organ_id": "median_sacral_vein",
+      "ta2_latin": "Vena sacralis mediana",
+      "name_en": "Median sacral vein",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_median_sacral_vein",
+      "path": [
+        "Pelvic vessels",
+        "Veins"
+      ]
+    },
+    {
+      "organ_id": "inferior_anorectal_veins_l",
+      "ta2_latin": "Venae anorectales inferiores",
+      "name_en": "Inferior anorectal veins (left)",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_inferior_rectal_vein_L",
+      "path": [
+        "Pelvic vessels",
+        "Veins"
+      ]
+    },
+    {
+      "organ_id": "inferior_anorectal_veins_r",
+      "ta2_latin": "Venae anorectales inferiores",
+      "name_en": "Inferior anorectal veins (right)",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_inferior_rectal_vein_R",
+      "path": [
+        "Pelvic vessels",
+        "Veins"
+      ]
+    },
+    {
+      "organ_id": "middle_anorectal_veins_l",
+      "ta2_latin": "Venae anorectales mediae",
+      "name_en": "Middle anorectal veins (left)",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_middle_rectal_vein_L",
+      "path": [
+        "Pelvic vessels",
+        "Veins"
+      ]
+    },
+    {
+      "organ_id": "middle_anorectal_veins_r",
+      "ta2_latin": "Venae anorectales mediae",
+      "name_en": "Middle anorectal veins (right)",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_middle_rectal_vein_R",
+      "path": [
+        "Pelvic vessels",
+        "Veins"
+      ]
+    },
+    {
+      "organ_id": "uterine_veins_l",
+      "ta2_latin": "Venae uterinae",
+      "name_en": "Uterine veins (left)",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_left_uterine_vein",
+      "path": [
+        "Pelvic vessels",
+        "Veins"
+      ]
+    },
+    {
+      "organ_id": "uterine_veins_r",
+      "ta2_latin": "Venae uterinae",
+      "name_en": "Uterine veins (right)",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_right_uterine_vein",
+      "path": [
+        "Pelvic vessels",
+        "Veins"
+      ]
+    }
+  ]
+}

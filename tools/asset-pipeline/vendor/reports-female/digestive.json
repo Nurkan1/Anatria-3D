@@ -1,0 +1,45 @@
+{
+ "system": "digestive",
+ "sex": "female",
+ "source": {
+  "version": "v1.5",
+  "url": "https://cdn.humanatlas.io/digital-objects/ref-organ/united-female/v1.5/assets/3d-vh-f-united.glb",
+  "metadata": "https://cdn.humanatlas.io/digital-objects/ref-organ/united-female/v1.5/metadata.json",
+  "license": "CC-BY-4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "sha256": "472567a56896b9b7890508da6501fbf858e56aaa30745365f7a71ade782b529c"
+ },
+ "output": "digestive_female.glb",
+ "draco": true,
+ "object_count": 2,
+ "objects": [
+  {
+   "name": "Rectum",
+   "organ_id": "rectum",
+   "node": "VH_F_rectum",
+   "term": "Rectum",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001052",
+   "source_label": "rectum",
+   "polygons": 1880,
+   "path": [
+    "Large intestine"
+   ]
+  },
+  {
+   "name": "Sigmoid colon",
+   "organ_id": "sigmoid_colon",
+   "node": "VH_F_sigmoid_colon",
+   "term": "Sigmoid colon",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001159",
+   "source_label": "sigmoid colon",
+   "polygons": 2848,
+   "path": [
+    "Large intestine"
+   ]
+  }
+ ]
+}

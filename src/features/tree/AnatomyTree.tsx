@@ -7,6 +7,7 @@ import { exportViewImage } from "@/features/viewer/exportView";
 import { explodeScope, MAX_EXPLODE } from "@/features/viewer/explode";
 import { SYSTEM_COLOURS, SYSTEM_LABELS } from "@/features/viewer/palette";
 
+import { BodySwitch } from "./BodySwitch";
 import { StructureSearch } from "./StructureSearch";
 import {
   GLASS_OPACITY,
@@ -293,6 +294,8 @@ export function AnatomyTree() {
       <StructureSearch />
 
       <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-4">
+      {/* Above the systems, because it decides what the systems are. */}
+      <BodySwitch />
       <section>
         <div className="mb-2 flex items-center gap-2">
           <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-500">

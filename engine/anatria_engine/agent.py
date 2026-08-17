@@ -79,6 +79,7 @@ def build_agent(request: AgentRequest, scene: SceneContext) -> Agent[SceneContex
             selection=request.selection,
             mode=request.mode,
             patient=request.case,
+            gender=request.gender_model,
         ),
         retries=TOOL_RETRIES,
     )

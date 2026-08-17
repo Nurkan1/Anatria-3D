@@ -1,0 +1,513 @@
+{
+ "system": "reproductive",
+ "sex": "female",
+ "source": {
+  "version": "v1.5",
+  "url": "https://cdn.humanatlas.io/digital-objects/ref-organ/united-female/v1.5/assets/3d-vh-f-united.glb",
+  "metadata": "https://cdn.humanatlas.io/digital-objects/ref-organ/united-female/v1.5/metadata.json",
+  "license": "CC-BY-4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "sha256": "472567a56896b9b7890508da6501fbf858e56aaa30745365f7a71ade782b529c"
+ },
+ "output": "reproductive_female.glb",
+ "draco": true,
+ "object_count": 35,
+ "objects": [
+  {
+   "name": "Abdominal ostium of uterine tube",
+   "organ_id": "abdominal_ostium_of_uterine_tube",
+   "node": "VH_F_abdominal_ostium_of_uterine_tube",
+   "term": "Abdominal ostium of uterine tube",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:77049",
+   "source_label": "Abdominal ostium of uterine tube",
+   "polygons": 546,
+   "path": [
+    "Uterine tube"
+   ]
+  },
+  {
+   "name": "Ampulla of uterine tube (left)",
+   "organ_id": "ampulla_of_uterine_tube_l",
+   "node": "VH_F_ampulla_of_uterine_tube_L",
+   "term": "Ampulla of uterine tube",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "FMA:18492",
+   "source_label": "Ampulla of left uterine tube",
+   "polygons": 11424,
+   "path": [
+    "Uterine tube"
+   ]
+  },
+  {
+   "name": "Ampulla of uterine tube (right)",
+   "organ_id": "ampulla_of_uterine_tube_r",
+   "node": "VH_F_ampulla_of_uterine_tube_R",
+   "term": "Ampulla of uterine tube",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "FMA:18491",
+   "source_label": "Ampulla of right uterine tube",
+   "polygons": 10440,
+   "path": [
+    "Uterine tube"
+   ]
+  },
+  {
+   "name": "Anterior surface of uterus",
+   "organ_id": "anterior_surface_of_uterus",
+   "node": "VH_F_anterior_wall_of_uterus",
+   "term": "Anterior surface of uterus",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:224876",
+   "source_label": "Anterior wall of uterus",
+   "polygons": 10148,
+   "path": [
+    "Uterus"
+   ]
+  },
+  {
+   "name": "Body of uterus",
+   "organ_id": "body_of_uterus",
+   "node": "VH_F_body_of_uterus",
+   "term": "Body of uterus",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0009853",
+   "source_label": "body of uterus",
+   "polygons": 5344,
+   "path": [
+    "Uterus"
+   ]
+  },
+  {
+   "name": "Broad ligament of uterus",
+   "organ_id": "broad_ligament_of_uterus",
+   "node": "VH_F_broad_ligament",
+   "term": "Broad ligament of uterus",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0012332",
+   "source_label": "broad ligament of uterus",
+   "polygons": 29442,
+   "path": [
+    "Ligaments of uterus and ovary"
+   ]
+  },
+  {
+   "name": "Cardinal ligament (left)",
+   "organ_id": "cardinal_ligament_l",
+   "node": "VH_F_left_cardinal_ligament_of_uterus",
+   "term": "Cardinal ligament",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "FMA:77064",
+   "source_label": "Cardinal ligament",
+   "polygons": 4056,
+   "path": [
+    "Ligaments of uterus and ovary"
+   ]
+  },
+  {
+   "name": "Cardinal ligament (right)",
+   "organ_id": "cardinal_ligament_r",
+   "node": "VH_F_right_cardinal_ligament_of_uterus",
+   "term": "Cardinal ligament",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "FMA:77064",
+   "source_label": "Cardinal ligament",
+   "polygons": 4056,
+   "path": [
+    "Ligaments of uterus and ovary"
+   ]
+  },
+  {
+   "name": "Cervix of uterus",
+   "organ_id": "cervix_of_uterus",
+   "node": "VH_F_cervix",
+   "term": "Cervix of uterus",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0000002",
+   "source_label": "uterine cervix",
+   "polygons": 3508,
+   "path": [
+    "Uterus"
+   ]
+  },
+  {
+   "name": "External os of uterus",
+   "organ_id": "external_os_of_uterus",
+   "node": "VH_F_external_cervical_os",
+   "term": "External os of uterus",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0013760",
+   "source_label": "external cervical os",
+   "polygons": 270,
+   "path": [
+    "Uterus",
+    "Cervix of uterus"
+   ]
+  },
+  {
+   "name": "Fimbriae of uterine tube (left)",
+   "organ_id": "fimbriae_of_uterine_tube_l",
+   "node": "VH_F_fibria_of_uterine_tube_L",
+   "term": "Fimbriae of uterine tube",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "FMA:18498",
+   "source_label": "Fimbria of left uterine tube",
+   "polygons": 2871,
+   "path": [
+    "Uterine tube"
+   ]
+  },
+  {
+   "name": "Fimbriae of uterine tube (right)",
+   "organ_id": "fimbriae_of_uterine_tube_r",
+   "node": "VH_F_fibria_of_uterine_tube_R",
+   "term": "Fimbriae of uterine tube",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "FMA:18497",
+   "source_label": "Fimbria of right uterine tube",
+   "polygons": 3530,
+   "path": [
+    "Uterine tube"
+   ]
+  },
+  {
+   "name": "Fundus of uterus",
+   "organ_id": "fundus_of_uterus",
+   "node": "VH_F_fundus_of_uterus",
+   "term": "Fundus of uterus",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:17561",
+   "source_label": "Fundus of uterus",
+   "polygons": 3062,
+   "path": [
+    "Uterus"
+   ]
+  },
+  {
+   "name": "Infundibulum of uterine tube (left)",
+   "organ_id": "infundibulum_of_uterine_tube_l",
+   "node": "VH_F_uterine_tube_infundibulum_L",
+   "term": "Infundibulum of uterine tube",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "FMA:18490",
+   "source_label": "Infundibulum of left uterine tube",
+   "polygons": 2116,
+   "path": [
+    "Uterine tube"
+   ]
+  },
+  {
+   "name": "Infundibulum of uterine tube (right)",
+   "organ_id": "infundibulum_of_uterine_tube_r",
+   "node": "VH_F_uterine_tube_infundibulum_R",
+   "term": "Infundibulum of uterine tube",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "FMA:18489",
+   "source_label": "Infundibulum of right uterine tube",
+   "polygons": 2200,
+   "path": [
+    "Uterine tube"
+   ]
+  },
+  {
+   "name": "Internal os of uterus",
+   "organ_id": "internal_os_of_uterus",
+   "node": "VH_F_internal_cervical_os",
+   "term": "Internal os of uterus",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0013759",
+   "source_label": "internal cervical os",
+   "polygons": 216,
+   "path": [
+    "Uterus",
+    "Cervix of uterus"
+   ]
+  },
+  {
+   "name": "Isthmus of uterine tube (left)",
+   "organ_id": "isthmus_of_uterine_tube_l",
+   "node": "VH_F_isthmus_of_fallopian_tube_L",
+   "term": "Isthmus of uterine tube",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "FMA:18494",
+   "source_label": "Isthmus of left uterine tube",
+   "polygons": 1870,
+   "path": [
+    "Uterine tube"
+   ]
+  },
+  {
+   "name": "Isthmus of uterine tube (right)",
+   "organ_id": "isthmus_of_uterine_tube_r",
+   "node": "VH_F_isthmus_of_fallopian_tube_R",
+   "term": "Isthmus of uterine tube",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "FMA:18493",
+   "source_label": "Isthmus of right uterine tube",
+   "polygons": 1600,
+   "path": [
+    "Uterine tube"
+   ]
+  },
+  {
+   "name": "Mesosalpinx (left)",
+   "organ_id": "mesosalpinx_l",
+   "node": "VH_F_mesosalpinx_L",
+   "term": "Mesosalpinx",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "FMA:19810",
+   "source_label": "Left mesosalpinx",
+   "polygons": 1914,
+   "path": [
+    "Ligaments of uterus and ovary",
+    "Broad ligament of uterus"
+   ]
+  },
+  {
+   "name": "Mesosalpinx (right)",
+   "organ_id": "mesosalpinx_r",
+   "node": "VH_F_mesosalpinx_R",
+   "term": "Mesosalpinx",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "FMA:19809",
+   "source_label": "Right mesosalpinx",
+   "polygons": 1755,
+   "path": [
+    "Ligaments of uterus and ovary",
+    "Broad ligament of uterus"
+   ]
+  },
+  {
+   "name": "Mesovarium (left)",
+   "organ_id": "mesovarium_l",
+   "node": "VH_F_mesovarium_L",
+   "term": "Mesovarium",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "FMA:19818",
+   "source_label": "Left mesovarium",
+   "polygons": 644,
+   "path": [
+    "Ligaments of uterus and ovary",
+    "Broad ligament of uterus"
+   ]
+  },
+  {
+   "name": "Mesovarium (right)",
+   "organ_id": "mesovarium_r",
+   "node": "VH_F_mesovarium_R",
+   "term": "Mesovarium",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "FMA:19817",
+   "source_label": "Right mesovarium",
+   "polygons": 183,
+   "path": [
+    "Ligaments of uterus and ovary",
+    "Broad ligament of uterus"
+   ]
+  },
+  {
+   "name": "Ovary (left)",
+   "organ_id": "ovary_l",
+   "node": "VH_F_left_ovary",
+   "term": "Ovary",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "FMA:7214",
+   "source_label": "Left ovary",
+   "polygons": 424,
+   "path": [
+    "Ovary"
+   ]
+  },
+  {
+   "name": "Ovary (right)",
+   "organ_id": "ovary_r",
+   "node": "VH_F_right_ovary",
+   "term": "Ovary",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "FMA:7213",
+   "source_label": "Right ovary",
+   "polygons": 410,
+   "path": [
+    "Ovary"
+   ]
+  },
+  {
+   "name": "Posterior surface of uterus",
+   "organ_id": "posterior_surface_of_uterus",
+   "node": "VH_F_posterior_wall_of_uterus",
+   "term": "Posterior surface of uterus",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:224878",
+   "source_label": "Posterior wall of uterus",
+   "polygons": 12022,
+   "path": [
+    "Uterus"
+   ]
+  },
+  {
+   "name": "Proper ovarian ligament (left)",
+   "organ_id": "proper_ovarian_ligament_l",
+   "node": "VH_F_ovarian_ligament_L",
+   "term": "Proper ovarian ligament",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "FMA:55424",
+   "source_label": "Left ovarian ligament",
+   "polygons": 208,
+   "path": [
+    "Ligaments of uterus and ovary"
+   ]
+  },
+  {
+   "name": "Proper ovarian ligament (right)",
+   "organ_id": "proper_ovarian_ligament_r",
+   "node": "VH_F_ovarian_ligament_R",
+   "term": "Proper ovarian ligament",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "FMA:55423",
+   "source_label": "Right ovarian ligament",
+   "polygons": 198,
+   "path": [
+    "Ligaments of uterus and ovary"
+   ]
+  },
+  {
+   "name": "Round ligament of uterus (left)",
+   "organ_id": "round_ligament_of_uterus_l",
+   "node": "VH_F_left_round_ligament_of_uterus",
+   "term": "Round ligament of uterus",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "FMA:57790",
+   "source_label": "Left round ligament of uterus",
+   "polygons": 1024,
+   "path": [
+    "Ligaments of uterus and ovary"
+   ]
+  },
+  {
+   "name": "Round ligament of uterus (right)",
+   "organ_id": "round_ligament_of_uterus_r",
+   "node": "VH_F_right_round_ligament_of_uterus",
+   "term": "Round ligament of uterus",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "FMA:57789",
+   "source_label": "Right round ligament of uterus",
+   "polygons": 902,
+   "path": [
+    "Ligaments of uterus and ovary"
+   ]
+  },
+  {
+   "name": "Suspensory ligament of ovary (left)",
+   "organ_id": "suspensory_ligament_of_ovary_l",
+   "node": "VH_F_suspensory_ligament_of_ovary_L",
+   "term": "Suspensory ligament of ovary",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "FMA:19824",
+   "source_label": "Suspensory ligament of left ovary",
+   "polygons": 1270,
+   "path": [
+    "Ligaments of uterus and ovary"
+   ]
+  },
+  {
+   "name": "Suspensory ligament of ovary (right)",
+   "organ_id": "suspensory_ligament_of_ovary_r",
+   "node": "VH_F_suspensory_ligament_of_ovary_R",
+   "term": "Suspensory ligament of ovary",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "FMA:19823",
+   "source_label": "Suspensory ligament of right ovary",
+   "polygons": 880,
+   "path": [
+    "Ligaments of uterus and ovary"
+   ]
+  },
+  {
+   "name": "Uterosacral ligament (left)",
+   "organ_id": "uterosacral_ligament_l",
+   "node": "VH_F_left_uterosacral_ligament",
+   "term": "Uterosacral ligament",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "FMA:19120",
+   "source_label": "Left uterosacral ligament",
+   "polygons": 1948,
+   "path": [
+    "Ligaments of uterus and ovary"
+   ]
+  },
+  {
+   "name": "Uterosacral ligament (right)",
+   "organ_id": "uterosacral_ligament_r",
+   "node": "VH_F_right_uterosacral_ligament",
+   "term": "Uterosacral ligament",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "FMA:19119",
+   "source_label": "Right uterosacral ligament",
+   "polygons": 1990,
+   "path": [
+    "Ligaments of uterus and ovary"
+   ]
+  },
+  {
+   "name": "Vagina",
+   "organ_id": "vagina",
+   "node": "VH_F_vagina",
+   "term": "Vagina",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0000996",
+   "source_label": "vagina",
+   "polygons": 8780,
+   "path": [
+    "Vagina"
+   ]
+  },
+  {
+   "name": "Vesico-uterine pouch",
+   "organ_id": "vesico_uterine_pouch",
+   "node": "VH_F_uterovesical_pouch",
+   "term": "Vesico-uterine pouch",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:14729",
+   "source_label": "Uterovesical pouch",
+   "polygons": 25352,
+   "path": [
+    "Ligaments of uterus and ovary"
+   ]
+  }
+ ]
+}

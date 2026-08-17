@@ -1060,3 +1060,71 @@ describe("pinning the depth reading", () => {
     expect(useSceneStore.getState().pinnedStack).toBeNull();
   });
 });
+
+describe("switching atlases", () => {
+  beforeEach(() => {
+    useSceneStore.setState({
+      ...initialViewState,
+      genderModel: "male",
+      manifest: null,
+      organs: {},
+      depthStack: [],
+      pinnedStack: null,
+      hoveredOrganId: null,
+    });
+  });
+
+  it("drops everything keyed by organ_id", () => {
+    // The two atlases are two different people, and an id from one names
+    // nothing in the other. Carried across, the reader would keep a selection
+    // of structures that are not on screen and cannot be brought back.
+    useSceneStore.setState({
+      selectedOrganIds: ["left_ventricle"],
+      hiddenOrganIds: ["aorta"],
+      isolatedOrganIds: ["left_ventricle"],
+      depthStack: ["skin"],
+      pinnedStack: ["skin"],
+      hoveredOrganId: "skin",
+      organs: { left_ventricle: organ() },
+    });
+
+    useSceneStore.getState().setGenderModel("female");
+
+    const state = useSceneStore.getState();
+    expect(state.genderModel).toBe("female");
+    expect(state.selectedOrganIds).toEqual([]);
+    expect(state.hiddenOrganIds).toEqual([]);
+    expect(state.isolatedOrganIds).toBeNull();
+    expect(state.depthStack).toEqual([]);
+    expect(state.pinnedStack).toBeNull();
+    expect(state.hoveredOrganId).toBeNull();
+    expect(state.organs).toEqual({});
+  });
+
+  it("clears the manifest, so the old body is never drawn against the new table", () => {
+    useSceneStore.setState({
+      manifest: {
+        version: 1,
+        gender_model: "male",
+        attribution: "",
+        license: "CC-BY-SA-4.0",
+        systems: [{ system: "skeletal", organ_count: 1, load_on_start: true }],
+        organs: [organ()],
+      },
+    });
+
+    useSceneStore.getState().setGenderModel("female");
+
+    expect(useSceneStore.getState().manifest).toBeNull();
+  });
+
+  it("does nothing when the atlas is already the one asked for", () => {
+    useSceneStore.setState({ selectedOrganIds: ["left_ventricle"] });
+
+    useSceneStore.getState().setGenderModel("male");
+
+    // A no-op rather than a reset: re-clicking the active button must not
+    // throw away a selection the reader is working with.
+    expect(useSceneStore.getState().selectedOrganIds).toEqual(["left_ventricle"]);
+  });
+});

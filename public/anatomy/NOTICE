@@ -2,8 +2,17 @@ Anatria3D — anatomical mesh assets
 ==================================
 
 The 3D meshes and anatomical nomenclature in this directory are NOT covered by
-the Anatria3D application licence. They are adapted from open anatomical
-datasets and remain under a share-alike licence.
+the Anatria3D application licence. They come from open anatomical datasets and
+keep the terms their authors set.
+
+**There are two atlases here, from two unrelated sources, under two different
+licences.** See the LICENSE file alongside this one for which files are which.
+The short version: `*_male.glb` and `manifest.json` are CC BY-SA 4.0;
+`*_female.glb` and `manifest_female.json` are CC BY 4.0.
+
+
+THE MALE ATLAS — CC BY-SA 4.0
+=============================
 
 Attribution chain
 -----------------
@@ -45,6 +54,78 @@ What this means in practice
   data. It does not extend to the Anatria3D application source code, which
   merely aggregates these assets rather than adapting them.
 - Do not relicense, or claim exclusive rights over, anything in this directory.
+
+
+THE FEMALE ATLAS — CC BY 4.0
+============================
+
+`*_female.glb` and `manifest_female.json` are a pelvic and reproductive module.
+They are not a female whole body, and no open dataset provides one.
+
+Attribution chain
+-----------------
+
+1. Visible Human Female
+   U.S. National Library of Medicine, National Institutes of Health.
+   The cryosection dataset every model below is ultimately reconstructed from.
+   Spitzer VM, Whitlock DG. The Visible Human Dataset. NLM, 2002.
+
+2. Human Reference Atlas (HRA) 3D Reference Organ Library
+   HuBMAP Consortium / NIH — https://humanatlas.io/
+   Digital object: ref-organ/united-female v1.5
+   https://cdn.humanatlas.io/digital-objects/ref-organ/united-female/v1.5/
+   Licensed under Creative Commons Attribution 4.0 International
+   https://creativecommons.org/licenses/by/4.0/
+
+   Cite: Börner K, et al. Human Reference Atlas. The licence statement is
+   machine-readable in the digital object's own metadata.json.
+
+3. Anatria3D adaptations
+   Produced by `tools/asset-pipeline/extract-hra.mjs`, entirely inside glTF —
+   no Blender round trip, so the node names are byte-identical to the published
+   digital object and any structure here can be checked against the HRA portal.
+   The changes are: selection of 76 of the 888 structures, the node hierarchy
+   flattened with transforms baked in, source materials and UV sets dropped in
+   favour of shading applied by the viewer, lossy Draco compression (position
+   quantisation 14 bits, normal 10), and stable organ identifiers added. No
+   polygon reduction beyond what Draco quantisation implies.
+
+   As adaptations of CC BY 4.0 material these files remain CC BY 4.0. There is
+   no share-alike obligation on them, and none is imposed here.
+
+Nomenclature, and where it differs from the source
+---------------------------------------------------
+
+The HRA labels structures with UBERON and FMA terms, which is right for its
+purpose — mapping cell types — and wrong for teaching: the labels are not
+unique (six pelvic meshes are labelled "compact bone tissue", naming the tissue
+rather than the bone), and they word many structures differently from
+Terminologia Anatomica.
+
+So each structure was matched by hand to a TA2 term, recorded in
+`tools/asset-pipeline/hra-selection.mjs`, and the build fails if any term is
+absent from TA2. Three structures present in the source are deliberately not
+shipped, because TA2 does not list them and inventing Latin for them would be
+worse than omitting them; the reasons are recorded in that same file.
+
+Where the source and this atlas disagree, the reason is written down rather
+than applied silently — including one upstream mesh whose label and ontology id
+belong to a different vessel from the one its node names.
+
+Provenance for every shipped structure — original node name, UBERON or FMA id,
+source label, polygon count — is committed in
+`tools/asset-pipeline/vendor/reports-female/`.
+
+What this means in practice
+---------------------------
+
+- These files may be redistributed, including commercially, provided the
+  attribution above is preserved.
+- They may be modified and the result kept closed. CC BY does not require
+  otherwise. This is a real difference from the male atlas.
+- **Do not merge them with the male meshes or manifests.** Combining CC BY
+  material into a CC BY-SA work forces share-alike onto it, which is a
+  condition the HRA's authors did not choose to impose.
 
 Nomenclature, and why nothing here is translated
 ------------------------------------------------

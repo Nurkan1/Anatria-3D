@@ -47,11 +47,20 @@ const SECTIONS: Section[] = [
           type — sent to the AI provider whose key you supplied.
         </p>
         <Callout>
-          <strong>The atlas is a male body.</strong> Its source, Z-Anatomy, publishes
-          one model and describes it as such, so there is no female anatomy here — no
-          uterus, no ovaries, no female pelvic structures. Everything that is not
-          sex-specific is the same in both, but where it differs, this shows one of
-          them. Worth knowing before you rely on it for the pelvis.
+          <strong>There are two atlases, and they are not the same size.</strong> The{" "}
+          <em>Body</em> switch above the systems list changes over. Male is a whole
+          body — every system, 3,478 structures. Female is the pelvis and the
+          reproductive organs only: the uterus, uterine tubes, ovaries, vagina, their
+          ligaments, the bladder, the pelvic girdle, the rectum and the pelvic
+          vessels. Nothing above the pelvic brim.
+        </Callout>
+        <Callout>
+          <strong>That is a limit of the available data, not an oversight.</strong> No
+          open dataset publishes a whole female body. The female structures here come
+          from the NIH Human Reference Atlas, which models organs rather than a body,
+          and they are a different person from the male atlas — so the two are
+          separate bodies and switching reloads the scene. For any region outside the
+          pelvis, use the male atlas and read across.
         </Callout>
         <Callout>
           <strong>Some other things are missing too</strong>, and it is better to read
@@ -510,11 +519,12 @@ const SECTIONS: Section[] = [
           change it through.
         </Callout>
         <Callout>
-          <strong>Sex drives the reasoning; the model does not follow it.</strong> The
-          atlas ships a male body whichever sex you choose, for the reason given in the
-          first section. The assistant reasons from the sex on the file and will not
-          describe the model as female — worth knowing before you write a case that
-          turns on the pelvis.
+          <strong>Sex drives the reasoning; the body on screen does not follow
+          it.</strong> The patient's sex is a field on the case file, and changing it
+          does not change the atlas — that is the <em>Body</em> switch, and you set it
+          yourself. For a case that turns on the female pelvis, switch the body over
+          as well; for anything above it, the male atlas is what there is. The
+          assistant reasons from the sex on the file either way.
         </Callout>
 
         <Sub>Marking what the patient reports</Sub>

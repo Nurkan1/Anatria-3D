@@ -5,12 +5,15 @@ Anatria3D is educational software. It is NOT a medical device, and it is not
 for diagnosis or treatment of any person.
 
 
-Anatomical assets — Creative Commons Attribution-ShareAlike 4.0
---------------------------------------------------------------
-
 The 3D meshes and the anatomical nomenclature shipped with this application are
-not original to it. They are adaptations of open anatomical datasets and remain
-under a share-alike licence:
+not original to it. They come from two unrelated open datasets, under two
+different licences, and they are kept in separate files for that reason.
+
+
+Male atlas — Creative Commons Attribution-ShareAlike 4.0
+--------------------------------------------------------
+
+Files: `anatomy/manifest.json`, `anatomy/*_male.glb`
 
   1. BodyParts3D
      The Database Center for Life Science (DBCLS), Japan
@@ -28,13 +31,48 @@ under a share-alike licence:
      As adaptations of CC BY-SA 4.0 material these files are themselves
      licensed CC BY-SA 4.0.
 
-Redistributing the assets, in this application or apart from it, requires
-preserving this attribution and keeping them under CC BY-SA 4.0. The full
-notice ships alongside the data, in `anatomy/NOTICE` and `anatomy/LICENSE`.
+Redistributing these files, in this application or apart from it, requires
+preserving this attribution and keeping them under CC BY-SA 4.0.
 
-The nomenclature is Terminologia Anatomica 2 Latin and clinical English only.
-No localised medical terminology is stored or redistributed here; translation
-is performed at runtime by the AI assistant for the reader in front of it.
+
+Female atlas — Creative Commons Attribution 4.0
+------------------------------------------------
+
+Files: `anatomy/manifest_female.json`, `anatomy/*_female.glb`
+
+A pelvic and reproductive module of 76 structures — not a whole body, because
+no open dataset provides a female one.
+
+  1. Visible Human Female
+     U.S. National Library of Medicine, National Institutes of Health
+     (Spitzer & Whitlock, 2002) — the dataset everything below derives from.
+
+  2. Human Reference Atlas 3D Reference Organ Library
+     HuBMAP Consortium / NIH — https://humanatlas.io/
+     Digital object ref-organ/united-female v1.5
+     CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/
+
+  3. Anatria3D adaptations — 76 of 888 structures selected, node hierarchy
+     flattened with transforms baked in, materials and UV sets dropped, lossy
+     Draco compression, stable organ identifiers added, and each structure
+     matched by hand to a Terminologia Anatomica term.
+
+     As adaptations of CC BY 4.0 material these files remain CC BY 4.0.
+
+Redistributing these files requires preserving this attribution. There is no
+share-alike obligation on them.
+
+**The two atlases must not be merged into one file.** Folding CC BY material
+into a CC BY-SA work forces share-alike onto it, imposing a condition the HRA's
+authors chose not to impose.
+
+The full notice ships alongside the data, in `anatomy/NOTICE` and
+`anatomy/LICENSE`.
+
+The nomenclature of both is Terminologia Anatomica 2 Latin and clinical English
+only. No localised medical terminology is stored or redistributed here;
+translation is performed at runtime by the AI assistant for the reader in front
+of it.
 
 
 Application source code — Apache License, Version 2.0

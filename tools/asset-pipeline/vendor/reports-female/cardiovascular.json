@@ -1,0 +1,272 @@
+{
+ "system": "cardiovascular",
+ "sex": "female",
+ "source": {
+  "version": "v1.5",
+  "url": "https://cdn.humanatlas.io/digital-objects/ref-organ/united-female/v1.5/assets/3d-vh-f-united.glb",
+  "metadata": "https://cdn.humanatlas.io/digital-objects/ref-organ/united-female/v1.5/metadata.json",
+  "license": "CC-BY-4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "sha256": "472567a56896b9b7890508da6501fbf858e56aaa30745365f7a71ade782b529c"
+ },
+ "output": "cardiovascular_female.glb",
+ "draco": true,
+ "object_count": 17,
+ "objects": [
+  {
+   "name": "Common iliac vein (left)",
+   "organ_id": "common_iliac_vein_l",
+   "node": "VH_F_left_common_iliac_vein",
+   "term": "Common iliac vein",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "FMA:21388",
+   "source_label": "Left common iliac vein",
+   "polygons": 1932,
+   "path": [
+    "Pelvic vessels",
+    "Veins"
+   ]
+  },
+  {
+   "name": "Common iliac vein (right)",
+   "organ_id": "common_iliac_vein_r",
+   "node": "VH_F_right_common_iliac_vein",
+   "term": "Common iliac vein",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "FMA:21387",
+   "source_label": "Right common iliac vein",
+   "polygons": 1386,
+   "path": [
+    "Pelvic vessels",
+    "Veins"
+   ]
+  },
+  {
+   "name": "Inferior anorectal veins (left)",
+   "organ_id": "inferior_anorectal_veins_l",
+   "node": "VH_F_inferior_rectal_vein_L",
+   "term": "Inferior anorectal veins",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "FMA:21242",
+   "source_label": "Inferior rectal vein",
+   "polygons": 1678,
+   "path": [
+    "Pelvic vessels",
+    "Veins"
+   ]
+  },
+  {
+   "name": "Inferior anorectal veins (right)",
+   "organ_id": "inferior_anorectal_veins_r",
+   "node": "VH_F_inferior_rectal_vein_R",
+   "term": "Inferior anorectal veins",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "FMA:21242",
+   "source_label": "Inferior rectal vein",
+   "polygons": 1668,
+   "path": [
+    "Pelvic vessels",
+    "Veins"
+   ]
+  },
+  {
+   "name": "Internal iliac vein (left)",
+   "organ_id": "internal_iliac_vein_l",
+   "node": "VH_F_internal_iliac_vein_L",
+   "term": "Internal iliac vein",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "UBERON:0001317",
+   "source_label": "internal iliac vein",
+   "polygons": 574,
+   "path": [
+    "Pelvic vessels",
+    "Veins"
+   ]
+  },
+  {
+   "name": "Internal iliac vein (right)",
+   "organ_id": "internal_iliac_vein_r",
+   "node": "VH_F_internal_iliac_vein_R",
+   "term": "Internal iliac vein",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "UBERON:0001317",
+   "source_label": "internal iliac vein",
+   "polygons": 838,
+   "path": [
+    "Pelvic vessels",
+    "Veins"
+   ]
+  },
+  {
+   "name": "Internal pudendal vein (left)",
+   "organ_id": "internal_pudendal_vein_l",
+   "node": "VH_F_internal_pudendal_vein_L",
+   "term": "Internal pudendal vein",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "UBERON:0018252",
+   "source_label": "internal pudendal vein",
+   "polygons": 1404,
+   "path": [
+    "Pelvic vessels",
+    "Veins"
+   ]
+  },
+  {
+   "name": "Internal pudendal vein (right)",
+   "organ_id": "internal_pudendal_vein_r",
+   "node": "VH_F_internal_pudendal_vein_R",
+   "term": "Internal pudendal vein",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "UBERON:0018252",
+   "source_label": "internal pudendal vein",
+   "polygons": 1560,
+   "path": [
+    "Pelvic vessels",
+    "Veins"
+   ]
+  },
+  {
+   "name": "Median sacral vein",
+   "organ_id": "median_sacral_vein",
+   "node": "VH_F_median_sacral_vein",
+   "term": "Median sacral vein",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0006687",
+   "source_label": "median sacral vein",
+   "polygons": 1835,
+   "path": [
+    "Pelvic vessels",
+    "Veins"
+   ]
+  },
+  {
+   "name": "Middle anorectal veins (left)",
+   "organ_id": "middle_anorectal_veins_l",
+   "node": "VH_F_middle_rectal_vein_L",
+   "term": "Middle anorectal veins",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "FMA:18895",
+   "source_label": "Left middle rectal vein",
+   "polygons": 1036,
+   "path": [
+    "Pelvic vessels",
+    "Veins"
+   ]
+  },
+  {
+   "name": "Middle anorectal veins (right)",
+   "organ_id": "middle_anorectal_veins_r",
+   "node": "VH_F_middle_rectal_vein_R",
+   "term": "Middle anorectal veins",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "FMA:18894",
+   "source_label": "Right middle rectal vein",
+   "polygons": 1000,
+   "path": [
+    "Pelvic vessels",
+    "Veins"
+   ]
+  },
+  {
+   "name": "Superior anorectal artery",
+   "organ_id": "superior_anorectal_artery",
+   "node": "VH_F_superior_rectal_artery",
+   "term": "Superior anorectal artery",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0035040",
+   "source_label": "superior rectal artery",
+   "polygons": 2080,
+   "path": [
+    "Pelvic vessels",
+    "Arteries"
+   ]
+  },
+  {
+   "name": "Superior anorectal vein",
+   "organ_id": "superior_anorectal_vein",
+   "node": "VH_F_superior_rectal_vein",
+   "term": "Superior anorectal vein",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0035040",
+   "source_label": "superior rectal artery",
+   "polygons": 3592,
+   "path": [
+    "Pelvic vessels",
+    "Veins"
+   ]
+  },
+  {
+   "name": "Uterine artery (left)",
+   "organ_id": "uterine_artery_l",
+   "node": "VH_F_left_uterine_artery",
+   "term": "Uterine artery",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "FMA:18831",
+   "source_label": "Left uterine artery",
+   "polygons": 1382,
+   "path": [
+    "Pelvic vessels",
+    "Arteries"
+   ]
+  },
+  {
+   "name": "Uterine artery (right)",
+   "organ_id": "uterine_artery_r",
+   "node": "VH_F_right_uterine_artery",
+   "term": "Uterine artery",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "FMA:18830",
+   "source_label": "Right uterine artery",
+   "polygons": 1392,
+   "path": [
+    "Pelvic vessels",
+    "Arteries"
+   ]
+  },
+  {
+   "name": "Uterine veins (left)",
+   "organ_id": "uterine_veins_l",
+   "node": "VH_F_left_uterine_vein",
+   "term": "Uterine veins",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "FMA:18898",
+   "source_label": "Left uterine vein",
+   "polygons": 2474,
+   "path": [
+    "Pelvic vessels",
+    "Veins"
+   ]
+  },
+  {
+   "name": "Uterine veins (right)",
+   "organ_id": "uterine_veins_r",
+   "node": "VH_F_right_uterine_vein",
+   "term": "Uterine veins",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "FMA:18897",
+   "source_label": "Right uterine vein",
+   "polygons": 2332,
+   "path": [
+    "Pelvic vessels",
+    "Veins"
+   ]
+  }
+ ]
+}

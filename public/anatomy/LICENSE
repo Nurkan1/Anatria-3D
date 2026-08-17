@@ -1,16 +1,53 @@
-Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+Two licences apply in this directory, one per atlas
+===================================================
 
-The contents of this directory — 3D meshes and the anatomical label data in
-manifest.json — are licensed under CC BY-SA 4.0.
+This directory holds two anatomical atlases from two unrelated sources. They
+are kept in separate files on purpose, and they are NOT under the same licence.
+Check which file you are redistributing before you redistribute it.
 
-Full licence text:
-    https://creativecommons.org/licenses/by-sa/4.0/legalcode
 
-Human-readable summary:
-    https://creativecommons.org/licenses/by-sa/4.0/
+1. The male atlas — CC BY-SA 4.0 (share-alike)
+----------------------------------------------
 
-Required attribution is set out in the NOTICE file alongside this one, which
-must be preserved in any redistribution.
+    manifest.json
+    *_male.glb
 
-This licence applies to this directory only. It does not apply to the Anatria3D
-application source code.
+Creative Commons Attribution-ShareAlike 4.0 International.
+
+    Full text: https://creativecommons.org/licenses/by-sa/4.0/legalcode
+    Summary:   https://creativecommons.org/licenses/by-sa/4.0/
+
+Derived from Z-Anatomy and BodyParts3D. Redistribution must preserve the
+attribution in NOTICE and must keep these files under CC BY-SA 4.0.
+
+
+2. The female atlas — CC BY 4.0 (attribution only)
+--------------------------------------------------
+
+    manifest_female.json
+    *_female.glb
+
+Creative Commons Attribution 4.0 International.
+
+    Full text: https://creativecommons.org/licenses/by/4.0/legalcode
+    Summary:   https://creativecommons.org/licenses/by/4.0/
+
+From the NIH Human Reference Atlas. Redistribution must preserve the
+attribution in NOTICE. There is no share-alike obligation on these files.
+
+
+Why they are not combined
+-------------------------
+
+CC BY 4.0 material may lawfully be incorporated into a CC BY-SA 4.0 work, but
+the combined work then has to be released under share-alike — which would
+impose a condition on the HRA's meshes that their authors deliberately did not
+choose. Keeping the two atlases in separate files makes this directory a mere
+aggregation, and each work keeps the terms its authors set.
+
+So: do not merge a `_male` mesh and a `_female` mesh into one file, and do not
+merge the two manifests. Nothing in the application does, and the test suite
+asserts it.
+
+Neither licence applies to the Anatria3D application source code, which is
+Apache-2.0 and merely aggregates these assets rather than adapting them.

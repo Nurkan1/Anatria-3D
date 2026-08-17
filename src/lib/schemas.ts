@@ -34,9 +34,13 @@ export const UserProfileSchema = z.enum(["layperson", "student", "clinician"]);
 export type UserProfile = z.infer<typeof UserProfileSchema>;
 
 /**
- * Z-Anatomy ships a male model only. `female` is accepted by the protocol so
- * the schema does not need a breaking change when a female mesh source is
- * procured, but the UI toggle stays disabled until then.
+ * Which body is on screen. The two are separate atlases, not one model with a
+ * switch — see `manifest.ts`.
+ *
+ * `male` is Z-Anatomy's whole body, 3,478 structures across every system.
+ * `female` is the pelvic and reproductive module built from the NIH Human
+ * Reference Atlas: 76 structures, and deliberately not a whole body, because no
+ * open source for one exists. The application says so where the reader chooses.
  */
 export const GenderModelSchema = z.enum(["male", "female"]);
 export type GenderModel = z.infer<typeof GenderModelSchema>;
@@ -559,9 +563,27 @@ export type AnatomySystem = z.infer<typeof AnatomySystemSchema>;
 export const AnatomyManifestSchema = z.object({
   version: z.number().int(),
   gender_model: GenderModelSchema,
-  /** Attribution is a CC BY-SA 4.0 obligation, so it travels with the data. */
+  /**
+   * Attribution is a licence obligation under both CC BY-SA 4.0 (the male
+   * atlas) and CC BY 4.0 (the female one), so it travels with the data rather
+   * than living only in a NOTICE file somebody has to go and find.
+   */
   attribution: z.string(),
   license: z.string(),
+  /**
+   * Where the meshes came from, when the atlas is built from a published
+   * digital object rather than exported from a .blend. Optional because the
+   * male atlas has no single upstream URL to point at.
+   */
+  source: z
+    .object({
+      version: z.string(),
+      url: z.string(),
+      metadata: z.string().optional(),
+      license: z.string(),
+      licenseUrl: z.string().optional(),
+    })
+    .optional(),
   systems: z.array(AnatomySystemSchema).min(1),
   organs: z.array(ManifestOrganSchema),
 });

@@ -15,6 +15,8 @@
     "test:watch": "vitest",
     "sidecar:build": "python engine/build_sidecar.py",
     "manifest:build": "node tools/asset-pipeline/build-manifest.mjs",
+    "assets:female": "node --max-old-space-size=8192 tools/asset-pipeline/extract-hra.mjs",
+    "manifest:build:female": "node tools/asset-pipeline/build-female-manifest.mjs",
     "check:version": "node tools/check-version.mjs"
   },
   "dependencies": {
@@ -37,6 +39,9 @@
     "zustand": "^5.0.14"
   },
   "devDependencies": {
+    "@gltf-transform/core": "^4",
+    "@gltf-transform/extensions": "^4",
+    "@gltf-transform/functions": "^4",
     "@playwright/test": "^1.62.1",
     "@tailwindcss/vite": "^4.3.3",
     "@tauri-apps/cli": "^2.11.4",
@@ -46,6 +51,7 @@
     "@types/react-dom": "^19.2.4",
     "@types/three": "^0.185.4",
     "@vitejs/plugin-react": "^6.0.5",
+    "draco3dgltf": "^1",
     "jsdom": "^30.0.1",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",

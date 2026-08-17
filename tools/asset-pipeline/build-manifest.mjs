@@ -22,6 +22,8 @@ import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { parseTa2, slugify } from "./ta2.mjs";
+
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = join(HERE, "..", "..");
 const TA2_CSV = join(HERE, "vendor", "TA2.csv");
@@ -100,41 +102,6 @@ function routeVisceral(name) {
 }
 
 /**
- * TA2.csv is not conventional CSV: a UTF-8 BOM, then every row wrapped in one
- * pair of double quotes with `;`-separated fields inside. Splitting on `,` or
- * feeding it to a standard parser yields one giant column.
- */
-function parseTa2(text) {
-  const lines = text
-    .replace(/^﻿/, "")
-    .split(/\r?\n/)
-    .map((line) => line.trim())
-    .filter(Boolean);
-
-  const header = lines[0].replace(/^"|"$/g, "").split(";");
-  const column = { en: header.indexOf("English"), la: header.indexOf("Latin") };
-  for (const [name, position] of Object.entries(column)) {
-    if (position < 0) {
-      throw new Error(`TA2.csv is missing the ${name} column. Header: ${header.join(";")}`);
-    }
-  }
-
-  const byEnglish = new Map();
-  for (const line of lines.slice(1)) {
-    const fields = line.replace(/^"|"$/g, "").split(";");
-    if (fields.length !== header.length) continue;
-    const english = fields[column.en].trim();
-    if (!english) continue;
-    // First occurrence wins: TA2 repeats some terms across regional sections.
-    const key = english.toLowerCase();
-    if (!byEnglish.has(key)) {
-      byEnglish.set(key, { en: english, la: fields[column.la].trim() });
-    }
-  }
-  return byEnglish;
-}
-
-/**
  * Split a Z-Anatomy object name into the term TA2 knows and its laterality.
  *
  * Names carry dotted suffixes, and only two of them are laterality:
@@ -180,15 +147,6 @@ function parseObjectName(name) {
   if (wrapped) base = wrapped[1].trim();
 
   return { base: base.replace(/\.+$/, "").trim(), laterality };
-}
-
-function slugify(name) {
-  return name
-    .normalize("NFD")
-    .replace(/\p{Diacritic}/gu, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "_")
-    .replace(/^_+|_+$/g, "");
 }
 
 function loadReports() {

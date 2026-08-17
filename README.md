@@ -66,9 +66,10 @@ newer distributions.
 **Windows installs without administrator rights.** On a university laptop where
 you are not an administrator, you can still install it.
 
-**No account, no key and no internet are needed to start.** All 3,478
-structures, the labelling, cross-sections, exploded views and image export work
-offline the moment you install. Only the AI tutor needs an API key of your own —
+**No account, no key and no internet are needed to start.** All 3,554
+structures — 3,478 in the male atlas, 76 in the female pelvic module — the
+labelling, cross-sections, exploded views and image export work offline the
+moment you install. Only the AI tutor needs an API key of your own —
 which also means your questions go straight to your provider, never through a
 server of ours.
 
@@ -114,9 +115,9 @@ language. That is the assistant's job, done per turn with the reader's profile i
 hand, and it already answers in the reader's own language even when the
 interface does not offer it.
 
-Open: a female atlas, which needs a female source model rather than extra
-organs — see
-[The atlas is male, and that is a source limitation](#the-atlas-is-male-and-that-is-a-source-limitation).
+Open: female anatomy above the pelvis, which needs a source that does not exist
+in the open — see
+[There are two atlases, and the female one is a pelvis](#there-are-two-atlases-and-the-female-one-is-a-pelvis).
 
 ---
 
@@ -426,37 +427,68 @@ regulatory classification.
 
 ## Assets and licensing
 
-Geometry and nomenclature come from the real [Z-Anatomy](https://www.z-anatomy.com/)
-atlas — no placeholder or synthesised shapes. Everything under `public/anatomy/`
-is **CC BY-SA 4.0**, adapted from Z-Anatomy, which derives from BodyParts3D
-(DBCLS, CC BY-SA 2.1 JP). The share-alike obligation attaches to the meshes and
-their derived label data; it does not extend to this application's source code,
-which aggregates rather than adapts them. Full attribution in
-[`public/anatomy/NOTICE`](public/anatomy/NOTICE).
+Geometry and nomenclature come from real anatomical atlases — no placeholder or
+synthesised shapes — and `public/anatomy/` holds two of them under **two
+different licences**:
 
-### The atlas is male, and that is a source limitation
+- `manifest.json` and `*_male.glb` are **CC BY-SA 4.0**, adapted from
+  [Z-Anatomy](https://www.z-anatomy.com/), which derives from BodyParts3D
+  (DBCLS, CC BY-SA 2.1 JP).
+- `manifest_female.json` and `*_female.glb` are **CC BY 4.0**, from the
+  [NIH Human Reference Atlas](https://humanatlas.io/), derived from the Visible
+  Human Female (NLM).
+
+Neither share-alike nor attribution extends to this application's source code,
+which aggregates rather than adapts them. The two must not be merged into one
+file — that would impose share-alike on material whose authors chose attribution
+alone. Full attribution in [`public/anatomy/NOTICE`](public/anatomy/NOTICE) and
+the file-by-file breakdown in
+[`public/anatomy/LICENSE`](public/anatomy/LICENSE).
+
+### There are two atlases, and the female one is a pelvis
+
+The Body switch above the systems list changes over between them.
+
+| | Male | Female |
+|---|---|---|
+| Source | Z-Anatomy → BodyParts3D | NIH Human Reference Atlas → Visible Human Female |
+| Coverage | Whole body, every system | Pelvis and reproductive organs |
+| Structures | 3,478 | 76 |
+| Licence | CC BY-SA 4.0 | CC BY 4.0 |
+
+**The female atlas is not a female body, and the application says so where you
+choose it.** It holds the uterus with its cervix and walls, both uterine tubes
+down to the fimbriae, the ovaries, the vagina, the suspensory ligaments and
+peritoneal folds, the bladder and ureters, the pelvic girdle, the rectum and
+sigmoid colon, and seventeen pelvic vessels. Nothing above the pelvic brim.
+
+That is a real limit and it is stated rather than worked around, because the
+alternative is worse: a Male/Female toggle that promises a body and delivers a
+pelvis reads as a failed download, and takes the credibility of everything else
+on screen with it.
+
+The two are separate atlases rather than one model with a switch, and that is
+not an implementation detail. They are **two different people** — a Japanese
+male MRI subject and the Visible Human Female — so no organ of one is positioned
+to sit inside the other. Switching reloads the scene because it genuinely is a
+different body.
+
+#### Why Z-Anatomy alone could not do it
 
 Z-Anatomy publishes exactly one body and
 [describes it](https://github.com/Z-Anatomy/Models-of-human-anatomy) as "Human
-male model". There is no female anatomy in this app: no uterus, no ovaries, no
-female pelvic structures. A request for a female model has been open upstream
+male model". A request for a female model has been open upstream
 [since December 2023](https://github.com/moueza/Z-Anatomy/issues/20) with no
 reply. The `Female genital system'` collection exists in the source blend and is
 empty — as is `Male genital system'`; the male organs arrive through a different
 branch of the tree.
 
-**The application is already built for a second model.** The protocol accepts
-`gender_model: "female"`, the mesh files are named `*_male.glb`, and the manifest
-carries `gender_model`. The blocker is source data, not architecture.
-
-And the expensive part would not be the geometry. The manifest is derived from
+The expensive part was never the geometry. The manifest is derived from
 Z-Anatomy's collection names crossed with `TA2.csv`, which is what produces
 `organ_id`, the TA2 Latin, the clinical English, the system and the anatomical
 hierarchy — everything the right-click menu, region isolation and the agent's
 scene tools depend on. A mesh dump without that labelling would give none of it.
-
-This is stated in the first screen of the in-app guide too. Someone teaching from
-it should read it from us, not discover it in front of a class.
+The HRA needed that labelling built by hand; see below.
 
 #### It is not fixable from upstream, and here is the check
 
@@ -496,30 +528,25 @@ put in it.
 So the limitation is not a gap in this pipeline. **BodyParts3D was built from a
 male body**, and everything downstream of it inherits that.
 
-#### What would actually unblock it
+#### What unblocked it
 
-A different source, and the obstacle is licensing rather than geometry.
-
-This has now been searched rather than assumed. The test was deliberately
-narrow, because it is the conjunction that matters and every near-miss passes
-one half of it: **a model must carry uterus, ovaries, uterine tubes and cervix
-as separate named meshes, *and* be available under CC0, CC BY or CC BY-SA** —
-no non-commercial clause, no agreement to sign, no fee.
-
-**Nothing found meets both.** The two that come closest:
+A different source. The test was deliberately narrow, because it is the
+conjunction that matters and every near-miss passes one half of it: **a model
+must carry uterus, ovaries, uterine tubes and cervix as separate named meshes,
+*and* be available under CC0, CC BY or CC BY-SA** — no non-commercial clause, no
+agreement to sign, no fee.
 
 | Candidate | Has the organs | Licence | Verdict |
 |---|---|---|---|
-| [**Ella**, IT'IS Virtual Population](https://itis.swiss/virtual-population/) | Yes — uterus, ovaries, uterine tubes and cervix, fully segmented | Signed agreement, non-commercial, paid commercial tiers | Fails on licence |
+| [**Human Reference Atlas**, HuBMAP / NIH](https://humanatlas.io/3d-reference-library) | Yes — as separate named meshes, with UBERON/FMA ids | **CC BY 4.0** | **Passes.** This is what ships |
+| [**Ella**, IT'IS Virtual Population](https://itis.swiss/virtual-population/) | Yes — fully segmented | Signed agreement, non-commercial, paid commercial tiers | Fails on licence |
 | [**Maastricht pelvis**, AnatomyTOOL](https://anatomytool.org/) | Yes, but pelvis only | CC BY-NC-SA 4.0 | Fails on licence *and* scope |
+| [**Visible Human Female**, NLM](https://www.nlm.nih.gov/research/visible/getting_data.html) | No meshes — 40 GB of cryosections | Open terms | Research source, not integrable |
+| [**Denver lower extremity**](https://digitalcommons.du.edu/visiblehuman/1/) | Lower limb only, 129 GB | CC BY 4.0 | Wrong region |
 
-Both fail on the same clause, and that is not bad luck. A detailed female model
-is expensive to produce, so the people who produce them monetise them. The
-consequence is worth stating: **this will not resolve by waiting.**
-
-One misreading to head off, because it is the common one. *"Anatria3D is given
+The misreading to head off, because it is the common one. *"Anatria3D is given
 away, so a non-commercial source is fine"* — it is not. **NC does not restrict
-what you charge; it restricts what you may grant onward.** This atlas is
+what you charge; it restricts what you may grant onward.** The male atlas is
 published under CC BY-SA 4.0, which permits commercial use, and that permission
 cannot be granted over material that withholds it. The conflict is between the
 two licences, not between the licence and a price.
@@ -530,17 +557,53 @@ from real individuals treat re-identification as binding, and anyone reaching
 for medical imaging as a shortcut — segmenting a CT and shipping the result —
 inherits that obligation along with the geometry.
 
-With the dataset route closed, one path remains: **commissioning the work.** An
-anatomist and a 3D artist, built from published atlases, licensed CC BY-SA from
-the first commit. It is slow and it costs money, and it is the only door not
-shut by a licence.
+#### What the HRA cost to use
 
-Two things are worth saying plainly to anyone picking this up. **A female
-reproductive module is not a female model** — dropping a uterus into a male
-pelvis produces wrong relations, and spatial relations are what this application
-is for. And when a compatible source does appear, the work is already waiting
-for it: the manifest carries `gender_model`, the protocol accepts `"female"`,
-and the mesh files are already named `*_male.glb`.
+Its meshes were ready; its **names were not**. The HRA is built for mapping cell
+types, so it labels structures with UBERON and FMA terms, and those labels are
+unusable as they stand for teaching:
+
+- **They are not unique.** 888 structures carry 508 distinct labels. Six pelvic
+  meshes are labelled `compact bone tissue` and six `trabecular bone tissue` —
+  the tissue, not the bone. Joining on the label would merge the ilium with the
+  ischium.
+- **They word structures differently from TA2.** `uterine cervix` is TA2's
+  *Cervix of uterus*; `trigone of urinary bladder` is *Trigone of bladder*;
+  every pelvic vessel TA2 calls *anorectal*, the HRA calls rectal. A naive match
+  resolved 32 of 70.
+- **A few are wrong.** One vein carries the label and ontology id of the
+  corresponding artery.
+
+So every structure was matched by hand to a TA2 term in
+[`hra-selection.mjs`](tools/asset-pipeline/hra-selection.mjs), and the build
+**fails** if any term is absent from `TA2.csv`. Three structures in the source
+are deliberately not shipped — the uterine horn, the lower uterine segment and a
+cervicovaginal junction — because TA2 does not list them, and coining plausible
+Latin for an anatomy atlas is worse than leaving a structure out. The reasons
+are recorded beside the table, and a test asserts every shipped term exists.
+
+Provenance for all 76 — original node name, UBERON or FMA id, source label,
+polygon count — is committed in `tools/asset-pipeline/vendor/reports-female/`.
+The extraction stays inside glTF rather than round-tripping through Blender, so
+the node names are byte-identical to the published digital object and any
+structure here can be checked against the HRA portal.
+
+#### The rule that shaped it
+
+**A female reproductive module is not a female model** — dropping a uterus into
+a male pelvis produces wrong relations, and spatial relations are what this
+application is for.
+
+That is why nothing was dropped into anything. The female atlas ships its own
+pelvic girdle, its own bladder, its own rectum and its own vessels, all from the
+same body, and the male atlas is untouched. What you are looking at when you
+switch is one person's pelvis, internally consistent, not a graft.
+
+The same rule applies to the licences. CC BY material may lawfully be folded
+into a CC BY-SA work, but the result must then be share-alike — imposing a
+condition the HRA's authors chose not to. So the two atlases are separate files,
+which keeps this a mere aggregation, and
+[a test asserts they never share a mesh file](tests/female-atlas.test.ts).
 
 ### What else is missing, and what is complete
 

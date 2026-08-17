@@ -750,3 +750,59 @@ def test_a_finished_case_is_reviewed_with_everything():
     text = review(PATIENT)
     assert PATIENT.ground_truth in text
     assert "The answer is sealed and you do not have it" not in text
+
+
+# ---------------------------------------------------------------------------
+# Which body is on screen
+# ---------------------------------------------------------------------------
+
+
+def test_male_is_the_default_body() -> None:
+    """A sidecar older than the window it is paired with still gets a body.
+
+    `gender` is defaulted rather than required for the same reason every new
+    protocol field is optional on the way in — and the default has to be the
+    atlas every build before this one loaded.
+    """
+    text = build_instructions(
+        profile="student",
+        language="en",
+        organs=[],
+        selection=[],
+        mode="tutor",
+    )
+    assert "male atlas is loaded" in text
+
+
+def test_female_says_what_is_not_loaded() -> None:
+    """The whole point of the rule.
+
+    Told only that 76 structures are loaded, the agent reasons from the atlas
+    it has always seen and offers to focus a kidney. The tool layer rejects the
+    id, and the reader sees an assistant that promised and then did nothing.
+    """
+    text = build_instructions(
+        profile="student",
+        language="en",
+        organs=[],
+        selection=[],
+        mode="tutor",
+        gender="female",
+    )
+    assert "pelvic and reproductive module" in text
+    assert "Nothing above the pelvis is loaded" in text
+    # It must still be allowed to teach what it cannot show.
+    assert "The limit is on what can be shown" in text
+
+
+def test_the_body_rule_sits_below_safety() -> None:
+    """Safety is absolute and nothing later may argue with it."""
+    text = build_instructions(
+        profile="student",
+        language="en",
+        organs=[],
+        selection=[],
+        mode="tutor",
+        gender="female",
+    )
+    assert text.index("THE BODY ON SCREEN") > text.index("Anatria3D")

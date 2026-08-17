@@ -1,0 +1,131 @@
+{
+ "system": "renal",
+ "sex": "female",
+ "source": {
+  "version": "v1.5",
+  "url": "https://cdn.humanatlas.io/digital-objects/ref-organ/united-female/v1.5/assets/3d-vh-f-united.glb",
+  "metadata": "https://cdn.humanatlas.io/digital-objects/ref-organ/united-female/v1.5/metadata.json",
+  "license": "CC-BY-4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "sha256": "472567a56896b9b7890508da6501fbf858e56aaa30745365f7a71ade782b529c"
+ },
+ "output": "renal_female.glb",
+ "draco": true,
+ "object_count": 8,
+ "objects": [
+  {
+   "name": "Fundus of bladder, base",
+   "organ_id": "fundus_of_bladder_base",
+   "node": "VH_F_fundus_of_urinary_bladder_base",
+   "term": "Fundus of bladder",
+   "qualifier": "base",
+   "side": null,
+   "ontology_id": "UBERON:0006082",
+   "source_label": "fundus of urinary bladder",
+   "polygons": 25526,
+   "path": [
+    "Urinary bladder"
+   ]
+  },
+  {
+   "name": "Fundus of bladder, dome",
+   "organ_id": "fundus_of_bladder_dome",
+   "node": "VH_F_fundus_of_urinary_bladder_dome",
+   "term": "Fundus of bladder",
+   "qualifier": "dome",
+   "side": null,
+   "ontology_id": "UBERON:0006082",
+   "source_label": "fundus of urinary bladder",
+   "polygons": 11916,
+   "path": [
+    "Urinary bladder"
+   ]
+  },
+  {
+   "name": "Neck of bladder",
+   "organ_id": "neck_of_bladder",
+   "node": "VH_F_urinary_bladder_neck_smooth_muscle",
+   "term": "Neck of bladder",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0004230",
+   "source_label": "urinary bladder neck smooth muscle",
+   "polygons": 1790,
+   "path": [
+    "Urinary bladder"
+   ]
+  },
+  {
+   "name": "Trigone of bladder",
+   "organ_id": "trigone_of_bladder",
+   "node": "VH_F_trigone_of_urinary_bladder",
+   "term": "Trigone of bladder",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001257",
+   "source_label": "trigone of urinary bladder",
+   "polygons": 1684,
+   "path": [
+    "Urinary bladder"
+   ]
+  },
+  {
+   "name": "Ureter (left)",
+   "organ_id": "ureter_l",
+   "node": "VH_F_left_ureter",
+   "term": "Ureter",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "UBERON:0001223",
+   "source_label": "left ureter",
+   "polygons": 14944,
+   "path": [
+    "Ureter"
+   ]
+  },
+  {
+   "name": "Ureter (right)",
+   "organ_id": "ureter_r",
+   "node": "VH_F_right_ureter",
+   "term": "Ureter",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "UBERON:0001222",
+   "source_label": "right ureter",
+   "polygons": 12952,
+   "path": [
+    "Ureter"
+   ]
+  },
+  {
+   "name": "Ureteric orifice (left)",
+   "organ_id": "ureteric_orifice_l",
+   "node": "VH_F_ureteral_orifice_L",
+   "term": "Ureteric orifice",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "FMA:15940",
+   "source_label": "Left ureteral orifice",
+   "polygons": 194,
+   "path": [
+    "Urinary bladder",
+    "Trigone of bladder"
+   ]
+  },
+  {
+   "name": "Ureteric orifice (right)",
+   "organ_id": "ureteric_orifice_r",
+   "node": "VH_F_ureteral_orifice_R",
+   "term": "Ureteric orifice",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "FMA:15939",
+   "source_label": "Right ureteral orifice",
+   "polygons": 180,
+   "path": [
+    "Urinary bladder",
+    "Trigone of bladder"
+   ]
+  }
+ ]
+}
