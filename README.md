@@ -453,7 +453,7 @@ The Body switch above the systems list changes over between them.
 | | Male | Female |
 |---|---|---|
 | Source | Z-Anatomy → BodyParts3D | NIH Human Reference Atlas → Visible Human Female |
-| Coverage | Whole body, every system | Spine, abdomen and pelvis |
+| Coverage | Whole body, every system | Spine, abdomen, pelvis and breast |
 | Structures | 3,478 | 219 |
 | Licence | CC BY-SA 4.0 | CC BY 4.0 |
 
@@ -472,11 +472,18 @@ no skeletal muscle or peripheral nerve at all. The HRA models organs, not a
 body.
 
 Where it is *better* than the male atlas is worth saying too, because the
-structure count invites the opposite assumption. Its viscera are modelled far
-more finely: 52 renal structures against 8, 70 respiratory against 38, 62
-reproductive against 14. A kidney there opens into capsule, hilum, cortex,
-columns and every pyramid with its papilla; on the male side a kidney is one
-mesh.
+structure count invites the opposite assumption. Where the two overlap, the
+female viscera are modelled far more finely:
+
+| System | Male | Female |
+|---|---|---|
+| Renal | 8 | **58** |
+| Reproductive | 14 | **35** |
+| Digestive | 47 | **49** |
+| Integumentary (the breast) | 0 | **16** |
+
+A kidney there opens into capsule, hilum, cortex, columns and every pyramid
+with its papilla; on the male side a kidney is one mesh.
 
 **This atlas is one woman, not an average, and the interface says so.** The
 male atlas is an idealised composite; this is a 59-year-old subject, frozen and
@@ -500,7 +507,7 @@ marked wrong for it.
 
 That is a real limit and it is stated rather than worked around, because the
 alternative is worse: a Male/Female toggle that promises a body and delivers a
-pelvis reads as a failed download, and takes the credibility of everything else
+trunk reads as a failed download, and takes the credibility of everything else
 on screen with it.
 
 The two are separate atlases rather than one model with a switch, and that is
@@ -820,8 +827,10 @@ a structure once, under the first system that claims it.
 
 ### Two constraints worth knowing
 
-- **Z-Anatomy ships a male model only.** The gender toggle exists in the UI and
-  in the IPC schema but is disabled; there is no free source for a female mesh.
+- **Z-Anatomy ships a male model only**, so everything in this section describes
+  the male atlas alone. The female one comes from a different source, is built
+  by a different pipeline, and is documented in
+  [There are two atlases](#there-are-two-atlases-and-the-female-one-is-a-trunk).
 - **TA2.csv has no Bulgarian.** It carries English, Latin, French, Spanish,
   Portuguese, Italian and Parsi. Bulgarian lives in
   `tools/asset-pipeline/translations/bg.json`, written by hand, with a per-term
