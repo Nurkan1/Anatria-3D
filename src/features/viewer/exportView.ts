@@ -1,3 +1,4 @@
+import { APP_VERSION_LABEL } from "@/lib/appVersion";
 import { saveViewImage } from "@/lib/studyDb";
 import type { AnatomyManifest } from "@/lib/schemas";
 import { useSceneStore } from "@/stores/sceneStore";
@@ -43,7 +44,15 @@ import { getViewerHandle, projectToScreen } from "./viewerBridge";
  */
 
 const FOOTER_HEIGHT = 46;
-const DISCLAIMER = "Anatria3D — educational use only. Not a medical device.";
+/**
+ * The build is named here because an exported plate is evidence.
+ *
+ * Two plates of the same structure can legitimately disagree — 0.2.0 corrected
+ * sixty-one Latin terms — and without a version on the image there is no way to
+ * tell a corrected plate from a stale one, or to know which of the two to
+ * trust. It costs six characters in a line that already carries the name.
+ */
+const DISCLAIMER = `Anatria3D ${APP_VERSION_LABEL} — educational use only. Not a medical device.`;
 
 /** `CC-BY-SA-4.0` is an SPDX id; `CC BY-SA 4.0` is what a reader knows. */
 function readableLicence(spdx: string): string {

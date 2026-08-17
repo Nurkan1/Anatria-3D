@@ -3,6 +3,7 @@ import { useState } from "react";
 import { StudyPanel } from "@/features/study/StudyPanel";
 import { AnatomyTree } from "@/features/tree/AnatomyTree";
 import { UsagePanel } from "@/features/usage/UsagePanel";
+import { APP_VERSION_LABEL } from "@/lib/appVersion";
 import { useStudyStore } from "@/stores/studyStore";
 
 type Tab = "atlas" | "study" | "usage";
@@ -43,6 +44,19 @@ export function LeftPanel() {
         <TabButton active={tab === "usage"} onClick={() => setTab("usage")}>
           Usage
         </TabButton>
+        {/*
+          Sits in the tab strip rather than in a dialog, because the question it
+          answers — "which build is this?" — is asked by someone reporting a
+          problem or comparing two plates, and both of those are worse errands
+          if the answer is three clicks deep. `shrink-0` keeps the three tabs
+          sharing the width as they did before.
+        */}
+        <span
+          className="shrink-0 self-center px-2 text-[10px] font-medium tabular-nums text-slate-600"
+          title={`Anatria3D ${APP_VERSION_LABEL}`}
+        >
+          {APP_VERSION_LABEL}
+        </span>
       </div>
 
       <div className={`min-h-0 flex-1 ${tab === "atlas" ? "" : "hidden"}`}>

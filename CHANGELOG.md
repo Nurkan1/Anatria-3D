@@ -142,6 +142,15 @@ count kept beside the heading. Notes rest folded, because notes are what you go
 and look up while the patients and sessions are the work in front of you. A
 search opens all three, since one box narrows all three.
 
+**The application now says which version it is.** `v0.2.0` sits in the tab strip
+above the atlas, in the guide's footer, and on every plate you export. There is
+no auto-updater here by design, so the copy on your machine is whichever one you
+last installed — and until now nothing on screen said which that was. That
+mattered in three places: reporting a problem meant guessing, an exported plate
+carried no record of the build that drew it, and two plates of the same
+structure could disagree with nothing to say which was current. The corrections
+below are exactly that kind of change.
+
 ### Fixed
 
 **Sixty-one Latin terms were misspelled, truncated or named the wrong

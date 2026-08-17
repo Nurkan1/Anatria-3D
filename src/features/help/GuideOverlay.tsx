@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
+import { APP_VERSION_LABEL } from "@/lib/appVersion";
 import { MAX_SEVERITY, MAX_VISITS } from "@/lib/studyDb";
 
 /**
@@ -893,8 +894,9 @@ const SECTIONS: Section[] = [
           own licence; none of them is ours.
         </p>
         <p className="pt-2 text-[11px] text-slate-500">
-          © 2026 Digital Rose. Anatria3D is a trademark of Digital Rose. Application
-          code under Apache-2.0; anatomical assets under CC BY-SA 4.0.
+          Anatria3D {APP_VERSION_LABEL}. © 2026 Digital Rose. Anatria3D is a trademark of
+          Digital Rose. Application code under Apache-2.0; anatomical assets under CC
+          BY-SA 4.0.
         </p>
       </>
     ),
