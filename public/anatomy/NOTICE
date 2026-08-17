@@ -39,7 +39,12 @@ Attribution chain
    what Draco quantisation implies.
 
    Anatomical labels are taken from Z-Anatomy's TA2.csv (Terminologia
-   Anatomica 2).
+   Anatomica 2). That file is shipped unmodified, but it carries a few
+   typographical errors of its own — `Truncus coeiiacus` for *coeliacus*,
+   `Arteria mesenteries superior` for *mesenterica* — and those are corrected
+   as it is read, not in the file. Every correction is listed with its reason
+   in `tools/asset-pipeline/ta2.mjs`, and the build fails if one of them stops
+   matching a row.
 
    As adaptations of CC BY-SA 4.0 material, these files are themselves licensed
    under Creative Commons Attribution-ShareAlike 4.0 International:

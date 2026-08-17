@@ -2515,7 +2515,7 @@
     },
     {
       "organ_id": "superior_mesenteric_artery",
-      "ta2_latin": "Arteria mesenteries superior",
+      "ta2_latin": "Arteria mesenterica superior",
       "name_en": "Superior mesenteric artery",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",
@@ -34340,7 +34340,7 @@
     },
     {
       "organ_id": "coeliac_trunk",
-      "ta2_latin": "Truncus coeiiacus",
+      "ta2_latin": "Truncus coeliacus",
       "name_en": "Coeliac trunk",
       "system": "cardiovascular",
       "mesh_file": "cardiovascular_male.glb",

@@ -162,6 +162,37 @@ describe("the anatomy this subject actually has", () => {
   });
 });
 
+describe("the vendored TA2.csv, and the typos in it", () => {
+  it("ships corrected Latin for the rows that carry a typo", () => {
+    // These are faults in the file, not in Terminologia Anatomica, and they
+    // reach the reader: both were found on a labelled plate, printed under a
+    // vessel. The file itself stays untouched — it arrives with Z-Anatomy —
+    // so the correction is applied on the way in.
+    expect(ta2.get("coeliac trunk")?.la).toBe("Truncus coeliacus");
+    expect(ta2.get("superior mesenteric artery")?.la).toBe("Arteria mesenterica superior");
+    expect(ta2.get("lleocolic vein")?.en).toBe("Ileocolic vein");
+  });
+
+  it("still keys the corrected rows by what the file actually spells", () => {
+    // The English is the join key. Correcting it in place would break every
+    // lookup, so "Lleocolic vein" stays the key and only the displayed value
+    // changes.
+    expect(ta2.has("lleocolic vein")).toBe(true);
+    expect(ta2.has("ileocolic vein")).toBe(false);
+  });
+
+  it("reaches the shipped atlases", () => {
+    for (const file of ["manifest.json", "manifest_female.json"]) {
+      const manifest = AnatomyManifestSchema.parse(
+        JSON.parse(readFileSync(join(REPO, "public/anatomy", file), "utf8")),
+      );
+      const latin = manifest.organs.map((organ) => organ.ta2_latin);
+      expect(latin, file).not.toContain("Truncus coeiiacus");
+      expect(latin, file).not.toContain("Arteria mesenteries superior");
+    }
+  });
+});
+
 describe("the two atlases", () => {
   const male = AnatomyManifestSchema.parse(
     JSON.parse(readFileSync(join(REPO, "public/anatomy/manifest.json"), "utf8")),
