@@ -18,13 +18,14 @@ it, so this file is also the answer to "is it worth reinstalling".
 ### Added
 
 **A female atlas.** The atlas now has a second body. A Male/Female switch sits
-above the systems list, and choosing Female loads 221 structures built from the
+above the systems list, and choosing Female loads 264 structures built from the
 NIH Human Reference Atlas: the vertebral column from C1 to the coccyx, the
 pelvic girdle, the uterus with its cervix and walls, both uterine tubes down to
 the fimbriae, the ovaries, the vagina, sixteen ligaments and peritoneal folds,
 the bladder and ureters, both kidneys, the liver with its impressions and
 ligaments, the biliary tract, the pancreas, the spleen, the small and large
-intestine, seventeen pelvic vessels — and the breast.
+intestine, sixty vessels — the pelvic set, the coeliac trunk, the mesenteric
+arteries and the whole hepatic portal system — and the breast.
 
 The breast is worth calling out because **the male atlas has none at all**: the
 body of the breast, lobes of the mammary gland, lactiferous ducts and sinuses,
@@ -60,7 +61,7 @@ mark in an exam.
 
 Every structure carries its Terminologia Anatomica Latin, matched by hand,
 because the source names anatomy with UBERON and FMA labels that are not unique
-and often word structures differently. Eight structures in the source are not
+and often word structures differently. Eleven structures in the source are not
 shipped, because TA2 does not list them and inventing Latin would be worse than
 leaving them out; three more that TA2 does name are left out by judgement, and
 they are recorded separately so a decision cannot hide behind the standard.

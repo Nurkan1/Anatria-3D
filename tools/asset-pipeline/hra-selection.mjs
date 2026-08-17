@@ -57,6 +57,9 @@ export const NOT_IN_TA2 = {
     "'Vaginal part of cervix' sits — but a mesh the source declines to name is not " +
     "one to name from a bounding box, so it is left out rather than guessed at.",
   VH_F_duodenal_ampulla: "The duodenal cap, a radiological description of the first part of the duodenum. TA2 names the part, not the appearance.",
+  VH_F_inferior_pancreaticoduodenal_vein: "TA2 names the pancreaticoduodenal veins as a group, and the posterior superior one individually, but no inferior one.",
+  VH_F_anterior_segmental_right_hepatic_artery: "TA2 divides the right hepatic *duct* into anterior and posterior branches, not the right hepatic artery.",
+  VH_F_posterior_segmental_right_hepatic_artery: "As the anterior — see VH_F_anterior_segmental_right_hepatic_artery.",
   VH_F_basal_plate: "Placental. TA2 is adult anatomy; these terms belong to Terminologia Embryologica, which this atlas does not carry.",
   VH_F_chorionic_plate: "Placental — see VH_F_basal_plate.",
   VH_F_amnion: "Placental — see VH_F_basal_plate.",
@@ -88,6 +91,21 @@ export const OUT_OF_SCOPE = {
 export const KNOWN_SOURCE_ERRATA = {
   VH_F_superior_rectal_vein:
     "Labelled 'superior rectal artery' with UBERON:0035040 in HRA v1.5, duplicating the artery node. Named from the node here.",
+  VH_F_inferior_mesenteric_vein:
+    "Labelled 'superior mesenteric artery' in HRA v1.5 — a different vessel, which has its own node. Named from the node here.",
+};
+
+/**
+ * Defects in the vendored `TA2.csv`, not in Terminologia Anatomica itself.
+ *
+ * The file arrives with Z-Anatomy and is not ours to correct, so the typo stays
+ * the join key — it is what the file contains. Where the Latin on the row is
+ * right, the structure ships with its English fixed for display through the
+ * entry's `english` field.
+ */
+export const VENDOR_TA2_DEFECTS = {
+  "Lleocolic vein":
+    "Row 5119, an L where the I belongs. The Latin is correct (Vena ileocolica), so it ships as 'Ileocolic vein'.",
 };
 
 /** `1..n`, inclusive. */
@@ -433,6 +451,82 @@ export const STRUCTURES = [
     ];
   }),
 
+  // -- cardiovascular: the abdominal supply -----------------------------------
+  // The abdominal organs arrived without their vessels, which contradicts a
+  // principle this application states in its own README: an organ is studied
+  // with its supply, or it is not studied. The coeliac trunk, the portal system
+  // and the mesenteric tree were in the source the whole time.
+  //
+  // Three spellings that would each have been wrong if assumed: TA2 writes
+  // **Coeliac**, puts the qualifier first in **Proper hepatic artery**, and
+  // calls the middle hepatic vein **intermediate**.
+  { node: "VH_F_descending_aorta_a", id: "descending_aorta_upper", term: "Descending aorta", qualifier: "upper", side: null, path: ["Abdominal vessels", "Arteries"] },
+  { node: "VH_F_descending_aorta_b", id: "descending_aorta_lower", term: "Descending aorta", qualifier: "lower", side: null, path: ["Abdominal vessels", "Arteries"] },
+  { node: "VH_F_celiac_trunk", id: "coeliac_trunk", term: "Coeliac trunk", side: null, path: ["Abdominal vessels", "Arteries"] },
+  { node: "VH_F_superior_mesenteric_artery", id: "superior_mesenteric_artery", term: "Superior mesenteric artery", side: null, path: ["Abdominal vessels", "Arteries"] },
+  { node: "VH_F_inferior_mesenteric_artery", id: "inferior_mesenteric_artery", term: "Inferior mesenteric artery", side: null, path: ["Abdominal vessels", "Arteries"] },
+  { node: "VH_F_splenic_artery", id: "splenic_artery", term: "Splenic artery", side: null, path: ["Abdominal vessels", "Arteries"] },
+  { node: "VH_F_common_hepatic_artery", id: "common_hepatic_artery", term: "Common hepatic artery", side: null, path: ["Abdominal vessels", "Arteries"] },
+  { node: "VH_F_proper_hepatic_artery", id: "proper_hepatic_artery", term: "Proper hepatic artery", side: null, path: ["Abdominal vessels", "Arteries"] },
+  { node: "VH_F_right_hepatic_artery", id: "right_hepatic_artery", term: "Right hepatic artery", side: null, path: ["Abdominal vessels", "Arteries"] },
+  { node: "VH_F_left_hepatic_artery", id: "left_hepatic_artery", term: "Left hepatic artery", side: null, path: ["Abdominal vessels", "Arteries"] },
+  { node: "VH_F_middle_hepatic_artery_branch_of_left_hepatic_artery", id: "intermediate_branch_of_left_hepatic_artery", term: "Intermediate branch of left hepatic artery", side: null, path: ["Abdominal vessels", "Arteries"] },
+  { node: "VH_F_cystic_artery", id: "cystic_artery", term: "Cystic artery", side: null, path: ["Abdominal vessels", "Arteries"] },
+  // Sided terms, not "Renal artery" plus a side: TA2 names each one, exactly as
+  // it does the hepatic vessels above, and the Latin carries the side itself
+  // (*Arteria renum dextra*). Using the most specific term the standard offers
+  // is the rule throughout this table — and for the veins it is the only
+  // option, since TA2 has no generic "Renal vein" at all.
+  { node: "VH_F_right_renal_artery", id: "right_renal_artery", term: "Right renal artery", side: null, path: ["Abdominal vessels", "Arteries"] },
+  { node: "VH_F_left_renal_artery", id: "left_renal_artery", term: "Left renal artery", side: null, path: ["Abdominal vessels", "Arteries"] },
+  { node: "VH_F_ileocolic_artery", id: "ileocolic_artery", term: "Ileocolic artery", side: null, path: ["Abdominal vessels", "Arteries"] },
+  { node: "VH_F_right_colic_artery", id: "right_colic_artery", term: "Right colic artery", side: null, path: ["Abdominal vessels", "Arteries"] },
+  { node: "VH_F_middle_colic_artery", id: "middle_colic_artery", term: "Middle colic artery", side: null, path: ["Abdominal vessels", "Arteries"] },
+  { node: "VH_F_left_colic_artery", id: "left_colic_artery", term: "Left colic artery", side: null, path: ["Abdominal vessels", "Arteries"] },
+  // The artery of Drummond. TA2 lists it plainly as the marginal artery —
+  // *Arteria marginalis coli* — so the eponym is not needed.
+  { node: "VH_F_marginal_artery_of_Drummond", id: "marginal_artery", term: "Marginal artery", side: null, path: ["Abdominal vessels", "Arteries"] },
+  ...series({
+    keys: range(1, 3),
+    node: (n) => `VH_F_sigmoid_artery_${"abc"[n - 1]}`,
+    id: (n) => `sigmoid_arteries_${n}`,
+    term: "Sigmoid arteries",
+    label: (n) => String(n),
+    path: ["Abdominal vessels", "Arteries"],
+  }),
+
+  { node: "VH_F_inferior_vena_cava_a", id: "inferior_vena_cava_upper", term: "Inferior vena cava", qualifier: "upper", side: null, path: ["Abdominal vessels", "Veins"] },
+  { node: "VH_F_inferior_vena_cava_b", id: "inferior_vena_cava_lower", term: "Inferior vena cava", qualifier: "lower", side: null, path: ["Abdominal vessels", "Veins"] },
+  { node: "VH_F_right_hepatic_vein", id: "right_hepatic_vein", term: "Right hepatic vein", side: null, path: ["Abdominal vessels", "Veins"] },
+  { node: "VH_F_left_hepatic_vein", id: "left_hepatic_vein", term: "Left hepatic vein", side: null, path: ["Abdominal vessels", "Veins"] },
+  { node: "VH_F_middle_hepatic_vein", id: "intermediate_hepatic_vein", term: "Intermediate hepatic vein", side: null, path: ["Abdominal vessels", "Veins"] },
+  { node: "VH_F_right_renal_vein", id: "right_renal_vein", term: "Right renal vein", side: null, path: ["Abdominal vessels", "Veins"] },
+  { node: "VH_F_left_renal_vein", id: "left_renal_vein", term: "Left renal vein", side: null, path: ["Abdominal vessels", "Veins"] },
+
+  // The portal system, kept as its own group: blood that has already passed a
+  // capillary bed and is on its way to a second one is the thing a reader is
+  // trying to see when they open this at all.
+  { node: "VH_F_hepatic_portal_vein", id: "hepatic_portal_vein", term: "Hepatic portal vein", side: null, path: ["Abdominal vessels", "Veins", "Portal system"] },
+  { node: "VH_F_right_branch_of_portal_vein", id: "right_branch_of_hepatic_portal_vein", term: "Right branch of hepatic portal vein", side: null, path: ["Abdominal vessels", "Veins", "Portal system"] },
+  { node: "VH_F_left_branch_of_portal_vein", id: "left_branch_of_hepatic_portal_vein", term: "Left branch of hepatic portal vein", side: null, path: ["Abdominal vessels", "Veins", "Portal system"] },
+  { node: "VH_F_superior_mesenteric_vein", id: "superior_mesenteric_vein", term: "Superior mesenteric vein", side: null, path: ["Abdominal vessels", "Veins", "Portal system"] },
+  { node: "VH_F_inferior_mesenteric_vein", id: "inferior_mesenteric_vein", term: "Inferior mesenteric vein", side: null, path: ["Abdominal vessels", "Veins", "Portal system"] },
+  { node: "VH_F_splenic_vein", id: "splenic_vein", term: "Splenic vein", side: null, path: ["Abdominal vessels", "Veins", "Portal system"] },
+  // The vendored TA2.csv misspells this row — see VENDOR_TA2_DEFECTS.
+  { node: "VH_F_ileocolic_vein", id: "ileocolic_vein", term: "Lleocolic vein", english: "Ileocolic vein", side: null, path: ["Abdominal vessels", "Veins", "Portal system"] },
+  { node: "VH_F_right_colic_vein", id: "right_colic_vein", term: "Right colic vein", side: null, path: ["Abdominal vessels", "Veins", "Portal system"] },
+  { node: "VH_F_middle_colic_vein", id: "middle_colic_vein", term: "Middle colic vein", side: null, path: ["Abdominal vessels", "Veins", "Portal system"] },
+  { node: "VH_F_left_colic_vein", id: "left_colic_vein", term: "Left colic vein", side: null, path: ["Abdominal vessels", "Veins", "Portal system"] },
+  { node: "VH_F_cystic_vein", id: "cystic_veins", term: "Cystic veins", side: null, path: ["Abdominal vessels", "Veins", "Portal system"] },
+  ...series({
+    keys: range(1, 3),
+    node: (n) => `VH_F_sigmoid_vein_${"abc"[n - 1]}`,
+    id: (n) => `sigmoid_veins_${n}`,
+    term: "Sigmoid veins",
+    label: (n) => String(n),
+    path: ["Abdominal vessels", "Veins", "Portal system"],
+  }),
+
   // -- renal: the kidneys, in the detail the male atlas has never had ---------
   // The male atlas models each kidney as a single mesh. This one opens: the
   // capsule, the hilum, the cortex, the columns, and every pyramid with its
@@ -511,6 +605,7 @@ export const SYSTEM_OF = new Map(
       case "Spleen":
         return [entry.node, "lymphatic"];
       case "Pelvic vessels":
+      case "Abdominal vessels":
         return [entry.node, "cardiovascular"];
       default:
         throw new Error(`No system for path root "${top}"`);

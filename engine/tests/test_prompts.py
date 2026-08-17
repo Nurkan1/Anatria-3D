@@ -777,7 +777,7 @@ def test_male_is_the_default_body() -> None:
 def test_female_says_what_is_not_loaded() -> None:
     """The whole point of the rule.
 
-    Told only that 221 structures are loaded, the agent reasons from the atlas
+    Told only that 264 structures are loaded, the agent reasons from the atlas
     it has always seen and offers to focus a kidney. The tool layer rejects the
     id, and the reader sees an assistant that promised and then did nothing.
     """

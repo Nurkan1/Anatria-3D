@@ -20,6 +20,8 @@ export interface HraStructure {
   id: string;
   /** A Terminologia Anatomica 2 English term, verified at build time. */
   term: string;
+  /** Display-only override, where the vendored TA2.csv row carries a typo. */
+  english?: string;
   /**
    * Distinguishes structures the HRA splits and TA2 does not — each hip bone
    * into compact and spongy tissue, the bladder fundus into dome and base.

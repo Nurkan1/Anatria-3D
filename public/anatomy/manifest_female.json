@@ -14,7 +14,7 @@
   "systems": [
     {
       "system": "cardiovascular",
-      "organ_count": 17,
+      "organ_count": 60,
       "load_on_start": false
     },
     {
@@ -83,6 +83,32 @@
       ]
     },
     {
+      "organ_id": "descending_aorta_lower",
+      "ta2_latin": "Aorta descendens",
+      "name_en": "Descending aorta, lower",
+      "qualifier": "lower",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_descending_aorta_b",
+      "path": [
+        "Abdominal vessels",
+        "Arteries"
+      ]
+    },
+    {
+      "organ_id": "descending_aorta_upper",
+      "ta2_latin": "Aorta descendens",
+      "name_en": "Descending aorta, upper",
+      "qualifier": "upper",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_descending_aorta_a",
+      "path": [
+        "Abdominal vessels",
+        "Arteries"
+      ]
+    },
+    {
       "organ_id": "vermiform_appendix",
       "ta2_latin": "Appendix vermiformis",
       "name_en": "Vermiform appendix",
@@ -141,6 +167,186 @@
       ]
     },
     {
+      "organ_id": "right_colic_artery",
+      "ta2_latin": "Arteria colica dextra",
+      "name_en": "Right colic artery",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_right_colic_artery",
+      "path": [
+        "Abdominal vessels",
+        "Arteries"
+      ]
+    },
+    {
+      "organ_id": "middle_colic_artery",
+      "ta2_latin": "Arteria colica media",
+      "name_en": "Middle colic artery",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_middle_colic_artery",
+      "path": [
+        "Abdominal vessels",
+        "Arteries"
+      ]
+    },
+    {
+      "organ_id": "left_colic_artery",
+      "ta2_latin": "Arteria colica sinistra",
+      "name_en": "Left colic artery",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_left_colic_artery",
+      "path": [
+        "Abdominal vessels",
+        "Arteries"
+      ]
+    },
+    {
+      "organ_id": "cystic_artery",
+      "ta2_latin": "Arteria cystica",
+      "name_en": "Cystic artery",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_cystic_artery",
+      "path": [
+        "Abdominal vessels",
+        "Arteries"
+      ]
+    },
+    {
+      "organ_id": "common_hepatic_artery",
+      "ta2_latin": "Arteria hepatica communis",
+      "name_en": "Common hepatic artery",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_common_hepatic_artery",
+      "path": [
+        "Abdominal vessels",
+        "Arteries"
+      ]
+    },
+    {
+      "organ_id": "right_hepatic_artery",
+      "ta2_latin": "Arteria hepatica dextra",
+      "name_en": "Right hepatic artery",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_right_hepatic_artery",
+      "path": [
+        "Abdominal vessels",
+        "Arteries"
+      ]
+    },
+    {
+      "organ_id": "proper_hepatic_artery",
+      "ta2_latin": "Arteria hepatica propria",
+      "name_en": "Proper hepatic artery",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_proper_hepatic_artery",
+      "path": [
+        "Abdominal vessels",
+        "Arteries"
+      ]
+    },
+    {
+      "organ_id": "left_hepatic_artery",
+      "ta2_latin": "Arteria hepatica sinistra",
+      "name_en": "Left hepatic artery",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_left_hepatic_artery",
+      "path": [
+        "Abdominal vessels",
+        "Arteries"
+      ]
+    },
+    {
+      "organ_id": "ileocolic_artery",
+      "ta2_latin": "Arteria ileocolica",
+      "name_en": "Ileocolic artery",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_ileocolic_artery",
+      "path": [
+        "Abdominal vessels",
+        "Arteries"
+      ]
+    },
+    {
+      "organ_id": "marginal_artery",
+      "ta2_latin": "Arteria marginalis coli",
+      "name_en": "Marginal artery",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_marginal_artery_of_Drummond",
+      "path": [
+        "Abdominal vessels",
+        "Arteries"
+      ]
+    },
+    {
+      "organ_id": "inferior_mesenteric_artery",
+      "ta2_latin": "Arteria mesenterica inferior",
+      "name_en": "Inferior mesenteric artery",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_inferior_mesenteric_artery",
+      "path": [
+        "Abdominal vessels",
+        "Arteries"
+      ]
+    },
+    {
+      "organ_id": "superior_mesenteric_artery",
+      "ta2_latin": "Arteria mesenteries superior",
+      "name_en": "Superior mesenteric artery",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_superior_mesenteric_artery",
+      "path": [
+        "Abdominal vessels",
+        "Arteries"
+      ]
+    },
+    {
+      "organ_id": "right_renal_artery",
+      "ta2_latin": "Arteria renum dextra",
+      "name_en": "Right renal artery",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_right_renal_artery",
+      "path": [
+        "Abdominal vessels",
+        "Arteries"
+      ]
+    },
+    {
+      "organ_id": "left_renal_artery",
+      "ta2_latin": "Arteria renum sinistra",
+      "name_en": "Left renal artery",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_left_renal_artery",
+      "path": [
+        "Abdominal vessels",
+        "Arteries"
+      ]
+    },
+    {
+      "organ_id": "splenic_artery",
+      "ta2_latin": "Arteria splenica",
+      "name_en": "Splenic artery",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_splenic_artery",
+      "path": [
+        "Abdominal vessels",
+        "Arteries"
+      ]
+    },
+    {
       "organ_id": "uterine_artery_l",
       "ta2_latin": "Arteria uterina",
       "name_en": "Uterine artery (left)",
@@ -161,6 +367,45 @@
       "node": "VH_F_right_uterine_artery",
       "path": [
         "Pelvic vessels",
+        "Arteries"
+      ]
+    },
+    {
+      "organ_id": "sigmoid_arteries_1",
+      "ta2_latin": "Arteriae sigmoideae",
+      "name_en": "Sigmoid arteries, 1",
+      "qualifier": "1",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_sigmoid_artery_a",
+      "path": [
+        "Abdominal vessels",
+        "Arteries"
+      ]
+    },
+    {
+      "organ_id": "sigmoid_arteries_2",
+      "ta2_latin": "Arteriae sigmoideae",
+      "name_en": "Sigmoid arteries, 2",
+      "qualifier": "2",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_sigmoid_artery_b",
+      "path": [
+        "Abdominal vessels",
+        "Arteries"
+      ]
+    },
+    {
+      "organ_id": "sigmoid_arteries_3",
+      "ta2_latin": "Arteriae sigmoideae",
+      "name_en": "Sigmoid arteries, 3",
+      "qualifier": "3",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_sigmoid_artery_c",
+      "path": [
+        "Abdominal vessels",
         "Arteries"
       ]
     },
@@ -2104,6 +2349,44 @@
       ]
     },
     {
+      "organ_id": "right_branch_of_hepatic_portal_vein",
+      "ta2_latin": "Ramus dexter venae portae hepatis",
+      "name_en": "Right branch of hepatic portal vein",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_right_branch_of_portal_vein",
+      "path": [
+        "Abdominal vessels",
+        "Veins",
+        "Portal system"
+      ]
+    },
+    {
+      "organ_id": "intermediate_branch_of_left_hepatic_artery",
+      "ta2_latin": "Ramus intermedius arteriae hepaticae sinistrae",
+      "name_en": "Intermediate branch of left hepatic artery",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_middle_hepatic_artery_branch_of_left_hepatic_artery",
+      "path": [
+        "Abdominal vessels",
+        "Arteries"
+      ]
+    },
+    {
+      "organ_id": "left_branch_of_hepatic_portal_vein",
+      "ta2_latin": "Ramus sinister venae portae hepatis",
+      "name_en": "Left branch of hepatic portal vein",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_left_branch_of_portal_vein",
+      "path": [
+        "Abdominal vessels",
+        "Veins",
+        "Portal system"
+      ]
+    },
+    {
       "organ_id": "rectum",
       "ta2_latin": "Rectum",
       "name_en": "Rectum",
@@ -2156,6 +2439,18 @@
       "node": "VH_F_trigone_of_urinary_bladder",
       "path": [
         "Urinary bladder"
+      ]
+    },
+    {
+      "organ_id": "coeliac_trunk",
+      "ta2_latin": "Truncus coeiiacus",
+      "name_en": "Coeliac trunk",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_celiac_trunk",
+      "path": [
+        "Abdominal vessels",
+        "Arteries"
       ]
     },
     {
@@ -2239,6 +2534,120 @@
       ]
     },
     {
+      "organ_id": "inferior_vena_cava_lower",
+      "ta2_latin": "Vena cava inferior",
+      "name_en": "Inferior vena cava, lower",
+      "qualifier": "lower",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_inferior_vena_cava_b",
+      "path": [
+        "Abdominal vessels",
+        "Veins"
+      ]
+    },
+    {
+      "organ_id": "inferior_vena_cava_upper",
+      "ta2_latin": "Vena cava inferior",
+      "name_en": "Inferior vena cava, upper",
+      "qualifier": "upper",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_inferior_vena_cava_a",
+      "path": [
+        "Abdominal vessels",
+        "Veins"
+      ]
+    },
+    {
+      "organ_id": "right_colic_vein",
+      "ta2_latin": "Vena colica dextra",
+      "name_en": "Right colic vein",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_right_colic_vein",
+      "path": [
+        "Abdominal vessels",
+        "Veins",
+        "Portal system"
+      ]
+    },
+    {
+      "organ_id": "middle_colic_vein",
+      "ta2_latin": "Vena colica media",
+      "name_en": "Middle colic vein",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_middle_colic_vein",
+      "path": [
+        "Abdominal vessels",
+        "Veins",
+        "Portal system"
+      ]
+    },
+    {
+      "organ_id": "left_colic_vein",
+      "ta2_latin": "Vena colica sinistra",
+      "name_en": "Left colic vein",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_left_colic_vein",
+      "path": [
+        "Abdominal vessels",
+        "Veins",
+        "Portal system"
+      ]
+    },
+    {
+      "organ_id": "right_hepatic_vein",
+      "ta2_latin": "Vena hepatica dextra",
+      "name_en": "Right hepatic vein",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_right_hepatic_vein",
+      "path": [
+        "Abdominal vessels",
+        "Veins"
+      ]
+    },
+    {
+      "organ_id": "intermediate_hepatic_vein",
+      "ta2_latin": "Vena hepatica intermedia",
+      "name_en": "Intermediate hepatic vein",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_middle_hepatic_vein",
+      "path": [
+        "Abdominal vessels",
+        "Veins"
+      ]
+    },
+    {
+      "organ_id": "left_hepatic_vein",
+      "ta2_latin": "Vena hepatica sinistra",
+      "name_en": "Left hepatic vein",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_left_hepatic_vein",
+      "path": [
+        "Abdominal vessels",
+        "Veins"
+      ]
+    },
+    {
+      "organ_id": "ileocolic_vein",
+      "ta2_latin": "Vena ileocolica",
+      "name_en": "Ileocolic vein",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_ileocolic_vein",
+      "path": [
+        "Abdominal vessels",
+        "Veins",
+        "Portal system"
+      ]
+    },
+    {
       "organ_id": "common_iliac_vein_l",
       "ta2_latin": "Vena iliaca communis",
       "name_en": "Common iliac vein (left)",
@@ -2287,6 +2696,45 @@
       ]
     },
     {
+      "organ_id": "inferior_mesenteric_vein",
+      "ta2_latin": "Vena mesenterica inferior",
+      "name_en": "Inferior mesenteric vein",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_inferior_mesenteric_vein",
+      "path": [
+        "Abdominal vessels",
+        "Veins",
+        "Portal system"
+      ]
+    },
+    {
+      "organ_id": "superior_mesenteric_vein",
+      "ta2_latin": "Vena mesenterica superior",
+      "name_en": "Superior mesenteric vein",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_superior_mesenteric_vein",
+      "path": [
+        "Abdominal vessels",
+        "Veins",
+        "Portal system"
+      ]
+    },
+    {
+      "organ_id": "hepatic_portal_vein",
+      "ta2_latin": "Vena portae hepatis",
+      "name_en": "Hepatic portal vein",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_hepatic_portal_vein",
+      "path": [
+        "Abdominal vessels",
+        "Veins",
+        "Portal system"
+      ]
+    },
+    {
       "organ_id": "internal_pudendal_vein_l",
       "ta2_latin": "Vena pudendalis interna",
       "name_en": "Internal pudendal vein (left)",
@@ -2311,6 +2759,30 @@
       ]
     },
     {
+      "organ_id": "right_renal_vein",
+      "ta2_latin": "Vena renalis dextra",
+      "name_en": "Right renal vein",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_right_renal_vein",
+      "path": [
+        "Abdominal vessels",
+        "Veins"
+      ]
+    },
+    {
+      "organ_id": "left_renal_vein",
+      "ta2_latin": "Vena renalis sinistra",
+      "name_en": "Left renal vein",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_left_renal_vein",
+      "path": [
+        "Abdominal vessels",
+        "Veins"
+      ]
+    },
+    {
       "organ_id": "median_sacral_vein",
       "ta2_latin": "Vena sacralis mediana",
       "name_en": "Median sacral vein",
@@ -2320,6 +2792,19 @@
       "path": [
         "Pelvic vessels",
         "Veins"
+      ]
+    },
+    {
+      "organ_id": "splenic_vein",
+      "ta2_latin": "Vena splenica",
+      "name_en": "Splenic vein",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_splenic_vein",
+      "path": [
+        "Abdominal vessels",
+        "Veins",
+        "Portal system"
       ]
     },
     {
@@ -2368,6 +2853,61 @@
       "path": [
         "Pelvic vessels",
         "Veins"
+      ]
+    },
+    {
+      "organ_id": "cystic_veins",
+      "ta2_latin": "Venae cysticae",
+      "name_en": "Cystic veins",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_cystic_vein",
+      "path": [
+        "Abdominal vessels",
+        "Veins",
+        "Portal system"
+      ]
+    },
+    {
+      "organ_id": "sigmoid_veins_1",
+      "ta2_latin": "Venae sigmoideae",
+      "name_en": "Sigmoid veins, 1",
+      "qualifier": "1",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_sigmoid_vein_a",
+      "path": [
+        "Abdominal vessels",
+        "Veins",
+        "Portal system"
+      ]
+    },
+    {
+      "organ_id": "sigmoid_veins_2",
+      "ta2_latin": "Venae sigmoideae",
+      "name_en": "Sigmoid veins, 2",
+      "qualifier": "2",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_sigmoid_vein_b",
+      "path": [
+        "Abdominal vessels",
+        "Veins",
+        "Portal system"
+      ]
+    },
+    {
+      "organ_id": "sigmoid_veins_3",
+      "ta2_latin": "Venae sigmoideae",
+      "name_en": "Sigmoid veins, 3",
+      "qualifier": "3",
+      "system": "cardiovascular",
+      "mesh_file": "cardiovascular_female.glb",
+      "node": "VH_F_sigmoid_vein_c",
+      "path": [
+        "Abdominal vessels",
+        "Veins",
+        "Portal system"
       ]
     },
     {

@@ -105,9 +105,19 @@ function checkPin(path, allowUnpinned) {
   return digest;
 }
 
-/** `Term, qualifier (side)` — the name a reader sees. */
+/**
+ * `Term, qualifier (side)` — the name a reader sees.
+ *
+ * `english` overrides the term for display only. It exists for one reason: the
+ * vendored TA2.csv carries a typo — row 5119 reads "Lleocolic vein", with an L
+ * for the I — and the term is still the join key, because that is what the file
+ * actually contains and correcting a vendored standard is not this pipeline's
+ * business. The Latin on that row is right, so the structure ships with its
+ * correct English rather than the typo. See `VENDOR_TA2_DEFECTS`.
+ */
 export function displayName(entry) {
-  const qualified = entry.qualifier ? `${entry.term}, ${entry.qualifier}` : entry.term;
+  const shown = entry.english ?? entry.term;
+  const qualified = entry.qualifier ? `${shown}, ${entry.qualifier}` : shown;
   if (entry.side === "left") return `${qualified} (left)`;
   if (entry.side === "right") return `${qualified} (right)`;
   return qualified;

@@ -40,7 +40,7 @@ Female atlas — Creative Commons Attribution 4.0
 
 Files: `anatomy/manifest_female.json`, `anatomy/*_female.glb`
 
-The trunk — spine, abdominal organs, pelvis and breast, 221 structures. Not a
+The trunk — spine, abdominal organs, pelvis and breast, 264 structures. Not a
 whole body, because no open dataset provides a female one.
 
   1. Visible Human Female
@@ -52,7 +52,7 @@ whole body, because no open dataset provides a female one.
      Digital object ref-organ/united-female v1.5
      CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/
 
-  3. Anatria3D adaptations — 221 of 888 structures selected, node hierarchy
+  3. Anatria3D adaptations — 264 of 888 structures selected, node hierarchy
      flattened with transforms baked in, materials and UV sets dropped, lossy
      Draco compression, stable organ identifiers added, and each structure
      matched by hand to a Terminologia Anatomica term.

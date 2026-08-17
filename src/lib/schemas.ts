@@ -38,7 +38,7 @@ export type UserProfile = z.infer<typeof UserProfileSchema>;
  * switch — see `manifest.ts`.
  *
  * `male` is Z-Anatomy's whole body, 3,478 structures across every system.
- * `female` is the trunk, built from the NIH Human Reference Atlas: 221
+ * `female` is the trunk, built from the NIH Human Reference Atlas: 264
  * structures — spine, abdominal organs, pelvis and breast — and deliberately
  * not a whole body, because no open source for one exists. The application says
  * so where the reader chooses.

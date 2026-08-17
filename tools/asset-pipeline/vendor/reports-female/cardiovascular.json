@@ -11,8 +11,38 @@
  },
  "output": "cardiovascular_female.glb",
  "draco": true,
- "object_count": 17,
+ "object_count": 60,
  "objects": [
+  {
+   "name": "Coeliac trunk",
+   "organ_id": "coeliac_trunk",
+   "node": "VH_F_celiac_trunk",
+   "term": "Coeliac trunk",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:14812",
+   "source_label": "Celiac trunk",
+   "polygons": 384,
+   "path": [
+    "Abdominal vessels",
+    "Arteries"
+   ]
+  },
+  {
+   "name": "Common hepatic artery",
+   "organ_id": "common_hepatic_artery",
+   "node": "VH_F_common_hepatic_artery",
+   "term": "Common hepatic artery",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0005436",
+   "source_label": "common hepatic artery",
+   "polygons": 582,
+   "path": [
+    "Abdominal vessels",
+    "Arteries"
+   ]
+  },
   {
    "name": "Common iliac vein (left)",
    "organ_id": "common_iliac_vein_l",
@@ -44,6 +74,114 @@
    ]
   },
   {
+   "name": "Cystic artery",
+   "organ_id": "cystic_artery",
+   "node": "VH_F_cystic_artery",
+   "term": "Cystic artery",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0039222",
+   "source_label": "cystic artery",
+   "polygons": 1430,
+   "path": [
+    "Abdominal vessels",
+    "Arteries"
+   ]
+  },
+  {
+   "name": "Cystic veins",
+   "organ_id": "cystic_veins",
+   "node": "VH_F_cystic_vein",
+   "term": "Cystic veins",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0035392",
+   "source_label": "cystic vein",
+   "polygons": 3240,
+   "path": [
+    "Abdominal vessels",
+    "Veins",
+    "Portal system"
+   ]
+  },
+  {
+   "name": "Descending aorta, lower",
+   "organ_id": "descending_aorta_lower",
+   "node": "VH_F_descending_aorta_b",
+   "term": "Descending aorta",
+   "qualifier": "lower",
+   "side": null,
+   "ontology_id": "UBERON:0001514",
+   "source_label": "descending aorta",
+   "polygons": 7930,
+   "path": [
+    "Abdominal vessels",
+    "Arteries"
+   ]
+  },
+  {
+   "name": "Descending aorta, upper",
+   "organ_id": "descending_aorta_upper",
+   "node": "VH_F_descending_aorta_a",
+   "term": "Descending aorta",
+   "qualifier": "upper",
+   "side": null,
+   "ontology_id": "UBERON:0001514",
+   "source_label": "descending aorta",
+   "polygons": 6004,
+   "path": [
+    "Abdominal vessels",
+    "Arteries"
+   ]
+  },
+  {
+   "name": "Hepatic portal vein",
+   "organ_id": "hepatic_portal_vein",
+   "node": "VH_F_hepatic_portal_vein",
+   "term": "Hepatic portal vein",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001639",
+   "source_label": "hepatic portal vein",
+   "polygons": 2262,
+   "path": [
+    "Abdominal vessels",
+    "Veins",
+    "Portal system"
+   ]
+  },
+  {
+   "name": "Ileocolic artery",
+   "organ_id": "ileocolic_artery",
+   "node": "VH_F_ileocolic_artery",
+   "term": "Ileocolic artery",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0035548",
+   "source_label": "ileocolic artery",
+   "polygons": 1486,
+   "path": [
+    "Abdominal vessels",
+    "Arteries"
+   ]
+  },
+  {
+   "name": "Ileocolic vein",
+   "organ_id": "ileocolic_vein",
+   "node": "VH_F_ileocolic_vein",
+   "term": "Lleocolic vein",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001219",
+   "source_label": "ileocolic vein",
+   "polygons": 1878,
+   "path": [
+    "Abdominal vessels",
+    "Veins",
+    "Portal system"
+   ]
+  },
+  {
    "name": "Inferior anorectal veins (left)",
    "organ_id": "inferior_anorectal_veins_l",
    "node": "VH_F_inferior_rectal_vein_L",
@@ -70,6 +208,97 @@
    "polygons": 1668,
    "path": [
     "Pelvic vessels",
+    "Veins"
+   ]
+  },
+  {
+   "name": "Inferior mesenteric artery",
+   "organ_id": "inferior_mesenteric_artery",
+   "node": "VH_F_inferior_mesenteric_artery",
+   "term": "Inferior mesenteric artery",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001183",
+   "source_label": "inferior mesenteric artery",
+   "polygons": 2179,
+   "path": [
+    "Abdominal vessels",
+    "Arteries"
+   ]
+  },
+  {
+   "name": "Inferior mesenteric vein",
+   "organ_id": "inferior_mesenteric_vein",
+   "node": "VH_F_inferior_mesenteric_vein",
+   "term": "Inferior mesenteric vein",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001182",
+   "source_label": "superior mesenteric artery",
+   "polygons": 6934,
+   "path": [
+    "Abdominal vessels",
+    "Veins",
+    "Portal system"
+   ]
+  },
+  {
+   "name": "Inferior vena cava, lower",
+   "organ_id": "inferior_vena_cava_lower",
+   "node": "VH_F_inferior_vena_cava_b",
+   "term": "Inferior vena cava",
+   "qualifier": "lower",
+   "side": null,
+   "ontology_id": "FMA:10951",
+   "source_label": "inferior vena cava",
+   "polygons": 10866,
+   "path": [
+    "Abdominal vessels",
+    "Veins"
+   ]
+  },
+  {
+   "name": "Inferior vena cava, upper",
+   "organ_id": "inferior_vena_cava_upper",
+   "node": "VH_F_inferior_vena_cava_a",
+   "term": "Inferior vena cava",
+   "qualifier": "upper",
+   "side": null,
+   "ontology_id": "FMA:10951",
+   "source_label": "inferior vena cava",
+   "polygons": 3614,
+   "path": [
+    "Abdominal vessels",
+    "Veins"
+   ]
+  },
+  {
+   "name": "Intermediate branch of left hepatic artery",
+   "organ_id": "intermediate_branch_of_left_hepatic_artery",
+   "node": "VH_F_middle_hepatic_artery_branch_of_left_hepatic_artery",
+   "term": "Intermediate branch of left hepatic artery",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "-",
+   "source_label": "-",
+   "polygons": 468,
+   "path": [
+    "Abdominal vessels",
+    "Arteries"
+   ]
+  },
+  {
+   "name": "Intermediate hepatic vein",
+   "organ_id": "intermediate_hepatic_vein",
+   "node": "VH_F_middle_hepatic_vein",
+   "term": "Intermediate hepatic vein",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:14340",
+   "source_label": "Middle hepatic vein",
+   "polygons": 824,
+   "path": [
+    "Abdominal vessels",
     "Veins"
    ]
   },
@@ -134,6 +363,128 @@
    ]
   },
   {
+   "name": "Left branch of hepatic portal vein",
+   "organ_id": "left_branch_of_hepatic_portal_vein",
+   "node": "VH_F_left_branch_of_portal_vein",
+   "term": "Left branch of hepatic portal vein",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "-",
+   "source_label": "-",
+   "polygons": 1612,
+   "path": [
+    "Abdominal vessels",
+    "Veins",
+    "Portal system"
+   ]
+  },
+  {
+   "name": "Left colic artery",
+   "organ_id": "left_colic_artery",
+   "node": "VH_F_left_colic_artery",
+   "term": "Left colic artery",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:14826",
+   "source_label": "Left colic artery",
+   "polygons": 1264,
+   "path": [
+    "Abdominal vessels",
+    "Arteries"
+   ]
+  },
+  {
+   "name": "Left colic vein",
+   "organ_id": "left_colic_vein",
+   "node": "VH_F_left_colic_vein",
+   "term": "Left colic vein",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:15394",
+   "source_label": "Left colic vein",
+   "polygons": 1613,
+   "path": [
+    "Abdominal vessels",
+    "Veins",
+    "Portal system"
+   ]
+  },
+  {
+   "name": "Left hepatic artery",
+   "organ_id": "left_hepatic_artery",
+   "node": "VH_F_left_hepatic_artery",
+   "term": "Left hepatic artery",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:14779",
+   "source_label": "Left hepatic artery",
+   "polygons": 1276,
+   "path": [
+    "Abdominal vessels",
+    "Arteries"
+   ]
+  },
+  {
+   "name": "Left hepatic vein",
+   "organ_id": "left_hepatic_vein",
+   "node": "VH_F_left_hepatic_vein",
+   "term": "Left hepatic vein",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:14339",
+   "source_label": "Left hepatic vein",
+   "polygons": 650,
+   "path": [
+    "Abdominal vessels",
+    "Veins"
+   ]
+  },
+  {
+   "name": "Left renal artery",
+   "organ_id": "left_renal_artery",
+   "node": "VH_F_left_renal_artery",
+   "term": "Left renal artery",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001186",
+   "source_label": "left renal artery",
+   "polygons": 5730,
+   "path": [
+    "Abdominal vessels",
+    "Arteries"
+   ]
+  },
+  {
+   "name": "Left renal vein",
+   "organ_id": "left_renal_vein",
+   "node": "VH_F_left_renal_vein",
+   "term": "Left renal vein",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001142",
+   "source_label": "left renal vein",
+   "polygons": 2898,
+   "path": [
+    "Abdominal vessels",
+    "Veins"
+   ]
+  },
+  {
+   "name": "Marginal artery",
+   "organ_id": "marginal_artery",
+   "node": "VH_F_marginal_artery_of_Drummond",
+   "term": "Marginal artery",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:14824",
+   "source_label": "marginal colic artery",
+   "polygons": 7647,
+   "path": [
+    "Abdominal vessels",
+    "Arteries"
+   ]
+  },
+  {
    "name": "Median sacral vein",
    "organ_id": "median_sacral_vein",
    "node": "VH_F_median_sacral_vein",
@@ -179,6 +530,283 @@
    ]
   },
   {
+   "name": "Middle colic artery",
+   "organ_id": "middle_colic_artery",
+   "node": "VH_F_middle_colic_artery",
+   "term": "Middle colic artery",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001196",
+   "source_label": "middle colic artery",
+   "polygons": 1405,
+   "path": [
+    "Abdominal vessels",
+    "Arteries"
+   ]
+  },
+  {
+   "name": "Middle colic vein",
+   "organ_id": "middle_colic_vein",
+   "node": "VH_F_middle_colic_vein",
+   "term": "Middle colic vein",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001218",
+   "source_label": "middle colic vein",
+   "polygons": 2506,
+   "path": [
+    "Abdominal vessels",
+    "Veins",
+    "Portal system"
+   ]
+  },
+  {
+   "name": "Proper hepatic artery",
+   "organ_id": "proper_hepatic_artery",
+   "node": "VH_F_proper_hepatic_artery",
+   "term": "Proper hepatic artery",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:14772",
+   "source_label": "Hepatic artery proper",
+   "polygons": 620,
+   "path": [
+    "Abdominal vessels",
+    "Arteries"
+   ]
+  },
+  {
+   "name": "Right branch of hepatic portal vein",
+   "organ_id": "right_branch_of_hepatic_portal_vein",
+   "node": "VH_F_right_branch_of_portal_vein",
+   "term": "Right branch of hepatic portal vein",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "-",
+   "source_label": "-",
+   "polygons": 1788,
+   "path": [
+    "Abdominal vessels",
+    "Veins",
+    "Portal system"
+   ]
+  },
+  {
+   "name": "Right colic artery",
+   "organ_id": "right_colic_artery",
+   "node": "VH_F_right_colic_artery",
+   "term": "Right colic artery",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:14811",
+   "source_label": "Right colic artery",
+   "polygons": 1650,
+   "path": [
+    "Abdominal vessels",
+    "Arteries"
+   ]
+  },
+  {
+   "name": "Right colic vein",
+   "organ_id": "right_colic_vein",
+   "node": "VH_F_right_colic_vein",
+   "term": "Right colic vein",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:15407",
+   "source_label": "Right colic vein",
+   "polygons": 1958,
+   "path": [
+    "Abdominal vessels",
+    "Veins",
+    "Portal system"
+   ]
+  },
+  {
+   "name": "Right hepatic artery",
+   "organ_id": "right_hepatic_artery",
+   "node": "VH_F_right_hepatic_artery",
+   "term": "Right hepatic artery",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:14778",
+   "source_label": "Right hepatic artery",
+   "polygons": 652,
+   "path": [
+    "Abdominal vessels",
+    "Arteries"
+   ]
+  },
+  {
+   "name": "Right hepatic vein",
+   "organ_id": "right_hepatic_vein",
+   "node": "VH_F_right_hepatic_vein",
+   "term": "Right hepatic vein",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:14338",
+   "source_label": "Right hepatic vein",
+   "polygons": 1044,
+   "path": [
+    "Abdominal vessels",
+    "Veins"
+   ]
+  },
+  {
+   "name": "Right renal artery",
+   "organ_id": "right_renal_artery",
+   "node": "VH_F_right_renal_artery",
+   "term": "Right renal artery",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001185",
+   "source_label": "right renal artery",
+   "polygons": 3198,
+   "path": [
+    "Abdominal vessels",
+    "Arteries"
+   ]
+  },
+  {
+   "name": "Right renal vein",
+   "organ_id": "right_renal_vein",
+   "node": "VH_F_right_renal_vein",
+   "term": "Right renal vein",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001141",
+   "source_label": "right renal vein",
+   "polygons": 1072,
+   "path": [
+    "Abdominal vessels",
+    "Veins"
+   ]
+  },
+  {
+   "name": "Sigmoid arteries, 1",
+   "organ_id": "sigmoid_arteries_1",
+   "node": "VH_F_sigmoid_artery_a",
+   "term": "Sigmoid arteries",
+   "qualifier": "1",
+   "side": null,
+   "ontology_id": "UBERON:0035180",
+   "source_label": "sigmoid artery",
+   "polygons": 794,
+   "path": [
+    "Abdominal vessels",
+    "Arteries"
+   ]
+  },
+  {
+   "name": "Sigmoid arteries, 2",
+   "organ_id": "sigmoid_arteries_2",
+   "node": "VH_F_sigmoid_artery_b",
+   "term": "Sigmoid arteries",
+   "qualifier": "2",
+   "side": null,
+   "ontology_id": "UBERON:0035180",
+   "source_label": "sigmoid artery",
+   "polygons": 520,
+   "path": [
+    "Abdominal vessels",
+    "Arteries"
+   ]
+  },
+  {
+   "name": "Sigmoid arteries, 3",
+   "organ_id": "sigmoid_arteries_3",
+   "node": "VH_F_sigmoid_artery_c",
+   "term": "Sigmoid arteries",
+   "qualifier": "3",
+   "side": null,
+   "ontology_id": "UBERON:0035180",
+   "source_label": "sigmoid artery",
+   "polygons": 646,
+   "path": [
+    "Abdominal vessels",
+    "Arteries"
+   ]
+  },
+  {
+   "name": "Sigmoid veins, 1",
+   "organ_id": "sigmoid_veins_1",
+   "node": "VH_F_sigmoid_vein_a",
+   "term": "Sigmoid veins",
+   "qualifier": "1",
+   "side": null,
+   "ontology_id": "FMA:15395",
+   "source_label": "sigmoid vein",
+   "polygons": 416,
+   "path": [
+    "Abdominal vessels",
+    "Veins",
+    "Portal system"
+   ]
+  },
+  {
+   "name": "Sigmoid veins, 2",
+   "organ_id": "sigmoid_veins_2",
+   "node": "VH_F_sigmoid_vein_b",
+   "term": "Sigmoid veins",
+   "qualifier": "2",
+   "side": null,
+   "ontology_id": "FMA:15395",
+   "source_label": "sigmoid vein",
+   "polygons": 1732,
+   "path": [
+    "Abdominal vessels",
+    "Veins",
+    "Portal system"
+   ]
+  },
+  {
+   "name": "Sigmoid veins, 3",
+   "organ_id": "sigmoid_veins_3",
+   "node": "VH_F_sigmoid_vein_c",
+   "term": "Sigmoid veins",
+   "qualifier": "3",
+   "side": null,
+   "ontology_id": "FMA:15395",
+   "source_label": "sigmoid vein",
+   "polygons": 700,
+   "path": [
+    "Abdominal vessels",
+    "Veins",
+    "Portal system"
+   ]
+  },
+  {
+   "name": "Splenic artery",
+   "organ_id": "splenic_artery",
+   "node": "VH_F_splenic_artery",
+   "term": "Splenic artery",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001194",
+   "source_label": "splenic artery",
+   "polygons": 5894,
+   "path": [
+    "Abdominal vessels",
+    "Arteries"
+   ]
+  },
+  {
+   "name": "Splenic vein",
+   "organ_id": "splenic_vein",
+   "node": "VH_F_splenic_vein",
+   "term": "Splenic vein",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0003713",
+   "source_label": "splenic vein",
+   "polygons": 9254,
+   "path": [
+    "Abdominal vessels",
+    "Veins",
+    "Portal system"
+   ]
+  },
+  {
    "name": "Superior anorectal artery",
    "organ_id": "superior_anorectal_artery",
    "node": "VH_F_superior_rectal_artery",
@@ -206,6 +834,37 @@
    "path": [
     "Pelvic vessels",
     "Veins"
+   ]
+  },
+  {
+   "name": "Superior mesenteric artery",
+   "organ_id": "superior_mesenteric_artery",
+   "node": "VH_F_superior_mesenteric_artery",
+   "term": "Superior mesenteric artery",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001182",
+   "source_label": "superior mesenteric artery",
+   "polygons": 2833,
+   "path": [
+    "Abdominal vessels",
+    "Arteries"
+   ]
+  },
+  {
+   "name": "Superior mesenteric vein",
+   "organ_id": "superior_mesenteric_vein",
+   "node": "VH_F_superior_mesenteric_vein",
+   "term": "Superior mesenteric vein",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001138",
+   "source_label": "superior mesenteric vein",
+   "polygons": 4060,
+   "path": [
+    "Abdominal vessels",
+    "Veins",
+    "Portal system"
    ]
   },
   {
