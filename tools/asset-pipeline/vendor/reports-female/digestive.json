@@ -11,7 +11,7 @@
  },
  "output": "digestive_female.glb",
  "draco": true,
- "object_count": 49,
+ "object_count": 50,
  "objects": [
   {
    "name": "Accessory pancreatic duct",
@@ -677,6 +677,20 @@
    "polygons": 3997,
    "path": [
     "Pancreas"
+   ]
+  },
+  {
+   "name": "Terminal ileum",
+   "organ_id": "terminal_ileum",
+   "node": "VH_F_ileum_terminal",
+   "term": "Terminal ileum",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:14966",
+   "source_label": "distal part of ileum",
+   "polygons": 2332,
+   "path": [
+    "Small intestine"
    ]
   },
   {

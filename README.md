@@ -67,8 +67,8 @@ newer distributions.
 **Windows installs without administrator rights.** On a university laptop where
 you are not an administrator, you can still install it.
 
-**No account, no key and no internet are needed to start.** All 3,697
-structures — 3,478 in the male atlas, 219 in the female trunk — the
+**No account, no key and no internet are needed to start.** All 3,699
+structures — 3,478 in the male atlas, 221 in the female trunk — the
 labelling, cross-sections, exploded views and image export work offline the
 moment you install. Only the AI tutor needs an API key of your own —
 which also means your questions go straight to your provider, never through a
@@ -454,7 +454,7 @@ The Body switch above the systems list changes over between them.
 |---|---|---|
 | Source | Z-Anatomy → BodyParts3D | NIH Human Reference Atlas → Visible Human Female |
 | Coverage | Whole body, every system | Spine, abdomen, pelvis and breast |
-| Structures | 3,478 | 219 |
+| Structures | 3,478 | 221 |
 | Licence | CC BY-SA 4.0 | CC BY 4.0 |
 
 **The female atlas is not a female body, and the application says so where you
@@ -478,8 +478,8 @@ female viscera are modelled far more finely:
 | System | Male | Female |
 |---|---|---|
 | Renal | 8 | **58** |
-| Reproductive | 14 | **35** |
-| Digestive | 47 | **49** |
+| Reproductive | 14 | **36** |
+| Digestive | 47 | **50** |
 | Integumentary (the breast) | 0 | **16** |
 
 A kidney there opens into capsule, hilum, cortex, columns and every pyramid
@@ -619,10 +619,10 @@ unusable as they stand for teaching:
 
 So every structure was matched by hand to a TA2 term in
 [`hra-selection.mjs`](tools/asset-pipeline/hra-selection.mjs), and the build
-**fails** if any term is absent from `TA2.csv`. Ten structures in the source are
-deliberately not shipped — the uterine horn, the lower uterine segment, a
-cervicovaginal junction, the duodenal ampulla, a "terminal ileum" and five
-placental structures — because TA2 does not list them,
+**fails** if any term is absent from `TA2.csv`. Eight structures in the source are
+deliberately not shipped — the uterine horn, a cervicovaginal junction the
+source declines to label, the duodenal ampulla and five placental structures —
+because TA2 does not list them,
 and coining plausible Latin for an anatomy atlas is worse than leaving a
 structure out. The reasons are recorded beside the table, and a test asserts
 every shipped term exists.
@@ -639,7 +639,7 @@ single unlateralised triangular ligament of the liver where TA2 has only a right
 and a left. It sits entirely at positive x, and the paired structures in this
 body put the left side at positive x, so it is the left one.
 
-Provenance for all 219 — original node name, UBERON or FMA id, source label,
+Provenance for all 221 — original node name, UBERON or FMA id, source label,
 polygon count — is committed in `tools/asset-pipeline/vendor/reports-female/`.
 The extraction stays inside glTF rather than round-tripping through Blender, so
 the node names are byte-identical to the published digital object and any

@@ -11,7 +11,7 @@
  },
  "output": "reproductive_female.glb",
  "draco": true,
- "object_count": 35,
+ "object_count": 36,
  "objects": [
   {
    "name": "Abdominal ostium of uterine tube",
@@ -265,6 +265,20 @@
    "polygons": 1600,
    "path": [
     "Uterine tube"
+   ]
+  },
+  {
+   "name": "Isthmus of uterus",
+   "organ_id": "isthmus_of_uterus",
+   "node": "VH_F_lower_uterine_segment",
+   "term": "Isthmus of uterus",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:17752",
+   "source_label": "Lower uterine segment",
+   "polygons": 1408,
+   "path": [
+    "Uterus"
    ]
   },
   {

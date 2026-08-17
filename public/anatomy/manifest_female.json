@@ -19,7 +19,7 @@
     },
     {
       "system": "digestive",
-      "organ_count": 49,
+      "organ_count": 50,
       "load_on_start": false
     },
     {
@@ -39,7 +39,7 @@
     },
     {
       "system": "reproductive",
-      "organ_count": 35,
+      "organ_count": 36,
       "load_on_start": false
     },
     {
@@ -837,6 +837,17 @@
       "node": "VH_F_isthmus_of_fallopian_tube_R",
       "path": [
         "Uterine tube"
+      ]
+    },
+    {
+      "organ_id": "isthmus_of_uterus",
+      "ta2_latin": "Isthmus uteri",
+      "name_en": "Isthmus of uterus",
+      "system": "reproductive",
+      "mesh_file": "reproductive_female.glb",
+      "node": "VH_F_lower_uterine_segment",
+      "path": [
+        "Uterus"
       ]
     },
     {
@@ -1784,6 +1795,17 @@
       "path": [
         "Small intestine",
         "Duodenum"
+      ]
+    },
+    {
+      "organ_id": "terminal_ileum",
+      "ta2_latin": "Pars terminalis ilei",
+      "name_en": "Terminal ileum",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_ileum_terminal",
+      "path": [
+        "Small intestine"
       ]
     },
     {

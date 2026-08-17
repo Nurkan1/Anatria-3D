@@ -51,10 +51,12 @@ export const SOURCE = {
  */
 export const NOT_IN_TA2 = {
   VH_F_cornua: "The uterine horn. TA2 lists horns of the hyoid, thyroid, sacrum and coccyx, not of the uterus.",
-  VH_F_lower_uterine_segment: "An obstetric term, not a TA2 one.",
-  VH_F_cervicovaginal_junction: "Carries no label at all in the source, and TA2 has no matching term.",
+  VH_F_cervicovaginal_junction:
+    "Carries no label at all in the source. Its span (0.2-2.6 cm) is the cervix's " +
+    "inferior end reaching past the vaginal vault at 0.6, which is where TA2's " +
+    "'Vaginal part of cervix' sits — but a mesh the source declines to name is not " +
+    "one to name from a bounding box, so it is left out rather than guessed at.",
   VH_F_duodenal_ampulla: "The duodenal cap, a radiological description of the first part of the duodenum. TA2 names the part, not the appearance.",
-  VH_F_ileum_terminal: "Labelled 'distal part of ileum'. Terminal ileum is clinical usage; TA2 divides the small intestine into duodenum, jejunum and ileum only.",
   VH_F_basal_plate: "Placental. TA2 is adult anatomy; these terms belong to Terminologia Embryologica, which this atlas does not carry.",
   VH_F_chorionic_plate: "Placental — see VH_F_basal_plate.",
   VH_F_amnion: "Placental — see VH_F_basal_plate.",
@@ -144,6 +146,12 @@ export const STRUCTURES = [
   { node: "VH_F_fundus_of_uterus", id: "fundus_of_uterus", term: "Fundus of uterus", side: null, path: ["Uterus"] },
   { node: "VH_F_anterior_wall_of_uterus", id: "anterior_surface_of_uterus", term: "Anterior surface of uterus", side: null, path: ["Uterus"] },
   { node: "VH_F_posterior_wall_of_uterus", id: "posterior_surface_of_uterus", term: "Posterior surface of uterus", side: null, path: ["Uterus"] },
+  // The obstetric "lower uterine segment" is the isthmus — the constriction
+  // between body and cervix, which is what that name describes once it expands
+  // in pregnancy. Its span here (1.8-3.8 cm) sits exactly between the body
+  // above and the cervix below. TA2 lists it; an earlier pass claimed it did
+  // not, without looking.
+  { node: "VH_F_lower_uterine_segment", id: "isthmus_of_uterus", term: "Isthmus of uterus", side: null, path: ["Uterus"] },
   { node: "VH_F_cervix", id: "cervix_of_uterus", term: "Cervix of uterus", side: null, path: ["Uterus"] },
   { node: "VH_F_internal_cervical_os", id: "internal_os_of_uterus", term: "Internal os of uterus", side: null, path: ["Uterus", "Cervix of uterus"] },
   { node: "VH_F_external_cervical_os", id: "external_os_of_uterus", term: "External os of uterus", side: null, path: ["Uterus", "Cervix of uterus"] },
@@ -357,6 +365,11 @@ export const STRUCTURES = [
   { node: "VH_F_duodenum_ascending", id: "ascending_part_of_duodenum", term: "Ascending part of duodenum", side: null, path: ["Small intestine", "Duodenum"] },
   { node: "VH_F_jejenum", id: "jejunum", term: "Jejunum", side: null, path: ["Small intestine"] },
   { node: "VH_F_ileum", id: "ileum", term: "Ileum", side: null, path: ["Small intestine"] },
+  // TA2 2961, "Pars terminalis ilei". Dropped once as clinical usage the
+  // standard did not carry, which was asserted rather than checked — and it is
+  // a link in the chain, so removing it left the ileum's open end facing the
+  // caecum across a gap.
+  { node: "VH_F_ileum_terminal", id: "terminal_ileum", term: "Terminal ileum", side: null, path: ["Small intestine"] },
 
   // -- digestive: the rest of the large intestine ----------------------------
   { node: "VH_F_caecum", id: "caecum", term: "Caecum", side: null, path: ["Large intestine"] },

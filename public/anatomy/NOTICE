@@ -85,7 +85,7 @@ Attribution chain
    Produced by `tools/asset-pipeline/extract-hra.mjs`, entirely inside glTF —
    no Blender round trip, so the node names are byte-identical to the published
    digital object and any structure here can be checked against the HRA portal.
-   The changes are: selection of 219 of the 888 structures, the node hierarchy
+   The changes are: selection of 221 of the 888 structures, the node hierarchy
    flattened with transforms baked in, source materials and UV sets dropped in
    favour of shading applied by the viewer, lossy Draco compression (position
    quantisation 14 bits, normal 10), and stable organ identifiers added. No
@@ -105,12 +105,12 @@ Terminologia Anatomica.
 
 So each structure was matched by hand to a TA2 term, recorded in
 `tools/asset-pipeline/hra-selection.mjs`, and the build fails if any term is
-absent from TA2. Ten structures present in the source are deliberately not
+absent from TA2. Eight structures present in the source are deliberately not
 shipped, because TA2 does not list them and inventing Latin for them would be
 worse than omitting them. Three more that TA2 *does* name are left out by
 judgement — the placenta's umbilical vessels, which alone would be a placenta
 made of three tubes — and those are recorded in a separate list, so a decision
-cannot borrow the standard's authority. The reasons for all thirteen are in
+cannot borrow the standard's authority. The reasons for all eleven are in
 that same file.
 
 Where the source and this atlas disagree, the reason is written down rather
