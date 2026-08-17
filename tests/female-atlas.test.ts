@@ -113,8 +113,20 @@ describe("the anatomy this subject actually has", () => {
     // A real variant, in roughly one person in twenty. Someone tidying the
     // series to the expected five would be correcting the atlas to match a
     // textbook rather than the body it was made from.
-    expect(names).toContain("Lumbar vertebra, L6");
-    expect(names.filter((name) => name.startsWith("Lumbar vertebra"))).toHaveLength(6);
+    //
+    // Checked by id rather than by name, because the names deliberately differ:
+    // L1 to L5 carry TA2's own numbered terms and L6 cannot, since TA2 stops at
+    // five.
+    const lumbar = female.organs.filter((organ) => /^vertebra_l\d+$/.test(organ.organ_id));
+    expect(lumbar).toHaveLength(6);
+    expect(lumbar.map((organ) => organ.organ_id).sort()).toEqual([
+      "vertebra_l1",
+      "vertebra_l2",
+      "vertebra_l3",
+      "vertebra_l4",
+      "vertebra_l5",
+      "vertebra_l6",
+    ]);
   });
 
   it("keeps the uneven pyramid count between the kidneys", () => {
@@ -157,5 +169,41 @@ describe("the two atlases", () => {
 
   it("are licensed separately", () => {
     expect(male.license).not.toBe(female.license);
+  });
+
+  it("call the same vertebra by the same name", () => {
+    // The two atlases reach their nomenclature by different routes — the male
+    // through Z-Anatomy's own object names, the female through a table written
+    // by hand — and they must still land on the same word. A reader comparing a
+    // male and a female spine should be reading anatomy, not two conventions.
+    //
+    // TA2 names each vertebra individually (`Vertebra T7` renders *Vertebra
+    // thoracis VII*), so neither atlas needs a qualifier for them.
+    const byId = (m: typeof male) => new Map(m.organs.map((o) => [o.organ_id, o]));
+    const maleById = byId(male);
+    const femaleById = byId(female);
+
+    const shared = [...femaleById.keys()].filter(
+      (id) => /^vertebra_[ctl]\d+$|^atlas_c1$|^axis_c2$|^sacrum$|^coccyx$/.test(id) && maleById.has(id),
+    );
+    // C3-C7, T1-T12, L1-L5, atlas, axis, sacrum, coccyx.
+    expect(shared).toHaveLength(26);
+
+    for (const id of shared) {
+      expect(femaleById.get(id)!.ta2_latin, id).toBe(maleById.get(id)!.ta2_latin);
+      expect(femaleById.get(id)!.qualifier, id).toBeUndefined();
+    }
+  });
+
+  it("keeps the qualifier only where TA2 runs out", () => {
+    // TA2 stops at L5 — it does not name a sixth lumbar vertebra, because it
+    // does not expect one. So L6 is the single vertebra in either atlas that
+    // still needs the class term plus a qualifier, and the male atlas has no
+    // counterpart for it at all. That is the variant announcing itself in the
+    // label, and it should stay that way.
+    const l6 = female.organs.find((organ) => organ.organ_id === "vertebra_l6");
+    expect(l6?.ta2_latin).toBe("Vertebra lumbalis");
+    expect(l6?.qualifier).toBe("L6");
+    expect(male.organs.some((organ) => organ.organ_id === "vertebra_l6")).toBe(false);
   });
 });

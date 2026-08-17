@@ -74,20 +74,29 @@ function range(from, to) {
 }
 
 /**
- * A run of structures the source numbers or letters and TA2 names once.
+ * A run of structures the source numbers or letters.
  *
- * Terminologia Anatomica lists "Thoracic vertebra", not T1 through T12, and
- * "Renal pyramid", not the eleven a kidney happens to have. Writing those out
- * by hand would be seventy near-identical lines in which one transposed digit
- * would be invisible. The mapping is still declared once, by hand — this only
- * expands it.
+ * Two different cases, and the difference matters:
+ *
+ * - **TA2 names each one.** It numbers every vertebra, so `Vertebra T7` is a
+ *   term in its own right and renders *Vertebra thoracis VII*. Pass a function
+ *   for `term` and no `label`; the level lives in the nomenclature, exactly as
+ *   it does in the male atlas.
+ * - **TA2 names only the class.** It lists "Renal pyramid", not the eleven a
+ *   kidney happens to have. Pass a constant `term` and a `label`, and the
+ *   instance is distinguished by the qualifier instead.
+ *
+ * Either way the mapping is declared once, by hand. This only expands it —
+ * seventy near-identical lines would hide a transposed digit.
  */
 function series({ node, id, term, path, side = null, keys, label }) {
   return keys.map((key, index) => ({
     node: node(key, index),
     id: id(key, index),
-    term,
-    qualifier: label(key, index),
+    // `term` may itself vary with the key: TA2 names the vertebrae one by one,
+    // so each of those is its own term rather than a class plus a qualifier.
+    term: typeof term === "function" ? term(key, index) : term,
+    ...(label ? { qualifier: label(key, index) } : {}),
     side,
     path,
   }));
@@ -99,7 +108,10 @@ function series({ node, id, term, path, side = null, keys, label }) {
  * - `node`   the glTF node name in the source, and the key for everything
  * - `id`     the organ_id. Unique across this file; never collides with the
  *            male atlas because the female manifest is a separate document
- * - `term`   a Terminologia Anatomica 2 **English** term, verified at build time
+ * - `term`   a Terminologia Anatomica 2 **English** term, verified at build time.
+ *            Where TA2 names a structure individually — it numbers every
+ *            vertebra — that term is used, so this atlas and the male one call
+ *            the same bone the same thing
  * - `qualifier` distinguishes structures the HRA splits and TA2 does not — the
  *            pelvis bones into compact and spongy, the bladder fundus into dome
  *            and base. Without it those pairs would claim one id between them
@@ -218,38 +230,52 @@ export const STRUCTURES = [
   // before the viscera: it turns the female atlas from a pelvis into an axial
   // skeleton the abdominal organs can hang from.
   //
-  // TA2 names the classes, not the bones — "Thoracic vertebra", never T7 — so
-  // the level is the qualifier. C1 and C2 are the exceptions it does name.
+  // TA2 names the vertebrae one by one — "Vertebra T7" is a term, rendered
+  // *Vertebra thoracis VII* — so each takes its own term and needs no
+  // qualifier. That also makes this atlas agree with the male one, which
+  // reaches the same names through Z-Anatomy's own naming: a spine labelled
+  // here and a spine labelled there now read identically, which is the point.
+  //
+  // C1 and C2 are named rather than numbered, in TA2 and in the male atlas.
   { node: "VH_F_cervical_vertebra_1", id: "atlas_c1", term: "Atlas (C1)", side: null, path: ["Vertebral column", "Cervical vertebrae"] },
   { node: "VH_F_cervical_vertebra_2", id: "axis_c2", term: "Axis (C2)", side: null, path: ["Vertebral column", "Cervical vertebrae"] },
   ...series({
     keys: range(3, 7),
     node: (n) => `VH_F_cervical_vertebra_${n}`,
-    id: (n) => `cervical_vertebra_c${n}`,
-    term: "Cervical vertebra",
-    label: (n) => `C${n}`,
+    id: (n) => `vertebra_c${n}`,
+    term: (n) => `Vertebra C${n}`,
     path: ["Vertebral column", "Cervical vertebrae"],
   }),
   ...series({
     keys: range(1, 12),
     node: (n) => `VH_F_thoracic_vertebra_${n}`,
-    id: (n) => `thoracic_vertebra_t${n}`,
-    term: "Thoracic vertebra",
-    label: (n) => `T${n}`,
+    id: (n) => `vertebra_t${n}`,
+    term: (n) => `Vertebra T${n}`,
     path: ["Vertebral column", "Thoracic vertebrae"],
   }),
-  // Six, not five. This subject has a sixth lumbar vertebra — a real variant in
-  // roughly one person in twenty, not a fault in the data. It is called out in
-  // the interface, because a student who counts six and is not told why learns
-  // something elementary wrong.
   ...series({
-    keys: range(1, 6),
+    keys: range(1, 5),
     node: (n) => `VH_F_lumbar_vertebra_${n}`,
-    id: (n) => `lumbar_vertebra_l${n}`,
-    term: "Lumbar vertebra",
-    label: (n) => `L${n}`,
+    id: (n) => `vertebra_l${n}`,
+    term: (n) => `Vertebra L${n}`,
     path: ["Vertebral column", "Lumbar vertebrae"],
   }),
+  // The sixth lumbar vertebra, and the one place in the column where the class
+  // term is still needed — because **TA2 stops at L5**. It does not name a
+  // sixth, since it does not expect one.
+  //
+  // That absence is doing useful work rather than being a nuisance. Every other
+  // vertebra reads as its own Latin name; this one reads "Vertebra lumbalis ·
+  // L6" against "Vertebra lumborum V" above it, so the variant announces itself
+  // in the label without a word of explanation attached.
+  {
+    node: "VH_F_lumbar_vertebra_6",
+    id: "vertebra_l6",
+    term: "Lumbar vertebra",
+    qualifier: "L6",
+    side: null,
+    path: ["Vertebral column", "Lumbar vertebrae"],
+  },
 
   // -- digestive: liver -------------------------------------------------------
   { node: "VH_F_capsule_of_the_liver", id: "fibrous_capsule_of_liver", term: "Fibrous capsule of liver", side: null, path: ["Liver"] },

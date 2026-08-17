@@ -44,81 +44,6 @@
    ]
   },
   {
-   "name": "Cervical vertebra, C3",
-   "organ_id": "cervical_vertebra_c3",
-   "node": "VH_F_cervical_vertebra_3",
-   "term": "Cervical vertebra",
-   "qualifier": "C3",
-   "side": null,
-   "ontology_id": "UBERON:0004612",
-   "source_label": "mammalian cervical vertebra 3",
-   "polygons": 17926,
-   "path": [
-    "Vertebral column",
-    "Cervical vertebrae"
-   ]
-  },
-  {
-   "name": "Cervical vertebra, C4",
-   "organ_id": "cervical_vertebra_c4",
-   "node": "VH_F_cervical_vertebra_4",
-   "term": "Cervical vertebra",
-   "qualifier": "C4",
-   "side": null,
-   "ontology_id": "UBERON:0004613",
-   "source_label": "mammalian cervical vertebra 4",
-   "polygons": 19724,
-   "path": [
-    "Vertebral column",
-    "Cervical vertebrae"
-   ]
-  },
-  {
-   "name": "Cervical vertebra, C5",
-   "organ_id": "cervical_vertebra_c5",
-   "node": "VH_F_cervical_vertebra_5",
-   "term": "Cervical vertebra",
-   "qualifier": "C5",
-   "side": null,
-   "ontology_id": "UBERON:0004614",
-   "source_label": "mammalian cervical vertebra 5",
-   "polygons": 19472,
-   "path": [
-    "Vertebral column",
-    "Cervical vertebrae"
-   ]
-  },
-  {
-   "name": "Cervical vertebra, C6",
-   "organ_id": "cervical_vertebra_c6",
-   "node": "VH_F_cervical_vertebra_6",
-   "term": "Cervical vertebra",
-   "qualifier": "C6",
-   "side": null,
-   "ontology_id": "UBERON:0004615",
-   "source_label": "mammalian cervical vertebra 6",
-   "polygons": 18848,
-   "path": [
-    "Vertebral column",
-    "Cervical vertebrae"
-   ]
-  },
-  {
-   "name": "Cervical vertebra, C7",
-   "organ_id": "cervical_vertebra_c7",
-   "node": "VH_F_cervical_vertebra_7",
-   "term": "Cervical vertebra",
-   "qualifier": "C7",
-   "side": null,
-   "ontology_id": "UBERON:0004616",
-   "source_label": "mammalian cervical vertebra 7",
-   "polygons": 16724,
-   "path": [
-    "Vertebral column",
-    "Cervical vertebrae"
-   ]
-  },
-  {
    "name": "Coccyx",
    "organ_id": "coccyx",
    "node": "VH_F_coccyx",
@@ -261,83 +186,8 @@
    ]
   },
   {
-   "name": "Lumbar vertebra, L1",
-   "organ_id": "lumbar_vertebra_l1",
-   "node": "VH_F_lumbar_vertebra_1",
-   "term": "Lumbar vertebra",
-   "qualifier": "L1",
-   "side": null,
-   "ontology_id": "UBERON:0004617",
-   "source_label": "lumbar vertebra 1",
-   "polygons": 18208,
-   "path": [
-    "Vertebral column",
-    "Lumbar vertebrae"
-   ]
-  },
-  {
-   "name": "Lumbar vertebra, L2",
-   "organ_id": "lumbar_vertebra_l2",
-   "node": "VH_F_lumbar_vertebra_2",
-   "term": "Lumbar vertebra",
-   "qualifier": "L2",
-   "side": null,
-   "ontology_id": "UBERON:0004618",
-   "source_label": "lumbar vertebra 2",
-   "polygons": 17612,
-   "path": [
-    "Vertebral column",
-    "Lumbar vertebrae"
-   ]
-  },
-  {
-   "name": "Lumbar vertebra, L3",
-   "organ_id": "lumbar_vertebra_l3",
-   "node": "VH_F_lumbar_vertebra_3",
-   "term": "Lumbar vertebra",
-   "qualifier": "L3",
-   "side": null,
-   "ontology_id": "UBERON:0004619",
-   "source_label": "lumbar vertebra 3",
-   "polygons": 18540,
-   "path": [
-    "Vertebral column",
-    "Lumbar vertebrae"
-   ]
-  },
-  {
-   "name": "Lumbar vertebra, L4",
-   "organ_id": "lumbar_vertebra_l4",
-   "node": "VH_F_lumbar_vertebra_4",
-   "term": "Lumbar vertebra",
-   "qualifier": "L4",
-   "side": null,
-   "ontology_id": "UBERON:0004620",
-   "source_label": "lumbar vertebra 4",
-   "polygons": 19238,
-   "path": [
-    "Vertebral column",
-    "Lumbar vertebrae"
-   ]
-  },
-  {
-   "name": "Lumbar vertebra, L5",
-   "organ_id": "lumbar_vertebra_l5",
-   "node": "VH_F_lumbar_vertebra_5",
-   "term": "Lumbar vertebra",
-   "qualifier": "L5",
-   "side": null,
-   "ontology_id": "UBERON:0004621",
-   "source_label": "lumbar vertebra 5",
-   "polygons": 18002,
-   "path": [
-    "Vertebral column",
-    "Lumbar vertebrae"
-   ]
-  },
-  {
    "name": "Lumbar vertebra, L6",
-   "organ_id": "lumbar_vertebra_l6",
+   "organ_id": "vertebra_l6",
    "node": "VH_F_lumbar_vertebra_6",
    "term": "Lumbar vertebra",
    "qualifier": "L6",
@@ -429,11 +279,161 @@
    ]
   },
   {
-   "name": "Thoracic vertebra, T1",
-   "organ_id": "thoracic_vertebra_t1",
+   "name": "Vertebra C3",
+   "organ_id": "vertebra_c3",
+   "node": "VH_F_cervical_vertebra_3",
+   "term": "Vertebra C3",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0004612",
+   "source_label": "mammalian cervical vertebra 3",
+   "polygons": 17926,
+   "path": [
+    "Vertebral column",
+    "Cervical vertebrae"
+   ]
+  },
+  {
+   "name": "Vertebra C4",
+   "organ_id": "vertebra_c4",
+   "node": "VH_F_cervical_vertebra_4",
+   "term": "Vertebra C4",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0004613",
+   "source_label": "mammalian cervical vertebra 4",
+   "polygons": 19724,
+   "path": [
+    "Vertebral column",
+    "Cervical vertebrae"
+   ]
+  },
+  {
+   "name": "Vertebra C5",
+   "organ_id": "vertebra_c5",
+   "node": "VH_F_cervical_vertebra_5",
+   "term": "Vertebra C5",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0004614",
+   "source_label": "mammalian cervical vertebra 5",
+   "polygons": 19472,
+   "path": [
+    "Vertebral column",
+    "Cervical vertebrae"
+   ]
+  },
+  {
+   "name": "Vertebra C6",
+   "organ_id": "vertebra_c6",
+   "node": "VH_F_cervical_vertebra_6",
+   "term": "Vertebra C6",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0004615",
+   "source_label": "mammalian cervical vertebra 6",
+   "polygons": 18848,
+   "path": [
+    "Vertebral column",
+    "Cervical vertebrae"
+   ]
+  },
+  {
+   "name": "Vertebra C7",
+   "organ_id": "vertebra_c7",
+   "node": "VH_F_cervical_vertebra_7",
+   "term": "Vertebra C7",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0004616",
+   "source_label": "mammalian cervical vertebra 7",
+   "polygons": 16724,
+   "path": [
+    "Vertebral column",
+    "Cervical vertebrae"
+   ]
+  },
+  {
+   "name": "Vertebra L1",
+   "organ_id": "vertebra_l1",
+   "node": "VH_F_lumbar_vertebra_1",
+   "term": "Vertebra L1",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0004617",
+   "source_label": "lumbar vertebra 1",
+   "polygons": 18208,
+   "path": [
+    "Vertebral column",
+    "Lumbar vertebrae"
+   ]
+  },
+  {
+   "name": "Vertebra L2",
+   "organ_id": "vertebra_l2",
+   "node": "VH_F_lumbar_vertebra_2",
+   "term": "Vertebra L2",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0004618",
+   "source_label": "lumbar vertebra 2",
+   "polygons": 17612,
+   "path": [
+    "Vertebral column",
+    "Lumbar vertebrae"
+   ]
+  },
+  {
+   "name": "Vertebra L3",
+   "organ_id": "vertebra_l3",
+   "node": "VH_F_lumbar_vertebra_3",
+   "term": "Vertebra L3",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0004619",
+   "source_label": "lumbar vertebra 3",
+   "polygons": 18540,
+   "path": [
+    "Vertebral column",
+    "Lumbar vertebrae"
+   ]
+  },
+  {
+   "name": "Vertebra L4",
+   "organ_id": "vertebra_l4",
+   "node": "VH_F_lumbar_vertebra_4",
+   "term": "Vertebra L4",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0004620",
+   "source_label": "lumbar vertebra 4",
+   "polygons": 19238,
+   "path": [
+    "Vertebral column",
+    "Lumbar vertebrae"
+   ]
+  },
+  {
+   "name": "Vertebra L5",
+   "organ_id": "vertebra_l5",
+   "node": "VH_F_lumbar_vertebra_5",
+   "term": "Vertebra L5",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0004621",
+   "source_label": "lumbar vertebra 5",
+   "polygons": 18002,
+   "path": [
+    "Vertebral column",
+    "Lumbar vertebrae"
+   ]
+  },
+  {
+   "name": "Vertebra T1",
+   "organ_id": "vertebra_t1",
    "node": "VH_F_thoracic_vertebra_1",
-   "term": "Thoracic vertebra",
-   "qualifier": "T1",
+   "term": "Vertebra T1",
+   "qualifier": null,
    "side": null,
    "ontology_id": "UBERON:0004626",
    "source_label": "thoracic vertebra 1",
@@ -444,11 +444,11 @@
    ]
   },
   {
-   "name": "Thoracic vertebra, T10",
-   "organ_id": "thoracic_vertebra_t10",
+   "name": "Vertebra T10",
+   "organ_id": "vertebra_t10",
    "node": "VH_F_thoracic_vertebra_10",
-   "term": "Thoracic vertebra",
-   "qualifier": "T10",
+   "term": "Vertebra T10",
+   "qualifier": null,
    "side": null,
    "ontology_id": "UBERON:0004634",
    "source_label": "thoracic vertebra 10",
@@ -459,11 +459,11 @@
    ]
   },
   {
-   "name": "Thoracic vertebra, T11",
-   "organ_id": "thoracic_vertebra_t11",
+   "name": "Vertebra T11",
+   "organ_id": "vertebra_t11",
    "node": "VH_F_thoracic_vertebra_11",
-   "term": "Thoracic vertebra",
-   "qualifier": "T11",
+   "term": "Vertebra T11",
+   "qualifier": null,
    "side": null,
    "ontology_id": "UBERON:0004635",
    "source_label": "thoracic vertebra 11",
@@ -474,11 +474,11 @@
    ]
   },
   {
-   "name": "Thoracic vertebra, T12",
-   "organ_id": "thoracic_vertebra_t12",
+   "name": "Vertebra T12",
+   "organ_id": "vertebra_t12",
    "node": "VH_F_thoracic_vertebra_12",
-   "term": "Thoracic vertebra",
-   "qualifier": "T12",
+   "term": "Vertebra T12",
+   "qualifier": null,
    "side": null,
    "ontology_id": "UBERON:0004636",
    "source_label": "thoracic vertebra 12",
@@ -489,11 +489,11 @@
    ]
   },
   {
-   "name": "Thoracic vertebra, T2",
-   "organ_id": "thoracic_vertebra_t2",
+   "name": "Vertebra T2",
+   "organ_id": "vertebra_t2",
    "node": "VH_F_thoracic_vertebra_2",
-   "term": "Thoracic vertebra",
-   "qualifier": "T2",
+   "term": "Vertebra T2",
+   "qualifier": null,
    "side": null,
    "ontology_id": "UBERON:0004627",
    "source_label": "thoracic vertebra 2",
@@ -504,11 +504,11 @@
    ]
   },
   {
-   "name": "Thoracic vertebra, T3",
-   "organ_id": "thoracic_vertebra_t3",
+   "name": "Vertebra T3",
+   "organ_id": "vertebra_t3",
    "node": "VH_F_thoracic_vertebra_3",
-   "term": "Thoracic vertebra",
-   "qualifier": "T3",
+   "term": "Vertebra T3",
+   "qualifier": null,
    "side": null,
    "ontology_id": "UBERON:0004628",
    "source_label": "thoracic vertebra 3",
@@ -519,11 +519,11 @@
    ]
   },
   {
-   "name": "Thoracic vertebra, T4",
-   "organ_id": "thoracic_vertebra_t4",
+   "name": "Vertebra T4",
+   "organ_id": "vertebra_t4",
    "node": "VH_F_thoracic_vertebra_4",
-   "term": "Thoracic vertebra",
-   "qualifier": "T4",
+   "term": "Vertebra T4",
+   "qualifier": null,
    "side": null,
    "ontology_id": "UBERON:0004629",
    "source_label": "thoracic vertebra 4",
@@ -534,11 +534,11 @@
    ]
   },
   {
-   "name": "Thoracic vertebra, T5",
-   "organ_id": "thoracic_vertebra_t5",
+   "name": "Vertebra T5",
+   "organ_id": "vertebra_t5",
    "node": "VH_F_thoracic_vertebra_5",
-   "term": "Thoracic vertebra",
-   "qualifier": "T5",
+   "term": "Vertebra T5",
+   "qualifier": null,
    "side": null,
    "ontology_id": "UBERON:0004630",
    "source_label": "thoracic vertebra 5",
@@ -549,11 +549,11 @@
    ]
   },
   {
-   "name": "Thoracic vertebra, T6",
-   "organ_id": "thoracic_vertebra_t6",
+   "name": "Vertebra T6",
+   "organ_id": "vertebra_t6",
    "node": "VH_F_thoracic_vertebra_6",
-   "term": "Thoracic vertebra",
-   "qualifier": "T6",
+   "term": "Vertebra T6",
+   "qualifier": null,
    "side": null,
    "ontology_id": "UBERON:0004631",
    "source_label": "thoracic vertebra 6",
@@ -564,11 +564,11 @@
    ]
   },
   {
-   "name": "Thoracic vertebra, T7",
-   "organ_id": "thoracic_vertebra_t7",
+   "name": "Vertebra T7",
+   "organ_id": "vertebra_t7",
    "node": "VH_F_thoracic_vertebra_7",
-   "term": "Thoracic vertebra",
-   "qualifier": "T7",
+   "term": "Vertebra T7",
+   "qualifier": null,
    "side": null,
    "ontology_id": "UBERON:0004632",
    "source_label": "thoracic vertebra 7",
@@ -579,11 +579,11 @@
    ]
   },
   {
-   "name": "Thoracic vertebra, T8",
-   "organ_id": "thoracic_vertebra_t8",
+   "name": "Vertebra T8",
+   "organ_id": "vertebra_t8",
    "node": "VH_F_thoracic_vertebra_8",
-   "term": "Thoracic vertebra",
-   "qualifier": "T8",
+   "term": "Vertebra T8",
+   "qualifier": null,
    "side": null,
    "ontology_id": "UBERON:0011050",
    "source_label": "thoracic vertebra 8",
@@ -594,11 +594,11 @@
    ]
   },
   {
-   "name": "Thoracic vertebra, T9",
-   "organ_id": "thoracic_vertebra_t9",
+   "name": "Vertebra T9",
+   "organ_id": "vertebra_t9",
    "node": "VH_F_thoracic_vertebra_9",
-   "term": "Thoracic vertebra",
-   "qualifier": "T9",
+   "term": "Vertebra T9",
+   "qualifier": null,
    "side": null,
    "ontology_id": "UBERON:0004633",
    "source_label": "thoracic vertebra 9",

@@ -2186,10 +2186,9 @@
       ]
     },
     {
-      "organ_id": "cervical_vertebra_c3",
-      "ta2_latin": "Vertebra cervicalis",
-      "name_en": "Cervical vertebra, C3",
-      "qualifier": "C3",
+      "organ_id": "vertebra_c3",
+      "ta2_latin": "Vertebra cervicalis III",
+      "name_en": "Vertebra C3",
       "system": "skeletal",
       "mesh_file": "skeletal_female.glb",
       "node": "VH_F_cervical_vertebra_3",
@@ -2199,10 +2198,9 @@
       ]
     },
     {
-      "organ_id": "cervical_vertebra_c4",
-      "ta2_latin": "Vertebra cervicalis",
-      "name_en": "Cervical vertebra, C4",
-      "qualifier": "C4",
+      "organ_id": "vertebra_c4",
+      "ta2_latin": "Vertebra cervicalis IV",
+      "name_en": "Vertebra C4",
       "system": "skeletal",
       "mesh_file": "skeletal_female.glb",
       "node": "VH_F_cervical_vertebra_4",
@@ -2212,10 +2210,9 @@
       ]
     },
     {
-      "organ_id": "cervical_vertebra_c5",
-      "ta2_latin": "Vertebra cervicalis",
-      "name_en": "Cervical vertebra, C5",
-      "qualifier": "C5",
+      "organ_id": "vertebra_c5",
+      "ta2_latin": "Vertebra cervicalis V",
+      "name_en": "Vertebra C5",
       "system": "skeletal",
       "mesh_file": "skeletal_female.glb",
       "node": "VH_F_cervical_vertebra_5",
@@ -2225,10 +2222,9 @@
       ]
     },
     {
-      "organ_id": "cervical_vertebra_c6",
-      "ta2_latin": "Vertebra cervicalis",
-      "name_en": "Cervical vertebra, C6",
-      "qualifier": "C6",
+      "organ_id": "vertebra_c6",
+      "ta2_latin": "Vertebra cervicalis VI",
+      "name_en": "Vertebra C6",
       "system": "skeletal",
       "mesh_file": "skeletal_female.glb",
       "node": "VH_F_cervical_vertebra_6",
@@ -2238,10 +2234,9 @@
       ]
     },
     {
-      "organ_id": "cervical_vertebra_c7",
-      "ta2_latin": "Vertebra cervicalis",
-      "name_en": "Cervical vertebra, C7",
-      "qualifier": "C7",
+      "organ_id": "vertebra_c7",
+      "ta2_latin": "Vertebra cervicalis VII",
+      "name_en": "Vertebra C7",
       "system": "skeletal",
       "mesh_file": "skeletal_female.glb",
       "node": "VH_F_cervical_vertebra_7",
@@ -2251,72 +2246,7 @@
       ]
     },
     {
-      "organ_id": "lumbar_vertebra_l1",
-      "ta2_latin": "Vertebra lumbalis",
-      "name_en": "Lumbar vertebra, L1",
-      "qualifier": "L1",
-      "system": "skeletal",
-      "mesh_file": "skeletal_female.glb",
-      "node": "VH_F_lumbar_vertebra_1",
-      "path": [
-        "Vertebral column",
-        "Lumbar vertebrae"
-      ]
-    },
-    {
-      "organ_id": "lumbar_vertebra_l2",
-      "ta2_latin": "Vertebra lumbalis",
-      "name_en": "Lumbar vertebra, L2",
-      "qualifier": "L2",
-      "system": "skeletal",
-      "mesh_file": "skeletal_female.glb",
-      "node": "VH_F_lumbar_vertebra_2",
-      "path": [
-        "Vertebral column",
-        "Lumbar vertebrae"
-      ]
-    },
-    {
-      "organ_id": "lumbar_vertebra_l3",
-      "ta2_latin": "Vertebra lumbalis",
-      "name_en": "Lumbar vertebra, L3",
-      "qualifier": "L3",
-      "system": "skeletal",
-      "mesh_file": "skeletal_female.glb",
-      "node": "VH_F_lumbar_vertebra_3",
-      "path": [
-        "Vertebral column",
-        "Lumbar vertebrae"
-      ]
-    },
-    {
-      "organ_id": "lumbar_vertebra_l4",
-      "ta2_latin": "Vertebra lumbalis",
-      "name_en": "Lumbar vertebra, L4",
-      "qualifier": "L4",
-      "system": "skeletal",
-      "mesh_file": "skeletal_female.glb",
-      "node": "VH_F_lumbar_vertebra_4",
-      "path": [
-        "Vertebral column",
-        "Lumbar vertebrae"
-      ]
-    },
-    {
-      "organ_id": "lumbar_vertebra_l5",
-      "ta2_latin": "Vertebra lumbalis",
-      "name_en": "Lumbar vertebra, L5",
-      "qualifier": "L5",
-      "system": "skeletal",
-      "mesh_file": "skeletal_female.glb",
-      "node": "VH_F_lumbar_vertebra_5",
-      "path": [
-        "Vertebral column",
-        "Lumbar vertebrae"
-      ]
-    },
-    {
-      "organ_id": "lumbar_vertebra_l6",
+      "organ_id": "vertebra_l6",
       "ta2_latin": "Vertebra lumbalis",
       "name_en": "Lumbar vertebra, L6",
       "qualifier": "L6",
@@ -2329,10 +2259,69 @@
       ]
     },
     {
-      "organ_id": "thoracic_vertebra_t1",
-      "ta2_latin": "Vertebra thoracica",
-      "name_en": "Thoracic vertebra, T1",
-      "qualifier": "T1",
+      "organ_id": "vertebra_l1",
+      "ta2_latin": "Vertebra lumborum I",
+      "name_en": "Vertebra L1",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_lumbar_vertebra_1",
+      "path": [
+        "Vertebral column",
+        "Lumbar vertebrae"
+      ]
+    },
+    {
+      "organ_id": "vertebra_l2",
+      "ta2_latin": "Vertebra lumborum II",
+      "name_en": "Vertebra L2",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_lumbar_vertebra_2",
+      "path": [
+        "Vertebral column",
+        "Lumbar vertebrae"
+      ]
+    },
+    {
+      "organ_id": "vertebra_l3",
+      "ta2_latin": "Vertebra lumborum III",
+      "name_en": "Vertebra L3",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_lumbar_vertebra_3",
+      "path": [
+        "Vertebral column",
+        "Lumbar vertebrae"
+      ]
+    },
+    {
+      "organ_id": "vertebra_l4",
+      "ta2_latin": "Vertebra lumborum IV",
+      "name_en": "Vertebra L4",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_lumbar_vertebra_4",
+      "path": [
+        "Vertebral column",
+        "Lumbar vertebrae"
+      ]
+    },
+    {
+      "organ_id": "vertebra_l5",
+      "ta2_latin": "Vertebra lumborum V",
+      "name_en": "Vertebra L5",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_lumbar_vertebra_5",
+      "path": [
+        "Vertebral column",
+        "Lumbar vertebrae"
+      ]
+    },
+    {
+      "organ_id": "vertebra_t1",
+      "ta2_latin": "Vertebra thoracis I",
+      "name_en": "Vertebra T1",
       "system": "skeletal",
       "mesh_file": "skeletal_female.glb",
       "node": "VH_F_thoracic_vertebra_1",
@@ -2342,49 +2331,9 @@
       ]
     },
     {
-      "organ_id": "thoracic_vertebra_t10",
-      "ta2_latin": "Vertebra thoracica",
-      "name_en": "Thoracic vertebra, T10",
-      "qualifier": "T10",
-      "system": "skeletal",
-      "mesh_file": "skeletal_female.glb",
-      "node": "VH_F_thoracic_vertebra_10",
-      "path": [
-        "Vertebral column",
-        "Thoracic vertebrae"
-      ]
-    },
-    {
-      "organ_id": "thoracic_vertebra_t11",
-      "ta2_latin": "Vertebra thoracica",
-      "name_en": "Thoracic vertebra, T11",
-      "qualifier": "T11",
-      "system": "skeletal",
-      "mesh_file": "skeletal_female.glb",
-      "node": "VH_F_thoracic_vertebra_11",
-      "path": [
-        "Vertebral column",
-        "Thoracic vertebrae"
-      ]
-    },
-    {
-      "organ_id": "thoracic_vertebra_t12",
-      "ta2_latin": "Vertebra thoracica",
-      "name_en": "Thoracic vertebra, T12",
-      "qualifier": "T12",
-      "system": "skeletal",
-      "mesh_file": "skeletal_female.glb",
-      "node": "VH_F_thoracic_vertebra_12",
-      "path": [
-        "Vertebral column",
-        "Thoracic vertebrae"
-      ]
-    },
-    {
-      "organ_id": "thoracic_vertebra_t2",
-      "ta2_latin": "Vertebra thoracica",
-      "name_en": "Thoracic vertebra, T2",
-      "qualifier": "T2",
+      "organ_id": "vertebra_t2",
+      "ta2_latin": "Vertebra thoracis II",
+      "name_en": "Vertebra T2",
       "system": "skeletal",
       "mesh_file": "skeletal_female.glb",
       "node": "VH_F_thoracic_vertebra_2",
@@ -2394,10 +2343,9 @@
       ]
     },
     {
-      "organ_id": "thoracic_vertebra_t3",
-      "ta2_latin": "Vertebra thoracica",
-      "name_en": "Thoracic vertebra, T3",
-      "qualifier": "T3",
+      "organ_id": "vertebra_t3",
+      "ta2_latin": "Vertebra thoracis III",
+      "name_en": "Vertebra T3",
       "system": "skeletal",
       "mesh_file": "skeletal_female.glb",
       "node": "VH_F_thoracic_vertebra_3",
@@ -2407,10 +2355,9 @@
       ]
     },
     {
-      "organ_id": "thoracic_vertebra_t4",
-      "ta2_latin": "Vertebra thoracica",
-      "name_en": "Thoracic vertebra, T4",
-      "qualifier": "T4",
+      "organ_id": "vertebra_t4",
+      "ta2_latin": "Vertebra thoracis IV",
+      "name_en": "Vertebra T4",
       "system": "skeletal",
       "mesh_file": "skeletal_female.glb",
       "node": "VH_F_thoracic_vertebra_4",
@@ -2420,10 +2367,21 @@
       ]
     },
     {
-      "organ_id": "thoracic_vertebra_t5",
-      "ta2_latin": "Vertebra thoracica",
-      "name_en": "Thoracic vertebra, T5",
-      "qualifier": "T5",
+      "organ_id": "vertebra_t9",
+      "ta2_latin": "Vertebra thoracis IX",
+      "name_en": "Vertebra T9",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_thoracic_vertebra_9",
+      "path": [
+        "Vertebral column",
+        "Thoracic vertebrae"
+      ]
+    },
+    {
+      "organ_id": "vertebra_t5",
+      "ta2_latin": "Vertebra thoracis V",
+      "name_en": "Vertebra T5",
       "system": "skeletal",
       "mesh_file": "skeletal_female.glb",
       "node": "VH_F_thoracic_vertebra_5",
@@ -2433,10 +2391,9 @@
       ]
     },
     {
-      "organ_id": "thoracic_vertebra_t6",
-      "ta2_latin": "Vertebra thoracica",
-      "name_en": "Thoracic vertebra, T6",
-      "qualifier": "T6",
+      "organ_id": "vertebra_t6",
+      "ta2_latin": "Vertebra thoracis VI",
+      "name_en": "Vertebra T6",
       "system": "skeletal",
       "mesh_file": "skeletal_female.glb",
       "node": "VH_F_thoracic_vertebra_6",
@@ -2446,10 +2403,9 @@
       ]
     },
     {
-      "organ_id": "thoracic_vertebra_t7",
-      "ta2_latin": "Vertebra thoracica",
-      "name_en": "Thoracic vertebra, T7",
-      "qualifier": "T7",
+      "organ_id": "vertebra_t7",
+      "ta2_latin": "Vertebra thoracis VII",
+      "name_en": "Vertebra T7",
       "system": "skeletal",
       "mesh_file": "skeletal_female.glb",
       "node": "VH_F_thoracic_vertebra_7",
@@ -2459,10 +2415,9 @@
       ]
     },
     {
-      "organ_id": "thoracic_vertebra_t8",
-      "ta2_latin": "Vertebra thoracica",
-      "name_en": "Thoracic vertebra, T8",
-      "qualifier": "T8",
+      "organ_id": "vertebra_t8",
+      "ta2_latin": "Vertebra thoracis VIII",
+      "name_en": "Vertebra T8",
       "system": "skeletal",
       "mesh_file": "skeletal_female.glb",
       "node": "VH_F_thoracic_vertebra_8",
@@ -2472,13 +2427,36 @@
       ]
     },
     {
-      "organ_id": "thoracic_vertebra_t9",
-      "ta2_latin": "Vertebra thoracica",
-      "name_en": "Thoracic vertebra, T9",
-      "qualifier": "T9",
+      "organ_id": "vertebra_t10",
+      "ta2_latin": "Vertebra thoracis X",
+      "name_en": "Vertebra T10",
       "system": "skeletal",
       "mesh_file": "skeletal_female.glb",
-      "node": "VH_F_thoracic_vertebra_9",
+      "node": "VH_F_thoracic_vertebra_10",
+      "path": [
+        "Vertebral column",
+        "Thoracic vertebrae"
+      ]
+    },
+    {
+      "organ_id": "vertebra_t11",
+      "ta2_latin": "Vertebra thoracis XI",
+      "name_en": "Vertebra T11",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_thoracic_vertebra_11",
+      "path": [
+        "Vertebral column",
+        "Thoracic vertebrae"
+      ]
+    },
+    {
+      "organ_id": "vertebra_t12",
+      "ta2_latin": "Vertebra thoracis XII",
+      "name_en": "Vertebra T12",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_thoracic_vertebra_12",
       "path": [
         "Vertebral column",
         "Thoracic vertebrae"

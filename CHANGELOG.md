@@ -59,13 +59,18 @@ from**, read from that atlas's own manifest, so a plate of the female pelvis
 carries the NIH Human Reference Atlas and CC BY 4.0 rather than a line about
 Z-Anatomy.
 
-**Structures now say which one they are.** Terminologia Anatomica names classes,
-not instances — one *Vertebra thoracica* for all twelve, one *Os ilium* for
-compact and spongy bone alike — so a labelled spine used to export with twelve
-identical names on twelve leader lines. The level or the part is now appended
-after the term: *Vertebra thoracica · T7*, *Os ilium · left · compact bone*. The
-Latin itself is untouched, because "Vertebra thoracica T7" is not a term TA2
-lists.
+**Structures now say which one they are.** A labelled spine used to export with
+twelve identical *Vertebra thoracica* on twelve leader lines, and both halves of
+a hip bone as *Os ilium*. Where Terminologia Anatomica names a structure
+individually its own term is used — every vertebra is numbered there, so T7 is
+*Vertebra thoracis VII*, exactly as the male atlas already called it. Where TA2
+names only the class, the part is appended after it: *Os ilium · left · compact
+bone*.
+
+The sixth lumbar vertebra is the one place the two atlases cannot agree, and it
+is the more useful for it. TA2 stops at L5 — it does not name a sixth, because
+it does not expect one — so that vertebra alone reads *Vertebra lumbalis · L6*
+under *Vertebra lumborum V*. The variant announces itself in the label.
 
 ## [0.1.7] — 2026-08-16
 
