@@ -103,6 +103,41 @@ describe("the shipped female manifest", () => {
   });
 });
 
+describe("the anatomy this subject actually has", () => {
+  const female = AnatomyManifestSchema.parse(
+    JSON.parse(readFileSync(join(REPO, "public/anatomy/manifest_female.json"), "utf8")),
+  );
+  const names = female.organs.map((organ) => organ.name_en);
+
+  it("keeps the sixth lumbar vertebra", () => {
+    // A real variant, in roughly one person in twenty. Someone tidying the
+    // series to the expected five would be correcting the atlas to match a
+    // textbook rather than the body it was made from.
+    expect(names).toContain("Lumbar vertebra, L6");
+    expect(names.filter((name) => name.startsWith("Lumbar vertebra"))).toHaveLength(6);
+  });
+
+  it("keeps the uneven pyramid count between the kidneys", () => {
+    // Eleven on the left, ten on the right. Ordinary variation — a kidney has
+    // between eight and eighteen — and not a dropped mesh to go looking for.
+    const pyramids = (side: string) =>
+      names.filter((name) => name.startsWith("Renal pyramid") && name.endsWith(`(${side})`));
+    expect(pyramids("left")).toHaveLength(11);
+    expect(pyramids("right")).toHaveLength(10);
+  });
+
+  it("opens the kidney further than the male atlas does", () => {
+    // The claim the README makes, asserted. The male atlas models a kidney as
+    // one mesh; if this ever regressed to the same, the comparison would become
+    // a false statement in the documentation.
+    const male = AnatomyManifestSchema.parse(
+      JSON.parse(readFileSync(join(REPO, "public/anatomy/manifest.json"), "utf8")),
+    );
+    const renal = (m: typeof male) => m.organs.filter((organ) => organ.system === "renal");
+    expect(renal(female).length).toBeGreaterThan(renal(male).length);
+  });
+});
+
 describe("the two atlases", () => {
   const male = AnatomyManifestSchema.parse(
     JSON.parse(readFileSync(join(REPO, "public/anatomy/manifest.json"), "utf8")),

@@ -11,8 +11,529 @@
  },
  "output": "digestive_female.glb",
  "draco": true,
- "object_count": 2,
+ "object_count": 49,
  "objects": [
+  {
+   "name": "Accessory pancreatic duct",
+   "organ_id": "accessory_pancreatic_duct",
+   "node": "VH_F_dorsal_pancreatic_duct",
+   "term": "Accessory pancreatic duct",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0005429",
+   "source_label": "dorsal pancreatic duct",
+   "polygons": 920,
+   "path": [
+    "Pancreas"
+   ]
+  },
+  {
+   "name": "Ascending colon",
+   "organ_id": "ascending_colon",
+   "node": "VH_F_ascending_colon",
+   "term": "Ascending colon",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001156",
+   "source_label": "ascending colon",
+   "polygons": 1656,
+   "path": [
+    "Large intestine",
+    "Colon"
+   ]
+  },
+  {
+   "name": "Ascending part of duodenum",
+   "organ_id": "ascending_part_of_duodenum",
+   "node": "VH_F_duodenum_ascending",
+   "term": "Ascending part of duodenum",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:14930",
+   "source_label": "ascending part of duodenum",
+   "polygons": 504,
+   "path": [
+    "Small intestine",
+    "Duodenum"
+   ]
+  },
+  {
+   "name": "Bare area of liver",
+   "organ_id": "bare_area_of_liver",
+   "node": "VH_F_bare_area_of_liver",
+   "term": "Bare area of liver",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001149",
+   "source_label": "bare area of liver",
+   "polygons": 5864,
+   "path": [
+    "Liver"
+   ]
+  },
+  {
+   "name": "Bile duct",
+   "organ_id": "bile_duct",
+   "node": "VH_F_common_bile_duct",
+   "term": "Bile duct",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001174",
+   "source_label": "common bile duct",
+   "polygons": 1472,
+   "path": [
+    "Biliary tract"
+   ]
+  },
+  {
+   "name": "Body of pancreas",
+   "organ_id": "body_of_pancreas",
+   "node": "VH_F_body_of_pancreas",
+   "term": "Body of pancreas",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001150",
+   "source_label": "body of pancreas",
+   "polygons": 3595,
+   "path": [
+    "Pancreas"
+   ]
+  },
+  {
+   "name": "Caecum",
+   "organ_id": "caecum",
+   "node": "VH_F_caecum",
+   "term": "Caecum",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001153",
+   "source_label": "caecum",
+   "polygons": 840,
+   "path": [
+    "Large intestine"
+   ]
+  },
+  {
+   "name": "Caudate lobe",
+   "organ_id": "caudate_lobe_of_liver",
+   "node": "VH_F_caudate_lobe",
+   "term": "Caudate lobe",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001117",
+   "source_label": "caudate lobe of liver",
+   "polygons": 5354,
+   "path": [
+    "Liver",
+    "Lobes"
+   ]
+  },
+  {
+   "name": "Colic impression of liver",
+   "organ_id": "colic_impression_of_liver",
+   "node": "VH_F_colic_impression_of_liver",
+   "term": "Colic impression of liver",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:14484",
+   "source_label": "colic impression of liver",
+   "polygons": 584,
+   "path": [
+    "Liver",
+    "Impressions"
+   ]
+  },
+  {
+   "name": "Common hepatic duct",
+   "organ_id": "common_hepatic_duct",
+   "node": "VH_F_common_hepatic_duct",
+   "term": "Common hepatic duct",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001175",
+   "source_label": "common hepatic duct",
+   "polygons": 432,
+   "path": [
+    "Biliary tract"
+   ]
+  },
+  {
+   "name": "Coronary ligament",
+   "organ_id": "coronary_ligament",
+   "node": "VH_F_coronary_ligament_of_liver",
+   "term": "Coronary ligament",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0013138",
+   "source_label": "coronary ligament of liver",
+   "polygons": 2426,
+   "path": [
+    "Liver",
+    "Ligaments"
+   ]
+  },
+  {
+   "name": "Cystic duct",
+   "organ_id": "cystic_duct",
+   "node": "VH_F_cystic_duct",
+   "term": "Cystic duct",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001152",
+   "source_label": "cystic duct",
+   "polygons": 1080,
+   "path": [
+    "Biliary tract"
+   ]
+  },
+  {
+   "name": "Descending colon",
+   "organ_id": "descending_colon",
+   "node": "VH_F_descending_colon",
+   "term": "Descending colon",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001158",
+   "source_label": "descending colon",
+   "polygons": 4871,
+   "path": [
+    "Large intestine",
+    "Colon"
+   ]
+  },
+  {
+   "name": "Descending part of duodenum",
+   "organ_id": "descending_part_of_duodenum",
+   "node": "VH_F_duodenum_descending",
+   "term": "Descending part of duodenum",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:14928",
+   "source_label": "descending part of duodenum",
+   "polygons": 936,
+   "path": [
+    "Small intestine",
+    "Duodenum"
+   ]
+  },
+  {
+   "name": "Diaphragmatic surface of liver",
+   "organ_id": "diaphragmatic_surface_of_liver",
+   "node": "VH_F_diaphragmatic_surface_of_liver",
+   "term": "Diaphragmatic surface of liver",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:15729",
+   "source_label": "diaphragmatic surface of liver",
+   "polygons": 12448,
+   "path": [
+    "Liver"
+   ]
+  },
+  {
+   "name": "Duodenal impression of liver",
+   "organ_id": "duodenal_impression_of_liver",
+   "node": "VH_F_duodenal_impression_of_liver",
+   "term": "Duodenal impression of liver",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:14485",
+   "source_label": "duodenal impression of liver",
+   "polygons": 68,
+   "path": [
+    "Liver",
+    "Impressions"
+   ]
+  },
+  {
+   "name": "Falciform ligament",
+   "organ_id": "falciform_ligament",
+   "node": "VH_F_falciform_ligament",
+   "term": "Falciform ligament",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001247",
+   "source_label": "falciform ligament",
+   "polygons": 516,
+   "path": [
+    "Liver",
+    "Ligaments"
+   ]
+  },
+  {
+   "name": "Fibrous capsule of liver",
+   "organ_id": "fibrous_capsule_of_liver",
+   "node": "VH_F_capsule_of_the_liver",
+   "term": "Fibrous capsule of liver",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0016479",
+   "source_label": "capsule of the liver",
+   "polygons": 30034,
+   "path": [
+    "Liver"
+   ]
+  },
+  {
+   "name": "Gallbladder",
+   "organ_id": "gallbladder",
+   "node": "VH_F_gallbladder",
+   "term": "Gallbladder",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0002110",
+   "source_label": "gallbladder",
+   "polygons": 2396,
+   "path": [
+    "Biliary tract"
+   ]
+  },
+  {
+   "name": "Gastric impression of liver",
+   "organ_id": "gastric_impression_of_liver",
+   "node": "VH_F_gastric_impression_of_liver",
+   "term": "Gastric impression of liver",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:14487",
+   "source_label": "gastric impression of liver",
+   "polygons": 2970,
+   "path": [
+    "Liver",
+    "Impressions"
+   ]
+  },
+  {
+   "name": "Head of pancreas",
+   "organ_id": "head_of_pancreas",
+   "node": "VH_F_head_of_pancreas",
+   "term": "Head of pancreas",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001069",
+   "source_label": "head of pancreas",
+   "polygons": 3733,
+   "path": [
+    "Pancreas"
+   ]
+  },
+  {
+   "name": "Hepatoduodenal ligament",
+   "organ_id": "hepatoduodenal_ligament",
+   "node": "VH_F_hepataduodenal_ligament",
+   "term": "Hepatoduodenal ligament",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0012472",
+   "source_label": "hepatoduodenal ligament",
+   "polygons": 1094,
+   "path": [
+    "Liver",
+    "Ligaments"
+   ]
+  },
+  {
+   "name": "Hepatopancreatic ampulla",
+   "organ_id": "hepatopancreatic_ampulla",
+   "node": "VH_F_hepatopancreatic_ampulla",
+   "term": "Hepatopancreatic ampulla",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0004913",
+   "source_label": "hepatopancreatic ampulla",
+   "polygons": 688,
+   "path": [
+    "Biliary tract"
+   ]
+  },
+  {
+   "name": "Horizontal part of duodenum",
+   "organ_id": "horizontal_part_of_duodenum",
+   "node": "VH_F_duodenum_horizontal",
+   "term": "Horizontal part of duodenum",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:14929",
+   "source_label": "horizontal part of duodenum",
+   "polygons": 1080,
+   "path": [
+    "Small intestine",
+    "Duodenum"
+   ]
+  },
+  {
+   "name": "Ileal papilla",
+   "organ_id": "ileal_papilla",
+   "node": "VH_F_ileocecal_valve",
+   "term": "Ileal papilla",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0000569",
+   "source_label": "ileocecal valve",
+   "polygons": 46,
+   "path": [
+    "Large intestine"
+   ]
+  },
+  {
+   "name": "Ileum",
+   "organ_id": "ileum",
+   "node": "VH_F_ileum",
+   "term": "Ileum",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0002116",
+   "source_label": "ileum",
+   "polygons": 21084,
+   "path": [
+    "Small intestine"
+   ]
+  },
+  {
+   "name": "Jejunum",
+   "organ_id": "jejunum",
+   "node": "VH_F_jejenum",
+   "term": "Jejunum",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0002115",
+   "source_label": "jejunum",
+   "polygons": 11380,
+   "path": [
+    "Small intestine"
+   ]
+  },
+  {
+   "name": "Left colic flexure",
+   "organ_id": "left_colic_flexure",
+   "node": "VH_F_splenic_flexure_of_colon",
+   "term": "Left colic flexure",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0022276",
+   "source_label": "splenic flexure of colon",
+   "polygons": 1536,
+   "path": [
+    "Large intestine",
+    "Colon"
+   ]
+  },
+  {
+   "name": "Left hepatic duct",
+   "organ_id": "left_hepatic_duct",
+   "node": "VH_F_left_hepatic_duct",
+   "term": "Left hepatic duct",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001177",
+   "source_label": "left hepatic duct",
+   "polygons": 720,
+   "path": [
+    "Biliary tract"
+   ]
+  },
+  {
+   "name": "Left triangular ligament",
+   "organ_id": "left_triangular_ligament",
+   "node": "VH_F_triangular_ligament_of_liver",
+   "term": "Left triangular ligament",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0035444",
+   "source_label": "triangular ligament of liver",
+   "polygons": 276,
+   "path": [
+    "Liver",
+    "Ligaments"
+   ]
+  },
+  {
+   "name": "Ligamentum venosum",
+   "organ_id": "ligamentum_venosum",
+   "node": "VH_F_ligamentum_venosum",
+   "term": "Ligamentum venosum",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0006587",
+   "source_label": "ligamentum venosum",
+   "polygons": 702,
+   "path": [
+    "Liver",
+    "Ligaments"
+   ]
+  },
+  {
+   "name": "Neck of pancreas",
+   "organ_id": "neck_of_pancreas",
+   "node": "VH_F_neck_of_pancreas",
+   "term": "Neck of pancreas",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:14517",
+   "source_label": "Neck of pancreas",
+   "polygons": 738,
+   "path": [
+    "Pancreas"
+   ]
+  },
+  {
+   "name": "Oesophageal impression of liver",
+   "organ_id": "oesophageal_impression_of_liver",
+   "node": "VH_F_esophageal_impression_of_liver",
+   "term": "Oesophageal impression of liver",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:14486",
+   "source_label": "esophageal impression of liver",
+   "polygons": 374,
+   "path": [
+    "Liver",
+    "Impressions"
+   ]
+  },
+  {
+   "name": "Pancreatic duct",
+   "organ_id": "pancreatic_duct",
+   "node": "VH_F_ventral_pancreatic_duct",
+   "term": "Pancreatic duct",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001064",
+   "source_label": "Ventral pancreatic duct",
+   "polygons": 5124,
+   "path": [
+    "Pancreas"
+   ]
+  },
+  {
+   "name": "Porta hepatis",
+   "organ_id": "porta_hepatis",
+   "node": "VH_F_porta_hepatis",
+   "term": "Porta hepatis",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:15758",
+   "source_label": "porta hepatis",
+   "polygons": 850,
+   "path": [
+    "Liver"
+   ]
+  },
+  {
+   "name": "Quadrate lobe",
+   "organ_id": "quadrate_lobe_of_liver",
+   "node": "VH_F_quadrate_lobe",
+   "term": "Quadrate lobe",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001116",
+   "source_label": "quadrate lobe of liver",
+   "polygons": 2008,
+   "path": [
+    "Liver",
+    "Lobes"
+   ]
+  },
   {
    "name": "Rectum",
    "organ_id": "rectum",
@@ -28,6 +549,65 @@
    ]
   },
   {
+   "name": "Renal impression of liver",
+   "organ_id": "renal_impression_of_liver",
+   "node": "VH_F_renal_impression_of_liver",
+   "term": "Renal impression of liver",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:14488",
+   "source_label": "renal impression of liver",
+   "polygons": 954,
+   "path": [
+    "Liver",
+    "Impressions"
+   ]
+  },
+  {
+   "name": "Right colic flexure",
+   "organ_id": "right_colic_flexure",
+   "node": "VH_F_hepatic_flexure_of_colon",
+   "term": "Right colic flexure",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0022277",
+   "source_label": "hepatic flexure of colon",
+   "polygons": 1479,
+   "path": [
+    "Large intestine",
+    "Colon"
+   ]
+  },
+  {
+   "name": "Right hepatic duct",
+   "organ_id": "right_hepatic_duct",
+   "node": "VH_F_right_hepatic_duct",
+   "term": "Right hepatic duct",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001176",
+   "source_label": "right hepatic duct",
+   "polygons": 400,
+   "path": [
+    "Biliary tract"
+   ]
+  },
+  {
+   "name": "Round ligament of liver",
+   "organ_id": "round_ligament_of_liver",
+   "node": "VH_F_round_ligament_of_liver",
+   "term": "Round ligament of liver",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0006588",
+   "source_label": "round ligament of liver",
+   "polygons": 558,
+   "path": [
+    "Liver",
+    "Ligaments"
+   ]
+  },
+  {
    "name": "Sigmoid colon",
    "organ_id": "sigmoid_colon",
    "node": "VH_F_sigmoid_colon",
@@ -37,6 +617,107 @@
    "ontology_id": "UBERON:0001159",
    "source_label": "sigmoid colon",
    "polygons": 2848,
+   "path": [
+    "Large intestine"
+   ]
+  },
+  {
+   "name": "Sphincter of ampulla",
+   "organ_id": "sphincter_of_ampulla",
+   "node": "VH_F_sphincter_of_heptopancreatic_ampulla",
+   "term": "Sphincter of ampulla",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:15077",
+   "source_label": "Sphincter of hepatopancreatic ampulla",
+   "polygons": 4096,
+   "path": [
+    "Biliary tract"
+   ]
+  },
+  {
+   "name": "Superior part of duodenum",
+   "organ_id": "superior_part_of_duodenum",
+   "node": "VH_F_duodenum_superior",
+   "term": "Superior part of duodenum",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:7206",
+   "source_label": "superior part of duodenum",
+   "polygons": 1224,
+   "path": [
+    "Small intestine",
+    "Duodenum"
+   ]
+  },
+  {
+   "name": "Suprarenal impression of liver",
+   "organ_id": "suprarenal_impression_of_liver",
+   "node": "VH_F_suprarenal_impression_of_liver",
+   "term": "Suprarenal impression of liver",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:14489",
+   "source_label": "Suprarenal impression of liver",
+   "polygons": 87,
+   "path": [
+    "Liver",
+    "Impressions"
+   ]
+  },
+  {
+   "name": "Tail of pancreas",
+   "organ_id": "tail_of_pancreas",
+   "node": "VH_F_tail_of_pancreas",
+   "term": "Tail of pancreas",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001151",
+   "source_label": "tail of pancreas",
+   "polygons": 3997,
+   "path": [
+    "Pancreas"
+   ]
+  },
+  {
+   "name": "Transverse colon",
+   "organ_id": "transverse_colon",
+   "node": "VH_F_transverse_colon",
+   "term": "Transverse colon",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001157",
+   "source_label": "transverse colon",
+   "polygons": 5001,
+   "path": [
+    "Large intestine",
+    "Colon"
+   ]
+  },
+  {
+   "name": "Uncinate process of pancreas",
+   "organ_id": "uncinate_process_of_pancreas",
+   "node": "VH_F_ucinate_process1",
+   "term": "Uncinate process of pancreas",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0010373",
+   "source_label": "uncinate process of pancreas",
+   "polygons": 831,
+   "path": [
+    "Pancreas"
+   ]
+  },
+  {
+   "name": "Vermiform appendix",
+   "organ_id": "vermiform_appendix",
+   "node": "VH_F_vermiform_appendix",
+   "term": "Vermiform appendix",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001154",
+   "source_label": "vermiform appendix",
+   "polygons": 264,
    "path": [
     "Large intestine"
    ]

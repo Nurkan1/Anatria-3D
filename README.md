@@ -66,8 +66,8 @@ newer distributions.
 **Windows installs without administrator rights.** On a university laptop where
 you are not an administrator, you can still install it.
 
-**No account, no key and no internet are needed to start.** All 3,554
-structures — 3,478 in the male atlas, 76 in the female pelvic module — the
+**No account, no key and no internet are needed to start.** All 3,681
+structures — 3,478 in the male atlas, 203 in the female trunk — the
 labelling, cross-sections, exploded views and image export work offline the
 moment you install. Only the AI tutor needs an API key of your own —
 which also means your questions go straight to your provider, never through a
@@ -115,9 +115,9 @@ language. That is the assistant's job, done per turn with the reader's profile i
 hand, and it already answers in the reader's own language even when the
 interface does not offer it.
 
-Open: female anatomy above the pelvis, which needs a source that does not exist
-in the open — see
-[There are two atlases, and the female one is a pelvis](#there-are-two-atlases-and-the-female-one-is-a-pelvis).
+Open: the female head, thorax and limbs, and female musculature anywhere, which
+need a source that does not exist in the open — see
+[There are two atlases, and the female one is a trunk](#there-are-two-atlases-and-the-female-one-is-a-trunk).
 
 ---
 
@@ -445,22 +445,55 @@ alone. Full attribution in [`public/anatomy/NOTICE`](public/anatomy/NOTICE) and
 the file-by-file breakdown in
 [`public/anatomy/LICENSE`](public/anatomy/LICENSE).
 
-### There are two atlases, and the female one is a pelvis
+### There are two atlases, and the female one is a trunk
 
 The Body switch above the systems list changes over between them.
 
 | | Male | Female |
 |---|---|---|
 | Source | Z-Anatomy → BodyParts3D | NIH Human Reference Atlas → Visible Human Female |
-| Coverage | Whole body, every system | Pelvis and reproductive organs |
-| Structures | 3,478 | 76 |
+| Coverage | Whole body, every system | Spine, abdomen and pelvis |
+| Structures | 3,478 | 203 |
 | Licence | CC BY-SA 4.0 | CC BY 4.0 |
 
 **The female atlas is not a female body, and the application says so where you
-choose it.** It holds the uterus with its cervix and walls, both uterine tubes
-down to the fimbriae, the ovaries, the vagina, the suspensory ligaments and
-peritoneal folds, the bladder and ureters, the pelvic girdle, the rectum and
-sigmoid colon, and seventeen pelvic vessels. Nothing above the pelvic brim.
+choose it.** It holds the vertebral column from C1 to the coccyx, the pelvic
+girdle, the uterus with its cervix and walls, both uterine tubes down to the
+fimbriae, the ovaries, the vagina, sixteen ligaments and peritoneal folds, the
+bladder and ureters, both kidneys, the liver with its impressions and ligaments,
+the biliary tract, the pancreas, the spleen, the small and large intestine, and
+seventeen pelvic vessels.
+
+**What it lacks, it lacks in the source:** no skull, no ribcage, no limbs, and
+no skeletal muscle or peripheral nerve at all. The HRA models organs, not a
+body.
+
+Where it is *better* than the male atlas is worth saying too, because the
+structure count invites the opposite assumption. Its viscera are modelled far
+more finely: 52 renal structures against 8, 70 respiratory against 38, 62
+reproductive against 14. A kidney there opens into capsule, hilum, cortex,
+columns and every pyramid with its papilla; on the male side a kidney is one
+mesh.
+
+**This atlas is one woman, not an average, and the interface says so.** The
+male atlas is an idealised composite; this is a 59-year-old subject, frozen and
+sectioned supine. Two differences from the textbook are measurable in the
+shipped geometry, and both are surfaced where the reader chooses the body and
+again in the assistant's instructions — which are told to give the classical
+teaching value first and describe this body second:
+
+- **Six lumbar vertebrae**, L1 to L6, where most people have five. A real
+  variant, in roughly one person in twenty.
+- **The kidneys span L1 to L5**, against the vertebrae shipped beside them,
+  where the classical description is T12 to L3 — and the left is 2.7 cm longer
+  than the right. Cadaveric position and the loss of muscle tone account for
+  much of the descent; renal ptosis is commoner in older women. The capsule was
+  checked against the outer cortex to rule out perirenal fat inflating the
+  measurement: they co-extend to within a millimetre.
+
+Neither is corrected. The geometry is the published NIH data, unaltered — a
+student who is not told, however, would measure the renal level here and be
+marked wrong for it.
 
 That is a real limit and it is stated rather than worked around, because the
 alternative is worse: a Male/Female toggle that promises a body and delivers a
@@ -576,13 +609,19 @@ unusable as they stand for teaching:
 
 So every structure was matched by hand to a TA2 term in
 [`hra-selection.mjs`](tools/asset-pipeline/hra-selection.mjs), and the build
-**fails** if any term is absent from `TA2.csv`. Three structures in the source
-are deliberately not shipped — the uterine horn, the lower uterine segment and a
-cervicovaginal junction — because TA2 does not list them, and coining plausible
-Latin for an anatomy atlas is worse than leaving a structure out. The reasons
-are recorded beside the table, and a test asserts every shipped term exists.
+**fails** if any term is absent from `TA2.csv`. Five structures in the source
+are deliberately not shipped — the uterine horn, the lower uterine segment, a
+cervicovaginal junction, the duodenal ampulla and a "terminal ileum" — because
+TA2 does not list them, and coining plausible Latin for an anatomy atlas is
+worse than leaving a structure out. The reasons are recorded beside the table,
+and a test asserts every shipped term exists.
 
-Provenance for all 76 — original node name, UBERON or FMA id, source label,
+One laterality was read off the geometry rather than guessed: the source ships a
+single unlateralised triangular ligament of the liver where TA2 has only a right
+and a left. It sits entirely at positive x, and the paired structures in this
+body put the left side at positive x, so it is the left one.
+
+Provenance for all 203 — original node name, UBERON or FMA id, source label,
 polygon count — is committed in `tools/asset-pipeline/vendor/reports-female/`.
 The extraction stays inside glTF rather than round-tripping through Blender, so
 the node names are byte-identical to the published digital object and any

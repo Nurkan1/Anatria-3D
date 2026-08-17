@@ -49,18 +49,43 @@ const SECTIONS: Section[] = [
         <Callout>
           <strong>There are two atlases, and they are not the same size.</strong> The{" "}
           <em>Body</em> switch above the systems list changes over. Male is a whole
-          body — every system, 3,478 structures. Female is the pelvis and the
-          reproductive organs only: the uterus, uterine tubes, ovaries, vagina, their
-          ligaments, the bladder, the pelvic girdle, the rectum and the pelvic
-          vessels. Nothing above the pelvic brim.
+          body — every system, 3,478 structures. Female is the <em>trunk</em>: the
+          spine from C1 to the coccyx, the pelvic girdle, the reproductive organs with
+          their ligaments, the bladder and ureters, the kidneys, the liver and biliary
+          tract, the pancreas, the spleen and the intestines.
         </Callout>
         <Callout>
-          <strong>That is a limit of the available data, not an oversight.</strong> No
-          open dataset publishes a whole female body. The female structures here come
-          from the NIH Human Reference Atlas, which models organs rather than a body,
-          and they are a different person from the male atlas — so the two are
-          separate bodies and switching reloads the scene. For any region outside the
-          pelvis, use the male atlas and read across.
+          <strong>What the female atlas does not have, it never had.</strong> No skull,
+          no ribcage, no limbs — and <em>no skeletal muscle or peripheral nerve at
+          all</em>. Its source, the NIH Human Reference Atlas, models organs rather
+          than a body, so those are missing from the data rather than hidden. It is
+          also a different person from the male atlas, which is why switching reloads
+          the scene: nothing of one belongs inside the other.
+        </Callout>
+        <Callout>
+          <strong>Where the female atlas is better.</strong> Its viscera are modelled
+          in far more detail than the male ones. A kidney there opens into capsule,
+          hilum, cortex, columns and every pyramid with its papilla — against a single
+          mesh on the male side. Worth knowing before you assume the bigger atlas is
+          the better one for an organ.
+        </Callout>
+        <Callout>
+          <strong>The female atlas is one woman, not an average — learn the textbook
+          value from her, not her measurements.</strong> She was 59, and was frozen and
+          sectioned lying down. Two things in her differ from what you will be examined
+          on, and neither is a labelling mistake:
+          <ul className="mt-1.5 ml-4 list-disc space-y-1">
+            <li>
+              <strong>Six lumbar vertebrae</strong>, L1 to L6, where most people have
+              five. A real variant, in roughly one person in twenty.
+            </li>
+            <li>
+              <strong>Her kidneys span L1 to L5</strong> and the left is 2.7 cm longer
+              than the right. The value to learn is the classical <em>T12 to L3</em>.
+              Kidneys descend with posture and with the loss of muscle tone after
+              death, and renal ptosis is commoner in older women.
+            </li>
+          </ul>
         </Callout>
         <Callout>
           <strong>Some other things are missing too</strong>, and it is better to read

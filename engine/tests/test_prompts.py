@@ -789,8 +789,30 @@ def test_female_says_what_is_not_loaded() -> None:
         mode="tutor",
         gender="female",
     )
-    assert "pelvic and reproductive module" in text
-    assert "Nothing above the pelvis is loaded" in text
+    assert "It is the **trunk**" in text
+    assert "any skeletal muscle or peripheral nerve at all" in text
+    # The variants that most look like bugs in the data.
+    assert "six lumbar vertebrae" in text
+    assert "T12 to L3" in text
+
+
+def test_female_gives_the_exam_value_before_this_body() -> None:
+    """The rule that keeps a reader from being marked wrong.
+
+    This subject's kidneys sit at L1-L5. A reader measuring them on screen and
+    writing that down loses the mark, so the agent is told to lead with the
+    classical range and describe the body second.
+    """
+    text = build_instructions(
+        profile="student",
+        language="en",
+        organs=[],
+        selection=[],
+        mode="tutor",
+        gender="female",
+    )
+    assert "give the classical teaching value first" in text.lower()
+    assert text.index("T12 to L3") > text.index("NOT AN AVERAGE")
     # It must still be allowed to teach what it cannot show.
     assert "The limit is on what can be shown" in text
 

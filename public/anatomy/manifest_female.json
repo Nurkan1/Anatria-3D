@@ -18,12 +18,17 @@
     },
     {
       "system": "digestive",
-      "organ_count": 2,
+      "organ_count": 49,
+      "load_on_start": false
+    },
+    {
+      "system": "lymphatic",
+      "organ_count": 5,
       "load_on_start": false
     },
     {
       "system": "renal",
-      "organ_count": 8,
+      "organ_count": 58,
       "load_on_start": false
     },
     {
@@ -33,11 +38,22 @@
     },
     {
       "system": "skeletal",
-      "organ_count": 14,
+      "organ_count": 39,
       "load_on_start": true
     }
   ],
   "organs": [
+    {
+      "organ_id": "hepatopancreatic_ampulla",
+      "ta2_latin": "Ampulla hepatopancreatica",
+      "name_en": "Hepatopancreatic ampulla",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_hepatopancreatic_ampulla",
+      "path": [
+        "Biliary tract"
+      ]
+    },
     {
       "organ_id": "ampulla_of_uterine_tube_l",
       "ta2_latin": "Ampulla tubae uterinae",
@@ -58,6 +74,28 @@
       "node": "VH_F_ampulla_of_uterine_tube_R",
       "path": [
         "Uterine tube"
+      ]
+    },
+    {
+      "organ_id": "vermiform_appendix",
+      "ta2_latin": "Appendix vermiformis",
+      "name_en": "Vermiform appendix",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_vermiform_appendix",
+      "path": [
+        "Large intestine"
+      ]
+    },
+    {
+      "organ_id": "bare_area_of_liver",
+      "ta2_latin": "Area nuda hepatis",
+      "name_en": "Bare area of liver",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_bare_area_of_liver",
+      "path": [
+        "Liver"
       ]
     },
     {
@@ -97,6 +135,85 @@
       ]
     },
     {
+      "organ_id": "atlas_c1",
+      "ta2_latin": "Atlas (C1)",
+      "name_en": "Atlas (C1)",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_cervical_vertebra_1",
+      "path": [
+        "Vertebral column",
+        "Cervical vertebrae"
+      ]
+    },
+    {
+      "organ_id": "axis_c2",
+      "ta2_latin": "Axis (C2)",
+      "name_en": "Axis (C2)",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_cervical_vertebra_2",
+      "path": [
+        "Vertebral column",
+        "Cervical vertebrae"
+      ]
+    },
+    {
+      "organ_id": "caecum",
+      "ta2_latin": "Caecum",
+      "name_en": "Caecum",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_caecum",
+      "path": [
+        "Large intestine"
+      ]
+    },
+    {
+      "organ_id": "fibrous_capsule_of_kidney_l",
+      "ta2_latin": "Capsula fibrosa renis",
+      "name_en": "Fibrous capsule of kidney (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_kidney_capsule_L",
+      "path": [
+        "Kidney"
+      ]
+    },
+    {
+      "organ_id": "fibrous_capsule_of_kidney_r",
+      "ta2_latin": "Capsula fibrosa renis",
+      "name_en": "Fibrous capsule of kidney (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_kidney_capsule_R",
+      "path": [
+        "Kidney"
+      ]
+    },
+    {
+      "organ_id": "head_of_pancreas",
+      "ta2_latin": "Caput pancreatis",
+      "name_en": "Head of pancreas",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_head_of_pancreas",
+      "path": [
+        "Pancreas"
+      ]
+    },
+    {
+      "organ_id": "tail_of_pancreas",
+      "ta2_latin": "Cauda pancreatis",
+      "name_en": "Tail of pancreas",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_tail_of_pancreas",
+      "path": [
+        "Pancreas"
+      ]
+    },
+    {
       "organ_id": "cervix_of_uterus",
       "ta2_latin": "Cervix uteri",
       "name_en": "Cervix of uterus",
@@ -119,6 +236,41 @@
       ]
     },
     {
+      "organ_id": "neck_of_pancreas",
+      "ta2_latin": "Collum pancreatis",
+      "name_en": "Neck of pancreas",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_neck_of_pancreas",
+      "path": [
+        "Pancreas"
+      ]
+    },
+    {
+      "organ_id": "ascending_colon",
+      "ta2_latin": "Colon ascendens",
+      "name_en": "Ascending colon",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_ascending_colon",
+      "path": [
+        "Large intestine",
+        "Colon"
+      ]
+    },
+    {
+      "organ_id": "descending_colon",
+      "ta2_latin": "Colon descendens",
+      "name_en": "Descending colon",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_descending_colon",
+      "path": [
+        "Large intestine",
+        "Colon"
+      ]
+    },
+    {
       "organ_id": "sigmoid_colon",
       "ta2_latin": "Colon sigmoideum",
       "name_en": "Sigmoid colon",
@@ -130,6 +282,51 @@
       ]
     },
     {
+      "organ_id": "transverse_colon",
+      "ta2_latin": "Colon transversum",
+      "name_en": "Transverse colon",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_transverse_colon",
+      "path": [
+        "Large intestine",
+        "Colon"
+      ]
+    },
+    {
+      "organ_id": "renal_columns_l",
+      "ta2_latin": "Columnae renales",
+      "name_en": "Renal columns (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_column_L",
+      "path": [
+        "Kidney"
+      ]
+    },
+    {
+      "organ_id": "renal_columns_r",
+      "ta2_latin": "Columnae renales",
+      "name_en": "Renal columns (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_column_R",
+      "path": [
+        "Kidney"
+      ]
+    },
+    {
+      "organ_id": "body_of_pancreas",
+      "ta2_latin": "Corpus pancreatis",
+      "name_en": "Body of pancreas",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_body_of_pancreas",
+      "path": [
+        "Pancreas"
+      ]
+    },
+    {
       "organ_id": "body_of_uterus",
       "ta2_latin": "Corpus uteri",
       "name_en": "Body of uterus",
@@ -138,6 +335,105 @@
       "node": "VH_F_body_of_uterus",
       "path": [
         "Uterus"
+      ]
+    },
+    {
+      "organ_id": "renal_cortex_l",
+      "ta2_latin": "Cortex renis",
+      "name_en": "Renal cortex (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_outer_cortex_of_kidney_L",
+      "path": [
+        "Kidney"
+      ]
+    },
+    {
+      "organ_id": "renal_cortex_r",
+      "ta2_latin": "Cortex renis",
+      "name_en": "Renal cortex (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_outer_cortex_of_kidney_R",
+      "path": [
+        "Kidney"
+      ]
+    },
+    {
+      "organ_id": "bile_duct",
+      "ta2_latin": "Ductus biliaris",
+      "name_en": "Bile duct",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_common_bile_duct",
+      "path": [
+        "Biliary tract"
+      ]
+    },
+    {
+      "organ_id": "cystic_duct",
+      "ta2_latin": "Ductus cysticus",
+      "name_en": "Cystic duct",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_cystic_duct",
+      "path": [
+        "Biliary tract"
+      ]
+    },
+    {
+      "organ_id": "common_hepatic_duct",
+      "ta2_latin": "Ductus hepaticus communis",
+      "name_en": "Common hepatic duct",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_common_hepatic_duct",
+      "path": [
+        "Biliary tract"
+      ]
+    },
+    {
+      "organ_id": "right_hepatic_duct",
+      "ta2_latin": "Ductus hepaticus dexter",
+      "name_en": "Right hepatic duct",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_right_hepatic_duct",
+      "path": [
+        "Biliary tract"
+      ]
+    },
+    {
+      "organ_id": "left_hepatic_duct",
+      "ta2_latin": "Ductus hepaticus sinister",
+      "name_en": "Left hepatic duct",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_left_hepatic_duct",
+      "path": [
+        "Biliary tract"
+      ]
+    },
+    {
+      "organ_id": "pancreatic_duct",
+      "ta2_latin": "Ductus pancreaticus",
+      "name_en": "Pancreatic duct",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_ventral_pancreatic_duct",
+      "path": [
+        "Pancreas"
+      ]
+    },
+    {
+      "organ_id": "accessory_pancreatic_duct",
+      "ta2_latin": "Ductus pancreaticus accessorius",
+      "name_en": "Accessory pancreatic duct",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_dorsal_pancreatic_duct",
+      "path": [
+        "Pancreas"
       ]
     },
     {
@@ -163,6 +459,50 @@
       ]
     },
     {
+      "organ_id": "colic_impression_of_spleen",
+      "ta2_latin": "Facies colica splenis",
+      "name_en": "Colic impression of spleen",
+      "system": "lymphatic",
+      "mesh_file": "lymphatic_female.glb",
+      "node": "VH_F_colic_surface_of_spleen",
+      "path": [
+        "Spleen"
+      ]
+    },
+    {
+      "organ_id": "diaphragmatic_surface_of_liver",
+      "ta2_latin": "Facies diaphragmatica hepatis",
+      "name_en": "Diaphragmatic surface of liver",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_diaphragmatic_surface_of_liver",
+      "path": [
+        "Liver"
+      ]
+    },
+    {
+      "organ_id": "diaphragmatic_surface_of_spleen",
+      "ta2_latin": "Facies diaphragmatica splenis",
+      "name_en": "Diaphragmatic surface of spleen",
+      "system": "lymphatic",
+      "mesh_file": "lymphatic_female.glb",
+      "node": "VH_F_diaphragmatic_surface_of_spleen",
+      "path": [
+        "Spleen"
+      ]
+    },
+    {
+      "organ_id": "gastric_impression_of_spleen",
+      "ta2_latin": "Facies gastrica splenis",
+      "name_en": "Gastric impression of spleen",
+      "system": "lymphatic",
+      "mesh_file": "lymphatic_female.glb",
+      "node": "VH_F_gastric_surface_of_spleen",
+      "path": [
+        "Spleen"
+      ]
+    },
+    {
       "organ_id": "posterior_surface_of_uterus",
       "ta2_latin": "Facies posterior uteri",
       "name_en": "Posterior surface of uterus",
@@ -171,6 +511,17 @@
       "node": "VH_F_posterior_wall_of_uterus",
       "path": [
         "Uterus"
+      ]
+    },
+    {
+      "organ_id": "renal_impression_of_spleen",
+      "ta2_latin": "Facies renalis splenis",
+      "name_en": "Renal impression of spleen",
+      "system": "lymphatic",
+      "mesh_file": "lymphatic_female.glb",
+      "node": "VH_F_renal_surface_of_spleen",
+      "path": [
+        "Spleen"
       ]
     },
     {
@@ -193,6 +544,30 @@
       "node": "VH_F_fibria_of_uterine_tube_R",
       "path": [
         "Uterine tube"
+      ]
+    },
+    {
+      "organ_id": "right_colic_flexure",
+      "ta2_latin": "Flexura dextra coli",
+      "name_en": "Right colic flexure",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_hepatic_flexure_of_colon",
+      "path": [
+        "Large intestine",
+        "Colon"
+      ]
+    },
+    {
+      "organ_id": "left_colic_flexure",
+      "ta2_latin": "Flexura sinistra coli",
+      "name_en": "Left colic flexure",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_splenic_flexure_of_colon",
+      "path": [
+        "Large intestine",
+        "Colon"
       ]
     },
     {
@@ -226,6 +601,122 @@
       "node": "VH_F_fundus_of_urinary_bladder_dome",
       "path": [
         "Urinary bladder"
+      ]
+    },
+    {
+      "organ_id": "hilum_of_kidney_l",
+      "ta2_latin": "Hilum renis",
+      "name_en": "Hilum of kidney (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_hilum_of_kidney_L",
+      "path": [
+        "Kidney"
+      ]
+    },
+    {
+      "organ_id": "hilum_of_kidney_r",
+      "ta2_latin": "Hilum renis",
+      "name_en": "Hilum of kidney (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_hilum_of_kidney_R",
+      "path": [
+        "Kidney"
+      ]
+    },
+    {
+      "organ_id": "hilum_of_spleen",
+      "ta2_latin": "Hilum splenis",
+      "name_en": "Hilum of spleen",
+      "system": "lymphatic",
+      "mesh_file": "lymphatic_female.glb",
+      "node": "VH_F_hilum_of_spleen",
+      "path": [
+        "Spleen"
+      ]
+    },
+    {
+      "organ_id": "ileum",
+      "ta2_latin": "Ileum",
+      "name_en": "Ileum",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_ileum",
+      "path": [
+        "Small intestine"
+      ]
+    },
+    {
+      "organ_id": "colic_impression_of_liver",
+      "ta2_latin": "Impressio colica hepatis",
+      "name_en": "Colic impression of liver",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_colic_impression_of_liver",
+      "path": [
+        "Liver",
+        "Impressions"
+      ]
+    },
+    {
+      "organ_id": "duodenal_impression_of_liver",
+      "ta2_latin": "Impressio duodenalis hepatis",
+      "name_en": "Duodenal impression of liver",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_duodenal_impression_of_liver",
+      "path": [
+        "Liver",
+        "Impressions"
+      ]
+    },
+    {
+      "organ_id": "gastric_impression_of_liver",
+      "ta2_latin": "Impressio gastrica hepatis",
+      "name_en": "Gastric impression of liver",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_gastric_impression_of_liver",
+      "path": [
+        "Liver",
+        "Impressions"
+      ]
+    },
+    {
+      "organ_id": "oesophageal_impression_of_liver",
+      "ta2_latin": "Impressio oesophagea hepatis",
+      "name_en": "Oesophageal impression of liver",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_esophageal_impression_of_liver",
+      "path": [
+        "Liver",
+        "Impressions"
+      ]
+    },
+    {
+      "organ_id": "renal_impression_of_liver",
+      "ta2_latin": "Impressio renalis hepatis",
+      "name_en": "Renal impression of liver",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_renal_impression_of_liver",
+      "path": [
+        "Liver",
+        "Impressions"
+      ]
+    },
+    {
+      "organ_id": "suprarenal_impression_of_liver",
+      "ta2_latin": "Impressio suprarenalis hepatis",
+      "name_en": "Suprarenal impression of liver",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_suprarenal_impression_of_liver",
+      "path": [
+        "Liver",
+        "Impressions"
       ]
     },
     {
@@ -273,6 +764,17 @@
       ]
     },
     {
+      "organ_id": "jejunum",
+      "ta2_latin": "Jejunum",
+      "name_en": "Jejunum",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_jejenum",
+      "path": [
+        "Small intestine"
+      ]
+    },
+    {
       "organ_id": "cardinal_ligament_l",
       "ta2_latin": "Ligamentum cardinale",
       "name_en": "Cardinal ligament (left)",
@@ -292,6 +794,42 @@
       "node": "VH_F_right_cardinal_ligament_of_uterus",
       "path": [
         "Ligaments of uterus and ovary"
+      ]
+    },
+    {
+      "organ_id": "coronary_ligament",
+      "ta2_latin": "Ligamentum coronarium",
+      "name_en": "Coronary ligament",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_coronary_ligament_of_liver",
+      "path": [
+        "Liver",
+        "Ligaments"
+      ]
+    },
+    {
+      "organ_id": "falciform_ligament",
+      "ta2_latin": "Ligamentum falciforme",
+      "name_en": "Falciform ligament",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_falciform_ligament",
+      "path": [
+        "Liver",
+        "Ligaments"
+      ]
+    },
+    {
+      "organ_id": "hepatoduodenal_ligament",
+      "ta2_latin": "Ligamentum hepatoduodenale",
+      "name_en": "Hepatoduodenal ligament",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_hepataduodenal_ligament",
+      "path": [
+        "Liver",
+        "Ligaments"
       ]
     },
     {
@@ -350,6 +888,18 @@
       ]
     },
     {
+      "organ_id": "round_ligament_of_liver",
+      "ta2_latin": "Ligamentum teres hepatis",
+      "name_en": "Round ligament of liver",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_round_ligament_of_liver",
+      "path": [
+        "Liver",
+        "Ligaments"
+      ]
+    },
+    {
       "organ_id": "round_ligament_of_uterus_l",
       "ta2_latin": "Ligamentum teres uteri",
       "name_en": "Round ligament of uterus (left)",
@@ -372,6 +922,18 @@
       ]
     },
     {
+      "organ_id": "left_triangular_ligament",
+      "ta2_latin": "Ligamentum triangulare sinistrum",
+      "name_en": "Left triangular ligament",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_triangular_ligament_of_liver",
+      "path": [
+        "Liver",
+        "Ligaments"
+      ]
+    },
+    {
       "organ_id": "uterosacral_ligament_l",
       "ta2_latin": "Ligamentum uterosacrale",
       "name_en": "Uterosacral ligament (left)",
@@ -391,6 +953,42 @@
       "node": "VH_F_right_uterosacral_ligament",
       "path": [
         "Ligaments of uterus and ovary"
+      ]
+    },
+    {
+      "organ_id": "ligamentum_venosum",
+      "ta2_latin": "Ligamentum venosum",
+      "name_en": "Ligamentum venosum",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_ligamentum_venosum",
+      "path": [
+        "Liver",
+        "Ligaments"
+      ]
+    },
+    {
+      "organ_id": "caudate_lobe_of_liver",
+      "ta2_latin": "Lobus caudatus",
+      "name_en": "Caudate lobe",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_caudate_lobe",
+      "path": [
+        "Liver",
+        "Lobes"
+      ]
+    },
+    {
+      "organ_id": "quadrate_lobe_of_liver",
+      "ta2_latin": "Lobus quadratus",
+      "name_en": "Quadrate lobe",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_quadrate_lobe",
+      "path": [
+        "Liver",
+        "Lobes"
       ]
     },
     {
@@ -701,6 +1299,591 @@
       ]
     },
     {
+      "organ_id": "ileal_papilla",
+      "ta2_latin": "Papilla ilealis",
+      "name_en": "Ileal papilla",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_ileocecal_valve",
+      "path": [
+        "Large intestine"
+      ]
+    },
+    {
+      "organ_id": "renal_papilla_1_l",
+      "ta2_latin": "Papilla renalis",
+      "name_en": "Renal papilla, 1 (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_papilla_L_a",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_papilla_1_r",
+      "ta2_latin": "Papilla renalis",
+      "name_en": "Renal papilla, 1 (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_papilla_R_a",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_papilla_10_l",
+      "ta2_latin": "Papilla renalis",
+      "name_en": "Renal papilla, 10 (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_papilla_L_j",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_papilla_10_r",
+      "ta2_latin": "Papilla renalis",
+      "name_en": "Renal papilla, 10 (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_papilla_R_j",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_papilla_11_l",
+      "ta2_latin": "Papilla renalis",
+      "name_en": "Renal papilla, 11 (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_papilla_L_k",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_papilla_2_l",
+      "ta2_latin": "Papilla renalis",
+      "name_en": "Renal papilla, 2 (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_papilla_L_b",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_papilla_2_r",
+      "ta2_latin": "Papilla renalis",
+      "name_en": "Renal papilla, 2 (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_papilla_R_b",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_papilla_3_l",
+      "ta2_latin": "Papilla renalis",
+      "name_en": "Renal papilla, 3 (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_papilla_L_c",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_papilla_3_r",
+      "ta2_latin": "Papilla renalis",
+      "name_en": "Renal papilla, 3 (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_papilla_R_c",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_papilla_4_l",
+      "ta2_latin": "Papilla renalis",
+      "name_en": "Renal papilla, 4 (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_papilla_L_d",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_papilla_4_r",
+      "ta2_latin": "Papilla renalis",
+      "name_en": "Renal papilla, 4 (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_papilla_R_d",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_papilla_5_l",
+      "ta2_latin": "Papilla renalis",
+      "name_en": "Renal papilla, 5 (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_papilla_L_e",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_papilla_5_r",
+      "ta2_latin": "Papilla renalis",
+      "name_en": "Renal papilla, 5 (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_papilla_R_e",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_papilla_6_l",
+      "ta2_latin": "Papilla renalis",
+      "name_en": "Renal papilla, 6 (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_papilla_L_f",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_papilla_6_r",
+      "ta2_latin": "Papilla renalis",
+      "name_en": "Renal papilla, 6 (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_papilla_R_f",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_papilla_7_l",
+      "ta2_latin": "Papilla renalis",
+      "name_en": "Renal papilla, 7 (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_papilla_L_g",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_papilla_7_r",
+      "ta2_latin": "Papilla renalis",
+      "name_en": "Renal papilla, 7 (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_papilla_R_g",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_papilla_8_l",
+      "ta2_latin": "Papilla renalis",
+      "name_en": "Renal papilla, 8 (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_papilla_L_h",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_papilla_8_r",
+      "ta2_latin": "Papilla renalis",
+      "name_en": "Renal papilla, 8 (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_papilla_R_h",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_papilla_9_l",
+      "ta2_latin": "Papilla renalis",
+      "name_en": "Renal papilla, 9 (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_papilla_L_i",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_papilla_9_r",
+      "ta2_latin": "Papilla renalis",
+      "name_en": "Renal papilla, 9 (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_papilla_R_i",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "ascending_part_of_duodenum",
+      "ta2_latin": "Pars ascendens duodeni",
+      "name_en": "Ascending part of duodenum",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_duodenum_ascending",
+      "path": [
+        "Small intestine",
+        "Duodenum"
+      ]
+    },
+    {
+      "organ_id": "descending_part_of_duodenum",
+      "ta2_latin": "Pars descendens duodeni",
+      "name_en": "Descending part of duodenum",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_duodenum_descending",
+      "path": [
+        "Small intestine",
+        "Duodenum"
+      ]
+    },
+    {
+      "organ_id": "horizontal_part_of_duodenum",
+      "ta2_latin": "Pars horizontalis duodeni",
+      "name_en": "Horizontal part of duodenum",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_duodenum_horizontal",
+      "path": [
+        "Small intestine",
+        "Duodenum"
+      ]
+    },
+    {
+      "organ_id": "superior_part_of_duodenum",
+      "ta2_latin": "Pars superior duodeni",
+      "name_en": "Superior part of duodenum",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_duodenum_superior",
+      "path": [
+        "Small intestine",
+        "Duodenum"
+      ]
+    },
+    {
+      "organ_id": "porta_hepatis",
+      "ta2_latin": "Porta hepatis",
+      "name_en": "Porta hepatis",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_porta_hepatis",
+      "path": [
+        "Liver"
+      ]
+    },
+    {
+      "organ_id": "uncinate_process_of_pancreas",
+      "ta2_latin": "Processus uncinatus pancreatis",
+      "name_en": "Uncinate process of pancreas",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_ucinate_process1",
+      "path": [
+        "Pancreas"
+      ]
+    },
+    {
+      "organ_id": "renal_pyramid_1_l",
+      "ta2_latin": "Pyramis renalis",
+      "name_en": "Renal pyramid, 1 (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_pyramid_L_a",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_pyramid_1_r",
+      "ta2_latin": "Pyramis renalis",
+      "name_en": "Renal pyramid, 1 (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_pyramid_R_a",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_pyramid_10_l",
+      "ta2_latin": "Pyramis renalis",
+      "name_en": "Renal pyramid, 10 (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_pyramid_L_j",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_pyramid_10_r",
+      "ta2_latin": "Pyramis renalis",
+      "name_en": "Renal pyramid, 10 (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_pyramid_R_j",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_pyramid_11_l",
+      "ta2_latin": "Pyramis renalis",
+      "name_en": "Renal pyramid, 11 (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_pyramid_L_k",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_pyramid_2_l",
+      "ta2_latin": "Pyramis renalis",
+      "name_en": "Renal pyramid, 2 (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_pyramid_L_b",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_pyramid_2_r",
+      "ta2_latin": "Pyramis renalis",
+      "name_en": "Renal pyramid, 2 (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_pyramid_R_b",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_pyramid_3_l",
+      "ta2_latin": "Pyramis renalis",
+      "name_en": "Renal pyramid, 3 (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_pyramid_L_c",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_pyramid_3_r",
+      "ta2_latin": "Pyramis renalis",
+      "name_en": "Renal pyramid, 3 (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_pyramid_R_c",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_pyramid_4_l",
+      "ta2_latin": "Pyramis renalis",
+      "name_en": "Renal pyramid, 4 (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_pyramid_L_d",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_pyramid_4_r",
+      "ta2_latin": "Pyramis renalis",
+      "name_en": "Renal pyramid, 4 (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_pyramid_R_d",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_pyramid_5_l",
+      "ta2_latin": "Pyramis renalis",
+      "name_en": "Renal pyramid, 5 (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_pyramid_L_e",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_pyramid_5_r",
+      "ta2_latin": "Pyramis renalis",
+      "name_en": "Renal pyramid, 5 (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_pyramid_R_e",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_pyramid_6_l",
+      "ta2_latin": "Pyramis renalis",
+      "name_en": "Renal pyramid, 6 (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_pyramid_L_f",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_pyramid_6_r",
+      "ta2_latin": "Pyramis renalis",
+      "name_en": "Renal pyramid, 6 (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_pyramid_R_f",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_pyramid_7_l",
+      "ta2_latin": "Pyramis renalis",
+      "name_en": "Renal pyramid, 7 (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_pyramid_L_g",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_pyramid_7_r",
+      "ta2_latin": "Pyramis renalis",
+      "name_en": "Renal pyramid, 7 (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_pyramid_R_g",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_pyramid_8_l",
+      "ta2_latin": "Pyramis renalis",
+      "name_en": "Renal pyramid, 8 (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_pyramid_L_h",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_pyramid_8_r",
+      "ta2_latin": "Pyramis renalis",
+      "name_en": "Renal pyramid, 8 (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_pyramid_R_h",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_pyramid_9_l",
+      "ta2_latin": "Pyramis renalis",
+      "name_en": "Renal pyramid, 9 (left)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_pyramid_L_i",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
+      "organ_id": "renal_pyramid_9_r",
+      "ta2_latin": "Pyramis renalis",
+      "name_en": "Renal pyramid, 9 (right)",
+      "system": "renal",
+      "mesh_file": "renal_female.glb",
+      "node": "VH_F_renal_pyramid_R_i",
+      "path": [
+        "Kidney",
+        "Medulla"
+      ]
+    },
+    {
       "organ_id": "rectum",
       "ta2_latin": "Rectum",
       "name_en": "Rectum",
@@ -712,6 +1895,17 @@
       ]
     },
     {
+      "organ_id": "sphincter_of_ampulla",
+      "ta2_latin": "Sphincter ampullae",
+      "name_en": "Sphincter of ampulla",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_sphincter_of_heptopancreatic_ampulla",
+      "path": [
+        "Biliary tract"
+      ]
+    },
+    {
       "organ_id": "trigone_of_bladder",
       "ta2_latin": "Trigonum vesicae",
       "name_en": "Trigone of bladder",
@@ -720,6 +1914,17 @@
       "node": "VH_F_trigone_of_urinary_bladder",
       "path": [
         "Urinary bladder"
+      ]
+    },
+    {
+      "organ_id": "fibrous_capsule_of_liver",
+      "ta2_latin": "Tunica fibrosa hepatis",
+      "name_en": "Fibrous capsule of liver",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_capsule_of_the_liver",
+      "path": [
+        "Liver"
       ]
     },
     {
@@ -921,6 +2126,293 @@
       "path": [
         "Pelvic vessels",
         "Veins"
+      ]
+    },
+    {
+      "organ_id": "cervical_vertebra_c3",
+      "ta2_latin": "Vertebra cervicalis",
+      "name_en": "Cervical vertebra, C3",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_cervical_vertebra_3",
+      "path": [
+        "Vertebral column",
+        "Cervical vertebrae"
+      ]
+    },
+    {
+      "organ_id": "cervical_vertebra_c4",
+      "ta2_latin": "Vertebra cervicalis",
+      "name_en": "Cervical vertebra, C4",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_cervical_vertebra_4",
+      "path": [
+        "Vertebral column",
+        "Cervical vertebrae"
+      ]
+    },
+    {
+      "organ_id": "cervical_vertebra_c5",
+      "ta2_latin": "Vertebra cervicalis",
+      "name_en": "Cervical vertebra, C5",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_cervical_vertebra_5",
+      "path": [
+        "Vertebral column",
+        "Cervical vertebrae"
+      ]
+    },
+    {
+      "organ_id": "cervical_vertebra_c6",
+      "ta2_latin": "Vertebra cervicalis",
+      "name_en": "Cervical vertebra, C6",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_cervical_vertebra_6",
+      "path": [
+        "Vertebral column",
+        "Cervical vertebrae"
+      ]
+    },
+    {
+      "organ_id": "cervical_vertebra_c7",
+      "ta2_latin": "Vertebra cervicalis",
+      "name_en": "Cervical vertebra, C7",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_cervical_vertebra_7",
+      "path": [
+        "Vertebral column",
+        "Cervical vertebrae"
+      ]
+    },
+    {
+      "organ_id": "lumbar_vertebra_l1",
+      "ta2_latin": "Vertebra lumbalis",
+      "name_en": "Lumbar vertebra, L1",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_lumbar_vertebra_1",
+      "path": [
+        "Vertebral column",
+        "Lumbar vertebrae"
+      ]
+    },
+    {
+      "organ_id": "lumbar_vertebra_l2",
+      "ta2_latin": "Vertebra lumbalis",
+      "name_en": "Lumbar vertebra, L2",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_lumbar_vertebra_2",
+      "path": [
+        "Vertebral column",
+        "Lumbar vertebrae"
+      ]
+    },
+    {
+      "organ_id": "lumbar_vertebra_l3",
+      "ta2_latin": "Vertebra lumbalis",
+      "name_en": "Lumbar vertebra, L3",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_lumbar_vertebra_3",
+      "path": [
+        "Vertebral column",
+        "Lumbar vertebrae"
+      ]
+    },
+    {
+      "organ_id": "lumbar_vertebra_l4",
+      "ta2_latin": "Vertebra lumbalis",
+      "name_en": "Lumbar vertebra, L4",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_lumbar_vertebra_4",
+      "path": [
+        "Vertebral column",
+        "Lumbar vertebrae"
+      ]
+    },
+    {
+      "organ_id": "lumbar_vertebra_l5",
+      "ta2_latin": "Vertebra lumbalis",
+      "name_en": "Lumbar vertebra, L5",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_lumbar_vertebra_5",
+      "path": [
+        "Vertebral column",
+        "Lumbar vertebrae"
+      ]
+    },
+    {
+      "organ_id": "lumbar_vertebra_l6",
+      "ta2_latin": "Vertebra lumbalis",
+      "name_en": "Lumbar vertebra, L6",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_lumbar_vertebra_6",
+      "path": [
+        "Vertebral column",
+        "Lumbar vertebrae"
+      ]
+    },
+    {
+      "organ_id": "thoracic_vertebra_t1",
+      "ta2_latin": "Vertebra thoracica",
+      "name_en": "Thoracic vertebra, T1",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_thoracic_vertebra_1",
+      "path": [
+        "Vertebral column",
+        "Thoracic vertebrae"
+      ]
+    },
+    {
+      "organ_id": "thoracic_vertebra_t10",
+      "ta2_latin": "Vertebra thoracica",
+      "name_en": "Thoracic vertebra, T10",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_thoracic_vertebra_10",
+      "path": [
+        "Vertebral column",
+        "Thoracic vertebrae"
+      ]
+    },
+    {
+      "organ_id": "thoracic_vertebra_t11",
+      "ta2_latin": "Vertebra thoracica",
+      "name_en": "Thoracic vertebra, T11",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_thoracic_vertebra_11",
+      "path": [
+        "Vertebral column",
+        "Thoracic vertebrae"
+      ]
+    },
+    {
+      "organ_id": "thoracic_vertebra_t12",
+      "ta2_latin": "Vertebra thoracica",
+      "name_en": "Thoracic vertebra, T12",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_thoracic_vertebra_12",
+      "path": [
+        "Vertebral column",
+        "Thoracic vertebrae"
+      ]
+    },
+    {
+      "organ_id": "thoracic_vertebra_t2",
+      "ta2_latin": "Vertebra thoracica",
+      "name_en": "Thoracic vertebra, T2",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_thoracic_vertebra_2",
+      "path": [
+        "Vertebral column",
+        "Thoracic vertebrae"
+      ]
+    },
+    {
+      "organ_id": "thoracic_vertebra_t3",
+      "ta2_latin": "Vertebra thoracica",
+      "name_en": "Thoracic vertebra, T3",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_thoracic_vertebra_3",
+      "path": [
+        "Vertebral column",
+        "Thoracic vertebrae"
+      ]
+    },
+    {
+      "organ_id": "thoracic_vertebra_t4",
+      "ta2_latin": "Vertebra thoracica",
+      "name_en": "Thoracic vertebra, T4",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_thoracic_vertebra_4",
+      "path": [
+        "Vertebral column",
+        "Thoracic vertebrae"
+      ]
+    },
+    {
+      "organ_id": "thoracic_vertebra_t5",
+      "ta2_latin": "Vertebra thoracica",
+      "name_en": "Thoracic vertebra, T5",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_thoracic_vertebra_5",
+      "path": [
+        "Vertebral column",
+        "Thoracic vertebrae"
+      ]
+    },
+    {
+      "organ_id": "thoracic_vertebra_t6",
+      "ta2_latin": "Vertebra thoracica",
+      "name_en": "Thoracic vertebra, T6",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_thoracic_vertebra_6",
+      "path": [
+        "Vertebral column",
+        "Thoracic vertebrae"
+      ]
+    },
+    {
+      "organ_id": "thoracic_vertebra_t7",
+      "ta2_latin": "Vertebra thoracica",
+      "name_en": "Thoracic vertebra, T7",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_thoracic_vertebra_7",
+      "path": [
+        "Vertebral column",
+        "Thoracic vertebrae"
+      ]
+    },
+    {
+      "organ_id": "thoracic_vertebra_t8",
+      "ta2_latin": "Vertebra thoracica",
+      "name_en": "Thoracic vertebra, T8",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_thoracic_vertebra_8",
+      "path": [
+        "Vertebral column",
+        "Thoracic vertebrae"
+      ]
+    },
+    {
+      "organ_id": "thoracic_vertebra_t9",
+      "ta2_latin": "Vertebra thoracica",
+      "name_en": "Thoracic vertebra, T9",
+      "system": "skeletal",
+      "mesh_file": "skeletal_female.glb",
+      "node": "VH_F_thoracic_vertebra_9",
+      "path": [
+        "Vertebral column",
+        "Thoracic vertebrae"
+      ]
+    },
+    {
+      "organ_id": "gallbladder",
+      "ta2_latin": "Vesica biliaris",
+      "name_en": "Gallbladder",
+      "system": "digestive",
+      "mesh_file": "digestive_female.glb",
+      "node": "VH_F_gallbladder",
+      "path": [
+        "Biliary tract"
       ]
     }
   ]

@@ -17,24 +17,38 @@ it, so this file is also the answer to "is it worth reinstalling".
 
 ### Added
 
-**Female pelvic and reproductive anatomy.** The atlas now has a second body.
-A Male/Female switch sits above the systems list, and choosing Female loads
-76 structures built from the NIH Human Reference Atlas: the uterus with its
-cervix and walls, both uterine tubes down to the fimbriae, the ovaries, the
-vagina, the full set of suspensory ligaments and peritoneal folds, the bladder
-and ureters, the pelvic girdle, the rectum and sigmoid colon, and seventeen
-pelvic vessels including the uterine arteries and veins.
+**A female atlas.** The atlas now has a second body. A Male/Female switch sits
+above the systems list, and choosing Female loads 203 structures built from the
+NIH Human Reference Atlas: the vertebral column from C1 to the coccyx, the
+pelvic girdle, the uterus with its cervix and walls, both uterine tubes down to
+the fimbriae, the ovaries, the vagina, sixteen ligaments and peritoneal folds,
+the bladder and ureters, both kidneys, the liver with its impressions and
+ligaments, the biliary tract, the pancreas, the spleen, the small and large
+intestine, and seventeen pelvic vessels.
 
-It is **not a whole female body**, and the application says so where you choose
-it. No open dataset provides one: the Human Reference Atlas models organs for
-cell mapping rather than a body for teaching, and the raw Visible Human Female
-is forty gigabytes of photographs with no meshes in it. What is here is the
-region that was genuinely missing — the male atlas had fourteen reproductive
-structures and no female counterpart at all.
+It is **the trunk, not a whole female body**, and the application says so where
+you choose it. There is no skull, no ribcage, no limbs, and no skeletal muscle
+or peripheral nerve anywhere — the source models organs rather than a body, and
+no open dataset publishes a whole female one.
+
+In one respect it is better than the male atlas, which the structure count
+hides. Its viscera are far more finely modelled: a kidney opens into capsule,
+hilum, cortex, columns and every pyramid with its papilla, where the male atlas
+has a single kidney mesh.
+
+**It is one woman, not an average, and the interface says where she differs.**
+The male atlas is an idealised composite; this is a 59-year-old subject. She has
+**six lumbar vertebrae** rather than five, and **her kidneys span L1 to L5**
+where the classical description is T12 to L3, with the left 2.7 cm longer than
+the right. Both are real, both are measurable in the geometry, and neither is
+corrected. They are stated where you choose the body, in the guide, and in the
+assistant's own instructions — which now give the textbook value first and
+describe this body second, so that measuring her on screen does not cost you a
+mark in an exam.
 
 Every structure carries its Terminologia Anatomica Latin, matched by hand,
 because the source names anatomy with UBERON and FMA labels that are not unique
-and often word structures differently. Three structures in the source are
+and often word structures differently. Five structures in the source are
 deliberately not shipped, because TA2 does not list them and inventing Latin
 would be worse than leaving them out.
 

@@ -11,8 +11,36 @@
  },
  "output": "renal_female.glb",
  "draco": true,
- "object_count": 8,
+ "object_count": 58,
  "objects": [
+  {
+   "name": "Fibrous capsule of kidney (left)",
+   "organ_id": "fibrous_capsule_of_kidney_l",
+   "node": "VH_F_kidney_capsule_L",
+   "term": "Fibrous capsule of kidney",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "UBERON:0002015",
+   "source_label": "kidney capsule",
+   "polygons": 10850,
+   "path": [
+    "Kidney"
+   ]
+  },
+  {
+   "name": "Fibrous capsule of kidney (right)",
+   "organ_id": "fibrous_capsule_of_kidney_r",
+   "node": "VH_F_kidney_capsule_R",
+   "term": "Fibrous capsule of kidney",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "UBERON:0002015",
+   "source_label": "kidney capsule",
+   "polygons": 10642,
+   "path": [
+    "Kidney"
+   ]
+  },
   {
    "name": "Fundus of bladder, base",
    "organ_id": "fundus_of_bladder_base",
@@ -42,6 +70,34 @@
    ]
   },
   {
+   "name": "Hilum of kidney (left)",
+   "organ_id": "hilum_of_kidney_l",
+   "node": "VH_F_hilum_of_kidney_L",
+   "term": "Hilum of kidney",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "UBERON:0008716",
+   "source_label": "hilum of kidney",
+   "polygons": 5927,
+   "path": [
+    "Kidney"
+   ]
+  },
+  {
+   "name": "Hilum of kidney (right)",
+   "organ_id": "hilum_of_kidney_r",
+   "node": "VH_F_hilum_of_kidney_R",
+   "term": "Hilum of kidney",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "UBERON:0008716",
+   "source_label": "hilum of kidney",
+   "polygons": 4216,
+   "path": [
+    "Kidney"
+   ]
+  },
+  {
    "name": "Neck of bladder",
    "organ_id": "neck_of_bladder",
    "node": "VH_F_urinary_bladder_neck_smooth_muscle",
@@ -53,6 +109,692 @@
    "polygons": 1790,
    "path": [
     "Urinary bladder"
+   ]
+  },
+  {
+   "name": "Renal columns (left)",
+   "organ_id": "renal_columns_l",
+   "node": "VH_F_renal_column_L",
+   "term": "Renal columns",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "UBERON:0001284",
+   "source_label": "renal column",
+   "polygons": 26115,
+   "path": [
+    "Kidney"
+   ]
+  },
+  {
+   "name": "Renal columns (right)",
+   "organ_id": "renal_columns_r",
+   "node": "VH_F_renal_column_R",
+   "term": "Renal columns",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "UBERON:0001284",
+   "source_label": "renal column",
+   "polygons": 23628,
+   "path": [
+    "Kidney"
+   ]
+  },
+  {
+   "name": "Renal cortex (left)",
+   "organ_id": "renal_cortex_l",
+   "node": "VH_F_outer_cortex_of_kidney_L",
+   "term": "Renal cortex",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "UBERON:0002189",
+   "source_label": "outer cortex of kidney",
+   "polygons": 13784,
+   "path": [
+    "Kidney"
+   ]
+  },
+  {
+   "name": "Renal cortex (right)",
+   "organ_id": "renal_cortex_r",
+   "node": "VH_F_outer_cortex_of_kidney_R",
+   "term": "Renal cortex",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "UBERON:0002189",
+   "source_label": "outer cortex of kidney",
+   "polygons": 13824,
+   "path": [
+    "Kidney"
+   ]
+  },
+  {
+   "name": "Renal papilla, 1 (left)",
+   "organ_id": "renal_papilla_1_l",
+   "node": "VH_F_renal_papilla_L_a",
+   "term": "Renal papilla",
+   "qualifier": "1",
+   "side": "left",
+   "ontology_id": "UBERON:0001228",
+   "source_label": "renal papilla",
+   "polygons": 70,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal papilla, 1 (right)",
+   "organ_id": "renal_papilla_1_r",
+   "node": "VH_F_renal_papilla_R_a",
+   "term": "Renal papilla",
+   "qualifier": "1",
+   "side": "right",
+   "ontology_id": "UBERON:0001228",
+   "source_label": "renal papilla",
+   "polygons": 122,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal papilla, 10 (left)",
+   "organ_id": "renal_papilla_10_l",
+   "node": "VH_F_renal_papilla_L_j",
+   "term": "Renal papilla",
+   "qualifier": "10",
+   "side": "left",
+   "ontology_id": "UBERON:0001228",
+   "source_label": "renal papilla",
+   "polygons": 86,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal papilla, 10 (right)",
+   "organ_id": "renal_papilla_10_r",
+   "node": "VH_F_renal_papilla_R_j",
+   "term": "Renal papilla",
+   "qualifier": "10",
+   "side": "right",
+   "ontology_id": "UBERON:0001228",
+   "source_label": "renal papilla",
+   "polygons": 78,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal papilla, 11 (left)",
+   "organ_id": "renal_papilla_11_l",
+   "node": "VH_F_renal_papilla_L_k",
+   "term": "Renal papilla",
+   "qualifier": "11",
+   "side": "left",
+   "ontology_id": "UBERON:0001228",
+   "source_label": "renal papilla",
+   "polygons": 102,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal papilla, 2 (left)",
+   "organ_id": "renal_papilla_2_l",
+   "node": "VH_F_renal_papilla_L_b",
+   "term": "Renal papilla",
+   "qualifier": "2",
+   "side": "left",
+   "ontology_id": "UBERON:0001228",
+   "source_label": "renal papilla",
+   "polygons": 50,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal papilla, 2 (right)",
+   "organ_id": "renal_papilla_2_r",
+   "node": "VH_F_renal_papilla_R_b",
+   "term": "Renal papilla",
+   "qualifier": "2",
+   "side": "right",
+   "ontology_id": "UBERON:0001228",
+   "source_label": "renal papilla",
+   "polygons": 58,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal papilla, 3 (left)",
+   "organ_id": "renal_papilla_3_l",
+   "node": "VH_F_renal_papilla_L_c",
+   "term": "Renal papilla",
+   "qualifier": "3",
+   "side": "left",
+   "ontology_id": "UBERON:0001228",
+   "source_label": "renal papilla",
+   "polygons": 42,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal papilla, 3 (right)",
+   "organ_id": "renal_papilla_3_r",
+   "node": "VH_F_renal_papilla_R_c",
+   "term": "Renal papilla",
+   "qualifier": "3",
+   "side": "right",
+   "ontology_id": "UBERON:0001228",
+   "source_label": "renal papilla",
+   "polygons": 80,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal papilla, 4 (left)",
+   "organ_id": "renal_papilla_4_l",
+   "node": "VH_F_renal_papilla_L_d",
+   "term": "Renal papilla",
+   "qualifier": "4",
+   "side": "left",
+   "ontology_id": "UBERON:0001228",
+   "source_label": "renal papilla",
+   "polygons": 78,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal papilla, 4 (right)",
+   "organ_id": "renal_papilla_4_r",
+   "node": "VH_F_renal_papilla_R_d",
+   "term": "Renal papilla",
+   "qualifier": "4",
+   "side": "right",
+   "ontology_id": "UBERON:0001228",
+   "source_label": "renal papilla",
+   "polygons": 72,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal papilla, 5 (left)",
+   "organ_id": "renal_papilla_5_l",
+   "node": "VH_F_renal_papilla_L_e",
+   "term": "Renal papilla",
+   "qualifier": "5",
+   "side": "left",
+   "ontology_id": "UBERON:0001228",
+   "source_label": "renal papilla",
+   "polygons": 66,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal papilla, 5 (right)",
+   "organ_id": "renal_papilla_5_r",
+   "node": "VH_F_renal_papilla_R_e",
+   "term": "Renal papilla",
+   "qualifier": "5",
+   "side": "right",
+   "ontology_id": "UBERON:0001228",
+   "source_label": "renal papilla",
+   "polygons": 106,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal papilla, 6 (left)",
+   "organ_id": "renal_papilla_6_l",
+   "node": "VH_F_renal_papilla_L_f",
+   "term": "Renal papilla",
+   "qualifier": "6",
+   "side": "left",
+   "ontology_id": "UBERON:0001228",
+   "source_label": "renal papilla",
+   "polygons": 72,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal papilla, 6 (right)",
+   "organ_id": "renal_papilla_6_r",
+   "node": "VH_F_renal_papilla_R_f",
+   "term": "Renal papilla",
+   "qualifier": "6",
+   "side": "right",
+   "ontology_id": "UBERON:0001228",
+   "source_label": "renal papilla",
+   "polygons": 83,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal papilla, 7 (left)",
+   "organ_id": "renal_papilla_7_l",
+   "node": "VH_F_renal_papilla_L_g",
+   "term": "Renal papilla",
+   "qualifier": "7",
+   "side": "left",
+   "ontology_id": "UBERON:0001228",
+   "source_label": "renal papilla",
+   "polygons": 50,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal papilla, 7 (right)",
+   "organ_id": "renal_papilla_7_r",
+   "node": "VH_F_renal_papilla_R_g",
+   "term": "Renal papilla",
+   "qualifier": "7",
+   "side": "right",
+   "ontology_id": "UBERON:0001228",
+   "source_label": "renal papilla",
+   "polygons": 124,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal papilla, 8 (left)",
+   "organ_id": "renal_papilla_8_l",
+   "node": "VH_F_renal_papilla_L_h",
+   "term": "Renal papilla",
+   "qualifier": "8",
+   "side": "left",
+   "ontology_id": "UBERON:0001228",
+   "source_label": "renal papilla",
+   "polygons": 60,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal papilla, 8 (right)",
+   "organ_id": "renal_papilla_8_r",
+   "node": "VH_F_renal_papilla_R_h",
+   "term": "Renal papilla",
+   "qualifier": "8",
+   "side": "right",
+   "ontology_id": "UBERON:0001228",
+   "source_label": "renal papilla",
+   "polygons": 26,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal papilla, 9 (left)",
+   "organ_id": "renal_papilla_9_l",
+   "node": "VH_F_renal_papilla_L_i",
+   "term": "Renal papilla",
+   "qualifier": "9",
+   "side": "left",
+   "ontology_id": "UBERON:0001228",
+   "source_label": "renal papilla",
+   "polygons": 62,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal papilla, 9 (right)",
+   "organ_id": "renal_papilla_9_r",
+   "node": "VH_F_renal_papilla_R_i",
+   "term": "Renal papilla",
+   "qualifier": "9",
+   "side": "right",
+   "ontology_id": "UBERON:0001228",
+   "source_label": "renal papilla",
+   "polygons": 106,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal pyramid, 1 (left)",
+   "organ_id": "renal_pyramid_1_l",
+   "node": "VH_F_renal_pyramid_L_a",
+   "term": "Renal pyramid",
+   "qualifier": "1",
+   "side": "left",
+   "ontology_id": "UBERON:0004200",
+   "source_label": "renal pyramid",
+   "polygons": 2782,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal pyramid, 1 (right)",
+   "organ_id": "renal_pyramid_1_r",
+   "node": "VH_F_renal_pyramid_R_a",
+   "term": "Renal pyramid",
+   "qualifier": "1",
+   "side": "right",
+   "ontology_id": "UBERON:0004200",
+   "source_label": "renal pyramid",
+   "polygons": 2696,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal pyramid, 10 (left)",
+   "organ_id": "renal_pyramid_10_l",
+   "node": "VH_F_renal_pyramid_L_j",
+   "term": "Renal pyramid",
+   "qualifier": "10",
+   "side": "left",
+   "ontology_id": "UBERON:0004200",
+   "source_label": "renal pyramid",
+   "polygons": 1292,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal pyramid, 10 (right)",
+   "organ_id": "renal_pyramid_10_r",
+   "node": "VH_F_renal_pyramid_R_j",
+   "term": "Renal pyramid",
+   "qualifier": "10",
+   "side": "right",
+   "ontology_id": "UBERON:0004200",
+   "source_label": "renal pyramid",
+   "polygons": 2862,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal pyramid, 11 (left)",
+   "organ_id": "renal_pyramid_11_l",
+   "node": "VH_F_renal_pyramid_L_k",
+   "term": "Renal pyramid",
+   "qualifier": "11",
+   "side": "left",
+   "ontology_id": "UBERON:0004200",
+   "source_label": "renal pyramid",
+   "polygons": 1128,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal pyramid, 2 (left)",
+   "organ_id": "renal_pyramid_2_l",
+   "node": "VH_F_renal_pyramid_L_b",
+   "term": "Renal pyramid",
+   "qualifier": "2",
+   "side": "left",
+   "ontology_id": "UBERON:0004200",
+   "source_label": "renal pyramid",
+   "polygons": 1008,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal pyramid, 2 (right)",
+   "organ_id": "renal_pyramid_2_r",
+   "node": "VH_F_renal_pyramid_R_b",
+   "term": "Renal pyramid",
+   "qualifier": "2",
+   "side": "right",
+   "ontology_id": "UBERON:0004200",
+   "source_label": "renal pyramid",
+   "polygons": 956,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal pyramid, 3 (left)",
+   "organ_id": "renal_pyramid_3_l",
+   "node": "VH_F_renal_pyramid_L_c",
+   "term": "Renal pyramid",
+   "qualifier": "3",
+   "side": "left",
+   "ontology_id": "UBERON:0004200",
+   "source_label": "renal pyramid",
+   "polygons": 668,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal pyramid, 3 (right)",
+   "organ_id": "renal_pyramid_3_r",
+   "node": "VH_F_renal_pyramid_R_c",
+   "term": "Renal pyramid",
+   "qualifier": "3",
+   "side": "right",
+   "ontology_id": "UBERON:0004200",
+   "source_label": "renal pyramid",
+   "polygons": 2254,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal pyramid, 4 (left)",
+   "organ_id": "renal_pyramid_4_l",
+   "node": "VH_F_renal_pyramid_L_d",
+   "term": "Renal pyramid",
+   "qualifier": "4",
+   "side": "left",
+   "ontology_id": "UBERON:0004200",
+   "source_label": "renal pyramid",
+   "polygons": 1462,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal pyramid, 4 (right)",
+   "organ_id": "renal_pyramid_4_r",
+   "node": "VH_F_renal_pyramid_R_d",
+   "term": "Renal pyramid",
+   "qualifier": "4",
+   "side": "right",
+   "ontology_id": "UBERON:0004200",
+   "source_label": "renal pyramid",
+   "polygons": 2234,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal pyramid, 5 (left)",
+   "organ_id": "renal_pyramid_5_l",
+   "node": "VH_F_renal_pyramid_L_e",
+   "term": "Renal pyramid",
+   "qualifier": "5",
+   "side": "left",
+   "ontology_id": "UBERON:0004200",
+   "source_label": "renal pyramid",
+   "polygons": 1334,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal pyramid, 5 (right)",
+   "organ_id": "renal_pyramid_5_r",
+   "node": "VH_F_renal_pyramid_R_e",
+   "term": "Renal pyramid",
+   "qualifier": "5",
+   "side": "right",
+   "ontology_id": "UBERON:0004200",
+   "source_label": "renal pyramid",
+   "polygons": 2328,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal pyramid, 6 (left)",
+   "organ_id": "renal_pyramid_6_l",
+   "node": "VH_F_renal_pyramid_L_f",
+   "term": "Renal pyramid",
+   "qualifier": "6",
+   "side": "left",
+   "ontology_id": "UBERON:0004200",
+   "source_label": "renal pyramid",
+   "polygons": 1730,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal pyramid, 6 (right)",
+   "organ_id": "renal_pyramid_6_r",
+   "node": "VH_F_renal_pyramid_R_f",
+   "term": "Renal pyramid",
+   "qualifier": "6",
+   "side": "right",
+   "ontology_id": "UBERON:0004200",
+   "source_label": "renal pyramid",
+   "polygons": 2267,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal pyramid, 7 (left)",
+   "organ_id": "renal_pyramid_7_l",
+   "node": "VH_F_renal_pyramid_L_g",
+   "term": "Renal pyramid",
+   "qualifier": "7",
+   "side": "left",
+   "ontology_id": "UBERON:0004200",
+   "source_label": "renal pyramid",
+   "polygons": 2724,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal pyramid, 7 (right)",
+   "organ_id": "renal_pyramid_7_r",
+   "node": "VH_F_renal_pyramid_R_g",
+   "term": "Renal pyramid",
+   "qualifier": "7",
+   "side": "right",
+   "ontology_id": "UBERON:0004200",
+   "source_label": "renal pyramid",
+   "polygons": 2454,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal pyramid, 8 (left)",
+   "organ_id": "renal_pyramid_8_l",
+   "node": "VH_F_renal_pyramid_L_h",
+   "term": "Renal pyramid",
+   "qualifier": "8",
+   "side": "left",
+   "ontology_id": "UBERON:0004200",
+   "source_label": "renal pyramid",
+   "polygons": 718,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal pyramid, 8 (right)",
+   "organ_id": "renal_pyramid_8_r",
+   "node": "VH_F_renal_pyramid_R_h",
+   "term": "Renal pyramid",
+   "qualifier": "8",
+   "side": "right",
+   "ontology_id": "UBERON:0004200",
+   "source_label": "renal pyramid",
+   "polygons": 2262,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal pyramid, 9 (left)",
+   "organ_id": "renal_pyramid_9_l",
+   "node": "VH_F_renal_pyramid_L_i",
+   "term": "Renal pyramid",
+   "qualifier": "9",
+   "side": "left",
+   "ontology_id": "UBERON:0004200",
+   "source_label": "renal pyramid",
+   "polygons": 1266,
+   "path": [
+    "Kidney",
+    "Medulla"
+   ]
+  },
+  {
+   "name": "Renal pyramid, 9 (right)",
+   "organ_id": "renal_pyramid_9_r",
+   "node": "VH_F_renal_pyramid_R_i",
+   "term": "Renal pyramid",
+   "qualifier": "9",
+   "side": "right",
+   "ontology_id": "UBERON:0004200",
+   "source_label": "renal pyramid",
+   "polygons": 1660,
+   "path": [
+    "Kidney",
+    "Medulla"
    ]
   },
   {

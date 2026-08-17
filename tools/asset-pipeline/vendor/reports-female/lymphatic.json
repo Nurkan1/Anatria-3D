@@ -1,0 +1,87 @@
+{
+ "system": "lymphatic",
+ "sex": "female",
+ "source": {
+  "version": "v1.5",
+  "url": "https://cdn.humanatlas.io/digital-objects/ref-organ/united-female/v1.5/assets/3d-vh-f-united.glb",
+  "metadata": "https://cdn.humanatlas.io/digital-objects/ref-organ/united-female/v1.5/metadata.json",
+  "license": "CC-BY-4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "sha256": "472567a56896b9b7890508da6501fbf858e56aaa30745365f7a71ade782b529c"
+ },
+ "output": "lymphatic_female.glb",
+ "draco": true,
+ "object_count": 5,
+ "objects": [
+  {
+   "name": "Colic impression of spleen",
+   "organ_id": "colic_impression_of_spleen",
+   "node": "VH_F_colic_surface_of_spleen",
+   "term": "Colic impression of spleen",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:15838",
+   "source_label": "colic surface of spleen",
+   "polygons": 130,
+   "path": [
+    "Spleen"
+   ]
+  },
+  {
+   "name": "Diaphragmatic surface of spleen",
+   "organ_id": "diaphragmatic_surface_of_spleen",
+   "node": "VH_F_diaphragmatic_surface_of_spleen",
+   "term": "Diaphragmatic surface of spleen",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:15828",
+   "source_label": "diaphragmatic surface of spleen",
+   "polygons": 4338,
+   "path": [
+    "Spleen"
+   ]
+  },
+  {
+   "name": "Gastric impression of spleen",
+   "organ_id": "gastric_impression_of_spleen",
+   "node": "VH_F_gastric_surface_of_spleen",
+   "term": "Gastric impression of spleen",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:15837",
+   "source_label": "gastric surface of spleen",
+   "polygons": 1778,
+   "path": [
+    "Spleen"
+   ]
+  },
+  {
+   "name": "Hilum of spleen",
+   "organ_id": "hilum_of_spleen",
+   "node": "VH_F_hilum_of_spleen",
+   "term": "Hilum of spleen",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "UBERON:0001248",
+   "source_label": "hilum of spleen",
+   "polygons": 1506,
+   "path": [
+    "Spleen"
+   ]
+  },
+  {
+   "name": "Renal impression of spleen",
+   "organ_id": "renal_impression_of_spleen",
+   "node": "VH_F_renal_surface_of_spleen",
+   "term": "Renal impression of spleen",
+   "qualifier": null,
+   "side": null,
+   "ontology_id": "FMA:15839",
+   "source_label": "renal surface of spleen",
+   "polygons": 792,
+   "path": [
+    "Spleen"
+   ]
+  }
+ ]
+}
