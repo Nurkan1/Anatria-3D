@@ -404,8 +404,10 @@ def _body_rule(gender: GenderModel) -> str:
                 "the vertebral column from C1 to the coccyx, the pelvic girdle, the "
                 "female reproductive organs with their ligaments and peritoneal "
                 "folds, the bladder and ureters, the kidneys, the liver and biliary "
-                "tract, the pancreas, the spleen, the small and large intestine, and "
-                "the pelvic vessels.",
+                "tract, the pancreas, the spleen, the small and large intestine, the "
+                "pelvic vessels, and the breast — lobes, lactiferous ducts and "
+                "sinuses, suspensory ligaments, nipple and areola. The breast "
+                "exists on no other body in this application.",
                 "",
                 "What is **not** loaded, and cannot be shown: the skull and the "
                 "brain, the ribcage and sternum, the heart and lungs, the limbs, and "

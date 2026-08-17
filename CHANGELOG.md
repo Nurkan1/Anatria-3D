@@ -24,7 +24,19 @@ pelvic girdle, the uterus with its cervix and walls, both uterine tubes down to
 the fimbriae, the ovaries, the vagina, sixteen ligaments and peritoneal folds,
 the bladder and ureters, both kidneys, the liver with its impressions and
 ligaments, the biliary tract, the pancreas, the spleen, the small and large
-intestine, and seventeen pelvic vessels.
+intestine, seventeen pelvic vessels — and the breast.
+
+The breast is worth calling out because **the male atlas has none at all**:
+lobes of the mammary gland, lactiferous ducts and sinuses, suspensory
+ligaments, nipple, areola and areolar tubercles, on both sides. It is filed
+under the integumentary system, where Terminologia Anatomica files it, and it
+is the first structure in either atlas to use that system.
+
+The placenta is in the source and is **not** shipped. Terminologia Anatomica is
+adult anatomy: it names the umbilical vessels but not the placenta itself, nor
+the amnion, the chorionic plate or the cord — those belong to Terminologia
+Embryologica, which this atlas does not carry. Three vessels floating where a
+placenta should be would teach nothing and look like a failed load.
 
 It is **the trunk, not a whole female body**, and the application says so where
 you choose it. There is no skull, no ribcage, no limbs, and no skeletal muscle

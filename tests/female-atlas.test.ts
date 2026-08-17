@@ -7,6 +7,7 @@ import { AnatomyManifestSchema } from "../src/lib/schemas";
 import { parseTa2 } from "../tools/asset-pipeline/ta2.mjs";
 import {
   NOT_IN_TA2,
+  OUT_OF_SCOPE,
   STRUCTURES,
   SYSTEM_OF,
 } from "../tools/asset-pipeline/hra-selection.mjs";
@@ -58,10 +59,21 @@ describe("the female selection table", () => {
   });
 
   it("records why each dropped structure was dropped", () => {
-    for (const [node, reason] of Object.entries(NOT_IN_TA2)) {
+    for (const [node, reason] of Object.entries({ ...NOT_IN_TA2, ...OUT_OF_SCOPE })) {
       expect(reason.length, node).toBeGreaterThan(20);
       // A structure cannot be both shipped and dropped.
       expect(STRUCTURES.some((entry) => entry.node === node)).toBe(false);
+    }
+  });
+
+  it("keeps a missing term and a judgement in separate lists", () => {
+    // `NOT_IN_TA2` records what the standard lacks; `OUT_OF_SCOPE` records a
+    // decision. Merging them would let a decision borrow the standard's
+    // authority — the umbilical vessels are dropped because a placenta without
+    // its plates, amnion and cord teaches nothing, not because TA2 is silent.
+    // TA2 names them both.
+    for (const node of Object.keys(OUT_OF_SCOPE)) {
+      expect(Object.keys(NOT_IN_TA2)).not.toContain(node);
     }
   });
 });

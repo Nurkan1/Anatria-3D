@@ -33,6 +33,11 @@ export interface HraStructure {
 export const SOURCE: HraSource;
 /** Node name to the reason TA2 does not list it. */
 export const NOT_IN_TA2: Record<string, string>;
+/**
+ * Node name to the reason it is left out despite having a TA2 term. Kept apart
+ * from `NOT_IN_TA2` so a judgement cannot hide behind the standard's authority.
+ */
+export const OUT_OF_SCOPE: Record<string, string>;
 /** Node name to a description of how the source contradicts itself there. */
 export const KNOWN_SOURCE_ERRATA: Record<string, string>;
 export const STRUCTURES: HraStructure[];

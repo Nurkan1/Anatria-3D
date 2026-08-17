@@ -76,7 +76,7 @@ export function BodySwitch() {
       {genderModel === "female" && (
         <div className="mt-1.5 space-y-1.5 text-[10px] leading-relaxed text-slate-500">
           <p>
-            Spine, abdominal organs and pelvis
+            Spine, abdominal organs, pelvis and breast
             {count > 0 ? ` — ${count} structures` : ""}, from the NIH Human Reference
             Atlas. Not a whole female body: no open dataset provides one. For the head,
             thorax or limbs, switch back to the male atlas.

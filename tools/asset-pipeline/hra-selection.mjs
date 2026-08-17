@@ -55,6 +55,28 @@ export const NOT_IN_TA2 = {
   VH_F_cervicovaginal_junction: "Carries no label at all in the source, and TA2 has no matching term.",
   VH_F_duodenal_ampulla: "The duodenal cap, a radiological description of the first part of the duodenum. TA2 names the part, not the appearance.",
   VH_F_ileum_terminal: "Labelled 'distal part of ileum'. Terminal ileum is clinical usage; TA2 divides the small intestine into duodenum, jejunum and ileum only.",
+  VH_F_fat_L: "Interlobar adipose tissue of the breast. TA2 names the corpus mammae and the panniculus adiposus, neither of which is this. A quarter of the breast's geometry, but the lobes carry its shape.",
+  VH_F_fat_R: "As the left. See VH_F_fat_L.",
+  VH_F_basal_plate: "Placental. TA2 is adult anatomy; these terms belong to Terminologia Embryologica, which this atlas does not carry.",
+  VH_F_chorionic_plate: "Placental — see VH_F_basal_plate.",
+  VH_F_amnion: "Placental — see VH_F_basal_plate.",
+  VH_F_umbilical_cord: "Placental — see VH_F_basal_plate.",
+  VH_F_placenta_vessels: "Placental, and unlabelled in the source besides.",
+};
+
+/**
+ * Structures TA2 *does* name and this atlas still does not ship, because
+ * shipping them alone would be worse than shipping nothing.
+ *
+ * Kept apart from `NOT_IN_TA2` on purpose: that list records what the standard
+ * lacks, and this one records a judgement. Conflating them would let a
+ * judgement hide behind the standard's authority.
+ */
+export const OUT_OF_SCOPE = {
+  VH_F_umbilical_artery_1:
+    "The placenta is not shipped. TA2 names the umbilical vessels but none of the placenta itself — not the basal or chorionic plate, not the amnion, not the cord — because those are Terminologia Embryologica terms. Three vessels floating where a placenta should be teaches nothing and looks like a failed load.",
+  VH_F_umbilical_artery_2: "See VH_F_umbilical_artery_1.",
+  VH_F_umbilical_vein: "See VH_F_umbilical_artery_1.",
 };
 
 /**
@@ -362,6 +384,29 @@ export const STRUCTURES = [
   { node: "VH_F_renal_surface_of_spleen", id: "renal_impression_of_spleen", term: "Renal impression of spleen", side: null, path: ["Spleen"] },
   { node: "VH_F_hilum_of_spleen", id: "hilum_of_spleen", term: "Hilum of spleen", side: null, path: ["Spleen"] },
 
+  // -- integumentary: the breast ---------------------------------------------
+  // Filed where TA2 files it. Its chapter runs skin, nails, cutaneous glands,
+  // subcutaneous tissue, and then Mamma — the breast is integumentary, not
+  // reproductive, and this is the first structure in either atlas to use that
+  // system at all.
+  //
+  // Nothing here exists on the male body. The male atlas has no breast of any
+  // kind, so these fourteen are not a finer version of something — they are the
+  // only breast anatomy Anatria3D has.
+  ...["left", "right"].flatMap((side) => {
+    const tag = side === "left" ? "L" : "R";
+    const id = (name) => `${name}_${tag.toLowerCase()}`;
+    return [
+      { node: `VH_F_mammary_lobes_${tag}`, id: id("lobes_of_mammary_gland"), term: "Lobes of mammary gland", side, path: ["Breast"] },
+      { node: `VH_F_main_lactiferous_ducts_${tag}`, id: id("lactiferous_ducts"), term: "Lactiferous ducts", side, path: ["Breast"] },
+      { node: `VH_F_main_lactiferous_sinuses_${tag}`, id: id("lactiferous_sinuses"), term: "Lactiferous sinuses", side, path: ["Breast"] },
+      { node: `VH_F_suspensory_ligaments_${tag}`, id: id("suspensory_ligaments_of_breast"), term: "Suspensory ligaments of breast", side, path: ["Breast"] },
+      { node: `VH_F_nipple_${tag}`, id: id("nipple"), term: "Nipple", side, path: ["Breast", "Nipple and areola"] },
+      { node: `VH_F_areola_${tag}`, id: id("areola"), term: "Areola", side, path: ["Breast", "Nipple and areola"] },
+      { node: `VH_F_areolar_tubercles_${tag}`, id: id("areolar_tubercles"), term: "Areolar tubercles", side, path: ["Breast", "Nipple and areola"] },
+    ];
+  }),
+
   // -- renal: the kidneys, in the detail the male atlas has never had ---------
   // The male atlas models each kidney as a single mesh. This one opens: the
   // capsule, the hilum, the cortex, the columns, and every pyramid with its
@@ -432,6 +477,10 @@ export const SYSTEM_OF = new Map(
         return [entry.node, "digestive"];
       case "Kidney":
         return [entry.node, "renal"];
+      // Where Terminologia Anatomica files it: its integumentary chapter runs
+      // skin, nails, cutaneous glands, subcutaneous tissue, then Mamma.
+      case "Breast":
+        return [entry.node, "integumentary"];
       // Where the male atlas files it too.
       case "Spleen":
         return [entry.node, "lymphatic"];

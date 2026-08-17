@@ -1,0 +1,219 @@
+{
+ "system": "integumentary",
+ "sex": "female",
+ "source": {
+  "version": "v1.5",
+  "url": "https://cdn.humanatlas.io/digital-objects/ref-organ/united-female/v1.5/assets/3d-vh-f-united.glb",
+  "metadata": "https://cdn.humanatlas.io/digital-objects/ref-organ/united-female/v1.5/metadata.json",
+  "license": "CC-BY-4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "sha256": "472567a56896b9b7890508da6501fbf858e56aaa30745365f7a71ade782b529c"
+ },
+ "output": "integumentary_female.glb",
+ "draco": true,
+ "object_count": 14,
+ "objects": [
+  {
+   "name": "Areola (left)",
+   "organ_id": "areola_l",
+   "node": "VH_F_areola_L",
+   "term": "Areola",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "FMA:223679",
+   "source_label": "Left female areola",
+   "polygons": 23785,
+   "path": [
+    "Breast",
+    "Nipple and areola"
+   ]
+  },
+  {
+   "name": "Areola (right)",
+   "organ_id": "areola_r",
+   "node": "VH_F_areola_R",
+   "term": "Areola",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "FMA:223677",
+   "source_label": "Right female areola",
+   "polygons": 23785,
+   "path": [
+    "Breast",
+    "Nipple and areola"
+   ]
+  },
+  {
+   "name": "Areolar tubercles (left)",
+   "organ_id": "areolar_tubercles_l",
+   "node": "VH_F_areolar_tubercles_L",
+   "term": "Areolar tubercles",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "UBERON:0011828",
+   "source_label": "areolar tubercle",
+   "polygons": 4621,
+   "path": [
+    "Breast",
+    "Nipple and areola"
+   ]
+  },
+  {
+   "name": "Areolar tubercles (right)",
+   "organ_id": "areolar_tubercles_r",
+   "node": "VH_F_areolar_tubercles_R",
+   "term": "Areolar tubercles",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "UBERON:0011828",
+   "source_label": "areolar tubercle",
+   "polygons": 4621,
+   "path": [
+    "Breast",
+    "Nipple and areola"
+   ]
+  },
+  {
+   "name": "Lactiferous ducts (left)",
+   "organ_id": "lactiferous_ducts_l",
+   "node": "VH_F_main_lactiferous_ducts_L",
+   "term": "Lactiferous ducts",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "UBERON:0015134",
+   "source_label": "main lactiferous duct",
+   "polygons": 34755,
+   "path": [
+    "Breast"
+   ]
+  },
+  {
+   "name": "Lactiferous ducts (right)",
+   "organ_id": "lactiferous_ducts_r",
+   "node": "VH_F_main_lactiferous_ducts_R",
+   "term": "Lactiferous ducts",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "UBERON:0015134",
+   "source_label": "main lactiferous duct",
+   "polygons": 34660,
+   "path": [
+    "Breast"
+   ]
+  },
+  {
+   "name": "Lactiferous sinuses (left)",
+   "organ_id": "lactiferous_sinuses_l",
+   "node": "VH_F_main_lactiferous_sinuses_L",
+   "term": "Lactiferous sinuses",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "FMA:58088",
+   "source_label": "Lactiferous sinus",
+   "polygons": 11456,
+   "path": [
+    "Breast"
+   ]
+  },
+  {
+   "name": "Lactiferous sinuses (right)",
+   "organ_id": "lactiferous_sinuses_r",
+   "node": "VH_F_main_lactiferous_sinuses_R",
+   "term": "Lactiferous sinuses",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "FMA:58088",
+   "source_label": "Lactiferous sinus",
+   "polygons": 11449,
+   "path": [
+    "Breast"
+   ]
+  },
+  {
+   "name": "Lobes of mammary gland (left)",
+   "organ_id": "lobes_of_mammary_gland_l",
+   "node": "VH_F_mammary_lobes_L",
+   "term": "Lobes of mammary gland",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "UBERON:0018140",
+   "source_label": "mammary lobe",
+   "polygons": 75788,
+   "path": [
+    "Breast"
+   ]
+  },
+  {
+   "name": "Lobes of mammary gland (right)",
+   "organ_id": "lobes_of_mammary_gland_r",
+   "node": "VH_F_mammary_lobes_R",
+   "term": "Lobes of mammary gland",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "UBERON:0018140",
+   "source_label": "mammary lobe",
+   "polygons": 75788,
+   "path": [
+    "Breast"
+   ]
+  },
+  {
+   "name": "Nipple (left)",
+   "organ_id": "nipple_l",
+   "node": "VH_F_nipple_L",
+   "term": "Nipple",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "UBERON:0013772",
+   "source_label": "left nipple",
+   "polygons": 9696,
+   "path": [
+    "Breast",
+    "Nipple and areola"
+   ]
+  },
+  {
+   "name": "Nipple (right)",
+   "organ_id": "nipple_r",
+   "node": "VH_F_nipple_R",
+   "term": "Nipple",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "UBERON:0013773",
+   "source_label": "right nipple",
+   "polygons": 9696,
+   "path": [
+    "Breast",
+    "Nipple and areola"
+   ]
+  },
+  {
+   "name": "Suspensory ligaments of breast (left)",
+   "organ_id": "suspensory_ligaments_of_breast_l",
+   "node": "VH_F_suspensory_ligaments_L",
+   "term": "Suspensory ligaments of breast",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "FMA:73119",
+   "source_label": "Suspensory ligament of left breast",
+   "polygons": 44278,
+   "path": [
+    "Breast"
+   ]
+  },
+  {
+   "name": "Suspensory ligaments of breast (right)",
+   "organ_id": "suspensory_ligaments_of_breast_r",
+   "node": "VH_F_suspensory_ligaments_R",
+   "term": "Suspensory ligaments of breast",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "FMA:73118",
+   "source_label": "Suspensory ligament of right breast",
+   "polygons": 51682,
+   "path": [
+    "Breast"
+   ]
+  }
+ ]
+}

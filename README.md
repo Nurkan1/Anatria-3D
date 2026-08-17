@@ -66,8 +66,8 @@ newer distributions.
 **Windows installs without administrator rights.** On a university laptop where
 you are not an administrator, you can still install it.
 
-**No account, no key and no internet are needed to start.** All 3,681
-structures — 3,478 in the male atlas, 203 in the female trunk — the
+**No account, no key and no internet are needed to start.** All 3,695
+structures — 3,478 in the male atlas, 217 in the female trunk — the
 labelling, cross-sections, exploded views and image export work offline the
 moment you install. Only the AI tutor needs an API key of your own —
 which also means your questions go straight to your provider, never through a
@@ -453,7 +453,7 @@ The Body switch above the systems list changes over between them.
 |---|---|---|
 | Source | Z-Anatomy → BodyParts3D | NIH Human Reference Atlas → Visible Human Female |
 | Coverage | Whole body, every system | Spine, abdomen and pelvis |
-| Structures | 3,478 | 203 |
+| Structures | 3,478 | 217 |
 | Licence | CC BY-SA 4.0 | CC BY 4.0 |
 
 **The female atlas is not a female body, and the application says so where you
@@ -461,8 +461,10 @@ choose it.** It holds the vertebral column from C1 to the coccyx, the pelvic
 girdle, the uterus with its cervix and walls, both uterine tubes down to the
 fimbriae, the ovaries, the vagina, sixteen ligaments and peritoneal folds, the
 bladder and ureters, both kidneys, the liver with its impressions and ligaments,
-the biliary tract, the pancreas, the spleen, the small and large intestine, and
-seventeen pelvic vessels.
+the biliary tract, the pancreas, the spleen, the small and large intestine,
+seventeen pelvic vessels, and the breast — which exists nowhere on the male
+atlas, and is filed under the integumentary system where Terminologia Anatomica
+files it.
 
 **What it lacks, it lacks in the source:** no skull, no ribcage, no limbs, and
 no skeletal muscle or peripheral nerve at all. The HRA models organs, not a
@@ -609,19 +611,27 @@ unusable as they stand for teaching:
 
 So every structure was matched by hand to a TA2 term in
 [`hra-selection.mjs`](tools/asset-pipeline/hra-selection.mjs), and the build
-**fails** if any term is absent from `TA2.csv`. Five structures in the source
-are deliberately not shipped — the uterine horn, the lower uterine segment, a
-cervicovaginal junction, the duodenal ampulla and a "terminal ileum" — because
-TA2 does not list them, and coining plausible Latin for an anatomy atlas is
-worse than leaving a structure out. The reasons are recorded beside the table,
-and a test asserts every shipped term exists.
+**fails** if any term is absent from `TA2.csv`. Twelve structures in the source are
+deliberately not shipped — the uterine horn, the lower uterine segment, a
+cervicovaginal junction, the duodenal ampulla, a "terminal ileum", the breast's
+interlobar fat and five placental structures — because TA2 does not list them,
+and coining plausible Latin for an anatomy atlas is worse than leaving a
+structure out. The reasons are recorded beside the table, and a test asserts
+every shipped term exists.
+
+Three more are left out by judgement rather than by the standard, and they are
+recorded in a separate list so a decision cannot borrow the standard's
+authority: TA2 names the umbilical artery and vein, but nothing else of the
+placenta — not the basal or chorionic plate, not the amnion, not the cord, all
+of which are Terminologia Embryologica terms. Three vessels floating where a
+placenta should be would teach nothing.
 
 One laterality was read off the geometry rather than guessed: the source ships a
 single unlateralised triangular ligament of the liver where TA2 has only a right
 and a left. It sits entirely at positive x, and the paired structures in this
 body put the left side at positive x, so it is the left one.
 
-Provenance for all 203 — original node name, UBERON or FMA id, source label,
+Provenance for all 217 — original node name, UBERON or FMA id, source label,
 polygon count — is committed in `tools/asset-pipeline/vendor/reports-female/`.
 The extraction stays inside glTF rather than round-tripping through Blender, so
 the node names are byte-identical to the published digital object and any

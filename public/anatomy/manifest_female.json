@@ -23,6 +23,11 @@
       "load_on_start": false
     },
     {
+      "system": "integumentary",
+      "organ_count": 14,
+      "load_on_start": false
+    },
+    {
       "system": "lymphatic",
       "organ_count": 5,
       "load_on_start": false
@@ -97,6 +102,30 @@
       "node": "VH_F_bare_area_of_liver",
       "path": [
         "Liver"
+      ]
+    },
+    {
+      "organ_id": "areola_l",
+      "ta2_latin": "Areola mammae",
+      "name_en": "Areola (left)",
+      "system": "integumentary",
+      "mesh_file": "integumentary_female.glb",
+      "node": "VH_F_areola_L",
+      "path": [
+        "Breast",
+        "Nipple and areola"
+      ]
+    },
+    {
+      "organ_id": "areola_r",
+      "ta2_latin": "Areola mammae",
+      "name_en": "Areola (right)",
+      "system": "integumentary",
+      "mesh_file": "integumentary_female.glb",
+      "node": "VH_F_areola_R",
+      "path": [
+        "Breast",
+        "Nipple and areola"
       ]
     },
     {
@@ -413,6 +442,28 @@
       "node": "VH_F_left_hepatic_duct",
       "path": [
         "Biliary tract"
+      ]
+    },
+    {
+      "organ_id": "lactiferous_ducts_l",
+      "ta2_latin": "Ductus lactiferi",
+      "name_en": "Lactiferous ducts (left)",
+      "system": "integumentary",
+      "mesh_file": "integumentary_female.glb",
+      "node": "VH_F_main_lactiferous_ducts_L",
+      "path": [
+        "Breast"
+      ]
+    },
+    {
+      "organ_id": "lactiferous_ducts_r",
+      "ta2_latin": "Ductus lactiferi",
+      "name_en": "Lactiferous ducts (right)",
+      "system": "integumentary",
+      "mesh_file": "integumentary_female.glb",
+      "node": "VH_F_main_lactiferous_ducts_R",
+      "path": [
+        "Breast"
       ]
     },
     {
@@ -778,6 +829,28 @@
       ]
     },
     {
+      "organ_id": "suspensory_ligaments_of_breast_l",
+      "ta2_latin": "Ligamenta suspensoria mammaria",
+      "name_en": "Suspensory ligaments of breast (left)",
+      "system": "integumentary",
+      "mesh_file": "integumentary_female.glb",
+      "node": "VH_F_suspensory_ligaments_L",
+      "path": [
+        "Breast"
+      ]
+    },
+    {
+      "organ_id": "suspensory_ligaments_of_breast_r",
+      "ta2_latin": "Ligamenta suspensoria mammaria",
+      "name_en": "Suspensory ligaments of breast (right)",
+      "system": "integumentary",
+      "mesh_file": "integumentary_female.glb",
+      "node": "VH_F_suspensory_ligaments_R",
+      "path": [
+        "Breast"
+      ]
+    },
+    {
       "organ_id": "cardinal_ligament_l",
       "ta2_latin": "Ligamentum cardinale",
       "name_en": "Cardinal ligament (left)",
@@ -968,6 +1041,28 @@
       "path": [
         "Liver",
         "Ligaments"
+      ]
+    },
+    {
+      "organ_id": "lobes_of_mammary_gland_l",
+      "ta2_latin": "Lobi glandulae mammariae",
+      "name_en": "Lobes of mammary gland (left)",
+      "system": "integumentary",
+      "mesh_file": "integumentary_female.glb",
+      "node": "VH_F_mammary_lobes_L",
+      "path": [
+        "Breast"
+      ]
+    },
+    {
+      "organ_id": "lobes_of_mammary_gland_r",
+      "ta2_latin": "Lobi glandulae mammariae",
+      "name_en": "Lobes of mammary gland (right)",
+      "system": "integumentary",
+      "mesh_file": "integumentary_female.glb",
+      "node": "VH_F_mammary_lobes_R",
+      "path": [
+        "Breast"
       ]
     },
     {
@@ -1322,6 +1417,30 @@
       "node": "VH_F_ileocecal_valve",
       "path": [
         "Large intestine"
+      ]
+    },
+    {
+      "organ_id": "nipple_l",
+      "ta2_latin": "Papilla mammaria",
+      "name_en": "Nipple (left)",
+      "system": "integumentary",
+      "mesh_file": "integumentary_female.glb",
+      "node": "VH_F_nipple_L",
+      "path": [
+        "Breast",
+        "Nipple and areola"
+      ]
+    },
+    {
+      "organ_id": "nipple_r",
+      "ta2_latin": "Papilla mammaria",
+      "name_en": "Nipple (right)",
+      "system": "integumentary",
+      "mesh_file": "integumentary_female.glb",
+      "node": "VH_F_nipple_R",
+      "path": [
+        "Breast",
+        "Nipple and areola"
       ]
     },
     {
@@ -1952,6 +2071,28 @@
       ]
     },
     {
+      "organ_id": "lactiferous_sinuses_l",
+      "ta2_latin": "Sinus lactiferi",
+      "name_en": "Lactiferous sinuses (left)",
+      "system": "integumentary",
+      "mesh_file": "integumentary_female.glb",
+      "node": "VH_F_main_lactiferous_sinuses_L",
+      "path": [
+        "Breast"
+      ]
+    },
+    {
+      "organ_id": "lactiferous_sinuses_r",
+      "ta2_latin": "Sinus lactiferi",
+      "name_en": "Lactiferous sinuses (right)",
+      "system": "integumentary",
+      "mesh_file": "integumentary_female.glb",
+      "node": "VH_F_main_lactiferous_sinuses_R",
+      "path": [
+        "Breast"
+      ]
+    },
+    {
       "organ_id": "sphincter_of_ampulla",
       "ta2_latin": "Sphincter ampullae",
       "name_en": "Sphincter of ampulla",
@@ -1971,6 +2112,30 @@
       "node": "VH_F_trigone_of_urinary_bladder",
       "path": [
         "Urinary bladder"
+      ]
+    },
+    {
+      "organ_id": "areolar_tubercles_l",
+      "ta2_latin": "Tubercula areolae",
+      "name_en": "Areolar tubercles (left)",
+      "system": "integumentary",
+      "mesh_file": "integumentary_female.glb",
+      "node": "VH_F_areolar_tubercles_L",
+      "path": [
+        "Breast",
+        "Nipple and areola"
+      ]
+    },
+    {
+      "organ_id": "areolar_tubercles_r",
+      "ta2_latin": "Tubercula areolae",
+      "name_en": "Areolar tubercles (right)",
+      "system": "integumentary",
+      "mesh_file": "integumentary_female.glb",
+      "node": "VH_F_areolar_tubercles_R",
+      "path": [
+        "Breast",
+        "Nipple and areola"
       ]
     },
     {

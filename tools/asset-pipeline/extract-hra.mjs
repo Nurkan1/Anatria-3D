@@ -40,7 +40,14 @@ import { ALL_EXTENSIONS } from "@gltf-transform/extensions";
 import { cloneDocument, dedup, draco, flatten, prune } from "@gltf-transform/functions";
 import draco3d from "draco3dgltf";
 
-import { KNOWN_SOURCE_ERRATA, NOT_IN_TA2, SOURCE, STRUCTURES, SYSTEM_OF } from "./hra-selection.mjs";
+import {
+  KNOWN_SOURCE_ERRATA,
+  NOT_IN_TA2,
+  OUT_OF_SCOPE,
+  SOURCE,
+  STRUCTURES,
+  SYSTEM_OF,
+} from "./hra-selection.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = join(HERE, "..", "..");
@@ -263,7 +270,13 @@ async function main() {
 
   const dropped = Object.keys(NOT_IN_TA2).length;
   if (dropped > 0) {
-    process.stderr.write(`${dropped} structure(s) in the source deliberately not shipped (see NOT_IN_TA2)\n`);
+    process.stderr.write(`${dropped} structure(s) dropped for want of a TA2 term (see NOT_IN_TA2)\n`);
+  }
+  const parked = Object.keys(OUT_OF_SCOPE).length;
+  if (parked > 0) {
+    process.stderr.write(
+      `${parked} structure(s) TA2 does name, left out by judgement (see OUT_OF_SCOPE)\n`,
+    );
   }
   for (const [node, note] of Object.entries(KNOWN_SOURCE_ERRATA)) {
     process.stderr.write(`errata: ${node} — ${note}\n`);

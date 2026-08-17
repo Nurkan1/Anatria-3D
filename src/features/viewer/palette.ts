@@ -62,7 +62,7 @@ export const SYSTEM_LABELS: Record<AnatomicalSystem, string> = {
   renal: "Urinary",
   endocrine: "Endocrine gland",
   reproductive: "Reproductive",
-  integumentary: "Skin",
+  integumentary: "Skin and breast",
   regional: "Surface & regional",
 };
 
@@ -451,8 +451,8 @@ export function tissueOpacity(organ: Tissue): number {
  */
 const DEPTH_BIAS: Readonly<Record<string, number>> = {
   regional: -2,
-  // Dead today: no structure in the atlas is classified `integumentary`. Listed
-  // because if skin ever arrives it is this exact case, one layer out again.
+  // The breast, on the female atlas. It sits in the superficial fascia, so it
+  // is one layer out from everything beneath it in exactly the way a region is.
   integumentary: -2,
   connective: -1,
   ligament: -1,
