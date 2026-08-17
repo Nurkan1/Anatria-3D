@@ -40,8 +40,8 @@ Female atlas — Creative Commons Attribution 4.0
 
 Files: `anatomy/manifest_female.json`, `anatomy/*_female.glb`
 
-A pelvic and reproductive module of 76 structures — not a whole body, because
-no open dataset provides a female one.
+The trunk — spine, abdominal organs, pelvis and breast, 219 structures. Not a
+whole body, because no open dataset provides a female one.
 
   1. Visible Human Female
      U.S. National Library of Medicine, National Institutes of Health
@@ -52,7 +52,7 @@ no open dataset provides a female one.
      Digital object ref-organ/united-female v1.5
      CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/
 
-  3. Anatria3D adaptations — 76 of 888 structures selected, node hierarchy
+  3. Anatria3D adaptations — 219 of 888 structures selected, node hierarchy
      flattened with transforms baked in, materials and UV sets dropped, lossy
      Draco compression, stable organ identifiers added, and each structure
      matched by hand to a Terminologia Anatomica term.

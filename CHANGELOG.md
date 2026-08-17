@@ -13,12 +13,12 @@ There is **no auto-updater**, by design: the application never reaches the
 network on its own. A new version reaches you only when you download and install
 it, so this file is also the answer to "is it worth reinstalling".
 
-## [Unreleased]
+## [0.2.0] — 2026-08-17
 
 ### Added
 
 **A female atlas.** The atlas now has a second body. A Male/Female switch sits
-above the systems list, and choosing Female loads 203 structures built from the
+above the systems list, and choosing Female loads 219 structures built from the
 NIH Human Reference Atlas: the vertebral column from C1 to the coccyx, the
 pelvic girdle, the uterus with its cervix and walls, both uterine tubes down to
 the fimbriae, the ovaries, the vagina, sixteen ligaments and peritoneal folds,

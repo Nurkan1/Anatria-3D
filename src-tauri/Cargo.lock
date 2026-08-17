@@ -45,7 +45,7 @@ dependencies = [
 
 [[package]]
 name = "anatria3d"
-version = "0.1.7"
+version = "0.2.0"
 dependencies = [
  "base64 0.23.1",
  "keyring",

@@ -33,6 +33,7 @@ keywords:
   - medical education
   - 3D visualisation
   - Terminologia Anatomica
+  - female anatomy
   - local-first software
   - open educational resources
 
@@ -47,8 +48,8 @@ identifiers:
 
 license: Apache-2.0
 repository-code: https://github.com/Nurkan1/Anatria-3D
-version: 0.1.7
-date-released: "2026-08-16"
+version: 0.2.0
+date-released: "2026-08-17"
 
 # The anatomical meshes and nomenclature are not ours and are not covered by
 # the Apache licence. Anyone citing this work should carry their attribution
@@ -64,3 +65,20 @@ references:
     notes: Licensed CC BY-SA 2.1 Japan.
     authors:
       - name: Database Center for Life Science (DBCLS), Japan
+  # The female atlas, and a different licence: CC BY 4.0, with no share-alike.
+  - type: data
+    title: Human Reference Atlas 3D Reference Organ Library
+    notes: >-
+      Reference organ set ref-organ/united-female v1.5. Licensed CC BY 4.0.
+      The female atlas in this software is derived from it.
+    url: https://humanatlas.io/
+    authors:
+      - name: HuBMAP Consortium
+      - name: National Institutes of Health (NIH)
+  - type: data
+    title: The Visible Human Female
+    notes: >-
+      The dataset the Human Reference Atlas female organs are reconstructed
+      from.
+    authors:
+      - name: U.S. National Library of Medicine

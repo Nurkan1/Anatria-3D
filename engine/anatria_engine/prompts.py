@@ -811,7 +811,7 @@ def build_instructions(
         PROFILES[profile],
         _language_rule(language),
         # Immediately before the inventory, because it is what the inventory
-        # means: 76 structures is a complete pelvis or a broken body depending
+        # means: 219 structures is a complete trunk or a broken body depending
         # entirely on which atlas the reader has open.
         _body_rule(gender),
         _scene_inventory(organs, selection),

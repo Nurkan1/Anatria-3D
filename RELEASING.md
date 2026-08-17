@@ -33,13 +33,30 @@ git status --short --branch   # nothing uncommitted, nothing unpushed
 
 ### The scheme: `0.MINOR.PATCH`
 
-Anatria3D is **before 1.0**, and the next release after `0.1.6` is **`0.1.7`** —
+Anatria3D is **before 1.0**, and the release after `0.1.6` was **`0.1.7`** —
 not `1.7.0`. The two are easy to transpose and they say opposite things: `0.1.x`
 says the interfaces may still move, and `1.x` is a promise of stability to
 anyone building on it. Publishing `1.0.0` is a deliberate act for the day that
 promise is meant, not a typo to arrive at.
 
-Tags are `v` plus the number: `v0.1.7`.
+Tags are `v` plus the number: `v0.2.0`.
+
+### PATCH or MINOR
+
+Most releases move the **patch**: fixes, and features that fit inside what the
+application already is.
+
+The **minor** moves when a release changes what the reader is holding — enough
+that someone who knows the previous version would be wrong about this one. It is
+a judgement, not a rule, and the test that has worked is: *would the one-line
+summary have to mention it?*
+
+`0.2.0` is the worked example. It added a second atlas. Every sentence
+describing Anatria3D as "a 3D anatomy atlas of a male body" became false, the
+interface grew a control that had never existed, and the assistant gained a
+tool. `0.1.8` would have filed that under the same heading as a scrolling fix.
+
+Patch resets to zero on a minor: after `0.2.0` comes `0.2.1`.
 
 ### The five files that carry it
 
@@ -68,17 +85,17 @@ release date, not today's date if they differ.
 
 **This is checked, not remembered.** `tools/check-version.mjs` reads all five and
 fails if they disagree; it runs in Gates on every push, and in the release
-workflow it is additionally handed the tag, so a `v0.1.7` pushed against files
-still saying `0.1.6` fails before anything is built.
+workflow it is additionally handed the tag, so a `v0.2.0` pushed against files
+still saying `0.1.7` fails before anything is built.
 
 ```bash
 pnpm check:version          # do the five agree?
-pnpm check:version 0.1.7    # do they agree, and on this number?
+pnpm check:version 0.2.0    # do they agree, and on this number?
 ```
 
 Use the second form on the bump commit. "Are they equal" and "are they the
 number I meant" are different questions, and only the second catches `1.7.0`
-typed where `0.1.7` was intended.
+typed where `0.2.0` was intended.
 
 Read together rather than one at a time:
 
