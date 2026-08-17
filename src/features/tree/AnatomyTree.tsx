@@ -567,8 +567,21 @@ export function AnatomyTree() {
       </section>
 
       <ExplodeControl />
+      </div>
 
-      <section className="flex flex-wrap gap-2 border-t border-slate-800 pt-3">
+      {/*
+        Outside the scrolling column, and pinned, because Systems expands.
+        One open system is hundreds of rows, so every position inside that
+        column — under the systems list as much as at the bottom — is a
+        scroll away the moment somebody opens one. These are the controls
+        reached for most often while actually reading the model, which makes
+        them the ones that must not move.
+
+        No heading, unlike every section above. This strip is on screen
+        permanently, so its height is paid for on every frame, and the
+        buttons already say what they do.
+      */}
+      <section className="flex shrink-0 flex-wrap gap-2 border-t border-slate-800 px-4 py-3">
         {isolatedOrganIds !== null && (
           <button
             type="button"
@@ -636,7 +649,6 @@ export function AnatomyTree() {
           Reset view
         </button>
       </section>
-      </div>
     </div>
   );
 }
