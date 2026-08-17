@@ -24,7 +24,7 @@
     },
     {
       "system": "integumentary",
-      "organ_count": 14,
+      "organ_count": 16,
       "load_on_start": false
     },
     {
@@ -343,6 +343,28 @@
       "node": "VH_F_renal_column_R",
       "path": [
         "Kidney"
+      ]
+    },
+    {
+      "organ_id": "body_of_breast_l",
+      "ta2_latin": "Corpus mammae",
+      "name_en": "Body of breast (left)",
+      "system": "integumentary",
+      "mesh_file": "integumentary_female.glb",
+      "node": "VH_F_fat_L",
+      "path": [
+        "Breast"
+      ]
+    },
+    {
+      "organ_id": "body_of_breast_r",
+      "ta2_latin": "Corpus mammae",
+      "name_en": "Body of breast (right)",
+      "system": "integumentary",
+      "mesh_file": "integumentary_female.glb",
+      "node": "VH_F_fat_R",
+      "path": [
+        "Breast"
       ]
     },
     {

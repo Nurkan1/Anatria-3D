@@ -55,8 +55,6 @@ export const NOT_IN_TA2 = {
   VH_F_cervicovaginal_junction: "Carries no label at all in the source, and TA2 has no matching term.",
   VH_F_duodenal_ampulla: "The duodenal cap, a radiological description of the first part of the duodenum. TA2 names the part, not the appearance.",
   VH_F_ileum_terminal: "Labelled 'distal part of ileum'. Terminal ileum is clinical usage; TA2 divides the small intestine into duodenum, jejunum and ileum only.",
-  VH_F_fat_L: "Interlobar adipose tissue of the breast. TA2 names the corpus mammae and the panniculus adiposus, neither of which is this. A quarter of the breast's geometry, but the lobes carry its shape.",
-  VH_F_fat_R: "As the left. See VH_F_fat_L.",
   VH_F_basal_plate: "Placental. TA2 is adult anatomy; these terms belong to Terminologia Embryologica, which this atlas does not carry.",
   VH_F_chorionic_plate: "Placental — see VH_F_basal_plate.",
   VH_F_amnion: "Placental — see VH_F_basal_plate.",
@@ -397,6 +395,21 @@ export const STRUCTURES = [
     const tag = side === "left" ? "L" : "R";
     const id = (name) => `${name}_${tag.toLowerCase()}`;
     return [
+      // The breast itself — the mass the rest sits inside.
+      //
+      // The source calls this "interlobar adipose tissue of the mammary
+      // gland", which describes the tissue rather than the structure. That is
+      // the same habit that labels each hip bone "compact bone tissue", and it
+      // is resolved the same way: TA2 names the enclosing mass *Corpus
+      // mammae*, and this mesh is it — measured at 12.8 x 18.2 x 10.6 cm, fully
+      // enclosing the lobes at 7.1 x 11.1 x 5.5.
+      //
+      // It was dropped once, on the grounds that it is a quarter of the
+      // breast's triangles and the lobes would carry its shape. Triangles do
+      // not measure volume: the lobes are a finely tessellated branching tree
+      // and the fat is a smooth surface with far fewer, larger faces. Without
+      // this the breast rendered as a duct tree hanging in space.
+      { node: `VH_F_fat_${tag}`, id: id("body_of_breast"), term: "Body of breast", side, path: ["Breast"] },
       { node: `VH_F_mammary_lobes_${tag}`, id: id("lobes_of_mammary_gland"), term: "Lobes of mammary gland", side, path: ["Breast"] },
       { node: `VH_F_main_lactiferous_ducts_${tag}`, id: id("lactiferous_ducts"), term: "Lactiferous ducts", side, path: ["Breast"] },
       { node: `VH_F_main_lactiferous_sinuses_${tag}`, id: id("lactiferous_sinuses"), term: "Lactiferous sinuses", side, path: ["Breast"] },

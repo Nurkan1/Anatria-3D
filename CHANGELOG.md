@@ -26,9 +26,9 @@ the bladder and ureters, both kidneys, the liver with its impressions and
 ligaments, the biliary tract, the pancreas, the spleen, the small and large
 intestine, seventeen pelvic vessels — and the breast.
 
-The breast is worth calling out because **the male atlas has none at all**:
-lobes of the mammary gland, lactiferous ducts and sinuses, suspensory
-ligaments, nipple, areola and areolar tubercles, on both sides. It is filed
+The breast is worth calling out because **the male atlas has none at all**: the
+body of the breast, lobes of the mammary gland, lactiferous ducts and sinuses,
+suspensory ligaments, nipple, areola and areolar tubercles, on both sides. It is filed
 under the integumentary system, where Terminologia Anatomica files it, and it
 is the first structure in either atlas to use that system.
 

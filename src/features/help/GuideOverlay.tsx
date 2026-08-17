@@ -53,8 +53,8 @@ const SECTIONS: Section[] = [
           spine from C1 to the coccyx, the pelvic girdle, the reproductive organs with
           their ligaments, the bladder and ureters, the kidneys, the liver and biliary
           tract, the pancreas, the spleen, the intestines — and the breast, which
-          exists nowhere on the male atlas: lobes, lactiferous ducts and sinuses,
-          suspensory ligaments, nipple and areola.
+          exists nowhere on the male atlas: the body of the breast, its lobes,
+          lactiferous ducts and sinuses, suspensory ligaments, nipple and areola.
         </Callout>
         <Callout>
           <strong>What the female atlas does not have, it never had.</strong> No skull,

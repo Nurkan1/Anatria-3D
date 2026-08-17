@@ -11,7 +11,7 @@
  },
  "output": "integumentary_female.glb",
  "draco": true,
- "object_count": 14,
+ "object_count": 16,
  "objects": [
   {
    "name": "Areola (left)",
@@ -71,6 +71,34 @@
    "path": [
     "Breast",
     "Nipple and areola"
+   ]
+  },
+  {
+   "name": "Body of breast (left)",
+   "organ_id": "body_of_breast_l",
+   "node": "VH_F_fat_L",
+   "term": "Body of breast",
+   "qualifier": null,
+   "side": "left",
+   "ontology_id": "FMA:73166",
+   "source_label": "Interlobar adipose tissue of left mammary gland",
+   "polygons": 66420,
+   "path": [
+    "Breast"
+   ]
+  },
+  {
+   "name": "Body of breast (right)",
+   "organ_id": "body_of_breast_r",
+   "node": "VH_F_fat_R",
+   "term": "Body of breast",
+   "qualifier": null,
+   "side": "right",
+   "ontology_id": "FMA:73165",
+   "source_label": "Interlobar adipose tissue of right mammary gland",
+   "polygons": 373649,
+   "path": [
+    "Breast"
    ]
   },
   {

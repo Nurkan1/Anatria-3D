@@ -405,8 +405,9 @@ def _body_rule(gender: GenderModel) -> str:
                 "female reproductive organs with their ligaments and peritoneal "
                 "folds, the bladder and ureters, the kidneys, the liver and biliary "
                 "tract, the pancreas, the spleen, the small and large intestine, the "
-                "pelvic vessels, and the breast — lobes, lactiferous ducts and "
-                "sinuses, suspensory ligaments, nipple and areola. The breast "
+                "pelvic vessels, and the breast — its body, the lobes, lactiferous "
+                "ducts and sinuses, suspensory ligaments, nipple and areola. "
+                "The breast "
                 "exists on no other body in this application.",
                 "",
                 "What is **not** loaded, and cannot be shown: the skull and the "
