@@ -1128,3 +1128,40 @@ describe("switching atlases", () => {
     expect(useSceneStore.getState().selectedOrganIds).toEqual(["left_ventricle"]);
   });
 });
+
+describe("naming a structure TA2 names only as a class", () => {
+  it("tells twelve thoracic vertebrae apart", () => {
+    // The bug this pins: TA2 has one "Vertebra thoracica" for all twelve, and
+    // the label shows the Latin. An exported plate of the spine came out with
+    // twelve identical names on twelve leader lines — a picture that names
+    // nothing, which is the whole point of the feature.
+    const t7 = organ({
+      organ_id: "thoracic_vertebra_t7",
+      ta2_latin: "Vertebra thoracica",
+      name_en: "Thoracic vertebra, T7",
+      qualifier: "T7",
+      system: "skeletal",
+    });
+    const t8 = organ({ ...t7, organ_id: "thoracic_vertebra_t8", qualifier: "T8" });
+
+    expect(organLabel(t7)).toBe("Vertebra thoracica · T7");
+    expect(organLabel(t7)).not.toBe(organLabel(t8));
+  });
+
+  it("keeps side ahead of the qualifier", () => {
+    // Both halves of a hip bone are "Os ilium", and each is modelled twice —
+    // compact and spongy. Four meshes, one term.
+    const ilium = organ({
+      organ_id: "ilium_compact_bone_l",
+      ta2_latin: "Os ilium",
+      name_en: "Ilium, compact bone (left)",
+      qualifier: "compact bone",
+      system: "skeletal",
+    });
+    expect(organLabel(ilium)).toBe("Os ilium · left · compact bone");
+  });
+
+  it("leaves a structure with no qualifier exactly as it was", () => {
+    expect(organLabel(organ())).toBe("Ventriculus sinister");
+  });
+});

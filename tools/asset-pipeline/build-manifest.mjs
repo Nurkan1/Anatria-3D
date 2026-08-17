@@ -34,6 +34,9 @@ const ATTRIBUTION =
   "Meshes adapted from Z-Anatomy (CC BY-SA 4.0), itself derived from " +
   "BodyParts3D / DBCLS (CC BY-SA 2.1 JP). See NOTICE.";
 
+/** The same credit in one line, for the footer of an exported image. */
+const CREDIT = "Z-Anatomy / BodyParts3D (DBCLS)";
+
 /** Systems fetched at startup. Everything else loads when switched on. */
 const LOAD_ON_START = new Set(["skeletal"]);
 
@@ -265,7 +268,15 @@ function main() {
   writeFileSync(
     OUT,
     `${JSON.stringify(
-      { version: 1, gender_model: "male", attribution: ATTRIBUTION, license: "CC-BY-SA-4.0", systems, organs },
+      {
+        version: 1,
+        gender_model: "male",
+        attribution: ATTRIBUTION,
+        credit: CREDIT,
+        license: "CC-BY-SA-4.0",
+        systems,
+        organs,
+      },
       null,
       2,
     )}\n`,

@@ -1,4 +1,5 @@
 import { saveViewImage } from "@/lib/studyDb";
+import type { AnatomyManifest } from "@/lib/schemas";
 import { useSceneStore } from "@/stores/sceneStore";
 
 import { backgroundTheme, type BackgroundTheme } from "./background";
@@ -20,16 +21,49 @@ import { getViewerHandle, projectToScreen } from "./viewerBridge";
  *
  * # Why the footer is not optional
  *
- * An image that leaves the app carries anatomy licensed CC BY-SA 4.0, and the
- * attribution has to travel with it — that is the licence, not a courtesy. The
+ * An image that leaves the app carries licensed anatomy, and the attribution
+ * has to travel with it — that is the licence, not a courtesy. The
  * educational-use line rides along for the same reason it is on every screen:
  * a picture of a diseased heart with no context is exactly what should never
  * circulate without one.
+ *
+ * # Why the credit is read from the manifest
+ *
+ * Because there are two atlases under two different licences, and this line was
+ * a constant. Every image exported from the female atlas went out crediting
+ * Z-Anatomy and BodyParts3D — whose work is not in it — under CC BY-SA 4.0,
+ * where the NIH Human Reference Atlas material it actually contains is CC BY
+ * 4.0. A wrong attribution in a redistributed file is a licence breach in both
+ * directions at once: it denies credit to the authors who are owed it, and
+ * asserts a share-alike condition over material whose authors did not impose
+ * one.
+ *
+ * The manifest already carries the right answer for whichever atlas is loaded,
+ * so the footer asks it rather than keeping a second copy that can drift.
  */
 
 const FOOTER_HEIGHT = 46;
-const ATTRIBUTION = "Anatomy: Z-Anatomy / BodyParts3D (DBCLS) — CC BY-SA 4.0";
 const DISCLAIMER = "Anatria3D — educational use only. Not a medical device.";
+
+/** `CC-BY-SA-4.0` is an SPDX id; `CC BY-SA 4.0` is what a reader knows. */
+function readableLicence(spdx: string): string {
+  return spdx.replace(/^CC-/, "CC ").replace(/-(\d)/, " $1").replace(/-/g, "-");
+}
+
+/**
+ * The credit line for the atlas currently loaded.
+ *
+ * Falls back to the manifest's full attribution sentence when the short credit
+ * is absent. Long in a footer, but a long correct attribution beats a tidy
+ * wrong one, and there is no third option that is honest.
+ */
+export function attributionLine(
+  manifest: Pick<AnatomyManifest, "credit" | "attribution" | "license"> | null,
+): string {
+  if (!manifest) return "";
+  if (!manifest.credit) return `Anatomy: ${manifest.attribution}`;
+  return `Anatomy: ${manifest.credit} — ${readableLicence(manifest.license)}`;
+}
 
 export async function exportViewImage(): Promise<string | null> {
   const handle = getViewerHandle();
@@ -63,7 +97,7 @@ export async function exportViewImage(): Promise<string | null> {
   ctx.drawImage(source, 0, 0);
 
   drawLabels(ctx, width, height, centres, camera, theme);
-  drawFooter(ctx, width, height, theme);
+  drawFooter(ctx, width, height, theme, attributionLine(useSceneStore.getState().manifest));
 
   const blob = await new Promise<Blob | null>((resolve) =>
     canvas.toBlob(resolve, "image/png"),
@@ -148,6 +182,7 @@ function drawFooter(
   width: number,
   height: number,
   theme: BackgroundTheme,
+  attribution: string,
 ): void {
   const scale = Math.max(width / 1000, 1);
   ctx.fillStyle = theme.canvas;
@@ -165,7 +200,7 @@ function drawFooter(
   ctx.fillStyle = theme.footerInk;
   ctx.fillText(DISCLAIMER, 12 * scale, height + FOOTER_HEIGHT * 0.36);
   ctx.fillStyle = theme.footerSubtle;
-  ctx.fillText(ATTRIBUTION, 12 * scale, height + FOOTER_HEIGHT * 0.72);
+  ctx.fillText(attribution, 12 * scale, height + FOOTER_HEIGHT * 0.72);
 }
 
 /**
@@ -188,4 +223,4 @@ function toBase64(bytes: Uint8Array): string {
 export const encodeImageBytes = toBase64;
 
 /** Text drawn into every exported image, asserted by its test. */
-export const IMAGE_FOOTER = { ATTRIBUTION, DISCLAIMER };
+export const IMAGE_FOOTER = { DISCLAIMER };

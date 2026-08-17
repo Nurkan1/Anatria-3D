@@ -54,7 +54,18 @@ would be worse than leaving them out.
 
 The two atlases stay in separate files under their own licences — the male one
 share-alike through Z-Anatomy, the female attribution-only through the HRA —
-and nothing merges them.
+and nothing merges them. **An exported image now credits whichever atlas it came
+from**, read from that atlas's own manifest, so a plate of the female pelvis
+carries the NIH Human Reference Atlas and CC BY 4.0 rather than a line about
+Z-Anatomy.
+
+**Structures now say which one they are.** Terminologia Anatomica names classes,
+not instances — one *Vertebra thoracica* for all twelve, one *Os ilium* for
+compact and spongy bone alike — so a labelled spine used to export with twelve
+identical names on twelve leader lines. The level or the part is now appended
+after the term: *Vertebra thoracica · T7*, *Os ilium · left · compact bone*. The
+Latin itself is untouched, because "Vertebra thoracica T7" is not a term TA2
+lists.
 
 ## [0.1.7] — 2026-08-16
 

@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 
 vi.mock("@tauri-apps/api/core", () => ({ invoke: vi.fn() }));
 
-const { encodeImageBytes, IMAGE_FOOTER } = await import("./exportView");
+const { attributionLine, encodeImageBytes, IMAGE_FOOTER } = await import("./exportView");
 const { labelTargets } = await import("./LabelOverlay");
 
 // `name_en` is what carries the side, so a label fixture without it cannot
@@ -91,12 +91,43 @@ describe("encodeImageBytes", () => {
 });
 
 describe("the exported image's footer", () => {
-  it("carries the attribution the asset licence requires", () => {
-    // The anatomy is CC BY-SA 4.0. An image that leaves the app takes the
-    // obligation with it — that is the licence, not a courtesy.
-    expect(IMAGE_FOOTER.ATTRIBUTION).toMatch(/Z-Anatomy/);
-    expect(IMAGE_FOOTER.ATTRIBUTION).toMatch(/CC BY-SA 4\.0/);
-    expect(IMAGE_FOOTER.ATTRIBUTION).toMatch(/BodyParts3D/);
+  const male = {
+    credit: "Z-Anatomy / BodyParts3D (DBCLS)",
+    attribution: "Meshes adapted from Z-Anatomy…",
+    license: "CC-BY-SA-4.0",
+  };
+  const female = {
+    credit: "NIH Human Reference Atlas / Visible Human Female (NLM)",
+    attribution: "Meshes from the Human Reference Atlas…",
+    license: "CC-BY-4.0",
+  };
+
+  it("credits the male atlas and its share-alike licence", () => {
+    // The obligation travels with an image that leaves the app — that is the
+    // licence, not a courtesy.
+    const line = attributionLine(male);
+    expect(line).toMatch(/Z-Anatomy/);
+    expect(line).toMatch(/BodyParts3D/);
+    expect(line).toMatch(/CC BY-SA 4\.0/);
+  });
+
+  it("credits the female atlas to the people who actually made it", () => {
+    // This line used to be a constant. Every plate exported from the female
+    // atlas went out crediting Z-Anatomy — whose work is not in it — under a
+    // share-alike licence the HRA's authors never imposed. Wrong in both
+    // directions at once.
+    const line = attributionLine(female);
+    expect(line).toMatch(/Human Reference Atlas/);
+    expect(line).toMatch(/CC BY 4\.0/);
+    expect(line).not.toMatch(/Z-Anatomy/);
+    expect(line).not.toMatch(/BY-SA/);
+  });
+
+  it("falls back to the full sentence rather than guessing", () => {
+    // Long under a picture, and correct. There is no third option that is
+    // honest.
+    const line = attributionLine({ attribution: "Meshes from somewhere", license: "CC-BY-4.0" });
+    expect(line).toMatch(/Meshes from somewhere/);
   });
 
   it("carries the educational-use line", () => {

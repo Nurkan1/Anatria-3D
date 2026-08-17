@@ -46,6 +46,9 @@ const ATTRIBUTION =
   "HuBMAP Consortium / NIH (CC BY 4.0), derived from the Visible Human Female " +
   "dataset of the U.S. National Library of Medicine. See NOTICE.";
 
+/** The same credit in one line, for the footer of an exported image. */
+const CREDIT = "NIH Human Reference Atlas / Visible Human Female (NLM)";
+
 /**
  * Opened first, so the viewport is never empty.
  *
@@ -108,6 +111,9 @@ function main() {
         // is drawn in the name the reader reads.
         ta2_latin: term.la || term.en,
         name_en: object.name,
+        // Carried through so the viewer can tell twelve thoracic vertebrae
+        // apart. TA2 names the class; this names which one.
+        ...(object.qualifier ? { qualifier: object.qualifier } : {}),
         system: report.system,
         mesh_file: report.output,
         node: object.node,
@@ -145,6 +151,7 @@ function main() {
         version: 1,
         gender_model: "female",
         attribution: ATTRIBUTION,
+        credit: CREDIT,
         license: "CC-BY-4.0",
         source: SOURCE,
         systems,

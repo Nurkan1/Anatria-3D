@@ -534,6 +534,20 @@ export const ManifestOrganSchema = OrganMetaSchema.extend({
   mesh_file: z.string().min(1),
   node: z.string().min(1),
   /**
+   * What tells this structure apart from others sharing its TA2 term.
+   *
+   * Terminologia Anatomica names classes, not instances: there is one
+   * "Vertebra thoracica" for all twelve, one "Os ilium" for compact and spongy
+   * bone alike. The label under the cursor and the leader lines on an exported
+   * plate both show the Latin, so without this a spine exports as twelve
+   * identical names — a picture that names nothing.
+   *
+   * It is not part of the term and never goes into `ta2_latin`. "Vertebra
+   * thoracica T7" is not a term TA2 lists, and writing one there would put an
+   * invented Latin name in the nomenclature.
+   */
+  qualifier: z.string().optional(),
+  /**
    * Anatomical ancestry, outermost first — `["Heart", "Left ventricle"]`.
    *
    * Taken from Z-Anatomy's own collection nesting, which *is* the anatomical
@@ -569,6 +583,15 @@ export const AnatomyManifestSchema = z.object({
    * than living only in a NOTICE file somebody has to go and find.
    */
   attribution: z.string(),
+  /**
+   * The same credit in one line, for the footer of an exported image.
+   *
+   * Separate from `attribution` because that is a sentence and this has to fit
+   * under a picture. Optional so an older manifest still parses — the export
+   * falls back to the full sentence, which is long and correct rather than
+   * short and wrong.
+   */
+  credit: z.string().optional(),
   license: z.string(),
   /**
    * Where the meshes came from, when the atlas is built from a published

@@ -2,6 +2,7 @@
   "version": 1,
   "gender_model": "male",
   "attribution": "Meshes adapted from Z-Anatomy (CC BY-SA 4.0), itself derived from BodyParts3D / DBCLS (CC BY-SA 2.1 JP). See NOTICE.",
+  "credit": "Z-Anatomy / BodyParts3D (DBCLS)",
   "license": "CC-BY-SA-4.0",
   "systems": [
     {

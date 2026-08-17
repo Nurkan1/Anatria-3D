@@ -1031,8 +1031,13 @@ export function organSide(organ: Pick<ManifestOrgan, "name_en">): "left" | "righ
  * Latin in an anatomy atlas would be a worse fault than the one being fixed.
  */
 export function organLabel(organ: ManifestOrgan): string {
-  const side = organSide(organ);
-  return side ? `${organ.ta2_latin} · ${side}` : organ.ta2_latin;
+  // Term, then side, then whatever tells it from its siblings. The qualifier
+  // is last because it is the narrowest distinction — but it is not optional
+  // detail: without it a labelled spine reads "Vertebra thoracica" twelve
+  // times, and an exported plate names nothing at all.
+  return [organ.ta2_latin, organSide(organ), organ.qualifier]
+    .filter(Boolean)
+    .join(" · ");
 }
 
 /** Clinical English, shown as a secondary line under the Latin. */
