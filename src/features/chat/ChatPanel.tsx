@@ -37,6 +37,8 @@ import { useStudyStore } from "@/stores/studyStore";
 import { useUsageStore } from "@/stores/usageStore";
 
 import { GrowingTextarea } from "@/components/GrowingTextarea";
+import { shouldShowAimHint, useAimHint } from "./aimHint";
+import { AimHint, AskingGuide } from "./AskingGuide";
 import { CaseBar } from "./CaseBar";
 import { Markdown } from "./Markdown";
 import { collectOrganRefs, stripOrganRefs } from "./organRefs";
@@ -543,8 +545,10 @@ function ReviewIntro({ onAsk, disabled }: { onAsk: () => void; disabled: boolean
 export function ChatPanel() {
   const organs = useSceneStore((s) => s.organs);
   const selectedOrganIds = useSceneStore((s) => s.selectedOrganIds);
+  const isolatedOrganIds = useSceneStore((s) => s.isolatedOrganIds);
   const hiddenSystems = useSceneStore((s) => s.hiddenSystems);
   const genderModel = useSceneStore((s) => s.genderModel);
+  const { learned: aimHintLearned, retire: retireAimHint } = useAimHint();
 
   const messages = useChatStore((s) => s.messages);
   const pendingRequestId = useChatStore((s) => s.pendingRequestId);
@@ -867,6 +871,11 @@ export function ChatPanel() {
         system: organ.system,
       }));
 
+    // Asking with something selected is the behaviour the hint exists to ask
+    // for, so doing it once retires the hint. Nobody who already works this way
+    // is ever told to.
+    if (selection.length > 0) retireAimHint();
+
     setDraft("");
     setTransportError(null);
     startTurn(requestId, prompt);
@@ -1055,6 +1064,13 @@ export function ChatPanel() {
 
       <CostNotice messages={messages} mode={mode} />
 
+      {shouldShowAimHint({
+        drafting: draft.trim().length > 0,
+        hasAim: selectedOrganIds.length > 0 || isolatedOrganIds !== null,
+        mode,
+        learned: aimHintLearned,
+      }) && <AimHint onDismiss={retireAimHint} />}
+
       <div className="border-t border-slate-800 p-3">
         <div className="relative">
           <GrowingTextarea
@@ -1100,9 +1116,12 @@ export function ChatPanel() {
             </button>
           )}
         </div>
-        <p className="mt-1.5 text-[10px] text-slate-600">
-          Educational use only — not for diagnosis or treatment.
-        </p>
+        <div className="mt-1.5 flex items-start gap-2">
+          <p className="flex-1 text-[10px] text-slate-600">
+            Educational use only — not for diagnosis or treatment.
+          </p>
+          <AskingGuide />
+        </div>
       </div>
     </div>
   );

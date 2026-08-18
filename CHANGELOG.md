@@ -96,6 +96,21 @@ is the more useful for it. TA2 stops at L5 — it does not name a sixth, because
 it does not expect one — so that vertebra alone reads *Vertebra lumbalis · L6*
 under *Vertebra lumborum V*. The variant announces itself in the label.
 
+**The assistant answers better when you point first, and now it says so.** Select
+a structure before you ask and the assistant is told exactly what you mean and
+treats it as the subject; select several and it is told to compare them. With
+nothing selected it is handed a summary of every structure loaded and has to
+search the atlas before it can start — a vaguer answer, and a larger bill,
+because every search is another pass through the whole conversation.
+
+A **How to ask** button sits under the composer with the four things worth
+knowing. And if you start typing a question with nothing selected, one line says
+so. It appears while you type rather than sitting there as a banner, and it
+retires itself the first time you ask with something selected — which is the
+behaviour it was asking for, so nobody who already works this way is ever told
+to. It stays out of case drills entirely: there the subject is the patient, and
+what you are typing is an answer.
+
 **Printed pages now say when a model wrote part of them.** A PDF containing
 assistant answers, or a case the assistant graded, carries a notice at the foot
 of every page — beneath the medical one, which still reads first.
