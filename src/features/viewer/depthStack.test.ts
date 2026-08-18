@@ -4,6 +4,8 @@ import {
   consumeClickReport,
   consumeDepthStackReport,
   MAX_STACK,
+  illuminationGlow,
+  LIT_DIMMEST,
   probeGlow,
   PROBE_REACH,
   reportClick,
@@ -158,5 +160,41 @@ describe("the click flag", () => {
 
     expect(consumeClickReport()).toBe(false);
     expect(consumeDepthStackReport()).toBe(true);
+  });
+});
+
+describe("illuminationGlow", () => {
+  it("lights everything the assistant named, however many that is", () => {
+    // The bug this replaced. The assistant may light 24 structures, and this
+    // borrowed `probeGlow`, whose falloff is calibrated for a six-deep cursor
+    // column and returns 0 past it — so from the seventh onwards nothing lit,
+    // while the answer still carried a numbered pin pointing at it.
+    const count = 24;
+    for (let index = 0; index < count; index += 1) {
+      expect(illuminationGlow(index, count), `named ${index} of ${count}`).toBeGreaterThan(0);
+    }
+  });
+
+  it("is brightest on the first named and dimmest on the last", () => {
+    expect(illuminationGlow(0, 5)).toBe(1);
+    expect(illuminationGlow(4, 5)).toBeCloseTo(LIT_DIMMEST);
+  });
+
+  it("never dims past the floor, so nothing lit reads as unlit", () => {
+    for (const count of [2, 6, 12, 24]) {
+      for (let index = 0; index < count; index += 1) {
+        expect(illuminationGlow(index, count)).toBeGreaterThanOrEqual(LIT_DIMMEST);
+      }
+    }
+  });
+
+  it("gives a lone structure the full light rather than the floor", () => {
+    expect(illuminationGlow(0, 1)).toBe(1);
+  });
+
+  it("refuses an index that cannot be one", () => {
+    expect(illuminationGlow(-1, 5)).toBe(0);
+    expect(illuminationGlow(5, 5)).toBe(0);
+    expect(illuminationGlow(Number.NaN, 5)).toBe(0);
   });
 });

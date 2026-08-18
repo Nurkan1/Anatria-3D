@@ -51,6 +51,42 @@ export function probeGlow(depth: number): number {
   return 1 - depth / PROBE_REACH;
 }
 
+/**
+ * The dimmest the assistant's light ever falls, on the last structure it named.
+ *
+ * Not zero, and that is the whole point of the constant existing.
+ */
+export const LIT_DIMMEST = 0.55;
+
+/**
+ * How brightly the assistant's light falls on the structure it named `index`th.
+ *
+ * # Why this is not `probeGlow`
+ *
+ * It used to be, and the two are different measurements wearing the same shape.
+ * `probeGlow` grades a **depth** — how far into the body the cursor's ray has
+ * travelled — and returns 0 past `PROBE_REACH`, which is correct there: a
+ * column six layers deep is as far as the eye follows a gradient.
+ *
+ * An illumination index is not a depth. It is the order the assistant named
+ * things in, the engine allows 24 of them, and borrowing the depth falloff meant
+ * **the seventh structure named and everything after it was not lit at all** —
+ * while the answer still carried a numbered pin pointing at it. Within the six
+ * that did light, the last arrived at a sixth of the brightness of the first,
+ * which on a deep structure behind a ghosted cerebrum is indistinguishable from
+ * unlit.
+ *
+ * The gradient is kept, because reading order is worth something and the first
+ * structure named is usually the subject of the sentence. It now runs from full
+ * brightness to `LIT_DIMMEST` across however many were named, so the dimmest is
+ * still unmistakably lit and nothing the assistant points at is invisible.
+ */
+export function illuminationGlow(index: number, count: number): number {
+  if (!Number.isFinite(index) || index < 0 || index >= count) return 0;
+  if (count <= 1) return 1;
+  return 1 - (index / (count - 1)) * (1 - LIT_DIMMEST);
+}
+
 /** The shape this needs from a three.js intersection, and no more. */
 interface Crossed {
   object: { userData?: Record<string, unknown> };

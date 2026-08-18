@@ -191,10 +191,13 @@ interface OrganMeshProps {
    */
   probeDepth: number | undefined;
   /**
-   * Where this structure sits in what the assistant has lit — 0 is the first it
-   * named. `undefined` means the assistant is not pointing at it.
+   * How brightly the assistant's light falls on this one, 0 to 1.
+   *
+   * Graded by the order it was named in — see `illuminationGlow`, which the
+   * scene applies — and never 0 for something the assistant named.
+   * `undefined` means the assistant is not pointing at it.
    */
-  litDepth: number | undefined;
+  litGlow: number | undefined;
   /**
    * Drain this structure's colour: the body is scanned and this one is not
    * what is being looked at. Resolved in the parent so the rule lives in one
@@ -250,7 +253,7 @@ export const OrganMesh = memo(function OrganMesh({
   coverageTouches,
   coverageBusiest,
   probeDepth,
-  litDepth,
+  litGlow: litGlowProp,
   scanned,
   clippingPlanes,
   onHover,
@@ -270,7 +273,7 @@ export const OrganMesh = memo(function OrganMesh({
   const userData = useMemo(() => ({ organId: organ.organ_id }), [organ.organ_id]);
 
   /** How brightly the assistant is lighting this one, 0 when it is not. */
-  const litGlow = litDepth !== undefined ? probeGlow(litDepth) : 0;
+  const litGlow = litGlowProp ?? 0;
 
   // The reader's ghosting, times the tissue's own transparency. A cornea is
   // see-through whatever the reader has done to the nervous system, and
@@ -429,7 +432,7 @@ export const OrganMesh = memo(function OrganMesh({
     coverageTouches,
     coverageBusiest,
     probeDepth,
-    litDepth,
+    litGlow,
     scanned,
   ]);
 

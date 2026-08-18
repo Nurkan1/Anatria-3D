@@ -16,6 +16,7 @@ import {
 } from "@/stores/sceneStore";
 import { useStudyStore } from "@/stores/studyStore";
 
+import { illuminationGlow } from "./depthStack";
 import { buildEyeGroups } from "./eyes";
 import { EyeGlobe } from "./EyeGlobe";
 import { backgroundTheme } from "./background";
@@ -456,8 +457,14 @@ function SystemMeshes({
    * own selection. Merged, a pointer move across the model would wash out a
    * selection the reader made deliberately.
    */
-  const litDepth = useMemo(
-    () => new Map(illuminated.map((organId, index) => [organId, index])),
+  const litGlow = useMemo(
+    () =>
+      new Map(
+        illuminated.map((organId, index) => [
+          organId,
+          illuminationGlow(index, illuminated.length),
+        ]),
+      ),
     [illuminated],
   );
 
@@ -638,11 +645,11 @@ function SystemMeshes({
         coverageTouches={coverage ? (coverage.byOrgan[organ.organ_id] ?? 0) : undefined}
         coverageBusiest={coverage?.busiest}
         probeDepth={probeDepth.get(organ.organ_id)}
-        litDepth={litDepth.get(organ.organ_id)}
+        litGlow={litGlow.get(organ.organ_id)}
         scanned={
           scan &&
           !keepsColour({
-            lit: litDepth.has(organ.organ_id),
+            lit: litGlow.has(organ.organ_id),
             selected: selectedOrganIds.includes(organ.organ_id),
             isolated: isolatedOrganIds?.includes(organ.organ_id) ?? false,
           })

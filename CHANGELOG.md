@@ -152,6 +152,15 @@ an isolation was hiding, the light fell on nothing and the pin beside it led
 nowhere. Lighting a structure now brings it into view — it widens what you are
 shown, never narrows it.
 
+**And everything it names is lit, not just the first few.** The light's
+brightness was graded by the same falloff the cursor uses to show depth, which
+goes fully dark past the sixth layer. The assistant may name up to
+twenty-four structures — so from the seventh onwards nothing lit at all, while
+the answer still carried a numbered pin pointing at it, and the fifth or sixth
+arrived so dim that a deep structure behind a ghosted brain was indistinguishable
+from unlit. The order still reads — the first structure named is brightest — but
+the last one named is now unmistakably lit rather than nearly invisible.
+
 **Sixty-one Latin terms were misspelled, truncated or named the wrong
 structure.** An audit of every label in both atlases against Terminologia
 Anatomica found defects in the vendored term list that reached the screen and
