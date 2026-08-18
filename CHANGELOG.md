@@ -142,6 +142,23 @@ count kept beside the heading. Notes rest folded, because notes are what you go
 and look up while the patients and sessions are the work in front of you. A
 search opens all three, since one box narrows all three.
 
+**Printed pages now say when a model wrote part of them.** A PDF containing
+assistant answers, or a case the assistant graded, carries a notice at the foot
+of every page — beneath the medical one, which still reads first.
+
+It appears **only when something on the page was actually generated**. A notebook
+of your own notes carries nothing, because there is nothing to disclose.
+
+The notice also says where its knowledge stops: notes are entered by you, and
+Anatria3D does not record where their text came from. That second half is not
+padding. Without it the first half would quietly certify that everything
+unmarked was written by a human, and that is not something this application can
+know — a paragraph pasted from a chatbot and one copied from a textbook arrive
+through the same keystroke. Anatria3D does not guess: it does not run your
+writing through a detector, and it does not record what you paste. Both would
+produce false accusations, and detectors are wrong most often about people
+writing outside their first language.
+
 **The application now says which version it is.** `v0.2.0` sits in the tab strip
 above the atlas, in the guide's footer, and on every plate you export. There is
 no auto-updater here by design, so the copy on your machine is whichever one you

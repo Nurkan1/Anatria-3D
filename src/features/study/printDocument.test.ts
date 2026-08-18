@@ -3,10 +3,12 @@ import { describe, expect, it } from "vitest";
 import type { CaseDigest, SessionDetail, SessionSummary, StudyNote } from "@/lib/studyDb";
 
 import {
+  aiNotice,
   buildCaseDocument,
   buildNotesDocument,
   buildSessionDocument,
   disclaimers,
+  hasGeneratedText,
   isPrintable,
   journalLanguage,
 } from "./printDocument";
@@ -316,6 +318,81 @@ describe("disclaimers", () => {
       expect(disclaimers(language).at(-1)).toContain("Not a medical device");
     },
   );
+});
+
+describe("the AI notice", () => {
+  const notes: StudyNote[] = [
+    {
+      id: 1,
+      organ_id: null,
+      organ_label: null,
+      session_id: null,
+      body: "Revise the conduction system before Friday.",
+      created_at: 1_700_000_000_000,
+      updated_at: 1_700_000_000_000,
+    },
+  ];
+
+  it("appears on a page a model wrote part of", () => {
+    const document = buildSessionDocument(detail(), labelFor);
+    expect(hasGeneratedText(document)).toBe(true);
+    expect(aiNotice(document).join(" ")).toMatch(/asistente de IA|AI assistant/);
+  });
+
+  it("stays off a notebook of the student's own notes", () => {
+    // The whole point of the second half of the notice is to stop the first
+    // half certifying that everything unmarked is human-written. With nothing
+    // marked there is no such inference to correct, and printing "we do not
+    // record where your text came from" beside somebody's own handwriting
+    // reads as an accusation rather than a disclosure.
+    const document = buildNotesDocument(notes, null, "en");
+    expect(hasGeneratedText(document)).toBe(false);
+    expect(aiNotice(document)).toEqual([]);
+  });
+
+  it("says where its knowledge stops, and never only that a model wrote something", () => {
+    // Both halves travel together. A disclosure that omits the limit of what
+    // was recorded is worse than none: a supervisor reads it as a guarantee
+    // about the notes, which is a claim this application cannot support.
+    const document = buildSessionDocument(detail(), labelFor);
+    for (const line of aiNotice(document)) {
+      expect(line).toMatch(/no registra la procedencia|does not record where|не записва произхода/);
+    }
+  });
+
+  it("catches a case graded by the assistant, which carries no model field", () => {
+    // The verdict is the assistant's assessment of the reader. It is written by
+    // a model like any answer, but nothing sits beside it saying so — a check
+    // that only walked the exchanges would print a graded case with no notice.
+    const document = buildSessionDocument(
+      detail({
+        session: {
+          ...SESSION,
+          kind: "case",
+          score: 80,
+          verdict: "Recognised the infarct pattern; missed the reciprocal changes.",
+        },
+        messages: [],
+      }),
+      labelFor,
+    );
+    expect(document.exchanges).toEqual([]);
+    expect(hasGeneratedText(document)).toBe(true);
+  });
+
+  it("catches a verdict on a visit inside a printed patient history", () => {
+    const page = buildCaseDocument(digest(), new Map(), labelFor);
+    expect(hasGeneratedText(page)).toBe(true);
+  });
+
+  it("prints the reader's language and English, like the medical notice", () => {
+    // A page travels further than the student who printed it.
+    const spanish = buildSessionDocument(detail(), labelFor);
+    expect(spanish.language).toBe("es");
+    const lines = aiNotice(spanish);
+    expect(lines).toHaveLength(2);
+    expect(lines[1]).toContain("AI assistant");
+  });
 });
 
 describe("journalLanguage", () => {

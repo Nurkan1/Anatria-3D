@@ -4,9 +4,11 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import { repairGluedHeadings } from "@/features/chat/repairMarkdown";
+import { APP_VERSION_LABEL } from "@/lib/appVersion";
 import { usePrintStore } from "@/stores/printStore";
 
 import {
+  aiNotice,
   disclaimers,
   isPrintable,
   type PrintDocument,
@@ -532,8 +534,18 @@ function Footer({ document }: { document: PrintDocument }) {
       {disclaimers(document.language).map((line) => (
         <p key={line}>{line}</p>
       ))}
+      {/*
+        Under the medical notice rather than above it. Both belong on the page,
+        but only one of them is about whether a person can be harmed by acting
+        on what is printed, and that one reads first.
+      */}
+      {aiNotice(document).map((line) => (
+        <p key={line} className="mt-1">
+          {line}
+        </p>
+      ))}
       <p className="mt-1">
-        Anatria3D · printed {moment(document.producedAt)}
+        Anatria3D {APP_VERSION_LABEL} · printed {moment(document.producedAt)}
       </p>
     </footer>
   );
