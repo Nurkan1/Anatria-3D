@@ -110,8 +110,23 @@ describe("the shipped female manifest", () => {
     for (const entry of STRUCTURES) expect(ids.has(entry.id), entry.id).toBe(true);
   });
 
-  it("opens on something, so the viewport is never empty", () => {
-    expect(manifest.systems.some((entry) => entry.load_on_start)).toBe(true);
+  it("opens whole, so the trunk is never a pelvis with nothing in it", () => {
+    // Every system, unlike the male atlas, which opens on the skeleton and
+    // waits to be asked for the rest. That is right for 37 MB across thirteen
+    // files and wrong for 5.3 MB across seven: the saving was not worth having,
+    // and the reader paid for it at every switch by ticking six boxes back on.
+    //
+    // A bare pelvic girdle is also the exact shape that reads as a failed load.
+    expect(manifest.systems.every((entry) => entry.load_on_start)).toBe(true);
+    expect(manifest.systems.length).toBe(7);
+  });
+
+  it("still opens the male atlas on one system only", () => {
+    // The two answers are different on purpose, and the reason is size. If the
+    // male atlas ever starts opening whole, that is 37 MB mounted to look at a
+    // kidney, and this test is where it gets noticed.
+    const male = manifestOf("manifest.json");
+    expect(male.systems.filter((entry) => entry.load_on_start)).toHaveLength(1);
   });
 
   it("points every organ at a female mesh file", () => {

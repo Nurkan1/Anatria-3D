@@ -15,32 +15,32 @@
     {
       "system": "cardiovascular",
       "organ_count": 60,
-      "load_on_start": false
+      "load_on_start": true
     },
     {
       "system": "digestive",
       "organ_count": 50,
-      "load_on_start": false
+      "load_on_start": true
     },
     {
       "system": "integumentary",
       "organ_count": 16,
-      "load_on_start": false
+      "load_on_start": true
     },
     {
       "system": "lymphatic",
       "organ_count": 5,
-      "load_on_start": false
+      "load_on_start": true
     },
     {
       "system": "renal",
       "organ_count": 58,
-      "load_on_start": false
+      "load_on_start": true
     },
     {
       "system": "reproductive",
       "organ_count": 36,
-      "load_on_start": false
+      "load_on_start": true
     },
     {
       "system": "skeletal",

@@ -50,14 +50,32 @@ const ATTRIBUTION =
 const CREDIT = "NIH Human Reference Atlas / Visible Human Female (NLM)";
 
 /**
- * Opened first, so the viewport is never empty.
+ * This module opens whole. Every system, at once.
  *
- * The pelvis rather than the reproductive organs, and deliberately: the uterus
- * on its own is a shape floating in the dark. Inside the pelvic girdle it is
- * anatomy, and every other structure in this module is described by where it
- * sits relative to those bones.
+ * # Why it does not do what the male atlas does
+ *
+ * There, one system opens and the rest wait to be asked for, because the male
+ * atlas is **37 MB across thirteen files** and mounting all of it to look at a
+ * kidney is a slow start for nothing.
+ *
+ * This is 5.3 MB across seven. The six systems that used to wait come to 4 MB
+ * between them — Draco-compressed, read off local disk, since nothing here is
+ * ever fetched over a network. The saving was not worth having.
+ *
+ * # What it cost
+ *
+ * The reader paid for it every single time. Switching to the female body reset
+ * the panel to the skeleton alone, so the uterus, the kidneys, the gut and the
+ * vessels each had to be switched back on by hand, at every switch. And the
+ * module is a **trunk**: a pelvic girdle with nothing in it is precisely the
+ * shape that makes someone think the atlas failed to load.
+ *
+ * The original reasoning for opening on the pelvis still stands — the uterus
+ * alone is a shape floating in the dark, and every structure here is described
+ * by where it sits relative to those bones. It is just an argument for the
+ * bones being *present*, which they are, not for everything else being absent.
  */
-const LOAD_ON_START = new Set(["skeletal"]);
+const OPENS_WHOLE = true;
 
 function loadReports() {
   if (!existsSync(REPORTS)) {
@@ -134,10 +152,13 @@ function main() {
     .map(([system, organ_count]) => ({
       system,
       organ_count,
-      load_on_start: LOAD_ON_START.has(system),
+      load_on_start: OPENS_WHOLE,
     }))
     .sort((a, b) => a.system.localeCompare(b.system));
 
+  // Kept even though `OPENS_WHOLE` cannot currently produce an empty set: it is
+  // the guarantee that matters — an atlas that opens to an empty viewport looks
+  // broken rather than lazy — and it should outlive whatever sets the flag.
   if (!systems.some((entry) => entry.load_on_start)) {
     systems[0].load_on_start = true;
   }

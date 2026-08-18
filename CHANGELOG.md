@@ -162,6 +162,15 @@ brainstem.
 Nothing outside the nervous system moved, and no structure was added, removed or
 renamed.
 
+**The female atlas opened as a bare pelvis.** Switching to it showed the
+skeleton alone, and the uterus, kidneys, gut, vessels and breast each had to be
+switched back on by hand — every time you switched. It now opens whole.
+
+The male atlas still opens on the skeleton and loads the rest when you ask for
+it, because it is 37 MB across thirteen files. The female module is 5.3 MB
+across seven; the six systems that used to wait come to 4 MB between them, read
+off local disk. The saving was never worth what it cost to use.
+
 **White scrollbars in a dark interface.** On a machine with Windows set to light
 mode, every scrollbar rendered light — white tracks with stepper arrows, down the
 side of the atlas tree and the transcript. The application had told the browser
