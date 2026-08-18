@@ -162,6 +162,15 @@ brainstem.
 Nothing outside the nervous system moved, and no structure was added, removed or
 renamed.
 
+**White scrollbars in a dark interface.** On a machine with Windows set to light
+mode, every scrollbar rendered light — white tracks with stepper arrows, down the
+side of the atlas tree and the transcript. The application had told the browser
+it followed the system theme, and it does not: the panels are dark whatever
+Windows is set to, and the Dark/Light control changes the background *behind the
+model*, not the interface around it. Scrollbars are now dark, narrow, and
+without the arrow buttons, so several scrolling panes sit together without any
+of them looking like a document.
+
 **Pointing at something now shows it.** When the assistant lit a structure that
 an isolation was hiding, the light fell on nothing and the pin beside it led
 nowhere. Lighting a structure now brings it into view — it widens what you are

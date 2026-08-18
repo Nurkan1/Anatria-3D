@@ -6,8 +6,70 @@
   --color-brand-slate: #1e293b;
 }
 
+/*
+ * The interface is dark, always, and the platform has to be told.
+ *
+ * This read `light dark`, which is an offer to follow the operating system —
+ * and the application does not follow it. The chrome is slate on slate whatever
+ * Windows is set to; the Dark/Light control in the left panel changes the
+ * *viewport background* behind the model, not the panels around it.
+ *
+ * So on a machine set to light mode every native part rendered light against a
+ * dark panel: white scrollbar tracks with arrow buttons at each end, down the
+ * side of the atlas tree and the transcript. Nothing was styled wrongly — the
+ * browser was answering a question honestly and had been asked the wrong one.
+ *
+ * `dark` also covers the controls that are easy to forget: a `<select>`, a range
+ * input's track, the focus ring, and the autofill background.
+ */
 :root {
-  color-scheme: light dark;
+  color-scheme: dark;
+}
+
+/*
+ * Scrollbars that belong to the panel they are in.
+ *
+ * `color-scheme: dark` alone gets the colours right and leaves Windows' full
+ * 17px scrollbar with a stepper arrow at each end — correct for a document, too
+ * heavy for a dense tool where several panes scroll at once and none of them is
+ * the page.
+ *
+ * So: no buttons, a narrow bar, and a track that is simply the panel showing
+ * through. The thumb is a mid-slate that holds up against both the dark chrome
+ * and the white print sheet, which is the one light surface in the app.
+ *
+ * Firefox takes the same intent through `scrollbar-width`/`scrollbar-color`;
+ * the WebKit rules are what WebView2 and WKWebView read.
+ */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-slate-600) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-slate-700);
+  border: 2px solid transparent;
+  background-clip: content-box;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-slate-500);
+}
+
+/* The square where a vertical and a horizontal bar meet, which defaults to a
+   flat light patch and is the one piece `color-scheme` does not reach. */
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 html,
@@ -90,6 +152,15 @@ button:not(:disabled),
  * everything else here.
  */
 @media print {
+  /*
+   * Paper is a light surface, whatever the screen was. Said explicitly so the
+   * dark `color-scheme` above cannot reach the printed page and have a driver
+   * decide, for instance, that a form field needs a dark fill.
+   */
+  :root {
+    color-scheme: light;
+  }
+
   /* The shell's `overflow: hidden` would clip the page to one screenful. */
   html,
   body {
