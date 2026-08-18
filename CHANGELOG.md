@@ -96,52 +96,6 @@ is the more useful for it. TA2 stops at L5 — it does not name a sixth, because
 it does not expect one — so that vertebra alone reads *Vertebra lumbalis · L6*
 under *Vertebra lumborum V*. The variant announces itself in the label.
 
-## [0.1.7] — 2026-08-16
-
-### Added
-
-**Virtual patients you can follow across visits.** A case file is no longer a
-single question and an answer. Each visit adds to the record — a weight that
-came down, a pressure that did not, what the imaging said — and the assistant
-reasons from the record as it stands at that visit. The order is the clinical
-content: a figure that moved over four visits is a different case from one that
-was always there.
-
-The answer is written when the case is opened, before anything is attempted, and
-cannot be edited afterwards. That is the whole discipline — an answer decided
-once the attempt is in hand grades nothing. It can now be opened deliberately,
-with a confirmation in front of it, and a case that has been opened stays open,
-so a summary cannot include the answer today and withhold it tomorrow.
-
-**A resting screen.** After fifteen minutes, or on `Ctrl+X`, the body fades to a
-grey brain lit by slow waves of neon blue expanding from points on the cortex.
-It is capped to a low frame rate and stops entirely when the window is hidden,
-so it costs a laptop almost nothing.
-
-**A keyboard for the viewport.** `I` isolate, `H` hide, `U` bring back what is
-hidden, `C` clear the selection, `X` step the exploded view, `F` fit, `A P L R S`
-for the anatomical viewpoints, and `+` / `−` to zoom. The letters match what is
-printed on the buttons, and a single place decides whether a keystroke belongs to
-the viewport — so typing "aorta" into a search box no longer turns the body.
-
-**More from the list of what is under the cursor.** The panel naming everything
-a ray from your pointer crosses can now be switched off from the left panel or
-the right-click menu, pinned by clicking the body so you can walk over to it,
-isolated whole — a ray through the shoulder is a surgical approach written down —
-or picked from: `Ctrl`-click the lines to take three of the twelve and leave the
-rest of the body out of the way. Picked lines join the same selection a
-`Ctrl`-click on the body builds, so `I` isolates them.
-
-**Writing boxes that grow with what is in them.** Every field that takes prose —
-the chat, notes, the patient record, the case composer — now fits what you paste
-into it, up to a limit, and scrolls after that. Reviewing a pasted case no longer
-means reading it three lines at a time.
-
-**A journal that folds.** Notes, patients and sessions each fold away, with the
-count kept beside the heading. Notes rest folded, because notes are what you go
-and look up while the patients and sessions are the work in front of you. A
-search opens all three, since one box narrows all three.
-
 **Printed pages now say when a model wrote part of them.** A PDF containing
 assistant answers, or a case the assistant graded, carries a notice at the foot
 of every page — beneath the medical one, which still reads first.
@@ -201,6 +155,54 @@ already was.
 
 The atlas now refuses to build if any Latin label carries a diacritic or repeats
 a word — the two signatures every one of these defects left behind.
+
+## [0.1.7] — 2026-08-16
+
+### Added
+
+**Virtual patients you can follow across visits.** A case file is no longer a
+single question and an answer. Each visit adds to the record — a weight that
+came down, a pressure that did not, what the imaging said — and the assistant
+reasons from the record as it stands at that visit. The order is the clinical
+content: a figure that moved over four visits is a different case from one that
+was always there.
+
+The answer is written when the case is opened, before anything is attempted, and
+cannot be edited afterwards. That is the whole discipline — an answer decided
+once the attempt is in hand grades nothing. It can now be opened deliberately,
+with a confirmation in front of it, and a case that has been opened stays open,
+so a summary cannot include the answer today and withhold it tomorrow.
+
+**A resting screen.** After fifteen minutes, or on `Ctrl+X`, the body fades to a
+grey brain lit by slow waves of neon blue expanding from points on the cortex.
+It is capped to a low frame rate and stops entirely when the window is hidden,
+so it costs a laptop almost nothing.
+
+**A keyboard for the viewport.** `I` isolate, `H` hide, `U` bring back what is
+hidden, `C` clear the selection, `X` step the exploded view, `F` fit, `A P L R S`
+for the anatomical viewpoints, and `+` / `−` to zoom. The letters match what is
+printed on the buttons, and a single place decides whether a keystroke belongs to
+the viewport — so typing "aorta" into a search box no longer turns the body.
+
+**More from the list of what is under the cursor.** The panel naming everything
+a ray from your pointer crosses can now be switched off from the left panel or
+the right-click menu, pinned by clicking the body so you can walk over to it,
+isolated whole — a ray through the shoulder is a surgical approach written down —
+or picked from: `Ctrl`-click the lines to take three of the twelve and leave the
+rest of the body out of the way. Picked lines join the same selection a
+`Ctrl`-click on the body builds, so `I` isolates them.
+
+**Writing boxes that grow with what is in them.** Every field that takes prose —
+the chat, notes, the patient record, the case composer — now fits what you paste
+into it, up to a limit, and scrolls after that. Reviewing a pasted case no longer
+means reading it three lines at a time.
+
+**A journal that folds.** Notes, patients and sessions each fold away, with the
+count kept beside the heading. Notes rest folded, because notes are what you go
+and look up while the patients and sessions are the work in front of you. A
+search opens all three, since one box narrows all three.
+
+### Fixed
 
 **Installers shipped a stale engine.** `tauri build` never re-froze the Python
 sidecar, so a build could carry an engine hours older than the interface it was
