@@ -1,45 +1,31 @@
 import type { ManifestOrgan } from "@/lib/schemas";
 
 /**
- * Which structures make up the brain, as far as the manifest can say.
+ * Which structures make up the brain.
  *
- * # Why this is not a one-line filter
+ * # This used to be a workaround, and no longer is
  *
- * The obvious rule — everything under `Central nervous system > Brain` — gives
- * **half a brain**. Z-Anatomy's tree is asymmetric: the right-sided gyri sit
- * under that path, while their left twins hang directly off `Central nervous
- * system` with no `Brain` level at all. Measured on the shipped manifest:
+ * Z-Anatomy's collection nesting filed most of the brain outside `Brain`: the
+ * right-sided gyri sat under that path while their left twins hung directly off
+ * `Central nervous system`, and the corpus callosum, fornix, thalamus and
+ * hippocampus sat outside it with no lateral twin to be recovered by. Asking
+ * for everything under `Brain` returned 68 structures — one hemisphere and the
+ * cerebellum — so this module paired each `_r` with its `_l` to reach 105, and
+ * documented the deep midline structures as a known hole.
  *
- * - `path` contains "Brain" → 68 structures, right hemisphere and cerebellum
- * - pairing each `_r` with its `_l` twin → 105, both hemispheres
+ * The hierarchy is now repaired in the pipeline (`tools/asset-pipeline/hierarchy.mjs`),
+ * so `Brain` holds 200 structures: both hemispheres, the diencephalon, the
+ * whole brainstem and the cerebellum. The twin-pairing pass was measured
+ * against the repaired manifest and adds nothing, so it is gone rather than
+ * kept as insurance — a second rule that never fires is a second rule to
+ * understand.
  *
- * That is where a naming rule stops. The corpus callosum, fornix, thalamus and
- * hippocampus are still outside it, because they are outside the `Brain`
- * subtree in the source data and have no lateral twin to be recovered by. They
- * are missing here, deliberately and knowingly: this set exists to draw an
- * ornament, and the honest way to get them is geometric — ask the mesh which
- * nodes sit inside the cranium — which belongs in the asset pipeline rather
- * than in a runtime guess.
- *
- * **So do not reach for this to teach with.** It is a decorative selection with
- * a known hole in the middle of it.
+ * The warning that used to stand here is withdrawn: this is the brain as the
+ * atlas holds it, not a decorative selection with a hole in the middle.
  */
 
 /** The node in the source hierarchy that everything cranial hangs from. */
 const BRAIN_NODE = "Brain";
-
-/** Z-Anatomy's laterality suffixes, and the only pairing rule that is safe. */
-const SIDES = ["_l", "_r"] as const;
-
-function twinOf(organId: string): string | null {
-  for (const side of SIDES) {
-    if (organId.endsWith(side)) {
-      const other = side === "_l" ? "_r" : "_l";
-      return organId.slice(0, -side.length) + other;
-    }
-  }
-  return null;
-}
 
 /**
  * Brain structure ids, sorted, from a manifest's organ list.
@@ -48,22 +34,10 @@ function twinOf(organId: string): string | null {
  * read in a test failure; nothing downstream depends on the ordering.
  */
 export function brainOrganIds(organs: readonly ManifestOrgan[]): string[] {
-  const byId = new Map(organs.map((organ) => [organ.organ_id, organ]));
-  const chosen = new Set<string>();
-
-  for (const organ of organs) {
-    if (organ.path?.includes(BRAIN_NODE)) chosen.add(organ.organ_id);
-  }
-
-  // Second pass, over what the first pass found. Adding twins while iterating
-  // the whole list would also pull in the twin of anything that merely happens
-  // to be adjacent, which is not the same rule.
-  for (const organId of [...chosen]) {
-    const twin = twinOf(organId);
-    if (twin && byId.has(twin)) chosen.add(twin);
-  }
-
-  return [...chosen].sort();
+  return organs
+    .filter((organ) => organ.path?.includes(BRAIN_NODE))
+    .map((organ) => organ.organ_id)
+    .sort();
 }
 
 /**
@@ -71,6 +45,6 @@ export function brainOrganIds(organs: readonly ManifestOrgan[]): string[] {
  *
  * A handful of meshes is not a brain, it is a mistake on screen — a fallback
  * that renders three gyri floating in the dark is worse than not appearing at
- * all. The number is a floor, not a target: the shipped manifest yields 105.
+ * all. The number is a floor, not a target: the shipped manifest yields 200.
  */
 export const ENOUGH_TO_DRAW = 40;

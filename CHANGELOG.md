@@ -124,6 +124,34 @@ below are exactly that kind of change.
 
 ### Fixed
 
+**Asking for the brain gave you half a brain.** Isolating `Brain` returned 68
+structures: the right hemisphere's gyri and sulci, and the cerebellum. The left
+hemisphere, the entire brainstem, the entire diencephalon and the corpus
+callosum were filed as *siblings* of the brain rather than parts of it, so they
+were hidden. Ask the assistant how many parts the brain has and it would explain
+correctly while showing you a model missing most of what it was naming — and the
+numbered pins in its answer pointed at structures that were not on screen.
+
+It was a fault in the hierarchy the atlas inherits, not in the anatomy or the
+rendering. For the application, the left precentral gyrus was not part of the
+brain. 195 structures are refiled, and `Brain` now holds 200: both hemispheres,
+the diencephalon, the brainstem with its midbrain, pons and medulla, and the
+cerebellum. The meninges and the spinal cord are deliberately *outside* it —
+isolating the brain should not bring the dura with it.
+
+Nine groups you can now isolate by name did not exist before: **Brainstem,
+Diencephalon, Mesencephalon, Pons, Medulla oblongata, Ventricular system, Spinal
+cord, Meninges** and **Eyeball**. Ask for the brainstem and you get the
+brainstem.
+
+Nothing outside the nervous system moved, and no structure was added, removed or
+renamed.
+
+**Pointing at something now shows it.** When the assistant lit a structure that
+an isolation was hiding, the light fell on nothing and the pin beside it led
+nowhere. Lighting a structure now brings it into view — it widens what you are
+shown, never narrows it.
+
 **Sixty-one Latin terms were misspelled, truncated or named the wrong
 structure.** An audit of every label in both atlases against Terminologia
 Anatomica found defects in the vendored term list that reached the screen and

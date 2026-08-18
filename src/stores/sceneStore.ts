@@ -320,11 +320,31 @@ export function applySceneCommand(
     case "clear_pathway":
       return { ...state, pathway: null };
 
-    case "illuminate_structures":
+    case "illuminate_structures": {
       // Replaced whole, never merged. What is lit is exactly what was last
       // asked for, so an explanation that moves on to another structure does
       // not leave the previous one still glowing behind it.
-      return { ...state, illuminated: [...command.organ_ids] };
+      const illuminated = [...command.organ_ids];
+      if (state.isolatedOrganIds === null) return { ...state, illuminated };
+
+      // Lighting something the isolation is hiding pointed at nothing at all:
+      // the answer carried a numbered pin, the reader clicked it, and the
+      // camera flew to a structure that was not being drawn. The light *is* the
+      // pointing gesture, so it has to bring what it names into view.
+      //
+      // This widens rather than narrows — the same reasoning as `requestSupply`
+      // switching a system on to honour a request for vessels. Nothing the
+      // reader asked to see is taken away; something they were told about is
+      // added.
+      const visible = new Set(state.isolatedOrganIds);
+      const before = visible.size;
+      for (const organId of illuminated) visible.add(organId);
+      return {
+        ...state,
+        illuminated,
+        isolatedOrganIds: visible.size === before ? state.isolatedOrganIds : [...visible],
+      };
+    }
 
     case "set_cross_section":
       return {

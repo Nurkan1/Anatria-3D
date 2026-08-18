@@ -738,7 +738,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Aqueduct of midbrain",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Mesencephalon"
       ]
     },
     {
@@ -4345,7 +4348,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Base of peduncle.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Mesencephalon"
       ]
     },
     {
@@ -4356,7 +4362,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Base of peduncle.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Mesencephalon"
       ]
     },
     {
@@ -5409,7 +5418,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Anterior chamber of eyeball.l",
-      "path": []
+      "path": [
+        "Sense organs",
+        "Eyeball"
+      ]
     },
     {
       "organ_id": "anterior_chamber_of_eyeball_r",
@@ -5418,7 +5430,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Anterior chamber of eyeball.r",
-      "path": []
+      "path": [
+        "Sense organs",
+        "Eyeball"
+      ]
     },
     {
       "organ_id": "lacrimal_canaliculus_l",
@@ -5449,7 +5464,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Central canal",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "hairs_of_head",
@@ -7199,7 +7217,8 @@
       "mesh_file": "nervous_male.glb",
       "node": "Cauda equina",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Spinal cord"
       ]
     },
     {
@@ -7282,7 +7301,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Optic chiasm.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Diencephalon"
       ]
     },
     {
@@ -7293,7 +7314,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Optic chiasm.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Diencephalon"
       ]
     },
     {
@@ -7416,7 +7439,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Inferior colliculus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Mesencephalon"
       ]
     },
     {
@@ -7427,7 +7453,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Inferior colliculus.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Mesencephalon"
       ]
     },
     {
@@ -7438,7 +7467,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Superior colliculus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Mesencephalon"
       ]
     },
     {
@@ -7449,7 +7481,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Superior colliculus.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Mesencephalon"
       ]
     },
     {
@@ -7496,7 +7531,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Anterior commissure",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -7507,7 +7545,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Hippocampal commissure",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -7536,7 +7577,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Posterior commissure",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Diencephalon"
       ]
     },
     {
@@ -7652,7 +7695,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Cornea.l",
-      "path": []
+      "path": [
+        "Sense organs",
+        "Eyeball"
+      ]
     },
     {
       "organ_id": "cornea_r",
@@ -7661,7 +7707,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Cornea.r",
-      "path": []
+      "path": [
+        "Sense organs",
+        "Eyeball"
+      ]
     },
     {
       "organ_id": "anterior_horn_of_spinal_cord",
@@ -7670,7 +7719,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Anterior horn of spinal cord",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "posterior_horn_of_spinal_cord",
@@ -7679,7 +7731,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Posterior horn of spinal cord",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "infrapatellar_fat_pad_l",
@@ -7717,7 +7772,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Amygdaloid body.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -7728,7 +7786,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Amygdaloid body.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -7739,7 +7800,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Corpus callosum",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -7759,7 +7823,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Lateral geniculate body.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Diencephalon"
       ]
     },
     {
@@ -7770,7 +7836,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Lateral geniculate body.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Diencephalon"
       ]
     },
     {
@@ -7781,7 +7849,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Medial geniculate body.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Diencephalon"
       ]
     },
     {
@@ -7792,7 +7862,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Medial geniculate body.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Diencephalon"
       ]
     },
     {
@@ -7803,7 +7875,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Mamillary body.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Diencephalon"
       ]
     },
     {
@@ -7814,7 +7888,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Mamillary body.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Diencephalon"
       ]
     },
     {
@@ -7844,7 +7920,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Vitreous body.l",
-      "path": []
+      "path": [
+        "Sense organs",
+        "Eyeball"
+      ]
     },
     {
       "organ_id": "vitreous_body_r",
@@ -7853,7 +7932,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Vitreous body.r",
-      "path": []
+      "path": [
+        "Sense organs",
+        "Eyeball"
+      ]
     },
     {
       "organ_id": "costal_cartilage_of_ninth_rib_l",
@@ -7960,7 +8042,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Cuneus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -9357,7 +9442,8 @@
       "mesh_file": "nervous_male.glb",
       "node": "Spinal dura",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Meninges"
       ]
     },
     {
@@ -10123,7 +10209,8 @@
       "mesh_file": "nervous_male.glb",
       "node": "Falx cerebri",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Meninges"
       ]
     },
     {
@@ -10463,7 +10550,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Cuneate fasciculus",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "gracile_fasciculus",
@@ -10472,7 +10562,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Gracile fasciculus",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "posterior_cord_of_brachial_plexus_l",
@@ -10503,7 +10596,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Posterolateral tract",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "anterior_fasciculus_proprius",
@@ -10512,7 +10608,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Anterior fasciculus proprius",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "lateral_fasciculus_proprius",
@@ -10521,7 +10620,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Lateral fasciculus proprius",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "posterior_fasciculus_proprius",
@@ -10530,7 +10632,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Posterior fasciculus proprius",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "zonular_fibres_l",
@@ -10539,7 +10644,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Zonular fibres.l",
-      "path": []
+      "path": [
+        "Sense organs",
+        "Eyeball"
+      ]
     },
     {
       "organ_id": "zonular_fibres_r",
@@ -10548,7 +10656,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Zonular fibres.r",
-      "path": []
+      "path": [
+        "Sense organs",
+        "Eyeball"
+      ]
     },
     {
       "organ_id": "fibula_l",
@@ -11007,7 +11118,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Fornix.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -11018,7 +11132,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Fornix.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -11083,7 +11200,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Interpeduncular fossa.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Mesencephalon"
       ]
     },
     {
@@ -11094,7 +11214,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Interpeduncular fossa.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Mesencephalon"
       ]
     },
     {
@@ -11238,7 +11361,9 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Spinal ganglion.l",
-      "path": []
+      "path": [
+        "Peripheral nervous system"
+      ]
     },
     {
       "organ_id": "spinal_ganglion_r",
@@ -11247,7 +11372,9 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Spinal ganglion.r",
-      "path": []
+      "path": [
+        "Peripheral nervous system"
+      ]
     },
     {
       "organ_id": "stomach",
@@ -11450,7 +11577,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Globus pallidus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -11461,7 +11591,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Globus pallidus.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -11472,7 +11605,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Superior occipital gyri.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -11497,7 +11633,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Orbital gyri.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -11522,7 +11661,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Transverse temporal gyri.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -11547,7 +11689,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Angular gyrus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -11572,7 +11717,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Middle frontal gyrus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -11597,7 +11745,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Superior frontal gyrus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -11622,7 +11773,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Lingual gyrus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -11647,7 +11801,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Lateral occipitotemporal gyrus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -11672,7 +11829,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Postcentral gyrus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -11697,7 +11857,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Precentral gyrus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -11722,7 +11885,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Supramarginal gyrus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -11747,7 +11913,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Inferior temporal gyrus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -11772,7 +11941,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Middle temporal gyrus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -11797,7 +11969,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Habenula",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Diencephalon"
       ]
     },
     {
@@ -11835,7 +12009,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Hippocampus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -11846,7 +12023,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Hippocampus.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -11879,7 +12059,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Hypothalamus",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Diencephalon"
       ]
     },
     {
@@ -11983,7 +12165,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Iris.l",
-      "path": []
+      "path": [
+        "Sense organs",
+        "Eyeball"
+      ]
     },
     {
       "organ_id": "iris_r",
@@ -11992,7 +12177,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Iris.r",
-      "path": []
+      "path": [
+        "Sense organs",
+        "Eyeball"
+      ]
     },
     {
       "organ_id": "jejunum",
@@ -12190,7 +12378,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Lens.l",
-      "path": []
+      "path": [
+        "Sense organs",
+        "Eyeball"
+      ]
     },
     {
       "organ_id": "lens_r",
@@ -12199,7 +12390,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Lens.r",
-      "path": []
+      "path": [
+        "Sense organs",
+        "Eyeball"
+      ]
     },
     {
       "organ_id": "levator_anguli_oris_l",
@@ -16932,7 +17126,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Superior parietal lobule.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -17334,7 +17531,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Medulla oblongata.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Medulla oblongata"
       ]
     },
     {
@@ -17344,7 +17544,12 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Medulla oblongata.r",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Medulla oblongata"
+      ]
     },
     {
       "organ_id": "external_intercostal_membrane_l",
@@ -17582,7 +17787,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Midbrain.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Mesencephalon"
       ]
     },
     {
@@ -17593,7 +17801,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Midbrain.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Mesencephalon"
       ]
     },
     {
@@ -23690,7 +23901,8 @@
       "mesh_file": "nervous_male.glb",
       "node": "Nerve to quadratus femoris muscle.l",
       "path": [
-        "Central nervous system"
+        "Peripheral nervous system",
+        "Nerves"
       ]
     },
     {
@@ -23701,7 +23913,8 @@
       "mesh_file": "nervous_male.glb",
       "node": "Nerve to quadratus femoris muscle.r",
       "path": [
-        "Central nervous system"
+        "Peripheral nervous system",
+        "Nerves"
       ]
     },
     {
@@ -25607,7 +25820,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Septal nuclei",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -25618,7 +25834,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Vestibular nuclei.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem"
       ]
     },
     {
@@ -25629,7 +25847,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Vestibular nuclei.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem"
       ]
     },
     {
@@ -25640,7 +25860,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Accessory nucleus of oculomotor nerve.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Mesencephalon"
       ]
     },
     {
@@ -25651,7 +25874,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Accessory nucleus of oculomotor nerve.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Mesencephalon"
       ]
     },
     {
@@ -25661,7 +25887,12 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Nucleus ambiguus.l",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Medulla oblongata"
+      ]
     },
     {
       "organ_id": "nucleus_ambiguus_r",
@@ -25670,7 +25901,12 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Nucleus ambiguus.r",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Medulla oblongata"
+      ]
     },
     {
       "organ_id": "caudate_nucleus_l",
@@ -25680,7 +25916,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Caudate nucleus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -25691,7 +25930,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Caudate nucleus.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -25702,7 +25944,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Anterior cochlear nucleus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem"
       ]
     },
     {
@@ -25712,7 +25956,11 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Anterior cochlear nucleus.r",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Brain",
+        "Brainstem"
+      ]
     },
     {
       "organ_id": "posterior_cochlear_nucleus_l",
@@ -25721,7 +25969,11 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Posterior cochlear nucleus.l",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Brain",
+        "Brainstem"
+      ]
     },
     {
       "organ_id": "posterior_cochlear_nucleus_r",
@@ -25730,7 +25982,11 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Posterior cochlear nucleus.r",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Brain",
+        "Brainstem"
+      ]
     },
     {
       "organ_id": "intermediolateral_nucleus",
@@ -25739,7 +25995,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Intermediolateral nucleus",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "intermediomedial_nucleus",
@@ -25748,7 +26007,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Intermediomedial nucleus",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "lentiform_nucleus_l",
@@ -25758,7 +26020,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Lentiform nucleus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -25769,7 +26034,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Lentiform nucleus.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -25780,7 +26048,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Nucleus of abducens nerve.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Pons"
       ]
     },
     {
@@ -25791,7 +26062,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Nucleus of abducens nerve.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Pons"
       ]
     },
     {
@@ -25802,7 +26076,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Nucleus of accessory nerve.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem"
       ]
     },
     {
@@ -25813,7 +26089,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Nucleus of accessory nerve.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem"
       ]
     },
     {
@@ -25824,7 +26102,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Motor nucleus of facial nerve.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Pons"
       ]
     },
     {
@@ -25835,7 +26116,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Motor nucleus of facial nerve.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Pons"
       ]
     },
     {
@@ -25845,7 +26129,12 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Nucleus of hypoglossal nerve.l",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Medulla oblongata"
+      ]
     },
     {
       "organ_id": "nucleus_of_hypoglossal_nerve_r",
@@ -25854,7 +26143,12 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Nucleus of hypoglossal nerve.r",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Medulla oblongata"
+      ]
     },
     {
       "organ_id": "nucleus_of_oculomotor_nerve_l",
@@ -25864,7 +26158,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Nucleus of oculomotor nerve.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Mesencephalon"
       ]
     },
     {
@@ -25875,7 +26172,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Nucleus of oculomotor nerve.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Mesencephalon"
       ]
     },
     {
@@ -25885,7 +26185,12 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Nucleus of trochlear nerve.l",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Mesencephalon"
+      ]
     },
     {
       "organ_id": "nucleus_of_trochlear_nerve_r",
@@ -25894,7 +26199,12 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Nucleus of trochlear nerve.r",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Mesencephalon"
+      ]
     },
     {
       "organ_id": "posterior_nucleus_of_vagus_nerve_l",
@@ -25903,7 +26213,12 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Posterior nucleus of vagus nerve.l",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Medulla oblongata"
+      ]
     },
     {
       "organ_id": "posterior_nucleus_of_vagus_nerve_r",
@@ -25912,7 +26227,12 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Posterior nucleus of vagus nerve.r",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Medulla oblongata"
+      ]
     },
     {
       "organ_id": "nucleus_proprius",
@@ -25921,7 +26241,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Nucleus proprius",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "nucleus_pulposus_c2_c3",
@@ -26184,7 +26507,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Red nucleus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Mesencephalon"
       ]
     },
     {
@@ -26195,7 +26521,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Red nucleus.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Mesencephalon"
       ]
     },
     {
@@ -26205,7 +26534,12 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Inferior salivatory nucleus.l",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Medulla oblongata"
+      ]
     },
     {
       "organ_id": "inferior_salivatory_nucleus_r",
@@ -26214,7 +26548,12 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Inferior salivatory nucleus.r",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Medulla oblongata"
+      ]
     },
     {
       "organ_id": "superior_salivatory_nucleus_l",
@@ -26224,7 +26563,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Superior salivatory nucleus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Pons"
       ]
     },
     {
@@ -26235,7 +26577,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Superior salivatory nucleus.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Pons"
       ]
     },
     {
@@ -26245,7 +26590,12 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Nucleus of solitary tract.l",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Medulla oblongata"
+      ]
     },
     {
       "organ_id": "nucleus_of_solitary_tract_r",
@@ -26254,7 +26604,12 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Nucleus of solitary tract.r",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Medulla oblongata"
+      ]
     },
     {
       "organ_id": "obturator_externus_l",
@@ -26375,7 +26730,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Olive.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Medulla oblongata"
       ]
     },
     {
@@ -26386,7 +26744,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Olive.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Medulla oblongata"
       ]
     },
     {
@@ -27604,7 +27965,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Opercular part of inferior frontal gyrus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -27996,7 +28360,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Triangular part of inferior frontal gyrus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -28872,7 +29239,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Temporal plane.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -28928,7 +29298,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Choroid plexus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Ventricular system"
       ]
     },
     {
@@ -28939,7 +29311,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Choroid plexus.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Ventricular system"
       ]
     },
     {
@@ -28961,7 +29335,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Occipital pole.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -28986,7 +29363,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Temporal pole.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -29011,7 +29391,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Pons.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Pons"
       ]
     },
     {
@@ -29022,7 +29405,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Pons.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Pons"
       ]
     },
     {
@@ -29033,7 +29419,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Precuneus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -29079,7 +29468,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Spinal reticular process",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "xiphoid_process",
@@ -29216,7 +29608,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Putamen.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -29227,7 +29622,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Putamen.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -29238,7 +29636,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Pyramid of medulla oblongata.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Medulla oblongata"
       ]
     },
     {
@@ -29249,7 +29650,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Pyramid of medulla oblongata.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Brainstem",
+        "Medulla oblongata"
       ]
     },
     {
@@ -29383,7 +29787,8 @@
       "mesh_file": "nervous_male.glb",
       "node": "Anterior root of spinal nerve.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Spinal cord"
       ]
     },
     {
@@ -29394,7 +29799,8 @@
       "mesh_file": "nervous_male.glb",
       "node": "Anterior root of spinal nerve.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Spinal cord"
       ]
     },
     {
@@ -29451,7 +29857,8 @@
       "mesh_file": "nervous_male.glb",
       "node": "Posterior root of spinal nerve.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Spinal cord"
       ]
     },
     {
@@ -29462,7 +29869,8 @@
       "mesh_file": "nervous_male.glb",
       "node": "Posterior root of spinal nerve.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Spinal cord"
       ]
     },
     {
@@ -32057,7 +32465,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Retina.l",
-      "path": []
+      "path": [
+        "Sense organs",
+        "Eyeball"
+      ]
     },
     {
       "organ_id": "retina_r",
@@ -32066,7 +32477,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Retina.r",
-      "path": []
+      "path": [
+        "Sense organs",
+        "Eyeball"
+      ]
     },
     {
       "organ_id": "extensor_retinaculum_of_wrist_l",
@@ -32357,7 +32771,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Sclera.l",
-      "path": []
+      "path": [
+        "Sense organs",
+        "Eyeball"
+      ]
     },
     {
       "organ_id": "sclera_r",
@@ -32366,7 +32783,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Sclera.r",
-      "path": []
+      "path": [
+        "Sense organs",
+        "Eyeball"
+      ]
     },
     {
       "organ_id": "anterior_segment_of_eyeball_l",
@@ -32375,7 +32795,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Anterior segment of eyeball.l",
-      "path": []
+      "path": [
+        "Sense organs",
+        "Eyeball"
+      ]
     },
     {
       "organ_id": "anterior_segment_of_eyeball_r",
@@ -32384,7 +32807,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Anterior segment of eyeball.r",
-      "path": []
+      "path": [
+        "Sense organs",
+        "Eyeball"
+      ]
     },
     {
       "organ_id": "anterior_lateral_segment_of_liver_vi",
@@ -32429,7 +32855,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Posterior segment of eyeball.l",
-      "path": []
+      "path": [
+        "Sense organs",
+        "Eyeball"
+      ]
     },
     {
       "organ_id": "posterior_segment_of_eyeball_r",
@@ -32438,7 +32867,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Posterior segment of eyeball.r",
-      "path": []
+      "path": [
+        "Sense organs",
+        "Eyeball"
+      ]
     },
     {
       "organ_id": "posterior_segment_of_liver_i",
@@ -32660,7 +33092,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Septum pellucidum",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -32947,7 +33382,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Stria medullaris thalami.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Diencephalon"
       ]
     },
     {
@@ -32958,7 +33395,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Stria medullaris thalami.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Diencephalon"
       ]
     },
     {
@@ -32969,7 +33408,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Stria terminalis.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -32980,7 +33422,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Stria terminalis.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -32990,7 +33435,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "White matter of spinal cord",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "white_matter_of_telencephalon_l",
@@ -33000,7 +33448,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "White matter of telencephalon.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -33024,7 +33475,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Lateral intermediate substance",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "lateral_bicipital_groove_l",
@@ -33070,7 +33524,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Calcarine sulcus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -33095,7 +33552,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Central sulcus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -33120,7 +33580,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Circular sulcus of insula.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -33145,7 +33608,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Collateral sulcus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -33170,7 +33636,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Inferior frontal sulcus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -33195,7 +33664,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Superior frontal sulcus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -33238,7 +33710,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Intraparietal sulcus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -33299,7 +33774,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Transverse occipital sulcus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -33324,7 +33802,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Olfactory sulcus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -33349,7 +33830,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Paracentral sulcus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -33374,7 +33858,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Parieto-occipital sulcus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -33399,7 +33886,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Postcentral sulcus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -33442,7 +33932,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Subparietal sulcus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -33467,7 +33960,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Inferior temporal sulcus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -33492,7 +33988,10 @@
       "mesh_file": "nervous_male.glb",
       "node": "Superior temporal sulcus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Cerebrum",
+        "Telencephalon"
       ]
     },
     {
@@ -33831,7 +34330,8 @@
       "mesh_file": "nervous_male.glb",
       "node": "Tentorium cerebelli.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Meninges"
       ]
     },
     {
@@ -33842,7 +34342,8 @@
       "mesh_file": "nervous_male.glb",
       "node": "Tentorium cerebelli.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Meninges"
       ]
     },
     {
@@ -33893,7 +34394,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Thalamus.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Diencephalon"
       ]
     },
     {
@@ -33904,7 +34407,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Thalamus.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Diencephalon"
       ]
     },
     {
@@ -33989,7 +34494,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Anterior corticospinal tract",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "lateral_corticospinal_tract",
@@ -33998,7 +34506,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Lateral corticospinal tract",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "iliotibial_tract_l",
@@ -34030,7 +34541,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Optic tract.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Diencephalon"
       ]
     },
     {
@@ -34041,7 +34554,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Optic tract.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Diencephalon"
       ]
     },
     {
@@ -34051,7 +34566,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Lateral reticulospinal tract",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "medial_reticulospinal_tract",
@@ -34060,7 +34578,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Medial reticulospinal tract",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "rubrospinal_tract",
@@ -34069,7 +34590,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Rubrospinal tract",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "anterior_spinocerebellar_tract",
@@ -34078,7 +34602,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Anterior spinocerebellar tract",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "posterior_spinocerebellar_tract",
@@ -34087,7 +34614,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Posterior spinocerebellar tract",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "spinotectal_tract",
@@ -34096,7 +34626,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Spinotectal tract",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "anterior_spinothalamic_tract",
@@ -34105,7 +34638,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Anterior spinothalamic tract",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "lateral_spinothalamic_tract",
@@ -34114,7 +34650,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Lateral spinothalamic tract",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "tectospinal_tract",
@@ -34123,7 +34662,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Tectospinal tract",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "lateral_vestibulospinal_tract",
@@ -34132,7 +34674,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Lateral vestibulospinal tract",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "medial_vestibulospinal_tract",
@@ -34141,7 +34686,10 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Medial vestibulospinal tract",
-      "path": []
+      "path": [
+        "Central nervous system",
+        "Spinal cord"
+      ]
     },
     {
       "organ_id": "tragus_l",
@@ -34500,7 +35048,9 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Auditory tube.l",
-      "path": []
+      "path": [
+        "Sense organs"
+      ]
     },
     {
       "organ_id": "auditory_tube_r",
@@ -34509,7 +35059,9 @@
       "system": "nervous",
       "mesh_file": "nervous_male.glb",
       "node": "Auditory tube.r",
-      "path": []
+      "path": [
+        "Sense organs"
+      ]
     },
     {
       "organ_id": "tuber_of_vermis",
@@ -37389,7 +37941,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Lateral ventricle.l",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Ventricular system"
       ]
     },
     {
@@ -37400,7 +37954,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Lateral ventricle.r",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Ventricular system"
       ]
     },
     {
@@ -37411,7 +37967,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Fourth ventricle",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Ventricular system"
       ]
     },
     {
@@ -37433,7 +37991,9 @@
       "mesh_file": "nervous_male.glb",
       "node": "Third ventricle",
       "path": [
-        "Central nervous system"
+        "Central nervous system",
+        "Brain",
+        "Ventricular system"
       ]
     },
     {

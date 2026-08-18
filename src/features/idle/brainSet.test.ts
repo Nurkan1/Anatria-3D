@@ -21,39 +21,25 @@ function organ(over: Partial<ManifestOrgan>): ManifestOrgan {
 }
 
 describe("brainOrganIds", () => {
-  it("recovers the hemisphere the source data leaves out", () => {
-    // The defect this function exists for. Z-Anatomy files the right gyri
-    // under `Central nervous system > Brain` and their left twins directly
-    // under `Central nervous system`, so the obvious filter draws half a head.
+  it("takes what the hierarchy says is in the brain, and nothing else", () => {
+    // This was three tests describing a workaround: the manifest filed the
+    // right gyri under `Brain` and their left twins directly under `Central
+    // nervous system`, so this function paired `_r` with `_l` to recover the
+    // missing hemisphere, while carefully not inventing twins that had no mesh.
+    //
+    // The hierarchy is repaired in the pipeline now, both sides are under
+    // `Brain`, and the pairing pass was measured against the repaired manifest
+    // and added nothing. So the rule is the plain filter it always wanted to
+    // be, and a structure outside `Brain` is outside the brain — including one
+    // whose twin is inside it, which the old rule would have dragged in.
     const set = brainOrganIds([
       organ({ organ_id: "cuneus_r", path: ["Central nervous system", "Brain", "Cerebrum"] }),
-      organ({ organ_id: "cuneus_l", path: ["Central nervous system"] }),
+      organ({ organ_id: "cuneus_l", path: ["Central nervous system", "Brain", "Cerebrum"] }),
+      organ({ organ_id: "dura_mater", path: ["Central nervous system", "Meninges"] }),
+      organ({ organ_id: "kidney_l", system: "renal", path: ["Urinary system"] }),
     ]);
 
     expect(set).toEqual(["cuneus_l", "cuneus_r"]);
-  });
-
-  it("does not invent a twin that is not in the atlas", () => {
-    // Pairing by name only ever *finds*; it must never assert. An id that
-    // resolves to no mesh would be dropped later anyway, silently.
-    const set = brainOrganIds([
-      organ({ organ_id: "culmen_r", path: ["Central nervous system", "Brain"] }),
-    ]);
-
-    expect(set).toEqual(["culmen_r"]);
-  });
-
-  it("leaves unrelated structures alone even when their twin is cranial", () => {
-    // The second pass runs over what the first pass chose, not over the whole
-    // atlas. Widening it would drag in the twin of anything merely adjacent.
-    const set = brainOrganIds([
-      organ({ organ_id: "flocculus_l", path: ["Central nervous system", "Brain"] }),
-      organ({ organ_id: "flocculus_r", path: ["Central nervous system"] }),
-      organ({ organ_id: "kidney_l", system: "renal", path: ["Urinary system"] }),
-      organ({ organ_id: "kidney_r", system: "renal", path: ["Urinary system"] }),
-    ]);
-
-    expect(set).toEqual(["flocculus_l", "flocculus_r"]);
   });
 
   it("takes nothing from a manifest with no brain in it", () => {
@@ -91,14 +77,20 @@ describe("against the manifest actually shipped", () => {
     expect([...files]).toEqual(["nervous_male.glb"]);
   });
 
-  it("does not silently pretend to hold the deep midline structures", () => {
-    // Documented absence, not an oversight. These sit outside the `Brain`
-    // subtree with no lateral twin, so no naming rule reaches them — getting
-    // them means asking the geometry, which belongs in the asset pipeline.
-    // If a future manifest fixes the hierarchy this test fails, and that is
-    // the point: it is how we find out the hole has closed.
+  it("holds the deep midline structures, now that the hierarchy has them", () => {
+    // This test used to assert the opposite, and said so: the deep midline
+    // structures sat outside the `Brain` subtree with no lateral twin, so no
+    // naming rule reached them, and it was written to fail the day the
+    // hierarchy was repaired — "it is how we find out the hole has closed".
+    //
+    // It closed. `tools/asset-pipeline/hierarchy.mjs` refiles them, and the
+    // assertion is inverted rather than deleted so the history of the hole
+    // stays legible.
     const set = new Set(brainOrganIds(organs));
 
-    expect(set.has("corpus_callosum")).toBe(false);
+    expect(set.has("corpus_callosum")).toBe(true);
+    expect(set.has("thalamus_l")).toBe(true);
+    expect(set.has("fornix_l")).toBe(true);
+    expect(set.has("hippocampus_l")).toBe(true);
   });
 });

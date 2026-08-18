@@ -22,6 +22,7 @@ import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { repairHierarchy } from "./hierarchy.mjs";
 import { parseTa2, slugify } from "./ta2.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -262,7 +263,12 @@ function main() {
     systems[0].load_on_start = true;
   }
 
-  organs.sort((a, b) => a.ta2_latin.localeCompare(b.ta2_latin));
+  // Z-Anatomy's collection nesting is the hierarchy everywhere except the
+  // nervous system, where it files most of the brain outside `Brain`. Repaired
+  // here rather than in the vendored data — see hierarchy.mjs for what and why.
+  const { organs: placed, corrected, propagated } = repairHierarchy(organs);
+
+  placed.sort((a, b) => a.ta2_latin.localeCompare(b.ta2_latin));
   systems.sort((a, b) => a.system.localeCompare(b.system));
 
   writeFileSync(
@@ -275,7 +281,7 @@ function main() {
         credit: CREDIT,
         license: "CC-BY-SA-4.0",
         systems,
-        organs,
+        organs: placed,
       },
       null,
       2,
@@ -284,7 +290,8 @@ function main() {
   );
 
   console.log(`Wrote ${OUT}`);
-  console.log(`  ${organs.length} structures total`);
+  console.log(`  ${placed.length} structures total`);
+  console.log(`  hierarchy: ${corrected} refiled by name, ${propagated} propagated from a twin`);
   for (const entry of systems) {
     const when = entry.load_on_start ? "eager" : "on demand";
     console.log(`  ${entry.system}: ${entry.organ_count} (${when})`);

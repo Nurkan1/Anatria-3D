@@ -249,6 +249,35 @@ describe("applySceneCommand", () => {
     expect(state.illuminated).toEqual([]);
   });
 
+  it("brings what it lights into view when an isolation is hiding it", () => {
+    // The bug this exists for, photographed by a reader: the assistant isolated
+    // the brain, then lit the thalamus and the corpus callosum to explain them.
+    // Neither was in the isolated set, so the answer carried numbered pins
+    // pointing at structures the viewport was not drawing.
+    const state = run(
+      { action: "isolate_structures", organ_ids: ["mouth"] },
+      { action: "illuminate_structures", organ_ids: ["stomach"] },
+    );
+    expect(state.illuminated).toEqual(["stomach"]);
+    expect(state.isolatedOrganIds).toEqual(["mouth", "stomach"]);
+  });
+
+  it("widens the isolation without disturbing it when nothing is hidden", () => {
+    // Lighting something already on screen must leave the isolation identical —
+    // not merely equal, so a re-render is not triggered for nothing.
+    const isolated = run({ action: "isolate_structures", organ_ids: ["mouth", "stomach"] });
+    const lit = applySceneCommand(isolated, {
+      action: "illuminate_structures",
+      organ_ids: ["mouth"],
+    });
+    expect(lit.isolatedOrganIds).toBe(isolated.isolatedOrganIds);
+  });
+
+  it("leaves a scene with no isolation alone", () => {
+    const state = run({ action: "illuminate_structures", organ_ids: ["mouth"] });
+    expect(state.isolatedOrganIds).toBeNull();
+  });
+
   it("reset_view puts the light out too", () => {
     const state = run(
       { action: "illuminate_structures", organ_ids: ["mouth"] },
