@@ -47,6 +47,38 @@ locally against the structures they were about, so the atlas can be coloured by
 your own revision. Forty notes on the thorax and nothing on the pelvis is
 invisible in a list, and impossible to miss as a shape on a body.
 
+![The Usage tab beside a case drill in Spanish. The left panel lists fourteen
+days of token consumption broken down by model, with stars annotated against
+four of them; the assistant is reasoning through an acute pancreatitis case with
+the duodenum, pancreas and gallbladder pinned to the
+anatomy.](docs/screenshots/usage-by-model.png)
+
+**You can see what it costs, and you are not locked to one provider.** Every
+answer's token count is recorded on your machine and totalled per day and per
+model. No prices are shown anywhere: rates change, and they differ by tier and
+region, so your provider's own dashboard is the authority on the bill. This
+panel answers the other question — *where is it going?*
+
+**The stars are annotations on this screenshot, not something the application
+shows.** They are one maintainer's judgement after real use, and they rate
+**balance rather than quality**: speed, reliability at calling the scene tools,
+and precision when explaining — weighed against price.
+
+- **Three stars — `gemini-3.7-flash`.** The best balance today. Not the best
+  model here: it is fast, it isolates the structure you asked for reliably, it
+  explains accurately enough for study, and it costs a fraction of the others.
+- **Two stars — `claude-haiku-4.5`, `claude-sonnet-5`, `gpt-5.6-terra`.** As good
+  or better at the anatomy and the reasoning. The star they lose is price,
+  nothing else.
+
+The answer in the screenshot is in Spanish while every label around it is in
+English. That is the arrangement described under [Status](#status): the chrome is
+English by decision, and the assistant answers in the reader's own language.
+
+This is a snapshot, not a benchmark. It reflects one person's use on one date,
+model versions move quickly, and the application never picks for you — the three
+providers sit side by side in the interface and you switch mid-conversation.
+
 ---
 
 ## Download
