@@ -45,7 +45,8 @@ whole body, because no open dataset provides a female one.
 
   1. Visible Human Female
      U.S. National Library of Medicine, National Institutes of Health
-     (Spitzer & Whitlock, 2002) — the dataset everything below derives from.
+     The Visible Human Project — the dataset everything below derives from.
+     https://www.nlm.nih.gov/research/visible/visible_human.html
 
   2. Human Reference Atlas 3D Reference Organ Library
      HuBMAP Consortium / NIH — https://humanatlas.io/
