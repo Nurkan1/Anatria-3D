@@ -17257,7 +17257,9 @@
       "system": "respiratory",
       "mesh_file": "respiratory_male.glb",
       "node": "Inferior lobe of right lung",
-      "path": []
+      "path": [
+        "Lungs"
+      ]
     },
     {
       "organ_id": "inferior_lobe_of_left_lung",
@@ -17266,7 +17268,9 @@
       "system": "respiratory",
       "mesh_file": "respiratory_male.glb",
       "node": "Inferior lobe of left lung",
-      "path": []
+      "path": [
+        "Lungs"
+      ]
     },
     {
       "organ_id": "middle_lobe_of_right_lung",
@@ -17275,7 +17279,9 @@
       "system": "respiratory",
       "mesh_file": "respiratory_male.glb",
       "node": "Middle lobe of right lung",
-      "path": []
+      "path": [
+        "Lungs"
+      ]
     },
     {
       "organ_id": "superior_lobe_of_right_lung",
@@ -17284,7 +17290,9 @@
       "system": "respiratory",
       "mesh_file": "respiratory_male.glb",
       "node": "Superior lobe of right lung",
-      "path": []
+      "path": [
+        "Lungs"
+      ]
     },
     {
       "organ_id": "superior_lobe_of_left_lung",
@@ -17293,7 +17301,9 @@
       "system": "respiratory",
       "mesh_file": "respiratory_male.glb",
       "node": "Superior lobe of left lung",
-      "path": []
+      "path": [
+        "Lungs"
+      ]
     },
     {
       "organ_id": "right_lobe_of_thymus",
@@ -32819,7 +32829,9 @@
       "system": "digestive",
       "mesh_file": "digestive_male.glb",
       "node": "Anterior lateral segment of liver (VI)",
-      "path": []
+      "path": [
+        "Liver"
+      ]
     },
     {
       "organ_id": "left_anterior_lateral_segment_of_liver_iii",
@@ -32828,7 +32840,9 @@
       "system": "digestive",
       "mesh_file": "digestive_male.glb",
       "node": "Left anterior lateral segment of liver (III)",
-      "path": []
+      "path": [
+        "Liver"
+      ]
     },
     {
       "organ_id": "anterior_medial_segment_of_liver_v",
@@ -32837,7 +32851,9 @@
       "system": "digestive",
       "mesh_file": "digestive_male.glb",
       "node": "Anterior medial segment of liver (V)",
-      "path": []
+      "path": [
+        "Liver"
+      ]
     },
     {
       "organ_id": "left_medial_segment_of_liver_iv",
@@ -32846,7 +32862,9 @@
       "system": "digestive",
       "mesh_file": "digestive_male.glb",
       "node": "Left medial segment of liver (IV)",
-      "path": []
+      "path": [
+        "Liver"
+      ]
     },
     {
       "organ_id": "posterior_segment_of_eyeball_l",
@@ -32879,7 +32897,9 @@
       "system": "digestive",
       "mesh_file": "digestive_male.glb",
       "node": "Posterior segment of liver (I)",
-      "path": []
+      "path": [
+        "Liver"
+      ]
     },
     {
       "organ_id": "posterior_lateral_segment_of_liver_vii",
@@ -32888,7 +32908,9 @@
       "system": "digestive",
       "mesh_file": "digestive_male.glb",
       "node": "Posterior lateral segment of liver (VII)",
-      "path": []
+      "path": [
+        "Liver"
+      ]
     },
     {
       "organ_id": "left_posterior_lateral_segment_of_liver_ii",
@@ -32897,7 +32919,9 @@
       "system": "digestive",
       "mesh_file": "digestive_male.glb",
       "node": "Left posterior lateral segment of liver (II)",
-      "path": []
+      "path": [
+        "Liver"
+      ]
     },
     {
       "organ_id": "posterior_medial_segment_of_liver_viii",
@@ -32906,7 +32930,9 @@
       "system": "digestive",
       "mesh_file": "digestive_male.glb",
       "node": "Posterior medial segment of liver (VIII)",
-      "path": []
+      "path": [
+        "Liver"
+      ]
     },
     {
       "organ_id": "seventh_rib_l",

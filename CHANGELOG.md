@@ -180,6 +180,18 @@ model*, not the interface around it. Scrollbars are now dark, narrow, and
 without the arrow buttons, so several scrolling panes sit together without any
 of them looking like a document.
 
+**The liver and the lung now open into their parts.** Asking to open the liver
+gave you a single mesh with its eight Couinaud segments loose beside it, and the
+lung the same with its five lobes. Both now open whole.
+
+They are the two that could be fixed honestly. The atlas's visceral systems all
+export flat — a fault in the export, not in the source — and most of what could
+be reconstructed would have arrived incomplete: a *digestive canal* without the
+oesophagus, the jejunum or the appendix, and a *bronchi* group holding the
+trachea alone while fourteen real bronchi sat outside it. That is the same
+defect as the brain, and it is not improved by being somewhere else. Those
+groups are recorded, with the reason, and wait for the export to be repaired.
+
 **Pointing at something now shows it.** When the assistant lit a structure that
 an isolation was hiding, the light fell on nothing and the pin beside it led
 nowhere. Lighting a structure now brings it into view — it widens what you are

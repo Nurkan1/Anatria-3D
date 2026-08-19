@@ -206,6 +206,109 @@ export const NERVOUS_PATHS = {
 };
 
 /**
+ * Where the visceral hierarchy went, and the little of it we take back here.
+ *
+ * # The export loses it
+ *
+ * `blender_export.py` walks a collection and hands each object the trail of
+ * ancestors above it. But it visits a node's own objects *before* descending,
+ * and a `seen` set stops an object being claimed twice — so an object linked
+ * into both `Digestive system` and its child `Digestive canal` is claimed by
+ * the parent, with an empty trail, and the child never gets it. Z-Anatomy links
+ * visceral objects into both, so every visceral system exported flat.
+ *
+ * Fixing that properly means correcting the walk and re-exporting, which needs
+ * Blender and the 1.5 GB source. Until then, `vendor/inspect.json` — a
+ * committed snapshot of the blend's 1,944 collections and 4,569 objects —
+ * carries the membership the export dropped, and a little of it can be
+ * recovered without touching the assets.
+ *
+ * # Why so little of it
+ *
+ * Because most of what could be recovered would be **wrong in the way the brain
+ * was wrong**: a group whose name promises an organ and whose membership does
+ * not deliver it. Reconstructing every visceral group would have produced
+ * `Digestive canal` without the oesophagus, the jejunum or the appendix, and a
+ * `Bronchi` holding the trachea alone while fourteen real bronchi sat outside
+ * it. That is the exact defect this file exists to repair, and shipping it
+ * under a different organ would be worse than shipping nothing.
+ *
+ * So only groups **verified complete by enumeration against the manifest** are
+ * taken, and the rest are recorded in `DECLINED_VISCERAL_GROUPS` rather than
+ * guessed at. The full recovery belongs with the export fix.
+ */
+const VISCERAL_ROOT = "Bonus collection/Visceral systems/";
+
+/**
+ * Source collections whose membership is complete, and may be used as a group.
+ *
+ * Each was checked by listing what the manifest holds for that organ and
+ * confirming the collection accounts for all of it:
+ *
+ * - **Liver** — the eight Couinaud segments, I to VIII, and the manifest has
+ *   exactly eight. The liver's own mesh is reached beside them because
+ *   `regionMembersByNode` also matches a structure's node name.
+ * - **Lungs** — five lobes: superior, middle and inferior on the right,
+ *   superior and inferior on the left. The manifest has exactly those five.
+ */
+const VISCERAL_GROUPS = new Set(["Liver", "Lungs"]);
+
+/**
+ * Groups the source offers and this does not take, with the reason.
+ *
+ * Kept because the next person to look at this will find the same collections
+ * and wonder why they were left, and because they are the checklist for the day
+ * the export walk is fixed — at which point every one of them arrives complete
+ * and this table can go.
+ */
+export const DECLINED_VISCERAL_GROUPS = {
+  "Digestive canal":
+    "would hold 9 of the alimentary canal's structures and leave out the " +
+    "oesophagus, the jejunum, the vermiform appendix and the gastric mucosa",
+  Bronchi:
+    "would hold the trachea alone — which is not a bronchus — while the main, " +
+    "lobar and segmental bronchi, fourteen of them, sat outside it",
+  Mouth:
+    "would hold the salivary glands but not the parotid and submandibular " +
+    "ducts that drain them",
+  "Peritoneal structures":
+    "would hold the omenta and the mesocolon but not the meso-appendix",
+};
+
+/**
+ * Give back the visceral groups that survive the completeness check.
+ *
+ * Only ever *adds* a path to a structure that has none: nothing the export got
+ * right can be overwritten by this, which is what makes it safe to run beside
+ * the repairs above.
+ */
+export function recoverVisceralPaths(organs, inspect) {
+  const objects = new Map(inspect.objects.map((entry) => [entry.name.trim(), entry]));
+  const collectionPath = new Map(inspect.collections.map((entry) => [entry.name, entry.path]));
+
+  let recovered = 0;
+  const placed = organs.map((organ) => {
+    if (organ.path.length > 0) return organ;
+    const source = objects.get((organ.node ?? "").trim());
+    if (!source) return organ;
+
+    for (const name of source.collections) {
+      if (!VISCERAL_GROUPS.has(name)) continue;
+      const full = collectionPath.get(name);
+      if (!full?.startsWith(VISCERAL_ROOT)) continue;
+      recovered += 1;
+      // Relative to the system, not including it: a `Digestive system` node
+      // holding only the structures that happen to have been recovered would
+      // itself be a group that under-delivers.
+      return { ...organ, path: [name] };
+    }
+    return organ;
+  });
+
+  return { organs: placed, recovered };
+}
+
+/**
  * Repair the hierarchy of a built organ list, in place-free fashion.
  *
  * Returns the organs with corrected paths and a count of what each mechanism

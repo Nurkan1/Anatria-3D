@@ -4,7 +4,12 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import { AnatomyManifestSchema } from "../src/lib/schemas";
-import { NERVOUS_PATHS, repairHierarchy } from "../tools/asset-pipeline/hierarchy.mjs";
+import {
+  DECLINED_VISCERAL_GROUPS,
+  NERVOUS_PATHS,
+  recoverVisceralPaths,
+  repairHierarchy,
+} from "../tools/asset-pipeline/hierarchy.mjs";
 
 const REPO = join(__dirname, "..");
 const male = AnatomyManifestSchema.parse(
@@ -126,6 +131,60 @@ describe("the repair does not reach past the nervous system", () => {
       (organ) => organ.system !== "nervous" && organ.path.includes("Brain"),
     );
     expect(outside).toEqual([]);
+  });
+});
+
+describe("the visceral groups taken back from inspect.json", () => {
+  it("opens the liver into its eight segments", () => {
+    // Couinaud I to VIII, and the manifest holds exactly eight. Before this the
+    // liver was a single mesh with its segments loose beside it, so asking to
+    // open the liver gave you the outside of it.
+    const segments = inGroup("Liver");
+    expect(segments).toHaveLength(8);
+    for (const roman of ["(I)", "(II)", "(III)", "(IV)", "(V)", "(VI)", "(VII)", "(VIII)"]) {
+      expect(segments.some((organ) => organ.name_en.includes(roman)), roman).toBe(true);
+    }
+  });
+
+  it("opens the lung into its five lobes", () => {
+    const lobes = inGroup("Lungs");
+    expect(lobes).toHaveLength(5);
+    const named = lobes.map((organ) => organ.name_en).sort();
+    expect(named.filter((name) => /right lung/.test(name))).toHaveLength(3);
+    expect(named.filter((name) => /left lung/.test(name))).toHaveLength(2);
+  });
+
+  it("takes no group it cannot fill", () => {
+    // The whole restraint of this recovery. Every one of these exists in the
+    // source and every one would have arrived incomplete — `Digestive canal`
+    // without the oesophagus, `Bronchi` holding the trachea alone. A group that
+    // under-delivers is the defect this file was written to repair, and it does
+    // not become acceptable by being in a different organ.
+    for (const node of Object.keys(DECLINED_VISCERAL_GROUPS)) {
+      expect(inGroup(node), node).toEqual([]);
+    }
+  });
+
+  it("says why each declined group was declined", () => {
+    for (const [node, reason] of Object.entries(DECLINED_VISCERAL_GROUPS)) {
+      expect(reason.length, node).toBeGreaterThan(30);
+    }
+  });
+
+  it("only ever adds a path, never replaces one", () => {
+    // The property that makes it safe to run beside the nervous repair: a
+    // structure the export placed correctly cannot be moved by this.
+    const organs = [
+      { organ_id: "a", ta2_latin: "A", system: "digestive", path: ["Somewhere"], node: "Liver" },
+      { organ_id: "b", ta2_latin: "B", system: "digestive", path: [], node: "Not in the blend" },
+    ];
+    const { organs: out, recovered } = recoverVisceralPaths(organs, {
+      objects: [{ name: "Liver", collections: ["Liver"] }],
+      collections: [{ name: "Liver", path: "Bonus collection/Visceral systems/Digestive system/Liver" }],
+    });
+    expect(out[0]!.path).toEqual(["Somewhere"]);
+    expect(out[1]!.path).toEqual([]);
+    expect(recovered).toBe(0);
   });
 });
 
