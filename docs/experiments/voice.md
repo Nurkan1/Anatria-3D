@@ -250,6 +250,28 @@ nothing appears to be wrong.
 All measurements above use piper's synthetic speech, which is a harsher test
 than a human voice for words like "aorta".
 
+## A bug only an *installed* build could show
+
+Reported on first real use of the `.deb`: pressing *Read aloud* gave
+
+    [Errno 13] Permission denied:
+    '/usr/lib/Anatria3D/anatria-engine/_internal/voices'
+
+`_VOICE_DIR` was `<package>/voices` — beside the frozen engine. From a source
+checkout that is writable and everything passes; installed from a `.deb` it is
+under `/usr`, owned by root, and the first voice download fails. An application
+writing into its own installation directory would be wrong even with the
+permission: voices are per-user data.
+
+`_voice_dirs()` now returns the writable `XDG_DATA_HOME/anatria3d/voices` first
+and keeps the bundled directory as a **read** fallback, so a build that ships
+voices uses them instead of fetching a second copy. Pinned by two tests.
+
+Worth noting what this says about testing: every gate was green, the sidecar
+round-tripped audio, and the bug was still there — because everything ran from
+a checkout the user owns. Nothing short of installing the package would have
+found it.
+
 ## Why the microphone did not work in a packaged build
 
 **The answer, after four wrong theories: WebKitGTK's media-stream support is

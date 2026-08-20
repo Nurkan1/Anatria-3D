@@ -29,6 +29,7 @@ import asyncio
 import base64
 import binascii
 import io
+import os
 import sys
 import wave
 from pathlib import Path
@@ -66,7 +67,28 @@ _PIPER_VOICES: Final[dict[str, str]] = {
 #: the user's data dir: they belong to this experimental build, and removing
 #: the branch should not leave hundreds of megabytes orphaned somewhere the
 #: user will never find.
-_VOICE_DIR: Final = Path(__file__).resolve().parent.parent / "voices"
+def _voice_dirs() -> list[Path]:
+    """Where piper voices live, in read order.
+
+    **Writable first, and never inside the installation.** The original version
+    put them beside the package, which works from a source checkout and fails
+    the moment the app is installed from a `.deb`:
+
+        [Errno 13] Permission denied:
+        '/usr/lib/Anatria3D/anatria-engine/_internal/voices'
+
+    `/usr` is root-owned, and an app downloading into its own install directory
+    would be wrong even if it could. Voices are per-user data, so they belong
+    under `XDG_DATA_HOME`.
+
+    The bundled directory is still *read*: a build that ships voices should use
+    them rather than downloading a second copy.
+    """
+    data_home = os.environ.get("XDG_DATA_HOME") or str(Path.home() / ".local" / "share")
+    return [
+        Path(data_home) / "anatria3d" / "voices",
+        Path(__file__).resolve().parent.parent / "voices",
+    ]
 
 #: Cached across calls; loading is the expensive part.
 _whisper_model: Any = None
@@ -115,11 +137,18 @@ def _load_piper(language: str) -> Any:
 
     # `PiperVoice.load` takes a path to the model file, not a voice name, so
     # the download has to happen first and be checked for.
-    model_path = _VOICE_DIR / f"{voice_name}.onnx"
-    if not model_path.exists():
-        _VOICE_DIR.mkdir(parents=True, exist_ok=True)
+    dirs = _voice_dirs()
+    model_path = next(
+        (d / f"{voice_name}.onnx" for d in dirs if (d / f"{voice_name}.onnx").is_file()),
+        None,
+    )
+    if model_path is None:
+        # Download into the writable one, which is always first.
+        target = dirs[0]
+        model_path = target / f"{voice_name}.onnx"
         try:
-            download_voice(voice_name, _VOICE_DIR)
+            target.mkdir(parents=True, exist_ok=True)
+            download_voice(voice_name, target)
         except Exception as exc:
             # The one moment voice touches the network, and it is a one-off
             # asset fetch, not the audio: the recording itself never leaves.

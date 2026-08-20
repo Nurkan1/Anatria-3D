@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import asyncio
 import base64
+from pathlib import Path
 
 import pytest
 
@@ -196,3 +197,34 @@ def test_the_hotword_list_is_computed_once() -> None:
     voice._hotwords = None
     first = voice._anatomy_hotwords()
     assert voice._anatomy_hotwords() is first
+
+
+def test_voices_are_downloaded_under_the_user_s_data_dir(monkeypatch) -> None:
+    """Never into the installation directory.
+
+    The first version put voices beside the package. From a source checkout
+    that works; installed from a `.deb` it is `/usr/lib/...`, owned by root,
+    and the first "Read aloud" fails with
+
+        [Errno 13] Permission denied:
+        '/usr/lib/Anatria3D/anatria-engine/_internal/voices'
+
+    An application writing into its own install directory would be wrong even
+    with permission — these are per-user data.
+    """
+    monkeypatch.setenv("XDG_DATA_HOME", "/tmp/xdg-test")
+    first, *rest = voice._voice_dirs()
+
+    # The writable one is first, because that is where a download goes.
+    assert first == Path("/tmp/xdg-test/anatria3d/voices")
+    # The bundled directory is still read, so a build that ships voices uses
+    # them instead of fetching a second copy.
+    assert rest, "the bundled directory should remain a read fallback"
+    assert not str(first).startswith("/usr")
+
+
+def test_the_data_dir_falls_back_to_the_home_default(monkeypatch) -> None:
+    """`XDG_DATA_HOME` is frequently unset; the spec's default applies."""
+    monkeypatch.delenv("XDG_DATA_HOME", raising=False)
+    first = voice._voice_dirs()[0]
+    assert first == Path.home() / ".local" / "share" / "anatria3d" / "voices"
