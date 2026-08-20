@@ -19,13 +19,19 @@ import { stripOrganRefs } from "./organRefs";
 /**
  * Ceiling on what is sent for synthesis.
  *
- * Piper is realtime-ish on a CPU, so a long answer takes about as long to
- * synthesise as it takes to say — a 4000-character answer is minutes of audio
- * nobody waits for, arriving as one base64 blob on one NDJSON line. Long
- * answers are cut at a sentence boundary and the reader keeps the written one,
- * which is the authoritative copy anyway.
+ * Matches `SpeakRequest.text` in `protocol.py`, so the cap is the protocol's
+ * and not a second, tighter one invented here.
+ *
+ * This was 700 — about one paragraph — on the reasoning that piper synthesises
+ * at roughly real time and a long answer is minutes of audio nobody waits for.
+ * Both halves of that were wrong. Measured on this machine, 502 characters
+ * take **3.9s to synthesise for 26.8s of speech** — about seven times faster
+ * than real time, so a full answer is a few seconds of waiting, not minutes.
+ * And truncation was the worse failure anyway: an explanation that stops after
+ * its first paragraph loses exactly the part the reader was waiting for, and
+ * stops without saying why. *Stop* is the answer to "too long", not a cut.
  */
-export const MAX_SPOKEN_CHARS = 700;
+export const MAX_SPOKEN_CHARS = 8000;
 
 export function speakableText(markdown: string): string {
   let text = stripOrganRefs(markdown);
@@ -66,9 +72,10 @@ export function speakableText(markdown: string): string {
 /**
  * Cut to `limit`, preferring the last sentence end before it.
  *
- * Stopping mid-clause sounds like a fault; stopping at a full stop sounds like
- * the end of a thought. If there is no sentence break in the last third, the
- * cut falls back to a word boundary rather than slicing a word in half.
+ * Only reached by an answer at the protocol's own 8000-character limit, which
+ * is far past anything the assistant writes. Kept because the frame would be
+ * rejected outright otherwise, and a cut at a full stop sounds like the end of
+ * a thought where a cut mid-clause sounds like a fault.
  */
 function truncateAtSentence(text: string, limit: number): string {
   if (text.length <= limit) return text;

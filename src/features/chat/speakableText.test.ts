@@ -57,9 +57,26 @@ describe("speakableText", () => {
     expect(speakableText("| Artery | Supplies |")).not.toContain("|");
   });
 
-  it("cuts a long answer at a sentence, not mid-word", () => {
+  it("speaks a whole multi-paragraph answer, not just the first paragraph", () => {
+    // The bug this pins: the cap was 700 characters — about one paragraph — so
+    // a normal answer stopped mid-explanation, silently.
+    const answer = [
+      "The heart is a muscular pump in the centre of the chest.",
+      "It has four chambers: two atria above and two ventricles below.",
+      "The right side sends blood to the lungs; the left side to the body.",
+    ].join("\n\n");
+
+    const spoken = speakableText(answer);
+
+    expect(spoken).toContain("muscular pump");
+    expect(spoken).toContain("four chambers");
+    // The last paragraph is the one truncation used to eat.
+    expect(spoken).toContain("to the body");
+  });
+
+  it("cuts at a sentence, not mid-word, at the protocol's own limit", () => {
     const sentence = "The left ventricle pumps blood into the aorta. ";
-    const spoken = speakableText(sentence.repeat(40));
+    const spoken = speakableText(sentence.repeat(400));
 
     expect(spoken.length).toBeLessThanOrEqual(MAX_SPOKEN_CHARS);
     // Ends where a thought ended, so it sounds finished rather than broken.
@@ -67,7 +84,7 @@ describe("speakableText", () => {
   });
 
   it("falls back to a word boundary when there is no sentence to cut at", () => {
-    const spoken = speakableText("word ".repeat(400));
+    const spoken = speakableText("word ".repeat(4000));
     expect(spoken.length).toBeLessThanOrEqual(MAX_SPOKEN_CHARS + 1);
     expect(spoken.endsWith("…")).toBe(true);
     expect(spoken).not.toMatch(/wor…$/);
