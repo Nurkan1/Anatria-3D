@@ -17,7 +17,7 @@ import { z } from "zod";
  * only thing standing between us and the two sides drifting apart silently.
  */
 
-export const PROTOCOL_VERSION = 2;
+export const PROTOCOL_VERSION = 3;
 
 // ---------------------------------------------------------------------------
 // Primitives
@@ -421,6 +421,63 @@ export const AgentRequestSchema = z.object({
 export type AgentRequest = z.infer<typeof AgentRequestSchema>;
 
 /**
+ * Ceiling on one base64 audio payload, in characters.
+ *
+ * The transport is NDJSON, so the whole clip travels on a single line, and
+ * base64 costs a third on top of the bytes. This is a backstop against a frame
+ * that would stall the reader rather than the limit the user meets — that is
+ * `VOICE_MAX_SECONDS`, enforced by the recorder and shown in the interface.
+ *
+ * Kept in step with `MAX_AUDIO_B64_CHARS` in `protocol.py`; the sidecar
+ * rejects anything larger, so a mismatch here would only mean a clip that is
+ * refused after the reader has already spoken it.
+ */
+export const MAX_AUDIO_B64_CHARS = 8 * 1024 * 1024;
+
+/**
+ * How long a single recording may run, in seconds.
+ *
+ * Displayed, not just enforced: a microphone that stops on its own without
+ * having said it would reads as a failure.
+ */
+export const VOICE_MAX_SECONDS = 30;
+
+/**
+ * Speech in: a recorded clip for the sidecar to transcribe locally.
+ *
+ * The audio is base64 because the transport is line-delimited and cannot carry
+ * a raw byte. It travels to the sidecar and no further — the recogniser runs
+ * in-process and offline, which is the point of the local engine.
+ */
+export const TranscribeRequestSchema = z.object({
+  request_id: z.string().min(1),
+  /** base64 of a compressed capture from MediaRecorder, not raw PCM. */
+  audio_b64: z.string().min(1).max(MAX_AUDIO_B64_CHARS),
+  /**
+   * The container MediaRecorder actually produced.
+   *
+   * Sent rather than assumed: WebKitGTK on Linux and WebView2 on Windows do
+   * not agree on a default, so hardcoding one would break a platform.
+   */
+  mime_type: z.string().min(1).max(128),
+  language: LanguageSchema,
+});
+export type TranscribeRequest = z.infer<typeof TranscribeRequestSchema>;
+
+/**
+ * Speech out: synthesise an answer that has already been shown.
+ *
+ * Sent after the written answer is on screen, never instead of it. The text
+ * carries the on-screen regulatory notice; speech is an addition to it.
+ */
+export const SpeakRequestSchema = z.object({
+  request_id: z.string().min(1),
+  text: z.string().min(1).max(8000),
+  language: LanguageSchema,
+});
+export type SpeakRequest = z.infer<typeof SpeakRequestSchema>;
+
+/**
  * Ask a provider which models the stored key can actually use.
  *
  * Doubles as key validation: the call that fills the picker is the call that
@@ -469,6 +526,13 @@ export const EngineErrorCodeSchema = z.enum([
   "service_unavailable",
   "guardrail_triggered",
   "invalid_request",
+  /**
+   * Voice is a local experiment and its engines are optional: the model may not
+   * be downloaded yet, or the wheels may be absent from this build. Its own
+   * code because the answer is "voice is off", not "something broke" — the
+   * typed interface is unaffected and the UI must say so.
+   */
+  "voice_unavailable",
   "internal_error",
 ]);
 export type EngineErrorCode = z.infer<typeof EngineErrorCodeSchema>;
@@ -540,6 +604,25 @@ export const EngineEventSchema = z.discriminatedUnion("type", [
     request_id: z.string(),
     usage: TokenUsageSchema.nullable(),
     model: z.string().nullable().default(null),
+  }),
+  /**
+   * What the recogniser heard.
+   *
+   * This lands in the composer for the reader to see and correct, and is not
+   * dispatched to the agent on its own. A misheard structure name is worth
+   * catching before it becomes a question about the wrong organ.
+   */
+  z.object({
+    type: z.literal("transcript"),
+    request_id: z.string(),
+    text: z.string(),
+  }),
+  /** Synthesised audio, base64, played by the webview as a Blob. */
+  z.object({
+    type: z.literal("speech"),
+    request_id: z.string(),
+    audio_b64: z.string(),
+    mime_type: z.string(),
   }),
   z.object({
     type: z.literal("error"),

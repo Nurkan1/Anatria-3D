@@ -55,3 +55,16 @@ tools/asset-pipeline/vendor/Z-Anatomy.zip
 
 # Coworker instructions for AI agents — kept local, not published.
 AGENTS.md
+
+# CI build artefacts downloaded for local testing.
+#
+# `gh run download <id> -n linux-packages -D ci-linux` drops the release
+# bundles here — an AppImage and a .deb, ~235 MB together. They are the
+# output of a run that already exists on GitHub, reproducible with one
+# command, and have no business in the history.
+ci-linux/
+
+# Piper voice models, downloaded on first use by the local voice experiment
+# (branch `local/voice`). ~60 MB each and fetched on demand — the same reason
+# the anatomy source above is not vendored.
+engine/voices/

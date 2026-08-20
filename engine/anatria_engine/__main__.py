@@ -20,10 +20,16 @@ from anatria_engine.protocol import (
     ListModelsRequest,
     ReadyEvent,
     ShutdownRequest,
+    SpeakRequest,
+    TranscribeRequest,
 )
 from anatria_engine.transport import StdinReader, Transport, parse_json_line
 
 _request_adapter: TypeAdapter[EngineRequest] = TypeAdapter(EngineRequest)
+
+#: Requests that run as their own cancellable task. `cancel` and `shutdown` act
+#: on the loop itself and so are handled inline instead.
+_Spawnable = AgentRequest | ListModelsRequest | TranscribeRequest | SpeakRequest
 
 # How long in-flight requests may keep running after stdin closes or a
 # `shutdown` frame arrives. See `Engine._drain`.
@@ -85,10 +91,15 @@ class Engine:
                 self._shutdown.set()
             case CancelRequest():
                 self._cancel(request.request_id)
-            case AgentRequest() | ListModelsRequest():
+            case (
+                AgentRequest()
+                | ListModelsRequest()
+                | TranscribeRequest()
+                | SpeakRequest()
+            ):
                 self._spawn(request)
 
-    def _spawn(self, request: AgentRequest | ListModelsRequest) -> None:
+    def _spawn(self, request: _Spawnable) -> None:
         request_id = request.request_id
         if request_id in self._tasks:
             self._transport.emit(
@@ -109,7 +120,7 @@ class Engine:
         if task is not None:
             task.cancel()
 
-    async def _run(self, request: AgentRequest | ListModelsRequest) -> None:
+    async def _run(self, request: _Spawnable) -> None:
         try:
             # Imported lazily, and *inside* the guard: the whole point is that a
             # broken provider SDK becomes an error event on the request that
@@ -119,12 +130,19 @@ class Engine:
             from anatria_engine.handlers import (
                 handle_agent_request,
                 handle_list_models,
+                handle_speak,
+                handle_transcribe,
             )
 
-            if isinstance(request, AgentRequest):
-                await handle_agent_request(request, self._transport)
-            else:
-                await handle_list_models(request, self._transport)
+            match request:
+                case AgentRequest():
+                    await handle_agent_request(request, self._transport)
+                case ListModelsRequest():
+                    await handle_list_models(request, self._transport)
+                case TranscribeRequest():
+                    await handle_transcribe(request, self._transport)
+                case SpeakRequest():
+                    await handle_speak(request, self._transport)
         except asyncio.CancelledError:
             raise
         except Exception as exc:

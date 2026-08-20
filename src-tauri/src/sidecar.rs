@@ -351,6 +351,19 @@ fn start(app: &AppHandle) -> Result<(), EngineError> {
     Ok(())
 }
 
+/// First `max` characters, with a marker saying what was dropped.
+///
+/// Characters rather than bytes: slicing a `&str` at a byte offset panics when
+/// it lands inside a multi-byte sequence, and Bulgarian is the primary target
+/// locale, so a Cyrillic diagnostic would be the crash rather than the log.
+fn elide(text: &str, max: usize) -> String {
+    let mut out: String = text.chars().take(max).collect();
+    if out.chars().count() < text.chars().count() {
+        out.push_str("… [truncated]");
+    }
+    out
+}
+
 fn forward_frame(app: &AppHandle, line: &str) {
     let line = line.trim();
     if line.is_empty() {
@@ -375,7 +388,16 @@ fn forward_frame(app: &AppHandle, line: &str) {
             // A non-JSON line on stdout means something in the engine wrote
             // past the protocol (a stray print, a library banner). Log it and
             // keep going rather than tearing down a working session.
-            eprintln!("[engine] non-protocol stdout line ({err}): {line}");
+            //
+            // Truncated, and that is not tidiness. Frames on this channel can
+            // carry base64 audio — a recorded question, or a synthesised
+            // answer — and a malformed one would otherwise write somebody's
+            // voice into a log file, where it is both useless and a recording
+            // nobody consented to keep. A prefix is all a stray banner needs.
+            eprintln!(
+                "[engine] non-protocol stdout line ({err}): {}",
+                elide(line, 200)
+            );
         }
     }
 }
@@ -383,6 +405,37 @@ fn forward_frame(app: &AppHandle, line: &str) {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// A long line is cut, and says that it was.
+    ///
+    /// The case that matters is a malformed frame carrying base64 audio: the
+    /// log must get a prefix, never the recording.
+    #[test]
+    fn a_long_line_is_elided() {
+        let audio = "A".repeat(5000);
+        let logged = elide(&audio, 200);
+        assert!(logged.starts_with(&"A".repeat(200)));
+        assert!(logged.ends_with("… [truncated]"));
+        assert!(logged.chars().count() < 250);
+    }
+
+    /// A short line survives whole — a stray library banner is worth reading.
+    #[test]
+    fn a_short_line_is_left_alone() {
+        assert_eq!(elide("libfoo: warning", 200), "libfoo: warning");
+    }
+
+    /// Cutting must count characters, not bytes.
+    ///
+    /// Bulgarian is the primary target locale, so a Cyrillic diagnostic is the
+    /// realistic case; slicing it at a byte offset would panic and turn a log
+    /// line into a crash.
+    #[test]
+    fn multibyte_text_is_cut_without_panicking() {
+        let cyrillic = "аорта ".repeat(100);
+        let logged = elide(&cyrillic, 10);
+        assert_eq!(logged.chars().count(), 10 + "… [truncated]".chars().count());
+    }
 
     /// The handle's own state machine, which is all this needs to be right.
     ///

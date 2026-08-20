@@ -5,10 +5,14 @@ import {
   AgentRequestSchema,
   EngineEventSchema,
   ListModelsRequestSchema,
+  SpeakRequestSchema,
+  TranscribeRequestSchema,
   type AgentRequest,
   type AiProvider,
   type EngineEvent,
   type ListModelsRequest,
+  type SpeakRequest,
+  type TranscribeRequest,
 } from "./schemas";
 
 /** Channel Rust forwards every engine frame on. Mirrors `sidecar::ENGINE_EVENT`. */
@@ -97,6 +101,31 @@ export function cancelRequest(requestId: string): Promise<void> {
 }
 
 // ---------------------------------------------------------------------------
+// Voice (local experiment — see docs/experiments/voice.md)
+// ---------------------------------------------------------------------------
+
+/**
+ * Send a recorded clip to be transcribed.
+ *
+ * The audio goes to the sidecar and stops there: the recogniser runs locally,
+ * in-process and offline. Nothing in this file could send it anywhere else even
+ * if it tried — the CSP's `connect-src` lists no external host.
+ *
+ * Note this does **not** go through the credential path: voice needs no key, so
+ * Rust routes it with a command that never reads the keyring.
+ */
+export function transcribeAudio(request: TranscribeRequest): Promise<void> {
+  return invoke("transcribe_audio", {
+    request: TranscribeRequestSchema.parse(request),
+  });
+}
+
+/** Ask for an answer already on screen to be spoken. */
+export function speakText(request: SpeakRequest): Promise<void> {
+  return invoke("speak_text", { request: SpeakRequestSchema.parse(request) });
+}
+
+// ---------------------------------------------------------------------------
 // Events
 // ---------------------------------------------------------------------------
 
@@ -116,7 +145,12 @@ export function onEngineEvent(
   const onViolation =
     options.onProtocolViolation ??
     ((payload, issues) => {
-      console.error("[engine] protocol violation", issues, payload);
+      // The payload is summarised rather than printed. Frames on this channel
+      // can carry base64 audio — a recorded question, or a synthesised
+      // answer — and a malformed one would otherwise put somebody's voice in
+      // the console, where it is unreadable and does not belong. The issue
+      // list is what actually diagnoses a protocol violation.
+      console.error("[engine] protocol violation", issues, describeFrame(payload));
     });
 
   return listen<unknown>(ENGINE_EVENT, (message) => {
@@ -127,6 +161,25 @@ export function onEngineEvent(
     }
     handler(parsed.data);
   });
+}
+
+/**
+ * A one-line description of a frame, safe to log.
+ *
+ * Names the shape — its `type` and the keys it carried — without reproducing
+ * any value. That is enough to find a protocol drift, and carries no audio, no
+ * transcript and no key.
+ *
+ * Exported for its own test — keeping a recording out of the console is the
+ * part that can go wrong, and it is worth asserting rather than assuming.
+ */
+export function describeFrame(payload: unknown): string {
+  if (typeof payload !== "object" || payload === null) {
+    return `<${typeof payload}>`;
+  }
+  const frame = payload as Record<string, unknown>;
+  const type = typeof frame.type === "string" ? frame.type : "<no type>";
+  return `${type} { ${Object.keys(frame).sort().join(", ")} }`;
 }
 
 /** Correlation id for one request/response exchange. */

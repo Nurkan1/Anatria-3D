@@ -18,7 +18,7 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-PROTOCOL_VERSION = 2
+PROTOCOL_VERSION = 3
 ENGINE_VERSION = "0.1.0"
 
 #: `auto` is not a language, it is the absence of a choice: answer in whatever
@@ -74,6 +74,11 @@ EngineErrorCode = Literal[
     "service_unavailable",
     "guardrail_triggered",
     "invalid_request",
+    # Voice is a local experiment and its engines are optional: the model may
+    # not be downloaded yet, or the wheels may be absent from this build. Its
+    # own code because the answer is "voice is off", not "something broke" —
+    # the typed interface is still fully working and the UI must say so.
+    "voice_unavailable",
     "internal_error",
 ]
 
@@ -422,6 +427,56 @@ class ListModelsRequest(Strict):
     api_key: str = Field(min_length=1, repr=False)
 
 
+#: Ceiling on one base64 audio payload, in characters.
+#:
+#: NDJSON puts the whole clip on a single line, and base64 costs a third on top
+#: of the bytes. 8 MB of base64 is ~6 MB of compressed audio — minutes of
+#: speech, far past the recording cap the interface enforces. It is a backstop
+#: against a frame that would stall the reader, not the real limit;
+#: `VOICE_MAX_SECONDS` is what the user actually meets.
+MAX_AUDIO_B64_CHARS = 8 * 1024 * 1024
+
+#: The recording cap the interface enforces and displays.
+VOICE_MAX_SECONDS = 30
+
+
+class TranscribeRequest(Strict):
+    """Speech in: a recorded clip, transcribed locally.
+
+    The audio is base64 inside a JSON field because the transport is
+    line-delimited and cannot carry a raw byte in a payload. `repr=False`
+    matches `api_key` above and for the same reason: this field must never
+    reach a log, and a stray `repr()` of the model is the likeliest way it
+    would.
+    """
+
+    kind: Literal["transcribe"] = "transcribe"
+    request_id: str = Field(min_length=1)
+    #: base64 of a compressed capture from MediaRecorder, not raw PCM.
+    audio_b64: str = Field(min_length=1, max_length=MAX_AUDIO_B64_CHARS, repr=False)
+    #: The container MediaRecorder produced, so the decoder is not left
+    #: guessing. WebKitGTK and WebView2 do not agree on a default.
+    mime_type: str = Field(min_length=1, max_length=128)
+    #: Hint for the recogniser. The atlas is already multilingual, and letting
+    #: whisper auto-detect on a two-word utterance is how "aorta" becomes
+    #: Finnish.
+    language: Language
+
+
+class SpeakRequest(Strict):
+    """Speech out: synthesise a finished answer locally.
+
+    Sent after the text has been received and shown, never instead of it — the
+    written answer carries the on-screen regulatory notice, and speech is an
+    addition to it rather than a replacement for it.
+    """
+
+    kind: Literal["speak"] = "speak"
+    request_id: str = Field(min_length=1)
+    text: str = Field(min_length=1, max_length=8000)
+    language: Language
+
+
 class CancelRequest(Strict):
     kind: Literal["cancel"] = "cancel"
     request_id: str = Field(min_length=1)
@@ -432,7 +487,12 @@ class ShutdownRequest(Strict):
 
 
 EngineRequest = Annotated[
-    AgentRequest | ListModelsRequest | CancelRequest | ShutdownRequest,
+    AgentRequest
+    | ListModelsRequest
+    | TranscribeRequest
+    | SpeakRequest
+    | CancelRequest
+    | ShutdownRequest,
     Field(discriminator="kind"),
 ]
 
@@ -530,6 +590,33 @@ class DoneEvent(Strict):
     model: str | None = None
 
 
+class TranscriptEvent(Strict):
+    """What the recogniser heard.
+
+    Deliberately not dispatched straight to the agent: it lands in the composer
+    for the reader to see and correct first. A misheard structure name is worth
+    catching before it becomes a question about the wrong organ.
+    """
+
+    type: Literal["transcript"] = "transcript"
+    request_id: str
+    text: str
+
+
+class SpeechEvent(Strict):
+    """Synthesised audio, base64, for the webview to play as a Blob.
+
+    `repr=False` for the same reason as the inbound clip: this must never reach
+    a log.
+    """
+
+    type: Literal["speech"] = "speech"
+    request_id: str
+    audio_b64: str = Field(repr=False)
+    #: What the bytes are, so the frontend can build the Blob without sniffing.
+    mime_type: str
+
+
 class ErrorEvent(Strict):
     type: Literal["error"] = "error"
     request_id: str | None
@@ -544,6 +631,8 @@ EngineEvent = Annotated[
     | SceneCommandEvent
     | ModelsEvent
     | CaseVerdictEvent
+    | TranscriptEvent
+    | SpeechEvent
     | DoneEvent
     | ErrorEvent,
     Field(discriminator="type"),

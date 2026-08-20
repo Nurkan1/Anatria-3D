@@ -50,6 +50,18 @@ rusqlite = { version = "0.40.1", features = ["bundled"] }
 # sent as a JSON array of bytes is not a payload, it is a stall.
 base64 = "0.23.1"
 
+# Linux only, and only for the microphone.
+#
+# WebKitGTK asks the embedder before granting getUserMedia and denies by
+# default when nobody answers — which is exactly the "the microphone returns no
+# tracks and nothing says why" failure. WebView2 on Windows does not need this,
+# so the dependency is target-gated rather than paid for everywhere.
+#
+# Voice is a local experiment (branch `local/voice`); if it is ever promoted,
+# this is one of the pieces that needs a deliberate look on each platform.
+[target.'cfg(target_os = "linux")'.dependencies]
+webkit2gtk = "2.0.1"
+
 [features]
 # Enabled by `tauri build --features custom-protocol`.
 custom-protocol = ["tauri/custom-protocol"]

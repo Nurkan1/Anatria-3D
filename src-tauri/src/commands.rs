@@ -120,6 +120,63 @@ pub fn list_models(engine: State<'_, EngineHandle>, request: FrontendRequest) ->
     Ok(())
 }
 
+/// A request that carries no credential, because it needs none.
+///
+/// The voice engines run locally inside the sidecar, so there is no provider to
+/// pick and no key to read. This is deliberately **not** `FrontendRequest`:
+/// that type's `build_frame` reads the keyring on every call, and routing voice
+/// through it would mean inventing a provider and fetching a secret for a
+/// request that must never carry one. Fewer paths touch the keyring, not more.
+#[derive(Debug, Deserialize)]
+pub struct LocalRequest {
+    request_id: String,
+    #[serde(flatten)]
+    rest: Map<String, Value>,
+}
+
+fn build_local_frame(kind: &str, request: LocalRequest) -> CommandResult<String> {
+    // The same guard as `build_frame`, for the same reason: a frontend that
+    // smuggles `api_key` into a voice frame is a bug or an injection attempt,
+    // and silently dropping it would hide either one.
+    if let Some(field) = RESERVED_FIELDS
+        .iter()
+        .find(|field| request.rest.contains_key(**field))
+    {
+        return Err(CommandError::Invalid(format!(
+            "request must not set the reserved field '{field}'"
+        )));
+    }
+
+    let mut frame = request.rest;
+    frame.insert("kind".into(), Value::String(kind.into()));
+    frame.insert("request_id".into(), Value::String(request.request_id));
+
+    serde_json::to_string(&Value::Object(frame))
+        .map_err(|e| CommandError::Invalid(e.to_string()))
+}
+
+/// Speech in: hand a recorded clip to the sidecar to transcribe locally.
+///
+/// The audio is base64 in `rest` and is never logged here — see `forward_frame`
+/// in `sidecar.rs` for the matching care on the way back.
+#[tauri::command]
+pub fn transcribe_audio(
+    engine: State<'_, EngineHandle>,
+    request: LocalRequest,
+) -> CommandResult<()> {
+    let frame = build_local_frame("transcribe", request)?;
+    engine.send_frame(&frame)?;
+    Ok(())
+}
+
+/// Speech out: ask the sidecar to synthesise an answer already on screen.
+#[tauri::command]
+pub fn speak_text(engine: State<'_, EngineHandle>, request: LocalRequest) -> CommandResult<()> {
+    let frame = build_local_frame("speak", request)?;
+    engine.send_frame(&frame)?;
+    Ok(())
+}
+
 /// Is the engine up, and if not, why?
 ///
 /// The companion to the `ready` event rather than a duplicate of it. That event

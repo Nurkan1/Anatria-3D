@@ -22,8 +22,12 @@ from anatria_engine.protocol import (
     ListModelsRequest,
     ModelsEvent,
     SceneCommandEvent,
+    SpeakRequest,
+    SpeechEvent,
     TextDeltaEvent,
     ToolStartedEvent,
+    TranscribeRequest,
+    TranscriptEvent,
 )
 from anatria_engine.providers import DEFAULT_MODELS, ProviderError
 from anatria_engine.transport import Transport
@@ -260,3 +264,72 @@ def _readable(exc: Exception) -> str:
             "default is known to work. Provider said: " + message
         )
     return message if len(message) <= 400 else message[:397] + "…"
+
+
+# ---------------------------------------------------------------------------
+# Voice (local experiment — see docs/experiments/voice.md)
+# ---------------------------------------------------------------------------
+
+
+async def handle_transcribe(request: TranscribeRequest, transport: Transport) -> None:
+    """Speech in: transcribe a clip and hand the text back.
+
+    Both failure modes end the turn with an error rather than silence, because
+    a voice button that does nothing is indistinguishable from a broken one and
+    the reader has no way to tell which.
+    """
+    from anatria_engine import voice
+
+    try:
+        text = await voice.transcribe(
+            request.audio_b64, request.mime_type, request.language
+        )
+    except voice.VoiceUnavailableError as exc:
+        transport.emit(
+            ErrorEvent(
+                request_id=request.request_id,
+                code="voice_unavailable",
+                message=str(exc),
+            )
+        )
+        return
+    except ValueError as exc:
+        # Bad base64. `str(exc)` is our own message from `_decode_audio` and
+        # carries none of the payload — this string reaches a log.
+        transport.emit(
+            ErrorEvent(
+                request_id=request.request_id,
+                code="invalid_request",
+                message=str(exc),
+            )
+        )
+        return
+
+    transport.emit(TranscriptEvent(request_id=request.request_id, text=text))
+    transport.emit(DoneEvent(request_id=request.request_id, usage=None))
+
+
+async def handle_speak(request: SpeakRequest, transport: Transport) -> None:
+    """Speech out: synthesise an answer that has already been shown."""
+    from anatria_engine import voice
+
+    try:
+        audio_b64, mime_type = await voice.synthesise(request.text, request.language)
+    except voice.VoiceUnavailableError as exc:
+        transport.emit(
+            ErrorEvent(
+                request_id=request.request_id,
+                code="voice_unavailable",
+                message=str(exc),
+            )
+        )
+        return
+
+    transport.emit(
+        SpeechEvent(
+            request_id=request.request_id,
+            audio_b64=audio_b64,
+            mime_type=mime_type,
+        )
+    )
+    transport.emit(DoneEvent(request_id=request.request_id, usage=None))

@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import argparse
 import importlib.metadata
+import os
 import shutil
 import subprocess
 import sys
@@ -106,6 +107,23 @@ def running_in_repo_venv(prefix: str = sys.prefix) -> bool:
         return True
 
 
+#: Speech-to-text and text-to-speech, for the local voice experiment
+#: (branch `experiment/voice`).
+#:
+#: **Opt-in by installation, not by manifest.** They are absent from
+#: `pyproject.toml` on purpose: together they add ~260 MB of wheels and their
+#: models are downloaded separately, so freezing them into every build is a
+#: release decision rather than a default. A build machine without them
+#: produces exactly the engine it always did, and the app reports
+#: `voice_unavailable`.
+VOICE_PACKAGES = ["faster_whisper", "piper"]
+
+
+def _installed_voice_packages() -> list[str]:
+    """Whichever voice engines this interpreter actually has."""
+    return [package for package in VOICE_PACKAGES if _module_available(package)]
+
+
 def missing_requirements() -> list[str]:
     """What this interpreter still lacks for the freeze below to succeed.
 
@@ -177,6 +195,23 @@ def build(clean: bool) -> int:
         f"--paths={ENGINE_DIR}",
     ]
     for package in COLLECT_ALL:
+        cmd.append(f"--collect-all={package}")
+    # Voice recognition biases towards the atlas's own vocabulary, and the
+    # manifest is compiled into the *web* bundle — the sidecar never receives
+    # it as a file. Staged beside the package so a frozen build has it; without
+    # this the hotword list silently empties in exactly the build where short
+    # commands need it, which looks like nothing at all going wrong.
+    manifest = ENGINE_DIR.parent / "public" / "anatomy" / "manifest.json"
+    if manifest.is_file() and _installed_voice_packages():
+        cmd.append(f"--add-data={manifest}{os.pathsep}anatria_engine")
+    for package in _installed_voice_packages():
+        # `--collect-all`, not `--hidden-import`: piper ships espeak-ng's
+        # phoneme tables as *data*, and without them the frozen binary looks
+        # for them at the absolute path they had on the machine that built the
+        # wheel and dies with
+        #     Error processing file '/project/_skbuild/.../phontab'
+        # having already emitted `ready`, so the symptom is a request that
+        # silently returns nothing.
         cmd.append(f"--collect-all={package}")
     for module in HIDDEN_IMPORTS:
         cmd.append(f"--hidden-import={module}")

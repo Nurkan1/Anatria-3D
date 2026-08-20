@@ -39,6 +39,8 @@ import { useUsageStore } from "@/stores/usageStore";
 import { GrowingTextarea } from "@/components/GrowingTextarea";
 import { shouldShowAimHint, useAimHint } from "./aimHint";
 import { AimHint, AskingGuide } from "./AskingGuide";
+import { VoiceButton } from "./VoiceButton";
+import { SpeakAnswerButton } from "./SpeakAnswerButton";
 import { CaseBar } from "./CaseBar";
 import { Markdown } from "./Markdown";
 import { collectOrganRefs, stripOrganRefs } from "./organRefs";
@@ -255,6 +257,13 @@ function MessageBubble({ message }: { message: ChatMessage }) {
             {/* Copy the prose the reader sees, not the [[organ_id]] plumbing. */}
             <CopyButton text={stripOrganRefs(message.content)} label="Copy answer" />
             <SaveAsNoteButton content={message.content} />
+            {/* Voice experiment: opt-in per answer, never automatic. */}
+            {message.status === "complete" && (
+              <SpeakAnswerButton
+                content={message.content}
+                language={chatPreferences().language}
+              />
+            )}
           </div>
           {/* Pushed to the far end so the two facts about the answer sit apart
               from the two things you can do with it. Both are faint: a reader
@@ -1115,6 +1124,17 @@ export function ChatPanel() {
               Send
             </button>
           )}
+        </div>
+        <div className="mt-1.5 flex items-center gap-2">
+          <VoiceButton
+            language={language}
+            disabled={!engineReady || pendingRequestId !== null}
+            onTranscript={(heard) =>
+              // Appended rather than replacing: a reader who typed half a
+              // question and then spoke the rest should keep both.
+              setDraft((current) => (current ? `${current.trimEnd()} ${heard}` : heard))
+            }
+          />
         </div>
         <div className="mt-1.5 flex items-start gap-2">
           <p className="flex-1 text-[10px] text-slate-600">

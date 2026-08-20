@@ -23,7 +23,9 @@ import {
   SceneCommandSchema,
   SectionPlaneSchema,
   SessionModeSchema,
+  SpeakRequestSchema,
   TokenUsageSchema,
+  TranscribeRequestSchema,
 } from "../src/lib/schemas";
 
 /**
@@ -96,6 +98,11 @@ function typescriptSurface(): ProtocolSurface {
         z.object({ role: z.enum(["user", "assistant"]), content: z.string() }),
       ),
       AgentRequest: fieldsOf(AgentRequestSchema),
+      // Voice (local experiment, branch `experiment/voice`). Compared for the same
+      // reason as everything else: a field added on one side only surfaces as
+      // a runtime validation error in a built app.
+      TranscribeRequest: fieldsOf(TranscribeRequestSchema),
+      SpeakRequest: fieldsOf(SpeakRequestSchema),
       // Nested inside AgentRequest. `case` matching on both sides proves
       // nothing about what travels inside it.
       VirtualPatient: fieldsOf(VirtualPatientSchema),

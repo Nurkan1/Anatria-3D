@@ -76,6 +76,11 @@ def build_surface() -> dict[str, Any]:
             "TokenUsage": fields_of(p.TokenUsage),
             "TranscriptTurn": fields_of(p.TranscriptTurn),
             "AgentRequest": fields_of(p.AgentRequest),
+            # Voice (local experiment, branch `experiment/voice`). Listed here for
+            # the same reason as everything else: a field added on one side
+            # only is a runtime validation error in a built app otherwise.
+            "TranscribeRequest": fields_of(p.TranscribeRequest),
+            "SpeakRequest": fields_of(p.SpeakRequest),
             # Nested inside AgentRequest, so joined explicitly: the outer field
             # agreeing on both sides says nothing about the shape it carries.
             "VirtualPatient": fields_of(p.VirtualPatient),
