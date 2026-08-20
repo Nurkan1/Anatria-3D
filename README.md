@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/badge/code-Apache--2.0-blue)](LICENSE)
 [![Male atlas](https://img.shields.io/badge/male%20atlas-CC%20BY--SA%204.0-blue)](public/anatomy/NOTICE)
 [![Female atlas](https://img.shields.io/badge/female%20atlas-CC%20BY%204.0-blue)](public/anatomy/NOTICE)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21921085.svg)](https://doi.org/10.5281/zenodo.21921085)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.21921085-blue)](https://doi.org/10.5281/zenodo.21921085)
 
 Interactive anatomy and AI insights — a local-first desktop application.
 
