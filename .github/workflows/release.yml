@@ -275,18 +275,45 @@ jobs:
           node tools/release-notes.mjs "${{ github.ref_name }}" artifacts > notes.md
           cat notes.md
 
+      # v0.2.0 shipped a draft holding two checksum files and no installers.
+      # The upload action carries each file's path inside the artifact, so the
+      # packages arrive at `artifacts/windows-installers/src-tauri/target/
+      # release/bundle/nsis/…` rather than one level down — and the old
+      # `artifacts/*/*` patterns matched only the checksums, which do sit at the
+      # artifact root. `action-gh-release` prints "🤔 Pattern does not match any
+      # files" and carries on, so the run was green and the release was empty.
+      #
+      # Counting first is the point. A release with no packages in it is a
+      # failure however cheerful the log was, and it must stop the run rather
+      # than reach the drafting step.
+      - name: The packages are all here
+        run: |
+          shopt -s globstar nullglob
+          missing=0
+          for pattern in '**/*-setup.exe' '**/*.msi' '**/*.deb' '**/*.AppImage'; do
+            found=(artifacts/$pattern)
+            if [ ${#found[@]} -eq 0 ]; then
+              echo "::error::No file matched $pattern under artifacts/"
+              missing=1
+            else
+              printf '%s\n' "${found[@]}"
+            fi
+          done
+          exit $missing
+
       - name: Publish
         uses: softprops/action-gh-release@v2
         with:
           draft: true # reviewed before anyone can download it
           name: Anatria3D ${{ github.ref_name }}
           body_path: notes.md
-          # Named rather than globbed. `artifacts/**/*` would also match the
-          # directories the download action creates, and a release is the wrong
-          # place to find out what an action does with those.
+          # `**` because the artifact keeps the bundle's directory structure.
+          # Every pattern ends in a file extension, so none of them can match
+          # the directories the download action creates — which was the worry
+          # that produced the too-shallow patterns this replaces.
           files: |
-            artifacts/*/*-setup.exe
-            artifacts/*/*.msi
-            artifacts/*/*.deb
-            artifacts/*/*.AppImage
-            artifacts/*/checksums-*.txt
+            artifacts/**/*-setup.exe
+            artifacts/**/*.msi
+            artifacts/**/*.deb
+            artifacts/**/*.AppImage
+            artifacts/**/checksums-*.txt
