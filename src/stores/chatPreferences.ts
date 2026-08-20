@@ -6,6 +6,9 @@ import {
   type Language,
   type UserProfile,
 } from "@/lib/schemas";
+// The protocol's own ceiling, so a stored preference cannot exceed what the
+// engine would accept.
+import { MAX_SPOKEN_CHARS } from "@/features/chat/speakableText";
 
 /**
  * The assistant settings worth carrying between sessions.
@@ -40,6 +43,18 @@ export interface ChatPreferences {
   provider: AiProvider;
   profile: UserProfile;
   language: Language;
+  /**
+   * How much of an answer "Read aloud" speaks, in characters.
+   *
+   * A setting rather than a constant because the right value is a judgement
+   * about the reader's own patience, and getting it wrong is not symmetric: a
+   * cap that is too low silently removes the end of an explanation, which is
+   * usually the part that was being waited for. It began life hard-coded at
+   * 700 — one paragraph — and did exactly that.
+   *
+   * `0` means no limit beyond the protocol's own 8000.
+   */
+  spokenLimit: number;
   /**
    * The last model explicitly chosen, per provider.
    *
@@ -79,6 +94,10 @@ export const DEFAULT_CHAT_PREFERENCES: ChatPreferences = {
   provider: "google",
   profile: "student",
   language: "bg",
+  // Whole answers by default. Piper runs about seven times faster than real
+  // time, so a full answer costs a few seconds before it starts speaking —
+  // cheaper than losing its ending.
+  spokenLimit: 0,
   model: {},
   settingsOpen: false,
 };
@@ -106,6 +125,16 @@ export function sanitiseChatPreferences(raw: unknown): Partial<ChatPreferences> 
   if (language.success) clean.language = language.data;
 
   if (typeof stored.settingsOpen === "boolean") clean.settingsOpen = stored.settingsOpen;
+
+  // Clamped, not merely type-checked: a hand-edited or corrupted file must not
+  // be able to set a limit of 3 characters and make speech look broken.
+  if (
+    typeof stored.spokenLimit === "number" &&
+    Number.isFinite(stored.spokenLimit) &&
+    stored.spokenLimit >= 0
+  ) {
+    clean.spokenLimit = Math.min(Math.round(stored.spokenLimit), MAX_SPOKEN_CHARS);
+  }
 
   if (typeof stored.model === "object" && stored.model !== null) {
     const model: Partial<Record<AiProvider, string>> = {};

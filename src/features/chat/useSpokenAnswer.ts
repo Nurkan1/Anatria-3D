@@ -3,6 +3,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { newRequestId, onEngineEvent, speakText } from "@/lib/ipc";
 import type { Language } from "@/lib/schemas";
 
+import { chatPreferences } from "@/stores/chatPreferences";
+
 import { speakableText } from "./speakableText";
 
 /**
@@ -113,7 +115,9 @@ export function useSpokenAnswer(): UseSpokenAnswer {
   const speak = useCallback(
     async (markdown: string, language: Language) => {
       setError(null);
-      const text = speakableText(markdown);
+      // Read at speak time rather than captured in a dependency: changing the
+      // setting should affect the next answer without remounting anything.
+      const text = speakableText(markdown, chatPreferences().spokenLimit);
       if (!text) return;
 
       const requestId = newRequestId();

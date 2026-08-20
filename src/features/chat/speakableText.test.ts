@@ -94,4 +94,26 @@ describe("speakableText", () => {
     const plain = "The aorta carries oxygenated blood from the left ventricle.";
     expect(speakableText(plain)).toBe(plain);
   });
+
+  it("speaks everything when no limit is set", () => {
+    // `0` is the default and means "no preference" — the reader has not asked
+    // for shorter speech, so nothing here decides it for them.
+    const long = "The heart pumps blood. ".repeat(60);
+    expect(speakableText(long, 0).length).toBeGreaterThan(1000);
+  });
+
+  it("honours a limit the reader chose, cutting at a sentence", () => {
+    const long = "The heart pumps blood. ".repeat(60);
+    const spoken = speakableText(long, 700);
+
+    expect(spoken.length).toBeLessThanOrEqual(700);
+    expect(spoken.endsWith(".")).toBe(true);
+  });
+
+  it("never exceeds the protocol ceiling, whatever is asked for", () => {
+    // A hand-edited preferences file must not produce a frame the engine
+    // rejects outright.
+    const long = "The heart pumps blood. ".repeat(2000);
+    expect(speakableText(long, 999999).length).toBeLessThanOrEqual(MAX_SPOKEN_CHARS);
+  });
 });

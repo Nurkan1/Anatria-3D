@@ -33,7 +33,7 @@ import { stripOrganRefs } from "./organRefs";
  */
 export const MAX_SPOKEN_CHARS = 8000;
 
-export function speakableText(markdown: string): string {
+export function speakableText(markdown: string, limit = 0): string {
   let text = stripOrganRefs(markdown);
 
   text = text
@@ -66,7 +66,11 @@ export function speakableText(markdown: string): string {
     .replace(/\s+/g, " ")
     .trim();
 
-  return truncateAtSentence(text, MAX_SPOKEN_CHARS);
+  // `0` means "no preference": the protocol's ceiling is the only limit. A
+  // reader who wants shorter speech sets one in Settings; nothing here decides
+  // it for them.
+  const ceiling = limit > 0 ? Math.min(limit, MAX_SPOKEN_CHARS) : MAX_SPOKEN_CHARS;
+  return truncateAtSentence(text, ceiling);
 }
 
 /**
