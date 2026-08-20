@@ -351,6 +351,35 @@ fn start(app: &AppHandle) -> Result<(), EngineError> {
     Ok(())
 }
 
+/// How much of an unparseable line reaches the log.
+///
+/// Enough to recognise a stray `print` or a library banner, which is all the
+/// line is ever wanted for, and far short of a payload.
+const LOG_ELISION: usize = 200;
+
+/// A line, cut to something safe to write down.
+///
+/// # Why a whole line is the wrong thing to log
+///
+/// It was logged in full, and with text that was merely untidy. But this is the
+/// boundary every frame crosses, and what crosses it is not always text: a
+/// voice experiment on this codebase put base64 audio on the same channel, and
+/// a parse failure there would have written a recording of somebody's voice
+/// into a log file. The same applies to a note, a patient record, or an
+/// answer — none of which belong on disk because a banner confused the parser.
+///
+/// Cut by `chars`, never by bytes. The journal is written in Bulgarian and
+/// Spanish, and slicing a UTF-8 string at an arbitrary byte index panics on a
+/// multi-byte character — turning a tidy diagnostic into a crash in the reader
+/// thread.
+fn elided(line: &str) -> String {
+    if line.chars().count() <= LOG_ELISION {
+        return line.to_owned();
+    }
+    let head: String = line.chars().take(LOG_ELISION).collect();
+    format!("{head}… ({} chars elided)", line.chars().count() - LOG_ELISION)
+}
+
 fn forward_frame(app: &AppHandle, line: &str) {
     let line = line.trim();
     if line.is_empty() {
@@ -375,7 +404,10 @@ fn forward_frame(app: &AppHandle, line: &str) {
             // A non-JSON line on stdout means something in the engine wrote
             // past the protocol (a stray print, a library banner). Log it and
             // keep going rather than tearing down a working session.
-            eprintln!("[engine] non-protocol stdout line ({err}): {line}");
+            eprintln!(
+                "[engine] non-protocol stdout line ({err}): {}",
+                elided(line)
+            );
         }
     }
 }
@@ -383,6 +415,39 @@ fn forward_frame(app: &AppHandle, line: &str) {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn a_short_line_is_logged_whole() {
+        assert_eq!(elided("Traceback (most recent call last):"), "Traceback (most recent call last):");
+    }
+
+    #[test]
+    fn a_long_line_is_cut_and_says_so() {
+        let line = "x".repeat(LOG_ELISION + 50);
+        let logged = elided(&line);
+        assert!(logged.starts_with(&"x".repeat(LOG_ELISION)));
+        assert!(logged.ends_with("(50 chars elided)"));
+        assert!(logged.len() < line.len());
+    }
+
+    /// The bug this guards. Slicing a UTF-8 string at a byte index panics when
+    /// the index lands inside a character, and this journal is written in
+    /// Bulgarian and Spanish — so the crash would arrive in the reader thread,
+    /// on a diagnostic path, only for users writing in Cyrillic.
+    #[test]
+    fn cuts_multibyte_text_without_panicking() {
+        for line in [
+            "Отговорите в този документ са генерирани от AI асистент. ".repeat(20),
+            "La aorta ascendente y el cayado aórtico irrigan la cabeza. ".repeat(20),
+        ] {
+            let logged = elided(&line);
+            assert!(logged.contains('…'));
+            // The head must be exactly the first LOG_ELISION characters —
+            // counted as characters, not as bytes.
+            let head: String = line.chars().take(LOG_ELISION).collect();
+            assert!(logged.starts_with(&head));
+        }
+    }
 
     /// The handle's own state machine, which is all this needs to be right.
     ///

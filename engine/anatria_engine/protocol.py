@@ -1,8 +1,13 @@
 """Pydantic mirror of the IPC wire format.
 
 The authoritative companion is `src/lib/schemas.ts`. Keep the two in lockstep —
-`tests/test_contract.py` and `src/lib/schemas.contract.test.ts` compare the
-JSON Schema each side generates and fail loudly when they diverge.
+`tests/protocol-contract.test.ts` runs this module and compares the two
+surfaces field by field, and fails loudly when they diverge.
+
+Note what that test does *not* do: it does not compare generated JSON Schema.
+It normalises both sides to the same shape and checks them, which is why a
+Pydantic model here is `extra="forbid"` and a new field needs a default on this
+side and `.optional()` on the TypeScript side, or the contract fails.
 
 Wire convention: snake_case throughout, so serde (Rust) and Pydantic (Python)
 both deserialise without rename shims.

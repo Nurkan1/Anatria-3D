@@ -113,10 +113,16 @@ export function onEngineEvent(
   handler: (event: EngineEvent) => void,
   options: EngineListenerOptions = {},
 ): Promise<UnlistenFn> {
+  // The default logs *what was wrong*, never the frame it was wrong about.
+  // Zod's message already names the failing paths and the types it expected,
+  // which is what a person debugging this needs; the payload adds only the
+  // data. And the data is a reader's note, a patient record, an answer — none
+  // of which should reach a console log because a schema drifted. A caller that
+  // genuinely needs the frame still receives it and can decide for itself.
   const onViolation =
     options.onProtocolViolation ??
-    ((payload, issues) => {
-      console.error("[engine] protocol violation", issues, payload);
+    ((_payload, issues) => {
+      console.error("[engine] protocol violation", issues);
     });
 
   return listen<unknown>(ENGINE_EVENT, (message) => {
