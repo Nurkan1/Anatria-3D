@@ -7,6 +7,14 @@ import {
   type UserProfile,
 } from "@/lib/schemas";
 
+import { MAX_SPOKEN_CHARS } from "@/features/chat/speakableText";
+import {
+  VOICE_MAX_SPEED,
+  VOICE_MAX_VOLUME,
+  VOICE_MIN_SPEED,
+  VOICE_MIN_VOLUME,
+} from "@/features/chat/speech";
+
 /**
  * The assistant settings worth carrying between sessions.
  *
@@ -66,6 +74,28 @@ export interface ChatPreferences {
    * it can still help once without overriding a decision.
    */
   settingsOpen: boolean;
+  /**
+   * How much of a long answer is read aloud, in characters. `0` means all of
+   * it, and is the default: an explanation cut off after its first paragraph
+   * loses the part the reader was waiting for, and stops without saying why.
+   *
+   * Exists for the reader who wants a summary read and will scroll the rest.
+   */
+  spokenLimit: number;
+  /**
+   * Speaking rate, as a multiplier of the voice's natural pace.
+   *
+   * A system voice reads at a native pace, which is *fast* if the language is
+   * not your first and you are trying to catch an anatomical term inside it —
+   * and this is an atlas for Bulgarian and Spanish students. Slowing playback
+   * is the ordinary way people cope with that.
+   *
+   * Stored rather than asked per answer: a reader who needs 0.8x needs it every
+   * time.
+   */
+  spokenSpeed: number;
+  /** Output level, as a multiplier. Exists to go down, for shared rooms. */
+  spokenVolume: number;
 }
 
 /**
@@ -81,6 +111,11 @@ export const DEFAULT_CHAT_PREFERENCES: ChatPreferences = {
   language: "bg",
   model: {},
   settingsOpen: false,
+  // Read the whole answer. Anyone who wants less says so.
+  spokenLimit: 0,
+  // The voice's own pace; nobody should have to set it to get normal speech.
+  spokenSpeed: 1.0,
+  spokenVolume: 1.0,
 };
 
 /**
@@ -118,7 +153,35 @@ export function sanitiseChatPreferences(raw: unknown): Partial<ChatPreferences> 
     clean.model = model;
   }
 
+  if (
+    typeof stored.spokenLimit === "number" &&
+    Number.isFinite(stored.spokenLimit) &&
+    stored.spokenLimit >= 0
+  ) {
+    // Clamped rather than trusted: a hand-edited file must not be able to raise
+    // the ceiling the speech code works to.
+    clean.spokenLimit = Math.min(Math.round(stored.spokenLimit), MAX_SPOKEN_CHARS);
+  }
+
+  const speed = readClamped(stored.spokenSpeed, VOICE_MIN_SPEED, VOICE_MAX_SPEED);
+  if (speed !== null) clean.spokenSpeed = speed;
+
+  const volume = readClamped(stored.spokenVolume, VOICE_MIN_VOLUME, VOICE_MAX_VOLUME);
+  if (volume !== null) clean.spokenVolume = volume;
+
   return clean;
+}
+
+/**
+ * A stored number brought back into range, or `null` if it is not a number.
+ *
+ * Out-of-range is clamped rather than rejected: a file that says 5x wants fast
+ * speech, and the nearest thing the engine can do is more useful than silently
+ * reverting to 1x.
+ */
+function readClamped(value: unknown, min: number, max: number): number | null {
+  if (typeof value !== "number" || !Number.isFinite(value)) return null;
+  return Math.min(Math.max(value, min), max);
 }
 
 /** The raw stored value, or null. Parsing failures are treated as absence. */

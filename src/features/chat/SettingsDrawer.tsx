@@ -6,6 +6,8 @@ import { chatPreferences, patchChatPreferences } from "@/stores/chatPreferences"
 import { askToConfirm } from "@/stores/confirmStore";
 import { useModelStore } from "@/stores/modelStore";
 
+import { VoiceSettings } from "./VoiceSettings";
+
 const PROVIDERS: { id: AiProvider; label: string }[] = [
   { id: "google", label: "Gemini" },
   { id: "anthropic", label: "Claude" },
@@ -54,6 +56,12 @@ interface SettingsDrawerProps {
   onProfileChange: (profile: UserProfile) => void;
   language: Language;
   onLanguageChange: (language: Language) => void;
+  spokenLimit: number;
+  onSpokenLimitChange: (limit: number) => void;
+  spokenSpeed: number;
+  onSpokenSpeedChange: (speed: number) => void;
+  spokenVolume: number;
+  onSpokenVolumeChange: (volume: number) => void;
 }
 
 /**
@@ -78,6 +86,12 @@ export function SettingsDrawer({
   onProfileChange,
   language,
   onLanguageChange,
+  spokenLimit,
+  onSpokenLimitChange,
+  spokenSpeed,
+  onSpokenSpeedChange,
+  spokenVolume,
+  onSpokenVolumeChange,
 }: SettingsDrawerProps) {
   // Seeded from the reader's own last decision, not from false. The drawer can
   // open itself when a provider has no key, and used to have no way back:
@@ -244,6 +258,16 @@ export function SettingsDrawer({
               ))}
             </div>
           </div>
+
+          <VoiceSettings
+            language={language}
+            spokenLimit={spokenLimit}
+            onSpokenLimitChange={onSpokenLimitChange}
+            spokenSpeed={spokenSpeed}
+            onSpokenSpeedChange={onSpokenSpeedChange}
+            spokenVolume={spokenVolume}
+            onSpokenVolumeChange={onSpokenVolumeChange}
+          />
 
           <div>
             <p className="mb-1 text-[10px] uppercase tracking-wider text-slate-500">

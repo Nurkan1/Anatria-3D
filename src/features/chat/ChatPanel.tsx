@@ -43,6 +43,7 @@ import { CaseBar } from "./CaseBar";
 import { Markdown } from "./Markdown";
 import { collectOrganRefs, stripOrganRefs } from "./organRefs";
 import { SettingsDrawer } from "./SettingsDrawer";
+import { SpeakAnswerButton } from "./SpeakAnswerButton";
 import { useCopy } from "./useCopy";
 
 /** Human-readable names for the scene tools, for the activity trail. */
@@ -255,6 +256,9 @@ function MessageBubble({ message }: { message: ChatMessage }) {
             {/* Copy the prose the reader sees, not the [[organ_id]] plumbing. */}
             <CopyButton text={stripOrganRefs(message.content)} label="Copy answer" />
             <SaveAsNoteButton content={message.content} />
+            {/* Absent, not disabled, where the machine has no voice for the
+                reader's language — see `SpeakAnswerButton`. */}
+            <SpeakAnswerButton content={message.content} language={chatPreferences().language} />
           </div>
           {/* Pushed to the far end so the two facts about the answer sit apart
               from the two things you can do with it. Both are faint: a reader
@@ -568,6 +572,9 @@ export function ChatPanel() {
   const [provider, setProvider] = useState<AiProvider>(() => chatPreferences().provider);
   const [profile, setProfile] = useState<UserProfile>(() => chatPreferences().profile);
   const [language, setLanguage] = useState<Language>(() => chatPreferences().language);
+  const [spokenLimit, setSpokenLimit] = useState<number>(() => chatPreferences().spokenLimit);
+  const [spokenSpeed, setSpokenSpeed] = useState<number>(() => chatPreferences().spokenSpeed);
+  const [spokenVolume, setSpokenVolume] = useState<number>(() => chatPreferences().spokenVolume);
   const [draft, setDraft] = useState("");
   const [transportError, setTransportError] = useState<string | null>(null);
 
@@ -825,8 +832,8 @@ export function ChatPanel() {
   // covered without anyone having to remember to wire it up. The model id is not
   // here — `modelStore` owns that half and merges into the same record.
   useEffect(() => {
-    patchChatPreferences({ provider, profile, language });
-  }, [provider, profile, language]);
+    patchChatPreferences({ provider, profile, language, spokenLimit, spokenSpeed, spokenVolume });
+  }, [provider, profile, language, spokenLimit, spokenSpeed, spokenVolume]);
 
   // Follow the stream, but only when the reader is already at the bottom —
   // yanking the view away while they scroll back through an answer is worse
@@ -982,6 +989,12 @@ export function ChatPanel() {
         onProfileChange={setProfile}
         language={language}
         onLanguageChange={setLanguage}
+        spokenLimit={spokenLimit}
+        onSpokenLimitChange={setSpokenLimit}
+        spokenSpeed={spokenSpeed}
+        onSpokenSpeedChange={setSpokenSpeed}
+        spokenVolume={spokenVolume}
+        onSpokenVolumeChange={setSpokenVolume}
       />
 
       <div ref={scrollRef} className="min-h-0 flex-1 space-y-4 overflow-y-auto px-3 py-3">
