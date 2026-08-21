@@ -297,13 +297,24 @@ def register_scene_tools(agent: Agent[SceneContext, str]) -> None:
 
         Isolate first. There is nothing to measure against a whole body, and
         the answer would be every vessel in it.
+
+        **What comes back is proximity, not proven supply**, and you must say
+        so rather than upgrade it. The viewer adds whole structures whose extent
+        meets the region, so a long one passing nearby arrives entire — asking
+        what innervates the heart brings the spinal nerves that run past it, not
+        only its cardiac branches. Describe the result as the vessels or nerves
+        *running through this region*, and name the ones that actually supply it
+        from your own knowledge of the anatomy.
         """
         ctx.deps.dispatch(AddSupply(kind=kind))
         label = "vessels" if kind == "vascular" else "nerves"
         return (
-            f"Asked the viewer for the {label} reaching the isolated structures. "
-            "It adds whatever it measures, which may be nothing if the region "
-            "has none nearby or nothing is isolated."
+            f"Asked the viewer to add the {label} whose extent meets the isolated "
+            "region. This is proximity, measured against the geometry — it is not "
+            "a claim that each one supplies the region, and a long structure "
+            "passing nearby is added whole. Say what the reader is now seeing in "
+            "those terms, and name what actually supplies it yourself. It may add "
+            "nothing, if the region has none nearby or nothing is isolated."
         )
 
     @agent.tool(sequential=True)

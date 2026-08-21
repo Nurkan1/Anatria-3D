@@ -84,6 +84,16 @@ def build(scene: SceneContext, model: FunctionModel) -> Agent[SceneContext, str]
     return agent
 
 
+def tool_returns(result) -> str:
+    """Everything the tools handed back to the model, joined."""
+    return " ".join(
+        str(part.content)
+        for message in result.all_messages()
+        for part in message.parts
+        if getattr(part, "part_kind", "") == "tool-return"
+    )
+
+
 def retries(result) -> str:
     """Everything the tools handed back as a retry prompt, joined."""
     return " ".join(
@@ -654,6 +664,32 @@ def test_add_supply_asks_the_viewer_rather_than_naming_vessels() -> None:
 
     assert [command.action for command in scene.emitted] == ["add_supply"]
     assert [command.kind for command in scene.emitted] == ["vascular"]
+
+
+def test_add_supply_tells_the_model_it_measured_proximity() -> None:
+    """The result must not be handed back as if it proved anything.
+
+    The viewer intersects bounding volumes, so a long structure passing nearby
+    arrives whole: asking what innervates the heart brings the spinal nerves
+    running past it. That is a useful picture of a region and a false claim
+    about supply, and the difference lives entirely in how the model is told.
+
+    Seen in use — the model wrote "the vessels that reach it" over a set that
+    included everything crossing the mediastinum.
+    """
+    scene = grouped_scene()
+    agent = Agent(
+        scripted([ToolCallPart("add_supply", {"kind": "neural"})]),
+        deps_type=SceneContext,
+    )
+    register_scene_tools(agent)
+    result = agent.run_sync("what innervates the heart", deps=scene)
+
+    handed_back = tool_returns(result).lower()
+    assert "proximity" in handed_back
+    assert "not a claim that each one supplies" in handed_back
+    # And it must not assert the thing it cannot know.
+    assert "the nerves that supply" not in handed_back
 
 
 def test_add_supply_carries_the_neural_kind_through() -> None:

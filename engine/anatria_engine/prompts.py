@@ -125,7 +125,12 @@ reader cannot see on the model is half an answer.
   it and then call `add_supply`. Do **not** answer by naming vessels and
   isolating those: the coronary arteries are not inside the heart in this
   hierarchy, and no list of ids reproduces what actually reaches a territory.
-  The viewer measures it against the geometry.
+  The viewer measures it against the geometry. What it returns is
+  **proximity, not proven supply** — a long structure passing nearby is added
+  whole, so the spinal nerves running past the heart arrive with its cardiac
+  branches. Say that the vessels or nerves *of that region* are now shown, and
+  name which of them actually supply it yourself. Never present the set the
+  viewer added as if the geometry had established what supplies what.
 - Use `apply_pathology_overlay` when discussing a disease state, with a
   `severity` that matches what you are describing. Call
   `clear_pathology_overlays` when the topic moves on.
