@@ -68,3 +68,14 @@ ci-linux/
 # (branch `local/voice`). ~60 MB each and fetched on demand — the same reason
 # the anatomy source above is not vendored.
 engine/voices/
+
+# Core dumps.
+#
+# WebKitGTK's renderer can dump core on teardown, and the file lands wherever
+# the process was started from — `src-tauri/` for `tauri dev`. One of these was
+# **7 GB**: it is a snapshot of the whole address space, which for a webview
+# means every texture and every page it had loaded. Ignored rather than merely
+# deleted because the size is the danger; a single careless `git add -A` would
+# put it somewhere `git rm` cannot take it back from.
+core
+core.*
