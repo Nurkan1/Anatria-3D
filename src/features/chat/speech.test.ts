@@ -193,9 +193,42 @@ describe("detectLanguage", () => {
     expect(detectLanguage("¿Dónde está?")).toBe("es");
   });
 
+  it("reads a short Spanish sentence, accents and all", () => {
+    // One marker word ("El") plus two acute accents. Removing accents from the
+    // evidence entirely — the first attempt at keeping French out — made this
+    // undetectable.
+    expect(detectLanguage("El corazón tiene cuatro cámaras.")).toBe("es");
+  });
+
   it("says nothing rather than guess at a bare term", () => {
     expect(detectLanguage("Aorta")).toBeNull();
     expect(detectLanguage("")).toBeNull();
+  });
+
+  it("declines every language it does not have a voice list for", () => {
+    // The assistant answers in whatever language the reader writes in, so these
+    // arrive in practice. Each one shares a word or two with the marker lists —
+    // German "in" and "an", French "de" and "la" — and each was wrongly called
+    // before the evidence floor existed: German came back as English, French as
+    // Spanish. Portuguese is here because it is the closest thing to Spanish
+    // that is not Spanish.
+    const foreign = [
+      "Das Herz hat vier Kammern und die Aorta verlässt die linke Herzkammer.",
+      "Le coeur a quatre cavités et l'aorte sort du ventricule gauche.",
+      "Il cuore ha quattro camere e l'aorta esce dal ventricolo sinistro.",
+      "Serce ma cztery komory, a aorta wychodzi z lewej komory.",
+      "O coração tem quatro câmaras e a aorta sai do ventrículo esquerdo.",
+    ];
+
+    for (const text of foreign) expect(detectLanguage(text)).toBeNull();
+  });
+
+  it("reads Spanish written without its accents", () => {
+    // Plenty of people type without them, and the accented vowels are not the
+    // signal anyway — they are shared with French and Portuguese.
+    expect(
+      detectLanguage("El corazon tiene cuatro camaras y la aorta sale del ventriculo."),
+    ).toBe("es");
   });
 });
 
@@ -210,7 +243,11 @@ describe("effectiveLanguage", () => {
     expect(effectiveLanguage("auto", "El corazón tiene cuatro cámaras.")).toBe("es");
   });
 
-  it("keeps auto's old meaning when the text decides nothing", () => {
-    expect(effectiveLanguage("auto", "Aorta")).toBe("en");
+  it("stays silent on auto when the text cannot be placed", () => {
+    // Not English-by-default: the assistant answers a German student in German,
+    // and reading that aloud in an English voice is the failure this refuses.
+    // A fragment too short to call loses its button, which is the cheaper miss.
+    expect(effectiveLanguage("auto", "Aorta")).toBeNull();
+    expect(effectiveLanguage("auto", "Das Herz hat vier Kammern und die Aorta.")).toBeNull();
   });
 });

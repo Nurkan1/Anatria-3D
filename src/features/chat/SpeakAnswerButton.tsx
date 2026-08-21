@@ -33,9 +33,13 @@ export function SpeakAnswerButton({ content, language }: Props) {
   // *this* answer can be read, which is the question the reader is asking.
   const spokenIn = effectiveLanguage(language, content);
 
-  // False until the platform has enumerated its voices, so the button appears a
-  // moment after the answer rather than before it can work.
-  if (!spoken.supports(spokenIn)) return null;
+  // `null` is an answer in a language this app cannot place — the assistant
+  // replies in the reader's own language, which may be one of many it has no
+  // voice for. Silence beats reading it in the wrong one.
+  //
+  // `supports` is false until the platform has enumerated its voices, so the
+  // button appears a moment after the answer rather than before it can work.
+  if (!spokenIn || !spoken.supports(spokenIn)) return null;
 
   return (
     <>

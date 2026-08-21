@@ -83,7 +83,8 @@ export function useSpokenAnswer(): UseSpokenAnswer {
         return;
       }
 
-      const voice = voicesForLanguage(voices, effectiveLanguage(language, markdown))[0];
+      const spokenIn = effectiveLanguage(language, markdown);
+      const voice = spokenIn ? voicesForLanguage(voices, spokenIn)[0] : undefined;
       if (!voice) {
         setError("No voice for this language is installed on this computer.");
         return;

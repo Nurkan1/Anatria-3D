@@ -115,32 +115,76 @@ export function detectLanguage(text: string): Exclude<Language, "auto"> | null {
   if (cyrillic > latin) return "bg";
   if (cyrillic === 0 && latin === 0) return null;
 
+  // Three characters Spanish has and no other likely language does. These are
+  // decisive on their own.
+  if (/[ñ¿¡]/i.test(text)) return "es";
+
+  const words = text.toLowerCase().match(/[\p{Letter}]+/gu) ?? [];
   let spanish = 0;
   let english = 0;
-  for (const word of text.toLowerCase().match(/[\p{Letter}]+/gu) ?? []) {
+  for (const word of words) {
     if (SPANISH_MARKERS.has(word)) spanish += 1;
     else if (ENGLISH_MARKERS.has(word)) english += 1;
   }
 
-  // Characters Spanish has and English does not. Worth several function words
-  // each: one "ñ" or an inverted question mark settles it on its own.
-  spanish += (text.match(/[ñáéíóúü¿¡]/gi) ?? []).length * 3;
+  // Acute accents count as ordinary evidence, not as proof. They were decisive
+  // once and it was wrong twice over: French and Portuguese carry them too, so
+  // "cavités" declared French prose Spanish — and then removing them entirely
+  // made a short Spanish sentence undetectable, because "El corazón tiene
+  // cuatro cámaras" has exactly one marker word in it. Weighted like a marker,
+  // they tip a real Spanish sentence and leave a French one under the floor.
+  spanish += (text.match(/[áéíóú]/gi) ?? []).length;
 
+  const winner = Math.max(spanish, english);
   if (spanish === english) return null;
+
+  // **The evidence has to be positive, not merely larger.** German and French
+  // share a handful of words with these lists — "in" and "an" with English,
+  // "de" and "la" with Spanish — so an answer in neither language still scores
+  // one or two and would otherwise be declared the winner by default. Real
+  // prose in one of these two languages hits a marker on roughly a quarter of
+  // its words; a language that only overlaps hits a twentieth.
+  //
+  // Below the floor the answer is "none of these", which is different from a
+  // tie and is why it must not fall through to a comparison.
+  if (winner < MIN_MARKER_HITS) return null;
+  if (winner / words.length < MIN_MARKER_SHARE) return null;
+
   return spanish > english ? "es" : "en";
 }
 
+/** Two hits, so a single shared word cannot decide anything. */
+const MIN_MARKER_HITS = 2;
+
 /**
- * The language to speak `text` in, given what the reader chose.
+ * How much of the text must be marker words before the guess is trusted.
+ *
+ * Spanish and English prose sit near 0.25. German and French, which only
+ * overlap these lists incidentally, sit near 0.05. 0.12 separates them with
+ * room on both sides rather than being tuned to the samples.
+ */
+const MIN_MARKER_SHARE = 0.12;
+
+/**
+ * The language to speak `text` in, or `null` if there is no honest answer.
  *
  * An explicit choice is honoured without inspecting anything — a reader who set
- * Bulgarian gets Bulgarian or nothing. Detection applies only to `auto`, and
- * falls back to English there when the text is too short or too ambiguous to
- * call, which is what `auto` meant before any of this.
+ * Bulgarian gets Bulgarian or nothing.
+ *
+ * On `auto` it follows the text, and **`null` means silence rather than
+ * English**. The assistant answers in whatever language the reader writes in,
+ * including ones the interface does not offer: a German student gets German.
+ * Defaulting an undetected answer to English would read that German aloud in an
+ * English voice, which is the mispronunciation this whole module refuses. The
+ * cost is that a very short answer — a fragment too small to call — loses its
+ * button, and that is the cheaper of the two mistakes.
  */
-export function effectiveLanguage(preference: Language, text: string): Exclude<Language, "auto"> {
+export function effectiveLanguage(
+  preference: Language,
+  text: string,
+): Exclude<Language, "auto"> | null {
   if (preference !== "auto") return preference;
-  return detectLanguage(text) ?? "en";
+  return detectLanguage(text);
 }
 
 /**
