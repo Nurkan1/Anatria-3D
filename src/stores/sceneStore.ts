@@ -274,6 +274,12 @@ export function applySceneCommand(
     case "isolate_group":
       return state;
 
+    // Same routing, a different reason: this one needs geometry rather than
+    // more state. It becomes a request the viewer answers once it can measure
+    // what actually passes through the study set — see `supplyRequestIn`.
+    case "add_supply":
+      return state;
+
     case "isolate_region":
       // Resolved by the store, which holds the manifest; the reducer is pure
       // and has no view of the hierarchy. Falling back to the structure alone
@@ -730,6 +736,13 @@ export const useSceneStore = create<SceneStore>()((set, get) => ({
       if (command.action === "isolate_group") {
         return isolateGroupIn(state, command.group) ?? state;
       }
+      // The other one it cannot serve, for the opposite reason: this does not
+      // need more state, it needs geometry that does not exist yet. It becomes
+      // a request the viewer answers once it can measure — see `requestSupply`,
+      // whose body this is, reached from the engine rather than the study bar.
+      if (command.action === "add_supply") {
+        return supplyRequestIn(state, command.kind);
+      }
       return applySceneCommand(state, command);
     }),
 
@@ -866,20 +879,7 @@ export const useSceneStore = create<SceneStore>()((set, get) => ({
       supplyResult: null,
     }),
 
-  requestSupply: (kind) =>
-    set((state) => {
-      if (state.isolatedOrganIds === null) return state;
-      const system = SUPPLY_SYSTEM[kind];
-      return {
-        // Switching the system on is part of fulfilling the request, not a
-        // guess at what the reader wanted: they asked for vessels, and vessels
-        // that are switched off cannot be shown to them. This is the opposite
-        // case to hiding something nobody asked to lose.
-        hiddenSystems: state.hiddenSystems.filter((entry) => entry !== system),
-        supplyRequest: { kind, seq: (state.supplyRequest?.seq ?? 0) + 1 },
-        supplyResult: null,
-      };
-    }),
+  requestSupply: (kind) => set((state) => supplyRequestIn(state, kind)),
 
   resolveSupply: (organIds) =>
     set((state) => {
@@ -1056,6 +1056,34 @@ export function groupNames(organs: ManifestOrgan[]): string[] {
  * Shared by the right-click menu and by the assistant's `isolate_group`, so the
  * two cannot drift into isolating different sets for the same name.
  */
+/**
+ * The body of a supply request, shared by the study bar and the engine.
+ *
+ * Extracted so `requestSupply` and the `add_supply` command cannot drift: they
+ * are the same act asked for from two places, and a second copy of the
+ * system-switching rule below is exactly the sort of thing that gets fixed in
+ * one of them only.
+ *
+ * Returns the state untouched when nothing is isolated. "Show me the vessels"
+ * against the whole body is every vessel in it.
+ */
+export function supplyRequestIn<T extends SceneViewState>(
+  state: T,
+  kind: SupplyKind,
+): T | Partial<SceneViewState> {
+  if (state.isolatedOrganIds === null) return state;
+  const system = SUPPLY_SYSTEM[kind];
+  return {
+    // Switching the system on is part of fulfilling the request, not a guess
+    // at what the reader wanted: they asked for vessels, and vessels that are
+    // switched off cannot be shown to them. This is the opposite case to
+    // hiding something nobody asked to lose.
+    hiddenSystems: state.hiddenSystems.filter((entry) => entry !== system),
+    supplyRequest: { kind, seq: (state.supplyRequest?.seq ?? 0) + 1 },
+    supplyResult: null,
+  };
+}
+
 export function isolateGroupIn(
   state: SceneViewState & { organs: Record<string, ManifestOrgan> },
   node: string,

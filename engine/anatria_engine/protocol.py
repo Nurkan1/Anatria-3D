@@ -280,6 +280,30 @@ class IsolateGroup(Strict):
     group: str = Field(min_length=1)
 
 
+class AddSupply(Strict):
+    """Fold the vessels — or the nerves — that reach the study set into it.
+
+    **The one relation naming cannot express.** The atlas is organised by system
+    and anatomy is studied by territory: isolating the heart brings its
+    seventeen parts because they are its descendants, and leaves the coronary
+    arteries behind because they live under *Systemic arteries*, an entirely
+    different branch. Walking the hierarchy never reaches them.
+
+    So this is not a list of ids the assistant could have named instead. It asks
+    the viewer to measure which vessels actually pass through what is being
+    studied, and only the live geometry can answer that. The reader has had it
+    on the study bar as `+ vessels` since 0.1; this is the same button reached
+    from the other side.
+
+    Requires something to be isolated. Asking for the vessels of the whole body
+    returns every vessel in it, which is the atlas with extra steps.
+    """
+
+    action: Literal["add_supply"] = "add_supply"
+    #: `vascular` brings arteries and veins, `neural` brings nerves.
+    kind: Literal["vascular", "neural"]
+
+
 class ClearPathologyOverlays(Strict):
     action: Literal["clear_pathology_overlays"] = "clear_pathology_overlays"
 
@@ -351,6 +375,7 @@ SceneCommand = Annotated[
     | IsolateStructures
     | IsolateRegion
     | IsolateGroup
+    | AddSupply
     | ApplyPathologyOverlay
     | ClearPathologyOverlays
     | HighlightPathway

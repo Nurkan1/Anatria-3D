@@ -16,11 +16,13 @@ import difflib
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from itertools import pairwise
+from typing import Literal
 
 from pydantic import BaseModel
 from pydantic_ai import Agent, ModelRetry, RunContext
 
 from anatria_engine.protocol import (
+    AddSupply,
     AnatomicalSystem,
     ApplyPathologyOverlay,
     ClearPathologyOverlays,
@@ -277,6 +279,32 @@ def register_scene_tools(agent: Agent[SceneContext, str]) -> None:
             )
         ctx.deps.dispatch(IsolateGroup(group=wanted))
         return f"Isolated everything under {wanted}."
+
+    @agent.tool(sequential=True)
+    def add_supply(ctx: RunContext[SceneContext], kind: Literal["vascular", "neural"]) -> str:
+        """Bring in the vessels — or the nerves — that reach what is isolated.
+
+        Use this after isolating something, when the reader asks what supplies
+        it, what drains it, or what innervates it. `vascular` brings arteries
+        and veins; `neural` brings nerves.
+
+        **Do not answer these by naming vessels and isolating them.** The atlas
+        is organised by system and this relationship is spatial: the coronary
+        arteries are not inside the heart in the hierarchy, they are under
+        *Systemic arteries*, and no list of ids you can write reproduces what
+        actually reaches a territory. The viewer measures it against the
+        geometry, which is the only thing that knows.
+
+        Isolate first. There is nothing to measure against a whole body, and
+        the answer would be every vessel in it.
+        """
+        ctx.deps.dispatch(AddSupply(kind=kind))
+        label = "vessels" if kind == "vascular" else "nerves"
+        return (
+            f"Asked the viewer for the {label} reaching the isolated structures. "
+            "It adds whatever it measures, which may be nothing if the region "
+            "has none nearby or nothing is isolated."
+        )
 
     @agent.tool(sequential=True)
     def show_all_structures(ctx: RunContext[SceneContext]) -> str:

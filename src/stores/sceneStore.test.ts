@@ -1273,3 +1273,52 @@ describe("groupNames", () => {
     expect(groupNames(organs)).toEqual(["Liver", "Lobes"]);
   });
 });
+
+describe("add_supply", () => {
+  beforeEach(() => {
+    useSceneStore.setState({
+      isolatedOrganIds: ["left_ventricle"],
+      hiddenSystems: ["cardiovascular"],
+      supplyRequest: null,
+      supplyResult: null,
+    });
+  });
+
+  it("turns the command into a request the viewer can answer", () => {
+    // Not an isolation the assistant could have written itself: which vessels
+    // reach a territory is a fact about geometry, so the command becomes a
+    // question and the viewer answers it once it can measure.
+    useSceneStore.getState().applyCommand({ action: "add_supply", kind: "vascular" });
+
+    expect(useSceneStore.getState().supplyRequest?.kind).toBe("vascular");
+  });
+
+  it("switches the system on, because vessels that are off cannot be shown", () => {
+    useSceneStore.getState().applyCommand({ action: "add_supply", kind: "vascular" });
+
+    expect(useSceneStore.getState().hiddenSystems).not.toContain("cardiovascular");
+  });
+
+  it("does nothing when nothing is isolated", () => {
+    // "Show me the vessels" against a whole body is every vessel in it, which
+    // is the atlas with extra steps.
+    useSceneStore.setState({ isolatedOrganIds: null });
+
+    useSceneStore.getState().applyCommand({ action: "add_supply", kind: "vascular" });
+
+    expect(useSceneStore.getState().supplyRequest).toBeNull();
+  });
+
+  it("reaches the same request as the study bar's own button", () => {
+    // Two entry points, one body. If they drift, the assistant and the reader
+    // are asking different questions under the same name.
+    useSceneStore.getState().applyCommand({ action: "add_supply", kind: "neural" });
+    const fromEngine = useSceneStore.getState().supplyRequest;
+
+    useSceneStore.setState({ supplyRequest: null });
+    useSceneStore.getState().requestSupply("neural");
+
+    expect(useSceneStore.getState().supplyRequest?.kind).toBe(fromEngine?.kind);
+  });
+});
+

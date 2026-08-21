@@ -636,6 +636,39 @@ def test_isolate_group_emits_the_name() -> None:
     assert [command.group for command in scene.emitted] == ["Kidney"]
 
 
+def test_add_supply_asks_the_viewer_rather_than_naming_vessels() -> None:
+    """The one relation the model must not answer from the hierarchy.
+
+    The coronary arteries are not inside the heart here — they are under
+    *Systemic arteries* — so any list of ids the model writes is a guess about
+    what reaches a territory. Only the geometry knows, and this is how the model
+    asks it.
+    """
+    scene = grouped_scene()
+    agent = Agent(
+        scripted([ToolCallPart("add_supply", {"kind": "vascular"})]),
+        deps_type=SceneContext,
+    )
+    register_scene_tools(agent)
+    agent.run_sync("what supplies the heart", deps=scene)
+
+    assert [command.action for command in scene.emitted] == ["add_supply"]
+    assert [command.kind for command in scene.emitted] == ["vascular"]
+
+
+def test_add_supply_carries_the_neural_kind_through() -> None:
+    """Innervation is the same question asked of a different system."""
+    scene = grouped_scene()
+    agent = Agent(
+        scripted([ToolCallPart("add_supply", {"kind": "neural"})]),
+        deps_type=SceneContext,
+    )
+    register_scene_tools(agent)
+    agent.run_sync("what innervates it", deps=scene)
+
+    assert [command.kind for command in scene.emitted] == ["neural"]
+
+
 def test_isolate_group_refuses_a_name_the_hierarchy_lacks() -> None:
     """The same rule as organ ids: the model may not invent scene targets.
 

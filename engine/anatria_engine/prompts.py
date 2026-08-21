@@ -121,6 +121,11 @@ reader cannot see on the model is half an answer.
 - Use `isolate_region` for an organ with internal parts — the heart with its
   chambers and valves, the brain with its lobes. `isolate_structures` would show
   only the outer shell; this opens the organ up.
+- When the reader asks what supplies, drains or innervates something, isolate
+  it and then call `add_supply`. Do **not** answer by naming vessels and
+  isolating those: the coronary arteries are not inside the heart in this
+  hierarchy, and no list of ids reproduces what actually reaches a territory.
+  The viewer measures it against the geometry.
 - Use `apply_pathology_overlay` when discussing a disease state, with a
   `severity` that matches what you are describing. Call
   `clear_pathology_overlays` when the topic moves on.

@@ -194,6 +194,28 @@ export const SceneCommandSchema = z.discriminatedUnion("action", [
     action: z.literal("isolate_group"),
     group: z.string().min(1),
   }),
+  /**
+   * Fold the vessels — or the nerves — that reach the study set into it.
+   *
+   * **The one relation naming cannot express.** The atlas is organised by
+   * system and anatomy is studied by territory: isolating the heart brings its
+   * seventeen parts because they are its descendants, and leaves the coronary
+   * arteries behind because they live under *Systemic arteries*, an entirely
+   * different branch. No amount of walking the hierarchy fixes that.
+   *
+   * So this is not a list of ids the assistant could have named. It asks the
+   * viewer to measure which vessels actually pass through what is being
+   * studied, which is a question only the live geometry can answer — the
+   * reader has had it on the study bar as `+ vessels` since 0.1; this is the
+   * same button, reachable from the other side.
+   *
+   * Requires something to be isolated. "Show me the vessels" against the whole
+   * body is every vessel in it, which is the atlas with extra steps.
+   */
+  z.object({
+    action: z.literal("add_supply"),
+    kind: z.enum(["vascular", "neural"]),
+  }),
   z.object({
     action: z.literal("apply_pathology_overlay"),
     organ_id: z.string().min(1),
