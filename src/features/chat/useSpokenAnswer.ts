@@ -4,7 +4,8 @@ import type { Language } from "@/lib/schemas";
 import { chatPreferences } from "@/stores/chatPreferences";
 
 import { speakableText, speechChunks } from "./speakableText";
-import { loadVoices, voicesForLanguage } from "./speech";
+import { voicesForLanguage } from "./speech";
+import { useLocalVoices } from "./useLocalVoices";
 
 /**
  * Read a finished answer aloud, using the voices the machine already has.
@@ -46,7 +47,7 @@ function synthesis(): SpeechSynthesis | null {
 export function useSpokenAnswer(): UseSpokenAnswer {
   const [state, setState] = useState<SpeechState>("idle");
   const [error, setError] = useState<string | null>(null);
-  const [voices, setVoices] = useState<readonly SpeechSynthesisVoice[]>([]);
+  const voices = useLocalVoices();
 
   // Set while a queue we started is running, so the `error` an utterance fires
   // on `cancel()` can be told apart from one the engine raised by itself.
@@ -56,17 +57,9 @@ export function useSpokenAnswer(): UseSpokenAnswer {
     const synth = synthesis();
     if (!synth) return;
 
-    let live = true;
-    void loadVoices(synth).then((found) => {
-      if (live) setVoices(found);
-    });
-
-    return () => {
-      live = false;
-      // Speech outlives the component that started it — the engine is global —
-      // so leaving the view has to silence it explicitly.
-      synth.cancel();
-    };
+    // Speech outlives the component that started it — the engine is global —
+    // so leaving the view has to silence it explicitly.
+    return () => synth.cancel();
   }, []);
 
   const supports = useCallback(

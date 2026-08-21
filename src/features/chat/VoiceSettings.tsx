@@ -3,11 +3,13 @@ import { useState } from "react";
 import { type Language } from "@/lib/schemas";
 
 import {
+  voicesForLanguage,
   VOICE_MAX_SPEED,
   VOICE_MAX_VOLUME,
   VOICE_MIN_SPEED,
   VOICE_MIN_VOLUME,
 } from "./speech";
+import { useLocalVoices } from "./useLocalVoices";
 
 /**
  * Everything about how an answer is *spoken*, in one place.
@@ -25,7 +27,8 @@ import {
  * disclosure would make the common case the buried one. Length and level go
  * inside: both are set once, if ever.
  *
- * Part of the local voice experiment (branch `experiment/voice`).
+ * The speech is the platform's own — see `speech.ts`. Which is why this panel
+ * can also have to say that a machine has no voice at all for a language.
  */
 
 /**
@@ -63,6 +66,51 @@ const SPEED_PRESETS = [
 /** One decimal place, and no trailing `.0` on a whole multiplier. */
 function formatMultiplier(value: number): string {
   return `${Number(value.toFixed(2))}×`;
+}
+
+/** `auto` speaks English, so it is named as English rather than as a setting. */
+const LANGUAGE_NAMES: Record<Language, string> = {
+  auto: "English",
+  en: "English",
+  es: "Spanish",
+  bg: "Bulgarian",
+};
+
+/**
+ * Said when this computer has no voice for the reader's language.
+ *
+ * Without it the feature is not merely unavailable, it is **invisible**: the
+ * button does not appear, nothing explains why, and the reader concludes the
+ * app cannot do it. That matters most in the default configuration — the
+ * assistant starts in Bulgarian, and Windows does not install a Bulgarian voice
+ * unless someone asks for one.
+ *
+ * It names where to go rather than only what is wrong, because a missing voice
+ * is something the reader can fix in a minute and nothing this app can fix at
+ * all. The alternative — reading Bulgarian with an English voice — would
+ * mispronounce every term in the atlas, which is worse than silence.
+ */
+function MissingVoiceNotice({ language }: { language: Language }) {
+  const voices = useLocalVoices();
+  const name = LANGUAGE_NAMES[language];
+
+  // An empty list also means "voices are still being enumerated", which is why
+  // this waits: announcing a missing voice and then contradicting it a moment
+  // later would be worse than saying nothing.
+  if (voices.length === 0) return null;
+  if (voicesForLanguage(voices, language).length > 0) return null;
+
+  const windows = typeof navigator !== "undefined" && navigator.userAgent.includes("Windows");
+
+  return (
+    <p className="mb-2 rounded border border-slate-700/70 bg-slate-800/40 px-2 py-1 text-[10px] leading-snug text-slate-400">
+      No {name} voice is installed on this computer, so answers cannot be read
+      aloud in it.{" "}
+      {windows
+        ? "Windows adds them under Settings → Time & language → Speech."
+        : "Your desktop's speech settings control which voices are available."}
+    </p>
+  );
 }
 
 interface Props {
@@ -103,6 +151,8 @@ export function VoiceSettings({
           {expanded ? "Fewer options" : "More options"}
         </button>
       </div>
+
+      <MissingVoiceNotice language={language} />
 
       {/* Pace: the control this panel exists for, so it stays in the open. */}
       <div className="flex items-center gap-2">
