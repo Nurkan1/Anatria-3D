@@ -439,6 +439,26 @@ MAX_AUDIO_B64_CHARS = 8 * 1024 * 1024
 #: The recording cap the interface enforces and displays.
 VOICE_MAX_SECONDS = 30
 
+#: Speaking-rate bounds, as a multiplier of the voice's natural pace.
+#:
+#: Piper expresses pace as `length_scale`, where *larger is slower*; this is its
+#: reciprocal, because "1.5x" reads as faster to everyone who has used a podcast
+#: player and `length_scale=0.67` reads as nothing to anyone. The conversion is
+#: done once, in `voice.py`.
+#:
+#: The bounds are not arbitrary. Below 0.5 the vocoder smears consonants badly
+#: enough that anatomical terms stop being distinguishable, which defeats the
+#: purpose; above 2.0 nothing is intelligible. They are wide because the reader
+#: who needs this most is the one meeting English at speed for the first time.
+VOICE_MIN_SPEED = 0.5
+VOICE_MAX_SPEED = 2.0
+
+#: Output level, as a multiplier. Piper normalises to full range by default, so
+#: 1.0 is already loud; this exists to go *down*, for someone listening beside
+#: other people.
+VOICE_MIN_VOLUME = 0.1
+VOICE_MAX_VOLUME = 1.0
+
 
 class TranscribeRequest(Strict):
     """Speech in: a recorded clip, transcribed locally.
@@ -475,6 +495,19 @@ class SpeakRequest(Strict):
     request_id: str = Field(min_length=1)
     text: str = Field(min_length=1, max_length=8000)
     language: Language
+    #: Speaking rate as a multiplier of the voice's natural pace.
+    #:
+    #: Defaulted rather than required, and that is deliberate under
+    #: `extra="forbid"`: a frontend that predates this field keeps working, and
+    #: the value it would have sent is exactly this one. The same reasoning
+    #: applies to `volume`.
+    #:
+    #: Clamped here as well as in the interface. The slider cannot produce an
+    #: out-of-range value, but the slider is not the only thing that can send
+    #: this frame, and a `length_scale` of 0 makes the synthesiser divide by it.
+    speed: float = Field(default=1.0, ge=VOICE_MIN_SPEED, le=VOICE_MAX_SPEED)
+    #: Output level as a multiplier. See `VOICE_MIN_VOLUME`.
+    volume: float = Field(default=1.0, ge=VOICE_MIN_VOLUME, le=VOICE_MAX_VOLUME)
 
 
 class CancelRequest(Strict):

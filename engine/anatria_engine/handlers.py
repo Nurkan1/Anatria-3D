@@ -314,7 +314,9 @@ async def handle_speak(request: SpeakRequest, transport: Transport) -> None:
     from anatria_engine import voice
 
     try:
-        audio_b64, mime_type = await voice.synthesise(request.text, request.language)
+        audio_b64, mime_type = await voice.synthesise(
+            request.text, request.language, request.speed, request.volume
+        )
     except voice.VoiceUnavailableError as exc:
         transport.emit(
             ErrorEvent(

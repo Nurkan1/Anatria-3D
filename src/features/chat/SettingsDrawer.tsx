@@ -6,6 +6,8 @@ import { chatPreferences, patchChatPreferences } from "@/stores/chatPreferences"
 import { askToConfirm } from "@/stores/confirmStore";
 import { useModelStore } from "@/stores/modelStore";
 
+import { VoiceSettings } from "./VoiceSettings";
+
 const PROVIDERS: { id: AiProvider; label: string }[] = [
   { id: "google", label: "Gemini" },
   { id: "anthropic", label: "Claude" },
@@ -40,24 +42,6 @@ function KeyStatusBadge({ status }: { status: string }) {
  * in three languages; someone whose own is not on this row has nothing to press
  * — except this.
  */
-/**
- * How much of an answer to speak.
- *
- * A setting because the right answer is the reader's patience, not ours, and
- * the two failures are not symmetric: speech that is too long can be stopped
- * with a button, speech that stops early has silently removed the end of an
- * explanation — usually the part being waited for. This began as a hard-coded
- * 700 characters and did exactly that, which is why it is a choice now.
- *
- * Expressed in characters because that is what the synthesiser is given;
- * labelled in paragraphs because that is what a reader perceives.
- */
-const SPOKEN_LIMITS = [
-  { id: 0, label: "Whole answer", title: "Speak all of it (recommended)" },
-  { id: 700, label: "~1 para", title: "Speak roughly the first paragraph" },
-  { id: 1600, label: "~2 paras", title: "Speak roughly the first two paragraphs" },
-] as const;
-
 const LANGUAGES: { id: Language; label: string; title: string }[] = [
   { id: "auto", label: "Auto", title: "Answer in whatever language I write in" },
   { id: "bg", label: "BG", title: "Always answer in Bulgarian" },
@@ -74,6 +58,10 @@ interface SettingsDrawerProps {
   onLanguageChange: (language: Language) => void;
   spokenLimit: number;
   onSpokenLimitChange: (limit: number) => void;
+  spokenSpeed: number;
+  onSpokenSpeedChange: (speed: number) => void;
+  spokenVolume: number;
+  onSpokenVolumeChange: (volume: number) => void;
 }
 
 /**
@@ -100,6 +88,10 @@ export function SettingsDrawer({
   onLanguageChange,
   spokenLimit,
   onSpokenLimitChange,
+  spokenSpeed,
+  onSpokenSpeedChange,
+  spokenVolume,
+  onSpokenVolumeChange,
 }: SettingsDrawerProps) {
   // Seeded from the reader's own last decision, not from false. The drawer can
   // open itself when a provider has no key, and used to have no way back:
@@ -267,34 +259,15 @@ export function SettingsDrawer({
             </div>
           </div>
 
-          <div>
-            <p className="mb-1 text-[10px] uppercase tracking-wider text-slate-500">
-              Read aloud
-            </p>
-            <div className="flex gap-1">
-              {SPOKEN_LIMITS.map(({ id, label, title }) => (
-                <button
-                  key={id}
-                  type="button"
-                  onClick={() => onSpokenLimitChange(id)}
-                  title={title}
-                  aria-pressed={spokenLimit === id}
-                  className={`flex-1 rounded border px-1.5 py-1 text-[11px] ${
-                    spokenLimit === id
-                      ? "border-sky-500 bg-sky-500/10 text-sky-300"
-                      : "border-slate-700 text-slate-400"
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-            <p className="mt-1 text-[10px] leading-snug text-slate-600">
-              {spokenLimit === 0
-                ? "The whole answer is spoken. A long one takes a few seconds to prepare before it starts — press Stop to end it early."
-                : "Only the opening is spoken, cut at the end of a sentence. The written answer is always complete."}
-            </p>
-          </div>
+          <VoiceSettings
+            language={language}
+            spokenLimit={spokenLimit}
+            onSpokenLimitChange={onSpokenLimitChange}
+            spokenSpeed={spokenSpeed}
+            onSpokenSpeedChange={onSpokenSpeedChange}
+            spokenVolume={spokenVolume}
+            onSpokenVolumeChange={onSpokenVolumeChange}
+          />
 
           <div>
             <p className="mb-1 text-[10px] uppercase tracking-wider text-slate-500">

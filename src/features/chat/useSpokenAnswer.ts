@@ -117,14 +117,29 @@ export function useSpokenAnswer(): UseSpokenAnswer {
       setError(null);
       // Read at speak time rather than captured in a dependency: changing the
       // setting should affect the next answer without remounting anything.
-      const text = speakableText(markdown, chatPreferences().spokenLimit);
+      const preferences = chatPreferences();
+      const text = speakableText(markdown, preferences.spokenLimit);
       if (!text) return;
 
       const requestId = newRequestId();
       pendingRef.current = requestId;
       setState("synthesising");
       try {
-        await speakText({ request_id: requestId, text, language });
+        // Pace and level are applied by the synthesiser, not by the player.
+        // `playbackRate` on the element would have been free and needed no
+        // protocol field, but it resamples a finished waveform: slowing speech
+        // that way lengthens every formant with it, and the result at 0.8x is
+        // the drawl that makes people give up on text-to-speech. Piper
+        // resynthesises at the requested pace instead, so a slower reading is
+        // the same voice speaking more deliberately — which is the entire
+        // point for someone trying to catch "trachea" in a second language.
+        await speakText({
+          request_id: requestId,
+          text,
+          language,
+          speed: preferences.spokenSpeed,
+          volume: preferences.spokenVolume,
+        });
       } catch (cause) {
         pendingRef.current = null;
         setState("idle");

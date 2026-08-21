@@ -443,6 +443,25 @@ export const MAX_AUDIO_B64_CHARS = 8 * 1024 * 1024;
 export const VOICE_MAX_SECONDS = 30;
 
 /**
+ * Speaking-rate bounds, as a multiplier of the voice's natural pace.
+ *
+ * Kept in step with `VOICE_MIN_SPEED` / `VOICE_MAX_SPEED` in `protocol.py`,
+ * which clamps again on arrival — the slider cannot produce an out-of-range
+ * value, but the slider is not the only thing that can send this frame.
+ *
+ * Expressed as a multiplier because that is what a reader understands. The
+ * synthesiser underneath measures phoneme duration, where larger is *slower*;
+ * the reciprocal is taken once, in the engine, so nothing in the interface has
+ * to think backwards.
+ */
+export const VOICE_MIN_SPEED = 0.5;
+export const VOICE_MAX_SPEED = 2.0;
+
+/** Output level, as a multiplier. See `VOICE_MIN_VOLUME` in `protocol.py`. */
+export const VOICE_MIN_VOLUME = 0.1;
+export const VOICE_MAX_VOLUME = 1.0;
+
+/**
  * Speech in: a recorded clip for the sidecar to transcribe locally.
  *
  * The audio is base64 because the transport is line-delimited and cannot carry
@@ -474,6 +493,15 @@ export const SpeakRequestSchema = z.object({
   request_id: z.string().min(1),
   text: z.string().min(1).max(8000),
   language: LanguageSchema,
+  /**
+   * Speaking rate, as a multiplier of the voice's natural pace.
+   *
+   * Optional to match the Python default, so the two surfaces reconcile and a
+   * caller with nothing to say about pace does not have to say it.
+   */
+  speed: z.number().min(VOICE_MIN_SPEED).max(VOICE_MAX_SPEED).optional(),
+  /** Output level, as a multiplier. */
+  volume: z.number().min(VOICE_MIN_VOLUME).max(VOICE_MAX_VOLUME).optional(),
 });
 export type SpeakRequest = z.infer<typeof SpeakRequestSchema>;
 

@@ -388,10 +388,12 @@ raw answer to piper produces a voice saying *"hash hash Left ventricle asterisk
 asterisk"*, which is worse than no speech. It is not a Markdown parser and does
 not need to be.
 
-It also caps what is spoken (`MAX_SPOKEN_CHARS = 700`), cutting at a sentence
-boundary so it sounds finished rather than broken. Piper is roughly realtime,
-so a long answer is minutes of audio nobody waits for, arriving as one base64
-blob on one NDJSON line.
+It also caps what is spoken, cutting at a sentence boundary so it sounds
+finished rather than broken. That cap began as a hard-coded 700 characters —
+about a paragraph — and was wrong often enough to become a setting: it silently
+removed the end of an explanation, which is usually the part being waited for.
+The default is now the whole answer, with `MAX_SPOKEN_CHARS` (8000) as the
+protocol's own ceiling.
 
 Playback is a Blob through `URL.createObjectURL`, revoked on every path —
 these are megabytes each, and `media-src 'self' blob:` was already in the CSP.
@@ -408,6 +410,72 @@ Verified in the frozen sidecar, all three languages:
 
 Each language downloads its voice on first use (~60 MB), so the first *Read
 aloud* in a new language pauses while it fetches.
+
+### Pace, and why it is set at synthesis
+
+Reported from use: *"en inglés es muy rápido"*. Piper's English voice reads at
+a natural native pace, which is genuinely fast if English is not your first
+language and you are listening for a term you have only ever read. This is an
+atlas whose readers are Bulgarian and Spanish students, so that is the common
+case, not an edge one.
+
+**The speed is applied when the audio is made, not when it is played.**
+`HTMLAudioElement.playbackRate` would have been free and would have needed no
+protocol field at all, and it is the wrong tool: it resamples a finished
+waveform, so slowing speech down stretches every formant with it and produces
+the drawl that makes people give up on text-to-speech. Piper resynthesises at
+the requested pace instead, so a slower reading is the same voice speaking more
+deliberately — which is the entire point when someone is trying to catch
+"trachea" in a second language.
+
+`SpeakRequest` therefore carries `speed` and `volume`, both **defaulted rather
+than required**. Under `extra="forbid"` that is what keeps a frontend built
+before these fields from being rejected for not sending them, and 1.0 is
+exactly what it meant.
+
+**Piper measures phoneme duration, where larger is slower.** `speed` is its
+reciprocal: `length_scale = 1 / speed`. This is the one place in the feature
+where a mistake is completely silent — inverted the wrong way the slider still
+moves, still changes the voice, and does the opposite of its label, with no
+error anywhere. It has a test on both sides of the boundary, and that test was
+confirmed to fail against a deliberately reversed conversion.
+
+Measured through the real synthesis path, "The trachea divides into two
+bronchi.":
+
+| Speed | Audio produced |
+| --- | --- |
+| 0.5× | 3.91 s |
+| 0.8× | 2.67 s |
+| 1.0× | 2.35 s |
+| 1.25× | 1.93 s |
+| 2.0× | 1.39 s |
+
+The bounds (0.5–2.0) are not arbitrary. Below 0.5 the vocoder smears consonants
+badly enough that anatomical terms stop being distinguishable, which defeats the
+purpose. They are held in two places — `protocol.py` and `schemas.ts` — and a
+test asserts them, because drift there reads to the user as speech failing at
+exactly the setting they chose.
+
+`volume` scales the samples at synthesis and was verified to do so (peak sample
+32767 → 16383 → 3276 at 1.0 / 0.5 / 0.1). It only goes down; piper already
+normalises to full range.
+
+### The panel
+
+The three speech settings moved out of `SettingsDrawer` into `VoiceSettings`,
+because the drawer had begun to read as a list of unrelated switches — someone
+opening settings to paste an API key should not scroll past speech options.
+
+**Pace stays visible; volume and length go behind *More options*.** Pace is the
+control people actually reach for, and hiding it would have made the common
+case the buried one. The other two are set once, if ever. The expanded state is
+deliberately *not* persisted, unlike the drawer's own: it is a "show me the
+rest" gesture inside an already-open panel, not a standing preference.
+
+The panel reports the spoken language rather than offering a second choice of
+it. Two language settings that could disagree would produce an answer written
+in one language and read aloud in another, which is worse than either.
 
 ## Where this actually stands
 

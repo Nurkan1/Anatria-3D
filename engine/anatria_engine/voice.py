@@ -291,15 +291,43 @@ def _transcribe_blocking(audio: bytes, language: Language) -> str:
     return " ".join(segment.text.strip() for segment in segments).strip()
 
 
-def _synthesise_blocking(text: str, language: Language) -> bytes:
+def _synthesis_config(speed: float, volume: float) -> Any:
+    """Piper's knobs, from the reader's two.
+
+    **`length_scale` is the reciprocal of speed**, and getting that backwards is
+    a silent bug rather than a loud one: the slider would simply work the wrong
+    way round and every explanation of it would be a lie. Piper measures
+    *phoneme duration* — larger means each sound is held longer, so 1.5x speed
+    is `length_scale = 1 / 1.5`.
+
+    Returning `None` when nothing was changed is not just tidiness: it is the
+    path a build with an older piper takes, and it means the default case
+    cannot be broken by this function.
+    """
+    if speed == 1.0 and volume == 1.0:
+        return None
+    try:
+        from piper import SynthesisConfig
+    except ImportError:
+        # An older piper without the config object. Speaking at the natural
+        # pace is a far better outcome than refusing to speak at all.
+        return None
+    return SynthesisConfig(length_scale=1.0 / speed, volume=volume)
+
+
+def _synthesise_blocking(text: str, language: Language, speed: float, volume: float) -> bytes:
     # `auto` has no voice of its own: it means the reader never chose, so speak
     # the app's default rather than refusing.
     voice = _load_piper("en" if language == "auto" else language)
     buffer = io.BytesIO()
+    config = _synthesis_config(speed, volume)
     # Piper emits raw PCM; wrapping it in a WAV container gives the webview
     # something it can play as a Blob without a decoder of our own.
     with wave.open(buffer, "wb") as wav:
-        voice.synthesize_wav(text, wav)
+        if config is None:
+            voice.synthesize_wav(text, wav)
+        else:
+            voice.synthesize_wav(text, wav, syn_config=config)
     return buffer.getvalue()
 
 
@@ -318,7 +346,17 @@ async def transcribe(audio_b64: str, mime_type: str, language: Language) -> str:
     return await asyncio.to_thread(_transcribe_blocking, audio, language)
 
 
-async def synthesise(text: str, language: Language) -> tuple[str, str]:
-    """Speech out. Returns `(base64 audio, mime type)`."""
-    audio = await asyncio.to_thread(_synthesise_blocking, text, language)
+async def synthesise(
+    text: str,
+    language: Language,
+    speed: float = 1.0,
+    volume: float = 1.0,
+) -> tuple[str, str]:
+    """Speech out. Returns `(base64 audio, mime type)`.
+
+    `speed` and `volume` are multipliers, already validated by the request
+    model. They are defaulted here too so a caller that does not care — the
+    tests, mostly — does not have to know piper's units exist.
+    """
+    audio = await asyncio.to_thread(_synthesise_blocking, text, language, speed, volume)
     return base64.b64encode(audio).decode("ascii"), "audio/wav"

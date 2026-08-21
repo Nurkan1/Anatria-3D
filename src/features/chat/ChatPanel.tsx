@@ -578,6 +578,8 @@ export function ChatPanel() {
   const [profile, setProfile] = useState<UserProfile>(() => chatPreferences().profile);
   const [language, setLanguage] = useState<Language>(() => chatPreferences().language);
   const [spokenLimit, setSpokenLimit] = useState<number>(() => chatPreferences().spokenLimit);
+  const [spokenSpeed, setSpokenSpeed] = useState<number>(() => chatPreferences().spokenSpeed);
+  const [spokenVolume, setSpokenVolume] = useState<number>(() => chatPreferences().spokenVolume);
   const [draft, setDraft] = useState("");
   const [transportError, setTransportError] = useState<string | null>(null);
 
@@ -835,8 +837,8 @@ export function ChatPanel() {
   // covered without anyone having to remember to wire it up. The model id is not
   // here — `modelStore` owns that half and merges into the same record.
   useEffect(() => {
-    patchChatPreferences({ provider, profile, language, spokenLimit });
-  }, [provider, profile, language, spokenLimit]);
+    patchChatPreferences({ provider, profile, language, spokenLimit, spokenSpeed, spokenVolume });
+  }, [provider, profile, language, spokenLimit, spokenSpeed, spokenVolume]);
 
   // Follow the stream, but only when the reader is already at the bottom —
   // yanking the view away while they scroll back through an answer is worse
@@ -988,6 +990,10 @@ export function ChatPanel() {
       <SettingsDrawer
         spokenLimit={spokenLimit}
         onSpokenLimitChange={setSpokenLimit}
+        spokenSpeed={spokenSpeed}
+        onSpokenSpeedChange={setSpokenSpeed}
+        spokenVolume={spokenVolume}
+        onSpokenVolumeChange={setSpokenVolume}
         provider={provider}
         onProviderChange={setProvider}
         profile={profile}

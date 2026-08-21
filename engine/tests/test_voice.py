@@ -18,7 +18,12 @@ from pathlib import Path
 import pytest
 
 from anatria_engine import handlers, voice
-from anatria_engine.protocol import SpeakRequest, TranscribeRequest
+from anatria_engine.protocol import (
+    VOICE_MAX_SPEED,
+    VOICE_MIN_SPEED,
+    SpeakRequest,
+    TranscribeRequest,
+)
 from anatria_engine.transport import Transport
 
 
@@ -228,3 +233,66 @@ def test_the_data_dir_falls_back_to_the_home_default(monkeypatch) -> None:
     monkeypatch.delenv("XDG_DATA_HOME", raising=False)
     first = voice._voice_dirs()[0]
     assert first == Path.home() / ".local" / "share" / "anatria3d" / "voices"
+
+
+def test_a_speak_request_without_a_pace_speaks_normally() -> None:
+    """The field is defaulted, not required.
+
+    `extra="forbid"` makes every protocol addition a compatibility question: a
+    frontend built before this field exists sends no `speed`, and must not be
+    rejected for it. The value it would have meant is 1.0.
+    """
+    request = SpeakRequest(request_id="r6", text="The aorta.", language="en")
+    assert request.speed == 1.0
+    assert request.volume == 1.0
+
+
+def test_an_impossible_pace_is_refused_at_the_boundary() -> None:
+    """Clamped in the interface *and* here.
+
+    The slider cannot produce these, but the slider is not the only thing that
+    can send this frame, and `speed=0` becomes a division by zero one function
+    later.
+    """
+    import pydantic
+
+    for bad in (0, -1, 99):
+        with pytest.raises(pydantic.ValidationError):
+            SpeakRequest(request_id="r7", text="x", language="en", speed=bad)
+
+
+def test_pace_is_inverted_into_piper_s_units() -> None:
+    """**Larger `length_scale` is slower.** Getting this backwards is silent.
+
+    Piper measures phoneme *duration*, so asking for 1.25x speech means holding
+    each sound for 1/1.25 as long. Inverted the wrong way the slider would still
+    work, still change the voice, and do the opposite of its label — a bug no
+    stack trace would ever report.
+    """
+    config = voice._synthesis_config(1.25, 1.0)
+    if config is None:
+        pytest.skip("piper not installed in this environment")
+    assert config.length_scale == pytest.approx(0.8)
+    assert voice._synthesis_config(0.5, 1.0).length_scale == pytest.approx(2.0)
+
+
+def test_the_default_pace_asks_piper_for_nothing() -> None:
+    """No config object at all when nothing was changed.
+
+    This is the path a build with an older piper takes — the import inside
+    `_synthesis_config` can fail, and speaking at the natural pace is a far
+    better outcome than refusing to speak. Keeping the untouched case free of
+    that import means the default can never be broken by this function.
+    """
+    assert voice._synthesis_config(1.0, 1.0) is None
+
+
+def test_the_bounds_are_the_ones_the_interface_offers() -> None:
+    """Two owners, one range — the same rule the Zod/Pydantic contract enforces.
+
+    `schemas.ts` draws the slider from its own copy of these numbers. If they
+    drift, the slider's own extremes start being rejected by the engine, which
+    reads to the user as speech failing at exactly the setting they wanted.
+    """
+    assert VOICE_MIN_SPEED == 0.5
+    assert VOICE_MAX_SPEED == 2.0

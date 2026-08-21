@@ -2,6 +2,10 @@ import {
   AiProviderSchema,
   LanguageSchema,
   UserProfileSchema,
+  VOICE_MAX_SPEED,
+  VOICE_MAX_VOLUME,
+  VOICE_MIN_SPEED,
+  VOICE_MIN_VOLUME,
   type AiProvider,
   type Language,
   type UserProfile,
@@ -56,6 +60,23 @@ export interface ChatPreferences {
    */
   spokenLimit: number;
   /**
+   * Speaking rate, as a multiplier of the voice's natural pace.
+   *
+   * The setting this whole panel was asked for. Piper's English voice reads at
+   * a natural native pace, which is *fast* if English is not your first
+   * language and you are trying to catch an anatomical term inside it — and
+   * this is an atlas for Bulgarian and Spanish students. Slowing a recording
+   * down is the ordinary way people cope with that, and it should not require
+   * asking someone to speak differently.
+   *
+   * Stored rather than per-answer: a reader who needs 0.8x needs it for every
+   * answer, and re-setting it each time is the same forgetting the drawer state
+   * used to do.
+   */
+  spokenSpeed: number;
+  /** Output level, as a multiplier. Exists to go down, for shared rooms. */
+  spokenVolume: number;
+  /**
    * The last model explicitly chosen, per provider.
    *
    * Per provider rather than one field, because switching provider and back
@@ -98,9 +119,25 @@ export const DEFAULT_CHAT_PREFERENCES: ChatPreferences = {
   // time, so a full answer costs a few seconds before it starts speaking —
   // cheaper than losing its ending.
   spokenLimit: 0,
+  // The voice's own pace. Anyone who wants it slower says so; nobody should
+  // have to opt in to normal.
+  spokenSpeed: 1.0,
+  spokenVolume: 1.0,
   model: {},
   settingsOpen: false,
 };
+
+/**
+ * A finite number pulled into range, or null if it was never a number.
+ *
+ * Clamping rather than rejecting: a value slightly outside the bounds is a
+ * build that moved them, and honouring the reader's intent at the nearest legal
+ * value beats silently resetting them to the default.
+ */
+function readClamped(value: unknown, min: number, max: number): number | null {
+  if (typeof value !== "number" || !Number.isFinite(value)) return null;
+  return Math.min(Math.max(value, min), max);
+}
 
 /**
  * Turn whatever was in storage into something safe to apply.
@@ -135,6 +172,15 @@ export function sanitiseChatPreferences(raw: unknown): Partial<ChatPreferences> 
   ) {
     clean.spokenLimit = Math.min(Math.round(stored.spokenLimit), MAX_SPOKEN_CHARS);
   }
+
+  // Same clamp-don't-trust rule as `spokenLimit`. A stored speed of 0 would
+  // reach the synthesiser as a division by zero; one of 40 would produce a
+  // noise nobody can stop except by finding this file.
+  const speed = readClamped(stored.spokenSpeed, VOICE_MIN_SPEED, VOICE_MAX_SPEED);
+  if (speed !== null) clean.spokenSpeed = speed;
+
+  const volume = readClamped(stored.spokenVolume, VOICE_MIN_VOLUME, VOICE_MAX_VOLUME);
+  if (volume !== null) clean.spokenVolume = volume;
 
   if (typeof stored.model === "object" && stored.model !== null) {
     const model: Partial<Record<AiProvider, string>> = {};

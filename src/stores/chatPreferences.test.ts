@@ -134,3 +134,39 @@ describe("the stored snapshot", () => {
     expect(chatPreferences()).toEqual(DEFAULT_CHAT_PREFERENCES);
   });
 });
+
+describe("spoken speed and volume", () => {
+  it("defaults to the voice's own pace and level", () => {
+    // Nobody should have to opt in to normal. A build that shipped 0.8 here
+    // would have every reader wondering why the app talks slowly.
+    expect(DEFAULT_CHAT_PREFERENCES.spokenSpeed).toBe(1);
+    expect(DEFAULT_CHAT_PREFERENCES.spokenVolume).toBe(1);
+  });
+
+  it("keeps a speed the slider could have produced", () => {
+    expect(sanitiseChatPreferences({ spokenSpeed: 0.8 })).toEqual({ spokenSpeed: 0.8 });
+  });
+
+  it("pulls a stored speed of zero up into range", () => {
+    // The one value that must never reach the synthesiser: pace is inverted
+    // into `length_scale` there, so zero is a division by zero rather than
+    // merely a strange reading.
+    expect(sanitiseChatPreferences({ spokenSpeed: 0 })).toEqual({ spokenSpeed: 0.5 });
+  });
+
+  it("pulls an absurd speed down rather than discarding it", () => {
+    expect(sanitiseChatPreferences({ spokenSpeed: 40 })).toEqual({ spokenSpeed: 2 });
+  });
+
+  it("ignores a speed that was never a number", () => {
+    // Distinct from clamping: no key at all means the default applies, which
+    // is what a corrupted or hand-edited file should get.
+    expect(sanitiseChatPreferences({ spokenSpeed: "fast" })).toEqual({});
+    expect(sanitiseChatPreferences({ spokenSpeed: Number.NaN })).toEqual({});
+  });
+
+  it("clamps volume the same way", () => {
+    expect(sanitiseChatPreferences({ spokenVolume: 0 })).toEqual({ spokenVolume: 0.1 });
+    expect(sanitiseChatPreferences({ spokenVolume: 9 })).toEqual({ spokenVolume: 1 });
+  });
+});
