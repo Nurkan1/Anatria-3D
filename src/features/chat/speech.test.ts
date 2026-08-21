@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { loadVoices, voicesForLanguage } from "./speech";
+import { loadVoices, speakableLanguages, voicesForLanguage } from "./speech";
 
 /**
  * The rule these protect is not a preference: a voice with
@@ -76,6 +76,25 @@ describe("voicesForLanguage", () => {
     ];
 
     expect(voicesForLanguage(voices, "auto").map((v) => v.name)).toEqual(["English"]);
+  });
+});
+
+describe("speakableLanguages", () => {
+  it("reports only the app's own languages, in a stable order", () => {
+    const voices = [
+      voice({ lang: "bg-BG" }),
+      voice({ lang: "fr-FR" }),
+      voice({ lang: "es-ES" }),
+    ];
+
+    // French is installed and irrelevant: the assistant does not write in it.
+    expect(speakableLanguages(voices)).toEqual(["es", "bg"]);
+  });
+
+  it("does not count a cloud voice as something this computer can speak", () => {
+    const voices = [voice({ lang: "es-ES", localService: false })];
+
+    expect(speakableLanguages(voices)).toEqual([]);
   });
 });
 

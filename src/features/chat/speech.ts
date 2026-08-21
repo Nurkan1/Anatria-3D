@@ -63,6 +63,23 @@ export function voicesForLanguage(
     });
 }
 
+/** The languages the assistant writes in, and so the ones worth a voice. */
+const SPEAKABLE: readonly Exclude<Language, "auto">[] = ["en", "es", "bg"];
+
+/**
+ * Which of the assistant's languages this computer can actually speak.
+ *
+ * Used to tell a reader on `auto` that the machine is not mute — it simply has
+ * no English voice, and choosing one of these would work. Listing every
+ * installed voice instead would be useless: a machine with only French and
+ * German voices can speak none of the languages this app writes in.
+ */
+export function speakableLanguages(
+  voices: readonly SpeechSynthesisVoice[],
+): Exclude<Language, "auto">[] {
+  return SPEAKABLE.filter((language) => voicesForLanguage(voices, language).length > 0);
+}
+
 /**
  * `en-US`, `en_US` and bare `en` all reduce to `en`.
  *

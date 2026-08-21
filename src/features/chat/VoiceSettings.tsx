@@ -3,6 +3,7 @@ import { useState } from "react";
 import { type Language } from "@/lib/schemas";
 
 import {
+  speakableLanguages,
   voicesForLanguage,
   VOICE_MAX_SPEED,
   VOICE_MAX_VOLUME,
@@ -81,14 +82,20 @@ const LANGUAGE_NAMES: Record<Language, string> = {
  *
  * Without it the feature is not merely unavailable, it is **invisible**: the
  * button does not appear, nothing explains why, and the reader concludes the
- * app cannot do it. That matters most in the default configuration — the
- * assistant starts in Bulgarian, and Windows does not install a Bulgarian voice
- * unless someone asks for one.
+ * app cannot do it.
+ *
+ * **Which language is missing is not predictable.** The expectation was
+ * Bulgarian, since the assistant starts there and it is the least common voice;
+ * the machine this was tested on had Bulgarian and Spanish and no *English*.
+ * Windows installs voices from its display language and whatever packs are
+ * present, so nothing about a language makes it the safe one — which is why
+ * this is a runtime check per language rather than a special case for any of
+ * them.
  *
  * It names where to go rather than only what is wrong, because a missing voice
  * is something the reader can fix in a minute and nothing this app can fix at
- * all. The alternative — reading Bulgarian with an English voice — would
- * mispronounce every term in the atlas, which is worse than silence.
+ * all. Falling back to another language's voice is not the alternative: it
+ * would mispronounce every term in the atlas, which is worse than silence.
  */
 function MissingVoiceNotice({ language }: { language: Language }) {
   const voices = useLocalVoices();
@@ -100,17 +107,52 @@ function MissingVoiceNotice({ language }: { language: Language }) {
   if (voices.length === 0) return null;
   if (voicesForLanguage(voices, language).length > 0) return null;
 
+  // `auto` is the one case where switching language is a real answer. It means
+  // the reader expressed no preference, so offering them one costs nothing —
+  // where a reader who *chose* Bulgarian wants Bulgarian, and telling them to
+  // settle for Spanish would be answering a question they did not ask.
+  //
+  // Found on a real machine: a Windows PC with Spanish and Bulgarian voices and
+  // no English one. `auto` speaks English, so the app went silent on a computer
+  // with two perfectly good voices installed.
+  const alternatives = language === "auto" ? speakableLanguages(voices) : [];
+  if (alternatives.length > 0) {
+    return (
+      <Notice>
+        Answers are read in English when no language is chosen, and this
+        computer has no English voice. It does have{" "}
+        {listLanguages(alternatives)} — setting the assistant to one of those
+        will let it speak.
+      </Notice>
+    );
+  }
+
   const windows = typeof navigator !== "undefined" && navigator.userAgent.includes("Windows");
 
   return (
-    <p className="mb-2 rounded border border-slate-700/70 bg-slate-800/40 px-2 py-1 text-[10px] leading-snug text-slate-400">
+    <Notice>
       No {name} voice is installed on this computer, so answers cannot be read
       aloud in it.{" "}
       {windows
         ? "Windows adds them under Settings → Time & language → Speech."
         : "Your desktop's speech settings control which voices are available."}
+    </Notice>
+  );
+}
+
+function Notice({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="mb-2 rounded border border-slate-700/70 bg-slate-800/40 px-2 py-1 text-[10px] leading-snug text-slate-400">
+      {children}
     </p>
   );
+}
+
+/** "Spanish", or "Spanish and Bulgarian". Never an Oxford comma for two. */
+function listLanguages(languages: Exclude<Language, "auto">[]): string {
+  const names = languages.map((language) => LANGUAGE_NAMES[language]);
+  if (names.length <= 1) return names[0] ?? "";
+  return `${names.slice(0, -1).join(", ")} and ${names.at(-1)}`;
 }
 
 interface Props {

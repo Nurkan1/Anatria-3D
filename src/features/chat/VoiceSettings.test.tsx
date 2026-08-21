@@ -68,10 +68,33 @@ describe("VoiceSettings", () => {
     expect(screen.queryByText(/is installed on this computer/)).toBeNull();
   });
 
-  it("names English when the reader never chose a language", () => {
-    voices.current = [voice("es-ES")];
+  it("offers the languages this computer can speak, on auto", () => {
+    // The real case: a Windows PC with Spanish and Bulgarian voices and no
+    // English one. `auto` speaks English, so the app fell silent on a machine
+    // with two perfectly good voices sitting there.
+    voices.current = [voice("es-ES"), voice("bg-BG")];
+    renderPanel("auto");
+
+    expect(screen.getByText(/no English voice/)).toBeTruthy();
+    expect(screen.getByText(/Spanish and Bulgarian/)).toBeTruthy();
+    // Telling someone to install a voice they do not need is the wrong advice.
+    expect(screen.queryByText(/Time & language/)).toBeNull();
+  });
+
+  it("falls back to install instructions when auto has nothing to offer", () => {
+    voices.current = [voice("fr-FR"), voice("de-DE")];
     renderPanel("auto");
 
     expect(screen.getByText(/No English voice is installed/)).toBeTruthy();
+  });
+
+  it("never suggests switching away from a language the reader chose", () => {
+    // A reader who picked Bulgarian wants Bulgarian. Offering Spanish would
+    // answer a question they did not ask.
+    voices.current = [voice("es-ES"), voice("en-US")];
+    renderPanel("bg");
+
+    expect(screen.getByText(/No Bulgarian voice is installed/)).toBeTruthy();
+    expect(screen.queryByText(/setting the assistant to one of those/)).toBeNull();
   });
 });
