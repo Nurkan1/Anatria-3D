@@ -131,11 +131,18 @@ the `elide()` helper in `sidecar.rs`: the line is truncated before it reaches
 the log. It counts **characters, not bytes** — Bulgarian is the primary locale,
 and slicing a byte offset through a multi-byte character panics.
 
-This fix lives on `experiment/voice` and **not on `main`**: the hazard is only
-reachable once audio crosses that boundary, which nothing on the trunk does. It
-is the clearest example in this document of the experiment finding something in
-code that predates it, and it is worth carrying across whether or not the rest
-of the voice work is ever promoted.
+**`main` fixed the same hazard independently, and the two will conflict.** This
+branch is based on `113ea57` and predates `8402592`, *"fix(ipc): stop logging
+the frame that failed to parse"*, which added `elided()` to the same
+`forward_frame` in `sidecar.rs`. Both exist, both are correct, and both count
+characters rather than bytes. They are not to be reconciled here: whoever
+integrates this branch resolves that one region, and knowing in advance that it
+is a genuine duplicate — not a mistake by either side — is the whole value of
+recording it.
+
+It is the clearest example in this document of the experiment finding something
+in code that predates it: the finding reached the trunk on its own, before the
+voice work it came from was anywhere near promotion.
 
 The Python side is already clean: `_summarise_validation_error` emits only
 Pydantic's `loc` and `msg`, never input values, and `api_key` carries
