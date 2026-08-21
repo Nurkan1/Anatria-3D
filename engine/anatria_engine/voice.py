@@ -1,9 +1,19 @@
 """Local speech-to-text and text-to-speech.
 
-Both engines run **in this process and offline**: `faster-whisper` transcribes,
-`piper` synthesises. Nothing here opens a socket, which is the strongest form
-of the rule that all network I/O lives in the sidecar — for voice there is no
-network I/O at all, and the microphone audio never leaves the machine.
+Both engines run **in this process**: `faster-whisper` transcribes, `piper`
+synthesises. All inference is local, and **the recorded audio never leaves the
+machine** — that is the point of choosing local engines, and it holds
+unconditionally.
+
+**Each engine fetches its model once**, on first use: whisper pulls its weights
+through huggingface into `$HOME`, and `_load_piper` calls `download_voice`. So
+voice is offline *in use* and not on *first run*. Said plainly because
+`README.md` promises that "no account, no key and no internet are needed to
+start", which makes any claim about network behaviour here close to a promise.
+That promise is not broken — it covers the atlas, which still works untouched
+with voice absent — but an earlier version of this paragraph claimed there was
+no network I/O at all, which was never true and is exactly the sentence a
+reader would have relied on.
 
 Two consequences shape the whole module:
 
@@ -63,30 +73,48 @@ _PIPER_VOICES: Final[dict[str, str]] = {
     "bg": "bg_BG-dimitar-medium",
 }
 
-#: Where downloaded voices live. Under the engine's own directory rather than
-#: the user's data dir: they belong to this experimental build, and removing
-#: the branch should not leave hundreds of megabytes orphaned somewhere the
-#: user will never find.
-def _voice_dirs() -> list[Path]:
-    """Where piper voices live, in read order.
 
-    **Writable first, and never inside the installation.** The original version
-    put them beside the package, which works from a source checkout and fails
-    the moment the app is installed from a `.deb`:
+def _voice_cache_dir() -> Path:
+    """The per-user directory downloaded voices are written to.
+
+    **A function, not a module constant.** The environment can differ between
+    import time and use — a frozen build imports early and may be re-parented
+    into a different session — and a constant would freeze whatever was true at
+    import and hide that it had.
+
+    The first version resolved this against the package instead
+    (`Path(__file__).parent.parent / "voices"`), which works from a source
+    checkout and fails the moment the app is installed:
 
         [Errno 13] Permission denied:
         '/usr/lib/Anatria3D/anatria-engine/_internal/voices'
 
-    `/usr` is root-owned, and an app downloading into its own install directory
-    would be wrong even if it could. Voices are per-user data, so they belong
-    under `XDG_DATA_HOME`.
+    `/usr` is root-owned, `C:\\Program Files` likewise, and an application
+    writing into its own install directory would be wrong even where it is
+    permitted. Note the asymmetry that points at the right answer: whisper
+    never had this problem, because it caches through huggingface into `$HOME`
+    by default. The location chosen explicitly was the fragile one.
 
-    The bundled directory is still *read*: a build that ships voices should use
-    them rather than downloading a second copy.
+    A *cache*, not data: every file here is re-downloadable from the published
+    catalogue, so deleting it costs a fetch and nothing else. Stdlib only — no
+    dependency is worth adding for two `environ` lookups, and `pyproject.toml`
+    staying untouched is what keeps CI able to install this branch.
     """
-    data_home = os.environ.get("XDG_DATA_HOME") or str(Path.home() / ".local" / "share")
+    if sys.platform == "win32":
+        base = Path(os.environ.get("LOCALAPPDATA") or Path.home() / "AppData" / "Local")
+        return base / "Anatria3D" / "voices"
+    base = Path(os.environ.get("XDG_CACHE_HOME") or Path.home() / ".cache")
+    return base / "anatria3d" / "voices"
+
+
+def _voice_dirs() -> list[Path]:
+    """Where piper voices live, in read order: writable first.
+
+    The bundled directory is still *read*, so a build that ships its voices
+    uses them instead of fetching a second copy. It is never written to.
+    """
     return [
-        Path(data_home) / "anatria3d" / "voices",
+        _voice_cache_dir(),
         Path(__file__).resolve().parent.parent / "voices",
     ]
 
@@ -152,15 +180,25 @@ def _load_piper(language: str) -> Any:
         except Exception as exc:
             # The one moment voice touches the network, and it is a one-off
             # asset fetch, not the audio: the recording itself never leaves.
+            #
+            # The directory is named here, and in the load failure below, for
+            # a reason the original design got backwards: it worried about
+            # orphaning hundreds of megabytes somewhere the user would never
+            # find, and answered that by writing into the install tree, where
+            # a user cannot write at all. A path in the message is worth more
+            # than a path nobody can write to — this is what someone wanting
+            # the space back needs to know to delete it.
             raise VoiceUnavailableError(
-                f"The voice {voice_name!r} could not be downloaded. "
+                f"The voice {voice_name!r} could not be downloaded to {target}. "
                 "The first use of each language fetches it once."
             ) from exc
 
     try:
         voice = PiperVoice.load(model_path)
     except Exception as exc:
-        raise VoiceUnavailableError(f"The voice {voice_name!r} could not be loaded.") from exc
+        raise VoiceUnavailableError(
+            f"The voice {voice_name!r} could not be loaded from {model_path}."
+        ) from exc
     _piper_voices[voice_name] = voice
     return voice
 

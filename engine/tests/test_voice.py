@@ -204,7 +204,7 @@ def test_the_hotword_list_is_computed_once() -> None:
     assert voice._anatomy_hotwords() is first
 
 
-def test_voices_are_downloaded_under_the_user_s_data_dir(monkeypatch) -> None:
+def test_voices_are_downloaded_under_a_per_user_cache(monkeypatch) -> None:
     """Never into the installation directory.
 
     The first version put voices beside the package. From a source checkout
@@ -215,9 +215,11 @@ def test_voices_are_downloaded_under_the_user_s_data_dir(monkeypatch) -> None:
         '/usr/lib/Anatria3D/anatria-engine/_internal/voices'
 
     An application writing into its own install directory would be wrong even
-    with permission — these are per-user data.
+    with permission — and on a machine the user did not build themselves, it is
+    not permitted at all.
     """
-    monkeypatch.setenv("XDG_DATA_HOME", "/tmp/xdg-test")
+    monkeypatch.setattr(voice.sys, "platform", "linux")
+    monkeypatch.setenv("XDG_CACHE_HOME", "/tmp/xdg-test")
     first, *rest = voice._voice_dirs()
 
     # The writable one is first, because that is where a download goes.
@@ -228,11 +230,51 @@ def test_voices_are_downloaded_under_the_user_s_data_dir(monkeypatch) -> None:
     assert not str(first).startswith("/usr")
 
 
-def test_the_data_dir_falls_back_to_the_home_default(monkeypatch) -> None:
-    """`XDG_DATA_HOME` is frequently unset; the spec's default applies."""
-    monkeypatch.delenv("XDG_DATA_HOME", raising=False)
-    first = voice._voice_dirs()[0]
-    assert first == Path.home() / ".local" / "share" / "anatria3d" / "voices"
+def test_the_cache_dir_falls_back_to_the_home_default(monkeypatch) -> None:
+    """`XDG_CACHE_HOME` is frequently unset; the spec's default applies."""
+    monkeypatch.setattr(voice.sys, "platform", "linux")
+    monkeypatch.delenv("XDG_CACHE_HOME", raising=False)
+    assert voice._voice_cache_dir() == Path.home() / ".cache" / "anatria3d" / "voices"
+
+
+def test_windows_uses_local_appdata_rather_than_an_xdg_variable(monkeypatch) -> None:
+    """`.deb` is this experiment's target, but the path must not be nonsense
+    on the platform the project actually ships an installer for.
+
+    `LOCALAPPDATA` rather than `APPDATA`: these are re-downloadable models, so
+    they belong in the local (non-roaming) profile — nobody wants 600 MB of
+    voices syncing to a domain server.
+    """
+    monkeypatch.setattr(voice.sys, "platform", "win32")
+    monkeypatch.setenv("LOCALAPPDATA", r"C:\Users\x\AppData\Local")
+    assert voice._voice_cache_dir() == Path(r"C:\Users\x\AppData\Local") / "Anatria3D" / "voices"
+
+
+def test_a_download_failure_names_the_directory(monkeypatch) -> None:
+    """So a user reclaiming the space knows what to delete.
+
+    The original design worried about orphaning hundreds of megabytes somewhere
+    unfindable and answered that by writing into the install tree, where a user
+    cannot write at all. A path in the message is worth more than a path nobody
+    can write to.
+    """
+    monkeypatch.setattr(voice, "_piper_voices", {})
+    # Both directories pointed at nothing, so the lookup misses and a download
+    # is actually attempted. Without this the bundled `engine/voices/` copy is
+    # found on a developer machine and the failure path never runs.
+    monkeypatch.setattr(
+        voice, "_voice_dirs", lambda: [Path("/tmp/xdg-named/anatria3d/voices")]
+    )
+
+    def explode(*_args, **_kwargs):
+        raise OSError("no route to host")
+
+    import piper.download_voices
+
+    monkeypatch.setattr(piper.download_voices, "download_voice", explode)
+    with pytest.raises(voice.VoiceUnavailableError) as caught:
+        voice._load_piper("en")
+    assert "/tmp/xdg-named/anatria3d/voices" in str(caught.value)
 
 
 def test_a_speak_request_without_a_pace_speaks_normally() -> None:

@@ -121,11 +121,21 @@ when a frame fails to parse:
 
     eprintln!("[engine] non-protocol stdout line ({err}): {line}");
 
-Today that channel carries text. Once synthesised speech travels back as
-base64, one malformed frame writes **a recording of somebody's voice into a log
-file** — the thing the brief says must never happen. This is pre-existing and
-harmless now; voice is what makes it real. It must be truncated before any
-audio crosses that boundary.
+That channel carried only text before this branch. Once synthesised speech
+travels back as base64, one malformed frame writes **a recording of somebody's
+voice into a log file** — the thing the brief says must never happen. The
+hazard was pre-existing and harmless; voice is what made it real.
+
+**Fixed in `354a56a`**, in the same commit that introduced the audio frames, by
+the `elide()` helper in `sidecar.rs`: the line is truncated before it reaches
+the log. It counts **characters, not bytes** — Bulgarian is the primary locale,
+and slicing a byte offset through a multi-byte character panics.
+
+This fix lives on `experiment/voice` and **not on `main`**: the hazard is only
+reachable once audio crosses that boundary, which nothing on the trunk does. It
+is the clearest example in this document of the experiment finding something in
+code that predates it, and it is worth carrying across whether or not the rest
+of the voice work is ever promoted.
 
 The Python side is already clean: `_summarise_validation_error` emits only
 Pydantic's `loc` and `msg`, never input values, and `api_key` carries

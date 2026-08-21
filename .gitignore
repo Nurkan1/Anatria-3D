@@ -65,7 +65,7 @@ AGENTS.md
 ci-linux/
 
 # Piper voice models, downloaded on first use by the local voice experiment
-# (branch `local/voice`). ~60 MB each and fetched on demand — the same reason
+# (branch `experiment/voice`). ~60 MB each and fetched on demand — the same reason
 # the anatomy source above is not vendored.
 engine/voices/
 
