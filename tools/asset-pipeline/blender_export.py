@@ -124,29 +124,40 @@ def gather_geometry(collection) -> dict:
     that throws away the structure that lets a reader study an organ together
     with everything inside it.
 
-    An object can be linked into several collections; the first path the walk
-    reaches wins, which is stable for a given collection order.
+    An object can be linked into several collections, and **the most specific
+    path wins**. Z-Anatomy links a visceral object into a parent collection and
+    into its child — the stomach sits in `Digestive system` and again in
+    `Digestive system/Digestive canal` — so taking the first path a
+    claim-then-descend walk reaches hands back the parent's shallower trail and
+    the child collection ends up empty. That is how six systems shipped with
+    structures carrying no usable ancestry: measured against `vendor/inspect.json`,
+    the shallow rule leaves `Digestive canal` with nothing in it and the deep
+    rule fills it.
+
+    Depth is the tiebreak rather than order because order is Blender's, not
+    ours: it changes when someone rearranges the outliner, which would silently
+    re-file structures with no edit to this file.
 
     Emptiness is judged after evaluation in `build_clean_scene`, not here: a
     curve has no polygons until its bevel is applied, so testing up front would
     reintroduce the very bug this function exists to avoid.
     """
-    found: dict[object, list[str]] = {}
-    seen: set[str] = set()
+    # Keyed by name, not by object: an object linked into two collections is
+    # reached twice and must be recognised as the same structure both times.
+    best: dict[str, tuple[object, list[str]]] = {}
 
     def walk(node, trail: list[str]) -> None:
         for obj in node.objects:
             if obj.type not in GEOMETRY_TYPES or is_heading(obj.name):
                 continue
-            if obj.name in seen:
-                continue
-            seen.add(obj.name)
-            found[obj] = trail
+            claimed = best.get(obj.name)
+            if claimed is None or len(trail) > len(claimed[1]):
+                best[obj.name] = (obj, trail)
         for child in node.children:
             walk(child, [*trail, child.name])
 
     walk(collection, [])
-    return found
+    return {obj: trail for obj, trail in best.values()}
 
 
 def ensure_gltf_addon() -> None:
