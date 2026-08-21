@@ -4,7 +4,7 @@ import type { Language } from "@/lib/schemas";
 import { chatPreferences } from "@/stores/chatPreferences";
 
 import { speakableText, speechChunks } from "./speakableText";
-import { voicesForLanguage } from "./speech";
+import { effectiveLanguage, voicesForLanguage } from "./speech";
 import { useLocalVoices } from "./useLocalVoices";
 
 /**
@@ -83,7 +83,7 @@ export function useSpokenAnswer(): UseSpokenAnswer {
         return;
       }
 
-      const voice = voicesForLanguage(voices, language)[0];
+      const voice = voicesForLanguage(voices, effectiveLanguage(language, markdown))[0];
       if (!voice) {
         setError("No voice for this language is installed on this computer.");
         return;

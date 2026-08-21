@@ -1,6 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { loadVoices, speakableLanguages, voicesForLanguage } from "./speech";
+import {
+  detectLanguage,
+  effectiveLanguage,
+  loadVoices,
+  speakableLanguages,
+  voicesForLanguage,
+} from "./speech";
 
 /**
  * The rule these protect is not a preference: a voice with
@@ -144,5 +150,67 @@ describe("loadVoices", () => {
 
     await expect(pending).resolves.toEqual([]);
     vi.useRealTimers();
+  });
+});
+
+/**
+ * Detection exists because `auto` records no language, and without it the app
+ * stays silent on an answer it could read. The bar is not perfection: it is
+ * being right on a paragraph of prose, and saying `null` instead of guessing
+ * when it is not.
+ */
+describe("detectLanguage", () => {
+  it("recognises Bulgarian by its script alone", () => {
+    expect(detectLanguage("Сърцето има четири камери.")).toBe("bg");
+  });
+
+  it("recognises Spanish prose", () => {
+    expect(
+      detectLanguage(
+        "El corazón tiene cuatro cámaras y la aorta sale del ventrículo izquierdo.",
+      ),
+    ).toBe("es");
+  });
+
+  it("recognises English prose", () => {
+    expect(
+      detectLanguage("The heart has four chambers and the aorta leaves the left ventricle."),
+    ).toBe("en");
+  });
+
+  it("is not fooled by the Latin the two share", () => {
+    // Anatomical terms are in neither marker list, so an answer dense with them
+    // is decided by the prose around them.
+    expect(
+      detectLanguage("La arteria coronaria derecha irriga el nodo sinoauricular."),
+    ).toBe("es");
+    expect(
+      detectLanguage("The right coronary artery supplies the sinoatrial node."),
+    ).toBe("en");
+  });
+
+  it("treats a single ñ or inverted mark as decisive", () => {
+    expect(detectLanguage("¿Dónde está?")).toBe("es");
+  });
+
+  it("says nothing rather than guess at a bare term", () => {
+    expect(detectLanguage("Aorta")).toBeNull();
+    expect(detectLanguage("")).toBeNull();
+  });
+});
+
+describe("effectiveLanguage", () => {
+  it("honours an explicit choice without reading the text", () => {
+    // A reader who set Bulgarian gets Bulgarian or nothing, whatever the answer
+    // happens to look like.
+    expect(effectiveLanguage("bg", "The heart has four chambers.")).toBe("bg");
+  });
+
+  it("follows the answer on auto", () => {
+    expect(effectiveLanguage("auto", "El corazón tiene cuatro cámaras.")).toBe("es");
+  });
+
+  it("keeps auto's old meaning when the text decides nothing", () => {
+    expect(effectiveLanguage("auto", "Aorta")).toBe("en");
   });
 });

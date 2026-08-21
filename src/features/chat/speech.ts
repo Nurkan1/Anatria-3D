@@ -67,6 +67,83 @@ export function voicesForLanguage(
 const SPEAKABLE: readonly Exclude<Language, "auto">[] = ["en", "es", "bg"];
 
 /**
+ * Very common words that occur in one of these languages and not the other.
+ *
+ * Deliberately function words: they are the most frequent things in any prose
+ * and they carry no subject matter, so an answer about the pericardium scores
+ * the same way as one about the femur. Anatomical terms are in neither list,
+ * which is what stops shared Latin from tipping the count.
+ */
+const SPANISH_MARKERS = new Set([
+  "de", "la", "el", "que", "los", "las", "con", "para", "una", "del",
+  "es", "en", "se", "por", "su", "al", "lo", "como", "más", "pero",
+  "esta", "este", "son", "hacia", "entre", "cuando",
+]);
+
+const ENGLISH_MARKERS = new Set([
+  "the", "of", "and", "is", "to", "in", "that", "it", "for", "with",
+  "as", "are", "was", "this", "from", "by", "an", "be", "or", "which",
+  "into", "between", "when", "its",
+]);
+
+/**
+ * Which of the app's languages a piece of prose is written in, or `null`.
+ *
+ * Only reached when the reader chose `auto`, which means the assistant replied
+ * in whatever language they wrote in and no setting records which. Without this
+ * the app goes silent on an answer it could read perfectly: a machine with
+ * Spanish and Bulgarian voices, an answer in Spanish, and no button — because
+ * `auto` nominally speaks English and English was the one voice missing. That
+ * happened on a real computer.
+ *
+ * **This is detection, not fallback.** Reaching for another language's voice
+ * because the right one is absent would mispronounce every term in the atlas
+ * and is refused elsewhere in this file. Reading the text to find out what it
+ * actually is, and then using *that* language's voice, is the opposite move —
+ * it is right whenever it is confident, and returns `null` rather than guess.
+ *
+ * Cheap on purpose. A language-detection dependency for three languages, on
+ * text that is always at least a paragraph, would be a large amount of code to
+ * decide something a dozen function words already settle.
+ */
+export function detectLanguage(text: string): Exclude<Language, "auto"> | null {
+  // Script first, because it is decisive rather than statistical: Bulgarian is
+  // the only one of the three written in Cyrillic, so a single comparison ends
+  // the question without counting anything.
+  const cyrillic = (text.match(/\p{Script=Cyrillic}/gu) ?? []).length;
+  const latin = (text.match(/\p{Script=Latin}/gu) ?? []).length;
+  if (cyrillic > latin) return "bg";
+  if (cyrillic === 0 && latin === 0) return null;
+
+  let spanish = 0;
+  let english = 0;
+  for (const word of text.toLowerCase().match(/[\p{Letter}]+/gu) ?? []) {
+    if (SPANISH_MARKERS.has(word)) spanish += 1;
+    else if (ENGLISH_MARKERS.has(word)) english += 1;
+  }
+
+  // Characters Spanish has and English does not. Worth several function words
+  // each: one "ñ" or an inverted question mark settles it on its own.
+  spanish += (text.match(/[ñáéíóúü¿¡]/gi) ?? []).length * 3;
+
+  if (spanish === english) return null;
+  return spanish > english ? "es" : "en";
+}
+
+/**
+ * The language to speak `text` in, given what the reader chose.
+ *
+ * An explicit choice is honoured without inspecting anything — a reader who set
+ * Bulgarian gets Bulgarian or nothing. Detection applies only to `auto`, and
+ * falls back to English there when the text is too short or too ambiguous to
+ * call, which is what `auto` meant before any of this.
+ */
+export function effectiveLanguage(preference: Language, text: string): Exclude<Language, "auto"> {
+  if (preference !== "auto") return preference;
+  return detectLanguage(text) ?? "en";
+}
+
+/**
  * Which of the assistant's languages this computer can actually speak.
  *
  * Used to tell a reader on `auto` that the machine is not mute — it simply has

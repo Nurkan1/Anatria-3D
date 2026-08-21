@@ -107,22 +107,17 @@ function MissingVoiceNotice({ language }: { language: Language }) {
   if (voices.length === 0) return null;
   if (voicesForLanguage(voices, language).length > 0) return null;
 
-  // `auto` is the one case where switching language is a real answer. It means
-  // the reader expressed no preference, so offering them one costs nothing —
-  // where a reader who *chose* Bulgarian wants Bulgarian, and telling them to
-  // settle for Spanish would be answering a question they did not ask.
-  //
-  // Found on a real machine: a Windows PC with Spanish and Bulgarian voices and
-  // no English one. `auto` speaks English, so the app went silent on a computer
-  // with two perfectly good voices installed.
+  // On `auto` the voice follows the language the answer is written in, so a
+  // missing English voice no longer means silence — Spanish and Bulgarian
+  // answers still read. What is true is narrower, and worth saying plainly
+  // rather than advising a settings change that would not help.
   const alternatives = language === "auto" ? speakableLanguages(voices) : [];
   if (alternatives.length > 0) {
     return (
       <Notice>
-        Answers are read in English when no language is chosen, and this
-        computer has no English voice. It does have{" "}
-        {listLanguages(alternatives)} — setting the assistant to one of those
-        will let it speak.
+        Answers are read in whichever language they are written in. This
+        computer can speak {listLanguages(alternatives)}, but has no English
+        voice, so English answers cannot be read aloud.
       </Notice>
     );
   }

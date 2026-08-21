@@ -1,5 +1,6 @@
 import type { Language } from "@/lib/schemas";
 
+import { effectiveLanguage } from "./speech";
 import { useSpokenAnswer } from "./useSpokenAnswer";
 
 /**
@@ -27,9 +28,14 @@ export function SpeakAnswerButton({ content, language }: Props) {
   const spoken = useSpokenAnswer();
   const speaking = spoken.state === "speaking";
 
-  // `supports` is false until the platform has enumerated its voices, so the
-  // button appears a moment after the answer rather than before it can work.
-  if (!spoken.supports(language)) return null;
+  // On `auto` this is the language the answer turned out to be written in, not
+  // the setting — see `effectiveLanguage`. The button therefore tracks whether
+  // *this* answer can be read, which is the question the reader is asking.
+  const spokenIn = effectiveLanguage(language, content);
+
+  // False until the platform has enumerated its voices, so the button appears a
+  // moment after the answer rather than before it can work.
+  if (!spoken.supports(spokenIn)) return null;
 
   return (
     <>
@@ -37,7 +43,7 @@ export function SpeakAnswerButton({ content, language }: Props) {
         type="button"
         onClick={() => {
           if (speaking) spoken.stop();
-          else spoken.speak(content, language);
+          else spoken.speak(content, spokenIn);
         }}
         aria-label={speaking ? "Stop reading aloud" : "Read this answer aloud"}
         title={speaking ? "Stop reading aloud" : "Read this answer aloud"}
