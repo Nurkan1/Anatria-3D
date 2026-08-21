@@ -18,25 +18,6 @@ export interface PlacedOrgan {
 /** Where each misfiled nervous structure belongs, by its TA2 Latin term. */
 export const NERVOUS_PATHS: Record<string, string[]>;
 
-/** Visceral groups the source offers and this pipeline declines, with the reason. */
-export const DECLINED_VISCERAL_GROUPS: Record<string, string>;
-
-/** The blend snapshot in `vendor/inspect.json`, in the fields this module reads. */
-export interface BlendSnapshot {
-  objects: { name: string; collections: string[] }[];
-  collections: { name: string; path: string }[];
-}
-
-/**
- * Give back the visceral groups whose membership is complete.
- *
- * Only ever adds a path to a structure that has none.
- */
-export function recoverVisceralPaths<T extends PlacedOrgan>(
-  organs: T[],
-  inspect: BlendSnapshot,
-): { organs: T[]; recovered: number };
-
 /**
  * Refile the structures Z-Anatomy's collection nesting places wrongly.
  *

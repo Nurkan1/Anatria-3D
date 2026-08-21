@@ -1023,35 +1023,43 @@
    "name": "Atlas (C1)",
    "polygons": 2146,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Cervical vertebrae"
    ]
   },
   {
    "name": "Axis (C2)",
    "polygons": 2244,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Cervical vertebrae"
    ]
   },
   {
    "name": "Body of sternum",
    "polygons": 4466,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Sternum"
    ]
   },
   {
    "name": "Calcaneus.l",
    "polygons": 1432,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Calcaneus.r",
    "polygons": 1432,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
@@ -1072,14 +1080,16 @@
    "name": "Clavicle.l",
    "polygons": 1548,
    "path": [
-    "Appendicular skeleton"
+    "Bones of upper limb",
+    "Bones of pectoral girdle"
    ]
   },
   {
    "name": "Clavicle.r",
    "polygons": 1548,
    "path": [
-    "Appendicular skeleton"
+    "Bones of upper limb",
+    "Bones of pectoral girdle"
    ]
   },
   {
@@ -1107,140 +1117,160 @@
    "name": "Costal cartilage of eighth rib.l",
    "polygons": 1312,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Costal cartilages"
    ]
   },
   {
    "name": "Costal cartilage of eighth rib.r",
    "polygons": 1312,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Costal cartilages"
    ]
   },
   {
    "name": "Costal cartilage of fifth rib.l",
    "polygons": 3246,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Costal cartilages"
    ]
   },
   {
    "name": "Costal cartilage of fifth rib.r",
    "polygons": 3246,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Costal cartilages"
    ]
   },
   {
    "name": "Costal cartilage of first rib.l",
    "polygons": 1386,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Costal cartilages"
    ]
   },
   {
    "name": "Costal cartilage of first rib.r",
    "polygons": 1386,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Costal cartilages"
    ]
   },
   {
    "name": "Costal cartilage of fourth rib.l",
    "polygons": 2236,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Costal cartilages"
    ]
   },
   {
    "name": "Costal cartilage of fourth rib.r",
    "polygons": 2236,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Costal cartilages"
    ]
   },
   {
    "name": "Costal cartilage of ninth rib.l",
    "polygons": 982,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Costal cartilages"
    ]
   },
   {
    "name": "Costal cartilage of ninth rib.r",
    "polygons": 982,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Costal cartilages"
    ]
   },
   {
    "name": "Costal cartilage of second rib.l",
    "polygons": 1704,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Costal cartilages"
    ]
   },
   {
    "name": "Costal cartilage of second rib.r",
    "polygons": 1704,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Costal cartilages"
    ]
   },
   {
    "name": "Costal cartilage of seventh rib.l",
    "polygons": 6882,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Costal cartilages"
    ]
   },
   {
    "name": "Costal cartilage of seventh rib.r",
    "polygons": 6882,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Costal cartilages"
    ]
   },
   {
    "name": "Costal cartilage of sixth rib.l",
    "polygons": 4060,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Costal cartilages"
    ]
   },
   {
    "name": "Costal cartilage of sixth rib.r",
    "polygons": 4060,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Costal cartilages"
    ]
   },
   {
    "name": "Costal cartilage of tenth rib.l",
    "polygons": 762,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Costal cartilages"
    ]
   },
   {
    "name": "Costal cartilage of tenth rib.r",
    "polygons": 762,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Costal cartilages"
    ]
   },
   {
    "name": "Costal cartilage of third rib.l",
    "polygons": 1800,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Costal cartilages"
    ]
   },
   {
    "name": "Costal cartilage of third rib.r",
    "polygons": 1800,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Costal cartilages"
    ]
   },
   {
@@ -1254,28 +1284,32 @@
    "name": "Cuboid bone.l",
    "polygons": 994,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Cuboid bone.r",
    "polygons": 994,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Distal phalanx of fifth finger of foot.l",
    "polygons": 222,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Distal phalanx of fifth finger of foot.r",
    "polygons": 222,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
@@ -1296,14 +1330,16 @@
    "name": "Distal phalanx of first finger of foot.l",
    "polygons": 466,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Distal phalanx of first finger of foot.r",
    "polygons": 466,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
@@ -1324,14 +1360,16 @@
    "name": "Distal phalanx of fourth finger of foot.l",
    "polygons": 278,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Distal phalanx of fourth finger of foot.r",
    "polygons": 278,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
@@ -1352,14 +1390,16 @@
    "name": "Distal phalanx of second finger of foot.l",
    "polygons": 236,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Distal phalanx of second finger of foot.r",
    "polygons": 236,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
@@ -1380,14 +1420,16 @@
    "name": "Distal phalanx of third finger of foot.l",
    "polygons": 318,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Distal phalanx of third finger of foot.r",
    "polygons": 318,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
@@ -1408,28 +1450,42 @@
    "name": "Eighth rib.l",
    "polygons": 8257,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs",
+    "False ribs"
    ]
   },
   {
    "name": "Eighth rib.r",
    "polygons": 8257,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs",
+    "False ribs"
    ]
   },
   {
    "name": "Eleventh rib.l",
    "polygons": 5032,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs",
+    "False ribs",
+    "Floating ribs"
    ]
   },
   {
    "name": "Eleventh rib.r",
    "polygons": 5032,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs",
+    "False ribs",
+    "Floating ribs"
    ]
   },
   {
@@ -1443,28 +1499,32 @@
    "name": "Femur.l",
    "polygons": 3786,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Femur.r",
    "polygons": 3786,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Fibula.l",
    "polygons": 1264,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Fibula.r",
    "polygons": 1264,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
@@ -1485,28 +1545,34 @@
    "name": "Fifth metatarsal bone.l",
    "polygons": 894,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Fifth metatarsal bone.r",
    "polygons": 894,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Fifth rib.l",
    "polygons": 9360,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs"
    ]
   },
   {
    "name": "Fifth rib.r",
    "polygons": 9360,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs"
    ]
   },
   {
@@ -1527,28 +1593,34 @@
    "name": "First metatarsal bone.l",
    "polygons": 1087,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "First metatarsal bone.r",
    "polygons": 1087,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "First rib.l",
    "polygons": 3208,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs"
    ]
   },
   {
    "name": "First rib.r",
    "polygons": 3208,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs"
    ]
   },
   {
@@ -1569,28 +1641,34 @@
    "name": "Fourth metatarsal bone.l",
    "polygons": 732,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Fourth metatarsal bone.r",
    "polygons": 732,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Fourth rib.l",
    "polygons": 8640,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs"
    ]
   },
   {
    "name": "Fourth rib.r",
    "polygons": 8640,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs"
    ]
   },
   {
@@ -1681,14 +1759,16 @@
    "name": "Intermediate cuneiform bone.l",
    "polygons": 444,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Intermediate cuneiform bone.r",
    "polygons": 444,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
@@ -1905,14 +1985,16 @@
    "name": "Lateral cuneiform bone.l",
    "polygons": 632,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Lateral cuneiform bone.r",
    "polygons": 632,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
@@ -1940,98 +2022,112 @@
    "name": "Lower canine.l",
    "polygons": 1276,
    "path": [
-    "Axial skeleton"
+    "Extracranial bones of head",
+    "Mandible"
    ]
   },
   {
    "name": "Lower canine.r",
    "polygons": 1276,
    "path": [
-    "Axial skeleton"
+    "Extracranial bones of head",
+    "Mandible"
    ]
   },
   {
    "name": "Lower first molar tooth.l",
    "polygons": 4475,
    "path": [
-    "Axial skeleton"
+    "Extracranial bones of head",
+    "Mandible"
    ]
   },
   {
    "name": "Lower first molar tooth.r",
    "polygons": 4475,
    "path": [
-    "Axial skeleton"
+    "Extracranial bones of head",
+    "Mandible"
    ]
   },
   {
    "name": "Lower first premolar.l",
    "polygons": 1207,
    "path": [
-    "Axial skeleton"
+    "Extracranial bones of head",
+    "Mandible"
    ]
   },
   {
    "name": "Lower first premolar.r",
    "polygons": 1207,
    "path": [
-    "Axial skeleton"
+    "Extracranial bones of head",
+    "Mandible"
    ]
   },
   {
    "name": "Lower lateral incisor.l",
    "polygons": 1033,
    "path": [
-    "Axial skeleton"
+    "Extracranial bones of head",
+    "Mandible"
    ]
   },
   {
    "name": "Lower lateral incisor.r",
    "polygons": 1033,
    "path": [
-    "Axial skeleton"
+    "Extracranial bones of head",
+    "Mandible"
    ]
   },
   {
    "name": "Lower medial incisor.l",
    "polygons": 984,
    "path": [
-    "Axial skeleton"
+    "Extracranial bones of head",
+    "Mandible"
    ]
   },
   {
    "name": "Lower medial incisor.r",
    "polygons": 984,
    "path": [
-    "Axial skeleton"
+    "Extracranial bones of head",
+    "Mandible"
    ]
   },
   {
    "name": "Lower second molar tooth.l",
    "polygons": 1655,
    "path": [
-    "Axial skeleton"
+    "Extracranial bones of head",
+    "Mandible"
    ]
   },
   {
    "name": "Lower second molar tooth.r",
    "polygons": 1655,
    "path": [
-    "Axial skeleton"
+    "Extracranial bones of head",
+    "Mandible"
    ]
   },
   {
    "name": "Lower second premolar.l",
    "polygons": 1180,
    "path": [
-    "Axial skeleton"
+    "Extracranial bones of head",
+    "Mandible"
    ]
   },
   {
    "name": "Lower second premolar.r",
    "polygons": 1180,
    "path": [
-    "Axial skeleton"
+    "Extracranial bones of head",
+    "Mandible"
    ]
   },
   {
@@ -2080,42 +2176,53 @@
    "name": "Mandible",
    "polygons": 18838,
    "path": [
-    "Axial skeleton"
+    "Extracranial bones of head",
+    "Mandible"
    ]
   },
   {
    "name": "Manubrium of sternum",
    "polygons": 2662,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Sternum"
    ]
   },
   {
    "name": "Maxilla.l",
    "polygons": 4798,
    "path": [
-    "Axial skeleton"
+    "Cranium",
+    "Bones of cranium",
+    "Maxilla",
+    "Right maxilla"
    ]
   },
   {
    "name": "Maxilla.r",
    "polygons": 4798,
    "path": [
-    "Axial skeleton"
+    "Cranium",
+    "Bones of cranium",
+    "Maxilla",
+    "Right maxilla"
    ]
   },
   {
    "name": "Medial cuneiform bone.l",
    "polygons": 968,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Medial cuneiform bone.r",
    "polygons": 968,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
@@ -2132,14 +2239,16 @@
    "name": "Middle phalanx of fifth finger of foot.l",
    "polygons": 216,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Middle phalanx of fifth finger of foot.r",
    "polygons": 216,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
@@ -2160,14 +2269,16 @@
    "name": "Middle phalanx of fourth finger of foot.l",
    "polygons": 404,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Middle phalanx of fourth finger of foot.r",
    "polygons": 404,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
@@ -2188,14 +2299,16 @@
    "name": "Middle phalanx of second finger of foot.l",
    "polygons": 326,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Middle phalanx of second finger of foot.r",
    "polygons": 326,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
@@ -2216,14 +2329,16 @@
    "name": "Middle phalanx of third finger of foot.l",
    "polygons": 359,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Middle phalanx of third finger of foot.r",
    "polygons": 359,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
@@ -2265,28 +2380,36 @@
    "name": "Navicular bone.l",
    "polygons": 731,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Navicular bone.r",
    "polygons": 731,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Ninth rib.l",
    "polygons": 7743,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs",
+    "False ribs"
    ]
   },
   {
    "name": "Ninth rib.r",
    "polygons": 7743,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs",
+    "False ribs"
    ]
   },
   {
@@ -2496,14 +2619,16 @@
    "name": "Patella.l",
    "polygons": 274,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Patella.r",
    "polygons": 274,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
@@ -2541,14 +2666,16 @@
    "name": "Proximal phalanx of fifth finger of foot.l",
    "polygons": 516,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Proximal phalanx of fifth finger of foot.r",
    "polygons": 516,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
@@ -2569,14 +2696,16 @@
    "name": "Proximal phalanx of first finger of foot.l",
    "polygons": 517,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Proximal phalanx of first finger of foot.r",
    "polygons": 517,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
@@ -2597,14 +2726,16 @@
    "name": "Proximal phalanx of fourth finger of foot.l",
    "polygons": 460,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Proximal phalanx of fourth finger of foot.r",
    "polygons": 460,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
@@ -2625,14 +2756,16 @@
    "name": "Proximal phalanx of second finger of foot.l",
    "polygons": 424,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Proximal phalanx of second finger of foot.r",
    "polygons": 424,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
@@ -2653,14 +2786,16 @@
    "name": "Proximal phalanx of third finger of foot.l",
    "polygons": 458,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Proximal phalanx of third finger of foot.r",
    "polygons": 458,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
@@ -2737,14 +2872,16 @@
    "name": "Scapula.l",
    "polygons": 25255,
    "path": [
-    "Appendicular skeleton"
+    "Bones of upper limb",
+    "Bones of pectoral girdle"
    ]
   },
   {
    "name": "Scapula.r",
    "polygons": 25255,
    "path": [
-    "Appendicular skeleton"
+    "Bones of upper limb",
+    "Bones of pectoral girdle"
    ]
   },
   {
@@ -2765,56 +2902,68 @@
    "name": "Second metatarsal bone.l",
    "polygons": 690,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Second metatarsal bone.r",
    "polygons": 690,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Second rib.l",
    "polygons": 5354,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs"
    ]
   },
   {
    "name": "Second rib.r",
    "polygons": 5354,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs"
    ]
   },
   {
    "name": "Sesamoid bones of foot.l",
    "polygons": 290,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Sesamoid bones of foot.r",
    "polygons": 290,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Seventh rib.l",
    "polygons": 9741,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs"
    ]
   },
   {
    "name": "Seventh rib.r",
    "polygons": 9741,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs"
    ]
   },
   {
@@ -2835,14 +2984,18 @@
    "name": "Sixth rib.l",
    "polygons": 10092,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs"
    ]
   },
   {
    "name": "Sixth rib.r",
    "polygons": 10092,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs"
    ]
   },
   {
@@ -2870,14 +3023,16 @@
    "name": "Talus.l",
    "polygons": 1325,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Talus.r",
    "polygons": 1325,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
@@ -2898,14 +3053,20 @@
    "name": "Tenth rib.l",
    "polygons": 7002,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs",
+    "False ribs"
    ]
   },
   {
    "name": "Tenth rib.r",
    "polygons": 7002,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs",
+    "False ribs"
    ]
   },
   {
@@ -2926,28 +3087,34 @@
    "name": "Third metatarsal bone.l",
    "polygons": 804,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Third metatarsal bone.r",
    "polygons": 804,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Third rib.l",
    "polygons": 6957,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs"
    ]
   },
   {
    "name": "Third rib.r",
    "polygons": 6957,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs"
    ]
   },
   {
@@ -2961,14 +3128,16 @@
    "name": "Tibia.l",
    "polygons": 1613,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
    "name": "Tibia.r",
    "polygons": 1613,
    "path": [
-    "Appendicular skeleton"
+    "Bones of lower limb",
+    "Bones of free lower limb"
    ]
   },
   {
@@ -3017,14 +3186,22 @@
    "name": "Twelfth rib.l",
    "polygons": 2995,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs",
+    "False ribs",
+    "Floating ribs"
    ]
   },
   {
    "name": "Twelfth rib.r",
    "polygons": 2995,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Ribs",
+    "False ribs",
+    "Floating ribs"
    ]
   },
   {
@@ -3045,252 +3222,338 @@
    "name": "Upper canine.l",
    "polygons": 1434,
    "path": [
-    "Axial skeleton"
+    "Cranium",
+    "Bones of cranium",
+    "Maxilla",
+    "Right maxilla"
    ]
   },
   {
    "name": "Upper canine.r",
    "polygons": 1434,
    "path": [
-    "Axial skeleton"
+    "Cranium",
+    "Bones of cranium",
+    "Maxilla",
+    "Right maxilla"
    ]
   },
   {
    "name": "Upper first molar tooth.l",
    "polygons": 2168,
    "path": [
-    "Axial skeleton"
+    "Cranium",
+    "Bones of cranium",
+    "Maxilla",
+    "Right maxilla"
    ]
   },
   {
    "name": "Upper first molar tooth.r",
    "polygons": 2168,
    "path": [
-    "Axial skeleton"
+    "Cranium",
+    "Bones of cranium",
+    "Maxilla",
+    "Right maxilla"
    ]
   },
   {
    "name": "Upper first premolar.l",
    "polygons": 1651,
    "path": [
-    "Axial skeleton"
+    "Cranium",
+    "Bones of cranium",
+    "Maxilla",
+    "Right maxilla"
    ]
   },
   {
    "name": "Upper first premolar.r",
    "polygons": 1651,
    "path": [
-    "Axial skeleton"
+    "Cranium",
+    "Bones of cranium",
+    "Maxilla",
+    "Right maxilla"
    ]
   },
   {
    "name": "Upper lateral incisor.l",
    "polygons": 1412,
    "path": [
-    "Axial skeleton"
+    "Cranium",
+    "Bones of cranium",
+    "Maxilla",
+    "Right maxilla"
    ]
   },
   {
    "name": "Upper lateral incisor.r",
    "polygons": 1412,
    "path": [
-    "Axial skeleton"
+    "Cranium",
+    "Bones of cranium",
+    "Maxilla",
+    "Right maxilla"
    ]
   },
   {
    "name": "Upper medial incisor.l",
    "polygons": 1368,
    "path": [
-    "Axial skeleton"
+    "Cranium",
+    "Bones of cranium",
+    "Maxilla",
+    "Right maxilla"
    ]
   },
   {
    "name": "Upper medial incisor.r",
    "polygons": 1368,
    "path": [
-    "Axial skeleton"
+    "Cranium",
+    "Bones of cranium",
+    "Maxilla",
+    "Right maxilla"
    ]
   },
   {
    "name": "Upper second molar tooth.l",
    "polygons": 1843,
    "path": [
-    "Axial skeleton"
+    "Cranium",
+    "Bones of cranium",
+    "Maxilla",
+    "Right maxilla"
    ]
   },
   {
    "name": "Upper second molar tooth.r",
    "polygons": 1843,
    "path": [
-    "Axial skeleton"
+    "Cranium",
+    "Bones of cranium",
+    "Maxilla",
+    "Right maxilla"
    ]
   },
   {
    "name": "Upper second premolar.l",
    "polygons": 1511,
    "path": [
-    "Axial skeleton"
+    "Cranium",
+    "Bones of cranium",
+    "Maxilla",
+    "Right maxilla"
    ]
   },
   {
    "name": "Upper second premolar.r",
    "polygons": 1511,
    "path": [
-    "Axial skeleton"
+    "Cranium",
+    "Bones of cranium",
+    "Maxilla",
+    "Right maxilla"
    ]
   },
   {
    "name": "Vertebra C3",
    "polygons": 2374,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Cervical vertebrae"
    ]
   },
   {
    "name": "Vertebra C4",
    "polygons": 1938,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Cervical vertebrae"
    ]
   },
   {
    "name": "Vertebra C5",
    "polygons": 2256,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Cervical vertebrae"
    ]
   },
   {
    "name": "Vertebra C6",
    "polygons": 2224,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Cervical vertebrae"
    ]
   },
   {
    "name": "Vertebra C7",
    "polygons": 2090,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Cervical vertebrae"
    ]
   },
   {
    "name": "Vertebra L1",
    "polygons": 3056,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Lumbar vertebrae"
    ]
   },
   {
    "name": "Vertebra L2",
    "polygons": 2572,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Lumbar vertebrae"
    ]
   },
   {
    "name": "Vertebra L3",
    "polygons": 3060,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Lumbar vertebrae"
    ]
   },
   {
    "name": "Vertebra L4",
    "polygons": 3692,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Lumbar vertebrae"
    ]
   },
   {
    "name": "Vertebra L5",
    "polygons": 3920,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Lumbar vertebrae"
    ]
   },
   {
    "name": "Vertebra T1",
    "polygons": 1946,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Thoracic vertebrae"
    ]
   },
   {
    "name": "Vertebra T10",
    "polygons": 2953,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Thoracic vertebrae"
    ]
   },
   {
    "name": "Vertebra T11",
    "polygons": 1780,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Thoracic vertebrae"
    ]
   },
   {
    "name": "Vertebra T12",
    "polygons": 2472,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Thoracic vertebrae"
    ]
   },
   {
    "name": "Vertebra T2",
    "polygons": 2092,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Thoracic vertebrae"
    ]
   },
   {
    "name": "Vertebra T3",
    "polygons": 2342,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Thoracic vertebrae"
    ]
   },
   {
    "name": "Vertebra T4",
    "polygons": 2214,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Thoracic vertebrae"
    ]
   },
   {
    "name": "Vertebra T5",
    "polygons": 2152,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Thoracic vertebrae"
    ]
   },
   {
    "name": "Vertebra T6",
    "polygons": 1774,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Thoracic vertebrae"
    ]
   },
   {
    "name": "Vertebra T7",
    "polygons": 2646,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Thoracic vertebrae"
    ]
   },
   {
    "name": "Vertebra T8",
    "polygons": 1706,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Thoracic vertebrae"
    ]
   },
   {
    "name": "Vertebra T9",
    "polygons": 2968,
    "path": [
-    "Axial skeleton"
+    "Vertebral column",
+    "Bones of vertebral column",
+    "Thoracic vertebrae"
    ]
   },
   {
@@ -3304,7 +3567,9 @@
    "name": "Xiphoid process",
    "polygons": 913,
    "path": [
-    "Axial skeleton"
+    "Thoracic skeleton",
+    "Bones of thorax",
+    "Sternum"
    ]
   },
   {

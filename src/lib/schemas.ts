@@ -178,7 +178,7 @@ export const SceneCommandSchema = z.discriminatedUnion("action", [
     organ_id: z.string().min(1),
   }),
   /**
-   * Isolate a named anatomical group — "Kidney", "Muscles", "Vertebral column".
+   * Isolate a named anatomical group — "Brain", "Muscles of hand", "Vertebral column".
    *
    * Most groups are not structures. The atlas has no mesh called "Kidney" on
    * the female body: it is fifty parts under one heading, and the same is true

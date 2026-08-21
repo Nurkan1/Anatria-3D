@@ -103,35 +103,40 @@
    "name": "?x.l",
    "polygons": 1872,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "?x.r",
    "polygons": 1872,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Abdominal aorta",
    "polygons": 1008,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Accessory branch of middle meningeal artery.l",
    "polygons": 720,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Accessory branch of middle meningeal artery.r",
    "polygons": 720,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -145,14 +150,16 @@
    "name": "Angular artery.l",
    "polygons": 5904,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Angular artery.r",
    "polygons": 5904,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -174,7 +181,8 @@
    "polygons": 2736,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Left pulmonary artery'"
    ]
   },
   {
@@ -182,35 +190,40 @@
    "polygons": 1584,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Right pulonary artery'"
    ]
   },
   {
    "name": "Anterior branch of renal artery.l",
    "polygons": 432,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Anterior branch of renal artery.r",
    "polygons": 576,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Anterior cerebral artery.l",
    "polygons": 432,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Anterior cerebral artery.r",
    "polygons": 432,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -252,28 +265,32 @@
    "name": "Anterior deep temporal artery.l",
    "polygons": 2016,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Anterior deep temporal artery.r",
    "polygons": 2016,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Anterior division of internal iliac artery.l",
    "polygons": 576,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Anterior division of internal iliac artery.r",
    "polygons": 576,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -294,35 +311,42 @@
    "name": "Anterior ethmoidal artery.l",
    "polygons": 1872,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Anterior ethmoidal artery.r",
    "polygons": 1872,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Anterior inferior cerebellar artery.l",
    "polygons": 2304,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Subclavian artery",
+    "Vertebral artery'"
    ]
   },
   {
    "name": "Anterior inferior cerebellar artery.r",
    "polygons": 2304,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Subclavian artery",
+    "Vertebral artery'"
    ]
   },
   {
    "name": "Anterior inferior pancreaticoduodenal artery",
    "polygons": 4464,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -366,7 +390,8 @@
    "polygons": 3456,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Left pulmonary artery'"
    ]
   },
   {
@@ -374,7 +399,8 @@
    "polygons": 2880,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Right pulonary artery'"
    ]
   },
   {
@@ -388,14 +414,16 @@
    "name": "Anterior septal branches of anterior ethmoidal artery.l",
    "polygons": 1440,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Anterior septal branches of anterior ethmoidal artery.r",
    "polygons": 1440,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -416,14 +444,16 @@
    "name": "Anterior temporal branch.l",
    "polygons": 5184,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Anterior temporal branch.r",
    "polygons": 5184,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -459,7 +489,8 @@
    "polygons": 1440,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary veins"
+    "Pulmonary veins",
+    "Left superior pulmonary vein'"
    ]
   },
   {
@@ -467,14 +498,16 @@
    "polygons": 1152,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary veins"
+    "Pulmonary veins",
+    "Right superior pulmonary vein'"
    ]
   },
   {
    "name": "Aortic arch",
    "polygons": 288,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -482,7 +515,8 @@
    "polygons": 1872,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Left pulmonary artery'"
    ]
   },
   {
@@ -490,7 +524,8 @@
    "polygons": 4608,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Right pulonary artery'"
    ]
   },
   {
@@ -498,7 +533,8 @@
    "polygons": 2880,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary veins"
+    "Pulmonary veins",
+    "Right superior pulmonary vein'"
    ]
   },
   {
@@ -506,14 +542,16 @@
    "polygons": 7056,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary veins"
+    "Pulmonary veins",
+    "Left superior pulmonary vein'"
    ]
   },
   {
    "name": "Appendicular artery",
    "polygons": 2448,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -534,70 +572,80 @@
    "name": "Artery of central sulcus.l",
    "polygons": 2304,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Artery of central sulcus.r",
    "polygons": 2304,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Artery of precentral sulcus.l",
    "polygons": 6192,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Artery of precentral sulcus.r",
    "polygons": 6192,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Artery of pterygoid canal.l",
    "polygons": 720,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Artery of pterygoid canal.r",
    "polygons": 720,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Ascending aorta",
    "polygons": 288,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Ascending branch of left colic artery",
    "polygons": 864,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Ascending pharyngeal artery.l",
    "polygons": 3024,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Ascending pharyngeal artery.r",
    "polygons": 3024,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -639,7 +687,9 @@
    "name": "Basilar artery",
    "polygons": 432,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Subclavian artery",
+    "Vertebral artery'"
    ]
   },
   {
@@ -703,35 +753,40 @@
    "name": "Brachiocephalic trunk",
    "polygons": 288,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Branch to angular gyrus.l",
    "polygons": 432,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Branch to angular gyrus.r",
    "polygons": 432,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Buccal artery.l",
    "polygons": 720,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Buccal artery.r",
    "polygons": 720,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -766,14 +821,16 @@
    "name": "Callosomarginal artery.l",
    "polygons": 7488,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Callosomarginal artery.r",
    "polygons": 7488,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -794,14 +851,16 @@
    "name": "Central retinal artery.l",
    "polygons": 103680,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Central retinal artery.r",
    "polygons": 103680,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -858,14 +917,16 @@
    "name": "Coeliac trunk",
    "polygons": 288,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Colic branch of ileocolic artery",
    "polygons": 1440,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -886,21 +947,24 @@
    "name": "Common hepatic artery",
    "polygons": 288,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Common iliac artery.l",
    "polygons": 144,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Common iliac artery.r",
    "polygons": 288,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -985,14 +1049,16 @@
    "name": "Deep artery of penis.l",
    "polygons": 1584,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Deep artery of penis.r",
    "polygons": 1584,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -1132,49 +1198,56 @@
    "name": "Descending branch of left colic artery",
    "polygons": 1440,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Descending palatine artery.l",
    "polygons": 1728,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Descending palatine artery.r",
    "polygons": 1728,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Distal lateral striate branches.l",
    "polygons": 4608,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Distal lateral striate branches.r",
    "polygons": 4608,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Dorsal artery of penis.l",
    "polygons": 5760,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Dorsal artery of penis.r",
    "polygons": 5760,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -1349,28 +1422,32 @@
    "name": "External carotid artery.l",
    "polygons": 864,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "External carotid artery.r",
    "polygons": 864,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "External iliac artery.l",
    "polygons": 432,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "External iliac artery.r",
    "polygons": 432,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -1419,14 +1496,16 @@
    "name": "Facial artery.l",
    "polygons": 1296,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Facial artery.r",
    "polygons": 1296,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -1517,35 +1596,40 @@
    "name": "Frontal branch of superficial temporal artery.l",
    "polygons": 2304,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Frontal branch of superficial temporal artery.r",
    "polygons": 2304,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Frontal branches of callosomarginal artery.l",
    "polygons": 1008,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Frontal branches of callosomarginal artery.r",
    "polygons": 1008,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Gastroduodenal artery",
    "polygons": 432,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -1588,14 +1672,16 @@
    "name": "Greater palatine artery.l",
    "polygons": 1008,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Greater palatine artery.r",
    "polygons": 1008,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -1623,42 +1709,48 @@
    "name": "Ileal branch of ileocolic artery",
    "polygons": 288,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Ileocolic artery",
    "polygons": 432,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Iliacus branch of iliolumbar artery.l",
    "polygons": 1584,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Iliacus branch of iliolumbar artery.r",
    "polygons": 1584,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Iliolumbar artery.l",
    "polygons": 288,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Iliolumbar artery.r",
    "polygons": 288,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -1679,14 +1771,16 @@
    "name": "Inferior alveolar artery.l",
    "polygons": 2592,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Inferior alveolar artery.r",
    "polygons": 2592,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -1694,7 +1788,8 @@
    "polygons": 2448,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary veins"
+    "Pulmonary veins",
+    "Left inferior pulmonary vein'"
    ]
   },
   {
@@ -1702,21 +1797,24 @@
    "polygons": 4464,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary veins"
+    "Pulmonary veins",
+    "Right inferior pulmonary vein'"
    ]
   },
   {
    "name": "Inferior epigastric artery.l",
    "polygons": 1440,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Inferior epigastric artery.r",
    "polygons": 1440,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -1737,14 +1835,16 @@
    "name": "Inferior gluteal artery.l",
    "polygons": 1872,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Inferior gluteal artery.r",
    "polygons": 1872,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -1765,14 +1865,16 @@
    "name": "Inferior labial artery.l",
    "polygons": 1152,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Inferior labial artery.r",
    "polygons": 1152,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -1815,7 +1917,8 @@
    "polygons": 1584,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Left pulmonary artery'"
    ]
   },
   {
@@ -1823,7 +1926,8 @@
    "polygons": 1296,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary veins"
+    "Pulmonary veins",
+    "Left superior pulmonary vein'"
    ]
   },
   {
@@ -1831,7 +1935,8 @@
    "polygons": 288,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Right pulonary artery'"
    ]
   },
   {
@@ -1852,7 +1957,8 @@
    "name": "Inferior mesenteric artery",
    "polygons": 864,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -1880,7 +1986,8 @@
    "name": "Inferior pancreaticoduodenal artery",
    "polygons": 288,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -1915,7 +2022,8 @@
    "name": "Inferior phrenic artery",
    "polygons": 2016,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -1929,14 +2037,16 @@
    "name": "Inferior suprarenal artery.l",
    "polygons": 2448,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Inferior suprarenal artery.r",
    "polygons": 2016,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -2001,28 +2111,32 @@
    "name": "Infra-orbital artery.l",
    "polygons": 576,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Infra-orbital artery.r",
    "polygons": 576,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Insular branches of middle cerebral artery (M2).r",
    "polygons": 864,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Insular branches of middle cerebral artery (M2-segment).l",
    "polygons": 864,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -2043,28 +2157,32 @@
    "name": "Internal carotid artery.l",
    "polygons": 1440,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Internal carotid artery.r",
    "polygons": 1440,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Internal iliac artery.l",
    "polygons": 288,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Internal iliac artery.r",
    "polygons": 288,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -2099,14 +2217,16 @@
    "name": "Internal pudendal artery.l",
    "polygons": 4032,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Internal pudendal artery.r",
    "polygons": 4032,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -2155,14 +2275,16 @@
    "name": "Intrarenal arteries of left kidney",
    "polygons": 8208,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Intrarenal arteries of right kidney",
    "polygons": 10224,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -2183,14 +2305,16 @@
    "name": "Lacrimal artery.l",
    "polygons": 2160,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Lacrimal artery.r",
    "polygons": 2160,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -2198,7 +2322,8 @@
    "polygons": 2880,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Left pulmonary artery'"
    ]
   },
   {
@@ -2206,7 +2331,8 @@
    "polygons": 1440,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Right pulonary artery'"
    ]
   },
   {
@@ -2241,28 +2367,34 @@
    "name": "Lateral frontobasal artery.l",
    "polygons": 2880,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Lateral frontobasal artery.r",
    "polygons": 2880,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Lateral occipital artery.l",
    "polygons": 2160,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Subclavian artery",
+    "Vertebral artery'"
    ]
   },
   {
    "name": "Lateral occipital artery.r",
    "polygons": 2160,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Subclavian artery",
+    "Vertebral artery'"
    ]
   },
   {
@@ -2297,14 +2429,18 @@
    "name": "Lateral pontine branches of basilar artery.l",
    "polygons": 1728,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Subclavian artery",
+    "Vertebral artery'"
    ]
   },
   {
    "name": "Lateral pontine branches of basilar artery.r",
    "polygons": 1728,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Subclavian artery",
+    "Vertebral artery'"
    ]
   },
   {
@@ -2326,7 +2462,8 @@
    "polygons": 1728,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Right pulonary artery'"
    ]
   },
   {
@@ -2376,7 +2513,8 @@
    "polygons": 2304,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary veins"
+    "Pulmonary veins",
+    "Right superior pulmonary vein'"
    ]
   },
   {
@@ -2404,14 +2542,16 @@
    "name": "Left colic artery",
    "polygons": 432,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Left common carotid artery",
    "polygons": 576,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -2433,7 +2573,8 @@
    "name": "Left gastric artery",
    "polygons": 720,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -2448,7 +2589,8 @@
    "polygons": 432,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary veins"
+    "Pulmonary veins",
+    "Left inferior pulmonary vein'"
    ]
   },
   {
@@ -2456,14 +2598,16 @@
    "polygons": 1008,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Left pulmonary artery'"
    ]
   },
   {
    "name": "Left renal artery",
    "polygons": 144,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -2513,14 +2657,16 @@
    "polygons": 432,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary veins"
+    "Pulmonary veins",
+    "Left superior pulmonary vein'"
    ]
   },
   {
    "name": "Left testicular artery",
    "polygons": 4464,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -2556,49 +2702,56 @@
    "polygons": 288,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary veins"
+    "Pulmonary veins",
+    "Left superior pulmonary vein'"
    ]
   },
   {
    "name": "Long posterior ciliary arteries.l",
    "polygons": 2160,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Long posterior ciliary arteries.r",
    "polygons": 2160,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Lumbar arteries.l",
    "polygons": 5328,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Lumbar arteries.r",
    "polygons": 5904,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Lumbar branch of iliolumbar artery.l",
    "polygons": 1296,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Lumbar branch of iliolumbar artery.r",
    "polygons": 1296,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -2619,21 +2772,24 @@
    "name": "Marginal artery",
    "polygons": 4752,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Maxillary artery.l",
    "polygons": 4752,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Maxillary artery.r",
    "polygons": 4752,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -2655,7 +2811,8 @@
    "polygons": 1008,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Left pulmonary artery'"
    ]
   },
   {
@@ -2663,7 +2820,8 @@
    "polygons": 720,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Right pulonary artery'"
    ]
   },
   {
@@ -2698,14 +2856,18 @@
    "name": "Medial occipital artery.l",
    "polygons": 2592,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Subclavian artery",
+    "Vertebral artery'"
    ]
   },
   {
    "name": "Medial occipital artery.r",
    "polygons": 2592,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Subclavian artery",
+    "Vertebral artery'"
    ]
   },
   {
@@ -2740,14 +2902,18 @@
    "name": "Medial pontine branches of basilar artery.l",
    "polygons": 1152,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Subclavian artery",
+    "Vertebral artery'"
    ]
   },
   {
    "name": "Medial pontine branches of basilar artery.r",
    "polygons": 1152,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Subclavian artery",
+    "Vertebral artery'"
    ]
   },
   {
@@ -2755,7 +2921,8 @@
    "polygons": 1728,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Right pulonary artery'"
    ]
   },
   {
@@ -2763,7 +2930,8 @@
    "polygons": 1584,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary veins"
+    "Pulmonary veins",
+    "Right superior pulmonary vein'"
    ]
   },
   {
@@ -2798,21 +2966,24 @@
    "name": "Median sacral artery",
    "polygons": 1440,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Mental branch of inferior alveolar artery.l",
    "polygons": 576,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Mental branch of inferior alveolar artery.r",
    "polygons": 576,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -2827,35 +2998,40 @@
    "name": "Middle cerebral artery (M1-segment).l",
    "polygons": 720,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Middle cerebral artery (M1-segment).r",
    "polygons": 720,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Middle cerebral artery (M3 segment).l",
    "polygons": 1872,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Middle cerebral artery (M3-segment).r",
    "polygons": 1872,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Middle colic artery",
    "polygons": 1152,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -2898,21 +3074,24 @@
    "polygons": 144,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Right pulonary artery'"
    ]
   },
   {
    "name": "Middle meningeal artery.l",
    "polygons": 720,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Middle meningeal artery.r",
    "polygons": 720,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -2947,14 +3126,16 @@
    "name": "Mylohyoid branch of inferior alveolar artery.l",
    "polygons": 1584,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Mylohyoid branch of inferior alveolar artery.r",
    "polygons": 1584,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -2968,28 +3149,32 @@
    "name": "Obturator artery.l",
    "polygons": 864,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Obturator artery.r",
    "polygons": 864,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Occipital artery.l",
    "polygons": 6768,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Occipital artery.r",
    "polygons": 6768,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -3017,28 +3202,32 @@
    "name": "Ophthalmic artery.l",
    "polygons": 864,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Ophthalmic artery.r",
    "polygons": 864,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Orbitofrontal branches of anterior cerebral artery.l",
    "polygons": 2304,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Orbitofrontal branches of anterior cerebral artery.r",
    "polygons": 2304,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -3087,28 +3276,34 @@
    "name": "Parietal branches of middle cerebral artery.l",
    "polygons": 2016,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Parietal branches of middle cerebral artery.r",
    "polygons": 2016,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Parieto-occipital artery.l",
    "polygons": 4176,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Subclavian artery",
+    "Vertebral artery'"
    ]
   },
   {
    "name": "Parieto-occipital artery.r",
    "polygons": 4176,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Subclavian artery",
+    "Vertebral artery'"
    ]
   },
   {
@@ -3185,14 +3380,16 @@
    "name": "Pericallosal artery.l",
    "polygons": 16128,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Pericallosal artery.r",
    "polygons": 16128,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -3297,14 +3494,16 @@
    "name": "Postcentral arterial branch.l",
    "polygons": 2448,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Postcentral arterial branch.r",
    "polygons": 2448,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -3326,7 +3525,8 @@
    "polygons": 3024,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Left pulmonary artery'"
    ]
   },
   {
@@ -3334,35 +3534,42 @@
    "polygons": 1008,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Right pulonary artery'"
    ]
   },
   {
    "name": "Posterior branch of renal artery.l",
    "polygons": 432,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Posterior branch of renal artery.r",
    "polygons": 864,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Posterior cerebral artery.l",
    "polygons": 16848,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Subclavian artery",
+    "Vertebral artery'"
    ]
   },
   {
    "name": "Posterior cerebral artery.r",
    "polygons": 16848,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Subclavian artery",
+    "Vertebral artery'"
    ]
   },
   {
@@ -3411,28 +3618,32 @@
    "name": "Posterior deep temporal artery.l",
    "polygons": 1872,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Posterior deep temporal artery.r",
    "polygons": 1872,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Posterior division of internal iliac artery.l",
    "polygons": 576,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Posterior division of internal iliac artery.r",
    "polygons": 576,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -3453,28 +3664,34 @@
    "name": "Posterior ethmoidal artery.l",
    "polygons": 288,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Posterior ethmoidal artery.r",
    "polygons": 288,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Posterior inferior cerebellar artery.l",
    "polygons": 18864,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Subclavian artery",
+    "Vertebral artery'"
    ]
   },
   {
    "name": "Posterior inferior cerebellar artery.r",
    "polygons": 18864,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Subclavian artery",
+    "Vertebral artery'"
    ]
   },
   {
@@ -3488,14 +3705,16 @@
    "name": "Posterior intercostal arteries.l",
    "polygons": 21744,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Posterior intercostal arteries.r",
    "polygons": 24912,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -3516,14 +3735,16 @@
    "name": "Posterior lateral nasal branches of sphenopalatine artery..l",
    "polygons": 7776,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Posterior lateral nasal branches of sphenopalatine artery..r",
    "polygons": 7776,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -3537,14 +3758,16 @@
    "name": "Posterior parietal artery.l",
    "polygons": 4608,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Posterior parietal artery.r",
    "polygons": 4608,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -3552,7 +3775,8 @@
    "polygons": 2304,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Left pulmonary artery'"
    ]
   },
   {
@@ -3560,49 +3784,56 @@
    "polygons": 1296,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Right pulonary artery'"
    ]
   },
   {
    "name": "Posterior septal branches of sphenopalatine artery.l",
    "polygons": 2016,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Posterior septal branches of sphenopalatine artery.r",
    "polygons": 2016,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Posterior superior alveolar artery.l",
    "polygons": 1296,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Posterior superior alveolar artery.r",
    "polygons": 1296,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Posterior temporal branch.l",
    "polygons": 2160,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Posterior temporal branch.r",
    "polygons": 2160,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -3638,28 +3869,32 @@
    "polygons": 3600,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary veins"
+    "Pulmonary veins",
+    "Right superior pulmonary vein'"
    ]
   },
   {
    "name": "Prefrontal artery.l",
    "polygons": 3168,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Prefrontal artery.r",
    "polygons": 3168,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Proper hepatic artery",
    "polygons": 2160,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -3694,14 +3929,16 @@
    "name": "Proximal lateral striate branches.l",
    "polygons": 3888,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Proximal lateral striate branches.r",
    "polygons": 3888,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -3807,7 +4044,8 @@
    "name": "Right colic artery",
    "polygons": 1584,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -3821,7 +4059,8 @@
    "name": "Right common carotid artery",
    "polygons": 432,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -3851,7 +4090,8 @@
    "polygons": 288,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary veins"
+    "Pulmonary veins",
+    "Right inferior pulmonary vein'"
    ]
   },
   {
@@ -3867,14 +4107,16 @@
    "polygons": 288,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Right pulonary artery'"
    ]
   },
   {
    "name": "Right renal artery",
    "polygons": 432,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -3931,14 +4173,16 @@
    "polygons": 864,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary veins"
+    "Pulmonary veins",
+    "Right superior pulmonary vein'"
    ]
   },
   {
    "name": "Right testicular artery.r",
    "polygons": 5040,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -3981,14 +4225,16 @@
    "name": "Septal branches of posterior ethmoidal artery.l",
    "polygons": 1440,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Septal branches of posterior ethmoidal artery.r",
    "polygons": 1440,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -4009,21 +4255,24 @@
    "name": "Short posterior ciliary arteries.l",
    "polygons": 1296,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Short posterior ciliary arteries.r",
    "polygons": 1296,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Sigmoid arteries",
    "polygons": 4464,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -4065,21 +4314,24 @@
    "name": "Spinal branch of iliolumbar artery.l",
    "polygons": 144,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Spinal branch of iliolumbar artery.r",
    "polygons": 144,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Splenic artery",
    "polygons": 4320,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -4100,28 +4352,32 @@
    "name": "Subcostal artery.l",
    "polygons": 2448,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Subcostal artery.r",
    "polygons": 2448,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Submental artery.l",
    "polygons": 2160,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Submental artery.r",
    "polygons": 2160,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -4247,14 +4503,16 @@
    "name": "Superficial temporal artery.l",
    "polygons": 13104,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Superficial temporal artery.r",
    "polygons": 13104,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -4289,7 +4547,8 @@
    "name": "Superior anorectal artery",
    "polygons": 1152,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -4297,7 +4556,8 @@
    "polygons": 2304,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary veins"
+    "Pulmonary veins",
+    "Left inferior pulmonary vein'"
    ]
   },
   {
@@ -4305,21 +4565,26 @@
    "polygons": 3456,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary veins"
+    "Pulmonary veins",
+    "Right inferior pulmonary vein'"
    ]
   },
   {
    "name": "Superior cerebellar artery.l",
    "polygons": 5472,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Subclavian artery",
+    "Vertebral artery'"
    ]
   },
   {
    "name": "Superior cerebellar artery.r",
    "polygons": 5472,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Subclavian artery",
+    "Vertebral artery'"
    ]
   },
   {
@@ -4354,14 +4619,16 @@
    "name": "Superior gluteal artery.l",
    "polygons": 8640,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Superior gluteal artery.r",
    "polygons": 8640,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -4382,14 +4649,16 @@
    "name": "Superior labial artery.l",
    "polygons": 576,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Superior labial artery.r",
    "polygons": 576,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -4425,7 +4694,8 @@
    "polygons": 2016,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Left pulmonary artery'"
    ]
   },
   {
@@ -4433,7 +4703,8 @@
    "polygons": 1008,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary veins"
+    "Pulmonary veins",
+    "Left superior pulmonary vein'"
    ]
   },
   {
@@ -4441,7 +4712,8 @@
    "polygons": 144,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Right pulonary artery'"
    ]
   },
   {
@@ -4462,7 +4734,8 @@
    "name": "Superior mesenteric artery",
    "polygons": 6192,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -4504,7 +4777,8 @@
    "name": "Superior phrenic arteries",
    "polygons": 7056,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -4519,7 +4793,8 @@
    "polygons": 2016,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Left pulmonary artery'"
    ]
   },
   {
@@ -4527,7 +4802,8 @@
    "polygons": 4032,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary arteries"
+    "Pulmonary arteries",
+    "Right pulonary artery'"
    ]
   },
   {
@@ -4563,7 +4839,8 @@
    "polygons": 4320,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary veins"
+    "Pulmonary veins",
+    "Left inferior pulmonary vein'"
    ]
   },
   {
@@ -4571,7 +4848,8 @@
    "polygons": 3600,
    "path": [
     "Pulmonary vessels",
-    "Pulmonary veins"
+    "Pulmonary veins",
+    "Right inferior pulmonary vein'"
    ]
   },
   {
@@ -4585,14 +4863,16 @@
    "name": "Supra-orbital artery.l",
    "polygons": 4176,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Supra-orbital artery.r",
    "polygons": 4176,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -4627,14 +4907,16 @@
    "name": "Supratrochlear artery.l",
    "polygons": 2880,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Supratrochlear artery.r",
    "polygons": 2880,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -4655,35 +4937,40 @@
    "name": "Temporal branches of middle cerebral artery.l",
    "polygons": 2592,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Temporal branches of middle cerebral artery.r",
    "polygons": 2592,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Temporo-occipital branch.l",
    "polygons": 4176,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Temporo-occipital branch.r",
    "polygons": 4176,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Thoracic aorta",
    "polygons": 432,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -4760,14 +5047,16 @@
    "name": "Transverse facial artery.l",
    "polygons": 2016,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
    "name": "Transverse facial artery.r",
    "polygons": 2016,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Aorta"
    ]
   },
   {
@@ -4816,14 +5105,18 @@
    "name": "Vertebral artery.l",
    "polygons": 2448,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Subclavian artery",
+    "Vertebral artery'"
    ]
   },
   {
    "name": "Vertebral artery.r",
    "polygons": 2448,
    "path": [
-    "Systemic arteries"
+    "Systemic arteries",
+    "Subclavian artery",
+    "Vertebral artery'"
    ]
   },
   {

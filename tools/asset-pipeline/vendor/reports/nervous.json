@@ -143,7 +143,10 @@
    "name": " Posterior transverse collateral sulcus.l",
    "polygons": 160,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon"
    ]
   },
   {
@@ -182,14 +185,20 @@
    "name": "(Communicating branch of median nerve with ulnar nerve).l",
    "polygons": 288,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
    ]
   },
   {
    "name": "(Communicating branch of median nerve with ulnar nerve).r",
    "polygons": 288,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
    ]
   },
   {
@@ -218,14 +227,16 @@
    "name": "Abducens nerve (VI).l",
    "polygons": 2488,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Nerves"
    ]
   },
   {
    "name": "Abducens nerve (VI).r",
    "polygons": 2488,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Nerves"
    ]
   },
   {
@@ -236,7 +247,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Lateral plantar nerve"
    ]
   },
   {
@@ -247,7 +260,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Lateral plantar nerve"
    ]
   },
   {
@@ -280,7 +295,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Medial plantar nerve"
    ]
   },
   {
@@ -291,7 +308,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Medial plantar nerve"
    ]
   },
   {
@@ -318,28 +337,46 @@
    "name": "Accessory nerve (XI).l",
    "polygons": 7752,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Accessory nerve (XI)"
    ]
   },
   {
    "name": "Accessory nerve (XI).r",
    "polygons": 7752,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Accessory nerve (XI)"
    ]
   },
   {
    "name": "Accessory nucleus of oculomotor nerve.l",
    "polygons": 384,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Midbrain",
+    "Cerebral peduncle",
+    "Tegmentum of midbrain",
+    "Grey matter of tegmentum of midbrain",
+    "Oculomotor complex"
    ]
   },
   {
    "name": "Accessory nucleus of oculomotor nerve.r",
    "polygons": 384,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Midbrain",
+    "Cerebral peduncle",
+    "Tegmentum of midbrain",
+    "Grey matter of tegmentum of midbrain",
+    "Oculomotor complex"
    ]
   },
   {
@@ -440,28 +477,46 @@
    "name": "Ampulla of lacrimal canaliculus.l",
    "polygons": 244,
    "path": [
-    "Sense organs"
+    "Sense organs",
+    "Eye*",
+    "Accessory visual structures",
+    "Lacrimal apparatus",
+    "Lacrimal canliculus"
    ]
   },
   {
    "name": "Ampulla of lacrimal canaliculus.r",
    "polygons": 244,
    "path": [
-    "Sense organs"
+    "Sense organs",
+    "Eye*",
+    "Accessory visual structures",
+    "Lacrimal apparatus",
+    "Lacrimal canliculus"
    ]
   },
   {
    "name": "Amygdaloid body.l",
    "polygons": 384,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Basal forebrain",
+    "Amygdaloid body"
    ]
   },
   {
    "name": "Amygdaloid body.r",
    "polygons": 384,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Basal forebrain",
+    "Amygdaloid body"
    ]
   },
   {
@@ -490,7 +545,12 @@
    "name": "Angular gyrus.l",
    "polygons": 1441,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Parietal lobe",
+    "Inferior parietal lobe"
    ]
   },
   {
@@ -500,7 +560,9 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Parietal lobe",
+    "Inferior parietal lobe"
    ]
   },
   {
@@ -525,28 +587,48 @@
    "name": "Anterior branch of medial antebrachial cutaneous nerve.l",
    "polygons": 720,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Medial antebrachial cutaneous nerve"
    ]
   },
   {
    "name": "Anterior branch of medial antebrachial cutaneous nerve.r",
    "polygons": 720,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Medial antebrachial cutaneous nerve"
    ]
   },
   {
    "name": "Anterior branch of obturator nerve.l",
    "polygons": 864,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of anterior part of lumbar plexus",
+    "Obturator nerve",
+    "Anterior branch of obturator nerve"
    ]
   },
   {
    "name": "Anterior branch of obturator nerve.r",
    "polygons": 864,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of anterior part of lumbar plexus",
+    "Obturator nerve",
+    "Anterior branch of obturator nerve"
    ]
   },
   {
@@ -563,7 +645,11 @@
    "name": "Anterior cochlear nucleus.l",
    "polygons": 96,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Medulla oblongata",
+    "Grey matter of medulla oblongata"
    ]
   },
   {
@@ -575,7 +661,13 @@
    "name": "Anterior commissure",
    "polygons": 800,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "White matter of telencephalon",
+    "Commissural fibres of telencephalon",
+    "Anterior commissure"
    ]
   },
   {
@@ -587,70 +679,108 @@
    "name": "Anterior cutaneous branches of femoral nerve.l",
    "polygons": 720,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve"
    ]
   },
   {
    "name": "Anterior cutaneous branches of femoral nerve.r",
    "polygons": 720,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve"
    ]
   },
   {
    "name": "Anterior division of inferior trunk of brachial plexus.l",
    "polygons": 288,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular part of brachial plexus",
+    "Inferior trunk of brachial plexus"
    ]
   },
   {
    "name": "Anterior division of inferior trunk of brachial plexus.r",
    "polygons": 288,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular part of brachial plexus",
+    "Inferior trunk of brachial plexus"
    ]
   },
   {
    "name": "Anterior division of mandibular nerve.l",
    "polygons": 308,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
    "name": "Anterior division of mandibular nerve.r",
    "polygons": 308,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
    "name": "Anterior division of middle trunk of brachial plexus.l",
    "polygons": 144,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular part of brachial plexus",
+    "Middle trunk of brachial plexus"
    ]
   },
   {
    "name": "Anterior division of middle trunk of brachial plexus.r",
    "polygons": 144,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular part of brachial plexus",
+    "Middle trunk of brachial plexus"
    ]
   },
   {
    "name": "Anterior division of superior trunk of brachial plexus.l",
    "polygons": 144,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular part of brachial plexus",
+    "Superior trunk of brachial plexus"
    ]
   },
   {
    "name": "Anterior division of superior trunk of brachial plexus.r",
    "polygons": 144,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular part of brachial plexus",
+    "Superior trunk of brachial plexus"
    ]
   },
   {
@@ -667,21 +797,31 @@
    "name": "Anterior interosseous nerve of forearm.l",
    "polygons": 720,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
    ]
   },
   {
    "name": "Anterior interosseous nerve of forearm.r",
    "polygons": 720,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
    ]
   },
   {
    "name": "Anterior occipital sulcus*.l",
    "polygons": 322,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Interlobular sulci"
    ]
   },
   {
@@ -691,7 +831,8 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Interlobular sulci"
    ]
   },
   {
@@ -716,28 +857,38 @@
    "name": "Anterior root of posterior femoral cutaneous nerve.l",
    "polygons": 720,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus"
    ]
   },
   {
    "name": "Anterior root of posterior femoral cutaneous nerve.r",
    "polygons": 720,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus"
    ]
   },
   {
    "name": "Anterior root of spinal nerve.l",
    "polygons": 3312,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Meninges",
+    "Dura",
+    "Spinal dura"
    ]
   },
   {
    "name": "Anterior root of spinal nerve.r",
    "polygons": 3312,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Meninges",
+    "Dura",
+    "Spinal dura"
    ]
   },
   {
@@ -764,7 +915,11 @@
    "name": "Aqueduct of midbrain",
    "polygons": 460,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Midbrain",
+    "Central mesencephalic structures"
    ]
   },
   {
@@ -799,28 +954,44 @@
    "name": "Axillary nerve.l",
    "polygons": 576,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Axillary nerve"
    ]
   },
   {
    "name": "Axillary nerve.r",
    "polygons": 576,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Axillary nerve"
    ]
   },
   {
    "name": "Base of peduncle.l",
    "polygons": 5046,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebellum",
+    "Cerebellar peduncles",
+    "Superior cerebellar peduncle"
    ]
   },
   {
    "name": "Base of peduncle.r",
    "polygons": 5046,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebellum",
+    "Cerebellar peduncles",
+    "Superior cerebellar peduncle"
    ]
   },
   {
@@ -889,14 +1060,18 @@
    "name": "Buccal nerve.l",
    "polygons": 1336,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
    "name": "Buccal nerve.r",
    "polygons": 1336,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
@@ -925,7 +1100,8 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve"
    ]
   },
   {
@@ -936,14 +1112,19 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve"
    ]
   },
   {
    "name": "Calcarine sulcus.l",
    "polygons": 779,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Occipital lobe"
    ]
   },
   {
@@ -953,28 +1134,44 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Occipital lobe"
    ]
   },
   {
    "name": "Cauda equina",
    "polygons": 6912,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Meninges",
+    "Dura",
+    "Spinal dura"
    ]
   },
   {
    "name": "Caudate nucleus.l",
    "polygons": 2570,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Corpus striatum",
+    "Dorsal striatum",
+    "Caudate nucleus"
    ]
   },
   {
    "name": "Caudate nucleus.r",
    "polygons": 2570,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Corpus striatum",
+    "Dorsal striatum",
+    "Caudate nucleus"
    ]
   },
   {
@@ -986,7 +1183,9 @@
    "name": "Central canal'",
    "polygons": 288,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Spinal cord",
+    "Central structures of spinal cord"
    ]
   },
   {
@@ -1002,7 +1201,11 @@
    "name": "Central sulcus.l",
    "polygons": 1326,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Interlobular sulci"
    ]
   },
   {
@@ -1012,42 +1215,63 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Interlobular sulci"
    ]
   },
   {
    "name": "Chorda tympani.l",
    "polygons": 884,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)",
+    "Chorda tympani"
    ]
   },
   {
    "name": "Chorda tympani.r",
    "polygons": 884,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)",
+    "Chorda tympani"
    ]
   },
   {
    "name": "Choroid plexus.l",
    "polygons": 2647,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Meninges",
+    "Leptomeninges",
+    "Pia",
+    "Cranial pia"
    ]
   },
   {
    "name": "Choroid plexus.r",
    "polygons": 2647,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Meninges",
+    "Leptomeninges",
+    "Pia",
+    "Cranial pia"
    ]
   },
   {
    "name": "Cingulate gyrus (Posteroventral part*).l",
    "polygons": 247,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Limbic lobe",
+    "Limbic gyrus",
+    "Fornicate gyrus"
    ]
   },
   {
@@ -1057,14 +1281,23 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Limbic lobe",
+    "Limbic gyrus",
+    "Fornicate gyrus"
    ]
   },
   {
    "name": "Cingulate gyrus and sulcus (Middle anterior part).l",
    "polygons": 687,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Limbic lobe",
+    "Limbic gyrus",
+    "Fornicate gyrus"
    ]
   },
   {
@@ -1074,14 +1307,23 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Limbic lobe",
+    "Limbic gyrus",
+    "Fornicate gyrus"
    ]
   },
   {
    "name": "Cingulate gyrus and sulcus (Middle posterior part).l",
    "polygons": 545,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Limbic lobe",
+    "Limbic gyrus",
+    "Fornicate gyrus"
    ]
   },
   {
@@ -1091,14 +1333,23 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Limbic lobe",
+    "Limbic gyrus",
+    "Fornicate gyrus"
    ]
   },
   {
    "name": "Cingulate gyrus and sulcus (Posterior dorsal part).l",
    "polygons": 401,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Limbic lobe",
+    "Limbic gyrus",
+    "Fornicate gyrus"
    ]
   },
   {
@@ -1108,14 +1359,21 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Limbic lobe",
+    "Limbic gyrus",
+    "Fornicate gyrus"
    ]
   },
   {
    "name": "Cingulate sulcus (Marginal part*).l",
    "polygons": 491,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Interlobular sulci"
    ]
   },
   {
@@ -1125,14 +1383,19 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Interlobular sulci"
    ]
   },
   {
    "name": "Circular sulcus of insula.l",
    "polygons": 720,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Interlobular sulci"
    ]
   },
   {
@@ -1142,7 +1405,8 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Interlobular sulci"
    ]
   },
   {
@@ -1193,35 +1457,52 @@
    "name": "Cochlea.l",
    "polygons": 3084,
    "path": [
-    "Sense organs"
+    "Sense organs",
+    "Ear",
+    "Internal ear",
+    "Bony labyrinth",
+    "Cochlea"
    ]
   },
   {
    "name": "Cochlea.r",
    "polygons": 3084,
    "path": [
-    "Sense organs"
+    "Sense organs",
+    "Ear",
+    "Internal ear",
+    "Bony labyrinth",
+    "Cochlea"
    ]
   },
   {
    "name": "Cochlear nerve",
    "polygons": 879,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Vestibulocochlear nerve (VIII)",
+    "Cochlear nerve"
    ]
   },
   {
    "name": "Cochlear nerve.l",
    "polygons": 452,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Vestibulocochlear nerve (VIII)"
    ]
   },
   {
    "name": "Collateral sulcus.l",
    "polygons": 1041,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Interlobular sulci"
    ]
   },
   {
@@ -1231,77 +1512,128 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Interlobular sulci"
    ]
   },
   {
    "name": "Common fibular nerve.l",
    "polygons": 1008,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Common fibular nerve"
    ]
   },
   {
    "name": "Common fibular nerve.r",
    "polygons": 1008,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Common fibular nerve"
    ]
   },
   {
    "name": "Common palmar digital branches of median nerve.l",
    "polygons": 1152,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
    ]
   },
   {
    "name": "Common palmar digital branches of median nerve.r",
    "polygons": 1152,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
    ]
   },
   {
    "name": "Common palmar digital branches of ulnar nerve.l",
    "polygons": 864,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve",
+    "Superficial branch of ulnar nerve"
    ]
   },
   {
    "name": "Common palmar digital branches of ulnar nerve.r",
    "polygons": 864,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve",
+    "Superficial branch of ulnar nerve"
    ]
   },
   {
    "name": "Common plantar digital branches of lateral plantar nerve.l",
    "polygons": 720,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Lateral plantar nerve"
    ]
   },
   {
    "name": "Common plantar digital branches of lateral plantar nerve.r",
    "polygons": 720,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Lateral plantar nerve"
    ]
   },
   {
    "name": "Common plantar digital branches of medial plantar nerve",
    "polygons": 864,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Medial plantar nerve"
    ]
   },
   {
    "name": "Common plantar digital branches of medial plantar nerve.l",
    "polygons": 864,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Medial plantar nerve"
    ]
   },
   {
@@ -1358,7 +1690,13 @@
    "name": "Corpus callosum",
    "polygons": 2020,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "White matter of telencephalon",
+    "Commissural fibres of telencephalon",
+    "Corpus callosum"
    ]
   },
   {
@@ -1397,7 +1735,11 @@
    "name": "Cuneus.l",
    "polygons": 869,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Occipital lobe"
    ]
   },
   {
@@ -1407,7 +1749,8 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Occipital lobe"
    ]
   },
   {
@@ -1423,42 +1766,72 @@
    "name": "Deep branch of radial nerve.l",
    "polygons": 1008,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve",
+    "Deep branch of radial nerve"
    ]
   },
   {
    "name": "Deep branch of radial nerve.r",
    "polygons": 1008,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve",
+    "Deep branch of radial nerve"
    ]
   },
   {
    "name": "Deep branch of ulnar nerve.l",
    "polygons": 720,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
    ]
   },
   {
    "name": "Deep branch of ulnar nerve.r",
    "polygons": 720,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
    ]
   },
   {
    "name": "Deep fibular nerve.l",
    "polygons": 2160,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Deep fibular nerve"
    ]
   },
   {
    "name": "Deep fibular nerve.r",
    "polygons": 2160,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Deep fibular nerve"
    ]
   },
   {
@@ -1595,70 +1968,124 @@
    "name": "Dorsal branch of ulnar nerve.l",
    "polygons": 720,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve",
+    "Dorsal branch of ulnar nerve"
    ]
   },
   {
    "name": "Dorsal branch of ulnar nerve.r",
    "polygons": 720,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve",
+    "Dorsal branch of ulnar nerve"
    ]
   },
   {
    "name": "Dorsal digital branches of deep fibular nerve.l",
    "polygons": 1584,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Deep fibular nerve"
    ]
   },
   {
    "name": "Dorsal digital branches of deep fibular nerve.r",
    "polygons": 1584,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Deep fibular nerve"
    ]
   },
   {
    "name": "Dorsal digital branches of radial nerve.l",
    "polygons": 6768,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve",
+    "Superficial branch of radial nerve"
    ]
   },
   {
    "name": "Dorsal digital branches of radial nerve.r",
    "polygons": 6768,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve",
+    "Superficial branch of radial nerve"
    ]
   },
   {
    "name": "Dorsal digital branches of superficial fibular nerve.l",
    "polygons": 4176,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Superficial fibular nerve"
    ]
   },
   {
    "name": "Dorsal digital branches of superficial fibular nerve.r",
    "polygons": 4176,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Superficial fibular nerve"
    ]
   },
   {
    "name": "Dorsal digital branches of ulnar nerve.l",
    "polygons": 2448,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve",
+    "Dorsal branch of ulnar nerve"
    ]
   },
   {
    "name": "Dorsal digital branches of ulnar nerve.r",
    "polygons": 2448,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve",
+    "Dorsal branch of ulnar nerve"
    ]
   },
   {
@@ -1669,7 +2096,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Lateral plantar nerve"
    ]
   },
   {
@@ -1680,7 +2109,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Lateral plantar nerve"
    ]
   },
   {
@@ -1709,14 +2140,22 @@
    "name": "Dorsal scapular nerve.l",
    "polygons": 1296,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular branches of brachial plexus",
+    "Dorsal scapular nerve"
    ]
   },
   {
    "name": "Dorsal scapular nerve.r",
    "polygons": 1296,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular branches of brachial plexus",
+    "Dorsal scapular nerve"
    ]
   },
   {
@@ -1789,7 +2228,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Deep fibular nerve"
    ]
   },
   {
@@ -1800,7 +2241,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Deep fibular nerve"
    ]
   },
   {
@@ -1811,7 +2254,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Deep fibular nerve"
    ]
   },
   {
@@ -1822,7 +2267,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Deep fibular nerve"
    ]
   },
   {
@@ -1833,7 +2280,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Deep fibular nerve"
    ]
   },
   {
@@ -1844,7 +2293,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Deep fibular nerve"
    ]
   },
   {
@@ -1855,7 +2306,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Deep fibular nerve"
    ]
   },
   {
@@ -1866,56 +2319,83 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Deep fibular nerve"
    ]
   },
   {
    "name": "Facial nerve (VII).l",
    "polygons": 13776,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
    ]
   },
   {
    "name": "Facial nerve (VII).r",
    "polygons": 13776,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Facial nerve (VII)"
    ]
   },
   {
    "name": "Falx cerebri",
    "polygons": 7362,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Meninges",
+    "Dura",
+    "Cranial dura"
    ]
   },
   {
    "name": "Femoral branch of genitofemoral nerve.l",
    "polygons": 1296,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of anterior part of lumbar plexus"
    ]
   },
   {
    "name": "Femoral branch of genitofemoral nerve.r",
    "polygons": 1296,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of anterior part of lumbar plexus"
    ]
   },
   {
    "name": "Femoral nerve.l",
    "polygons": 2016,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve"
    ]
   },
   {
    "name": "Femoral nerve.r",
    "polygons": 2016,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve"
    ]
   },
   {
@@ -1926,7 +2406,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Superficial fibular nerve"
    ]
   },
   {
@@ -1937,7 +2419,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Superficial fibular nerve"
    ]
   },
   {
@@ -1948,7 +2432,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Superficial fibular nerve"
    ]
   },
   {
@@ -1959,7 +2445,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Superficial fibular nerve"
    ]
   },
   {
@@ -1970,7 +2458,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Deep fibular nerve"
    ]
   },
   {
@@ -1981,7 +2471,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Deep fibular nerve"
    ]
   },
   {
@@ -2012,7 +2504,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Lateral plantar nerve"
    ]
   },
   {
@@ -2023,7 +2517,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Lateral plantar nerve"
    ]
   },
   {
@@ -2078,7 +2574,8 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve"
    ]
   },
   {
@@ -2089,7 +2586,8 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve"
    ]
   },
   {
@@ -2122,7 +2620,8 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve"
    ]
   },
   {
@@ -2133,7 +2632,8 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve"
    ]
   },
   {
@@ -2187,21 +2687,36 @@
    "name": "Fornix.l",
    "polygons": 1090,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "White matter of telencephalon",
+    "Projection fibers of telencephalon",
+    "Fornix"
    ]
   },
   {
    "name": "Fornix.r",
    "polygons": 1090,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "White matter of telencephalon",
+    "Projection fibers of telencephalon",
+    "Fornix"
    ]
   },
   {
    "name": "Fourth ventricle",
    "polygons": 5787,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Fourth ventricle"
    ]
   },
   {
@@ -2226,14 +2741,20 @@
    "name": "Ganglia of sympathetic trunk.l",
    "polygons": 12672,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Automatic division of peripheral nervous system",
+    "Thoracolumbar part of autonomic division",
+    "Sympathetic trunk"
    ]
   },
   {
    "name": "Ganglia of sympathetic trunk.r",
    "polygons": 12672,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Automatic division of peripheral nervous system",
+    "Thoracolumbar part of autonomic division",
+    "Sympathetic trunk"
    ]
   },
   {
@@ -2258,56 +2779,86 @@
    "name": "Genital branch of genitofemoral nerve.l",
    "polygons": 864,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of anterior part of lumbar plexus"
    ]
   },
   {
    "name": "Genital branch of genitofemoral nerve.r",
    "polygons": 864,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of anterior part of lumbar plexus"
    ]
   },
   {
    "name": "Genitofemoral nerve.l",
    "polygons": 432,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of anterior part of lumbar plexus"
    ]
   },
   {
    "name": "Genitofemoral nerve.r",
    "polygons": 432,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of anterior part of lumbar plexus"
    ]
   },
   {
    "name": "Globus pallidus.l",
    "polygons": 5276,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Corpus striatum",
+    "Globus pallidus"
    ]
   },
   {
    "name": "Globus pallidus.r",
    "polygons": 5276,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Corpus striatum",
+    "Globus pallidus"
    ]
   },
   {
    "name": "Glossopharyngeal nerve (IX).l",
    "polygons": 6764,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Glossopharyngeal nerve (IX)"
    ]
   },
   {
    "name": "Glossopharyngeal nerve (IX).r",
    "polygons": 6764,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Glossopharyngeal nerve (IX)"
    ]
   },
   {
@@ -2361,28 +2912,47 @@
    "name": "Habenula",
    "polygons": 398,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Diencephalon",
+    "Habenula"
    ]
   },
   {
    "name": "Hippocampal commissure",
    "polygons": 9860,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "White matter of telencephalon",
+    "Commissural fibres of telencephalon"
    ]
   },
   {
    "name": "Hippocampus.l",
    "polygons": 1020,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Limbic lobe",
+    "Hippocampus"
    ]
   },
   {
    "name": "Hippocampus.r",
    "polygons": 1020,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Limbic lobe",
+    "Hippocampus"
    ]
   },
   {
@@ -2449,21 +3019,29 @@
    "name": "Hypoglossal nerve (XII).l",
    "polygons": 8224,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Hypoglossal nerve (XII)"
    ]
   },
   {
    "name": "Hypoglossal nerve (XII).r",
    "polygons": 8224,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Hypoglossal nerve (XII)"
    ]
   },
   {
    "name": "Hypothalamus",
    "polygons": 4258,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Diencephalon",
+    "Hypothalamus"
    ]
   },
   {
@@ -2494,63 +3072,97 @@
    "name": "Ilio-inguinal nerve.l",
    "polygons": 1872,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbar nerves",
+    "Anterior rami of lumbar nerves",
+    "Ilio-inguinal nerve"
    ]
   },
   {
    "name": "Ilio-inguinal nerve.r",
    "polygons": 1872,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbar nerves",
+    "Anterior rami of lumbar nerves",
+    "Ilio-inguinal nerve"
    ]
   },
   {
    "name": "Iliohypogastric nerve.l",
    "polygons": 864,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbar nerves",
+    "Anterior rami of lumbar nerves",
+    "Iliohypogastric nerve"
    ]
   },
   {
    "name": "Iliohypogastric nerve.r",
    "polygons": 864,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbar nerves",
+    "Anterior rami of lumbar nerves",
+    "Iliohypogastric nerve"
    ]
   },
   {
    "name": "Inferior alveolar nerve.l",
    "polygons": 8592,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
    "name": "Inferior alveolar nerve.r",
    "polygons": 8592,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
    "name": "Inferior colliculus.l",
    "polygons": 464,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Midbrain",
+    "Tectum of midbrain",
+    "Inferior colliculus"
    ]
   },
   {
    "name": "Inferior colliculus.r",
    "polygons": 464,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Midbrain",
+    "Tectum of midbrain",
+    "Inferior colliculus"
    ]
   },
   {
    "name": "Inferior frontal sulcus.l",
    "polygons": 642,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
@@ -2560,7 +3172,8 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
@@ -2585,14 +3198,22 @@
    "name": "Inferior lateral brachial cutaneous nerve.l",
    "polygons": 288,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve"
    ]
   },
   {
    "name": "Inferior lateral brachial cutaneous nerve.r",
    "polygons": 288,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve"
    ]
   },
   {
@@ -2617,7 +3238,11 @@
    "name": "Inferior occipital gyrus and sulcus*.l",
    "polygons": 813,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Occipital lobe"
    ]
   },
   {
@@ -2627,7 +3252,8 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Occipital lobe"
    ]
   },
   {
@@ -2680,14 +3306,20 @@
    "name": "Inferior subscapular nerve.l",
    "polygons": 1008,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Infraclavicular part of brachial plexus"
    ]
   },
   {
    "name": "Inferior subscapular nerve.r",
    "polygons": 1008,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Infraclavicular part of brachial plexus"
    ]
   },
   {
@@ -2712,7 +3344,11 @@
    "name": "Inferior temporal gyrus.l",
    "polygons": 1392,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Temporal lobe"
    ]
   },
   {
@@ -2722,14 +3358,19 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Temporal lobe"
    ]
   },
   {
    "name": "Inferior temporal sulcus.l",
    "polygons": 227,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Temporal lobe"
    ]
   },
   {
@@ -2739,35 +3380,56 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Temporal lobe"
    ]
   },
   {
    "name": "Inferior trunk of brachial plexus.l",
    "polygons": 288,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular part of brachial plexus",
+    "Inferior trunk of brachial plexus"
    ]
   },
   {
    "name": "Inferior trunk of brachial plexus.r",
    "polygons": 288,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular part of brachial plexus",
+    "Inferior trunk of brachial plexus"
    ]
   },
   {
    "name": "Infrapatellar branch of saphenous nerve.l",
    "polygons": 288,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve",
+    "Saphenous nerve"
    ]
   },
   {
    "name": "Infrapatellar branch of saphenous nerve.r",
    "polygons": 288,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve",
+    "Saphenous nerve"
    ]
   },
   {
@@ -2796,7 +3458,11 @@
    "name": "Insula (Subcentral gyrus and ant. and post. sulci*).l",
    "polygons": 680,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Insula"
    ]
   },
   {
@@ -2806,35 +3472,56 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Insula"
    ]
   },
   {
    "name": "Intercostal nerves.l",
    "polygons": 25776,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Thoracic nerves",
+    "Anterior rami of thoracic nerves",
+    "Intercostal nerves"
    ]
   },
   {
    "name": "Intercostal nerves.r",
    "polygons": 25776,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Thoracic nerves",
+    "Anterior rami of thoracic nerves",
+    "Intercostal nerves"
    ]
   },
   {
    "name": "Intermediate dorsal cutaneous nerve of foot.l",
    "polygons": 1296,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Superficial fibular nerve"
    ]
   },
   {
    "name": "Intermediate dorsal cutaneous nerve of foot.r",
    "polygons": 1296,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Superficial fibular nerve"
    ]
   },
   {
@@ -2851,21 +3538,31 @@
    "name": "Interpeduncular fossa.l",
    "polygons": 58,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Midbrain"
    ]
   },
   {
    "name": "Interpeduncular fossa.r",
    "polygons": 58,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Midbrain"
    ]
   },
   {
    "name": "Intraparietal sulcus.l",
    "polygons": 781,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Parietal lobe"
    ]
   },
   {
@@ -2875,7 +3572,8 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Parietal lobe"
    ]
   },
   {
@@ -2892,49 +3590,77 @@
    "name": "Lacrimal canaliculus.l",
    "polygons": 411,
    "path": [
-    "Sense organs"
+    "Sense organs",
+    "Eye*",
+    "Accessory visual structures",
+    "Lacrimal apparatus",
+    "Lacrimal canliculus"
    ]
   },
   {
    "name": "Lacrimal canaliculus.r",
    "polygons": 411,
    "path": [
-    "Sense organs"
+    "Sense organs",
+    "Eye*",
+    "Accessory visual structures",
+    "Lacrimal apparatus",
+    "Lacrimal canliculus"
    ]
   },
   {
    "name": "Lacrimal gland.l",
    "polygons": 1810,
    "path": [
-    "Sense organs"
+    "Sense organs",
+    "Eye*",
+    "Accessory visual structures",
+    "Lacrimal apparatus",
+    "Lacrimal gland"
    ]
   },
   {
    "name": "Lacrimal gland.r",
    "polygons": 1810,
    "path": [
-    "Sense organs"
+    "Sense organs",
+    "Eye*",
+    "Accessory visual structures",
+    "Lacrimal apparatus",
+    "Lacrimal gland"
    ]
   },
   {
    "name": "Lacrimal sac.l",
    "polygons": 384,
    "path": [
-    "Sense organs"
+    "Sense organs",
+    "Eye*",
+    "Accessory visual structures",
+    "Lacrimal apparatus",
+    "Lacrimal sac"
    ]
   },
   {
    "name": "Lacrimal sac.r",
    "polygons": 384,
    "path": [
-    "Sense organs"
+    "Sense organs",
+    "Eye*",
+    "Accessory visual structures",
+    "Lacrimal apparatus",
+    "Lacrimal sac"
    ]
   },
   {
    "name": "Lat_Fis-ant-Horizont.l",
    "polygons": 153,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
@@ -2944,14 +3670,19 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
    "name": "Lat_Fis-ant-Vertical.l",
    "polygons": 168,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
@@ -2961,14 +3692,19 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
    "name": "Lat_Fis-post.l",
    "polygons": 435,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Interlobular sulci"
    ]
   },
   {
@@ -2978,21 +3714,30 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Interlobular sulci"
    ]
   },
   {
    "name": "Lateral antebrachial cutaneous nerve.l",
    "polygons": 864,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of lateral cord of brachial plexus",
+    "Musculocutaneous nerve"
    ]
   },
   {
    "name": "Lateral antebrachial cutaneous nerve.r",
    "polygons": 864,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of lateral cord of brachial plexus",
+    "Musculocutaneous nerve"
    ]
   },
   {
@@ -3009,28 +3754,42 @@
    "name": "Lateral femoral cutaneous nerve.l",
    "polygons": 2304,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus"
    ]
   },
   {
    "name": "Lateral femoral cutaneous nerve.r",
    "polygons": 2304,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus"
    ]
   },
   {
    "name": "Lateral geniculate body.l",
    "polygons": 604,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Diencephalon"
    ]
   },
   {
    "name": "Lateral geniculate body.r",
    "polygons": 604,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Diencephalon"
    ]
   },
   {
@@ -3041,7 +3800,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Medial plantar nerve"
    ]
   },
   {
@@ -3052,7 +3813,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Medial plantar nerve"
    ]
   },
   {
@@ -3063,7 +3826,8 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve"
    ]
   },
   {
@@ -3074,7 +3838,8 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve"
    ]
   },
   {
@@ -3108,7 +3873,11 @@
    "name": "Lateral occipital gyrus (Middle occipital gyrus*).l",
    "polygons": 756,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Occipital lobe"
    ]
   },
   {
@@ -3118,14 +3887,20 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Occipital lobe"
    ]
   },
   {
    "name": "Lateral occipitotemporal gyrus.l",
    "polygons": 805,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Temporal lobe",
+    "Occipitotemporal gyri"
    ]
   },
   {
@@ -3135,35 +3910,57 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Temporal lobe",
+    "Occipitotemporal gyri"
    ]
   },
   {
    "name": "Lateral pectoral nerve.l",
    "polygons": 3600,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of lateral cord of brachial plexus",
+    "Lateral pectoral nerve"
    ]
   },
   {
    "name": "Lateral pectoral nerve.r",
    "polygons": 3600,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of lateral cord of brachial plexus",
+    "Lateral pectoral nerve"
    ]
   },
   {
    "name": "Lateral plantar nerve.l",
    "polygons": 576,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Lateral plantar nerve"
    ]
   },
   {
    "name": "Lateral plantar nerve.r",
    "polygons": 576,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Lateral plantar nerve"
    ]
   },
   {
@@ -3180,14 +3977,22 @@
    "name": "Lateral ventricle.l",
    "polygons": 1456,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Lateral ventricle"
    ]
   },
   {
    "name": "Lateral ventricle.r",
    "polygons": 1456,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Lateral ventricle"
    ]
   },
   {
@@ -3209,14 +4014,24 @@
    "name": "Lentiform nucleus.l",
    "polygons": 1087,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "White matter of telencephalon",
+    "Internal capsule"
    ]
   },
   {
    "name": "Lentiform nucleus.r",
    "polygons": 1087,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "White matter of telencephalon",
+    "Internal capsule"
    ]
   },
   {
@@ -3317,7 +4132,11 @@
    "name": "Lingual gyrus.l",
    "polygons": 1525,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Occipital lobe"
    ]
   },
   {
@@ -3327,21 +4146,26 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Occipital lobe"
    ]
   },
   {
    "name": "Lingual nerve.l",
    "polygons": 1316,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
    "name": "Lingual nerve.r",
    "polygons": 1316,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
@@ -3383,7 +4207,8 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Common fibular nerve"
    ]
   },
   {
@@ -3394,7 +4219,8 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Common fibular nerve"
    ]
   },
   {
@@ -3423,14 +4249,22 @@
    "name": "Long thoracic nerve.l",
    "polygons": 2016,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular branches of brachial plexus",
+    "Long thoracic nerve"
    ]
   },
   {
    "name": "Long thoracic nerve.r",
    "polygons": 2016,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular branches of brachial plexus",
+    "Long thoracic nerve"
    ]
   },
   {
@@ -3441,7 +4275,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Medial plantar nerve"
    ]
   },
   {
@@ -3452,7 +4288,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Medial plantar nerve"
    ]
   },
   {
@@ -3481,7 +4319,11 @@
    "name": "Lunate sulcus.l",
    "polygons": 338,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Occipital lobe"
    ]
   },
   {
@@ -3491,105 +4333,160 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Occipital lobe"
    ]
   },
   {
    "name": "Mamillary body.l",
    "polygons": 220,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Diencephalon"
    ]
   },
   {
    "name": "Mamillary body.r",
    "polygons": 220,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Diencephalon"
    ]
   },
   {
    "name": "Maxillary nerve.l",
    "polygons": 3988,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
    "name": "Maxillary nerve.r",
    "polygons": 3988,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
    "name": "Medial antebrachial cutaneous nerve.l",
    "polygons": 864,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Medial antebrachial cutaneous nerve"
    ]
   },
   {
    "name": "Medial antebrachial cutaneous nerve.r",
    "polygons": 864,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Medial antebrachial cutaneous nerve"
    ]
   },
   {
    "name": "Medial brachial cutaneous nerve.l",
    "polygons": 864,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus"
    ]
   },
   {
    "name": "Medial brachial cutaneous nerve.r",
    "polygons": 864,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus"
    ]
   },
   {
    "name": "Medial crural cutaneous branches of saphenous nerve.l",
    "polygons": 288,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve",
+    "Saphenous nerve"
    ]
   },
   {
    "name": "Medial crural cutaneous branches of saphenous nerve.r",
    "polygons": 288,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve",
+    "Saphenous nerve"
    ]
   },
   {
    "name": "Medial dorsal cutaneous nerve of foot.l",
    "polygons": 2016,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Superficial fibular nerve"
    ]
   },
   {
    "name": "Medial dorsal cutaneous nerve of foot.r",
    "polygons": 2016,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Superficial fibular nerve"
    ]
   },
   {
    "name": "Medial geniculate body.l",
    "polygons": 198,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Diencephalon"
    ]
   },
   {
    "name": "Medial geniculate body.r",
    "polygons": 198,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Diencephalon"
    ]
   },
   {
@@ -3600,7 +4497,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Medial plantar nerve"
    ]
   },
   {
@@ -3611,7 +4510,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Medial plantar nerve"
    ]
   },
   {
@@ -3622,7 +4523,8 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve"
    ]
   },
   {
@@ -3633,7 +4535,8 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve"
    ]
   },
   {
@@ -3662,7 +4565,12 @@
    "name": "Medial occipitotemporal gyrus (Parahippocampal*).l",
    "polygons": 774,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Temporal lobe",
+    "Occipitotemporal gyri"
    ]
   },
   {
@@ -3672,35 +4580,57 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Temporal lobe",
+    "Occipitotemporal gyri"
    ]
   },
   {
    "name": "Medial pectoral nerve.l",
    "polygons": 1008,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular part of brachial plexus",
+    "Inferior trunk of brachial plexus"
    ]
   },
   {
    "name": "Medial pectoral nerve.r",
    "polygons": 1008,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular part of brachial plexus",
+    "Inferior trunk of brachial plexus"
    ]
   },
   {
    "name": "Medial plantar nerve.l",
    "polygons": 576,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Medial plantar nerve"
    ]
   },
   {
    "name": "Medial plantar nerve.r",
    "polygons": 576,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Medial plantar nerve"
    ]
   },
   {
@@ -3748,14 +4678,26 @@
    "name": "Medial sural cutaneous nerve.l",
    "polygons": 144,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve",
+    "Saphenous nerve"
    ]
   },
   {
    "name": "Medial sural cutaneous nerve.r",
    "polygons": 144,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve",
+    "Saphenous nerve"
    ]
   },
   {
@@ -3767,21 +4709,30 @@
    "name": "Median nerve.l",
    "polygons": 2592,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
    ]
   },
   {
    "name": "Median nerve.r",
    "polygons": 2592,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
    ]
   },
   {
    "name": "Medulla oblongata.l",
    "polygons": 6078,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Medulla oblongata"
    ]
   },
   {
@@ -3793,28 +4744,36 @@
    "name": "Meningeal branch of maxillary nerve.l",
    "polygons": 3084,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
    "name": "Meningeal branch of maxillary nerve.r",
    "polygons": 3084,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
    "name": "Mental nerve.l",
    "polygons": 1356,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
    "name": "Mental nerve.r",
    "polygons": 1356,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
@@ -3839,21 +4798,31 @@
    "name": "Midbrain.l",
    "polygons": 6092,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Midbrain"
    ]
   },
   {
    "name": "Midbrain.r",
    "polygons": 6092,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Midbrain"
    ]
   },
   {
    "name": "Middle frontal gyrus.l",
    "polygons": 2232,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
@@ -3863,14 +4832,19 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
    "name": "Middle temporal gyrus.l",
    "polygons": 1184,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Temporal lobe"
    ]
   },
   {
@@ -3880,133 +4854,206 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Temporal lobe"
    ]
   },
   {
    "name": "Middle trunk of brachial plexus.l",
    "polygons": 144,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular part of brachial plexus",
+    "Middle trunk of brachial plexus"
    ]
   },
   {
    "name": "Middle trunk of brachial plexus.r",
    "polygons": 144,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular part of brachial plexus",
+    "Middle trunk of brachial plexus"
    ]
   },
   {
    "name": "Motor nucleus of facial nerve.l",
    "polygons": 384,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Pons",
+    "Tegmentum of pons",
+    "Grey matter of pontine tegmentum"
    ]
   },
   {
    "name": "Motor nucleus of facial nerve.r",
    "polygons": 384,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Pons",
+    "Tegmentum of pons",
+    "Grey matter of pontine tegmentum"
    ]
   },
   {
    "name": "Motor root of trigeminal nerve.l",
    "polygons": 480,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
    "name": "Motor root of trigeminal nerve.r",
    "polygons": 480,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
    "name": "Muscular branches of axillary nerve.l",
    "polygons": 576,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Axillary nerve"
    ]
   },
   {
    "name": "Muscular branches of axillary nerve.r",
    "polygons": 576,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Axillary nerve"
    ]
   },
   {
    "name": "Muscular branches of deep fibular nerve.l",
    "polygons": 432,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Deep fibular nerve"
    ]
   },
   {
    "name": "Muscular branches of deep fibular nerve.r",
    "polygons": 432,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Deep fibular nerve"
    ]
   },
   {
    "name": "Muscular branches of median nerve.l",
    "polygons": 576,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
    ]
   },
   {
    "name": "Muscular branches of median nerve.r",
    "polygons": 576,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
    ]
   },
   {
    "name": "Muscular branches of radial nerve.l",
    "polygons": 1296,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve"
    ]
   },
   {
    "name": "Muscular branches of radial nerve.r",
    "polygons": 1296,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve"
    ]
   },
   {
    "name": "Muscular branches of ulnar nerve.l",
    "polygons": 288,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
    ]
   },
   {
    "name": "Muscular branches of ulnar nerve.r",
    "polygons": 288,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
    ]
   },
   {
    "name": "Musculocutaneous nerve.l",
    "polygons": 720,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of lateral cord of brachial plexus",
+    "Musculocutaneous nerve"
    ]
   },
   {
    "name": "Musculocutaneous nerve.r",
    "polygons": 720,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of lateral cord of brachial plexus",
+    "Musculocutaneous nerve"
    ]
   },
   {
@@ -4049,56 +5096,82 @@
    "name": "Nasolacrimal duct.l",
    "polygons": 444,
    "path": [
-    "Sense organs"
+    "Sense organs",
+    "Eye*",
+    "Accessory visual structures",
+    "Lacrimal apparatus",
+    "Nasolacrimal duct"
    ]
   },
   {
    "name": "Nasolacrimal duct.r",
    "polygons": 444,
    "path": [
-    "Sense organs"
+    "Sense organs",
+    "Eye*",
+    "Accessory visual structures",
+    "Lacrimal apparatus",
+    "Nasolacrimal duct"
    ]
   },
   {
    "name": "Nerve to mylohyoid muscle.l",
    "polygons": 1768,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
    "name": "Nerve to mylohyoid muscle.r",
    "polygons": 1768,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
    "name": "Nerve to piriformis muscle.l",
    "polygons": 720,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
    ]
   },
   {
    "name": "Nerve to piriformis muscle.r",
    "polygons": 720,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
    ]
   },
   {
    "name": "Nerve to quadratus femoris muscle.l",
    "polygons": 2160,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Meninges",
+    "Dura",
+    "Spinal dura"
    ]
   },
   {
    "name": "Nerve to quadratus femoris muscle.r",
    "polygons": 2160,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Meninges",
+    "Dura",
+    "Spinal dura"
    ]
   },
   {
@@ -4124,28 +5197,44 @@
    "name": "Nucleus of abducens nerve.l",
    "polygons": 384,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Pons",
+    "Tegmentum of pons",
+    "Grey matter of pontine tegmentum"
    ]
   },
   {
    "name": "Nucleus of abducens nerve.r",
    "polygons": 384,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Pons",
+    "Tegmentum of pons",
+    "Grey matter of pontine tegmentum"
    ]
   },
   {
    "name": "Nucleus of accessory nerve.l",
    "polygons": 896,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Spinal cord",
+    "Grey matter of spinal cord",
+    "Anterior horn of spinal cord"
    ]
   },
   {
    "name": "Nucleus of accessory nerve.r",
    "polygons": 896,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Spinal cord",
+    "Grey matter of spinal cord",
+    "Anterior horn of spinal cord"
    ]
   },
   {
@@ -4162,14 +5251,28 @@
    "name": "Nucleus of oculomotor nerve.l",
    "polygons": 384,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Midbrain",
+    "Cerebral peduncle",
+    "Tegmentum of midbrain",
+    "Grey matter of tegmentum of midbrain",
+    "Oculomotor complex"
    ]
   },
   {
    "name": "Nucleus of oculomotor nerve.r",
    "polygons": 384,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Midbrain",
+    "Cerebral peduncle",
+    "Tegmentum of midbrain",
+    "Grey matter of tegmentum of midbrain",
+    "Oculomotor complex"
    ]
   },
   {
@@ -4203,9 +5306,11 @@
    "path": [
     "Peripheral nervous system",
     "Spinal nerves",
-    "Brachial plexus",
-    "Branches of medial cord of brachial plexus",
-    "Ulnar nerve"
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Lateral plantar nerve"
    ]
   },
   {
@@ -4214,9 +5319,11 @@
    "path": [
     "Peripheral nervous system",
     "Spinal nerves",
-    "Brachial plexus",
-    "Branches of medial cord of brachial plexus",
-    "Ulnar nerve"
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Lateral plantar nerve"
    ]
   },
   {
@@ -4267,21 +5374,35 @@
    "name": "Obturator nerve.l",
    "polygons": 1728,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of anterior part of lumbar plexus",
+    "Obturator nerve"
    ]
   },
   {
    "name": "Obturator nerve.r",
    "polygons": 1728,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of anterior part of lumbar plexus",
+    "Obturator nerve"
    ]
   },
   {
    "name": "Occipital pole.l",
    "polygons": 887,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Occipital lobe"
    ]
   },
   {
@@ -4291,7 +5412,8 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Occipital lobe"
    ]
   },
   {
@@ -4316,7 +5438,11 @@
    "name": "Occipitotemporal sulcus (Lateral part*).l",
    "polygons": 439,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Temporal lobe"
    ]
   },
   {
@@ -4326,42 +5452,55 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Temporal lobe"
    ]
   },
   {
    "name": "Oculomotor nerve (III).l",
    "polygons": 4460,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Oculomotor nerve (III)"
    ]
   },
   {
    "name": "Oculomotor nerve (III).r",
    "polygons": 4460,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Oculomotor nerve (III)"
    ]
   },
   {
    "name": "Olfactory nerve (I).l",
    "polygons": 13708,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Olfactory nerve (I)"
    ]
   },
   {
    "name": "Olfactory nerve (I).r",
    "polygons": 13708,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Olfactory nerve (I)"
    ]
   },
   {
    "name": "Olfactory sulcus.l",
    "polygons": 487,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
@@ -4371,28 +5510,40 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
    "name": "Olive.l",
    "polygons": 512,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Medulla oblongata"
    ]
   },
   {
    "name": "Olive.r",
    "polygons": 512,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Medulla oblongata"
    ]
   },
   {
    "name": "Opercular part of inferior frontal gyrus.l",
    "polygons": 659,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Frontal lobe",
+    "Inferior frontal gyrus"
    ]
   },
   {
@@ -4402,21 +5553,27 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Frontal lobe",
+    "Inferior frontal gyrus"
    ]
   },
   {
    "name": "Ophthalmic nerve.l",
    "polygons": 3412,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
    "name": "Ophthalmic nerve.r",
    "polygons": 3412,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
@@ -4465,42 +5622,60 @@
    "name": "Optic chiasm.l",
    "polygons": 890,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Diencephalon"
    ]
   },
   {
    "name": "Optic chiasm.r",
    "polygons": 890,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Diencephalon"
    ]
   },
   {
    "name": "Optic nerve (II).l",
    "polygons": 884,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Optic nerve (II)"
    ]
   },
   {
    "name": "Optic nerve (II).r",
    "polygons": 884,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Optic nerve (II)"
    ]
   },
   {
    "name": "Optic tract.l",
    "polygons": 2332,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Diencephalon",
+    "Optic tract"
    ]
   },
   {
    "name": "Optic tract.r",
    "polygons": 2332,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Diencephalon",
+    "Optic tract"
    ]
   },
   {
@@ -4525,7 +5700,11 @@
    "name": "Orbital gyri (Frontomarginal gyrus and sulcus*).l",
    "polygons": 593,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
@@ -4535,14 +5714,19 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
    "name": "Orbital gyri.l",
    "polygons": 1363,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
@@ -4552,14 +5736,20 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
    "name": "Orbital part of  inferior frontal gyrus.l",
    "polygons": 156,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Frontal lobe",
+    "Inferior frontal gyrus"
    ]
   },
   {
@@ -4569,7 +5759,9 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Frontal lobe",
+    "Inferior frontal gyrus"
    ]
   },
   {
@@ -4594,7 +5786,11 @@
    "name": "Orbital sulci (H-shaped orbital sulci*).l",
    "polygons": 707,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
@@ -4604,14 +5800,19 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
    "name": "Orbital sulci (Lateral Orbital sulcus*).l",
    "polygons": 173,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
@@ -4621,35 +5822,50 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
    "name": "Palmar branch of median nerve.l",
    "polygons": 576,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
    ]
   },
   {
    "name": "Palmar branch of median nerve.r",
    "polygons": 576,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve"
    ]
   },
   {
    "name": "Palmar branch of ulnar nerve.l",
    "polygons": 576,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
    ]
   },
   {
    "name": "Palmar branch of ulnar nerve.r",
    "polygons": 576,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
    ]
   },
   {
@@ -4716,7 +5932,11 @@
    "name": "Paracentral gyrus and sulcus*.l",
    "polygons": 715,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
@@ -4726,14 +5946,19 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
    "name": "Paracentral sulcus.l",
    "polygons": 587,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
@@ -4743,14 +5968,19 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
    "name": "Parieto-occipital sulcus.l",
    "polygons": 1514,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Interlobular sulci"
    ]
   },
   {
@@ -4760,7 +5990,8 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Interlobular sulci"
    ]
   },
   {
@@ -4813,7 +6044,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Lateral plantar nerve"
    ]
   },
   {
@@ -4824,7 +6057,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Lateral plantar nerve"
    ]
   },
   {
@@ -4835,7 +6070,8 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve"
    ]
   },
   {
@@ -4846,21 +6082,28 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve"
    ]
   },
   {
    "name": "Pons.l",
    "polygons": 10171,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Pons"
    ]
   },
   {
    "name": "Pons.r",
    "polygons": 10171,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Pons"
    ]
   },
   {
@@ -4889,7 +6132,11 @@
    "name": "Postcentral gyrus.l",
    "polygons": 1114,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Parietal lobe"
    ]
   },
   {
@@ -4899,14 +6146,19 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Parietal lobe"
    ]
   },
   {
    "name": "Postcentral sulcus.l",
    "polygons": 1104,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Parietal lobe"
    ]
   },
   {
@@ -4916,21 +6168,30 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Parietal lobe"
    ]
   },
   {
    "name": "Posterior antebrachial cutaneous nerve.l",
    "polygons": 1296,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve"
    ]
   },
   {
    "name": "Posterior antebrachial cutaneous nerve.r",
    "polygons": 1296,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve"
    ]
   },
   {
@@ -4955,28 +6216,48 @@
    "name": "Posterior branch of medial antebrachial cutaneous nerve.l",
    "polygons": 1152,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Medial antebrachial cutaneous nerve"
    ]
   },
   {
    "name": "Posterior branch of medial antebrachial cutaneous nerve.r",
    "polygons": 1152,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Medial antebrachial cutaneous nerve"
    ]
   },
   {
    "name": "Posterior branch of obturator nerve.l",
    "polygons": 576,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of anterior part of lumbar plexus",
+    "Obturator nerve",
+    "Posterior branch of obturator nerve"
    ]
   },
   {
    "name": "Posterior branch of obturator nerve.r",
    "polygons": 576,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of anterior part of lumbar plexus",
+    "Obturator nerve",
+    "Posterior branch of obturator nerve"
    ]
   },
   {
@@ -4993,77 +6274,115 @@
    "name": "Posterior commissure",
    "polygons": 864,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Diencephalon",
+    "White matter of diencephalon"
    ]
   },
   {
    "name": "Posterior cord of brachial plexus.l",
    "polygons": 288,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Infraclavicular part of brachial plexus"
    ]
   },
   {
    "name": "Posterior cord of brachial plexus.r",
    "polygons": 288,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Infraclavicular part of brachial plexus"
    ]
   },
   {
    "name": "Posterior division of inferior trunk of brachial plexus.l",
    "polygons": 144,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular part of brachial plexus",
+    "Inferior trunk of brachial plexus"
    ]
   },
   {
    "name": "Posterior division of inferior trunk of brachial plexus.r",
    "polygons": 144,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular part of brachial plexus",
+    "Inferior trunk of brachial plexus"
    ]
   },
   {
    "name": "Posterior division of mandibular nerve.l",
    "polygons": 452,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
    "name": "Posterior division of mandibular nerve.r",
    "polygons": 452,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
    "name": "Posterior division of middle trunk of brachial plexus.l",
    "polygons": 144,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular part of brachial plexus",
+    "Middle trunk of brachial plexus"
    ]
   },
   {
    "name": "Posterior division of middle trunk of brachial plexus.r",
    "polygons": 144,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular part of brachial plexus",
+    "Middle trunk of brachial plexus"
    ]
   },
   {
    "name": "Posterior division of superior trunk of brachial plexus.l",
    "polygons": 144,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular part of brachial plexus",
+    "Superior trunk of brachial plexus"
    ]
   },
   {
    "name": "Posterior division of superior trunk of brachial plexus.r",
    "polygons": 144,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular part of brachial plexus",
+    "Superior trunk of brachial plexus"
    ]
   },
   {
@@ -5075,14 +6394,18 @@
    "name": "Posterior femoral cutaneous nerve.l",
    "polygons": 1296,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus"
    ]
   },
   {
    "name": "Posterior femoral cutaneous nerve.r",
    "polygons": 1296,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus"
    ]
   },
   {
@@ -5094,14 +6417,24 @@
    "name": "Posterior interosseous nerve of forearm.l",
    "polygons": 864,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve",
+    "Deep branch of radial nerve"
    ]
   },
   {
    "name": "Posterior interosseous nerve of forearm.r",
    "polygons": 864,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve",
+    "Deep branch of radial nerve"
    ]
   },
   {
@@ -5152,14 +6485,20 @@
    "name": "Posterior root of spinal nerve.l",
    "polygons": 3024,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Meninges",
+    "Dura",
+    "Spinal dura"
    ]
   },
   {
    "name": "Posterior root of spinal nerve.r",
    "polygons": 3024,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Meninges",
+    "Dura",
+    "Spinal dura"
    ]
   },
   {
@@ -5186,7 +6525,11 @@
    "name": "Precentral gyrus.l",
    "polygons": 1481,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
@@ -5196,14 +6539,19 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
    "name": "Precentral sulcus (Superior part)*.l",
    "polygons": 506,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
@@ -5213,14 +6561,19 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
    "name": "Precentral sulcus (inferior part)*.l",
    "polygons": 700,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
@@ -5230,14 +6583,19 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
    "name": "Precuneus.l",
    "polygons": 1194,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Parietal lobe"
    ]
   },
   {
@@ -5247,7 +6605,8 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Parietal lobe"
    ]
   },
   {
@@ -5292,56 +6651,100 @@
    "name": "Proper palmar digital branches of median nerve.l",
    "polygons": 5472,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve",
+    "Common palmar digital branches of median nerve"
    ]
   },
   {
    "name": "Proper palmar digital branches of median nerve.r",
    "polygons": 5472,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Median nerve",
+    "Common palmar digital branches of median nerve"
    ]
   },
   {
    "name": "Proper palmar digital branches of ulnar nerve.l",
    "polygons": 2880,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve",
+    "Superficial branch of ulnar nerve",
+    "Common palmar digital branches of ulnar nerve"
    ]
   },
   {
    "name": "Proper palmar digital branches of ulnar nerve.r",
    "polygons": 2880,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve",
+    "Superficial branch of ulnar nerve",
+    "Common palmar digital branches of ulnar nerve"
    ]
   },
   {
    "name": "Proper plantar digital branches of lateral plantar nerve.l",
    "polygons": 3744,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Lateral plantar nerve"
    ]
   },
   {
    "name": "Proper plantar digital branches of lateral plantar nerve.r",
    "polygons": 3744,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Lateral plantar nerve"
    ]
   },
   {
    "name": "Proper plantar digital branches of medial plantar nerve.l",
    "polygons": 3168,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Medial plantar nerve"
    ]
   },
   {
    "name": "Proper plantar digital branches of medial plantar nerve.r",
    "polygons": 3168,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Medial plantar nerve"
    ]
   },
   {
@@ -5364,28 +6767,44 @@
    "name": "Putamen.l",
    "polygons": 586,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Corpus striatum",
+    "Dorsal striatum"
    ]
   },
   {
    "name": "Putamen.r",
    "polygons": 586,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Corpus striatum",
+    "Dorsal striatum"
    ]
   },
   {
    "name": "Pyramid of medulla oblongata.l",
    "polygons": 512,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Medulla oblongata"
    ]
   },
   {
    "name": "Pyramid of medulla oblongata.r",
    "polygons": 512,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Medulla oblongata"
    ]
   },
   {
@@ -5405,7 +6824,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Lateral plantar nerve"
    ]
   },
   {
@@ -5416,21 +6837,31 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Lateral plantar nerve"
    ]
   },
   {
    "name": "Radial nerve.l",
    "polygons": 1152,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve"
    ]
   },
   {
    "name": "Radial nerve.r",
    "polygons": 1152,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve"
    ]
   },
   {
@@ -5461,14 +6892,26 @@
    "name": "Red nucleus.l",
    "polygons": 352,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Midbrain",
+    "Cerebral peduncle",
+    "Tegmentum of midbrain",
+    "Grey matter of tegmentum of midbrain"
    ]
   },
   {
    "name": "Red nucleus.r",
    "polygons": 352,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Midbrain",
+    "Cerebral peduncle",
+    "Tegmentum of midbrain",
+    "Grey matter of tegmentum of midbrain"
    ]
   },
   {
@@ -5547,14 +6990,20 @@
    "name": "Roots of brachial plexus.l",
    "polygons": 2304,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular part of brachial plexus"
    ]
   },
   {
    "name": "Roots of brachial plexus.r",
    "polygons": 2304,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular part of brachial plexus"
    ]
   },
   {
@@ -5566,14 +7015,26 @@
    "name": "Saphenous nerve.l",
    "polygons": 3312,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve",
+    "Saphenous nerve"
    ]
   },
   {
    "name": "Saphenous nerve.r",
    "polygons": 3312,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve",
+    "Saphenous nerve"
    ]
   },
   {
@@ -5626,14 +7087,22 @@
    "name": "Sciatic nerve.l",
    "polygons": 2448,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
    ]
   },
   {
    "name": "Sciatic nerve.r",
    "polygons": 2448,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
    ]
   },
   {
@@ -5654,7 +7123,8 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve"
    ]
   },
   {
@@ -5665,7 +7135,8 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve"
    ]
   },
   {
@@ -5676,7 +7147,8 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve"
    ]
   },
   {
@@ -5687,35 +7159,51 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve"
    ]
   },
   {
    "name": "Sensory root of trigeminal nerve.l",
    "polygons": 1376,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)",
+    "Sensory root of trigeminal nerve"
    ]
   },
   {
    "name": "Sensory root of trigeminal nerve.r",
    "polygons": 1376,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)",
+    "Sensory root of trigeminal nerve"
    ]
   },
   {
    "name": "Septal nuclei",
    "polygons": 548,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Basal forebrain"
    ]
   },
   {
    "name": "Septum pellucidum",
    "polygons": 2322,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Walls of lateral ventricle",
+    "Septum pellucidum"
    ]
   },
   {
@@ -5770,7 +7258,8 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Common fibular nerve"
    ]
   },
   {
@@ -5781,7 +7270,8 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Common fibular nerve"
    ]
   },
   {
@@ -5792,7 +7282,8 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve"
    ]
   },
   {
@@ -5803,14 +7294,18 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve"
    ]
   },
   {
    "name": "Spinal dura",
    "polygons": 17501,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Meninges",
+    "Dura",
+    "Spinal dura"
    ]
   },
   {
@@ -5877,7 +7372,11 @@
    "name": "Straight gyrus (Gyrus rectus).l",
    "polygons": 457,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
@@ -5887,35 +7386,52 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
    "name": "Stria medullaris thalami.l",
    "polygons": 842,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Diencephalon",
+    "White matter of diencephalon"
    ]
   },
   {
    "name": "Stria medullaris thalami.r",
    "polygons": 842,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Diencephalon",
+    "White matter of diencephalon"
    ]
   },
   {
    "name": "Stria terminalis.l",
    "polygons": 746,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "White matter of telencephalon"
    ]
   },
   {
    "name": "Stria terminalis.r",
    "polygons": 746,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "White matter of telencephalon"
    ]
   },
   {
@@ -5940,14 +7456,22 @@
    "name": "Subclavian nerve.l",
    "polygons": 432,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular branches of brachial plexus",
+    "Subclavian nerve"
    ]
   },
   {
    "name": "Subclavian nerve.r",
    "polygons": 432,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular branches of brachial plexus",
+    "Subclavian nerve"
    ]
   },
   {
@@ -5976,7 +7500,11 @@
    "name": "Subparietal sulcus.l",
    "polygons": 509,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Interlobular sulci"
    ]
   },
   {
@@ -5986,14 +7514,19 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Interlobular sulci"
    ]
   },
   {
    "name": "Sulcus interm_prim-Jensen.l",
    "polygons": 319,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Interlobular sulci"
    ]
   },
   {
@@ -6003,49 +7536,82 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Interlobular sulci"
    ]
   },
   {
    "name": "Superficial branch of radial nerve.l",
    "polygons": 2160,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve",
+    "Superficial branch of radial nerve"
    ]
   },
   {
    "name": "Superficial branch of radial nerve.r",
    "polygons": 2160,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Radial nerve",
+    "Superficial branch of radial nerve"
    ]
   },
   {
    "name": "Superficial branch of ulnar nerve.l",
    "polygons": 432,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve",
+    "Superficial branch of ulnar nerve"
    ]
   },
   {
    "name": "Superficial branch of ulnar nerve.r",
    "polygons": 432,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve",
+    "Superficial branch of ulnar nerve"
    ]
   },
   {
    "name": "Superficial fibular nerve.l",
    "polygons": 1584,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Superficial fibular nerve"
    ]
   },
   {
    "name": "Superficial fibular nerve.r",
    "polygons": 1584,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Superficial fibular nerve"
    ]
   },
   {
@@ -6128,21 +7694,35 @@
    "name": "Superior colliculus.l",
    "polygons": 458,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Midbrain",
+    "Tectum of midbrain",
+    "Superior colliculus"
    ]
   },
   {
    "name": "Superior colliculus.r",
    "polygons": 458,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Midbrain",
+    "Tectum of midbrain",
+    "Superior colliculus"
    ]
   },
   {
    "name": "Superior frontal gyrus.l",
    "polygons": 3684,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
@@ -6152,14 +7732,19 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
    "name": "Superior frontal sulcus.l",
    "polygons": 1189,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
@@ -6169,21 +7754,30 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
    "name": "Superior gluteal nerve.l",
    "polygons": 1728,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
    ]
   },
   {
    "name": "Superior gluteal nerve.r",
    "polygons": 1728,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve"
    ]
   },
   {
@@ -6208,21 +7802,33 @@
    "name": "Superior lateral brachial cutaneous nerve.l",
    "polygons": 1008,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Axillary nerve"
    ]
   },
   {
    "name": "Superior lateral brachial cutaneous nerve.r",
    "polygons": 1008,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of posterior cord of brachial plexus",
+    "Axillary nerve"
    ]
   },
   {
    "name": "Superior occipital gyri.l",
    "polygons": 610,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Occipital lobe"
    ]
   },
   {
@@ -6232,14 +7838,19 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Occipital lobe"
    ]
   },
   {
    "name": "Superior parietal lobule.l",
    "polygons": 1159,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Parietal lobe"
    ]
   },
   {
@@ -6249,7 +7860,8 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Parietal lobe"
    ]
   },
   {
@@ -6274,14 +7886,24 @@
    "name": "Superior salivatory nucleus.l",
    "polygons": 384,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Pons",
+    "Tegmentum of pons",
+    "Grey matter of pontine tegmentum"
    ]
   },
   {
    "name": "Superior salivatory nucleus.r",
    "polygons": 384,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Pons",
+    "Tegmentum of pons",
+    "Grey matter of pontine tegmentum"
    ]
   },
   {
@@ -6306,14 +7928,20 @@
    "name": "Superior subscapular nerve.l",
    "polygons": 576,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Infraclavicular part of brachial plexus"
    ]
   },
   {
    "name": "Superior subscapular nerve.r",
    "polygons": 576,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Infraclavicular part of brachial plexus"
    ]
   },
   {
@@ -6338,7 +7966,12 @@
    "name": "Superior temporal gyrus (Lateral part).l",
    "polygons": 978,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Temporal lobe",
+    "Superior temporal gyrus"
    ]
   },
   {
@@ -6348,14 +7981,20 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Temporal lobe",
+    "Superior temporal gyrus"
    ]
   },
   {
    "name": "Superior temporal sulcus.l",
    "polygons": 2216,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Temporal lobe"
    ]
   },
   {
@@ -6365,28 +8004,42 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Temporal lobe"
    ]
   },
   {
    "name": "Superior trunk of brachial plexus.l",
    "polygons": 144,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular part of brachial plexus",
+    "Superior trunk of brachial plexus"
    ]
   },
   {
    "name": "Superior trunk of brachial plexus.r",
    "polygons": 144,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular part of brachial plexus",
+    "Superior trunk of brachial plexus"
    ]
   },
   {
    "name": "Supramarginal gyrus.l",
    "polygons": 1389,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Parietal lobe",
+    "Inferior parietal lobe"
    ]
   },
   {
@@ -6396,21 +8049,31 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Parietal lobe",
+    "Inferior parietal lobe"
    ]
   },
   {
    "name": "Suprascapular nerve.l",
    "polygons": 2448,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular branches of brachial plexus",
+    "Suprascapular nerve"
    ]
   },
   {
    "name": "Suprascapular nerve.r",
    "polygons": 2448,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Supraclavicular branches of brachial plexus",
+    "Suprascapular nerve"
    ]
   },
   {
@@ -6439,70 +8102,110 @@
    "name": "Sural communicating branch of common fibular nerve.l",
    "polygons": 576,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve",
+    "Saphenous nerve"
    ]
   },
   {
    "name": "Sural communicating branch of common fibular nerve.r",
    "polygons": 576,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve",
+    "Saphenous nerve"
    ]
   },
   {
    "name": "Sural nerve.l",
    "polygons": 2016,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve",
+    "Saphenous nerve"
    ]
   },
   {
    "name": "Sural nerve.r",
    "polygons": 2016,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Lumbar plexus",
+    "Branches of posterior part of lumbar plexus",
+    "Femoral nerve",
+    "Saphenous nerve"
    ]
   },
   {
    "name": "Suspensory ligament of eyeball.l",
    "polygons": 5502,
    "path": [
-    "Sense organs"
+    "Sense organs",
+    "Eye*",
+    "Accessory visual structures"
    ]
   },
   {
    "name": "Suspensory ligament of eyeball.r",
    "polygons": 5502,
    "path": [
-    "Sense organs"
+    "Sense organs",
+    "Eye*",
+    "Accessory visual structures"
    ]
   },
   {
    "name": "Sympathetic nerves.l",
    "polygons": 12240,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Automatic division of peripheral nervous system",
+    "Thoracolumbar part of autonomic division",
+    "Sympathetic trunk"
    ]
   },
   {
    "name": "Sympathetic nerves.r",
    "polygons": 12240,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Automatic division of peripheral nervous system",
+    "Thoracolumbar part of autonomic division",
+    "Sympathetic trunk"
    ]
   },
   {
    "name": "Sympathetic trunk.l",
    "polygons": 12672,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Automatic division of peripheral nervous system",
+    "Thoracolumbar part of autonomic division",
+    "Sympathetic trunk"
    ]
   },
   {
    "name": "Sympathetic trunk.r",
    "polygons": 12672,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Automatic division of peripheral nervous system",
+    "Thoracolumbar part of autonomic division",
+    "Sympathetic trunk"
    ]
   },
   {
@@ -6514,7 +8217,12 @@
    "name": "Temporal plane.l",
    "polygons": 498,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Temporal lobe",
+    "Superior temporal gyrus"
    ]
   },
   {
@@ -6524,14 +8232,20 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Temporal lobe",
+    "Superior temporal gyrus"
    ]
   },
   {
    "name": "Temporal pole.l",
    "polygons": 488,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Temporal lobe"
    ]
   },
   {
@@ -6541,7 +8255,8 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Temporal lobe"
    ]
   },
   {
@@ -6588,7 +8303,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Deep fibular nerve"
    ]
   },
   {
@@ -6599,21 +8316,31 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Deep fibular nerve"
    ]
   },
   {
    "name": "Tentorium cerebelli.l",
    "polygons": 2282,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Meninges",
+    "Dura",
+    "Cranial dura",
+    "Tentorium cerebelli"
    ]
   },
   {
    "name": "Tentorium cerebelli.r",
    "polygons": 2282,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Meninges",
+    "Dura",
+    "Cranial dura",
+    "Tentorium cerebelli"
    ]
   },
   {
@@ -6642,49 +8369,77 @@
    "name": "Thalamus.l",
    "polygons": 758,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Diencephalon",
+    "Thalamus"
    ]
   },
   {
    "name": "Thalamus.r",
    "polygons": 758,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Diencephalon",
+    "Thalamus"
    ]
   },
   {
    "name": "Third ventricle",
    "polygons": 4119,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Diencephalon",
+    "Third ventricle"
    ]
   },
   {
    "name": "Thoracodorsal nerve.l",
    "polygons": 2304,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Infraclavicular part of brachial plexus"
    ]
   },
   {
    "name": "Thoracodorsal nerve.r",
    "polygons": 2304,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Infraclavicular part of brachial plexus"
    ]
   },
   {
    "name": "Tibial nerve.l",
    "polygons": 1296,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Tibial nerve"
    ]
   },
   {
    "name": "Tibial nerve.r",
    "polygons": 1296,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Tibial nerve"
    ]
   },
   {
@@ -6695,7 +8450,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Deep fibular nerve"
    ]
   },
   {
@@ -6706,7 +8463,9 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Common fibular nerve",
+    "Deep fibular nerve"
    ]
   },
   {
@@ -6717,7 +8476,8 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve"
    ]
   },
   {
@@ -6728,7 +8488,8 @@
     "Spinal nerves",
     "Lumbosacral plexus",
     "Sacral plexus",
-    "Sciatic nerve"
+    "Sciatic nerve",
+    "Tibial nerve"
    ]
   },
   {
@@ -6753,7 +8514,11 @@
    "name": "Transverse frontopolar gyrus and sulcus*.l",
    "polygons": 213,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
@@ -6763,7 +8528,8 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Frontal lobe"
    ]
   },
   {
@@ -6772,9 +8538,11 @@
    "path": [
     "Peripheral nervous system",
     "Spinal nerves",
-    "Brachial plexus",
-    "Branches of medial cord of brachial plexus",
-    "Ulnar nerve"
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Lateral plantar nerve"
    ]
   },
   {
@@ -6783,9 +8551,11 @@
    "path": [
     "Peripheral nervous system",
     "Spinal nerves",
-    "Brachial plexus",
-    "Branches of medial cord of brachial plexus",
-    "Ulnar nerve"
+    "Lumbosacral plexus",
+    "Sacral plexus",
+    "Sciatic nerve",
+    "Tibial nerve",
+    "Lateral plantar nerve"
    ]
   },
   {
@@ -6812,7 +8582,11 @@
    "name": "Transverse occipital sulcus.l",
    "polygons": 618,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Occipital lobe"
    ]
   },
   {
@@ -6822,7 +8596,8 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Occipital lobe"
    ]
   },
   {
@@ -6847,7 +8622,12 @@
    "name": "Transverse temporal gyri.l",
    "polygons": 203,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Temporal lobe",
+    "Superior temporal gyrus"
    ]
   },
   {
@@ -6857,14 +8637,21 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Temporal lobe",
+    "Superior temporal gyrus"
    ]
   },
   {
    "name": "Triangular part of inferior frontal gyrus.l",
    "polygons": 450,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "Frontal lobe",
+    "Inferior frontal gyrus"
    ]
   },
   {
@@ -6874,35 +8661,43 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "Frontal lobe",
+    "Inferior frontal gyrus"
    ]
   },
   {
    "name": "Trigeminal nerve (V).l",
    "polygons": 1192,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
    "name": "Trigeminal nerve (V).r",
    "polygons": 1192,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Trigeminal nerve (V)"
    ]
   },
   {
    "name": "Trochlear nerve (IV).l",
    "polygons": 1892,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Nerves"
    ]
   },
   {
    "name": "Trochlear nerve (IV).r",
    "polygons": 1892,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Nerves"
    ]
   },
   {
@@ -6918,14 +8713,20 @@
    "name": "Tympanic membrane.l",
    "polygons": 786,
    "path": [
-    "Sense organs"
+    "Sense organs",
+    "Ear",
+    "External ear",
+    "Tympanic membrane"
    ]
   },
   {
    "name": "Tympanic membrane.r",
    "polygons": 786,
    "path": [
-    "Sense organs"
+    "Sense organs",
+    "Ear",
+    "External ear",
+    "Tympanic membrane"
    ]
   },
   {
@@ -6954,14 +8755,22 @@
    "name": "Ulnar nerve.l",
    "polygons": 1584,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
    ]
   },
   {
    "name": "Ulnar nerve.r",
    "polygons": 1584,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Spinal nerves",
+    "Brachial plexus",
+    "Branches of medial cord of brachial plexus",
+    "Ulnar nerve"
    ]
   },
   {
@@ -6977,14 +8786,18 @@
    "name": "Vagus nerve (X).l",
    "polygons": 7340,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Vagus nerve (X)"
    ]
   },
   {
    "name": "Vagus nerve (X).r",
    "polygons": 23172,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Vagus nerve (X)"
    ]
   },
   {
@@ -7063,56 +8876,85 @@
    "name": "Vestibular nerve.l",
    "polygons": 2384,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Vestibulocochlear nerve (VIII)",
+    "Vestibular nerve"
    ]
   },
   {
    "name": "Vestibular nerve.r",
    "polygons": 2384,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Vestibulocochlear nerve (VIII)"
    ]
   },
   {
    "name": "Vestibular nuclei.l",
    "polygons": 784,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Pons",
+    "Tegmentum of pons",
+    "Grey matter of pontine tegmentum",
+    "Vestibular nuclei"
    ]
   },
   {
    "name": "Vestibular nuclei.r",
    "polygons": 784,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Brainstem",
+    "Pons",
+    "Tegmentum of pons",
+    "Grey matter of pontine tegmentum",
+    "Vestibular nuclei"
    ]
   },
   {
    "name": "Vestibule.l",
    "polygons": 4290,
    "path": [
-    "Sense organs"
+    "Sense organs",
+    "Ear",
+    "Internal ear",
+    "Bony labyrinth",
+    "Vestibule"
    ]
   },
   {
    "name": "Vestibule.r",
    "polygons": 4290,
    "path": [
-    "Sense organs"
+    "Sense organs",
+    "Ear",
+    "Internal ear",
+    "Bony labyrinth",
+    "Vestibule"
    ]
   },
   {
    "name": "Vestibulocochlear nerve (VIII).l",
    "polygons": 904,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Vestibulocochlear nerve (VIII)"
    ]
   },
   {
    "name": "Vestibulocochlear nerve (VIII).r",
    "polygons": 904,
    "path": [
-    "Peripheral nervous system"
+    "Peripheral nervous system",
+    "Cranial nerves",
+    "Vestibulocochlear nerve (VIII)"
    ]
   },
   {
@@ -7134,7 +8976,11 @@
    "name": "White matter of telencephalon.l",
    "polygons": 67644,
    "path": [
-    "Central nervous system"
+    "Central nervous system",
+    "Brain",
+    "Cerebrum",
+    "Telencephalon",
+    "White matter of telencephalon"
    ]
   },
   {
@@ -7144,7 +8990,8 @@
     "Central nervous system",
     "Brain",
     "Cerebrum",
-    "Telencephalon"
+    "Telencephalon",
+    "White matter of telencephalon"
    ]
   },
   {

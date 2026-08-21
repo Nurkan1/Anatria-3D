@@ -5,9 +5,7 @@ import { describe, expect, it } from "vitest";
 
 import { AnatomyManifestSchema } from "../src/lib/schemas";
 import {
-  DECLINED_VISCERAL_GROUPS,
   NERVOUS_PATHS,
-  recoverVisceralPaths,
   repairHierarchy,
 } from "../tools/asset-pipeline/hierarchy.mjs";
 
@@ -116,13 +114,18 @@ describe("the brain contains the brain", () => {
 describe("the repair does not reach past the nervous system", () => {
   it("leaves the muscle attachment markers where Z-Anatomy put them", () => {
     // Propagation is scoped for one reason. `Abductor hallucis.l` is the belly
-    // and is filed under `Muscles`; `.ol` and `.el` beside it are its origin
-    // and insertion markers, filed under nothing on purpose. An unscoped rule
+    // and carries a real path; `.ol` and `.el` beside it are its origin and
+    // insertion markers, filed under nothing on purpose. An unscoped rule
     // pulled 432 structures — including every one of those — into `Muscles`,
     // which would make isolating the muscles hand back a cloud of markers.
+    //
+    // The belly used to sit in the flat `Muscles` bucket. It sits in the
+    // regional hierarchy now because the export hands back the most specific
+    // collection rather than the first one it reaches; what this guards is
+    // unchanged, which is that the markers did not come with it.
     const belly = byId("abductor_hallucis_l");
     const origin = byId("abductor_hallucis_ol");
-    expect(belly?.path).toContain("Muscles");
+    expect(belly?.path).toContain("Muscles of foot");
     expect(origin?.path).toEqual([]);
   });
 
@@ -134,7 +137,7 @@ describe("the repair does not reach past the nervous system", () => {
   });
 });
 
-describe("the visceral groups taken back from inspect.json", () => {
+describe("the visceral systems open into their parts", () => {
   it("opens the liver into its eight segments", () => {
     // Couinaud I to VIII, and the manifest holds exactly eight. Before this the
     // liver was a single mesh with its segments loose beside it, so asking to
@@ -154,37 +157,31 @@ describe("the visceral groups taken back from inspect.json", () => {
     expect(named.filter((name) => /left lung/.test(name))).toHaveLength(2);
   });
 
-  it("takes no group it cannot fill", () => {
-    // The whole restraint of this recovery. Every one of these exists in the
-    // source and every one would have arrived incomplete — `Digestive canal`
-    // without the oesophagus, `Bronchi` holding the trachea alone. A group that
-    // under-delivers is the defect this file was written to repair, and it does
-    // not become acceptable by being in a different organ.
-    for (const node of Object.keys(DECLINED_VISCERAL_GROUPS)) {
-      expect(inGroup(node), node).toEqual([]);
+  it("fills the groups the workaround had to decline", () => {
+    // These are the ones `recoverVisceralPaths` refused, because reconstructing
+    // them from `inspect.json` would have handed back a `Digestive canal` with
+    // no oesophagus and a `Bronchi` holding only the trachea. A group that
+    // under-delivers was the defect that whole mechanism existed to avoid.
+    //
+    // The export supplies them now — it hands each object its most specific
+    // collection instead of the first one the walk reaches — so the mechanism
+    // is gone and this asserts the outcome it was standing in for.
+    const canal = inGroup("Digestive canal");
+    expect(canal.length).toBeGreaterThanOrEqual(9);
+    for (const term of ["Oesophagus", "Stomach", "Duodenum", "Jejunum"]) {
+      expect(
+        canal.some((organ) => organ.name_en.includes(term)),
+        term,
+      ).toBe(true);
     }
   });
 
-  it("says why each declined group was declined", () => {
-    for (const [node, reason] of Object.entries(DECLINED_VISCERAL_GROUPS)) {
-      expect(reason.length, node).toBeGreaterThan(30);
-    }
-  });
-
-  it("only ever adds a path, never replaces one", () => {
-    // The property that makes it safe to run beside the nervous repair: a
-    // structure the export placed correctly cannot be moved by this.
-    const organs = [
-      { organ_id: "a", ta2_latin: "A", system: "digestive", path: ["Somewhere"], node: "Liver" },
-      { organ_id: "b", ta2_latin: "B", system: "digestive", path: [], node: "Not in the blend" },
-    ];
-    const { organs: out, recovered } = recoverVisceralPaths(organs, {
-      objects: [{ name: "Liver", collections: ["Liver"] }],
-      collections: [{ name: "Liver", path: "Bonus collection/Visceral systems/Digestive system/Liver" }],
-    });
-    expect(out[0]!.path).toEqual(["Somewhere"]);
-    expect(out[1]!.path).toEqual([]);
-    expect(recovered).toBe(0);
+  it("places every structure by its most specific collection", () => {
+    // The property the export fix buys, seen from the manifest: a structure
+    // linked into a parent and its child lands in the child. `Atlas (C1)` sat
+    // in `Axial skeleton` and belongs three levels deeper.
+    const atlas = male.organs.find((organ) => organ.name_en.startsWith("Atlas"));
+    expect(atlas?.path).toContain("Cervical vertebrae");
   });
 });
 

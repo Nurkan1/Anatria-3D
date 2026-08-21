@@ -3603,7 +3603,8 @@
     "Joints of upper limb",
     "Joints of free upper limb",
     "Synovial joints of free upper limb",
-    "Joints of hand"
+    "Joints of hand",
+    "Intercarpal joints"
    ]
   },
   {
@@ -3613,7 +3614,8 @@
     "Joints of upper limb",
     "Joints of free upper limb",
     "Synovial joints of free upper limb",
-    "Joints of hand"
+    "Joints of hand",
+    "Intercarpal joints"
    ]
   },
   {
@@ -3861,7 +3863,8 @@
     "Joints of lower limb",
     "Joints of free lower limb",
     "Synovial joints of free lower limb",
-    "Knee joint"
+    "Knee joint",
+    "Tibial collateral ligament"
    ]
   },
   {
@@ -3871,7 +3874,8 @@
     "Joints of lower limb",
     "Joints of free lower limb",
     "Synovial joints of free lower limb",
-    "Knee joint"
+    "Knee joint",
+    "Tibial collateral ligament"
    ]
   },
   {

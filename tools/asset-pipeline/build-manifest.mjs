@@ -22,7 +22,7 @@ import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { recoverVisceralPaths, repairHierarchy } from "./hierarchy.mjs";
+import { repairHierarchy } from "./hierarchy.mjs";
 import { parseTa2, slugify } from "./ta2.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -266,15 +266,7 @@ function main() {
   // Z-Anatomy's collection nesting is the hierarchy everywhere except the
   // nervous system, where it files most of the brain outside `Brain`. Repaired
   // here rather than in the vendored data — see hierarchy.mjs for what and why.
-  const repaired = repairHierarchy(organs);
-  const { corrected, propagated } = repaired;
-  // The visceral systems exported flat — see `recoverVisceralPaths` for the
-  // walk-order bug that causes it, and for why only the groups proven complete
-  // are taken back here.
-  const { organs: placed, recovered } = recoverVisceralPaths(
-    repaired.organs,
-    JSON.parse(readFileSync(join(HERE, "vendor", "inspect.json"), "utf8")),
-  );
+  const { organs: placed, corrected, propagated } = repairHierarchy(organs);
 
   placed.sort((a, b) => a.ta2_latin.localeCompare(b.ta2_latin));
   systems.sort((a, b) => a.system.localeCompare(b.system));
@@ -299,7 +291,7 @@ function main() {
 
   console.log(`Wrote ${OUT}`);
   console.log(`  ${placed.length} structures total`);
-  console.log(`  hierarchy: ${corrected} refiled by name, ${propagated} propagated from a twin, ${recovered} visceral group(s) recovered`);
+  console.log(`  hierarchy: ${corrected} refiled by name, ${propagated} propagated from a twin`);
   for (const entry of systems) {
     const when = entry.load_on_start ? "eager" : "on demand";
     console.log(`  ${entry.system}: ${entry.organ_count} (${when})`);

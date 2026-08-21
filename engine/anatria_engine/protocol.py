@@ -395,7 +395,7 @@ class AgentRequest(Strict):
     selection: list[OrganContext] = Field(max_length=64)
     available_organs: list[OrganMeta]
     #: Named groups in the manifest hierarchy that can be isolated whole —
-    #: "Kidney", "Muscles", "Vertebral column". Names, not ids, because most of
+    #: "Brain", "Muscles of hand", "Vertebral column". Names, not ids, because most of
     #: them have neither.
     #:
     #: Defaulted for the usual reason: a new field on an existing event is

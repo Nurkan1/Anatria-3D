@@ -89,7 +89,7 @@ class SceneContext:
     #: case mode, where `record_case_verdict` is not registered at all — so a
     #: lesson has no way to write a grade even if the model asks for one.
     emit_verdict: Callable[[int, str], None] | None = None
-    #: Named groups that can be isolated whole — "Kidney", "Muscles". Validated
+    #: Named groups that can be isolated whole — "Brain", "Muscles of hand". Validated
     #: against, so the model cannot invent a heading the hierarchy lacks.
     #:
     #: Defaulted empty, which disables `isolate_group` rather than breaking it:
@@ -258,7 +258,7 @@ def register_scene_tools(agent: Agent[SceneContext, str]) -> None:
     def isolate_group(ctx: RunContext[SceneContext], group: str) -> str:
         """Show every structure under a named anatomical group.
 
-        For the groups listed in your instructions — "Kidney", "Muscles",
+        For the groups listed in your instructions — "Brain", "Muscles of hand",
         "Vertebral column". Use this when the reader asks for a whole organ or
         region that is modelled as many parts: the atlas often has no single
         mesh for it, so `focus_organ` has nothing to point at and naming the

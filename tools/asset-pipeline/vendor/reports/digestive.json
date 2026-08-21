@@ -26,12 +26,16 @@
   {
    "name": "(Accessory parotid gland).l",
    "polygons": 106,
-   "path": []
+   "path": [
+    "Mouth"
+   ]
   },
   {
    "name": "(Accessory parotid gland).r",
    "polygons": 106,
-   "path": []
+   "path": [
+    "Mouth"
+   ]
   },
   {
    "name": "Accessory pancreatic duct",
@@ -41,17 +45,23 @@
   {
    "name": "Anterior lateral segment of liver (VI)",
    "polygons": 1676,
-   "path": []
+   "path": [
+    "Liver"
+   ]
   },
   {
    "name": "Anterior medial segment of liver (V)",
    "polygons": 1769,
-   "path": []
+   "path": [
+    "Liver"
+   ]
   },
   {
    "name": "Ascending colon",
    "polygons": 8756,
-   "path": []
+   "path": [
+    "Digestive canal"
+   ]
   },
   {
    "name": "Bile duct",
@@ -61,12 +71,16 @@
   {
    "name": "Descending colon",
    "polygons": 12372,
-   "path": []
+   "path": [
+    "Digestive canal"
+   ]
   },
   {
    "name": "Duodenum",
    "polygons": 1737,
-   "path": []
+   "path": [
+    "Digestive canal"
+   ]
   },
   {
    "name": "Epiglottis",
@@ -86,7 +100,9 @@
   {
    "name": "Free taenia",
    "polygons": 3356,
-   "path": []
+   "path": [
+    "Digestive canal"
+   ]
   },
   {
    "name": "Gallbladder",
@@ -96,27 +112,37 @@
   {
    "name": "Gingiva",
    "polygons": 12298,
-   "path": []
+   "path": [
+    "Mouth"
+   ]
   },
   {
    "name": "Jejunum",
    "polygons": 13824,
-   "path": []
+   "path": [
+    "Digestive canal"
+   ]
   },
   {
    "name": "Left anterior lateral segment of liver (III)",
    "polygons": 1722,
-   "path": []
+   "path": [
+    "Liver"
+   ]
   },
   {
    "name": "Left medial segment of liver (IV)",
    "polygons": 2386,
-   "path": []
+   "path": [
+    "Liver"
+   ]
   },
   {
    "name": "Left posterior lateral segment of liver (II)",
    "polygons": 1658,
-   "path": []
+   "path": [
+    "Liver"
+   ]
   },
   {
    "name": "Liver",
@@ -196,7 +222,9 @@
   {
    "name": "Mesocolic taenia",
    "polygons": 3396,
-   "path": []
+   "path": [
+    "Digestive canal"
+   ]
   },
   {
    "name": "Mucosa of stomach",
@@ -206,12 +234,16 @@
   {
    "name": "Oesophagus",
    "polygons": 8160,
-   "path": []
+   "path": [
+    "Digestive canal"
+   ]
   },
   {
    "name": "Omental taenia",
    "polygons": 3116,
-   "path": []
+   "path": [
+    "Digestive canal"
+   ]
   },
   {
    "name": "Pancreas",
@@ -226,22 +258,30 @@
   {
    "name": "Parotid duct.l",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Mouth"
+   ]
   },
   {
    "name": "Parotid duct.r",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Mouth"
+   ]
   },
   {
    "name": "Parotid gland.l",
    "polygons": 852,
-   "path": []
+   "path": [
+    "Mouth"
+   ]
   },
   {
    "name": "Parotid gland.r",
    "polygons": 852,
-   "path": []
+   "path": [
+    "Mouth"
+   ]
   },
   {
    "name": "Pharynx.j",
@@ -251,57 +291,79 @@
   {
    "name": "Posterior lateral segment of liver (VII)",
    "polygons": 1194,
-   "path": []
+   "path": [
+    "Liver"
+   ]
   },
   {
    "name": "Posterior medial segment of liver (VIII)",
    "polygons": 1780,
-   "path": []
+   "path": [
+    "Liver"
+   ]
   },
   {
    "name": "Posterior segment of liver (I)",
    "polygons": 1304,
-   "path": []
+   "path": [
+    "Liver"
+   ]
   },
   {
    "name": "Sigmoid colon",
    "polygons": 3377,
-   "path": []
+   "path": [
+    "Digestive canal"
+   ]
   },
   {
    "name": "Stomach",
    "polygons": 4734,
-   "path": []
+   "path": [
+    "Digestive canal"
+   ]
   },
   {
    "name": "Sublingual gland.l",
    "polygons": 324,
-   "path": []
+   "path": [
+    "Mouth"
+   ]
   },
   {
    "name": "Sublingual gland.r",
    "polygons": 324,
-   "path": []
+   "path": [
+    "Mouth"
+   ]
   },
   {
    "name": "Submandibular duct.l",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Mouth"
+   ]
   },
   {
    "name": "Submandibular duct.r",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Mouth"
+   ]
   },
   {
    "name": "Submandibular gland.l",
    "polygons": 392,
-   "path": []
+   "path": [
+    "Mouth"
+   ]
   },
   {
    "name": "Submandibular gland.r",
    "polygons": 392,
-   "path": []
+   "path": [
+    "Mouth"
+   ]
   },
   {
    "name": "Thyroid cartilage",
@@ -311,12 +373,16 @@
   {
    "name": "Tongue",
    "polygons": 602,
-   "path": []
+   "path": [
+    "Mouth"
+   ]
   },
   {
    "name": "Transverse colon",
    "polygons": 8308,
-   "path": []
+   "path": [
+    "Digestive canal"
+   ]
   },
   {
    "name": "Upper canine.l",

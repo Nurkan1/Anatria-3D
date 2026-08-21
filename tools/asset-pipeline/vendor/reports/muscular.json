@@ -121,7 +121,8 @@
    "name": "(Abdominal part of pectoralis major muscle).l",
    "polygons": 1508,
    "path": [
-    "Muscles"
+    "Thoracic part of muscular system",
+    "Pectoralis major muscle"
    ]
   },
   {
@@ -138,21 +139,26 @@
    "name": "(Abdominal part of pectoralis major muscle).r",
    "polygons": 1508,
    "path": [
-    "Muscles"
+    "Thoracic part of muscular system",
+    "Pectoralis major muscle"
    ]
   },
   {
    "name": "(Adductor minimus).l",
    "polygons": 948,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Medial compartment of thigh"
    ]
   },
   {
    "name": "(Adductor minimus).r",
    "polygons": 948,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Medial compartment of thigh"
    ]
   },
   {
@@ -173,7 +179,9 @@
    "name": "(Opponens digiti minimi muscle of foot).l",
    "polygons": 236,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
@@ -190,7 +198,9 @@
    "name": "(Opponens digiti minimi muscle of foot).r",
    "polygons": 236,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
@@ -207,14 +217,18 @@
    "name": "Abductor digiti minimi of foot.l",
    "polygons": 1280,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
    "name": "Abductor digiti minimi of foot.r",
    "polygons": 1280,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
@@ -231,7 +245,9 @@
    "name": "Abductor digiti minimi of hand.l",
    "polygons": 672,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
@@ -248,7 +264,9 @@
    "name": "Abductor digiti minimi of hand.r",
    "polygons": 672,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
@@ -265,7 +283,9 @@
    "name": "Abductor hallucis.l",
    "polygons": 1688,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
@@ -282,21 +302,27 @@
    "name": "Abductor hallucis.r",
    "polygons": 1688,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
    "name": "Abductor pollicis brevis.l",
    "polygons": 624,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
    "name": "Abductor pollicis brevis.r",
    "polygons": 624,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
@@ -313,7 +339,9 @@
    "name": "Abductor pollicis longus.l",
    "polygons": 2462,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
@@ -330,14 +358,19 @@
    "name": "Abductor pollicis longus.r",
    "polygons": 2462,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
    "name": "Acromial part of deltoid muscle.l",
    "polygons": 2964,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Scapulohumeral muscles",
+    "Deltoid muscle"
    ]
   },
   {
@@ -354,21 +387,28 @@
    "name": "Acromial part of deltoid muscle.r",
    "polygons": 2964,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Scapulohumeral muscles",
+    "Deltoid muscle"
    ]
   },
   {
    "name": "Adductor brevis.l",
    "polygons": 2132,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Medial compartment of thigh"
    ]
   },
   {
    "name": "Adductor brevis.r",
    "polygons": 2132,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Medial compartment of thigh"
    ]
   },
   {
@@ -385,7 +425,9 @@
    "name": "Adductor longus.l",
    "polygons": 3714,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Medial compartment of thigh"
    ]
   },
   {
@@ -402,7 +444,9 @@
    "name": "Adductor longus.r",
    "polygons": 3714,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Medial compartment of thigh"
    ]
   },
   {
@@ -419,7 +463,9 @@
    "name": "Adductor magnus.l",
    "polygons": 8192,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Medial compartment of thigh"
    ]
   },
   {
@@ -436,7 +482,9 @@
    "name": "Adductor magnus.r",
    "polygons": 8192,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Medial compartment of thigh"
    ]
   },
   {
@@ -473,7 +521,9 @@
    "name": "Anconeus muscle.l",
    "polygons": 1442,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
@@ -490,7 +540,9 @@
    "name": "Anconeus muscle.r",
    "polygons": 1442,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
@@ -535,14 +587,16 @@
    "name": "Anterior belly of digastric muscle.l",
    "polygons": 392,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
    "name": "Anterior belly of digastric muscle.r",
    "polygons": 392,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
@@ -587,14 +641,18 @@
    "name": "Ary-epiglottic part of oblique arytenoid muscle.l",
    "polygons": 1022,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Laryngeal muscles"
    ]
   },
   {
    "name": "Ary-epiglottic part of oblique arytenoid muscle.r",
    "polygons": 1022,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Laryngeal muscles"
    ]
   },
   {
@@ -611,7 +669,9 @@
    "name": "Ascending part of trapezius muscle.l",
    "polygons": 4596,
    "path": [
-    "Superficial muscles"
+    "Dorsal part of muscular system",
+    "Hypaxial muscles of back",
+    "Trapezius muscle"
    ]
   },
   {
@@ -628,7 +688,9 @@
    "name": "Ascending part of trapezius muscle.r",
    "polygons": 4596,
    "path": [
-    "Superficial muscles"
+    "Dorsal part of muscular system",
+    "Hypaxial muscles of back",
+    "Trapezius muscle"
    ]
   },
   {
@@ -693,7 +755,9 @@
    "name": "Brachialis muscle.l",
    "polygons": 3478,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of arm"
    ]
   },
   {
@@ -710,7 +774,9 @@
    "name": "Brachialis muscle.r",
    "polygons": 3478,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of arm"
    ]
   },
   {
@@ -727,7 +793,9 @@
    "name": "Brachioradialis muscle.l",
    "polygons": 7312,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
@@ -744,14 +812,19 @@
    "name": "Brachioradialis muscle.r",
    "polygons": 7312,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
    "name": "Bucinator.l",
    "polygons": 884,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
@@ -778,7 +851,10 @@
    "name": "Bucinator.r",
    "polygons": 884,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
@@ -799,35 +875,44 @@
    "name": "Calcaneal tendon.l",
    "polygons": 4334,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of leg"
    ]
   },
   {
    "name": "Calcaneal tendon.r",
    "polygons": 4334,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of leg"
    ]
   },
   {
    "name": "Clavicular head of pectoralis major muscle.l",
    "polygons": 850,
    "path": [
-    "Superficial muscles"
+    "Thoracic part of muscular system",
+    "Pectoralis major muscle"
    ]
   },
   {
    "name": "Clavicular head of pectoralis major muscle.r",
    "polygons": 850,
    "path": [
-    "Superficial muscles"
+    "Thoracic part of muscular system",
+    "Pectoralis major muscle"
    ]
   },
   {
    "name": "Clavicular part of deltoid muscle.l",
    "polygons": 2902,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Scapulohumeral muscles",
+    "Deltoid muscle"
    ]
   },
   {
@@ -844,7 +929,10 @@
    "name": "Clavicular part of deltoid muscle.r",
    "polygons": 2902,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Scapulohumeral muscles",
+    "Deltoid muscle"
    ]
   },
   {
@@ -913,14 +1001,16 @@
    "name": "Common tendinous ring.l",
    "polygons": 362,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Common tendinous ring.r",
    "polygons": 362,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
@@ -955,7 +1045,9 @@
    "name": "Coracobrachialis muscle.l",
    "polygons": 1160,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of arm"
    ]
   },
   {
@@ -972,21 +1064,29 @@
    "name": "Coracobrachialis muscle.r",
    "polygons": 1160,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of arm"
    ]
   },
   {
    "name": "Corrugator supercilii.l",
    "polygons": 278,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
    "name": "Corrugator supercilii.r",
    "polygons": 278,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
@@ -1017,7 +1117,9 @@
    "name": "Deep head of flexor pollicis brevis.l",
    "polygons": 746,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
@@ -1044,21 +1146,27 @@
    "name": "Deep head of flexor pollicis brevis.r",
    "polygons": 746,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
    "name": "Deep head of pronator teres.l",
    "polygons": 1114,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of forearm"
    ]
   },
   {
    "name": "Deep head of pronator teres.r",
    "polygons": 1114,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of forearm"
    ]
   },
   {
@@ -1079,14 +1187,16 @@
    "name": "Deep part of masseter.l",
    "polygons": 994,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Deep part of masseter.r",
    "polygons": 994,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
@@ -1117,7 +1227,10 @@
    "name": "Depressor anguli oris.l",
    "polygons": 594,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
@@ -1134,14 +1247,20 @@
    "name": "Depressor anguli oris.r",
    "polygons": 594,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
    "name": "Depressor labii inferioris.l",
    "polygons": 832,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
@@ -1158,14 +1277,20 @@
    "name": "Depressor labii inferioris.r",
    "polygons": 832,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
    "name": "Depressor septi nasi.l",
    "polygons": 276,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
@@ -1182,14 +1307,19 @@
    "name": "Depressor septi nasi.r",
    "polygons": 276,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
    "name": "Descending part of trapezius muscle.l",
    "polygons": 6760,
    "path": [
-    "Superficial muscles"
+    "Dorsal part of muscular system",
+    "Hypaxial muscles of back",
+    "Trapezius muscle"
    ]
   },
   {
@@ -1206,7 +1336,9 @@
    "name": "Descending part of trapezius muscle.r",
    "polygons": 6760,
    "path": [
-    "Superficial muscles"
+    "Dorsal part of muscular system",
+    "Hypaxial muscles of back",
+    "Trapezius muscle"
    ]
   },
   {
@@ -1301,21 +1433,27 @@
    "name": "Dorsal interossei muscles of foot.l",
    "polygons": 1946,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
    "name": "Dorsal interossei muscles of foot.r",
    "polygons": 1946,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
    "name": "Dorsal interossei muscles of hand.l",
    "polygons": 1364,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
@@ -1372,35 +1510,41 @@
    "name": "Dorsal interossei muscles of hand.r",
    "polygons": 1364,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
    "name": "Dorsal parts of lateral intertransversarii lumborum muscles.l",
    "polygons": 720,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Hypaxial muscles of back"
    ]
   },
   {
    "name": "Dorsal parts of lateral intertransversarii lumborum muscles.r",
    "polygons": 720,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Hypaxial muscles of back"
    ]
   },
   {
    "name": "Epicranial aponeurosis.l",
    "polygons": 20118,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Epicranial aponeurosis.r",
    "polygons": 20118,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
@@ -1427,14 +1571,18 @@
    "name": "Extensor carpi radialis brevis.l",
    "polygons": 3142,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
    "name": "Extensor carpi radialis brevis.r",
    "polygons": 3142,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
@@ -1451,7 +1599,9 @@
    "name": "Extensor carpi radialis longus.l",
    "polygons": 3706,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
@@ -1468,7 +1618,9 @@
    "name": "Extensor carpi radialis longus.r",
    "polygons": 3706,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
@@ -1495,14 +1647,18 @@
    "name": "Extensor digiti minimi.l",
    "polygons": 2152,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
    "name": "Extensor digiti minimi.r",
    "polygons": 2152,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
@@ -1539,14 +1695,18 @@
    "name": "Extensor digitorum brevis.l",
    "polygons": 3184,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
    "name": "Extensor digitorum brevis.r",
    "polygons": 3184,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
@@ -1603,7 +1763,9 @@
    "name": "Extensor digitorum longus.l",
    "polygons": 3176,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of leg"
    ]
   },
   {
@@ -1630,7 +1792,9 @@
    "name": "Extensor digitorum longus.r",
    "polygons": 3176,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of leg"
    ]
   },
   {
@@ -1717,21 +1881,27 @@
    "name": "Extensor digitorum.l",
    "polygons": 6410,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
    "name": "Extensor digitorum.r",
    "polygons": 6410,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
    "name": "Extensor hallucis brevis.l",
    "polygons": 1118,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
@@ -1748,7 +1918,9 @@
    "name": "Extensor hallucis brevis.r",
    "polygons": 1118,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
@@ -1765,7 +1937,9 @@
    "name": "Extensor hallucis longus.l",
    "polygons": 2362,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of leg"
    ]
   },
   {
@@ -1782,7 +1956,9 @@
    "name": "Extensor hallucis longus.r",
    "polygons": 2362,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of leg"
    ]
   },
   {
@@ -1799,7 +1975,9 @@
    "name": "Extensor indicis.l",
    "polygons": 1142,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
@@ -1816,7 +1994,9 @@
    "name": "Extensor indicis.r",
    "polygons": 1142,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
@@ -1833,7 +2013,9 @@
    "name": "Extensor pollicis brevis.l",
    "polygons": 1173,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
@@ -1850,7 +2032,9 @@
    "name": "Extensor pollicis brevis.r",
    "polygons": 1173,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
@@ -1867,7 +2051,9 @@
    "name": "Extensor pollicis longus.l",
    "polygons": 1602,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
@@ -1884,28 +2070,33 @@
    "name": "Extensor pollicis longus.r",
    "polygons": 1602,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
    "name": "Extensor retinaculum of wrist.l",
    "polygons": 194,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Fascia of upper limb"
    ]
   },
   {
    "name": "Extensor retinaculum of wrist.r",
    "polygons": 194,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Fascia of upper limb"
    ]
   },
   {
    "name": "External abdominal oblique muscle.l",
    "polygons": 29622,
    "path": [
-    "Superficial muscles"
+    "Abdominal part of muscular system",
+    "Muscles of abdomen"
    ]
   },
   {
@@ -1972,7 +2163,8 @@
    "name": "External abdominal oblique muscle.r",
    "polygons": 29622,
    "path": [
-    "Superficial muscles"
+    "Abdominal part of muscular system",
+    "Muscles of abdomen"
    ]
   },
   {
@@ -2007,14 +2199,18 @@
    "name": "External part of thyro-arytenoid muscle.l",
    "polygons": 2236,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Laryngeal muscles"
    ]
   },
   {
    "name": "External part of thyro-arytenoid muscle.r",
    "polygons": 2236,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Laryngeal muscles"
    ]
   },
   {
@@ -2045,7 +2241,9 @@
    "name": "Fibularis brevis muscle.l",
    "polygons": 3446,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Lateral compartment of leg"
    ]
   },
   {
@@ -2062,14 +2260,18 @@
    "name": "Fibularis brevis muscle.r",
    "polygons": 3446,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Lateral compartment of leg"
    ]
   },
   {
    "name": "Fibularis longus muscle.l",
    "polygons": 5522,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Lateral compartment of leg"
    ]
   },
   {
@@ -2086,7 +2288,9 @@
    "name": "Fibularis longus muscle.r",
    "polygons": 5522,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Lateral compartment of leg"
    ]
   },
   {
@@ -2103,7 +2307,9 @@
    "name": "Fibularis tertius muscle.l",
    "polygons": 586,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of leg"
    ]
   },
   {
@@ -2120,21 +2326,27 @@
    "name": "Fibularis tertius muscle.r",
    "polygons": 586,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of leg"
    ]
   },
   {
    "name": "Flexor carpi radialis.l",
    "polygons": 1666,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of forearm"
    ]
   },
   {
    "name": "Flexor carpi radialis.r",
    "polygons": 1666,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of forearm"
    ]
   },
   {
@@ -2161,14 +2373,18 @@
    "name": "Flexor digiti minimi of foot.l",
    "polygons": 464,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
    "name": "Flexor digiti minimi of foot.r",
    "polygons": 464,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
@@ -2185,7 +2401,9 @@
    "name": "Flexor digiti minimi of hand.l",
    "polygons": 308,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
@@ -2202,7 +2420,9 @@
    "name": "Flexor digiti minimi of hand.r",
    "polygons": 308,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
@@ -2239,7 +2459,9 @@
    "name": "Flexor digitorum brevis.l",
    "polygons": 3224,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
@@ -2256,7 +2478,9 @@
    "name": "Flexor digitorum brevis.r",
    "polygons": 3224,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
@@ -2303,7 +2527,9 @@
    "name": "Flexor digitorum longus.l",
    "polygons": 6836,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of leg"
    ]
   },
   {
@@ -2320,7 +2546,9 @@
    "name": "Flexor digitorum longus.r",
    "polygons": 6836,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of leg"
    ]
   },
   {
@@ -2367,14 +2595,18 @@
    "name": "Flexor digitorum profundus.l",
    "polygons": 7110,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of forearm"
    ]
   },
   {
    "name": "Flexor digitorum profundus.r",
    "polygons": 7110,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of forearm"
    ]
   },
   {
@@ -2441,7 +2673,9 @@
    "name": "Flexor hallucis longus.l",
    "polygons": 5878,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of leg"
    ]
   },
   {
@@ -2458,7 +2692,9 @@
    "name": "Flexor hallucis longus.r",
    "polygons": 5878,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of leg"
    ]
   },
   {
@@ -2475,7 +2711,9 @@
    "name": "Flexor pollicis longus.l",
    "polygons": 1666,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of forearm"
    ]
   },
   {
@@ -2502,42 +2740,49 @@
    "name": "Flexor pollicis longus.r",
    "polygons": 1666,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of forearm"
    ]
   },
   {
    "name": "Flexor retinaculum of ankle.l",
    "polygons": 358,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb"
    ]
   },
   {
    "name": "Flexor retinaculum of ankle.r",
    "polygons": 358,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb"
    ]
   },
   {
    "name": "Flexor retinaculum of wrist.l",
    "polygons": 273,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Fascia of upper limb"
    ]
   },
   {
    "name": "Flexor retinaculum of wrist.r",
    "polygons": 273,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Fascia of upper limb"
    ]
   },
   {
    "name": "Frontalis muscle.l",
    "polygons": 5874,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
@@ -2554,21 +2799,24 @@
    "name": "Frontalis muscle.r",
    "polygons": 5874,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Genioglossus muscle.l",
    "polygons": 3746,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Genioglossus muscle.r",
    "polygons": 3746,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
@@ -2585,7 +2833,8 @@
    "name": "Geniohyoid muscle.l",
    "polygons": 530,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
@@ -2602,7 +2851,8 @@
    "name": "Geniohyoid muscle.r",
    "polygons": 530,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
@@ -2619,7 +2869,9 @@
    "name": "Gluteus maximus muscle.l",
    "polygons": 3326,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Superficial gluteal muscles"
    ]
   },
   {
@@ -2636,7 +2888,9 @@
    "name": "Gluteus maximus muscle.r",
    "polygons": 3326,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Superficial gluteal muscles"
    ]
   },
   {
@@ -2653,7 +2907,9 @@
    "name": "Gluteus medius muscle.l",
    "polygons": 5176,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Superficial gluteal muscles"
    ]
   },
   {
@@ -2670,14 +2926,18 @@
    "name": "Gluteus medius muscle.r",
    "polygons": 5176,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Superficial gluteal muscles"
    ]
   },
   {
    "name": "Gluteus minimus muscle.l",
    "polygons": 6250,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Superficial gluteal muscles"
    ]
   },
   {
@@ -2694,7 +2954,9 @@
    "name": "Gluteus minimus muscle.r",
    "polygons": 6250,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Superficial gluteal muscles"
    ]
   },
   {
@@ -2711,7 +2973,9 @@
    "name": "Gracilis muscle.l",
    "polygons": 4812,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of thigh"
    ]
   },
   {
@@ -2728,70 +2992,87 @@
    "name": "Gracilis muscle.r",
    "polygons": 4812,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Medial compartment of thigh"
    ]
   },
   {
    "name": "Humeral head of extensor carpi ulnaris.l",
    "polygons": 830,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
    "name": "Humeral head of extensor carpi ulnaris.r",
    "polygons": 830,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
    "name": "Humeral head of flexor carpi ulnaris.l",
    "polygons": 3912,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of forearm"
    ]
   },
   {
    "name": "Humeral head of flexor carpi ulnaris.r",
    "polygons": 3912,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of forearm"
    ]
   },
   {
    "name": "Humero-ulnar head of flexor digitorum superficialis.l",
    "polygons": 12798,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of forearm"
    ]
   },
   {
    "name": "Humero-ulnar head of flexor digitorum superficialis.r",
    "polygons": 12798,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of forearm"
    ]
   },
   {
    "name": "Hyoglossus muscle.l",
    "polygons": 1424,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Hyoglossus muscle.r",
    "polygons": 1424,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Iliacus muscle.l",
    "polygons": 4354,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb"
    ]
   },
   {
@@ -2808,7 +3089,8 @@
    "name": "Iliacus muscle.r",
    "polygons": 4354,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb"
    ]
   },
   {
@@ -2829,7 +3111,9 @@
    "name": "Iliocostalis colli muscle",
    "polygons": 2050,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Erector spinae"
    ]
   },
   {
@@ -2846,35 +3130,45 @@
    "name": "Iliocostalis colli muscle.r",
    "polygons": 2050,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Erector spinae"
    ]
   },
   {
    "name": "Iliocostalis lumborum muscle.l",
    "polygons": 10038,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Erector spinae"
    ]
   },
   {
    "name": "Iliocostalis lumborum muscle.r",
    "polygons": 10038,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Erector spinae"
    ]
   },
   {
    "name": "Iliocostalis thoracis muscle.l",
    "polygons": 5772,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Erector spinae"
    ]
   },
   {
    "name": "Iliocostalis thoracis muscle.r",
    "polygons": 5772,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Erector spinae"
    ]
   },
   {
@@ -2919,49 +3213,57 @@
    "name": "Iliotibial tract.l",
    "polygons": 48612,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb"
    ]
   },
   {
    "name": "Iliotibial tract.r",
    "polygons": 48612,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb"
    ]
   },
   {
    "name": "Inferior extensor retinaculum of ankle.l",
    "polygons": 169,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb"
    ]
   },
   {
    "name": "Inferior extensor retinaculum of ankle.r",
    "polygons": 169,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb"
    ]
   },
   {
    "name": "Inferior fibular retinaculum.l",
    "polygons": 35,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb"
    ]
   },
   {
    "name": "Inferior fibular retinaculum.r",
    "polygons": 35,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb"
    ]
   },
   {
    "name": "Inferior gemellus muscle.l",
    "polygons": 976,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Deep gluteal muscles"
    ]
   },
   {
@@ -2978,63 +3280,75 @@
    "name": "Inferior gemellus muscle.r",
    "polygons": 976,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Deep gluteal muscles"
    ]
   },
   {
    "name": "Inferior head of lateral pterygoid muscle.l",
    "polygons": 326,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Inferior head of lateral pterygoid muscle.r",
    "polygons": 326,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Inferior oblique muscle.l",
    "polygons": 1148,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Inferior oblique muscle.r",
    "polygons": 1148,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Inferior pharyngeal constrictor.l",
    "polygons": 3696,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Pharyngeal muscles"
    ]
   },
   {
    "name": "Inferior pharyngeal constrictor.r",
    "polygons": 3696,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Pharyngeal muscles"
    ]
   },
   {
    "name": "Inferior rectus muscle.l",
    "polygons": 1736,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Inferior rectus muscle.r",
    "polygons": 1736,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
@@ -3055,14 +3369,16 @@
    "name": "Inferior tarsus.l",
    "polygons": 106,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Inferior tarsus.r",
    "polygons": 106,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
@@ -3079,7 +3395,10 @@
    "name": "Infraspinatus muscle.l",
    "polygons": 3166,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Scapulohumeral muscles",
+    "Rotator cuff muscles"
    ]
   },
   {
@@ -3096,21 +3415,26 @@
    "name": "Infraspinatus muscle.r",
    "polygons": 3166,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Scapulohumeral muscles",
+    "Rotator cuff muscles"
    ]
   },
   {
    "name": "Inguinal ligament.l",
    "polygons": 1056,
    "path": [
-    "Muscles"
+    "Abdominal part of muscular system",
+    "Muscles of abdomen"
    ]
   },
   {
    "name": "Inguinal ligament.r",
    "polygons": 1056,
    "path": [
-    "Muscles"
+    "Abdominal part of muscular system",
+    "Muscles of abdomen"
    ]
   },
   {
@@ -3131,14 +3455,16 @@
    "name": "Intermediate tendon of digastric muscle.l",
    "polygons": 228,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
    "name": "Intermediate tendon of digastric muscle.r",
    "polygons": 228,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
@@ -3159,7 +3485,8 @@
    "name": "Internal abdominal oblique muscle.l",
    "polygons": 28869,
    "path": [
-    "Muscles"
+    "Abdominal part of muscular system",
+    "Muscles of abdomen"
    ]
   },
   {
@@ -3216,7 +3543,8 @@
    "name": "Internal abdominal oblique muscle.r",
    "polygons": 28869,
    "path": [
-    "Muscles"
+    "Abdominal part of muscular system",
+    "Muscles of abdomen"
    ]
   },
   {
@@ -3307,14 +3635,18 @@
    "name": "Lateral crico-arytenoid muscle.l",
    "polygons": 1624,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Laryngeal muscles"
    ]
   },
   {
    "name": "Lateral crico-arytenoid muscle.r",
    "polygons": 1624,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Laryngeal muscles"
    ]
   },
   {
@@ -3345,7 +3677,9 @@
    "name": "Lateral head of flexor hallucis brevis.l",
    "polygons": 966,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
@@ -3372,14 +3706,18 @@
    "name": "Lateral head of flexor hallucis brevis.r",
    "polygons": 966,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
    "name": "Lateral head of gastrocnemius.l",
    "polygons": 4908,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of leg"
    ]
   },
   {
@@ -3396,14 +3734,18 @@
    "name": "Lateral head of gastrocnemius.r",
    "polygons": 4908,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of leg"
    ]
   },
   {
    "name": "Lateral head of triceps brachii.l",
    "polygons": 3628,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of arm"
    ]
   },
   {
@@ -3420,7 +3762,9 @@
    "name": "Lateral head of triceps brachii.r",
    "polygons": 3628,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of arm"
    ]
   },
   {
@@ -3441,14 +3785,18 @@
    "name": "Lateral patellar retinaculum.l",
    "polygons": 74,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of thigh"
    ]
   },
   {
    "name": "Lateral patellar retinaculum.r",
    "polygons": 74,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of thigh"
    ]
   },
   {
@@ -3475,14 +3823,16 @@
    "name": "Lateral rectus muscle.l",
    "polygons": 1600,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Lateral rectus muscle.r",
    "polygons": 1600,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
@@ -3513,7 +3863,8 @@
    "name": "Latissimus dorsi muscle.l",
    "polygons": 21580,
    "path": [
-    "Superficial muscles"
+    "Dorsal part of muscular system",
+    "Hypaxial muscles of back"
    ]
   },
   {
@@ -3530,14 +3881,18 @@
    "name": "Latissimus dorsi muscle.r",
    "polygons": 21580,
    "path": [
-    "Superficial muscles"
+    "Dorsal part of muscular system",
+    "Hypaxial muscles of back"
    ]
   },
   {
    "name": "Levator anguli oris.l",
    "polygons": 330,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
@@ -3554,7 +3909,10 @@
    "name": "Levator anguli oris.r",
    "polygons": 330,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
@@ -3571,7 +3929,10 @@
    "name": "Levator labii superioris.l",
    "polygons": 540,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
@@ -3588,14 +3949,20 @@
    "name": "Levator labii superioris.r",
    "polygons": 540,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
    "name": "Levator nasolabialis.l",
    "polygons": 172,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
@@ -3612,21 +3979,26 @@
    "name": "Levator nasolabialis.r",
    "polygons": 172,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
    "name": "Levator palpebrae superioris.l",
    "polygons": 2152,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Levator palpebrae superioris.r",
    "polygons": 2152,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
@@ -3643,7 +4015,8 @@
    "name": "Levator scapulae.l",
    "polygons": 3082,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Hypaxial muscles of back"
    ]
   },
   {
@@ -3690,7 +4063,8 @@
    "name": "Levator scapulae.r",
    "polygons": 3082,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Hypaxial muscles of back"
    ]
   },
   {
@@ -3835,14 +4209,17 @@
    "name": "Linea alba",
    "polygons": 338,
    "path": [
-    "Muscles"
+    "Abdominal part of muscular system",
+    "Muscles of abdomen"
    ]
   },
   {
    "name": "Long head of biceps brachii.l",
    "polygons": 3218,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of arm"
    ]
   },
   {
@@ -3859,14 +4236,18 @@
    "name": "Long head of biceps brachii.r",
    "polygons": 3218,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of arm"
    ]
   },
   {
    "name": "Long head of biceps femoris.l",
    "polygons": 7258,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of thigh"
    ]
   },
   {
@@ -3883,14 +4264,18 @@
    "name": "Long head of biceps femoris.r",
    "polygons": 7258,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of thigh"
    ]
   },
   {
    "name": "Long head of triceps brachii.l",
    "polygons": 3950,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of arm"
    ]
   },
   {
@@ -3907,7 +4292,9 @@
    "name": "Long head of triceps brachii.r",
    "polygons": 3950,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of arm"
    ]
   },
   {
@@ -3964,28 +4351,36 @@
    "name": "Longissimus capitis muscle.l",
    "polygons": 1574,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Erector spinae"
    ]
   },
   {
    "name": "Longissimus capitis muscle.r",
    "polygons": 1574,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Erector spinae"
    ]
   },
   {
    "name": "Longissimus colli muscle.l",
    "polygons": 1826,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Erector spinae"
    ]
   },
   {
    "name": "Longissimus colli muscle.r",
    "polygons": 1826,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Erector spinae"
    ]
   },
   {
@@ -4262,21 +4657,26 @@
    "name": "Longissimus thoracis muscle.l",
    "polygons": 9652,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Erector spinae"
    ]
   },
   {
    "name": "Longissimus thoracis muscle.r",
    "polygons": 9652,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Erector spinae"
    ]
   },
   {
    "name": "Longus capitis muscle.l",
    "polygons": 1980,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
@@ -4293,49 +4693,60 @@
    "name": "Longus capitis muscle.r",
    "polygons": 1980,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
    "name": "Longus colli muscle.l",
    "polygons": 6294,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
    "name": "Longus colli muscle.r",
    "polygons": 6294,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
    "name": "Lumbrical muscles of foot.l",
    "polygons": 418,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
    "name": "Lumbrical muscles of foot.r",
    "polygons": 418,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
    "name": "Lumbrical muscles of hand.l",
    "polygons": 1368,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
    "name": "Lumbrical muscles of hand.r",
    "polygons": 1368,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
@@ -4410,21 +4821,27 @@
    "name": "Medial head of flexor hallucis brevis.l",
    "polygons": 514,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
    "name": "Medial head of flexor hallucis brevis.r",
    "polygons": 514,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
    "name": "Medial head of gastrocnemius.l",
    "polygons": 6462,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of leg"
    ]
   },
   {
@@ -4441,14 +4858,18 @@
    "name": "Medial head of gastrocnemius.r",
    "polygons": 6462,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of leg"
    ]
   },
   {
    "name": "Medial head of triceps brachii.l",
    "polygons": 2686,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of arm"
    ]
   },
   {
@@ -4465,7 +4886,9 @@
    "name": "Medial head of triceps brachii.r",
    "polygons": 2686,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of arm"
    ]
   },
   {
@@ -4486,14 +4909,18 @@
    "name": "Medial patellar retinaculum.l",
    "polygons": 92,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of thigh"
    ]
   },
   {
    "name": "Medial patellar retinaculum.r",
    "polygons": 92,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of thigh"
    ]
   },
   {
@@ -4510,7 +4937,8 @@
    "name": "Medial pterygoid muscle.l",
    "polygons": 496,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
@@ -4527,21 +4955,24 @@
    "name": "Medial pterygoid muscle.r",
    "polygons": 496,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Medial rectus muscle.l",
    "polygons": 1252,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Medial rectus muscle.r",
    "polygons": 1252,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
@@ -4562,7 +4993,10 @@
    "name": "Mentalis muscle.l",
    "polygons": 166,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
@@ -4579,7 +5013,10 @@
    "name": "Mentalis muscle.r",
    "polygons": 166,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
@@ -4600,63 +5037,80 @@
    "name": "Middle pharyngeal constrictor.l",
    "polygons": 2948,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Pharyngeal muscles"
    ]
   },
   {
    "name": "Middle pharyngeal constrictor.r",
    "polygons": 2948,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Pharyngeal muscles"
    ]
   },
   {
    "name": "Multifidus colli muscle.l",
    "polygons": 1390,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Transversospinal muscles"
    ]
   },
   {
    "name": "Multifidus colli muscle.r",
    "polygons": 1390,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Transversospinal muscles"
    ]
   },
   {
    "name": "Multifidus lumborum muscle.l",
    "polygons": 2820,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Transversospinal muscles"
    ]
   },
   {
    "name": "Multifidus lumborum muscle.r",
    "polygons": 2820,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Transversospinal muscles"
    ]
   },
   {
    "name": "Multifidus thoracis muscle.l",
    "polygons": 3902,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Transversospinal muscles"
    ]
   },
   {
    "name": "Multifidus thoracis muscle.r",
    "polygons": 3902,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Transversospinal muscles"
    ]
   },
   {
    "name": "Mylohyoid muscle.l",
    "polygons": 1122,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
@@ -4673,14 +5127,18 @@
    "name": "Mylohyoid muscle.r",
    "polygons": 1122,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
    "name": "Nasalis muscle.l",
    "polygons": 704,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
@@ -4697,7 +5155,10 @@
    "name": "Nasalis muscle.r",
    "polygons": 704,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
@@ -4714,7 +5175,9 @@
    "name": "Oblique head of adductor hallucis.l",
    "polygons": 904,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
@@ -4741,35 +5204,45 @@
    "name": "Oblique head of adductor hallucis.r",
    "polygons": 904,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
    "name": "Oblique head of adductor pollicis.l",
    "polygons": 450,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
    "name": "Oblique head of adductor pollicis.r",
    "polygons": 450,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
    "name": "Oblique part of cricothyroid muscle.l",
    "polygons": 2060,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Laryngeal muscles"
    ]
   },
   {
    "name": "Oblique part of cricothyroid muscle.r",
    "polygons": 2060,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Laryngeal muscles"
    ]
   },
   {
@@ -4786,7 +5259,9 @@
    "name": "Obliquus inferior capitis muscle.l",
    "polygons": 540,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Suboccipital muscles"
    ]
   },
   {
@@ -4803,14 +5278,18 @@
    "name": "Obliquus inferior capitis muscle.r",
    "polygons": 540,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Suboccipital muscles"
    ]
   },
   {
    "name": "Obliquus superior capitis muscle.l",
    "polygons": 654,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Suboccipital muscles"
    ]
   },
   {
@@ -4827,14 +5306,18 @@
    "name": "Obliquus superior capitis muscle.r",
    "polygons": 654,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Suboccipital muscles"
    ]
   },
   {
    "name": "Obturator externus.l",
    "polygons": 1156,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Deep gluteal muscles"
    ]
   },
   {
@@ -4851,14 +5334,18 @@
    "name": "Obturator externus.r",
    "polygons": 1156,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Medial compartment of thigh"
    ]
   },
   {
    "name": "Obturator internus.l",
    "polygons": 3760,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Deep gluteal muscles"
    ]
   },
   {
@@ -4875,14 +5362,17 @@
    "name": "Obturator internus.r",
    "polygons": 3760,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Deep gluteal muscles"
    ]
   },
   {
    "name": "Occipitalis muscle.l",
    "polygons": 2602,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
@@ -4899,7 +5389,8 @@
    "name": "Occipitalis muscle.r",
    "polygons": 2602,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
@@ -4916,7 +5407,8 @@
    "name": "Omohyoid muscle.l",
    "polygons": 2706,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
@@ -4933,14 +5425,17 @@
    "name": "Omohyoid muscle.r",
    "polygons": 2706,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
    "name": "Opponens digiti minimi muscle of hand.l",
    "polygons": 420,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
@@ -4957,28 +5452,37 @@
    "name": "Opponens digiti minimi muscle of hand.r",
    "polygons": 420,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
    "name": "Opponens pollicis muscle.l",
    "polygons": 384,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
    "name": "Opponens pollicis muscle.r",
    "polygons": 384,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
    "name": "Orbicularis oris muscle.l",
    "polygons": 1880,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
@@ -4995,14 +5499,20 @@
    "name": "Orbicularis oris muscle.r",
    "polygons": 1880,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
    "name": "Orbital part of orbicularis oculi.l",
    "polygons": 2390,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
@@ -5019,21 +5529,28 @@
    "name": "Orbital part of orbicularis oculi.r",
    "polygons": 2390,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
    "name": "Palatopharyngeus muscle.l",
    "polygons": 15282,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Pharyngeal muscles"
    ]
   },
   {
    "name": "Palatopharyngeus muscle.r",
    "polygons": 15282,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Pharyngeal muscles"
    ]
   },
   {
@@ -5054,42 +5571,56 @@
    "name": "Palmar interossei muscles.l",
    "polygons": 172,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
    "name": "Palmar interossei muscles.r",
    "polygons": 172,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
    "name": "Palmaris longus muscle.l",
    "polygons": 4374,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of forearm"
    ]
   },
   {
    "name": "Palmaris longus muscle.r",
    "polygons": 4374,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of forearm"
    ]
   },
   {
    "name": "Palpebral part of orbicularis oculi.l",
    "polygons": 830,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
    "name": "Palpebral part of orbicularis oculi.r",
    "polygons": 830,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
@@ -5121,7 +5652,9 @@
    "name": "Pectineus muscle.l",
    "polygons": 1952,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Medial compartment of thigh"
    ]
   },
   {
@@ -5138,7 +5671,9 @@
    "name": "Pectineus muscle.r",
    "polygons": 1952,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Medial compartment of thigh"
    ]
   },
   {
@@ -5252,7 +5787,9 @@
    "name": "Piriformis muscle.l",
    "polygons": 1500,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Deep gluteal muscles"
    ]
   },
   {
@@ -5269,21 +5806,25 @@
    "name": "Piriformis muscle.r",
    "polygons": 1500,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Deep gluteal muscles"
    ]
   },
   {
    "name": "Plantar aponeurosis.l",
    "polygons": 211,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb"
    ]
   },
   {
    "name": "Plantar aponeurosis.r",
    "polygons": 211,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb"
    ]
   },
   {
@@ -5305,7 +5846,9 @@
    "name": "Plantar interossei muscles.l",
    "polygons": 1242,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
@@ -5327,7 +5870,9 @@
    "name": "Plantar interossei muscles.r",
    "polygons": 1242,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
@@ -5348,7 +5893,9 @@
    "name": "Plantaris muscle.l",
    "polygons": 4698,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of leg"
    ]
   },
   {
@@ -5365,21 +5912,25 @@
    "name": "Plantaris muscle.r",
    "polygons": 4698,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of leg"
    ]
   },
   {
    "name": "Platysma.l",
    "polygons": 6548,
    "path": [
-    "Superficial muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
    "name": "Platysma.r",
    "polygons": 6548,
    "path": [
-    "Superficial muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
@@ -5410,7 +5961,9 @@
    "name": "Popliteus muscle.l",
    "polygons": 1132,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of leg"
    ]
   },
   {
@@ -5427,35 +5980,43 @@
    "name": "Popliteus muscle.r",
    "polygons": 1132,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of leg"
    ]
   },
   {
    "name": "Posterior belly of digastric muscle.l",
    "polygons": 1276,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
    "name": "Posterior belly of digastric muscle.r",
    "polygons": 1276,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
    "name": "Posterior crico-arytenoid muscle.l",
    "polygons": 1812,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Laryngeal muscles"
    ]
   },
   {
    "name": "Posterior crico-arytenoid muscle.r",
    "polygons": 1812,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Laryngeal muscles"
    ]
   },
   {
@@ -5495,7 +6056,10 @@
    "name": "Procerus muscle.l",
    "polygons": 546,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
@@ -5512,7 +6076,10 @@
    "name": "Procerus muscle.r",
    "polygons": 546,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
@@ -5524,7 +6091,9 @@
    "name": "Pronator quadratus.l",
    "polygons": 1020,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of forearm"
    ]
   },
   {
@@ -5536,7 +6105,9 @@
    "name": "Pronator quadratus.r",
    "polygons": 1020,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of forearm"
    ]
   },
   {
@@ -5563,14 +6134,16 @@
    "name": "Psoas major.l",
    "polygons": 5474,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb"
    ]
   },
   {
    "name": "Psoas major.r",
    "polygons": 5474,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb"
    ]
   },
   {
@@ -5605,14 +6178,16 @@
    "name": "Pyramidalis muscle.l",
    "polygons": 1112,
    "path": [
-    "Muscles"
+    "Abdominal part of muscular system",
+    "Muscles of abdomen"
    ]
   },
   {
    "name": "Pyramidalis muscle.r",
    "polygons": 1112,
    "path": [
-    "Muscles"
+    "Abdominal part of muscular system",
+    "Muscles of abdomen"
    ]
   },
   {
@@ -5629,7 +6204,9 @@
    "name": "Quadratus femoris muscle.l",
    "polygons": 1646,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Deep gluteal muscles"
    ]
   },
   {
@@ -5646,35 +6223,43 @@
    "name": "Quadratus femoris muscle.r",
    "polygons": 1646,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Deep gluteal muscles"
    ]
   },
   {
    "name": "Quadratus lumborum muscle.l",
    "polygons": 2832,
    "path": [
-    "Muscles"
+    "Abdominal part of muscular system",
+    "Muscles of abdomen"
    ]
   },
   {
    "name": "Quadratus lumborum muscle.r",
    "polygons": 2832,
    "path": [
-    "Muscles"
+    "Abdominal part of muscular system",
+    "Muscles of abdomen"
    ]
   },
   {
    "name": "Quadratus plantae muscle.l",
    "polygons": 1176,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
    "name": "Quadratus plantae muscle.r",
    "polygons": 1176,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
@@ -5691,14 +6276,18 @@
    "name": "Radial head of flexor digitorum superficialis.l",
    "polygons": 1276,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of forearm"
    ]
   },
   {
    "name": "Radial head of flexor digitorum superficialis.r",
    "polygons": 1276,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of forearm"
    ]
   },
   {
@@ -5715,7 +6304,8 @@
    "name": "Rectus abdominis muscle.l",
    "polygons": 20604,
    "path": [
-    "Muscles"
+    "Abdominal part of muscular system",
+    "Muscles of abdomen"
    ]
   },
   {
@@ -5732,7 +6322,8 @@
    "name": "Rectus abdominis muscle.r",
    "polygons": 20604,
    "path": [
-    "Muscles"
+    "Abdominal part of muscular system",
+    "Muscles of abdomen"
    ]
   },
   {
@@ -5749,7 +6340,8 @@
    "name": "Rectus anterior capitis muscle.l",
    "polygons": 396,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
@@ -5766,14 +6358,17 @@
    "name": "Rectus anterior capitis muscle.r",
    "polygons": 396,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
    "name": "Rectus femoris muscle.l",
    "polygons": 8276,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of thigh"
    ]
   },
   {
@@ -5790,14 +6385,17 @@
    "name": "Rectus femoris muscle.r",
    "polygons": 8276,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of thigh"
    ]
   },
   {
    "name": "Rectus lateralis capitis muscle.l",
    "polygons": 360,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
@@ -5814,7 +6412,8 @@
    "name": "Rectus lateralis capitis muscle.r",
    "polygons": 360,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
@@ -5831,7 +6430,9 @@
    "name": "Rectus posterior major capitis muscle.l",
    "polygons": 788,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Suboccipital muscles"
    ]
   },
   {
@@ -5848,7 +6449,9 @@
    "name": "Rectus posterior major capitis muscle.r",
    "polygons": 788,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Suboccipital muscles"
    ]
   },
   {
@@ -5865,7 +6468,9 @@
    "name": "Rectus posterior minor capitis muscle.l",
    "polygons": 432,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Suboccipital muscles"
    ]
   },
   {
@@ -5882,7 +6487,9 @@
    "name": "Rectus posterior minor capitis muscle.r",
    "polygons": 432,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Suboccipital muscles"
    ]
   },
   {
@@ -5899,14 +6506,16 @@
    "name": "Rhomboid major muscle.l",
    "polygons": 4800,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Hypaxial muscles of back"
    ]
   },
   {
    "name": "Rhomboid major muscle.r",
    "polygons": 4800,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Hypaxial muscles of back"
    ]
   },
   {
@@ -5923,42 +6532,56 @@
    "name": "Rhomboid minor muscle.l",
    "polygons": 1494,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Hypaxial muscles of back"
    ]
   },
   {
    "name": "Rhomboid minor muscle.r",
    "polygons": 1494,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Hypaxial muscles of back"
    ]
   },
   {
    "name": "Risorius muscle.l",
    "polygons": 592,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
    "name": "Risorius muscle.r",
    "polygons": 592,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
    "name": "Rotatores.l",
    "polygons": 6518,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Transversospinal muscles",
+    "Rotatores"
    ]
   },
   {
    "name": "Rotatores.r",
    "polygons": 6518,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Transversospinal muscles",
+    "Rotatores"
    ]
   },
   {
@@ -5975,7 +6598,9 @@
    "name": "Sartorius muscle.l",
    "polygons": 4966,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of thigh"
    ]
   },
   {
@@ -5992,7 +6617,9 @@
    "name": "Sartorius muscle.r",
    "polygons": 4966,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of thigh"
    ]
   },
   {
@@ -6029,7 +6656,8 @@
    "name": "Scalenus anterior muscle.l",
    "polygons": 1386,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
@@ -6046,7 +6674,8 @@
    "name": "Scalenus anterior muscle.r",
    "polygons": 1386,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
@@ -6073,7 +6702,8 @@
    "name": "Scalenus medius muscle.l",
    "polygons": 2078,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
@@ -6090,7 +6720,8 @@
    "name": "Scalenus medius muscle.r",
    "polygons": 2078,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
@@ -6107,21 +6738,26 @@
    "name": "Scalenus posterior muscle.l",
    "polygons": 1326,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
    "name": "Scalenus posterior muscle.r",
    "polygons": 1326,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
    "name": "Scapular spinal part of deltoid muscle.l",
    "polygons": 4378,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Scapulohumeral muscles",
+    "Deltoid muscle"
    ]
   },
   {
@@ -6138,7 +6774,10 @@
    "name": "Scapular spinal part of deltoid muscle.r",
    "polygons": 4378,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Scapulohumeral muscles",
+    "Deltoid muscle"
    ]
   },
   {
@@ -6197,7 +6836,9 @@
    "name": "Semimembranosus muscle.l",
    "polygons": 7442,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of thigh"
    ]
   },
   {
@@ -6214,35 +6855,45 @@
    "name": "Semimembranosus muscle.r",
    "polygons": 7442,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of thigh"
    ]
   },
   {
    "name": "Semispinalis colli muscle.l",
    "polygons": 2584,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Transversospinal muscles"
    ]
   },
   {
    "name": "Semispinalis colli muscle.r",
    "polygons": 2584,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Transversospinal muscles"
    ]
   },
   {
    "name": "Semispinalis thoracis muscle.l",
    "polygons": 4972,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Transversospinal muscles"
    ]
   },
   {
    "name": "Semispinalis thoracis muscle.r",
    "polygons": 4972,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Transversospinal muscles"
    ]
   },
   {
@@ -6259,7 +6910,9 @@
    "name": "Semitendinosus muscle.l",
    "polygons": 4316,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of thigh"
    ]
   },
   {
@@ -6276,7 +6929,9 @@
    "name": "Semitendinosus muscle.r",
    "polygons": 4316,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of thigh"
    ]
   },
   {
@@ -6407,14 +7062,16 @@
    "name": "Serratus posterior inferior muscle.l",
    "polygons": 8958,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Hypaxial muscles of back"
    ]
   },
   {
    "name": "Serratus posterior inferior muscle.r",
    "polygons": 8958,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Hypaxial muscles of back"
    ]
   },
   {
@@ -6441,21 +7098,25 @@
    "name": "Serratus posterior superior muscle.l",
    "polygons": 5518,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Hypaxial muscles of back"
    ]
   },
   {
    "name": "Serratus posterior superior muscle.r",
    "polygons": 5518,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Hypaxial muscles of back"
    ]
   },
   {
    "name": "Short head of biceps brachii.l",
    "polygons": 2696,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of arm"
    ]
   },
   {
@@ -6467,7 +7128,9 @@
    "name": "Short head of biceps brachii.r",
    "polygons": 2696,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of arm"
    ]
   },
   {
@@ -6479,21 +7142,27 @@
    "name": "Short head of biceps femoris.l",
    "polygons": 2476,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of thigh"
    ]
   },
   {
    "name": "Short head of biceps femoris.r",
    "polygons": 2476,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of thigh"
    ]
   },
   {
    "name": "Soleus muscle.l",
    "polygons": 6774,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of leg"
    ]
   },
   {
@@ -6520,7 +7189,9 @@
    "name": "Soleus muscle.r",
    "polygons": 6774,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of leg"
    ]
   },
   {
@@ -6537,42 +7208,54 @@
    "name": "Spinalis capitis muscle.l",
    "polygons": 2560,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Erector spinae"
    ]
   },
   {
    "name": "Spinalis capitis muscle.r",
    "polygons": 2560,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Erector spinae"
    ]
   },
   {
    "name": "Spinalis colli muscle.l",
    "polygons": 596,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Erector spinae"
    ]
   },
   {
    "name": "Spinalis colli muscle.r",
    "polygons": 596,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Erector spinae"
    ]
   },
   {
    "name": "Spinalis thoracis muscle.l",
    "polygons": 5532,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Erector spinae"
    ]
   },
   {
    "name": "Spinalis thoracis muscle.r",
    "polygons": 5532,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Epaxial muscles",
+    "Erector spinae"
    ]
   },
   {
@@ -6637,7 +7320,8 @@
    "name": "Sternocleidomastoid muscle.l",
    "polygons": 4952,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
@@ -6664,7 +7348,8 @@
    "name": "Sternocleidomastoid muscle.r",
    "polygons": 4952,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
@@ -6701,14 +7386,16 @@
    "name": "Sternocostal head of pectoralis major muscle.l",
    "polygons": 3217,
    "path": [
-    "Superficial muscles"
+    "Thoracic part of muscular system",
+    "Pectoralis major muscle"
    ]
   },
   {
    "name": "Sternocostal head of pectoralis major muscle.r",
    "polygons": 3217,
    "path": [
-    "Superficial muscles"
+    "Thoracic part of muscular system",
+    "Pectoralis major muscle"
    ]
   },
   {
@@ -6725,7 +7412,8 @@
    "name": "Sternohyoid muscle.l",
    "polygons": 1394,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
@@ -6742,63 +7430,76 @@
    "name": "Sternohyoid muscle.r",
    "polygons": 1394,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
    "name": "Sternothyroid muscle.l",
    "polygons": 1088,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
    "name": "Sternothyroid muscle.r",
    "polygons": 1088,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
    "name": "Straight part of cricothyroid muscle.l",
    "polygons": 1180,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Laryngeal muscles"
    ]
   },
   {
    "name": "Straight part of cricothyroid muscle.r",
    "polygons": 1180,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Laryngeal muscles"
    ]
   },
   {
    "name": "Stylohyoid muscle.l",
    "polygons": 694,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
    "name": "Stylohyoid muscle.r",
    "polygons": 694,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
    "name": "Stylopharyngeus muscle.l",
    "polygons": 9478,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Pharyngeal muscles"
    ]
   },
   {
    "name": "Stylopharyngeus muscle.r",
    "polygons": 9478,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Pharyngeal muscles"
    ]
   },
   {
@@ -6993,7 +7694,10 @@
    "name": "Subscapularis muscle.l",
    "polygons": 2954,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Scapulohumeral muscles",
+    "Rotator cuff muscles"
    ]
   },
   {
@@ -7010,7 +7714,10 @@
    "name": "Subscapularis muscle.r",
    "polygons": 2954,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Scapulohumeral muscles",
+    "Rotator cuff muscles"
    ]
   },
   {
@@ -7157,28 +7864,36 @@
    "name": "Superficial head of flexor pollicis brevis.l",
    "polygons": 276,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
    "name": "Superficial head of flexor pollicis brevis.r",
    "polygons": 276,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
    "name": "Superficial head of pronator teres.l",
    "polygons": 2546,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of forearm"
    ]
   },
   {
    "name": "Superficial head of pronator teres.r",
    "polygons": 2546,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of forearm"
    ]
   },
   {
@@ -7213,42 +7928,48 @@
    "name": "Superficial part of masseter.l",
    "polygons": 1402,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Superficial part of masseter.r",
    "polygons": 1402,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Superficial transverse metacarpal ligament.l",
    "polygons": 98,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Fascia of upper limb"
    ]
   },
   {
    "name": "Superficial transverse metacarpal ligament.r",
    "polygons": 98,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Fascia of upper limb"
    ]
   },
   {
    "name": "Superficial transverse metatarsal ligament.l",
    "polygons": 55,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb"
    ]
   },
   {
    "name": "Superficial transverse metatarsal ligament.r",
    "polygons": 55,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb"
    ]
   },
   {
@@ -7269,35 +7990,41 @@
    "name": "Superior extensor retinaculum of ankle.l",
    "polygons": 133,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb"
    ]
   },
   {
    "name": "Superior extensor retinaculum of ankle.r",
    "polygons": 133,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb"
    ]
   },
   {
    "name": "Superior fibular retinaculum.l",
    "polygons": 348,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb"
    ]
   },
   {
    "name": "Superior fibular retinaculum.r",
    "polygons": 348,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb"
    ]
   },
   {
    "name": "Superior gemellus muscle.l",
    "polygons": 404,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Deep gluteal muscles"
    ]
   },
   {
@@ -7314,77 +8041,91 @@
    "name": "Superior gemellus muscle.r",
    "polygons": 404,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Deep gluteal muscles"
    ]
   },
   {
    "name": "Superior head of lateral pterygoid muscle.l",
    "polygons": 226,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Superior head of lateral pterygoid muscle.r",
    "polygons": 226,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Superior oblique muscle.l",
    "polygons": 1750,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Superior oblique muscle.r",
    "polygons": 1750,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Superior pharyngeal constrictor.l",
    "polygons": 5334,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Pharyngeal muscles"
    ]
   },
   {
    "name": "Superior pharyngeal constrictor.r",
    "polygons": 5334,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Pharyngeal muscles"
    ]
   },
   {
    "name": "Superior rectus muscle.l",
    "polygons": 1284,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Superior rectus muscle.r",
    "polygons": 1284,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Superior tarsus.l",
    "polygons": 178,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Superior tarsus.r",
    "polygons": 178,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
@@ -7401,7 +8142,9 @@
    "name": "Supinator.l",
    "polygons": 2754,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
@@ -7418,7 +8161,9 @@
    "name": "Supinator.r",
    "polygons": 2754,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
@@ -7449,7 +8194,10 @@
    "name": "Supraspinatus muscle.l",
    "polygons": 1430,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Scapulohumeral muscles",
+    "Rotator cuff muscles"
    ]
   },
   {
@@ -7466,7 +8214,10 @@
    "name": "Supraspinatus muscle.r",
    "polygons": 1430,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Scapulohumeral muscles",
+    "Rotator cuff muscles"
    ]
   },
   {
@@ -7497,7 +8248,8 @@
    "name": "Temporalis muscle.l",
    "polygons": 10260,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
@@ -7544,21 +8296,24 @@
    "name": "Temporalis muscle.r",
    "polygons": 10260,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Temporoparietalis muscle.l",
    "polygons": 11972,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Temporoparietalis muscle.r",
    "polygons": 11972,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
@@ -7579,14 +8334,18 @@
    "name": "Tendon of extensor digitorum longus.l",
    "polygons": 5184,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of leg"
    ]
   },
   {
    "name": "Tendon of extensor digitorum longus.r",
    "polygons": 5184,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of leg"
    ]
   },
   {
@@ -7789,7 +8548,9 @@
    "name": "Tensor fasciae latae.l",
    "polygons": 1862,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Superficial gluteal muscles"
    ]
   },
   {
@@ -7806,7 +8567,9 @@
    "name": "Tensor fasciae latae.r",
    "polygons": 1862,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Superficial gluteal muscles"
    ]
   },
   {
@@ -7830,7 +8593,8 @@
    "name": "Teres major muscle.r",
    "polygons": 1154,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb"
    ]
   },
   {
@@ -7847,7 +8611,10 @@
    "name": "Teres minor muscle.l",
    "polygons": 1522,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Scapulohumeral muscles",
+    "Rotator cuff muscles"
    ]
   },
   {
@@ -7864,21 +8631,28 @@
    "name": "Teres minor muscle.r",
    "polygons": 1522,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Scapulohumeral muscles",
+    "Rotator cuff muscles"
    ]
   },
   {
    "name": "Thyro-epiglottic part of thyro-arytenoid muscle.l",
    "polygons": 3110,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Laryngeal muscles"
    ]
   },
   {
    "name": "Thyro-epiglottic part of thyro-arytenoid muscle.r",
    "polygons": 3110,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Laryngeal muscles"
    ]
   },
   {
@@ -7895,7 +8669,8 @@
    "name": "Thyrohyoid muscle.l",
    "polygons": 692,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
@@ -7912,7 +8687,8 @@
    "name": "Thyrohyoid muscle.r",
    "polygons": 692,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck"
    ]
   },
   {
@@ -7939,7 +8715,9 @@
    "name": "Tibialis anterior muscle.l",
    "polygons": 3526,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of leg"
    ]
   },
   {
@@ -7956,14 +8734,18 @@
    "name": "Tibialis anterior muscle.r",
    "polygons": 3526,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of leg"
    ]
   },
   {
    "name": "Tibialis posterior muscle.l",
    "polygons": 5526,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of leg"
    ]
   },
   {
@@ -7980,7 +8762,9 @@
    "name": "Tibialis posterior muscle.r",
    "polygons": 5526,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Posterior compartment of leg"
    ]
   },
   {
@@ -7994,7 +8778,9 @@
    "name": "Transverse arytenoid muscle",
    "polygons": 1822,
    "path": [
-    "Muscles"
+    "Cervical part of muscular system",
+    "Muscles of neck",
+    "Laryngeal muscles"
    ]
   },
   {
@@ -8031,7 +8817,9 @@
    "name": "Transverse head of adductor hallucis.l",
    "polygons": 366,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
@@ -8048,21 +8836,27 @@
    "name": "Transverse head of adductor hallucis.r",
    "polygons": 366,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Muscles of foot"
    ]
   },
   {
    "name": "Transverse head of adductor pollicis.l",
    "polygons": 1014,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
    "name": "Transverse head of adductor pollicis.r",
    "polygons": 1014,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Muscles of hand"
    ]
   },
   {
@@ -8083,7 +8877,9 @@
    "name": "Transverse part of trapezius muscle.l",
    "polygons": 2992,
    "path": [
-    "Superficial muscles"
+    "Dorsal part of muscular system",
+    "Hypaxial muscles of back",
+    "Trapezius muscle"
    ]
   },
   {
@@ -8100,14 +8896,17 @@
    "name": "Transverse part of trapezius muscle.r",
    "polygons": 2992,
    "path": [
-    "Superficial muscles"
+    "Dorsal part of muscular system",
+    "Hypaxial muscles of back",
+    "Trapezius muscle"
    ]
   },
   {
    "name": "Transversus abdominis muscle.l",
    "polygons": 34328,
    "path": [
-    "Muscles"
+    "Abdominal part of muscular system",
+    "Muscles of abdomen"
    ]
   },
   {
@@ -8124,7 +8923,8 @@
    "name": "Transversus abdominis muscle.r",
    "polygons": 34328,
    "path": [
-    "Muscles"
+    "Abdominal part of muscular system",
+    "Muscles of abdomen"
    ]
   },
   {
@@ -8237,35 +9037,43 @@
    "name": "Trochlea of superior oblique muscle.l",
    "polygons": 192,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Trochlea of superior oblique muscle.r",
    "polygons": 192,
    "path": [
-    "Muscles"
+    "Cranial part of muscular system",
+    "Muscles of head"
    ]
   },
   {
    "name": "Ulnar head of extensor carpi ulnaris.l",
    "polygons": 582,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
    "name": "Ulnar head of extensor carpi ulnaris.r",
    "polygons": 582,
    "path": [
-    "Muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Posterior compartment of forearm"
    ]
   },
   {
    "name": "Ulnar head of flexor carpi ulnaris.l",
    "polygons": 1466,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of forearm"
    ]
   },
   {
@@ -8282,14 +9090,18 @@
    "name": "Ulnar head of flexor carpi ulnaris.r",
    "polygons": 1466,
    "path": [
-    "Superficial muscles"
+    "Muscular system of upper limb",
+    "Muscles of upper limb",
+    "Anterior compartment of forearm"
    ]
   },
   {
    "name": "Vastus intermedius muscle.l",
    "polygons": 6164,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of thigh"
    ]
   },
   {
@@ -8306,14 +9118,18 @@
    "name": "Vastus intermedius muscle.r",
    "polygons": 6164,
    "path": [
-    "Muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of thigh"
    ]
   },
   {
    "name": "Vastus lateralis muscle.l",
    "polygons": 9356,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of thigh"
    ]
   },
   {
@@ -8330,14 +9146,18 @@
    "name": "Vastus lateralis muscle.r",
    "polygons": 9356,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of thigh"
    ]
   },
   {
    "name": "Vastus medialis muscle.l",
    "polygons": 6460,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of thigh"
    ]
   },
   {
@@ -8354,28 +9174,35 @@
    "name": "Vastus medialis muscle.r",
    "polygons": 6460,
    "path": [
-    "Superficial muscles"
+    "Muscular system of lower limb",
+    "Muscles of lower limb",
+    "Anterior compartment of thigh"
    ]
   },
   {
    "name": "Ventral parts of lateral intertransversarii lumborum muscles.l",
    "polygons": 996,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Hypaxial muscles of back"
    ]
   },
   {
    "name": "Ventral parts of lateral intertransversarii lumborum muscles.r",
    "polygons": 996,
    "path": [
-    "Muscles"
+    "Dorsal part of muscular system",
+    "Hypaxial muscles of back"
    ]
   },
   {
    "name": "Zygomaticus major muscle.l",
    "polygons": 798,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
@@ -8392,14 +9219,20 @@
    "name": "Zygomaticus major muscle.r",
    "polygons": 798,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
    "name": "Zygomaticus minor muscle.l",
    "polygons": 432,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   },
   {
@@ -8416,7 +9249,10 @@
    "name": "Zygomaticus minor muscle.r",
    "polygons": 432,
    "path": [
-    "Superficial muscles"
+    "Cranial part of muscular system",
+    "Muscles of head",
+    "Superficial muscles of head",
+    "Facial muscles"
    ]
   }
  ]

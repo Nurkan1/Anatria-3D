@@ -19,112 +19,175 @@
   {
    "name": "(Anteromedial basal segmental bronchus of left lung)",
    "polygons": 1440,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Anterior basal segmental bronchus of left lung (BVIII)",
    "polygons": 720,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Anterior basal segmental bronchus of right lung (BVIII)",
    "polygons": 1440,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Anterior segmental bronchus of left lung (BIII)",
    "polygons": 1728,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Anterior segmental bronchus of right lung (BIII)",
    "polygons": 2448,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Apical segmental bronchus of right lung (BI)",
    "polygons": 3312,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Apicoposterior segmental bronchus of left lung (BI+BII)",
    "polygons": 3744,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Inferior lingular segmental bronchus of left lung (BV)",
    "polygons": 1008,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Inferior lobe of left lung",
    "polygons": 4629,
-   "path": []
+   "path": [
+    "Lungs"
+   ]
   },
   {
    "name": "Inferior lobe of right lung",
    "polygons": 4226,
-   "path": []
+   "path": [
+    "Lungs"
+   ]
   },
   {
    "name": "Intermediate bronchus.r",
    "polygons": 144,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Lateral basal segmental bronchus of left lung (BIX)",
    "polygons": 1152,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Lateral basal segmental bronchus of right lung (BIX)",
    "polygons": 2304,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Lateral segmental bronchus of right lung (BIV)",
    "polygons": 1584,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Left inferior lobar bronchus",
    "polygons": 432,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Left main bronchus",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Left superior lobar bronchus",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Medial basal segmental bronchus of left lung (BVII)",
    "polygons": 2880,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Medial basal segmental bronchus of right lung (BVII)",
    "polygons": 864,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Medial segmental bronchus of right lung (BV)",
    "polygons": 1584,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Middle lobar bronchus.r",
    "polygons": 144,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Middle lobe of right lung",
    "polygons": 3698,
-   "path": []
+   "path": [
+    "Lungs"
+   ]
   },
   {
    "name": "Pleura",
@@ -134,62 +197,96 @@
   {
    "name": "Posterior basal segmental bronchus of left lung (BX)",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Posterior basal segmental bronchus of right lung (BX)",
    "polygons": 2160,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Posterior segmental bronchus of right lung (BII)",
    "polygons": 2448,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Right inferior lobar bronchus",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Right main bronchus",
    "polygons": 144,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Right superior lobar bronchus",
    "polygons": 144,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Superior lingular segmental bronchus of left lung (BIV)",
    "polygons": 1008,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Superior lobe of left lung",
    "polygons": 4645,
-   "path": []
+   "path": [
+    "Lungs"
+   ]
   },
   {
    "name": "Superior lobe of right lung",
    "polygons": 3874,
-   "path": []
+   "path": [
+    "Lungs"
+   ]
   },
   {
    "name": "Superior segmental bronchus of left lung (BVI)",
    "polygons": 2160,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Superior segmental bronchus of right lung (BVI)",
    "polygons": 4464,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   },
   {
    "name": "Trachea",
    "polygons": 4516,
-   "path": []
+   "path": [
+    "Tracheobronchial tree",
+    "Bronchi"
+   ]
   }
  ]
 }
