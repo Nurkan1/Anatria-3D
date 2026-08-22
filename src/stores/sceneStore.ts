@@ -112,6 +112,41 @@ export interface PathwayRequest {
   seq: number;
 }
 
+/**
+ * Bring named structures into view without taking anything else away.
+ *
+ * Pointing at something the viewport is not drawing points at nothing. That was
+ * fixed for illumination in 0.2.0 and the reasoning is the same wherever the
+ * app says *this one*: the gesture has to bring what it names into view, or it
+ * is a promise the screen does not keep.
+ *
+ * Two of the three things that can hide a structure are undone here — an
+ * explicit hide, and an isolation that excludes it. The third is its system
+ * being switched off, and that one is deliberately left alone: systems are
+ * lazy-loaded per mesh file, so a structure in a system that is off has no
+ * geometry to reveal, and turning the system on would repaint the screen with
+ * a thousand meshes the reader had put away. Widening, never narrowing — the
+ * same rule `supplyRequestIn` follows when it switches vessels on to honour a
+ * request for them.
+ */
+function revealing(state: SceneViewState, organIds: string[]): Partial<SceneViewState> {
+  const revealed: Partial<SceneViewState> = {};
+
+  const stillHidden = state.hiddenOrganIds.filter((id) => !organIds.includes(id));
+  if (stillHidden.length !== state.hiddenOrganIds.length) {
+    revealed.hiddenOrganIds = stillHidden;
+  }
+
+  if (state.isolatedOrganIds !== null) {
+    const visible = new Set(state.isolatedOrganIds);
+    const before = visible.size;
+    for (const organId of organIds) visible.add(organId);
+    if (visible.size !== before) revealed.isolatedOrganIds = [...visible];
+  }
+
+  return revealed;
+}
+
 /** The part of the store `applySceneCommand` may touch. */
 export interface SceneViewState {
   /**
@@ -239,6 +274,10 @@ export function applySceneCommand(
     case "focus_organ":
       return {
         ...state,
+        // The camera flew to structures that were not being drawn — hidden by
+        // hand, or left out of an isolation — and the reader was shown the
+        // inside of whatever happened to be in the way instead.
+        ...revealing(state, [command.organ_id]),
         selectedOrganIds: [command.organ_id],
         focusRequest: {
           organId: command.organ_id,
@@ -331,25 +370,10 @@ export function applySceneCommand(
       // asked for, so an explanation that moves on to another structure does
       // not leave the previous one still glowing behind it.
       const illuminated = [...command.organ_ids];
-      if (state.isolatedOrganIds === null) return { ...state, illuminated };
-
-      // Lighting something the isolation is hiding pointed at nothing at all:
-      // the answer carried a numbered pin, the reader clicked it, and the
-      // camera flew to a structure that was not being drawn. The light *is* the
-      // pointing gesture, so it has to bring what it names into view.
-      //
-      // This widens rather than narrows — the same reasoning as `requestSupply`
-      // switching a system on to honour a request for vessels. Nothing the
-      // reader asked to see is taken away; something they were told about is
-      // added.
-      const visible = new Set(state.isolatedOrganIds);
-      const before = visible.size;
-      for (const organId of illuminated) visible.add(organId);
-      return {
-        ...state,
-        illuminated,
-        isolatedOrganIds: visible.size === before ? state.isolatedOrganIds : [...visible],
-      };
+      // Lighting something the viewport is hiding pointed at nothing at all.
+      // The light *is* the pointing gesture, so it brings what it names into
+      // view — one body, shared with `focus_organ`, which had the same bug.
+      return { ...state, ...revealing(state, illuminated), illuminated };
     }
 
     case "set_cross_section":

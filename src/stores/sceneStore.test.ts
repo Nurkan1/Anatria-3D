@@ -1357,3 +1357,63 @@ describe("focusReference", () => {
     expect(useSceneStore.getState().focusBadge).toEqual({ organId: "vena_cava", index: 7 });
   });
 });
+
+describe("focus_organ brings what it points at into view", () => {
+  beforeEach(() => {
+    useSceneStore.setState({
+      organs: { aorta: organ(), heart: organ() },
+      selectedOrganIds: [],
+      hiddenOrganIds: [],
+      isolatedOrganIds: null,
+    });
+  });
+
+  it("takes the structure back out of hiding", () => {
+    // Hiding is the dissection move — peel this away. Flying the camera to
+    // something peeled away shows the reader the inside of whatever is in the
+    // way instead, and nothing says why.
+    useSceneStore.setState({ hiddenOrganIds: ["aorta"] });
+
+    useSceneStore.getState().applyCommand({ action: "focus_organ", organ_id: "aorta" });
+
+    expect(useSceneStore.getState().hiddenOrganIds).toEqual([]);
+  });
+
+  it("widens an isolation that would have excluded it", () => {
+    useSceneStore.setState({ isolatedOrganIds: ["heart"] });
+
+    useSceneStore.getState().applyCommand({ action: "focus_organ", organ_id: "aorta" });
+
+    expect(useSceneStore.getState().isolatedOrganIds?.sort()).toEqual(["aorta", "heart"]);
+  });
+
+  it("takes nothing away that the reader asked to see", () => {
+    // Widening, never narrowing. The heart stays isolated and the other hidden
+    // structure stays hidden.
+    useSceneStore.setState({ isolatedOrganIds: ["heart"], hiddenOrganIds: ["heart"] });
+
+    useSceneStore.getState().applyCommand({ action: "focus_organ", organ_id: "aorta" });
+
+    expect(useSceneStore.getState().isolatedOrganIds).toContain("heart");
+    expect(useSceneStore.getState().hiddenOrganIds).toEqual(["heart"]);
+  });
+
+  it("leaves an unisolated scene unisolated", () => {
+    // Focusing must not *start* an isolation — that would hide the whole body
+    // to point at one structure.
+    useSceneStore.getState().applyCommand({ action: "focus_organ", organ_id: "aorta" });
+
+    expect(useSceneStore.getState().isolatedOrganIds).toBeNull();
+  });
+
+  it("reveals for illumination the same way it does for a focus", () => {
+    // One body, two callers. They had the same bug and must not drift.
+    useSceneStore.setState({ hiddenOrganIds: ["aorta"] });
+
+    useSceneStore
+      .getState()
+      .applyCommand({ action: "illuminate_structures", organ_ids: ["aorta"] });
+
+    expect(useSceneStore.getState().hiddenOrganIds).toEqual([]);
+  });
+});
