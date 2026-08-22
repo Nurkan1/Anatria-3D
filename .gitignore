@@ -20,6 +20,15 @@ venv/
 engine/build/
 engine/dist/
 engine/*.spec
+
+# Speech models, if a machine has ever built the voice experiment.
+#
+# `experiment/voice` downloads a piper voice per language into here — 61 MB
+# each — and coming back to main leaves them untracked and, without this line,
+# unignored. That is the combination that reaches a commit by accident, and a
+# model committed once is in the history for good. Ignored rather than merely
+# deleted, because the size is the danger.
+engine/voices/
 .pytest_cache/
 .ruff_cache/
 
