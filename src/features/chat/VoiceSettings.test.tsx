@@ -44,11 +44,11 @@ function renderPanel(language: "auto" | "en" | "es" | "bg") {
 }
 
 describe("VoiceSettings", () => {
-  it("says which language has no voice, and where to get one", () => {
+  it("says which language it cannot speak, and where to look", () => {
     voices.current = [voice("en-US")];
     renderPanel("bg");
 
-    expect(screen.getByText(/No Bulgarian voice is installed/)).toBeTruthy();
+    expect(screen.getByText(/No Bulgarian voice is available/)).toBeTruthy();
   });
 
   it("says nothing when the language has a voice", () => {
@@ -87,7 +87,7 @@ describe("VoiceSettings", () => {
     voices.current = [voice("fr-FR"), voice("de-DE")];
     renderPanel("auto");
 
-    expect(screen.getByText(/No English voice is installed/)).toBeTruthy();
+    expect(screen.getByText(/No English voice is available/)).toBeTruthy();
   });
 
   it("never suggests switching away from a language the reader chose", () => {
@@ -96,7 +96,19 @@ describe("VoiceSettings", () => {
     voices.current = [voice("es-ES"), voice("en-US")];
     renderPanel("bg");
 
-    expect(screen.getByText(/No Bulgarian voice is installed/)).toBeTruthy();
+    expect(screen.getByText(/No Bulgarian voice is available/)).toBeTruthy();
     expect(screen.queryByText(/setting the assistant to one of those/)).toBeNull();
+  });
+
+  it("never claims to know what the computer has installed", () => {
+    // It cannot know. On Linux this said "no Spanish voice is installed" to a
+    // machine carrying 14,805 of them — WebKitGTK returns four hardcoded names
+    // whatever the system has, and marks them all non-local, which the privacy
+    // filter rejects. The reader was being sent to install what they had.
+    voices.current = [voice("en-US")];
+    const { container } = renderPanel("es");
+
+    expect(container.textContent).not.toMatch(/is installed on this computer/);
+    expect(container.textContent).toMatch(/available to this app/);
   });
 });

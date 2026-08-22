@@ -92,10 +92,17 @@ const LANGUAGE_NAMES: Record<Language, string> = {
  * this is a runtime check per language rather than a special case for any of
  * them.
  *
- * It names where to go rather than only what is wrong, because a missing voice
- * is something the reader can fix in a minute and nothing this app can fix at
- * all. Falling back to another language's voice is not the alternative: it
- * would mispronounce every term in the atlas, which is worse than silence.
+ * **It says what this app can use, never what the computer has installed** — it
+ * cannot know the second. On Linux it said "no Spanish voice is installed" to a
+ * machine with 14,805 of them: WebKitGTK returns four hardcoded Festival names
+ * regardless of the system, and marks every one `localService=false`, which the
+ * privacy filter correctly rejects. A reader sent to install voices they already
+ * had would have spent an hour finding that out.
+ *
+ * On Windows it names where to go, because there the reader really can fix it in
+ * a minute. Elsewhere it says installing may not help, which is the honest thing
+ * and saves the same hour. Falling back to another language's voice is not the
+ * alternative: it would mispronounce every term in the atlas.
  */
 function MissingVoiceNotice({ language }: { language: Language }) {
   const voices = useLocalVoices();
@@ -115,9 +122,9 @@ function MissingVoiceNotice({ language }: { language: Language }) {
   if (alternatives.length > 0) {
     return (
       <Notice>
-        Answers are read in whichever language they are written in. This
-        computer can speak {listLanguages(alternatives)}, but has no English
-        voice, so English answers cannot be read aloud.
+        Answers are read in whichever language they are written in. This app can
+        speak {listLanguages(alternatives)} here, but no English voice is
+        available to it, so English answers cannot be read aloud.
       </Notice>
     );
   }
@@ -126,11 +133,11 @@ function MissingVoiceNotice({ language }: { language: Language }) {
 
   return (
     <Notice>
-      No {name} voice is installed on this computer, so answers cannot be read
+      No {name} voice is available to this app here, so answers cannot be read
       aloud in it.{" "}
       {windows
-        ? "Windows adds them under Settings → Time & language → Speech."
-        : "Your desktop's speech settings control which voices are available."}
+        ? "Windows adds voices under Settings → Time & language → Speech."
+        : "The browser engine on this system offers none it can use, and installing system voices may not change that."}
     </Notice>
   );
 }
