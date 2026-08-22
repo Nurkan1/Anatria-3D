@@ -77,7 +77,20 @@ export function LabelOverlay() {
         return { ...target, x: point.x, y: point.y, behind: point.behind };
       });
 
-      const placed = layoutLabels(anchors, { width, height });
+      // The nodes are already in the DOM from the previous paint, so their own
+      // width is the honest measurement — no font maths, no guessing. A label
+      // seen for the first time measures 0 and lands where it always did; the
+      // next frame places it properly, which is one frame nobody perceives.
+      const placed = layoutLabels(anchors, {
+        width,
+        height,
+        measure: (text) => {
+          for (const node of nodes.current.values()) {
+            if (node.textContent?.endsWith(text)) return node.offsetWidth;
+          }
+          return 0;
+        },
+      });
       const shown = new Set(placed.map((label) => label.id));
 
       for (const label of placed) {

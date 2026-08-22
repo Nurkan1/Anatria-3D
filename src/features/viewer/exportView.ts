@@ -150,6 +150,10 @@ function drawLabels(
     return { ...target, x: point.x, y: point.y, behind: point.behind };
   });
 
+  // Set before the layout runs, because the layout asks how wide each name will
+  // be and `measureText` answers for whatever font is current.
+  ctx.font = `italic ${fontSize}px system-ui, "Segoe UI", sans-serif`;
+
   const placed = layoutLabels(anchors, {
     width,
     height,
@@ -157,9 +161,11 @@ function drawLabels(
     margin,
     padding: Math.round(18 * scale),
     gap: Math.round(70 * scale),
+    // The box drawn behind each name is `padding` wider than the text — see
+    // below — so the column has to allow for that too, or the plate comes back
+    // with the first letters shaved off.
+    measure: (text) => ctx.measureText(text).width + Math.round(18 * scale),
   });
-
-  ctx.font = `italic ${fontSize}px system-ui, "Segoe UI", sans-serif`;
   ctx.textBaseline = "middle";
 
   for (const label of placed) {

@@ -138,3 +138,52 @@ describe("layoutLabels", () => {
     expect(placed).toEqual([]);
   });
 });
+
+/**
+ * The column is where the leader line *meets* the name; the name runs outwards
+ * from there. Clamping the meeting point to the margin protects the anchor and
+ * not the text, which is how an exported plate came back reading "t breve
+ * musculi bicipitis brachii" with the Capu off the edge.
+ */
+describe("a name has to fit inside the frame, not just its anchor", () => {
+  const anchors = [
+    { id: "l", text: "Caput breve musculi bicipitis brachii · right", x: 300, y: 100 },
+    { id: "r", text: "Caput longum musculi tricipitis brachii · right", x: 700, y: 100 },
+  ];
+  const measure = (text: string) => text.length * 8;
+
+  it("keeps the left column far enough in for its widest name", () => {
+    const [left] = layoutLabels(anchors, { width: 1000, height: 600, margin: 12, measure });
+
+    // Text runs leftwards from labelX, so labelX minus its width must clear the
+    // margin. Without `measure` this column sat at 12 and the name started at
+    // roughly -340.
+    expect(left!.labelX - measure(left!.text)).toBeGreaterThanOrEqual(12);
+  });
+
+  it("keeps the right column far enough in for its widest name", () => {
+    const placed = layoutLabels(anchors, { width: 1000, height: 600, margin: 12, measure });
+    const right = placed.find((label) => label.side === "right")!;
+
+    expect(right.labelX + measure(right.text)).toBeLessThanOrEqual(1000 - 12);
+  });
+
+  it("still stands the columns off the anatomy when the names are short", () => {
+    // The measurement must not drag every column to the frame edge — the whole
+    // point of the gap is that a plate puts its names beside the subject.
+    const short = [{ id: "a", text: "Aorta", x: 500, y: 100 }];
+    const withMeasure = layoutLabels(short, { width: 1000, height: 600, measure });
+    const without = layoutLabels(short, { width: 1000, height: 600 });
+
+    expect(withMeasure[0]!.labelX).toBe(without[0]!.labelX);
+  });
+
+  it("does not invert its bounds for a name wider than the frame", () => {
+    const monster = [{ id: "a", text: "x".repeat(400), x: 500, y: 100 }];
+
+    const placed = layoutLabels(monster, { width: 800, height: 600, margin: 12, measure });
+
+    expect(placed).toHaveLength(1);
+    expect(Number.isFinite(placed[0]!.labelX)).toBe(true);
+  });
+});

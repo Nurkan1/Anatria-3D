@@ -46,6 +46,21 @@ export interface LabelLayoutOptions {
   padding?: number;
   /** How far the columns stand off from the anatomy they name. */
   gap?: number;
+  /**
+   * How wide a label will be drawn, so the column can leave room for it.
+   *
+   * `labelX` is where the leader line *meets* the name, and the name extends
+   * outwards from there — leftwards in the left column, rightwards in the
+   * right. Clamping `labelX` to the margin therefore protects the anchor and
+   * not the text, which is how an exported plate came back reading
+   * "t breve musculi bicipitis brachii" with the *Capu* off the edge.
+   *
+   * Optional because the measurement belongs to whoever is drawing: the canvas
+   * has `measureText`, the DOM has `offsetWidth`, and this module has neither.
+   * Without it the columns behave as they did, which is right for a caller
+   * whose labels are short and wrong for one whose labels are Latin.
+   */
+  measure?: (text: string) => number;
 }
 
 const DEFAULTS = { lineHeight: 20, margin: 12, padding: 16, gap: 64 };
@@ -121,23 +136,40 @@ export function layoutLabels(
   const left = Math.min(...visible.map((anchor) => anchor.x));
   const right = Math.max(...visible.map((anchor) => anchor.x));
   const middle = (left + right) / 2;
-  const leftColumn = clamp(left - gap, margin, width - margin);
-  const rightColumn = clamp(right + gap, margin, width - margin);
+
+  // Split about the anatomy's own midline rather than the window's, so an
+  // off-centre subject does not send all of its names to one column. Done
+  // before the columns are placed, because where a column can stand depends on
+  // how wide the names that will sit in it are.
+  const taken: Record<"left" | "right", LabelAnchor[]> = { left: [], right: [] };
+  for (const anchor of visible) {
+    const side = anchor.x <= middle ? "left" : "right";
+    if (taken[side].length >= capacity) continue;
+    taken[side].push(anchor);
+  }
+
+  const widest = (anchors: LabelAnchor[]) =>
+    options.measure ? Math.max(0, ...anchors.map((a) => options.measure!(a.text))) : 0;
+
+  // The bound each column may not cross, so the *text* stays inside the frame
+  // rather than only its anchor. `Math.min`/`Math.max` against the far margin
+  // keep the bounds ordered when a single name is wider than the frame — it
+  // still overflows, because nothing can fit it, but the clamp does not invert.
+  const leftBound = Math.min(margin + widest(taken.left), width - margin);
+  const rightBound = Math.max(width - margin - widest(taken.right), margin);
+  const leftColumn = clamp(left - gap, leftBound, width - margin);
+  const rightColumn = clamp(right + gap, margin, rightBound);
 
   const sides: Record<"left" | "right", PlacedLabel[]> = { left: [], right: [] };
-
-  for (const anchor of visible) {
-    // Split about the anatomy's own midline rather than the window's, so an
-    // off-centre subject does not send all of its names to one column.
-    const side = anchor.x <= middle ? "left" : "right";
-    if (sides[side].length >= capacity) continue;
-
-    sides[side].push({
-      ...anchor,
-      side,
-      labelX: side === "left" ? leftColumn : rightColumn,
-      labelY: anchor.y,
-    });
+  for (const side of ["left", "right"] as const) {
+    for (const anchor of taken[side]) {
+      sides[side].push({
+        ...anchor,
+        side,
+        labelX: side === "left" ? leftColumn : rightColumn,
+        labelY: anchor.y,
+      });
+    }
   }
 
   stack(sides.left, lineHeight, top, bottom);
