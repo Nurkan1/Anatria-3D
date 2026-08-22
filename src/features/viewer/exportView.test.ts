@@ -27,38 +27,38 @@ describe("labelTargets", () => {
       l: organ("l", "Nervus vagus (X)", "Vagus nerve (X) (left)"),
       r: organ("r", "Nervus vagus (X)", "Vagus nerve (X) (right)"),
     };
-    expect(labelTargets(paired, ["l", "r"], null).map((t) => t.text)).toEqual([
+    expect(labelTargets(paired, ["l", "r"], null, true).map((t) => t.text)).toEqual([
       "Nervus vagus (X) · left",
       "Nervus vagus (X) · right",
     ]);
   });
 
   it("names what is selected", () => {
-    expect(labelTargets(organs, ["a", "b"], null).map((t) => t.id)).toEqual(["a", "b"]);
+    expect(labelTargets(organs, ["a", "b"], null, true).map((t) => t.id)).toEqual(["a", "b"]);
   });
 
   it("names the isolated region when nothing is selected", () => {
-    expect(labelTargets(organs, [], ["b", "c"]).map((t) => t.id)).toEqual(["b", "c"]);
+    expect(labelTargets(organs, [], ["b", "c"], true).map((t) => t.id)).toEqual(["b", "c"]);
   });
 
   it("prefers the selection over the isolation around it", () => {
     // Someone who selected two muscles inside an isolated region wants those
     // two named, not the whole region.
-    expect(labelTargets(organs, ["c"], ["a", "b", "c"]).map((t) => t.id)).toEqual(["c"]);
+    expect(labelTargets(organs, ["c"], ["a", "b", "c"], true).map((t) => t.id)).toEqual(["c"]);
   });
 
   it("names nothing when nothing has been chosen", () => {
     // Never "everything visible": three thousand names is not a plate, it is a
     // wall, and choosing is the reader's job.
-    expect(labelTargets(organs, [], null)).toEqual([]);
+    expect(labelTargets(organs, [], null, true)).toEqual([]);
   });
 
   it("labels with the Terminologia Anatomica name", () => {
-    expect(labelTargets(organs, ["a"], null)[0]!.text).toBe("Musculus deltoideus");
+    expect(labelTargets(organs, ["a"], null, true)[0]!.text).toBe("Musculus deltoideus");
   });
 
   it("skips a structure that is no longer loaded", () => {
-    expect(labelTargets(organs, ["a", "gone"], null).map((t) => t.id)).toEqual(["a"]);
+    expect(labelTargets(organs, ["a", "gone"], null, true).map((t) => t.id)).toEqual(["a"]);
   });
 
   it("caps a huge isolation rather than trying to name all of it", () => {
@@ -66,7 +66,7 @@ describe("labelTargets", () => {
       Array.from({ length: 400 }, (_, i) => [`s${i}`, organ(`s${i}`, `S${i}`)]),
     );
     const ids = Object.keys(many);
-    expect(labelTargets(many, [], ids).length).toBeLessThan(ids.length);
+    expect(labelTargets(many, [], ids, true).length).toBeLessThan(ids.length);
   });
 });
 
@@ -135,5 +135,32 @@ describe("the exported image's footer", () => {
     // circulate without one.
     expect(IMAGE_FOOTER.DISCLAIMER).toMatch(/educational use only/i);
     expect(IMAGE_FOOTER.DISCLAIMER).toMatch(/not a medical device/i);
+  });
+});
+
+describe("labelTargets with the setting off", () => {
+  it("still names a single selected structure", () => {
+    // The setting is a standing preference about a plate full of labels. It was
+    // also, accidentally, what decided whether a numbered reference in an answer
+    // pointed at anything — click ④ and nothing on screen said which structure
+    // it was. One label cannot clutter a plate.
+    const organs = { a: { organ_id: "a", ta2_latin: "Aorta", name_en: "Aorta" } };
+
+    expect(labelTargets(organs, ["a"], null, false).map((t) => t.id)).toEqual(["a"]);
+  });
+
+  it("stays quiet for more than one, which is what the setting is about", () => {
+    const organs = {
+      a: { organ_id: "a", ta2_latin: "Aorta", name_en: "Aorta" },
+      b: { organ_id: "b", ta2_latin: "Vena cava", name_en: "Vena cava" },
+    };
+
+    expect(labelTargets(organs, ["a", "b"], null, false)).toEqual([]);
+  });
+
+  it("does not label a whole isolated region behind the reader's back", () => {
+    const organs = { a: { organ_id: "a", ta2_latin: "Aorta", name_en: "Aorta" } };
+
+    expect(labelTargets(organs, [], ["a"], false)).toEqual([]);
   });
 });

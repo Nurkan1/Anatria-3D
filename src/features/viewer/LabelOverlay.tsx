@@ -35,18 +35,27 @@ export function LabelOverlay() {
   const selectedOrganIds = useSceneStore((s) => s.selectedOrganIds);
   const isolatedOrganIds = useSceneStore((s) => s.isolatedOrganIds);
   const theme = backgroundTheme(useSceneStore((s) => s.background));
+  const focusBadge = useSceneStore((s) => s.focusBadge);
+
+  // Only when it is still the structure the number was given to. A badge that
+  // outlived its selection would put an answer's ④ on whatever the reader
+  // clicked next, which is worse than no number at all.
+  const badgeFor =
+    focusBadge && selectedOrganIds.length === 1 && selectedOrganIds[0] === focusBadge.organId
+      ? focusBadge
+      : null;
 
   const container = useRef<HTMLDivElement>(null);
   const nodes = useRef(new Map<string, HTMLSpanElement>());
   const lines = useRef(new Map<string, SVGLineElement>());
 
   const targets = useMemo(
-    () => labelTargets(organs, selectedOrganIds, isolatedOrganIds),
-    [organs, selectedOrganIds, isolatedOrganIds],
+    () => labelTargets(organs, selectedOrganIds, isolatedOrganIds, labelsVisible),
+    [organs, selectedOrganIds, isolatedOrganIds, labelsVisible],
   );
 
   useEffect(() => {
-    if (!labelsVisible || targets.length === 0) return;
+    if (targets.length === 0) return;
     let frame = 0;
 
     const draw = () => {
@@ -104,9 +113,11 @@ export function LabelOverlay() {
 
     frame = requestAnimationFrame(draw);
     return () => cancelAnimationFrame(frame);
-  }, [labelsVisible, targets]);
+  }, [targets]);
 
-  if (!labelsVisible || targets.length === 0) return null;
+  // `targets` already carries the setting — see `labelTargets`, which keeps a
+  // single selected structure named whatever the box says.
+  if (targets.length === 0) return null;
 
   return (
     <div ref={container} className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -139,8 +150,16 @@ export function LabelOverlay() {
             backgroundColor: theme.chip,
             color: theme.ink,
           }}
-          className="absolute whitespace-nowrap rounded px-1.5 py-0.5 text-[11px] italic leading-tight"
+          className="absolute flex items-center gap-1 whitespace-nowrap rounded px-1.5 py-0.5 text-[11px] italic leading-tight"
         >
+          {badgeFor?.organId === target.id && (
+            // The same number the answer used, so the paragraph and the body
+            // say the same thing. Upright and unitalicised against the Latin
+            // beside it: it is a reference mark, not part of the name.
+            <span className="flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-sky-500/20 px-0.5 text-[8px] font-semibold not-italic text-sky-300">
+              {badgeFor.index}
+            </span>
+          )}
           {target.text}
         </span>
       ))}
@@ -161,13 +180,37 @@ export function labelTargets(
   organs: Record<string, { organ_id: string; ta2_latin: string; name_en: string }>,
   selectedOrganIds: string[],
   isolatedOrganIds: string[] | null,
+  labelsVisible: boolean,
 ): { id: string; text: string }[] {
+  // **One structure is always named, whatever the setting says.**
+  //
+  // The setting means "keep naming what I select" — a standing preference about
+  // a plate full of labels. It was also, accidentally, the switch that decided
+  // whether a numbered reference in an answer pointed at anything: the reader
+  // clicks ④ beside *lobus superior pulmonis sinistri*, `focus_organ` selects
+  // it and flies the camera, and with the box unticked nothing on screen says
+  // which of the structures in view it is. The number promised to point, and
+  // pointed nowhere.
+  //
+  // A single label cannot clutter a plate, so the promise is kept and the
+  // preference is left meaning what it says for everything above one.
+  if (!labelsVisible) {
+    return selectedOrganIds.length === 1 ? named(organs, selectedOrganIds) : [];
+  }
+
   // The selection wins: naming it is the most direct way to ask for a label,
   // and someone who has selected four muscles inside an isolated region wants
   // those four named, not the whole region.
   const chosen = selectedOrganIds.length > 0 ? selectedOrganIds : (isolatedOrganIds ?? []);
 
-  return chosen
+  return named(organs, chosen);
+}
+
+function named(
+  organs: Record<string, { organ_id: string; ta2_latin: string; name_en: string }>,
+  ids: string[],
+): { id: string; text: string }[] {
+  return ids
     .slice(0, MAX_LABELS)
     .map((id) => organs[id])
     .filter((organ) => !!organ)

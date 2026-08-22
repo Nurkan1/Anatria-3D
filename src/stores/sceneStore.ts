@@ -518,7 +518,25 @@ interface SceneStore extends SceneViewState {
   /** Take the current selection out of the way, dissection-style. */
   hideSelection: () => void;
   unhideAll: () => void;
+  /**
+   * The number an answer gave the structure the reader last jumped to.
+   *
+   * Kept beside its `organId` rather than alone, and checked against the
+   * selection before it is drawn, so it cannot end up floating over a different
+   * structure. Store-level rather than view state: it comes from a click in the
+   * transcript, never from a scene command, and the pure reducer has no
+   * business knowing what the prose numbered.
+   */
+  focusBadge: { organId: string; index: number } | null;
   applyCommand: (command: SceneCommand) => void;
+  /**
+   * Jump to a structure an answer numbered, carrying the number with it.
+   *
+   * The reader reads "the left superior lobe ④", clicks it, and the label that
+   * appears in the scene says ④ too. Without that the connection between the
+   * paragraph and the body is one the reader has to hold in their head.
+   */
+  focusReference: (organId: string, index: number) => void;
   toggleSystem: (system: AnatomicalSystem) => void;
   /** Show only this system. Calling it again on the same one shows all. */
   soloSystem: (system: AnatomicalSystem) => void;
@@ -578,6 +596,7 @@ export const useSceneStore = create<SceneStore>()((set, get) => ({
   eyeTracking: true,
   depthProbeVisible: true,
   labelsVisible: false,
+  focusBadge: null,
   background: "dark",
 
   setManifest: (manifest) =>
@@ -725,6 +744,12 @@ export const useSceneStore = create<SceneStore>()((set, get) => ({
     }),
 
   unhideAll: () => set({ hiddenOrganIds: [] }),
+
+  focusReference: (organId, index) =>
+    set((state) => ({
+      ...applySceneCommand(state, { action: "focus_organ", organ_id: organId }),
+      focusBadge: { organId, index },
+    })),
 
   applyCommand: (command) =>
     set((state) => {

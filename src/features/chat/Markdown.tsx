@@ -61,7 +61,7 @@ function CodeBlock({ children }: { children: React.ReactNode }) {
 function OrganPin({ organId, label }: { organId: string; label: string }) {
   const organ = useSceneStore((s) => s.organs[organId]);
   const setHovered = useSceneStore((s) => s.setHovered);
-  const applyCommand = useSceneStore((s) => s.applyCommand);
+  const focusReference = useSceneStore((s) => s.focusReference);
   if (!organ) return null;
 
   const name = organLabel(organ);
@@ -73,7 +73,9 @@ function OrganPin({ organId, label }: { organId: string; label: string }) {
       onMouseLeave={() => setHovered(null)}
       onFocus={() => setHovered(organId)}
       onBlur={() => setHovered(null)}
-      onClick={() => applyCommand({ action: "focus_organ", organ_id: organId })}
+      // The number goes with it, so the label that appears in the scene is
+      // marked the same as the pin that was pressed.
+      onClick={() => focusReference(organId, Number(label))}
       title={`Show ${name}`}
       // The number alone tells a screen reader nothing about what pressing it
       // does, and it is the only label sighted readers get from the shape.

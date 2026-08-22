@@ -1322,3 +1322,38 @@ describe("add_supply", () => {
   });
 });
 
+describe("focusReference", () => {
+  beforeEach(() => {
+    useSceneStore.setState({
+      organs: { aorta: organ(), vena_cava: organ() },
+      selectedOrganIds: [],
+      focusBadge: null,
+    });
+  });
+
+  it("selects the structure and remembers the number the answer gave it", () => {
+    useSceneStore.getState().focusReference("aorta", 4);
+
+    expect(useSceneStore.getState().selectedOrganIds).toEqual(["aorta"]);
+    expect(useSceneStore.getState().focusBadge).toEqual({ organId: "aorta", index: 4 });
+  });
+
+  it("puts the scene in the same place a focus_organ tool call would", () => {
+    // One store, one render path: a click in the transcript and a tool call
+    // must not be able to reach different states.
+    useSceneStore.getState().focusReference("aorta", 1);
+    const fromClick = useSceneStore.getState().selectedOrganIds;
+
+    useSceneStore.setState({ selectedOrganIds: [] });
+    useSceneStore.getState().applyCommand({ action: "focus_organ", organ_id: "aorta" });
+
+    expect(useSceneStore.getState().selectedOrganIds).toEqual(fromClick);
+  });
+
+  it("lets the badge be replaced by the next reference", () => {
+    useSceneStore.getState().focusReference("aorta", 4);
+    useSceneStore.getState().focusReference("vena_cava", 7);
+
+    expect(useSceneStore.getState().focusBadge).toEqual({ organId: "vena_cava", index: 7 });
+  });
+});

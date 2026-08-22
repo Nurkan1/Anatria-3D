@@ -126,12 +126,13 @@ function drawLabels(
   theme: BackgroundTheme,
 ): void {
   const state = useSceneStore.getState();
-  if (!state.labelsVisible) return;
-
+  // The gate lives in `labelTargets` so the saved plate is what the screen
+  // shows, including the single label that survives the setting being off.
   const targets = labelTargets(
     state.organs,
     state.selectedOrganIds,
     state.isolatedOrganIds,
+    state.labelsVisible,
   );
   if (targets.length === 0) return;
 

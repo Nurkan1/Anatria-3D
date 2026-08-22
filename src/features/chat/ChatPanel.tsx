@@ -168,7 +168,7 @@ function ToolTrail({ tools }: { tools: string[] }) {
 function ReferenceLegend({ content }: { content: string }) {
   const organs = useSceneStore((s) => s.organs);
   const setHovered = useSceneStore((s) => s.setHovered);
-  const applyCommand = useSceneStore((s) => s.applyCommand);
+  const focusReference = useSceneStore((s) => s.focusReference);
 
   const refs = collectOrganRefs(content, (organId) => organId in organs);
   if (refs.length === 0) return null;
@@ -184,9 +184,7 @@ function ReferenceLegend({ content }: { content: string }) {
             type="button"
             onMouseEnter={() => setHovered(ref.organId)}
             onMouseLeave={() => setHovered(null)}
-            onClick={() =>
-              applyCommand({ action: "focus_organ", organ_id: ref.organId })
-            }
+            onClick={() => focusReference(ref.organId, ref.index)}
             className="flex items-center gap-1 rounded border border-slate-700/80 px-1.5 py-0.5 text-[10px] text-slate-400 transition hover:border-sky-600 hover:text-sky-200"
           >
             <span className="flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-sky-500/20 px-0.5 text-[8px] font-semibold text-sky-300">
