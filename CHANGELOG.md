@@ -13,6 +13,67 @@ There is **no auto-updater**, by design: the application never reaches the
 network on its own. A new version reaches you only when you download and install
 it, so this file is also the answer to "is it worth reinstalling".
 
+## [0.2.1] — 2026-08-22
+
+### Added
+
+**The atlas knows where its structures live.** Asking to isolate a region used
+to reach 121 named groups; it now reaches 291, and not one of the old ones was
+lost. "Show me the muscles of the hand", "isolate the cervical vertebrae",
+"open the digestive canal" — none of those could be answered before, because
+those groups existed in the source and never survived the export.
+
+The clearest case is the **aorta**, which went from naming nothing at all to
+holding 180 structures. Asking what branches off it now shows them.
+
+**The assistant can ask what supplies a structure.** Isolate the heart, ask what
+irrigates it, and the coronary arteries arrive in the viewport instead of being
+listed in a paragraph. It works for nerves too. This is measured against the
+geometry rather than looked up in the hierarchy, because the relationship is
+spatial: the coronary arteries are not filed inside the heart, and no list of
+names reproduces what actually reaches a territory.
+
+It reports what it is: the structures **running through** a region, which is not
+the same as the structures that supply it. A long nerve passing nearby is added
+whole. The assistant is told to say so and to name the real supply itself.
+
+**Answers can be read aloud, on Windows.** A *Read aloud* button appears under an
+answer when the computer has a voice for the language it is written in, using
+voices Windows already has — nothing is downloaded and nothing is sent anywhere.
+Speed, volume and how much of a long answer to read are in Settings.
+
+It uses only voices the system marks as local. Some platforms offer voices that
+work by sending the text to a company's servers, and an answer about your own
+anatomy question is not something to hand to a third party.
+
+**On Linux there is no Read aloud**, and the reason is not fixable here: the
+browser engine Linux builds embed reports a fixed list of four voices regardless
+of what the system has, and marks all of them non-local. Installing voices does
+not change it. Settings says so rather than sending you to look.
+
+### Fixed
+
+**A numbered reference now points at something.** Clicking ④ in an answer moved
+the camera and then left you to work out which of the structures in view it
+meant. The structure is now named on screen, marked with the same number the
+answer used — and it is named whether or not "Label what I select" is switched
+on, because a number that points nowhere is not a preference.
+
+**And it reveals what it points at.** If the structure was hidden, or outside
+what you had isolated, the camera used to fly to it and show you whatever was in
+the way. It comes back into view now. Nothing you asked to see is taken away.
+
+**Anatomical errors in the atlas itself.** `Adductor hallucis`, a muscle of the
+foot, was filed under the ulnar nerve — which does not reach the foot. It sits
+under the lateral plantar nerve, which innervates it. `Atlas (C1)` sat loose in
+`Axial skeleton` and is now in the cervical vertebrae. Sixty-seven structures had
+no place in the hierarchy at all and now do.
+
+**Saved images no longer cut their labels.** A plate exported with long Latin
+names came back with the first letters off the edge — *"t breve musculi bicipitis
+brachii"* where it should read *Caput*. The name columns now leave room for the
+longest name in them. The same fault had been quietly trimming names on screen.
+
 ## [0.2.0] — 2026-08-20
 
 ### Added
