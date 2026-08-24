@@ -144,6 +144,12 @@ jobs:
       # two the AppImage bundler needs and the deb does not, so a missing one
       # fails only the second artefact.
       - name: Install the system dependencies
+        # Ten minutes, against the job's sixty. This normally takes under two,
+        # and on 19 Aug 2026 a dead Ubuntu mirror hung it until the whole job
+        # timed out — an hour of runner spent on a step that had already
+        # failed, during a release. The retry is a person re-running the job;
+        # what was missing was finding out an hour earlier.
+        timeout-minutes: 10
         run: |
           sudo apt-get update
           sudo apt-get install -y \
