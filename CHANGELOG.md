@@ -13,6 +13,40 @@ There is **no auto-updater**, by design: the application never reaches the
 network on its own. A new version reaches you only when you download and install
 it, so this file is also the answer to "is it worth reinstalling".
 
+## [Unreleased]
+
+### Added
+
+**The atlas answers questions outside the application.** A read-only Model
+Context Protocol server ships in `tools/anatria_mcp/`. Point Claude, Codex or
+Gemini at it and they can search the 3,742 structures by Latin or English name,
+read a structure's record and its place in the hierarchy, walk that hierarchy,
+and see which licence each atlas carries — with Anatria3D closed, without an API
+key, and without touching the network.
+
+It cannot change anything. It does not talk to the running application, cannot
+move the viewport, and cannot read your study journal, your case files or your
+keys. Driving the viewer from outside is a separate question with a separate
+security model, and it is deliberately not part of this.
+
+It also states its own limits rather than letting a model guess at them: the
+index is Latin, English and identifiers, so a search in Bulgarian or Spanish
+finds nothing and now says so instead of returning a bare zero; and the manifest
+records no relationships, so nothing there can say what supplies or innervates a
+structure.
+
+Thanks to [@astreos108](https://github.com/astreos108), who asked for this by
+building his own before anyone offered one.
+
+### Known
+
+**Five systems cannot be reached by browsing the male atlas** — endocrine,
+lymphatic, regional, renal and reproductive. Their structures carry no place in
+the hierarchy, so they are found by name and not by walking the tree. Asking the
+assistant for them by name works; asking it to isolate them as a group does not.
+The MCP server's `list_systems` now measures this, which is the first step to
+fixing it.
+
 ## [0.2.1] — 2026-08-22
 
 ### Added

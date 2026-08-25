@@ -298,3 +298,78 @@ class TestSaysWhatItDoesNotKnow:
         # manifest holds no edges, and a model must not fill that in.
         instructions = (await client.initialize()).instructions or ""
         assert "no relationships" in instructions
+
+
+class TestTheShapeIsFrozen:
+    """Renaming a field is a breaking change once anyone's client reads it.
+
+    Three builds of this server went out inside one testing session, and two of
+    them moved the response shape — `part` was renamed, `note` appeared. That
+    was free while it lived on a branch nobody had wired up. It is not free now.
+
+    These assertions are the freeze. A field added is compatible and only needs
+    the list extended; a field renamed or removed is not, and should fail here
+    before it fails in someone else's session.
+    """
+
+    async def test_a_structure_record_keeps_its_fields(self, client):
+        out = await call(client, "describe_structure", organ_id="left_atrium")
+        assert set(out) == {
+            "organ_id",
+            "ta2_latin",
+            "name_en",
+            "system",
+            "hierarchy",
+            "part",
+            "belongs_to",
+            "attachment_markings",
+        }
+
+    async def test_a_search_result_keeps_its_fields(self, client):
+        out = await call(client, "search_structures", query="atrium")
+        assert set(out) == {"query", "total", "shown", "truncated", "note"}
+        assert set(out["shown"][0]) == {
+            "organ_id",
+            "ta2_latin",
+            "name_en",
+            "system",
+            "hierarchy",
+            "part",
+        }
+
+    async def test_a_browse_result_keeps_its_fields(self, client):
+        out = await call(client, "browse_hierarchy")
+        assert set(out) == {
+            "path",
+            "headings",
+            "structures",
+            "structure_total",
+            "offset",
+            "truncated",
+        }
+
+    async def test_a_system_record_keeps_its_fields(self, client):
+        out = await call(client, "list_systems")
+        systems = out["result"] if isinstance(out, dict) and "result" in out else out
+        assert set(systems[0]) == {"system", "structure_count", "root_headings", "unfiled"}
+
+    async def test_atlas_info_keeps_its_fields(self, client):
+        out = await call(client, "atlas_info")
+        assert set(out) == {
+            "gender_model",
+            "manifest_version",
+            "structure_count",
+            "systems",
+            "license",
+            "credit",
+            "attribution",
+        }
+
+    async def test_part_keeps_its_vocabulary(self, client):
+        # A consumer that branches on these strings breaks silently if they
+        # move. They moved once already — "belly" became "structure".
+        out = await call(client, "describe_structure", organ_id="sartorius_muscle_l")
+        assert {mark["part"] for mark in out["attachment_markings"]} == {
+            "origin_marking",
+            "insertion_marking",
+        }
