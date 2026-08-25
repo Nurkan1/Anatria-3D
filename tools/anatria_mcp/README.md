@@ -15,7 +15,7 @@ Five tools, all reads:
 |---|---|
 | `search_structures` | "what is the id for the left atrium?" |
 | `describe_structure` | the record, plus the muscle's origin and insertion areas |
-| `list_systems` | each system's size, where it sits in the tree, and how much of it is unfiled |
+| `list_systems` | each system's size and where in the tree it sits |
 | `browse_hierarchy` | one level of the atlas tree at a time, paged |
 | `atlas_info` | version, structure count, licence, credit |
 
@@ -43,10 +43,8 @@ left unstated is one a model fills from its own memory.
   male atlas, **197 muscles carry only one of the two**, and 59 markings have no
   belly under the derived id at all. An empty list is this dataset's coverage,
   not an anatomical claim. The link runs both ways: `belongs_to` names a
-  marking's muscle, or is null when that muscle is not in the atlas.
-- **A quarter of the male atlas is unfiled** — 910 structures with no hierarchy
-  path, the attachment markings among them. They surface at the root of
-  `browse_hierarchy`, which is why that call is paged.
+  marking's muscle, or is null when that muscle is not in the atlas. They are
+  filed under `Muscular insertions`, never among the muscles.
 
 ## The two atlases are different works
 

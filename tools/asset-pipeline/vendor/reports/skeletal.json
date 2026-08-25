@@ -991,12 +991,16 @@
   {
    "name": "Anterior cells of ethmoid bone.l",
    "polygons": 368,
-   "path": []
+   "path": [
+    "Skeletal system"
+   ]
   },
   {
    "name": "Anterior cells of ethmoid bone.r",
    "polygons": 368,
-   "path": []
+   "path": [
+    "Skeletal system"
+   ]
   },
   {
    "name": "Anterior longitudinal ligament",
@@ -2228,12 +2232,16 @@
   {
    "name": "Middle cells of ethmoid bone.l",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Skeletal system"
+   ]
   },
   {
    "name": "Middle cells of ethmoid bone.r",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Skeletal system"
+   ]
   },
   {
    "name": "Middle phalanx of fifth finger of foot.l",
@@ -2648,12 +2656,16 @@
   {
    "name": "Posterior cells of ethmoid bone.l",
    "polygons": 608,
-   "path": []
+   "path": [
+    "Skeletal system"
+   ]
   },
   {
    "name": "Posterior cells of ethmoid bone.r",
    "polygons": 608,
-   "path": []
+   "path": [
+    "Skeletal system"
+   ]
   },
   {
    "name": "Posterior longitudinal ligament",

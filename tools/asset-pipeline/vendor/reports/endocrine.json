@@ -15,32 +15,44 @@
   {
    "name": "Adenohypophysis",
    "polygons": 678,
-   "path": []
+   "path": [
+    "Endocrine glands"
+   ]
   },
   {
    "name": "Neurohypophysis",
    "polygons": 592,
-   "path": []
+   "path": [
+    "Endocrine glands"
+   ]
   },
   {
    "name": "Pineal gland",
    "polygons": 592,
-   "path": []
+   "path": [
+    "Endocrine glands"
+   ]
   },
   {
    "name": "Suprarenal gland.l",
    "polygons": 3996,
-   "path": []
+   "path": [
+    "Endocrine glands"
+   ]
   },
   {
    "name": "Suprarenal gland.r",
    "polygons": 2294,
-   "path": []
+   "path": [
+    "Endocrine glands"
+   ]
   },
   {
    "name": "Thyroid gland",
    "polygons": 1300,
-   "path": []
+   "path": [
+    "Endocrine glands"
+   ]
   }
  ]
 }

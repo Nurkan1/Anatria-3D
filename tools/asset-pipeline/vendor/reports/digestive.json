@@ -40,7 +40,9 @@
   {
    "name": "Accessory pancreatic duct",
    "polygons": 5688,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Anterior lateral segment of liver (VI)",
@@ -66,7 +68,9 @@
   {
    "name": "Bile duct",
    "polygons": 1008,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Descending colon",
@@ -85,17 +89,23 @@
   {
    "name": "Epiglottis",
    "polygons": 3326,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "External anal sphincter.l",
    "polygons": 202,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "External anal sphincter.r",
    "polygons": 202,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Free taenia",
@@ -107,7 +117,9 @@
   {
    "name": "Gallbladder",
    "polygons": 368,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Gingiva",
@@ -147,77 +159,107 @@
   {
    "name": "Liver",
    "polygons": 6135,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Lower canine.l",
    "polygons": 1276,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Lower canine.r",
    "polygons": 1276,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Lower first molar tooth.l",
    "polygons": 4475,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Lower first molar tooth.r",
    "polygons": 4475,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Lower first premolar.l",
    "polygons": 1207,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Lower first premolar.r",
    "polygons": 1207,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Lower lateral incisor.l",
    "polygons": 1033,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Lower lateral incisor.r",
    "polygons": 1033,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Lower medial incisor.l",
    "polygons": 984,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Lower medial incisor.r",
    "polygons": 984,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Lower second molar tooth.l",
    "polygons": 1655,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Lower second molar tooth.r",
    "polygons": 1655,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Lower second premolar.l",
    "polygons": 1180,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Lower second premolar.r",
    "polygons": 1180,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Mesocolic taenia",
@@ -229,7 +271,9 @@
   {
    "name": "Mucosa of stomach",
    "polygons": 4874,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Oesophagus",
@@ -248,12 +292,16 @@
   {
    "name": "Pancreas",
    "polygons": 5056,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Pancreatic duct",
    "polygons": 27912,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Parotid duct.l",
@@ -286,7 +334,9 @@
   {
    "name": "Pharynx.j",
    "polygons": 1,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Posterior lateral segment of liver (VII)",
@@ -368,7 +418,9 @@
   {
    "name": "Thyroid cartilage",
    "polygons": 4482,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Tongue",
@@ -387,82 +439,114 @@
   {
    "name": "Upper canine.l",
    "polygons": 1434,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Upper canine.r",
    "polygons": 1434,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Upper first molar tooth.l",
    "polygons": 2168,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Upper first molar tooth.r",
    "polygons": 2168,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Upper first premolar.l",
    "polygons": 1651,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Upper first premolar.r",
    "polygons": 1651,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Upper lateral incisor.l",
    "polygons": 1412,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Upper lateral incisor.r",
    "polygons": 1412,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Upper medial incisor.l",
    "polygons": 1368,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Upper medial incisor.r",
    "polygons": 1368,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Upper second molar tooth.l",
    "polygons": 1843,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Upper second molar tooth.r",
    "polygons": 1843,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Upper second premolar.l",
    "polygons": 1511,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Upper second premolar.r",
    "polygons": 1511,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Uvula of palate",
    "polygons": 1502,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   },
   {
    "name": "Vermiform appendix",
    "polygons": 442,
-   "path": []
+   "path": [
+    "Digestive system"
+   ]
   }
  ]
 }

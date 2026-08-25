@@ -14,42 +14,58 @@
   {
    "name": "Kidney.l",
    "polygons": 2982,
-   "path": []
+   "path": [
+    "Urinary system"
+   ]
   },
   {
    "name": "Kidney.r",
    "polygons": 2319,
-   "path": []
+   "path": [
+    "Urinary system"
+   ]
   },
   {
    "name": "Renal pelvis.l",
    "polygons": 1450,
-   "path": []
+   "path": [
+    "Urinary system"
+   ]
   },
   {
    "name": "Renal pelvis.r",
    "polygons": 1262,
-   "path": []
+   "path": [
+    "Urinary system"
+   ]
   },
   {
    "name": "Ureter.l",
    "polygons": 1440,
-   "path": []
+   "path": [
+    "Urinary system"
+   ]
   },
   {
    "name": "Ureter.r",
    "polygons": 1584,
-   "path": []
+   "path": [
+    "Urinary system"
+   ]
   },
   {
    "name": "Urethra",
    "polygons": 1440,
-   "path": []
+   "path": [
+    "Urinary system"
+   ]
   },
   {
    "name": "Urinary bladder",
    "polygons": 1518,
-   "path": []
+   "path": [
+    "Urinary system"
+   ]
   }
  ]
 }

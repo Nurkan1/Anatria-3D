@@ -159,29 +159,48 @@ class TestSystems:
         assert all(entry["structure_count"] > 0 for entry in systems)
 
 
+#: A heading with far more structures than one page holds. `Muscular
+#: insertions` carries all 451 attachment markings, which makes it the level
+#: that actually exercises paging now that the root has none.
+CROWDED = ["Muscular insertions"]
+
+
 class TestRootIsReachable:
-    """The entry point used to be unusable.
+    """The entry point used to be unusable, twice over.
 
     An unpaged root returned every unfiled mesh in the atlas — about a quarter
     of it, roughly 140 KB — and blew the transport's token limit outright. The
     call succeeded and was still useless, which is the worst shape a failure
     can take.
+
+    The second cause was in the data: those meshes had no path because the
+    export dropped the name of the collection they sat in. Fixed at the source,
+    the root now holds headings and nothing loose at all. Paging stays, because
+    a level deeper down still overflows a page — and because the guarantee is
+    that no level can ever exceed one.
     """
 
-    async def test_the_root_fits_through_the_transport(self, client):
+    async def test_the_root_is_headings_and_nothing_loose(self, client):
         out = await call(client, "browse_hierarchy")
         assert out["headings"], "headings are never paged; they are what you walk by"
+        assert out["structure_total"] == 0, (
+            "every structure should have a place in the tree; a loose one at the "
+            "root means the export dropped its collection name again"
+        )
+
+    async def test_no_level_can_exceed_one_page(self, client):
+        out = await call(client, "browse_hierarchy", path=CROWDED)
+        assert out["structure_total"] > 25
         assert len(out["structures"]) <= 25
-        assert out["structure_total"] > len(out["structures"])
         assert out["truncated"] is True
 
     async def test_offset_reaches_the_rest(self, client):
-        first = await call(client, "browse_hierarchy", limit=5)
-        second = await call(client, "browse_hierarchy", limit=5, offset=5)
+        first = await call(client, "browse_hierarchy", path=CROWDED, limit=5)
+        second = await call(client, "browse_hierarchy", path=CROWDED, limit=5, offset=5)
         assert first["offset"] == 0
         assert second["offset"] == 5
         ids = {item["organ_id"] for item in first["structures"]}
-        assert not ids & {item["organ_id"] for item in second["structures"]}
+        assert ids and not ids & {item["organ_id"] for item in second["structures"]}
 
     async def test_a_leaf_reports_no_truncation(self, client):
         out = await call(client, "browse_hierarchy", path=["Heart"])
@@ -261,12 +280,24 @@ class TestSystemsAreMapped:
         by_name = {entry["system"]: entry for entry in systems}
         assert "Systemic arteries" in by_name["cardiovascular"]["root_headings"]
 
-    async def test_reports_what_browsing_cannot_reach(self, client):
+    async def test_every_system_has_a_way_in(self, client):
+        # Five systems had none: endocrine, lymphatic, regional, renal and
+        # reproductive were search-only, and `unfiled` is what made that
+        # countable. It should stay at zero.
         out = await call(client, "list_systems")
         systems = out["result"] if isinstance(out, dict) and "result" in out else out
-        by_name = {entry["system"]: entry for entry in systems}
-        assert by_name["muscular"]["unfiled"] > 0
-        assert by_name["cardiovascular"]["unfiled"] == 0
+        for entry in systems:
+            assert entry["root_headings"], entry["system"]
+            assert entry["unfiled"] == 0, entry["system"]
+
+    async def test_the_muscle_markings_have_their_own_heading(self, client):
+        # Reachable by browsing, and never among the muscles.
+        out = await call(client, "browse_hierarchy", path=CROWDED)
+        assert out["structure_total"] == 451
+        assert {item["part"] for item in out["structures"]} <= {
+            "origin_marking",
+            "insertion_marking",
+        }
 
 
 class TestSaysWhatItDoesNotKnow:

@@ -154,9 +154,11 @@ class SystemMapOut(SystemOut):
     unfiled: int = Field(
         default=0,
         description=(
-            "Structures of this system with no hierarchy path at all. They are "
-            "reachable by search but not by browsing; in the male atlas the "
-            "muscular system's 451 are its attachment markings."
+            "Structures of this system with no hierarchy path at all — "
+            "reachable by search, invisible to anyone walking the tree. It "
+            "should be zero everywhere; 910 structures across five systems "
+            "were once unreachable this way, and this is what makes a "
+            "recurrence countable."
         ),
     )
 
@@ -364,10 +366,9 @@ def build_server() -> MCPServer:
         there, separately — the two are different things and a flat list of both
         cannot say which is which.
 
-        Structures are paged. The root carries roughly a quarter of the male
-        atlas as unfiled meshes, so an unpaged root would be tens of thousands
-        of tokens; `headings` is never paged, because that is the part a caller
-        walks by.
+        Structures are paged, because one level can hold hundreds —
+        `Muscular insertions` alone holds 451. `headings` is never paged, since
+        that is the part a caller walks by.
         """
         loaded = atlas(gender)
         prefix = _validated(loaded, tuple(path or ()))

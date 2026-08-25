@@ -123,10 +123,22 @@ describe("the repair does not reach past the nervous system", () => {
     // regional hierarchy now because the export hands back the most specific
     // collection rather than the first one it reaches; what this guards is
     // unchanged, which is that the markers did not come with it.
+    //
+    // They are no longer filed under nothing either. Z-Anatomy keeps them in a
+    // collection of their own, `Muscular insertions`, and the export now
+    // carries that name through instead of dropping it — so they are reachable
+    // by browsing without ever appearing among the muscles.
     const belly = byId("abductor_hallucis_l");
     const origin = byId("abductor_hallucis_ol");
     expect(belly?.path).toContain("Muscles of foot");
-    expect(origin?.path).toEqual([]);
+    expect(origin?.path).toEqual(["Muscular insertions"]);
+
+    const strays = male.organs.filter(
+      (organ) =>
+        /_(ol|or|el|er)$/.test(organ.organ_id) &&
+        organ.path.some((node) => node !== "Muscular insertions"),
+    );
+    expect(strays).toEqual([]);
   });
 
   it("changes no path outside the nervous system", () => {

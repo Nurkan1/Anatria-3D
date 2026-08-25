@@ -38,14 +38,25 @@ structure.
 Thanks to [@astreos108](https://github.com/astreos108), who asked for this by
 building his own before anyone offered one.
 
-### Known
+### Fixed
 
-**Five systems cannot be reached by browsing the male atlas** — endocrine,
-lymphatic, regional, renal and reproductive. Their structures carry no place in
-the hierarchy, so they are found by name and not by walking the tree. Asking the
-assistant for them by name works; asking it to isolate them as a group does not.
-The MCP server's `list_systems` now measures this, which is the first step to
-fixing it.
+**Every structure now has a place in the atlas.** 910 of them — a quarter of the
+male body — had none, and five whole systems had none at all: the endocrine
+glands, the lymphoid system, the body regions, the urinary tract and the genital
+organs. You could find a kidney by asking for it by name, and never by opening
+the hierarchy, because there was no heading to open. Asking the assistant to
+isolate them as a group did not work either, since the group did not exist.
+
+The names had been there all along, in the atlas we build from. The export was
+dropping them.
+
+Eleven new groups come with it, and the largest is one you could not reach
+before at all: the **451 muscle attachment areas** — where each muscle takes
+origin and where it inserts — now sit under `Muscular insertions`, separate from
+the muscles themselves. Isolating the muscles still gives you muscles.
+
+Nothing moved. All 3,478 structures are still there, every path that already
+worked is unchanged, and the geometry is identical to the byte.
 
 ## [0.2.1] — 2026-08-22
 

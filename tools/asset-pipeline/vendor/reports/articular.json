@@ -1764,12 +1764,16 @@
   {
    "name": "Interosseous membrane of forearm.l",
    "polygons": 2766,
-   "path": []
+   "path": [
+    "Joints"
+   ]
   },
   {
    "name": "Interosseous membrane of forearm.r",
    "polygons": 2766,
-   "path": []
+   "path": [
+    "Joints"
+   ]
   },
   {
    "name": "Interosseous membrane of leg.l",

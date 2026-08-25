@@ -173,6 +173,10 @@ class Atlas:
         incomplete** where it is: 197 muscles in the male atlas carry only one
         of the two markings. An empty result is therefore not evidence that a
         muscle has no attachments, only that this dataset records none.
+
+        The markings live under their own heading, `Muscular insertions`, which
+        is where Z-Anatomy keeps them — never among the muscles, so isolating
+        the muscles does not hand back a cloud of attachment areas.
         """
         return self._markings.get(organ_id, [])
 
@@ -264,10 +268,11 @@ def children_of(
     here, separately — a reader browsing needs to know which of the two they are
     looking at, and a flat list of both cannot say.
 
-    An empty prefix asks for the roots. **26% of the male atlas has no path at
-    all** — the attachment markings and other unfiled meshes — so the root's
-    structure list is enormous and callers must page it rather than take it
-    whole.
+    An empty prefix asks for the roots. Paging is the caller's job at any level:
+    `Muscular insertions` alone holds 451. The root once held 910 loose meshes
+    because the export dropped the name of the collection they sat in; that is
+    fixed at the source, and `systems_map` reports `unfiled` so a recurrence is
+    visible rather than silent.
     """
     depth = len(prefix)
     headings: dict[str, None] = {}

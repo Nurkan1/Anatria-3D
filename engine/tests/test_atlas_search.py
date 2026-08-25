@@ -221,20 +221,25 @@ class TestSystemsMap:
         roots, _ = mapped["cardiovascular"]
         assert "Systemic arteries" in roots
 
-    def test_counts_what_browsing_cannot_reach(self, atlas):
-        # The muscular system's unfiled structures are its 451 attachment
-        # markings: reachable by search, invisible to anyone walking the tree.
-        _, unfiled = mapped_muscular = systems_map(atlas.structures)["muscular"]
-        assert unfiled == sum(
-            1
-            for structure in atlas.structures
-            if structure.system == "muscular" and not structure.path
-        )
-        assert mapped_muscular[1] > 0
+    def test_counts_exactly_what_has_no_path(self, atlas):
+        mapped = systems_map(atlas.structures)
+        for system, (_, unfiled) in mapped.items():
+            assert unfiled == sum(
+                1
+                for structure in atlas.structures
+                if structure.system == system and not structure.path
+            ), system
 
-    def test_a_fully_filed_system_reports_none_unfiled(self, atlas):
-        _, unfiled = systems_map(atlas.structures)["cardiovascular"]
-        assert unfiled == 0
+    def test_every_system_is_now_reachable_by_browsing(self, atlas):
+        # It was not. 910 structures — 26% of the male atlas — carried no path,
+        # and five systems carried none at all: endocrine, lymphatic, regional,
+        # renal, reproductive. The export dropped the name of the collection an
+        # object sat directly in, so a reader could reach a kidney by searching
+        # and never by walking the tree. Regression guard, not a tautology.
+        mapped = systems_map(atlas.structures)
+        for system, (roots, unfiled) in mapped.items():
+            assert roots, f"{system} has no way in"
+            assert unfiled == 0, f"{system} leaves {unfiled} structures out of the tree"
 
 
 class TestHeadings:

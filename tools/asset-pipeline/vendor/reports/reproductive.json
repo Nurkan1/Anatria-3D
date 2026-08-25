@@ -18,72 +18,100 @@
   {
    "name": "Corpus cavernosum of penis",
    "polygons": 1288,
-   "path": []
+   "path": [
+    "Genital systems"
+   ]
   },
   {
    "name": "Corpus spongiosum of penis",
    "polygons": 560,
-   "path": []
+   "path": [
+    "Genital systems"
+   ]
   },
   {
    "name": "Ductus deferens.l",
    "polygons": 2448,
-   "path": []
+   "path": [
+    "Genital systems"
+   ]
   },
   {
    "name": "Ductus deferens.r",
    "polygons": 2448,
-   "path": []
+   "path": [
+    "Genital systems"
+   ]
   },
   {
    "name": "Ejaculatory duct.l",
    "polygons": 432,
-   "path": []
+   "path": [
+    "Genital systems"
+   ]
   },
   {
    "name": "Ejaculatory duct.r",
    "polygons": 432,
-   "path": []
+   "path": [
+    "Genital systems"
+   ]
   },
   {
    "name": "Epididymis.l",
    "polygons": 216,
-   "path": []
+   "path": [
+    "Genital systems"
+   ]
   },
   {
    "name": "Epididymis.r",
    "polygons": 216,
-   "path": []
+   "path": [
+    "Genital systems"
+   ]
   },
   {
    "name": "Glans penis",
    "polygons": 1391,
-   "path": []
+   "path": [
+    "Genital systems"
+   ]
   },
   {
    "name": "Prostate",
    "polygons": 468,
-   "path": []
+   "path": [
+    "Genital systems"
+   ]
   },
   {
    "name": "Seminal gland.l",
    "polygons": 360,
-   "path": []
+   "path": [
+    "Genital systems"
+   ]
   },
   {
    "name": "Seminal gland.r",
    "polygons": 360,
-   "path": []
+   "path": [
+    "Genital systems"
+   ]
   },
   {
    "name": "Testis.l",
    "polygons": 678,
-   "path": []
+   "path": [
+    "Genital systems"
+   ]
   },
   {
    "name": "Testis.r",
    "polygons": 678,
-   "path": []
+   "path": [
+    "Genital systems"
+   ]
   }
  ]
 }

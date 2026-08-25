@@ -70,817 +70,1143 @@
   {
    "name": "(Anterior tibial node).l",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "(Anterior tibial node).r",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "(Fibular node).l",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "(Fibular node).r",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "(Intermediate deep inguinal node).l",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "(Intermediate deep inguinal node).r",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "(Intermediate lacunar node).l",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "(Intermediate lacunar node).r",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "(Lateral lacunar node).l",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "(Lateral lacunar node).r",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "(Medial lacunar node).l",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "(Medial lacunar node).r",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "(Posterior tibial node).l",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "(Posterior tibial node).r",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "(Proximal deep inguinal node).l",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "(Proximal deep inguinal node).r",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "(Retropyloric nodes)",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "(Subpyloric nodes)",
    "polygons": 192,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "(Suprapyloric node)",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Anterior axillary nodes.l",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Anterior axillary nodes.r",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Anterior inferior jugular nodes.l",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Anterior inferior jugular nodes.r",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Apical axillary nodes.l",
    "polygons": 192,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Apical axillary nodes.r",
    "polygons": 192,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Appendicular nodes",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Brachial nodes.l",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Brachial nodes.r",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Brachiocephalic nodes",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Bucinator node.l",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Bucinator node.r",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Central axillary nodes.l",
    "polygons": 192,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Central axillary nodes.r",
    "polygons": 192,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Central superior mesenteric nodes",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Coeliac nodes",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Cubital nodes.l",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Cubital nodes.r",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Cystic node",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Deep popliteal nodes.l",
    "polygons": 192,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Deep popliteal nodes.r",
    "polygons": 192,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Ileocolic nodes",
    "polygons": 192,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Inferior deep lateral cervical nodes.l",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Inferior deep lateral cervical nodes.r",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Inferior diaphragmatic nodes",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Inferior epigastric nodes.l",
    "polygons": 192,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Inferior epigastric nodes.r",
    "polygons": 192,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Inferior gluteal nodes.l",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Inferior gluteal nodes.r",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Inferior pancreatic nodes",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Inferior superficial inguinal nodes.l",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Inferior superficial inguinal nodes.r",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Inferior tracheobronchial nodes",
    "polygons": 960,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Infra-auricular nodes.l",
    "polygons": 192,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Infra-auricular nodes.r",
    "polygons": 192,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Infraclavicular nodes.l",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Infraclavicular nodes.r",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Intercostal nodes.l",
    "polygons": 1152,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Intercostal nodes.r",
    "polygons": 1152,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Intermediate common iliac nodes",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Intermediate external iliac nodes.l",
    "polygons": 672,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Intermediate external iliac nodes.r",
    "polygons": 672,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Intermediate lumbar nodes",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Interpectoral nodes.l",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Interpectoral nodes.r",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Intraglandular parotid nodes.l",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Intraglandular parotid nodes.r",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Intrapulmonary nodes",
    "polygons": 2208,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Jugulodigastric node.l",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Jugulodigastric node.r",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Juxta-intestinal mesenteric nodes",
    "polygons": 1440,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Juxta-oesophageal nodes",
    "polygons": 960,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Lateral aortic nodes",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Lateral axillary nodes.l",
    "polygons": 192,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Lateral axillary nodes.r",
    "polygons": 192,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Lateral caval nodes",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Lateral common iliac nodes",
    "polygons": 768,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Lateral pericardial nodes",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Lateral sacral nodes.l",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Lateral sacral nodes.r",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Lateral superior jugular node.l",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Lateral superior jugular node.r",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Lateral vesical nodes.l",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Lateral vesical nodes.r",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Left colic nodes",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Left lobe of thymus",
    "polygons": 9188,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Mandibular node.l",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Mandibular node.r",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Mastoid nodes.l",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Mastoid nodes.r",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Medial common iliac nodes",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Medial external iliac nodes.l",
    "polygons": 768,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Medial external iliac nodes.r",
    "polygons": 768,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Median sacral nodes",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Middle colic nodes",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Nasolabial node.l",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Nasolabial node.r",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Node of arch of azygos vein",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Node of ligamentum arteriosum",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Obturator nodes.l",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Obturator nodes.r",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Occipital nodes.l",
    "polygons": 192,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Occipital nodes.r",
    "polygons": 192,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Palatine tonsil.l",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Palatine tonsil.r",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Paracolic superior mesenteric nodes",
    "polygons": 1632,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Pararectal nodes",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Parasternal nodes.l",
    "polygons": 768,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Parasternal nodes.r",
    "polygons": 768,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Paratracheal cervical nodes",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Paratracheal thoracic nodes",
    "polygons": 960,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Posterior axillary nodes.l",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Posterior axillary nodes.r",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Postvesical nodes",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Pre-aortic nodes",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Pre-auricular nodes.l",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Pre-auricular nodes.r",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Precaecal nodes",
    "polygons": 192,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Precaval nodes",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Prepericardial nodes",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Pretracheal nodes.l",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Pretracheal nodes.r",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Prevertebral nodes",
    "polygons": 960,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Prevesical nodes",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Retro-aortic nodes",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Retrocaecal nodes",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Retrocaval nodes",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Retropharyngeal nodes.l",
    "polygons": 192,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Retropharyngeal nodes.r",
    "polygons": 192,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Right colic nodes",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Right gastric nodes",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Right gastro-omental nodes",
    "polygons": 672,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Right lobe of thymus",
    "polygons": 6452,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Sigmoid nodes",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Spleen",
    "polygons": 1330,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Splenic nodes",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Subaortic nodes",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Submandibular nodes.l",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Submandibular nodes.r",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Submental nodes.l",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Submental nodes.r",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Superficial anterior cervical nodes",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Superficial lateral cervical nodes.l",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Superficial lateral cervical nodes.r",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Superficial parotid nodes.l",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Superficial parotid nodes.r",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Superficial popliteal nodes.l",
    "polygons": 192,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Superficial popliteal nodes.r",
    "polygons": 192,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Superior diaphragmatic nodes",
    "polygons": 576,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Superior gluteal nodes.l",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Superior gluteal nodes.r",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Superior pancreatic nodes",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Superior pancreaticoduodenal nodes",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Superior tracheobronchial nodes",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Superolateral superficial inguinal nodes.l",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Superolateral superficial inguinal nodes.r",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Superomedial superficial inguinal nodes.l",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Superomedial superficial inguinal nodes.r",
    "polygons": 288,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Supraclavicular nodes.l",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Supraclavicular nodes.r",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Supratrochlear nodes.l",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Supratrochlear nodes.r",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Lymphoid system"
+   ]
   },
   {
    "name": "Thyroid nodes.l",
    "polygons": 192,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   },
   {
    "name": "Thyroid nodes.r",
    "polygons": 192,
-   "path": []
+   "path": [
+    "Lymphoid organs"
+   ]
   }
  ]
 }

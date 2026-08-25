@@ -634,12 +634,16 @@
   {
    "name": "Anterior chamber of eyeball.l",
    "polygons": 4352,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Anterior chamber of eyeball.r",
    "polygons": 4352,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Anterior cochlear nucleus.l",
@@ -655,7 +659,9 @@
   {
    "name": "Anterior cochlear nucleus.r",
    "polygons": 96,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Anterior commissure",
@@ -673,7 +679,9 @@
   {
    "name": "Anterior corticospinal tract",
    "polygons": 3636,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Anterior cutaneous branches of femoral nerve.l",
@@ -786,12 +794,16 @@
   {
    "name": "Anterior fasciculus proprius",
    "polygons": 4646,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Anterior horn of spinal cord",
    "polygons": 4444,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Anterior interosseous nerve of forearm.l",
@@ -894,22 +906,30 @@
   {
    "name": "Anterior segment of eyeball.l",
    "polygons": 1664,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Anterior segment of eyeball.r",
    "polygons": 1664,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Anterior spinocerebellar tract",
    "polygons": 5858,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Anterior spinothalamic tract",
    "polygons": 4040,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Aqueduct of midbrain",
@@ -943,12 +963,16 @@
   {
    "name": "Auditory tube.l",
    "polygons": 920,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Auditory tube.r",
    "polygons": 920,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Axillary nerve.l",
@@ -1177,7 +1201,9 @@
   {
    "name": "Central canal",
    "polygons": 1616,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Central canal'",
@@ -1679,12 +1705,16 @@
   {
    "name": "Cornea.l",
    "polygons": 1344,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Cornea.r",
    "polygons": 1344,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Corpus callosum",
@@ -1729,7 +1759,9 @@
   {
    "name": "Cuneate fasciculus",
    "polygons": 1512,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Cuneus.l",
@@ -2864,7 +2896,9 @@
   {
    "name": "Gracile fasciculus",
    "polygons": 3838,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Gracile lobule.l",
@@ -3277,12 +3311,16 @@
   {
    "name": "Inferior salivatory nucleus.l",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Inferior salivatory nucleus.r",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Inferior semilunar lobule.l",
@@ -3527,12 +3565,16 @@
   {
    "name": "Intermediolateral nucleus",
    "polygons": 2828,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Intermediomedial nucleus",
    "polygons": 3232,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Interpeduncular fossa.l",
@@ -3579,12 +3621,16 @@
   {
    "name": "Iris.l",
    "polygons": 3248,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Iris.r",
    "polygons": 3248,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Lacrimal canaliculus.l",
@@ -3743,12 +3789,16 @@
   {
    "name": "Lateral corticospinal tract",
    "polygons": 3838,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Lateral fasciculus proprius",
    "polygons": 10100,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Lateral femoral cutaneous nerve.l",
@@ -3867,7 +3917,9 @@
   {
    "name": "Lateral intermediate substance",
    "polygons": 6666,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Lateral occipital gyrus (Middle occipital gyrus*).l",
@@ -3966,12 +4018,16 @@
   {
    "name": "Lateral reticulospinal tract",
    "polygons": 1616,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Lateral spinothalamic tract",
    "polygons": 4444,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Lateral ventricle.l",
@@ -3998,17 +4054,23 @@
   {
    "name": "Lateral vestibulospinal tract",
    "polygons": 4848,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Lens.l",
    "polygons": 1598,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Lens.r",
    "polygons": 1598,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Lentiform nucleus.l",
@@ -4672,7 +4734,9 @@
   {
    "name": "Medial reticulospinal tract",
    "polygons": 4040,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Medial sural cutaneous nerve.l",
@@ -4703,7 +4767,9 @@
   {
    "name": "Medial vestibulospinal tract",
    "polygons": 1616,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Median nerve.l",
@@ -4738,7 +4804,9 @@
   {
    "name": "Medulla oblongata.r",
    "polygons": 6078,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Meningeal branch of maxillary nerve.l",
@@ -5186,12 +5254,16 @@
   {
    "name": "Nucleus ambiguus.l",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Nucleus ambiguus.r",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Nucleus of abducens nerve.l",
@@ -5240,12 +5312,16 @@
   {
    "name": "Nucleus of hypoglossal nerve.l",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Nucleus of hypoglossal nerve.r",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Nucleus of oculomotor nerve.l",
@@ -5278,27 +5354,37 @@
   {
    "name": "Nucleus of solitary tract.l",
    "polygons": 672,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Nucleus of solitary tract.r",
    "polygons": 672,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Nucleus of trochlear nerve.l",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Nucleus of trochlear nerve.r",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Nucleus proprius",
    "polygons": 1616,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Oblique head of adductor hallucis.l",
@@ -6263,12 +6349,16 @@
   {
    "name": "Posterior cochlear nucleus.l",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Posterior cochlear nucleus.r",
    "polygons": 480,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Posterior commissure",
@@ -6388,7 +6478,9 @@
   {
    "name": "Posterior fasciculus proprius",
    "polygons": 6464,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Posterior femoral cutaneous nerve.l",
@@ -6411,7 +6503,9 @@
   {
    "name": "Posterior horn of spinal cord",
    "polygons": 6464,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Posterior interosseous nerve of forearm.l",
@@ -6440,12 +6534,16 @@
   {
    "name": "Posterior nucleus of vagus nerve.l",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Posterior nucleus of vagus nerve.r",
    "polygons": 384,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Posterior quadrangular lobule.l",
@@ -6504,22 +6602,30 @@
   {
    "name": "Posterior segment of eyeball.l",
    "polygons": 3264,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Posterior segment of eyeball.r",
    "polygons": 3264,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Posterior spinocerebellar tract",
    "polygons": 5858,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Posterolateral tract",
    "polygons": 4444,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Precentral gyrus.l",
@@ -6917,12 +7023,16 @@
   {
    "name": "Retina.l",
    "polygons": 3152,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Retina.r",
    "polygons": 3152,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Rhomboid major muscle.l",
@@ -7009,7 +7119,9 @@
   {
    "name": "Rubrospinal tract",
    "polygons": 3232,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Saphenous nerve.l",
@@ -7108,12 +7220,16 @@
   {
    "name": "Sclera.l",
    "polygons": 2272,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Sclera.r",
    "polygons": 2272,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Semimembranosus muscle.l",
@@ -7311,22 +7427,30 @@
   {
    "name": "Spinal ganglion.l",
    "polygons": 1680,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Spinal ganglion.r",
    "polygons": 1680,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Spinal reticular process",
    "polygons": 3434,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Spinotectal tract",
    "polygons": 1616,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Sternocleidomastoid muscle.l",
@@ -8211,7 +8335,9 @@
   {
    "name": "Tectospinal tract",
    "polygons": 1616,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Temporal plane.l",
@@ -8960,17 +9086,23 @@
   {
    "name": "Vitreous body.l",
    "polygons": 5436,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Vitreous body.r",
    "polygons": 5436,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "White matter of spinal cord",
    "polygons": 7777,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "White matter of telencephalon.l",
@@ -9015,12 +9147,16 @@
   {
    "name": "Zonular fibres.l",
    "polygons": 352,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Zonular fibres.r",
    "polygons": 34144,
-   "path": []
+   "path": [
+    "Nervous system & Sense organs"
+   ]
   },
   {
    "name": "Zygomaticus major muscle.l",
