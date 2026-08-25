@@ -36,6 +36,7 @@ from anatria_engine.atlas_search import (
     MIN_QUERY_LENGTH,
     Atlas,
     children_of,
+    headings_at,
     load_atlas,
     search,
 )
@@ -89,6 +90,15 @@ class StructureOut(BaseModel):
         default_factory=list,
         description="Headings from the atlas root down to this structure.",
     )
+    part: str = Field(
+        default="belly",
+        description=(
+            "What the source data marks this mesh as: 'belly' for the structure "
+            "itself, or 'origin_marking'/'insertion_marking' for a muscle "
+            "attachment area. This repeats the upstream dataset's own naming — "
+            "it is not an independent anatomical finding."
+        ),
+    )
 
 
 class SearchOut(BaseModel):
@@ -97,6 +107,21 @@ class SearchOut(BaseModel):
     shown: list[StructureOut]
     truncated: bool = Field(
         description="True when matches were withheld; narrow the query to see them."
+    )
+
+
+class DescribeOut(StructureOut):
+    """One structure, plus what else the manifest files against it."""
+
+    attachment_markings: list[StructureOut] = Field(
+        default_factory=list,
+        description=(
+            "Meshes the source data names as this muscle's origin or insertion "
+            "areas. Empty for anything that is not a muscle belly, and often "
+            "incomplete where it is — 197 muscles in the male atlas carry only "
+            "one of the two. An empty list means this dataset records none, not "
+            "that the muscle has no attachments."
+        ),
     )
 
 
@@ -109,6 +134,13 @@ class BrowseOut(BaseModel):
     path: list[str]
     headings: list[str] = Field(description="Sub-headings directly below this point.")
     structures: list[StructureOut] = Field(description="Structures that stop here.")
+    structure_total: int = Field(
+        description="Structures at this level in total, before the page was cut."
+    )
+    offset: int = Field(description="Where this page started.")
+    truncated: bool = Field(
+        description="True when structures were withheld; raise offset to see the rest."
+    )
 
 
 class AtlasInfoOut(BaseModel):
@@ -128,7 +160,33 @@ def _out(structure) -> StructureOut:
         name_en=structure.name_en,
         system=structure.system,
         hierarchy=list(structure.path),
+        part=structure.part,
     )
+
+
+def _validated(loaded: Atlas, prefix: tuple[str, ...]) -> tuple[str, ...]:
+    """Refuse a path that does not exist, rather than returning it empty.
+
+    A heading that is merely childless and a heading that was never there look
+    identical in the result — both are empty — so without this a caller walking
+    from a typo is told the branch is empty and has no way to learn otherwise.
+    Every other tool here errors on bad input and offers candidates; this one
+    used to succeed, which made it the only place in the server that could
+    mislead the reader.
+    """
+    for depth in range(len(prefix)):
+        available = headings_at(loaded.structures, prefix[:depth])
+        if prefix[depth] in available:
+            continue
+        close = difflib.get_close_matches(prefix[depth], available, n=SUGGESTIONS, cutoff=0.4)
+        where = " at the atlas root" if depth == 0 else f" under {list(prefix[:depth])}"
+        hint = (
+            f" Did you mean: {', '.join(close)}?"
+            if close
+            else f" Available: {', '.join(available[:SUGGESTIONS])}."
+        )
+        raise ToolError(f"No heading {prefix[depth]!r}{where}.{hint}")
+    return prefix
 
 
 READ_ONLY = ToolAnnotations(read_only_hint=True, idempotent_hint=True)
@@ -150,7 +208,15 @@ def build_server() -> MCPServer:
             "Terminologia Anatomica (TA2) Latin terms alongside English names. "
             "Use search_structures to find an organ_id, then describe_structure "
             "for its full record. This server reads only; it cannot move or "
-            "change anything in the Anatria3D application."
+            "change anything in the Anatria3D application. "
+            "What it does NOT hold, so do not answer these from it: the index "
+            "is Latin, English and identifiers only — a query in any other "
+            "language returns nothing, and that is not evidence the structure "
+            "is absent. The manifest records no relationships: nothing here "
+            "says what supplies, innervates, drains or borders a structure. "
+            "The two atlases are separate works under different licences and "
+            "cover different systems; the female one has no muscular or "
+            "nervous structures at all."
         ),
     )
 
@@ -170,6 +236,15 @@ def build_server() -> MCPServer:
             raise ToolError(f"Search for at least {MIN_QUERY_LENGTH} characters.")
 
         found = search(atlas(gender).structures, query)
+        if not found and not query.isascii():
+            # A Bulgarian or Spanish query returns zero for the same reason a
+            # nonexistent structure does, and the caller cannot tell which.
+            raise ToolError(
+                f"Nothing matches {query!r}. This atlas is indexed in TA2 Latin, "
+                "English and identifiers only — a query in another language "
+                "finds nothing here even when the structure exists. Search the "
+                "Latin or English term instead."
+            )
         shown = found[:limit]
         return SearchOut(
             query=query,
@@ -179,10 +254,16 @@ def build_server() -> MCPServer:
         )
 
     @mcp.tool(annotations=READ_ONLY)
-    def describe_structure(organ_id: str, gender: Gender = "male") -> StructureOut:
-        """The full record for one structure, including its hierarchy trail.
+    def describe_structure(organ_id: str, gender: Gender = "male") -> DescribeOut:
+        """One structure's record, plus any attachment areas filed against it.
 
         Use search_structures first to get an exact organ_id.
+
+        For a muscle belly this returns the meshes the source data names as its
+        origin and insertion areas. **That is the upstream dataset's own
+        naming, repeated — not an anatomical finding of this project.** Say so
+        if you pass it on, and do not report an empty list as "this muscle has
+        no attachments": it means the manifest records none.
         """
         loaded = atlas(gender)
         structure = loaded.by_id(organ_id)
@@ -196,7 +277,12 @@ def build_server() -> MCPServer:
                 else " Use search_structures to find the exact id."
             )
             raise ToolError(f"No structure {organ_id!r} in the {gender} atlas.{hint}")
-        return _out(structure)
+
+        base = _out(structure)
+        return DescribeOut(
+            **base.model_dump(),
+            attachment_markings=[_out(mark) for mark in loaded.markings_for(organ_id)],
+        )
 
     @mcp.tool(annotations=READ_ONLY)
     def list_systems(gender: Gender = "male") -> list[SystemOut]:
@@ -213,19 +299,31 @@ def build_server() -> MCPServer:
             Field(description="Headings from the root down. Omit for the top level."),
         ] = None,
         gender: Gender = "male",
+        limit: Annotated[int, Field(ge=1, le=MAX_RESULTS)] = MAX_RESULTS,
+        offset: Annotated[int, Field(ge=0)] = 0,
     ) -> BrowseOut:
         """Walk the atlas hierarchy one level at a time.
 
         Returns the sub-headings below a point and the structures that stop
         there, separately — the two are different things and a flat list of both
         cannot say which is which.
+
+        Structures are paged. The root carries roughly a quarter of the male
+        atlas as unfiled meshes, so an unpaged root would be tens of thousands
+        of tokens; `headings` is never paged, because that is the part a caller
+        walks by.
         """
-        prefix = tuple(path or ())
-        headings, leaves = children_of(atlas(gender).structures, prefix)
+        loaded = atlas(gender)
+        prefix = _validated(loaded, tuple(path or ()))
+        headings, leaves = children_of(loaded.structures, prefix)
+        page = leaves[offset : offset + limit]
         return BrowseOut(
             path=list(prefix),
             headings=headings,
-            structures=[_out(structure) for structure in leaves],
+            structures=[_out(structure) for structure in page],
+            structure_total=len(leaves),
+            offset=offset,
+            truncated=offset + len(page) < len(leaves),
         )
 
     @mcp.tool(annotations=READ_ONLY)

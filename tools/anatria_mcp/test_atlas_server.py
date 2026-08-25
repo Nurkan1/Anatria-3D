@@ -157,3 +157,104 @@ class TestSystems:
         systems = out["result"] if isinstance(out, dict) and "result" in out else out
         assert len(systems) >= 10
         assert all(entry["structure_count"] > 0 for entry in systems)
+
+
+class TestRootIsReachable:
+    """The entry point used to be unusable.
+
+    An unpaged root returned every unfiled mesh in the atlas — about a quarter
+    of it, roughly 140 KB — and blew the transport's token limit outright. The
+    call succeeded and was still useless, which is the worst shape a failure
+    can take.
+    """
+
+    async def test_the_root_fits_through_the_transport(self, client):
+        out = await call(client, "browse_hierarchy")
+        assert out["headings"], "headings are never paged; they are what you walk by"
+        assert len(out["structures"]) <= 25
+        assert out["structure_total"] > len(out["structures"])
+        assert out["truncated"] is True
+
+    async def test_offset_reaches_the_rest(self, client):
+        first = await call(client, "browse_hierarchy", limit=5)
+        second = await call(client, "browse_hierarchy", limit=5, offset=5)
+        assert first["offset"] == 0
+        assert second["offset"] == 5
+        ids = {item["organ_id"] for item in first["structures"]}
+        assert not ids & {item["organ_id"] for item in second["structures"]}
+
+    async def test_a_leaf_reports_no_truncation(self, client):
+        out = await call(client, "browse_hierarchy", path=["Heart"])
+        assert out["headings"] == []
+        assert out["structures"]
+        assert out["truncated"] is False
+        assert out["structure_total"] == len(out["structures"])
+
+
+class TestAWrongPathFails:
+    """A branch that never existed must not read as a branch that is empty."""
+
+    async def test_a_typo_errors_with_candidates(self, client):
+        result = await client.call_tool("browse_hierarchy", {"path": ["Hearts"]})
+        assert result.is_error
+        assert "Heart" in str(result.content)
+
+    async def test_a_wrong_child_names_where_it_looked(self, client):
+        result = await client.call_tool(
+            "browse_hierarchy", {"path": ["Central nervous system", "Brian"]}
+        )
+        assert result.is_error
+        message = str(result.content)
+        assert "Brian" in message
+        assert "Brain" in message
+
+    async def test_a_real_path_still_succeeds(self, client):
+        out = await call(client, "browse_hierarchy", path=["Central nervous system", "Brain"])
+        assert out["headings"]
+
+
+class TestAttachments:
+    """451 meshes in the male atlas are muscle attachment areas.
+
+    They carry the belly's English name and its TA2 term, so before `part`
+    existed a caller saw three indistinguishable entries per side and could
+    only conclude the data was duplicated.
+    """
+
+    async def test_a_muscle_reports_its_origin_and_insertion(self, client):
+        out = await call(client, "describe_structure", organ_id="sartorius_muscle_l")
+        assert out["part"] == "belly"
+        parts = {mark["part"] for mark in out["attachment_markings"]}
+        assert parts == {"origin_marking", "insertion_marking"}
+
+    async def test_search_distinguishes_a_marking_from_the_muscle(self, client):
+        out = await call(client, "search_structures", query="sartorius_muscle")
+        parts = {item["organ_id"]: item["part"] for item in out["shown"]}
+        assert parts["sartorius_muscle_l"] == "belly"
+        assert parts["sartorius_muscle_ol"] == "origin_marking"
+        assert parts["sartorius_muscle_el"] == "insertion_marking"
+
+    async def test_a_structure_with_no_markings_returns_an_empty_list(self, client):
+        out = await call(client, "describe_structure", organ_id="left_atrium")
+        assert out["attachment_markings"] == []
+
+
+class TestSaysWhatItDoesNotKnow:
+    async def test_a_non_latin_query_explains_the_index(self, client):
+        # Zero for a Bulgarian word and zero for a structure that is genuinely
+        # absent used to be the same answer, and the caller could not tell.
+        result = await client.call_tool("search_structures", {"query": "сърце"})
+        assert result.is_error
+        assert "Latin" in str(result.content)
+
+    async def test_an_absent_english_term_is_still_a_plain_zero(self, client):
+        # Not an error: "gizzard" really is not in a human atlas, and saying so
+        # by refusing would misrepresent a correct answer as a failure.
+        out = await call(client, "search_structures", query="gizzard")
+        assert out["total"] == 0
+
+    async def test_the_instructions_disclaim_relationships(self, client):
+        # `add_supply` in the application answers this from live geometry. The
+        # manifest holds no edges, and a model must not fill that in.
+        instructions = (await client.initialize()).instructions or ""
+        assert "no relationships" in instructions

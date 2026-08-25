@@ -14,15 +14,52 @@ Five tools, all reads:
 | Tool | Answers |
 |---|---|
 | `search_structures` | "what is the id for the left atrium?" |
-| `describe_structure` | the full record and its hierarchy trail |
-| `list_systems` | the twelve systems and how many structures each holds |
-| `browse_hierarchy` | one level of the atlas tree at a time |
+| `describe_structure` | the record, plus the muscle's origin and insertion areas |
+| `list_systems` | that atlas's systems and how many structures each holds |
+| `browse_hierarchy` | one level of the atlas tree at a time, paged |
 | `atlas_info` | version, structure count, licence, credit |
 
 **It cannot change anything.** It does not talk to the Anatria3D application,
 cannot move the viewport, and cannot read your study journal, your case files or
 your API keys. Driving the viewer is a different surface with a different
 security model, and it is deliberately not in this server.
+
+## What it does not hold
+
+Stated because a model asked these and had to be told no — and because a gap
+left unstated is one a model fills from its own memory.
+
+- **The index is TA2 Latin, English and identifiers.** A query in Bulgarian or
+  Spanish finds nothing, and the server now says so rather than returning a
+  bare zero that reads like "this structure does not exist".
+- **No relationships.** Nothing records what supplies, innervates, drains or
+  borders a structure. `add_supply` in the application answers that from live
+  geometry; the manifest has no geometry and therefore no edges.
+- **Attachment areas are the source data's marking, not our finding.**
+  Z-Anatomy names a muscle's origin and insertion meshes `.ol`/`.el` beside the
+  belly's `.l`, and `part` repeats that convention. 451 of them exist in the
+  male atlas, **197 muscles carry only one of the two**, and 59 markings have no
+  belly under the derived id at all. An empty list is this dataset's coverage,
+  not an anatomical claim.
+- **A quarter of the male atlas is unfiled** — 910 structures with no hierarchy
+  path, the attachment markings among them. They surface at the root of
+  `browse_hierarchy`, which is why that call is paged.
+
+## The two atlases are different works
+
+They do not share a licence, and they do not cover the same body.
+
+| | male | female |
+|---|---|---|
+| structures | 3,478 | 264 |
+| licence | **CC-BY-SA-4.0** | **CC-BY-4.0** |
+| source | Z-Anatomy / BodyParts3D (DBCLS) | NIH Human Reference Atlas / Visible Human Female |
+| systems | 12 | 7 — **no muscular, no nervous** |
+
+Share-alike on one side and plain attribution on the other: anything that
+merges output from both is combining two licences with different obligations.
+`atlas_info` reports each atlas's own fields, and it is the only place that
+says so.
 
 ## Why it has its own virtualenv
 
@@ -115,7 +152,8 @@ installed copy with `ANATRIA_ATLAS_DIR`:
 
 ## Licence of the data
 
-The atlas is **CC-BY-SA-4.0**, credited to Z-Anatomy / BodyParts3D (DBCLS).
-`atlas_info` returns those fields with every answer that asks for them, because
-data that leaves the application should not leave without its provenance. If you
-reproduce it anywhere, that licence travels with it.
+**There is no single answer** — see the table above. Ask `atlas_info` for the
+atlas you actually used and take the licence, credit and attribution it returns.
+Data that leaves the application should not leave without its provenance, and
+with two works under two licences a hardcoded answer would be wrong half the
+time. Whichever you reproduce, that licence travels with it.

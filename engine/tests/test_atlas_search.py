@@ -15,8 +15,11 @@ import pytest
 
 from anatria_engine.atlas_search import (
     MIN_QUERY_LENGTH,
+    belly_id,
     children_of,
+    headings_at,
     load_atlas,
+    part_of,
     search,
 )
 from anatria_engine.protocol import OrganMeta
@@ -138,3 +141,77 @@ class TestAgainstTheShippedManifest:
         assert deeper_headings or deeper_leaves
         for structure in deeper_leaves:
             assert structure.path == (headings[0],)
+
+
+class TestAttachmentMarkings:
+    """The suffixes are the only record that these meshes are not the muscle.
+
+    A quarter of the male atlas is unfiled, and 451 of those are muscle
+    attachment areas carrying the *same* English name and the *same* TA2 term
+    as the belly. Pointed at that without this distinction, a model reads six
+    sartorius entries and concludes the data is duplicated rubbish — which is
+    what happened. The convention is Z-Anatomy's, documented in
+    `tools/asset-pipeline/build-manifest.mjs`.
+    """
+
+    def test_reads_the_part_from_the_suffix(self):
+        assert part_of("sartorius_muscle_l") == "belly"
+        assert part_of("sartorius_muscle_ol") == "origin_marking"
+        assert part_of("sartorius_muscle_er") == "insertion_marking"
+
+    def test_anything_unsuffixed_is_the_structure_itself(self):
+        assert part_of("aorta") == "belly"
+        assert part_of("third_ventricle") == "belly"
+
+    def test_names_the_muscle_a_marking_belongs_to(self):
+        assert belly_id("sartorius_muscle_ol") == "sartorius_muscle_l"
+        assert belly_id("sartorius_muscle_er") == "sartorius_muscle_r"
+        assert belly_id("sartorius_muscle_l") is None
+
+    def test_the_muscle_may_not_exist(self, atlas):
+        # 59 markings in the male atlas have no belly under the derived id —
+        # the diaphragm and erector spinae among them. `belly_id` derives a
+        # name; it does not promise the atlas holds it.
+        assert belly_id("diaphragm_ol") == "diaphragm_l"
+        assert atlas.by_id("diaphragm_l") is None
+
+    def test_a_muscle_reports_its_markings(self, atlas):
+        markings = atlas.markings_for("sartorius_muscle_l")
+        assert {mark.organ_id for mark in markings} == {
+            "sartorius_muscle_el",
+            "sartorius_muscle_ol",
+        }
+        assert {mark.part for mark in markings} == {"origin_marking", "insertion_marking"}
+
+    def test_a_marking_is_never_filed_against_itself(self, atlas):
+        assert atlas.markings_for("sartorius_muscle_ol") == []
+
+    def test_most_muscles_carry_only_one_marking(self, atlas):
+        # Recorded because the tool description promises it: an empty or
+        # half-empty list is this dataset's coverage, not an anatomical claim
+        # that the muscle has no second attachment.
+        bellies = {
+            structure.organ_id
+            for structure in atlas.structures
+            if structure.system == "muscular" and structure.part == "belly"
+        }
+        with_both = sum(
+            1
+            for organ_id in bellies
+            if len({mark.part for mark in atlas.markings_for(organ_id)}) == 2
+        )
+        with_any = sum(1 for organ_id in bellies if atlas.markings_for(organ_id))
+        assert 0 < with_both < with_any
+
+
+class TestHeadings:
+    def test_lists_only_the_next_level(self, atlas):
+        roots = headings_at(atlas.structures, ())
+        assert "Central nervous system" in roots
+        assert "Brain" not in roots, "Brain sits deeper and must not surface at the root"
+
+    def test_descends(self, atlas):
+        assert "Brain" in headings_at(atlas.structures, ("Central nervous system",))
+
+    def test_a_leaf_has_no_headings(self, atlas):
+        assert headings_at(atlas.structures, ("Heart",)) == []
