@@ -13,9 +13,19 @@ There is **no auto-updater**, by design: the application never reaches the
 network on its own. A new version reaches you only when you download and install
 it, so this file is also the answer to "is it worth reinstalling".
 
-## [Unreleased]
+## [0.2.2] — 2026-08-25
 
 ### Added
+
+**You can take the fascia off.** The muscular system carries 116 sheets — the
+pectoral fascia, the rectus sheath, the fascia lata — lying directly on the
+muscles they wrap. They were drawn pale and thin, because that is what they
+are, and they still veiled the bellies underneath: what you saw was a body
+before anyone had started dissecting. A new checkbox in the left panel lifts
+them, and the choice is remembered between sessions.
+
+It is off by default. With the fascia on, the anatomy is honest; taking it off
+is the dissection move, and that should be your decision rather than ours.
 
 **The atlas answers questions outside the application.** A read-only Model
 Context Protocol server ships in `tools/anatria_mcp/`. Point Claude, Codex or
@@ -57,6 +67,19 @@ the muscles themselves. Isolating the muscles still gives you muscles.
 
 Nothing moved. All 3,478 structures are still there, every path that already
 worked is unchanged, and the geometry is identical to the byte.
+
+**A heading called "Muscles" held 42 of them.** Ask the assistant to isolate the
+muscles and it would land you on the pelvic floor, having done exactly what it
+was told: there was a group with that name, so it took it. It is the atlas's
+catch-all for the muscles its regional scheme has no room for — the
+intercostals, the diaphragm, the levator ani — and it is now called **Other
+muscles**, which is what it holds. Asked for the muscles as a whole, the
+assistant now switches off the other systems instead.
+
+**The help page had a list inside a paragraph.** Invalid markup that a browser
+recovers from by closing the paragraph early and moving what follows. Nothing
+looked wrong, and the page you were reading was not the one that had been
+written.
 
 ## [0.2.1] — 2026-08-22
 
