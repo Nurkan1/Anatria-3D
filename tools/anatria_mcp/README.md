@@ -15,7 +15,7 @@ Five tools, all reads:
 |---|---|
 | `search_structures` | "what is the id for the left atrium?" |
 | `describe_structure` | the record, plus the muscle's origin and insertion areas |
-| `list_systems` | that atlas's systems and how many structures each holds |
+| `list_systems` | each system's size, where it sits in the tree, and how much of it is unfiled |
 | `browse_hierarchy` | one level of the atlas tree at a time, paged |
 | `atlas_info` | version, structure count, licence, credit |
 
@@ -30,8 +30,10 @@ Stated because a model asked these and had to be told no — and because a gap
 left unstated is one a model fills from its own memory.
 
 - **The index is TA2 Latin, English and identifiers.** A query in Bulgarian or
-  Spanish finds nothing, and the server now says so rather than returning a
-  bare zero that reads like "this structure does not exist".
+  Spanish finds nothing. **Every** empty search carries a note saying so —
+  keyed on the result, not on the characters, because the first version fired
+  on non-ASCII input and therefore helped `corazón` while missing `corazon`,
+  which is how a Spanish speaker on an English keyboard actually types.
 - **No relationships.** Nothing records what supplies, innervates, drains or
   borders a structure. `add_supply` in the application answers that from live
   geometry; the manifest has no geometry and therefore no edges.
@@ -40,7 +42,8 @@ left unstated is one a model fills from its own memory.
   belly's `.l`, and `part` repeats that convention. 451 of them exist in the
   male atlas, **197 muscles carry only one of the two**, and 59 markings have no
   belly under the derived id at all. An empty list is this dataset's coverage,
-  not an anatomical claim.
+  not an anatomical claim. The link runs both ways: `belongs_to` names a
+  marking's muscle, or is null when that muscle is not in the atlas.
 - **A quarter of the male atlas is unfiled** — 910 structures with no hierarchy
   path, the attachment markings among them. They surface at the root of
   `browse_hierarchy`, which is why that call is paged.

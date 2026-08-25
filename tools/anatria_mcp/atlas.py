@@ -35,10 +35,12 @@ from anatria_engine.atlas_search import (
     MAX_RESULTS,
     MIN_QUERY_LENGTH,
     Atlas,
+    belly_id,
     children_of,
     headings_at,
     load_atlas,
     search,
+    systems_map,
 )
 from mcp.server import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
@@ -91,12 +93,12 @@ class StructureOut(BaseModel):
         description="Headings from the atlas root down to this structure.",
     )
     part: str = Field(
-        default="belly",
+        default="structure",
         description=(
-            "What the source data marks this mesh as: 'belly' for the structure "
-            "itself, or 'origin_marking'/'insertion_marking' for a muscle "
-            "attachment area. This repeats the upstream dataset's own naming — "
-            "it is not an independent anatomical finding."
+            "'structure' for the thing itself, or 'origin_marking' / "
+            "'insertion_marking' for a mesh the source data files as one of a "
+            "muscle's attachment areas. This repeats the upstream dataset's own "
+            "naming — it is not an independent anatomical finding."
         ),
     )
 
@@ -108,11 +110,23 @@ class SearchOut(BaseModel):
     truncated: bool = Field(
         description="True when matches were withheld; narrow the query to see them."
     )
+    note: str | None = Field(
+        default=None,
+        description="Present only when nothing matched; explains what the index covers.",
+    )
 
 
 class DescribeOut(StructureOut):
     """One structure, plus what else the manifest files against it."""
 
+    belongs_to: str | None = Field(
+        default=None,
+        description=(
+            "For an attachment marking, the identifier of the muscle it is filed "
+            "against — null for anything else, and null when the marking's muscle "
+            "is not in this atlas, which is the case for 59 of them."
+        ),
+    )
     attachment_markings: list[StructureOut] = Field(
         default_factory=list,
         description=(
@@ -128,6 +142,23 @@ class DescribeOut(StructureOut):
 class SystemOut(BaseModel):
     system: str
     structure_count: int
+
+
+class SystemMapOut(SystemOut):
+    """A system, and where in the tree to find it."""
+
+    root_headings: list[str] = Field(
+        default_factory=list,
+        description="Top-level headings under which this system's structures are filed.",
+    )
+    unfiled: int = Field(
+        default=0,
+        description=(
+            "Structures of this system with no hierarchy path at all. They are "
+            "reachable by search but not by browsing; in the male atlas the "
+            "muscular system's 451 are its attachment markings."
+        ),
+    )
 
 
 class BrowseOut(BaseModel):
@@ -197,6 +228,23 @@ READ_ONLY = ToolAnnotations(read_only_hint=True, idempotent_hint=True)
 #: ids picks the right one on the next call.
 SUGGESTIONS = 5
 
+#: Attached to every empty search, and to nothing else.
+#:
+#: Keyed on the result rather than the characters. The first version fired on
+#: non-ASCII input, which helped a Bulgarian query and missed `corazon` typed
+#: without its accent — the ordinary case for a Spanish speaker on an English
+#: keyboard, and one of the three languages this project ships in. A zero is
+#: also a *correct* answer for a structure a human atlas genuinely lacks, so
+#: this is a note beside the result and not an error in place of it.
+NO_MATCH_NOTE = (
+    "Nothing in the {gender} atlas matches. This index covers TA2 Latin terms, "
+    "English names and identifiers only — a query in Bulgarian, Spanish or any "
+    "other language finds nothing here even when the structure exists, so this "
+    "is not evidence of absence. Search the Latin or English term. If you did "
+    "search in English, the structure may genuinely not be in this atlas: "
+    "check atlas_info, since the two atlases cover different systems."
+)
+
 
 def build_server() -> MCPServer:
     mcp = MCPServer(
@@ -236,21 +284,13 @@ def build_server() -> MCPServer:
             raise ToolError(f"Search for at least {MIN_QUERY_LENGTH} characters.")
 
         found = search(atlas(gender).structures, query)
-        if not found and not query.isascii():
-            # A Bulgarian or Spanish query returns zero for the same reason a
-            # nonexistent structure does, and the caller cannot tell which.
-            raise ToolError(
-                f"Nothing matches {query!r}. This atlas is indexed in TA2 Latin, "
-                "English and identifiers only — a query in another language "
-                "finds nothing here even when the structure exists. Search the "
-                "Latin or English term instead."
-            )
         shown = found[:limit]
         return SearchOut(
             query=query,
             total=len(found),
             shown=[_out(structure) for structure in shown],
             truncated=len(found) > len(shown),
+            note=None if found else NO_MATCH_NOTE.format(gender=gender),
         )
 
     @mcp.tool(annotations=READ_ONLY)
@@ -259,11 +299,13 @@ def build_server() -> MCPServer:
 
         Use search_structures first to get an exact organ_id.
 
-        For a muscle belly this returns the meshes the source data names as its
-        origin and insertion areas. **That is the upstream dataset's own
-        naming, repeated — not an anatomical finding of this project.** Say so
-        if you pass it on, and do not report an empty list as "this muscle has
-        no attachments": it means the manifest records none.
+        For a muscle this returns the meshes the source data names as its origin
+        and insertion areas; called on one of those markings, `belongs_to` names
+        the muscle it is filed against, so the link works in both directions.
+        **That is the upstream dataset's own naming, repeated — not an
+        anatomical finding of this project.** Say so if you pass it on, and do
+        not report an empty list as "this muscle has no attachments": it means
+        the manifest records none.
         """
         loaded = atlas(gender)
         structure = loaded.by_id(organ_id)
@@ -279,17 +321,31 @@ def build_server() -> MCPServer:
             raise ToolError(f"No structure {organ_id!r} in the {gender} atlas.{hint}")
 
         base = _out(structure)
+        owner = belly_id(organ_id)
         return DescribeOut(
             **base.model_dump(),
+            belongs_to=owner if owner and loaded.by_id(owner) else None,
             attachment_markings=[_out(mark) for mark in loaded.markings_for(organ_id)],
         )
 
     @mcp.tool(annotations=READ_ONLY)
-    def list_systems(gender: Gender = "male") -> list[SystemOut]:
-        """The anatomical systems in the atlas, with how many structures each holds."""
+    def list_systems(gender: Gender = "male") -> list[SystemMapOut]:
+        """The atlas's systems: how big each is, and where in the tree it sits.
+
+        The counts alone are also in `atlas_info`. What is here and nowhere else
+        is the map — which top-level headings a system is filed under, and how
+        much of it is filed nowhere and therefore only reachable by search.
+        """
+        loaded = atlas(gender)
+        mapped = systems_map(loaded.structures)
         return [
-            SystemOut(system=system, structure_count=count)
-            for system, count in sorted(atlas(gender).systems.items())
+            SystemMapOut(
+                system=system,
+                structure_count=count,
+                root_headings=mapped.get(system, ([], 0))[0],
+                unfiled=mapped.get(system, ([], 0))[1],
+            )
+            for system, count in sorted(loaded.systems.items())
         ]
 
     @mcp.tool(annotations=READ_ONLY)

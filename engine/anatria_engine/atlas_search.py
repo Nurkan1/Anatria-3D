@@ -34,7 +34,7 @@ MIN_QUERY_LENGTH = 2
 #: repeating what the upstream dataset asserts; a caller that turns it into
 #: "the origin of this muscle is here" has gone one step further than the
 #: evidence, and the tool descriptions say so.
-Part = Literal["belly", "origin_marking", "insertion_marking"]
+Part = Literal["structure", "origin_marking", "insertion_marking"]
 
 _PART_BY_SUFFIX: dict[str, Part] = {
     "ol": "origin_marking",
@@ -82,7 +82,11 @@ def search(structures: list, query: str) -> list:
 
 
 def part_of(organ_id: str) -> Part:
-    """Whether an identifier names a muscle belly or one of its attachment meshes.
+    """Whether an identifier names a structure or a muscle's attachment mesh.
+
+    The default is `"structure"` rather than `"belly"`: most of the atlas is
+    not muscle, and calling the left atrium a belly borrows anatomical
+    vocabulary for a filing distinction it does not belong to.
 
     Suffix-driven, because that is the only place the distinction is recorded:
     `sartorius_muscle_ol` and `sartorius_muscle_l` carry the same English name
@@ -91,7 +95,7 @@ def part_of(organ_id: str) -> Part:
     to offer a reader — which is exactly what happened the first time a model
     was pointed at this data.
     """
-    return _PART_BY_SUFFIX.get(organ_id.rsplit("_", 1)[-1], "belly")
+    return _PART_BY_SUFFIX.get(organ_id.rsplit("_", 1)[-1], "structure")
 
 
 def belly_id(organ_id: str) -> str | None:
@@ -220,6 +224,25 @@ def load_atlas(manifest_path: Path) -> Atlas:
         structures=structures,
         systems={entry["system"]: entry["organ_count"] for entry in raw.get("systems", [])},
     )
+
+
+def systems_map(structures: list[Structure]) -> dict[str, tuple[list[str], int]]:
+    """Per system: the root headings its structures live under, and how many
+    are filed nowhere.
+
+    `atlas_info` already reports the per-system counts, so a tool that returned
+    only those would be a wrapper around a field the caller has. This is the
+    part a reader actually wants next — where in the tree to look, and how much
+    of the system is not in the tree at all.
+    """
+    found: dict[str, tuple[dict[str, None], list[int]]] = {}
+    for structure in structures:
+        headings, unfiled = found.setdefault(structure.system, ({}, [0]))
+        if structure.path:
+            headings[structure.path[0]] = None
+        else:
+            unfiled[0] += 1
+    return {system: (list(headings), unfiled[0]) for system, (headings, unfiled) in found.items()}
 
 
 def headings_at(structures: list[Structure], prefix: tuple[str, ...]) -> list[str]:

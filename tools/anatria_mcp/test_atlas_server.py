@@ -223,35 +223,75 @@ class TestAttachments:
 
     async def test_a_muscle_reports_its_origin_and_insertion(self, client):
         out = await call(client, "describe_structure", organ_id="sartorius_muscle_l")
-        assert out["part"] == "belly"
+        assert out["part"] == "structure"
         parts = {mark["part"] for mark in out["attachment_markings"]}
         assert parts == {"origin_marking", "insertion_marking"}
 
     async def test_search_distinguishes_a_marking_from_the_muscle(self, client):
         out = await call(client, "search_structures", query="sartorius_muscle")
         parts = {item["organ_id"]: item["part"] for item in out["shown"]}
-        assert parts["sartorius_muscle_l"] == "belly"
+        assert parts["sartorius_muscle_l"] == "structure"
         assert parts["sartorius_muscle_ol"] == "origin_marking"
         assert parts["sartorius_muscle_el"] == "insertion_marking"
 
     async def test_a_structure_with_no_markings_returns_an_empty_list(self, client):
         out = await call(client, "describe_structure", organ_id="left_atrium")
         assert out["attachment_markings"] == []
+        assert out["belongs_to"] is None
+
+    async def test_a_marking_names_its_muscle(self, client):
+        # Without this the link ran one way only, and since the markings are
+        # most of the 910 unfiled entries at the root, anyone who reached one
+        # by browsing was stranded on it.
+        out = await call(client, "describe_structure", organ_id="sartorius_muscle_el")
+        assert out["part"] == "insertion_marking"
+        assert out["belongs_to"] == "sartorius_muscle_l"
+
+    async def test_a_marking_whose_muscle_is_absent_says_so(self, client):
+        # 59 markings derive a belly the atlas does not hold. Naming it anyway
+        # would send the caller to an id that errors.
+        out = await call(client, "describe_structure", organ_id="diaphragm_ol")
+        assert out["belongs_to"] is None
+
+
+class TestSystemsAreMapped:
+    async def test_names_where_a_system_sits_in_the_tree(self, client):
+        out = await call(client, "list_systems")
+        systems = out["result"] if isinstance(out, dict) and "result" in out else out
+        by_name = {entry["system"]: entry for entry in systems}
+        assert "Systemic arteries" in by_name["cardiovascular"]["root_headings"]
+
+    async def test_reports_what_browsing_cannot_reach(self, client):
+        out = await call(client, "list_systems")
+        systems = out["result"] if isinstance(out, dict) and "result" in out else out
+        by_name = {entry["system"]: entry for entry in systems}
+        assert by_name["muscular"]["unfiled"] > 0
+        assert by_name["cardiovascular"]["unfiled"] == 0
 
 
 class TestSaysWhatItDoesNotKnow:
-    async def test_a_non_latin_query_explains_the_index(self, client):
-        # Zero for a Bulgarian word and zero for a structure that is genuinely
-        # absent used to be the same answer, and the caller could not tell.
-        result = await client.call_tool("search_structures", {"query": "сърце"})
-        assert result.is_error
-        assert "Latin" in str(result.content)
+    async def test_every_empty_search_explains_the_index(self, client):
+        # Keyed on the result, not the characters. The first version fired on
+        # non-ASCII input: it helped Bulgarian and missed `corazon` typed
+        # without its accent, which is how a Spanish speaker on an English
+        # keyboard actually types — and Spanish is one of the three languages
+        # this project ships in.
+        for query in ("сърце", "corazón", "corazon", "hueso", "rinon"):
+            out = await call(client, "search_structures", query=query)
+            assert out["total"] == 0, query
+            assert out["note"] and "Latin" in out["note"], query
 
-    async def test_an_absent_english_term_is_still_a_plain_zero(self, client):
-        # Not an error: "gizzard" really is not in a human atlas, and saying so
-        # by refusing would misrepresent a correct answer as a failure.
+    async def test_an_absent_term_is_a_zero_with_a_note_not_an_error(self, client):
+        # "gizzard" really is not in a human atlas. Refusing would misrepresent
+        # a correct answer as a failure, so the note sits beside the result
+        # rather than replacing it.
         out = await call(client, "search_structures", query="gizzard")
         assert out["total"] == 0
+        assert out["note"]
+
+    async def test_a_hit_carries_no_note(self, client):
+        out = await call(client, "search_structures", query="atrium")
+        assert out["note"] is None
 
     async def test_the_instructions_disclaim_relationships(self, client):
         # `add_supply` in the application answers this from live geometry. The

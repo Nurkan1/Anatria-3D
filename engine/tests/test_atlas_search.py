@@ -21,6 +21,7 @@ from anatria_engine.atlas_search import (
     load_atlas,
     part_of,
     search,
+    systems_map,
 )
 from anatria_engine.protocol import OrganMeta
 
@@ -155,13 +156,17 @@ class TestAttachmentMarkings:
     """
 
     def test_reads_the_part_from_the_suffix(self):
-        assert part_of("sartorius_muscle_l") == "belly"
+        assert part_of("sartorius_muscle_l") == "structure"
         assert part_of("sartorius_muscle_ol") == "origin_marking"
         assert part_of("sartorius_muscle_er") == "insertion_marking"
 
     def test_anything_unsuffixed_is_the_structure_itself(self):
-        assert part_of("aorta") == "belly"
-        assert part_of("third_ventricle") == "belly"
+        # Not "belly": most of the atlas is not muscle, and calling the left
+        # atrium a belly borrows anatomical vocabulary for a filing
+        # distinction that has nothing to do with it.
+        assert part_of("aorta") == "structure"
+        assert part_of("third_ventricle") == "structure"
+        assert part_of("left_atrium") == "structure"
 
     def test_names_the_muscle_a_marking_belongs_to(self):
         assert belly_id("sartorius_muscle_ol") == "sartorius_muscle_l"
@@ -193,7 +198,7 @@ class TestAttachmentMarkings:
         bellies = {
             structure.organ_id
             for structure in atlas.structures
-            if structure.system == "muscular" and structure.part == "belly"
+            if structure.system == "muscular" and structure.part == "structure"
         }
         with_both = sum(
             1
@@ -202,6 +207,34 @@ class TestAttachmentMarkings:
         )
         with_any = sum(1 for organ_id in bellies if atlas.markings_for(organ_id))
         assert 0 < with_both < with_any
+
+
+class TestSystemsMap:
+    """`list_systems` would otherwise be a wrapper around `atlas_info`.
+
+    The counts are already in the info call. What is only here is where in the
+    tree a system sits, and how much of it sits nowhere.
+    """
+
+    def test_names_the_root_headings_a_system_is_filed_under(self, atlas):
+        mapped = systems_map(atlas.structures)
+        roots, _ = mapped["cardiovascular"]
+        assert "Systemic arteries" in roots
+
+    def test_counts_what_browsing_cannot_reach(self, atlas):
+        # The muscular system's unfiled structures are its 451 attachment
+        # markings: reachable by search, invisible to anyone walking the tree.
+        _, unfiled = mapped_muscular = systems_map(atlas.structures)["muscular"]
+        assert unfiled == sum(
+            1
+            for structure in atlas.structures
+            if structure.system == "muscular" and not structure.path
+        )
+        assert mapped_muscular[1] > 0
+
+    def test_a_fully_filed_system_reports_none_unfiled(self, atlas):
+        _, unfiled = systems_map(atlas.structures)["cardiovascular"]
+        assert unfiled == 0
 
 
 class TestHeadings:
