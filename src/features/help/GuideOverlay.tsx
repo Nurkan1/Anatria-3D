@@ -1022,10 +1022,17 @@ function Sub({ children }: { children: React.ReactNode }) {
 }
 
 function Callout({ children }: { children: React.ReactNode }) {
+  // A `div`, not a `p`. A callout is a box that holds prose, and one of them
+  // holds a list — which a paragraph may not contain. React reported it as a
+  // nesting error on every open of the guide, and a browser recovering from
+  // invalid markup closes the paragraph early and reparents what follows.
+  //
+  // Nothing moves: preflight zeroes a paragraph's margins, and the box's own
+  // padding and border come from these classes either way.
   return (
-    <p className="rounded border border-slate-700/70 bg-slate-950/50 px-3 py-2 text-slate-300">
+    <div className="rounded border border-slate-700/70 bg-slate-950/50 px-3 py-2 text-slate-300">
       {children}
-    </p>
+    </div>
   );
 }
 
