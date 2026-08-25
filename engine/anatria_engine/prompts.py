@@ -496,6 +496,14 @@ def _groups_rule(groups: list[str]) -> str:
             "Use it when the request is for a whole organ or region. Keep "
             "`isolate_structures` for a handful of named parts, and "
             "`focus_organ` for one.",
+            "",
+            "A group is never a whole system. Asked for the muscles, the "
+            "nerves or the vessels as a body-wide layer, use "
+            "`set_layer_visibility` to clear the other systems — do not reach "
+            "for the group whose name sounds closest. Groups are headings "
+            "inside one system and every one of them holds a fraction of it, "
+            "so isolating a group and calling it the system shows the reader "
+            "a small part of the body while telling them it is all of it.",
         ]
     )
 

@@ -206,6 +206,28 @@ export const NERVOUS_PATHS = {
 };
 
 /**
+ * Headings whose name claims more than the heading holds.
+ *
+ * `Muscles` is Z-Anatomy's catch-all for the muscles its regional scheme has no
+ * place for — the intercostals, the diaphragm, the pelvic floor, the deep back,
+ * and a few shoulder-girdle strays that belong in the upper limb. Forty-two of
+ * them, against 1,110 in the system.
+ *
+ * The name is the problem, not the contents. Asked to isolate the muscles, a
+ * model reads the list of groups, finds one called exactly `Muscles`, and takes
+ * it — landing the reader on the pelvic floor and being told, truthfully as far
+ * as the tool knew, that this is the musculature. Every other heading here says
+ * what it covers; this one says the system and delivers 4% of it.
+ *
+ * Renaming does not file them correctly. That is a curation job on the source
+ * data and a separate one. This only stops the name from making a promise the
+ * contents cannot keep.
+ */
+const HEADING_RENAMES = {
+  Muscles: "Other muscles",
+};
+
+/**
  * Repair the hierarchy of a built organ list, in place-free fashion.
  *
  * Returns the organs with corrected paths and a count of what each mechanism
@@ -268,5 +290,26 @@ export function repairHierarchy(organs) {
     return { ...organ, path: [...best] };
   });
 
-  return { organs: repaired, corrected, propagated };
+  const unusedRenames = new Set(Object.keys(HEADING_RENAMES));
+  let renamed = 0;
+  const named = repaired.map((organ) => {
+    if (!organ.path.some((node) => node in HEADING_RENAMES)) return organ;
+    renamed += 1;
+    return {
+      ...organ,
+      path: organ.path.map((node) => {
+        if (node in HEADING_RENAMES) unusedRenames.delete(node);
+        return HEADING_RENAMES[node] ?? node;
+      }),
+    };
+  });
+
+  if (unusedRenames.size > 0) {
+    throw new Error(
+      `HEADING_RENAMES has entries matching no heading: ${[...unusedRenames].join(", ")}. ` +
+        "If the upstream naming changed, delete them rather than leave them looking authoritative.",
+    );
+  }
+
+  return { organs: named, corrected, propagated, renamed };
 }

@@ -967,7 +967,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Tendinous arch of levator ani.l",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -978,7 +978,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Tendinous arch of levator ani.r",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -9371,7 +9371,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Diaphragm",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -13942,7 +13942,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Levatores breves costarum.l",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -13953,7 +13953,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Levatores breves costarum.r",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -13986,7 +13986,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Levatores longi costarum.l",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -13997,7 +13997,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Levatores longi costarum.r",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -19280,7 +19280,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "External intercostal muscles.l",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -19291,7 +19291,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "External intercostal muscles.r",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -19302,7 +19302,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Internal intercostal muscles.l",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -19313,7 +19313,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Internal intercostal muscles.r",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -19324,7 +19324,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Innermost intercostal muscles.l",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -19335,7 +19335,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Innermost intercostal muscles.r",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -19494,7 +19494,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Interspinales colli muscles.l",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -19505,7 +19505,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Interspinales colli muscles.r",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -19516,7 +19516,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Interspinales lumborum muscles.l",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -19527,7 +19527,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Interspinales lumborum muscles.r",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -19538,7 +19538,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Interspinales thoracis muscles.l",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -19549,7 +19549,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Interspinales thoracis muscles.r",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -19901,7 +19901,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Coccygeus muscle.l",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -19912,7 +19912,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Coccygeus muscle.r",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -20893,7 +20893,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Iliococcygeus muscle.l",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -20904,7 +20904,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Iliococcygeus muscle.r",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -22288,7 +22288,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Pectoralis minor muscle.l",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -22321,7 +22321,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Pectoralis minor muscle.r",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -22660,7 +22660,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Pubo-analis muscle.l",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -22671,7 +22671,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Pubo-analis muscle.r",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -22682,7 +22682,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Pubococcygeus muscle.l",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -22693,7 +22693,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Pubococcygeus muscle.r",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -23922,7 +23922,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Serratus anterior muscle.l",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -23955,7 +23955,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Serratus anterior muscle.r",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -24184,7 +24184,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Splenius capitis muscle.l",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -24195,7 +24195,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Splenius capitis muscle.r",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -24228,7 +24228,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Splenius colli muscle.l",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -24239,7 +24239,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Splenius colli muscle.r",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -24460,7 +24460,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Subclavius muscle.l",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -24493,7 +24493,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Subclavius muscle.r",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -24718,7 +24718,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Teres major muscle.l",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -25067,7 +25067,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Transversus thoracis muscle.l",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -25100,7 +25100,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "Transversus thoracis muscle.r",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -37451,7 +37451,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "External anal sphincter.l",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
@@ -37462,7 +37462,7 @@
       "mesh_file": "muscular_male.glb",
       "node": "External anal sphincter.r",
       "path": [
-        "Muscles"
+        "Other muscles"
       ]
     },
     {
