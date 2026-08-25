@@ -25,6 +25,7 @@ Design notes:
 """
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -115,6 +116,19 @@ def is_heading(name: str) -> bool:
     return name.lower().endswith(HEADING_SUFFIX)
 
 
+def heading_name(name: str) -> str:
+    """A collection's name as a reader should see it.
+
+    Z-Anatomy numbers its top-level collections for ordering — `9: Regions of
+    human body` — and one of them carries a stray apostrophe, `Genital
+    systems'`, which is the real name in the blend rather than a quoting
+    artefact. Neither belongs in a heading shown to someone studying. Only the
+    displayed name is cleaned; collections are still looked up by their true
+    name.
+    """
+    return re.sub(r"^\d+:\s*", "", name).rstrip("'")
+
+
 def gather_geometry(collection) -> dict:
     """Every potentially-renderable object below a collection, with its ancestry.
 
@@ -157,7 +171,22 @@ def gather_geometry(collection) -> dict:
             walk(child, [*trail, child.name])
 
     walk(collection, [])
-    return {obj: trail for obj, trail in best.values()}
+    # An object sitting directly in the exported collection has no trail below
+    # it, and until this line that meant no place in the atlas at all: the
+    # collection's own name was never part of the path, so it was dropped.
+    #
+    # 910 structures shipped that way — 26% of the male atlas. Five whole
+    # systems had *every* structure unfiled, so a reader could reach a kidney
+    # or a lymph node by name and never by browsing, and `isolate_group` had no
+    # group to offer for either. The 451 muscle attachment markings are the
+    # same defect: they come from `2: Muscular insertions`, a collection with a
+    # perfectly good name that went nowhere.
+    #
+    # Seeded only where the trail is empty, deliberately. Prefixing every
+    # object with its system would rewrite every existing path in the manifest
+    # to fix the quarter that has none.
+    root = heading_name(collection.name)
+    return {obj: (trail or [root]) for obj, trail in best.values()}
 
 
 def ensure_gltf_addon() -> None:
