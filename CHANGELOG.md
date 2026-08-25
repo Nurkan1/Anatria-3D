@@ -45,8 +45,9 @@ finds nothing and now says so instead of returning a bare zero; and the manifest
 records no relationships, so nothing there can say what supplies or innervates a
 structure.
 
-Thanks to [@astreos108](https://github.com/astreos108), who asked for this by
-building his own before anyone offered one.
+[@astreos108](https://github.com/astreos108) forked the repo and built a
+version of his own while this was still on the list, which is what moved it to
+the front of it.
 
 ### Fixed
 
