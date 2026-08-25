@@ -36,6 +36,8 @@ export function LassoSelect({
   const organs = useSceneStore((s) => s.organs);
   const hiddenSystems = useSceneStore((s) => s.hiddenSystems);
   const hiddenOrganIds = useSceneStore((s) => s.hiddenOrganIds);
+  const hideConnective = useSceneStore((s) => s.hideConnective);
+  const connectiveIds = useSceneStore((s) => s.connectiveIds);
   const isolatedOrganIds = useSceneStore((s) => s.isolatedOrganIds);
   const addToSelection = useSceneStore((s) => s.addToSelection);
   const theme = backgroundTheme(useSceneStore((s) => s.background));
@@ -49,7 +51,10 @@ export function LassoSelect({
   const visible = useCallback(
     () =>
       Object.values(organs).filter((organ) =>
-        isOrganVisible({ hiddenSystems, isolatedOrganIds, hiddenOrganIds }, organ),
+        isOrganVisible(
+          { hiddenSystems, isolatedOrganIds, hiddenOrganIds, hideConnective, connectiveIds },
+          organ,
+        ),
       ),
     [organs, hiddenSystems, isolatedOrganIds, hiddenOrganIds],
   );

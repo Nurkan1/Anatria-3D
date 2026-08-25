@@ -400,6 +400,8 @@ function SystemMeshes({
   const hoveredOrganId = useSceneStore((s) => s.hoveredOrganId);
   const selectedOrganIds = useSceneStore((s) => s.selectedOrganIds);
   const hiddenOrganIds = useSceneStore((s) => s.hiddenOrganIds);
+  const hideConnective = useSceneStore((s) => s.hideConnective);
+  const connectiveIds = useSceneStore((s) => s.connectiveIds);
   const overlays = useSceneStore((s) => s.pathologyOverlays);
   const caseMarks = useSceneStore((s) => s.caseMarks);
   const hiddenSystems = useSceneStore((s) => s.hiddenSystems);
@@ -632,7 +634,10 @@ function SystemMeshes({
         organ={organ}
         geometry={entry.geometry}
         matrix={matrix ?? entry.matrix}
-        visible={isOrganVisible({ hiddenSystems, isolatedOrganIds, hiddenOrganIds }, organ)}
+        visible={isOrganVisible(
+            { hiddenSystems, isolatedOrganIds, hiddenOrganIds, hideConnective, connectiveIds },
+            organ,
+          )}
         opacity={organOpacity({ systemOpacity }, organ)}
         hovered={hoveredOrganId === organ.organ_id}
         selected={selectedOrganIds.includes(organ.organ_id)}

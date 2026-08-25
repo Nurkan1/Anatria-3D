@@ -267,6 +267,15 @@ const SECTIONS: Section[] = [
           and attribution — to a PNG you can put in a slide or a revision card.
         </p>
         <p>
+          <Ui>Take off the tendons &amp; fascia</Ui> lifts the 116 sheets the muscular
+          system carries — the pectoral fascia, the rectus sheath, the fascia lata.
+          They are drawn pale and thin because that is what they are, but they lie
+          directly on the muscles they wrap and still veil them. Off, you are looking
+          at a body before anyone has started; on, the bellies are bare. It is the
+          one preference here that changes the anatomy rather than the interface,
+          which is why it is a choice and not the default.
+        </p>
+        <p>
           <Ui>Background</Ui> switches the 3D space between dark and light. Dark is
           easier over a long session; light is for anything the figure has to leave in
           — a handout, a slide, a document that is not itself dark. The image export

@@ -228,6 +228,9 @@ export function AnatomyTree() {
   const isolatedOrganIds = useSceneStore((s) => s.isolatedOrganIds);
   const selectedOrganIds = useSceneStore((s) => s.selectedOrganIds);
   const hiddenOrganIds = useSceneStore((s) => s.hiddenOrganIds);
+  const hideConnective = useSceneStore((s) => s.hideConnective);
+  const connectiveIds = useSceneStore((s) => s.connectiveIds);
+  const setHideConnective = useSceneStore((s) => s.setHideConnective);
   const overlays = useSceneStore((s) => s.pathologyOverlays);
   const crossSection = useSceneStore((s) => s.crossSection);
 
@@ -399,7 +402,7 @@ export function AnatomyTree() {
             <ul className="ml-5 space-y-0.5">
               {list.map((organ) => {
                 const visible = isOrganVisible(
-                  { hiddenSystems, isolatedOrganIds, hiddenOrganIds },
+                  { hiddenSystems, isolatedOrganIds, hiddenOrganIds, hideConnective, connectiveIds },
                   organ,
                 );
                 const overlay = overlays[organ.organ_id];
@@ -489,6 +492,22 @@ export function AnatomyTree() {
           the surface inwards. It is the one thing here no page in a book can
           answer — but on a small screen it sits over the chest, so it comes off
           from here or from the right-click menu.
+        </p>
+
+        <label className="flex cursor-pointer items-center gap-2 pt-1 text-xs text-slate-300">
+          <input
+            type="checkbox"
+            checked={hideConnective}
+            onChange={(event) => setHideConnective(event.target.checked)}
+            className="accent-sky-500"
+          />
+          <span>Take off the tendons &amp; fascia</span>
+        </label>
+        <p className="text-[10px] leading-snug text-slate-600">
+          The muscular system carries 116 sheets — the pectoral fascia, the rectus
+          sheath, the fascia lata — lying directly on the muscles they wrap. They
+          are drawn thin and pale, but they still veil the bellies underneath. This
+          is the dissection move: take them off and the muscles are bare.
         </p>
 
         <div className="flex items-center gap-2 pt-1">

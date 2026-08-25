@@ -11,6 +11,7 @@ import type {
 import type { BackgroundMode } from "@/features/viewer/background";
 import type { AnatomicalView } from "@/features/viewer/cameraViews";
 import { sameStack } from "@/features/viewer/depthStack";
+import { tissueFamily } from "@/features/viewer/palette";
 import { MAX_EXPLODE, nextExplodeStop } from "@/features/viewer/explode";
 import { SUPPLY_SYSTEM, type SupplyKind } from "@/features/viewer/supply";
 import type { ViewPreferences } from "./viewPreferences";
@@ -445,6 +446,20 @@ interface SceneStore extends SceneViewState {
    */
   labelsVisible: boolean;
   /**
+   * Whether tendons, fascia, retinacula and intermuscular septa are drawn.
+   *
+   * 116 of them run through the muscular system and they are sheets: the
+   * pectoral fascia, the rectus sheath, the fascia lata. Drawn even at the
+   * 42% the palette gives them, they still veil the muscle bellies underneath
+   * — which is what a body looks like before a dissection starts, and not what
+   * someone studying the muscles came to see. Off by default, because that is
+   * the honest anatomy; a reader who wants the bellies turns them off and the
+   * choice is remembered.
+   */
+  hideConnective: boolean;
+  /** Ids of every structure the palette reads as tendon or fascia. */
+  connectiveIds: Set<string>;
+  /**
    * What the viewport sits on. Dark to work in, light to take figures out of.
    *
    * A preference like the others here, so it survives `reset_view`.
@@ -518,6 +533,7 @@ interface SceneStore extends SceneViewState {
   setEyeTracking: (enabled: boolean) => void;
   setDepthProbeVisible: (visible: boolean) => void;
   setLabelsVisible: (visible: boolean) => void;
+  setHideConnective: (hidden: boolean) => void;
   toggleScan: () => void;
   setBackground: (mode: BackgroundMode) => void;
   /** Apply the view settings carried over from the last session. */
@@ -620,6 +636,8 @@ export const useSceneStore = create<SceneStore>()((set, get) => ({
   eyeTracking: true,
   depthProbeVisible: true,
   labelsVisible: false,
+  hideConnective: false,
+  connectiveIds: new Set<string>(),
   focusBadge: null,
   background: "dark",
 
@@ -627,6 +645,14 @@ export const useSceneStore = create<SceneStore>()((set, get) => ({
     set({
       manifest,
       organs: Object.fromEntries(manifest.organs.map((organ) => [organ.organ_id, organ])),
+      // Computed once per atlas rather than per frame: `isOrganVisible` runs
+      // over every structure on every change, and `tissueFamily` is a chain of
+      // regular expressions.
+      connectiveIds: new Set(
+        manifest.organs
+          .filter((organ) => tissueFamily(organ).id === "connective")
+          .map((organ) => organ.organ_id),
+      ),
       // Systems not marked `load_on_start` begin hidden, and the viewer only
       // mounts — and therefore only fetches — the mesh files of visible
       // systems. Adding the rest of the body is then a data change: the app
@@ -691,6 +717,8 @@ export const useSceneStore = create<SceneStore>()((set, get) => ({
 
   setLabelsVisible: (visible) => set({ labelsVisible: visible }),
 
+  setHideConnective: (hidden) => set({ hideConnective: hidden }),
+
   toggleScan: () => set((state) => ({ scan: !state.scan })),
 
   setBackground: (mode) => set({ background: mode }),
@@ -709,6 +737,7 @@ export const useSceneStore = create<SceneStore>()((set, get) => ({
       eyeTracking: preferences.eyeTracking ?? state.eyeTracking,
       depthProbeVisible: preferences.depthProbeVisible ?? state.depthProbeVisible,
       labelsVisible: preferences.labelsVisible ?? state.labelsVisible,
+      hideConnective: preferences.hideConnective ?? state.hideConnective,
       background: preferences.background ?? state.background,
     })),
 
@@ -1006,12 +1035,31 @@ export const useSceneStore = create<SceneStore>()((set, get) => ({
  * the two fields it reads so callers can pass a slice of the store rather than
  * having to reconstruct — or cast to — a whole `SceneViewState`.
  */
+/**
+ * What deciding visibility needs.
+ *
+ * `SceneStore` rather than `SceneViewState`, because `hideConnective` is a
+ * preference and sits outside the resettable view — the same place
+ * `labelsVisible` sits, and for the same reason. Required rather than
+ * optional: a caller that renders structures and does not know about the
+ * preference would show fascia in one view and hide it in another, which is
+ * worse than not having the feature.
+ */
+export type VisibilityState = Pick<
+  SceneStore,
+  "hiddenSystems" | "isolatedOrganIds" | "hiddenOrganIds" | "hideConnective" | "connectiveIds"
+>;
+
 export function isOrganVisible(
-  state: Pick<SceneViewState, "hiddenSystems" | "isolatedOrganIds" | "hiddenOrganIds">,
+  state: VisibilityState,
   organ: ManifestOrgan,
 ): boolean {
   if (state.hiddenSystems.includes(organ.system)) return false;
   if (state.hiddenOrganIds.includes(organ.organ_id)) return false;
+  // Deliberately before the isolation check and not after: someone who asked
+  // for a group and also asked not to see fascia meant both, and a group that
+  // happens to contain a fascial sheet should not quietly reinstate it.
+  if (state.hideConnective && state.connectiveIds.has(organ.organ_id)) return false;
   if (state.isolatedOrganIds !== null && !state.isolatedOrganIds.includes(organ.organ_id)) {
     return false;
   }

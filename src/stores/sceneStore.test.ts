@@ -304,26 +304,63 @@ describe("applySceneCommand", () => {
 describe("isOrganVisible", () => {
   const heart = organ();
 
+  /** The two preference fields every call needs, at their defaults. */
+  const showing = { hideConnective: false, connectiveIds: new Set<string>() };
+
   it("is visible by default", () => {
-    expect(isOrganVisible(initialViewState, heart)).toBe(true);
+    expect(isOrganVisible({ ...initialViewState, ...showing }, heart)).toBe(true);
   });
 
   it("is hidden when its system is off", () => {
     expect(
-      isOrganVisible({ hiddenSystems: ["cardiovascular"], isolatedOrganIds: null, hiddenOrganIds: [] }, heart),
+      isOrganVisible({ hiddenSystems: ["cardiovascular"], isolatedOrganIds: null, hiddenOrganIds: [], ...showing }, heart),
     ).toBe(false);
   });
 
   it("is hidden when isolation excludes it", () => {
     expect(
-      isOrganVisible({ hiddenSystems: [], isolatedOrganIds: ["aorta_arch"], hiddenOrganIds: [] }, heart),
+      isOrganVisible({ hiddenSystems: [], isolatedOrganIds: ["aorta_arch"], hiddenOrganIds: [], ...showing }, heart),
+    ).toBe(false);
+  });
+
+  it("takes off the fascia when the reader asks for the muscles bare", () => {
+    // 116 sheets run through the muscular system — the pectoral fascia, the
+    // rectus sheath, the fascia lata. Pale and thin, they still veil the
+    // bellies, and until this flag there was no way to lift them: the store
+    // could hide a structure the reader clicked, and nothing could hide a
+    // tissue.
+    const fascia = { ...heart, organ_id: "pectoral_fascia_l" };
+    const state = {
+      ...initialViewState,
+      hideConnective: true,
+      connectiveIds: new Set(["pectoral_fascia_l"]),
+    };
+
+    expect(isOrganVisible(state, fascia)).toBe(false);
+    expect(isOrganVisible(state, heart)).toBe(true);
+  });
+
+  it("keeps the fascia off inside an isolation", () => {
+    // Someone who isolated a group *and* asked not to see fascia meant both.
+    // A group that happens to contain a sheet must not quietly reinstate it.
+    const fascia = { ...heart, organ_id: "pectoral_fascia_l" };
+    expect(
+      isOrganVisible(
+        {
+          ...initialViewState,
+          isolatedOrganIds: ["pectoral_fascia_l", "left_ventricle"],
+          hideConnective: true,
+          connectiveIds: new Set(["pectoral_fascia_l"]),
+        },
+        fascia,
+      ),
     ).toBe(false);
   });
 
   it("is visible when isolation includes it", () => {
     expect(
       isOrganVisible(
-        { hiddenSystems: [], isolatedOrganIds: ["left_ventricle"], hiddenOrganIds: [] },
+        { hiddenSystems: [], isolatedOrganIds: ["left_ventricle"], hiddenOrganIds: [], ...showing },
         heart,
       ),
     ).toBe(true);
@@ -334,7 +371,7 @@ describe("isOrganVisible", () => {
     // the user switched off.
     expect(
       isOrganVisible(
-        { hiddenSystems: ["cardiovascular"], isolatedOrganIds: ["left_ventricle"], hiddenOrganIds: [] },
+        { hiddenSystems: ["cardiovascular"], isolatedOrganIds: ["left_ventricle"], hiddenOrganIds: [], ...showing },
         heart,
       ),
     ).toBe(false);
