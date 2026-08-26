@@ -28,18 +28,18 @@ jobs:
     timeout-minutes: 60
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           version: 9
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: pnpm
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
@@ -115,7 +115,7 @@ jobs:
       # Short retention deliberately. These are for trying a build out; the
       # release is where a build is kept.
       - name: Keep the installers on the run
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: windows-installers
           retention-days: 14
@@ -138,7 +138,7 @@ jobs:
     timeout-minutes: 60
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # Tauri v2's Linux prerequisites. `patchelf` and `librsvg2-dev` are the
       # two the AppImage bundler needs and the deb does not, so a missing one
@@ -162,16 +162,16 @@ jobs:
             build-essential \
             curl wget file
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           version: 9
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: pnpm
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
@@ -236,7 +236,7 @@ jobs:
       # the packages have to leave CI and be started somewhere else before a
       # tag promises they run.
       - name: Keep the packages on the run
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: linux-packages
           retention-days: 14
@@ -265,9 +265,13 @@ jobs:
       # For the notes generator and the changelog it reads. The packages
       # themselves arrive as artifacts, which is why the build jobs upload them
       # whether or not a tag started the run.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/download-artifact@v4
+      # No `name`, so every artifact this run produced comes down at once, each
+      # under its own directory. v8 also fails the run on a digest mismatch
+      # where older majors only warned — which is the behaviour worth having in
+      # the one workflow whose output people are asked to trust unsigned.
+      - uses: actions/download-artifact@v8
         with:
           path: artifacts
 
@@ -308,7 +312,7 @@ jobs:
           exit $missing
 
       - name: Publish
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           draft: true # reviewed before anyone can download it
           name: Anatria3D ${{ github.ref_name }}

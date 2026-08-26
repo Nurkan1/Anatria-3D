@@ -29,18 +29,27 @@ jobs:
     timeout-minutes: 45
 
     steps:
-      - uses: actions/checkout@v4
+      # Floating majors, all of them on the Node 24 runtime. Node 20 left
+      # maintenance, and GitHub already forces the old actions onto 24 with a
+      # warning — when it stops forcing, a pinned Node 20 action does not run
+      # at all, and that would take the release workflow with it.
+      #
+      # Two are deliberately not bumped, and neither is an oversight:
+      # Swatinem/rust-cache@v2 is already `using: node24`, and
+      # dtolnay/rust-toolchain is a composite action with no Node runtime to
+      # deprecate.
+      - uses: actions/checkout@v7
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           version: 9
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: pnpm
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
