@@ -328,4 +328,10 @@ def test_a_busy_pipe_is_waited_out_not_refused(monkeypatch: pytest.MonkeyPatch) 
     assert bridge.BUSY_PATIENCE_SECONDS > held_for, "the test outlasts the patience"
     # Without this the test passes whether or not the pipe was ever busy, which
     # would make it a slow way of asserting nothing.
-    assert waited >= held_for, f"connected in {waited:.3f}s — the pipe was not busy"
+    #
+    # Half the hold, not the whole of it. `threading.Timer` fires approximately
+    # and the monotonic clock is coarse on Windows, so `waited >= held_for` is
+    # a flake by construction — it failed in CI by three milliseconds. What is
+    # actually being proved is that the client did not connect straight away,
+    # and an unobstructed open takes well under a millisecond.
+    assert waited >= held_for / 2, f"connected in {waited:.3f}s — the pipe was not busy"
