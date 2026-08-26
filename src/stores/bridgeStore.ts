@@ -47,7 +47,6 @@ export const UNKNOWN_BRIDGE: BridgeStatus = {
   supported: false,
   running: false,
   pipe: null,
-  token: null,
   accepted: 0,
   refused: 0,
 };

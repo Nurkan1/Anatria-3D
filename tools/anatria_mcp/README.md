@@ -27,10 +27,10 @@ is the same fifteen tools its own assistant has: `focus_organ`,
 `clear_pathology_overlays`, `highlight_pathway`, `clear_pathway`,
 `set_cross_section`.
 
-**They are not registered unless you configure a pipe and a token.** Without
-those two environment variables the server is read-only in the strong sense:
-the tools do not exist, so a model is never offered them and never spends a
-turn discovering they fail. See *Driving the application* below.
+**They are not registered unless you ask for them.** Without
+`ANATRIA3D_BRIDGE` the server is read-only in the strong sense: the tools do
+not exist, so a model is never offered them and never spends a turn
+discovering they fail. See *Driving the application* below.
 
 Neither half can read your study journal, your case files or your API keys.
 There is no tool for any of them and no code path that opens them.
@@ -155,27 +155,37 @@ args = ["C:\\path\\to\\Anatria3D\\tools\\anatria_mcp\\atlas.py"]
 
 ## Driving the application
 
-Two environment variables, both read off the **Control bridge** panel in
-Anatria3D's settings drawer:
+One line, and it never changes:
 
 ```json
-"env": {
-  "ANATRIA3D_BRIDGE_PIPE": "\\\\.\\pipe\\anatria3d-control-S-1-5-21-...",
-  "ANATRIA3D_BRIDGE_TOKEN": "0123456789abcdef0123456789abcdef"
-}
+"env": { "ANATRIA3D_BRIDGE": "1" }
 ```
 
-Use the panel's **Copy** buttons. The pipe field is truncated on screen.
+Then open Anatria3D, turn **Control bridge** on in the settings drawer, and
+restart the MCP client once. There is nothing to copy: the pipe is named for
+the account that created it and the server runs as that same account, so it
+finds the window by itself.
 
 - **Windows only for now.** The transport is a named pipe. On other platforms
   the switch is not offered and the panel says so.
-- **The token is per session.** The application mints a new one every time the
-  bridge is switched on, so a stored one goes stale the moment the reader turns
-  it off. That is what makes "off" mean off. A stale token is reported as such.
+- **The switch is the consent.** Nothing listens until a person turns it on,
+  a `bridge` badge sits in the application's header for as long as it is, and
+  turning it off takes the pipe with it.
 - **One client at a time.** A second program waits for the first to disconnect.
 - **The account owns the pipe.** Its permissions admit the user who created it
-  and nobody else, so another account on the same machine cannot open it even
-  with the token.
+  and nobody else.
+
+There is no token. There was one, minted per switch-on and copied from the
+panel, and it bought less than it cost: the pipe's permissions already answer
+the question that matters, and *which of your own programs* is not a question
+you can act on — any program running as you can already read your journal and
+your case files without going near a viewport. Against that, a value that
+changed every session meant editing this file and restarting the client every
+session, which reads as a broken feature rather than a careful one.
+
+`ANATRIA3D_BRIDGE_PIPE` still overrides the derived name, for an application
+running as a different account that has deliberately been made reachable.
+Nobody needs it for the ordinary setup.
 
 ### What it cannot know
 

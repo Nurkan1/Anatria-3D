@@ -833,20 +833,22 @@ const SECTIONS: Section[] = [
         </h3>
         <p>
           Open <Ui>Settings</Ui> in the assistant panel and scroll to{" "}
-          <Ui>Control bridge</Ui>. Press <Ui>Off</Ui> to turn it on. Two things appear:
-          a <Ui>Pipe</Ui> and a <Ui>Token</Ui>, each with a <Ui>Copy</Ui> button. Paste
-          both into the other program&apos;s configuration — the file its own
-          documentation calls <Ui>mcpServers</Ui> — and it can drive the view.
-        </p>
-        <p>
-          Use the <Ui>Copy</Ui> buttons rather than reading the pipe off the screen.
-          It is longer than the box and is shown cut short.
+          <Ui>Control bridge</Ui>. Press <Ui>Off</Ui> to turn it on. One line appears
+          with a <Ui>Copy</Ui> button. Paste it into the <Ui>env</Ui> block of the
+          other program&apos;s configuration — the file its own documentation calls{" "}
+          <Ui>mcpServers</Ui> — and restart it once.
         </p>
         <Callout>
-          <strong>Off means off.</strong> A new token is minted every time you switch
-          the bridge on, so switching it off makes the old one wrong — a program you
-          paired last week cannot quietly reconnect. That is also why closing
-          Anatria3D ends it: there is nothing left listening and nothing left valid.
+          <strong>That line never changes, so this is a once-only step.</strong> There
+          is nothing to copy again next week and nothing that quietly expires. The
+          other program finds this window by itself: the connection is named after
+          your own account, which it already knows.
+        </Callout>
+        <Callout>
+          <strong>Off means off.</strong> Turning the switch off closes the
+          connection, so there is nothing left to connect to. Closing Anatria3D does
+          the same. Nothing reconnects on its own — the next time has to start with
+          you pressing this switch again.
         </Callout>
         <h3 className="pt-2 text-[13px] font-semibold text-slate-200">
           How to tell it is on
@@ -868,7 +870,7 @@ const SECTIONS: Section[] = [
           What it can and cannot reach
         </h3>
         <p>
-          A paired agent gets the same fifteen tools this application&apos;s own
+          A connected agent gets the same fifteen tools this application&apos;s own
           assistant has — isolating, lighting, ghosting a layer, cutting a section,
           tracing a pathway. That is the point of it: an agent working from outside
           should be able to do what the one inside can do, not a reduced version.
@@ -892,8 +894,8 @@ const SECTIONS: Section[] = [
           connection between two programs on this computer, so nothing leaves your
           machine because you switched it on. What the <em>other</em> program does
           with what it reads is between you and that program — an agent that sends
-          your questions to its own provider was already doing that before you paired
-          it.
+          your questions to its own provider was already doing that before you
+          connected it here.
         </Callout>
         <p>
           Windows only, for now. On other builds the panel says so rather than showing

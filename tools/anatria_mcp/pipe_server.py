@@ -49,6 +49,7 @@ kernel32.CreateNamedPipeW.argtypes = [
     ctypes.c_void_p,
 ]
 kernel32.ConnectNamedPipe.argtypes = [wintypes.HANDLE, ctypes.c_void_p]
+kernel32.CancelIoEx.argtypes = [wintypes.HANDLE, ctypes.c_void_p]
 kernel32.DisconnectNamedPipe.argtypes = [wintypes.HANDLE]
 kernel32.CloseHandle.argtypes = [wintypes.HANDLE]
 kernel32.ReadFile.argtypes = [
@@ -137,10 +138,21 @@ class FakePipeServer:
         self.close()
 
     def close(self) -> None:
+        """Stop the thread, in the two steps the application itself uses.
+
+        `CancelIoEx` first, because the thread can be blocked in either of two
+        places and the flag reaches neither: a `ReadFile` waiting on a client
+        that has gone quiet, or a `ConnectNamedPipe` waiting for one to arrive.
+        Then a throwaway connection, in case there was nothing pending to
+        cancel at the instant we asked.
+
+        Getting this wrong does not merely leak a thread. `CloseHandle` on a
+        handle with a synchronous read still pending **blocks as well**, so the
+        version without the cancel hung the whole suite instead of failing one
+        test — which is how it was found.
+        """
         self._stopping.set()
-        # The thread may be parked in ConnectNamedPipe with nobody coming.
-        # Connecting once ourselves is the plainest way to release it, and it
-        # is what the application's own listener does to stop.
+        kernel32.CancelIoEx(self._handle, None)
         try:
             with open(self.full_name, "r+b", buffering=0):
                 pass

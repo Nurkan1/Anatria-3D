@@ -1,36 +1,39 @@
 """The client half of Anatria3D's control bridge.
 
-Transport only. This module knows how to reach a running Anatria3D, present a
-token and put one scene command on the wire; it knows nothing about what a
-scene command means, and nothing here validates one against the atlas. That
-belongs a layer up, where the manifest is in hand — see `scene_contract` in the
-engine for the rule it will apply.
+Transport only. This module knows how to find a running Anatria3D and put one
+scene command on the wire; it knows nothing about what a scene command means,
+and nothing here validates one against the atlas. That belongs a layer up,
+where the manifest is in hand — see `scene_contract` in the engine.
 
 # Configuration
 
-Two environment variables, both set by whoever configures the MCP client:
+One environment variable, and it never changes:
 
-    ANATRIA3D_BRIDGE_PIPE    the Pipe field from the app's Control bridge panel
-    ANATRIA3D_BRIDGE_TOKEN   the Token field from the same panel
+    ANATRIA3D_BRIDGE=1
 
-Neither has a default, and their absence is not an error — it is how a reader
-says they want the atlas without the viewport. `from_environment` returns
-`None`, the control tools are never registered, and the server is read-only in
-the strong sense that the capability is not there to misuse.
+Its absence is not an error — it is how a reader says they want the atlas
+without the viewport. `from_environment` returns `None`, the control tools are
+never registered, and the server is read-only in the strong sense that the
+capability is not there to misuse.
 
-The token is short-lived by design: the application mints a new one every time
-the switch is turned on, so a stored one goes stale the moment the reader
-turns the bridge off. That is the intended behaviour and not a rough edge —
-"off" that left a working credential behind would not be off.
+Nothing else is needed because there is nothing else to know. The pipe is named
+for the account that created it, and this process runs as that same account, so
+it can work the name out for itself — see `current_user_sid`.
 
-# What it deliberately does not do
+## Why there is no token any more
 
-There is **no timeout on the handshake read.** The application answers a pair
-frame either way — with `{"type":"paired"}`, or with a refusal followed by a
-disconnect — so a read that never returns means the far side is wedged, which
-no timeout here would repair. MCP clients impose their own call deadline, and
-that is the right place for it. Adding a second one would mean a thread blocked
-in `ReadFile` that cannot be cancelled, traded for an error message.
+There was one, minted per switch-on and shown in the panel beside the pipe. It
+bought less than it cost. The pipe's own permissions already answer the
+question that matters — is this the reader's own account — and *which of their
+programs* was a question the reader had no way to act on, since any program
+running as them could already read their journal and their case files without
+going anywhere near a viewport.
+
+Against that, a fresh token every session meant editing a JSON config and
+restarting the client each time. The predictable outcome is not a careful
+reader; it is somebody concluding the feature is broken. The switch in the
+application is the consent gesture, it is visible in the header for as long as
+it is on, and closing it takes the pipe with it.
 """
 
 from __future__ import annotations
@@ -38,6 +41,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import sys
 import time
 from collections.abc import Mapping
 from typing import BinaryIO
@@ -64,11 +68,12 @@ PIPE_PREFIX_PATTERN = re.compile(r"^\\{1,2}[.?]\\pipe\\", re.IGNORECASE)
 BUSY_PATIENCE_SECONDS = 2.0
 BUSY_RETRY_SECONDS = 0.05
 
-#: A line longer than this is not something this protocol produces.
-MAX_LINE = 64 * 1024
-
-PAIR_FRAME = "pair"
 SCENE_FRAME = "scene_command"
+
+#: The stem the application builds its pipe name on, with the SID appended.
+#: Mirrors `PIPE_STEM` in `control_bridge.rs`; the two must agree or nothing
+#: connects, which is what `test_bridge` pins.
+PIPE_STEM = "anatria3d-control"
 
 
 class BridgeUnavailable(RuntimeError):
@@ -79,44 +84,34 @@ class BridgeUnavailable(RuntimeError):
     """
 
 
-class BridgeRefused(RuntimeError):
-    """The application would not accept this token."""
-
-
 class ControlBridge:
     """One connection to a running Anatria3D.
 
     Opened lazily on the first command and kept afterwards, which matters more
     than it looks: the bridge admits one client at a time, so a client that
     connected and disconnected around every command would spend most of its
-    life racing itself for the pipe, and would re-pair each time.
+    life racing itself for the pipe.
     """
 
-    def __init__(self, pipe: str, token: str) -> None:
-        self._name = PIPE_PREFIX + PIPE_PREFIX_PATTERN.sub("", pipe.strip())
-        self._token = token
+    def __init__(self, pipe: str | None = None) -> None:
+        name = pipe.strip() if pipe else default_pipe_name()
+        self._name = PIPE_PREFIX + PIPE_PREFIX_PATTERN.sub("", name)
         self._stream: BinaryIO | None = None
 
     @classmethod
     def from_environment(cls) -> ControlBridge | None:
-        """Build one from the environment, or `None` when it is not configured.
+        """Build one if the reader asked for it, or `None` if they did not.
 
-        Both variables are required together. One without the other is a
-        half-finished configuration rather than a preference, and saying so is
-        more useful than silently behaving as though neither were set.
+        `ANATRIA3D_BRIDGE` is the whole configuration. `ANATRIA3D_BRIDGE_PIPE`
+        is read too and overrides the derived name, which exists for the case
+        the derivation cannot cover: an application running as a *different*
+        account that has deliberately been made reachable. Nobody needs it for
+        the ordinary setup and the panel does not ask for it.
         """
-        pipe = os.environ.get("ANATRIA3D_BRIDGE_PIPE", "").strip()
-        token = os.environ.get("ANATRIA3D_BRIDGE_TOKEN", "").strip()
-        if not pipe and not token:
+        if os.environ.get("ANATRIA3D_BRIDGE", "").strip().lower() not in _TRUE:
             return None
-        if not pipe or not token:
-            missing = "ANATRIA3D_BRIDGE_PIPE" if not pipe else "ANATRIA3D_BRIDGE_TOKEN"
-            raise BridgeUnavailable(
-                f"The control bridge is half-configured: {missing} is not set. "
-                "Both the Pipe and the Token from the application's Control "
-                "bridge panel are needed."
-            )
-        return cls(pipe, token)
+        override = os.environ.get("ANATRIA3D_BRIDGE_PIPE", "").strip()
+        return cls(override or None)
 
     @property
     def pipe_name(self) -> str:
@@ -130,21 +125,20 @@ class ControlBridge:
     def send(self, command: Mapping[str, object]) -> None:
         """Put one scene command on the wire.
 
-        Connects and pairs first if needed. A write that fails because the
-        application restarted is retried once on a fresh connection — an
-        application that was restarted between two commands is an ordinary
-        thing, and making the caller distinguish that from a real failure would
-        push a reconnect loop into every tool.
+        Connects first if needed. A write that fails because the application
+        restarted is retried once on a fresh connection — an application
+        restarted between two commands is an ordinary thing, and making the
+        caller distinguish that from a real failure would push a reconnect loop
+        into every tool.
         """
         frame = json.dumps({"type": SCENE_FRAME, "command": dict(command)})
         try:
             self._write(frame)
         except (OSError, ValueError):
             self.close()
-            # One retry, on a connection built from scratch. If pairing fails
-            # this time the error is the honest one: the token is stale, which
-            # is what a restarted application means for a client holding the
-            # old one.
+            # One retry, on a connection built from scratch. If the application
+            # really has gone, the second attempt fails with the honest error:
+            # nothing is listening.
             self._write(frame)
 
     def close(self) -> None:
@@ -169,7 +163,6 @@ class ControlBridge:
     def _ensure(self) -> BinaryIO:
         if self._stream is None:
             self._stream = self._connect()
-            self._pair(self._stream)
         return self._stream
 
     def _connect(self) -> BinaryIO:
@@ -203,63 +196,127 @@ class ControlBridge:
                     raise BridgeUnavailable(
                         f"Could not open {self._name} after waiting "
                         f"{BUSY_PATIENCE_SECONDS:g}s: {err}. If another program "
-                        "is paired with the bridge, it holds the only "
+                        "is connected to the bridge, it holds the only "
                         "connection until it disconnects."
                     ) from err
                 time.sleep(BUSY_RETRY_SECONDS)
 
-    def _pair(self, stream: BinaryIO) -> None:
-        """Present the token, and refuse to go on without an answer."""
-        stream.write(
-            json.dumps({"type": PAIR_FRAME, "token": self._token}).encode("utf-8") + b"\n"
-        )
-        stream.flush()
 
-        answer = _read_line(stream)
-        if answer is None:
-            # The application writes a refusal and disconnects, and those two
-            # race: often the disconnect wins and the client sees nothing at
-            # all. Silence here therefore means the token was wrong far more
-            # often than it means anything else, and saying so is more useful
-            # than reporting an empty read.
-            self.close()
-            raise BridgeRefused(
-                "The application closed the connection without pairing. The "
-                "token is almost certainly stale — it is minted afresh every "
-                "time the bridge is switched on. Copy the current one from the "
-                "Control bridge panel."
+# ---------------------------------------------------------------------------
+# Finding the application without being told where it is
+# ---------------------------------------------------------------------------
+
+#: What counts as "yes" in an environment variable.
+#:
+#: Generous on purpose. Somebody who wrote `true` because every other tool
+#: takes `true` should not be left with a server that silently offers five
+#: tools instead of twenty and no clue why.
+_TRUE = {"1", "true", "yes", "on"}
+
+
+def default_pipe_name() -> str:
+    """The pipe an Anatria3D running as this account will have created.
+
+    This is what replaces the pipe-and-token copying. The application names its
+    pipe for the account that owns it, this process runs as the same account,
+    so the name is derivable rather than something a person has to carry across
+    a config file.
+    """
+    return f"{PIPE_STEM}-{current_user_sid()}"
+
+
+def current_user_sid() -> str:
+    """This process's own user SID, in the `S-1-5-21-...` string form.
+
+    Read from the process token rather than from a username, which is what
+    `control_acl::current_user_sid` on the application's side does — the two
+    have to produce the same string or nothing connects, and asking Windows the
+    same question twice is the only way to be sure of that. A username would
+    also have to be looked up, and would differ across domains.
+
+    `ctypes` rather than pywin32: this virtualenv is one a reader creates by
+    hand, and a dependency for one function is a dependency in every future
+    install instruction.
+    """
+    if sys.platform != "win32":
+        raise BridgeUnavailable(
+            "The control bridge is a Windows transport; this build has none."
+        )
+
+    import ctypes
+    from ctypes import wintypes
+
+    kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+    advapi32 = ctypes.WinDLL("advapi32", use_last_error=True)
+
+    TOKEN_QUERY = 0x0008
+    TOKEN_USER = 1
+
+    # Declared, all of them. `GetCurrentProcess` returns the pseudo-handle -1,
+    # and without a restype ctypes hands it on as a C int, which overflows the
+    # moment the next call wants a HANDLE.
+    kernel32.GetCurrentProcess.restype = wintypes.HANDLE
+    kernel32.CloseHandle.argtypes = [wintypes.HANDLE]
+    kernel32.LocalFree.argtypes = [ctypes.c_void_p]
+    advapi32.OpenProcessToken.argtypes = [
+        wintypes.HANDLE,
+        wintypes.DWORD,
+        ctypes.POINTER(wintypes.HANDLE),
+    ]
+    advapi32.GetTokenInformation.argtypes = [
+        wintypes.HANDLE,
+        ctypes.c_int,
+        ctypes.c_void_p,
+        wintypes.DWORD,
+        ctypes.POINTER(wintypes.DWORD),
+    ]
+    advapi32.ConvertSidToStringSidW.argtypes = [
+        ctypes.c_void_p,
+        ctypes.POINTER(wintypes.LPWSTR),
+    ]
+
+    token = wintypes.HANDLE()
+    if not advapi32.OpenProcessToken(
+        kernel32.GetCurrentProcess(), TOKEN_QUERY, ctypes.byref(token)
+    ):
+        raise BridgeUnavailable(
+            f"Could not read this process's token (Win32 {ctypes.get_last_error()})."
+        )
+
+    try:
+        # Asked twice: a TOKEN_USER is a header followed by a variable-length
+        # SID, so the first call fails and reports the size it needs.
+        needed = wintypes.DWORD(0)
+        advapi32.GetTokenInformation(
+            token, TOKEN_USER, None, 0, ctypes.byref(needed)
+        )
+        if not needed.value:
+            raise BridgeUnavailable(
+                f"Could not size this account's identity "
+                f"(Win32 {ctypes.get_last_error()})."
             )
 
+        buffer = ctypes.create_string_buffer(needed.value)
+        if not advapi32.GetTokenInformation(
+            token, TOKEN_USER, buffer, needed, ctypes.byref(needed)
+        ):
+            raise BridgeUnavailable(
+                f"Could not read this account's identity "
+                f"(Win32 {ctypes.get_last_error()})."
+            )
+
+        # TOKEN_USER is a SID_AND_ATTRIBUTES, whose first member is the pointer
+        # to the SID itself.
+        sid = ctypes.c_void_p.from_buffer(buffer)
+        text = wintypes.LPWSTR()
+        if not advapi32.ConvertSidToStringSidW(sid, ctypes.byref(text)):
+            raise BridgeUnavailable(
+                f"Could not render this account's identity as text "
+                f"(Win32 {ctypes.get_last_error()})."
+            )
         try:
-            parsed = json.loads(answer)
-        except json.JSONDecodeError:
-            self.close()
-            raise BridgeUnavailable(f"Unreadable answer from the bridge: {answer!r}")
-
-        if parsed.get("type") == "paired":
-            return
-
-        self.close()
-        reason = parsed.get("reason") or parsed.get("message") or answer
-        raise BridgeRefused(f"The application refused this client: {reason}")
-
-
-def _read_line(stream: BinaryIO) -> str | None:
-    """One newline-terminated line, or `None` if the far side hung up.
-
-    Read a byte at a time rather than buffered, because the stream is shared
-    with whatever comes next and over-reading would swallow it. The only lines
-    this ever reads are one-word handshake answers, so the cost is nothing.
-    """
-    out = bytearray()
-    while len(out) < MAX_LINE:
-        chunk = stream.read(1)
-        if not chunk:
-            return None
-        if chunk == b"\n":
-            return out.decode("utf-8", "replace").rstrip("\r")
-        out += chunk
-    raise BridgeUnavailable(
-        f"The bridge sent {MAX_LINE} bytes with no line ending. That is not "
-        "this protocol."
-    )
+            return str(text.value)
+        finally:
+            kernel32.LocalFree(text)
+    finally:
+        kernel32.CloseHandle(token)

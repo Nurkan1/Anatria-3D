@@ -16,10 +16,10 @@
 //!
 //! - **Off unless asked.** Nothing starts this at launch, and no failure path
 //!   turns it on. A reader who never opens the panel never has a pipe.
-//! - **Stopping revokes.** The token is minted per start and dropped with the
-//!   listener, so turning the bridge off and on again invalidates whatever any
-//!   previously paired program was holding. "Off" that leaves a usable
-//!   credential behind is not off.
+//! - **Off is off.** Stopping drops the listener and the pipe with it, so
+//!   there is nothing left to connect to. The switch is the whole of the
+//!   consent: it is the thing the reader can see, in a panel they opened, with
+//!   a badge in the header for as long as it is on.
 //! - **One pipe per user, not per machine.** The name carries the account's
 //!   SID. Two people signed in at once — an ordinary thing on a shared faculty
 //!   machine — each get their own, rather than the second finding the name
@@ -30,11 +30,12 @@ use std::fmt;
 
 /// What the settings panel needs to draw the switch.
 ///
-/// `token` is the one field here that is deliberately readable from the
-/// webview. It is not a secret in the sense the API keys are — those never
-/// enter this context and there is no command that returns one — it is a
-/// per-session capability whose entire purpose is to be read off a panel and
-/// pasted into another program's configuration.
+/// Nothing here is a credential. There was a per-session token once, and it
+/// bought less than it cost: the pipe's own permissions already answer "is
+/// this the reader's account", and *which of their programs* was a question
+/// the reader had no way to act on — while a fresh token every session meant
+/// editing a config file and restarting a client each time, which reads as a
+/// broken feature rather than a security measure.
 #[derive(Debug, Clone, Serialize)]
 pub struct BridgeStatus {
     /// Whether this build has a transport at all. False everywhere but Windows
@@ -43,9 +44,11 @@ pub struct BridgeStatus {
     pub supported: bool,
     pub running: bool,
     /// The full path a client connects to, or `None` when stopped.
+    ///
+    /// Shown for a reader writing a client of their own. The MCP server does
+    /// not need it: the name is this account's SID, which any program running
+    /// as the reader can work out for itself.
     pub pipe: Option<String>,
-    /// This session's pairing token, or `None` when stopped.
-    pub token: Option<String>,
     /// Scene commands admitted since the bridge was started.
     pub accepted: u64,
     /// Lines refused: not a scene command, or malformed. Shown because a
@@ -61,7 +64,6 @@ impl BridgeStatus {
             supported,
             running: false,
             pipe: None,
-            token: None,
             accepted: 0,
             refused: 0,
         }
@@ -86,8 +88,6 @@ pub enum BridgeError {
     /// The account could not be identified, so the pipe could not be named or
     /// restricted to it.
     NoIdentity(String),
-    /// The operating system would not provide the randomness for a token.
-    NoRandomness,
     /// The account's pipe name is already taken — a second window of this
     /// application, in practice, since nothing else may open it.
     ///
@@ -107,10 +107,6 @@ impl fmt::Display for BridgeError {
                 "this build has no control bridge; it is available on Windows"
             ),
             Self::NoIdentity(why) => write!(f, "could not identify this account: {why}"),
-            Self::NoRandomness => write!(
-                f,
-                "the operating system would not provide random bytes for a pairing token"
-            ),
             Self::AlreadyOpen => write!(
                 f,
                 "another Anatria3D window signed in as you already has the bridge on. \
@@ -133,7 +129,6 @@ mod platform {
     use crate::control_acl;
     use crate::control_frame;
     use crate::control_listener::Listener;
-    use crate::control_pairing::Pairing;
     use crate::control_pipe::{pipe_path, PipeError, ERROR_PIPE_BUSY};
 
     /// The stem every instance's pipe name is built on. The account's SID is
@@ -144,7 +139,6 @@ mod platform {
     /// there is no way to lose the listener while believing it stopped.
     struct Running {
         listener: Listener,
-        token: String,
         tally: Arc<Tally>,
     }
 
@@ -185,7 +179,6 @@ mod platform {
                     supported: true,
                     running: true,
                     pipe: Some(pipe_path(state.listener.name())),
-                    token: Some(state.token.clone()),
                     accepted: state.tally.accepted.load(Ordering::Relaxed),
                     refused: state.tally.refused.load(Ordering::Relaxed),
                 },
@@ -195,9 +188,8 @@ mod platform {
         /// Turn it on, and hand every admitted command to `on_command`.
         ///
         /// Idempotent: starting a running bridge returns its current state
-        /// rather than minting a second token. A panel that double-fires must
-        /// not silently invalidate the token the reader has already pasted
-        /// somewhere.
+        /// rather than tearing the listener down and building another. A panel
+        /// that double-fires must not drop a client that is mid-conversation.
         ///
         /// `on_command` receives the *rebuilt* frame — `control_frame::admit`
         /// has already checked its type, dropped every field but the three the
@@ -217,13 +209,10 @@ mod platform {
                 Some(stem) => stem.to_owned(),
                 None => pipe_name()?,
             };
-            let pairing = Pairing::new().map_err(|_| BridgeError::NoRandomness)?;
-            let token = pairing.token().to_owned();
-
             let tally = Arc::new(Tally::default());
             let counters = Arc::clone(&tally);
 
-            let listener = Listener::start(&name, pairing, move |line| {
+            let listener = Listener::start(&name, move |line| {
                 let sequence = counters.sequence.fetch_add(1, Ordering::Relaxed);
                 match control_frame::admit(line, &control_frame::bridge_request_id(sequence)) {
                     Ok(frame) => {
@@ -245,16 +234,15 @@ mod platform {
                 other => BridgeError::Pipe(other.to_string()),
             })?;
 
-            *running = Some(Running {
-                listener,
-                token,
-                tally,
-            });
+            *running = Some(Running { listener, tally });
             drop(running);
             Ok(self.status())
         }
 
-        /// Turn it off, and invalidate this session's token with it.
+        /// Turn it off, and give up the pipe with it.
+        ///
+        /// There is nothing left to connect to afterwards, which is the whole
+        /// of what "off" has to mean.
         ///
         /// Safe to call when already stopped, which is what makes it usable
         /// from the shutdown path without asking first.
@@ -304,7 +292,6 @@ mod platform {
     #[cfg(test)]
     mod tests {
         use super::*;
-        use crate::control_listener::PAIRED;
         use crate::control_pipe::ControlClient;
         use std::sync::mpsc;
         use std::time::Duration;
@@ -317,17 +304,6 @@ mod platform {
             format!(r#"{{"type":"scene_command","command":{{"action":"{action}"}}}}"#)
         }
 
-        fn pair(client: &ControlClient, token: &str) {
-            client
-                .write_line(&format!(r#"{{"type":"pair","token":"{token}"}}"#))
-                .expect("the pairing frame was sent");
-            assert_eq!(
-                client.read_line().expect("a reply"),
-                Some(PAIRED.to_owned()),
-                "the client was not paired"
-            );
-        }
-
         #[test]
         fn a_new_bridge_is_off() {
             let bridge = ControlBridge::for_test();
@@ -335,11 +311,10 @@ mod platform {
             assert!(status.supported);
             assert!(!status.running);
             assert!(status.pipe.is_none());
-            assert!(status.token.is_none());
         }
 
         #[test]
-        fn starting_names_a_pipe_and_mints_a_token() {
+        fn starting_names_a_pipe() {
             let bridge = ControlBridge::for_test();
             let status = bridge.start(|_| {}).expect("started");
             assert!(status.running);
@@ -348,7 +323,6 @@ mod platform {
                 .as_deref()
                 .expect("a pipe path")
                 .starts_with(r"\\.\pipe\"));
-            assert_eq!(status.token.expect("a token").len(), 32);
             bridge.stop();
         }
 
@@ -362,7 +336,7 @@ mod platform {
         }
 
         #[test]
-        fn stopping_gives_up_the_pipe_and_the_token() {
+        fn stopping_gives_up_the_pipe() {
             let bridge = ControlBridge::for_test();
             let started = bridge.start(|_| {}).expect("started");
             let path = started.pipe.expect("a pipe path");
@@ -371,8 +345,8 @@ mod platform {
 
             let status = bridge.status();
             assert!(!status.running);
-            assert!(status.token.is_none());
-            // The name is free again, which is the observable half of "off".
+            // The name is free again, which is the whole of what "off" means
+            // now that there is no credential to invalidate alongside it.
             assert!(
                 ControlClient::connect_now(name_of(&path)).is_err(),
                 "the pipe outlived the bridge"
@@ -380,31 +354,18 @@ mod platform {
         }
 
         #[test]
-        fn a_second_start_does_not_mint_a_second_token() {
-            // A panel that fires twice must not invalidate the token the reader
-            // has already pasted into a client's configuration.
+        fn a_second_start_keeps_the_listener_it_already_had() {
+            // A panel that fires twice must not tear down a listener a client
+            // is mid-conversation with.
             let bridge = ControlBridge::for_test();
             let first = bridge.start(|_| {}).expect("started");
             let second = bridge.start(|_| {}).expect("still started");
-            assert_eq!(first.token, second.token);
             assert_eq!(first.pipe, second.pipe);
             bridge.stop();
         }
 
         #[test]
-        fn restarting_invalidates_the_previous_token() {
-            // The rule that makes the switch mean something: off is not a
-            // pause. Whatever a paired program was holding is now wrong.
-            let bridge = ControlBridge::for_test();
-            let before = bridge.start(|_| {}).expect("started").token;
-            bridge.stop();
-            let after = bridge.start(|_| {}).expect("started again").token;
-            assert_ne!(before, after);
-            bridge.stop();
-        }
-
-        #[test]
-        fn a_paired_client_reaches_the_sink() {
+        fn a_connected_client_reaches_the_sink() {
             let (tx, rx) = mpsc::channel();
             let bridge = ControlBridge::for_test();
             let status = bridge
@@ -415,7 +376,6 @@ mod platform {
 
             let client = ControlClient::connect(name_of(status.pipe.as_deref().expect("a path")))
                 .expect("connected");
-            pair(&client, status.token.as_deref().expect("a token"));
             client
                 .write_line(&scene_command("reset_view"))
                 .expect("the command was sent");
@@ -439,30 +399,6 @@ mod platform {
         }
 
         #[test]
-        fn an_unpaired_client_never_reaches_the_sink() {
-            let (tx, rx) = mpsc::channel();
-            let bridge = ControlBridge::for_test();
-            let status = bridge
-                .start(move |frame| {
-                    let _ = tx.send(frame);
-                })
-                .expect("started");
-
-            let client = ControlClient::connect(name_of(status.pipe.as_deref().expect("a path")))
-                .expect("connected");
-            // Straight to driving, with no token.
-            let _ = client.write_line(&scene_command("reset_view"));
-
-            assert!(
-                rx.recv_timeout(Duration::from_millis(400)).is_err(),
-                "a command crossed without pairing"
-            );
-
-            drop(client);
-            bridge.stop();
-        }
-
-        #[test]
         fn what_is_not_a_scene_command_is_counted_and_dropped() {
             let (tx, rx) = mpsc::channel();
             let bridge = ControlBridge::for_test();
@@ -474,7 +410,6 @@ mod platform {
 
             let client = ControlClient::connect(name_of(status.pipe.as_deref().expect("a path")))
                 .expect("connected");
-            pair(&client, status.token.as_deref().expect("a token"));
 
             // A `done` frame is the sharpest of these: one reaching the
             // frontend would tell the composer a turn it never started has
@@ -518,7 +453,6 @@ mod platform {
 
             let client = ControlClient::connect(name_of(status.pipe.as_deref().expect("a path")))
                 .expect("connected");
-            pair(&client, status.token.as_deref().expect("a token"));
             for _ in 0..3 {
                 client
                     .write_line(&scene_command("reset_view"))

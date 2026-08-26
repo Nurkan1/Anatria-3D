@@ -12,9 +12,9 @@ import { BridgeSettings } from "./BridgeSettings";
  * The bridge is the one control in this application that lets something
  * outside the window act on it, so every case here is a variation of the same
  * question: **does the screen agree with what Rust actually did?** A switch
- * that draws itself on after a failed start, or leaves a dead token on screen
- * after being turned off, is worse than a broken bridge — the reader would
- * believe a program is paired when none is, or that one is not when it is.
+ * that draws itself on after a failed start, or keeps offering a
+ * configuration after the bridge is off, is worse than a broken bridge — the
+ * reader would believe something is listening when nothing is.
  */
 
 const ipc = vi.hoisted(() => ({
@@ -30,7 +30,6 @@ function status(overrides: Partial<BridgeStatus> = {}): BridgeStatus {
     supported: true,
     running: false,
     pipe: null,
-    token: null,
     accepted: 0,
     refused: 0,
     ...overrides,
@@ -40,8 +39,10 @@ function status(overrides: Partial<BridgeStatus> = {}): BridgeStatus {
 const RUNNING = status({
   running: true,
   pipe: String.raw`\\.\pipe\anatria3d-control-S-1-5-21-9-9-9-1001`,
-  token: "0123456789abcdef0123456789abcdef",
 });
+
+/** The one line the panel exists to hand over. */
+const CONFIG = '"ANATRIA3D_BRIDGE": "1"';
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -65,13 +66,11 @@ describe("the switch", () => {
 
     const control = await screen.findByRole("switch");
     expect(control.getAttribute("aria-checked")).toBe("false");
-    // Nothing to paste: no pipe, no token, and so nothing to copy. The word
-    // "token" itself is in the description above, which is why this asks for
-    // the copy buttons instead.
+    // Nothing to paste while it is off, and so nothing to copy.
     expect(screen.queryByRole("button", { name: /copy/i })).toBeNull();
   });
 
-  it("shows the pipe and the token once it is on", async () => {
+  it("hands over the one line to paste once it is on", async () => {
     ipc.bridgeStatus.mockResolvedValue(status());
     ipc.startBridge.mockResolvedValue(RUNNING);
     render(<BridgeSettings />);
@@ -81,9 +80,20 @@ describe("the switch", () => {
       fireEvent.click(control);
     });
 
-    expect(await screen.findByText(RUNNING.token!)).toBeTruthy();
-    expect(screen.getByText(RUNNING.pipe!)).toBeTruthy();
+    expect(await screen.findByText(CONFIG)).toBeTruthy();
     expect(screen.getByRole("switch").getAttribute("aria-checked")).toBe("true");
+  });
+
+  it("asks for nothing that changes between sessions", async () => {
+    // The whole point of dropping the token. If anything here varies per
+    // switch-on, the reader is back to editing a config file every time and
+    // concluding the feature is broken when it stops working.
+    ipc.bridgeStatus.mockResolvedValue(RUNNING);
+    render(<BridgeSettings />);
+
+    const line = await screen.findByText(CONFIG);
+    expect(line.textContent).not.toMatch(/[0-9a-f]{16}/);
+    expect(line.textContent).not.toContain("pipe");
   });
 
   it("stays off when starting failed, and says why", async () => {
@@ -105,20 +115,21 @@ describe("the switch", () => {
     expect(screen.getByRole("switch").getAttribute("aria-checked")).toBe("false");
   });
 
-  it("takes the token off the screen when it is turned off", async () => {
-    // The token is dead the moment the bridge stops. Leaving it visible would
-    // invite the reader to paste a credential that no longer works.
+  it("stops offering the configuration when it is turned off", async () => {
+    // Nothing here is a credential any more, but a line telling somebody to
+    // wire up a bridge that is not listening is still an instruction to do
+    // something that will not work.
     ipc.bridgeStatus.mockResolvedValue(RUNNING);
     ipc.stopBridge.mockResolvedValue(status());
     render(<BridgeSettings />);
 
-    expect(await screen.findByText(RUNNING.token!)).toBeTruthy();
+    expect(await screen.findByText(CONFIG)).toBeTruthy();
     await act(async () => {
       fireEvent.click(screen.getByRole("switch"));
     });
 
     await waitFor(() => {
-      expect(screen.queryByText(RUNNING.token!)).toBeNull();
+      expect(screen.queryByText(CONFIG)).toBeNull();
     });
     expect(screen.getByRole("switch").getAttribute("aria-checked")).toBe("false");
   });
@@ -140,7 +151,7 @@ describe("the switch", () => {
     ipc.bridgeStatus.mockResolvedValue(RUNNING);
     render(<BridgeSettings />);
 
-    await screen.findByText(RUNNING.token!);
+    await screen.findByText(CONFIG);
     expect(screen.queryByText(/nothing reaches the 3D view/i)).toBeNull();
   });
 });

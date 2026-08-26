@@ -14,6 +14,15 @@ import { useCopy } from "./useCopy";
 const POLL_MS = 2000;
 
 /**
+ * The whole of what a client needs, and it is the same on every machine.
+ *
+ * No pipe and no token: the server derives the pipe name from the account it
+ * is already running as. That is what turns setup from a per-session ritual
+ * into one line pasted once.
+ */
+const MCP_ENV = '"ANATRIA3D_BRIDGE": "1"';
+
+/**
  * The control bridge's switch.
  *
  * # Why this is a switch and not a setting
@@ -21,16 +30,21 @@ const POLL_MS = 2000;
  * Everything else in this drawer is a preference: which provider, which voice,
  * which language. This one opens a door. A program running as you, on this
  * machine, can drive the viewport through it — so it is off at every launch,
- * it is never turned on by anything but a press here, and turning it off
- * invalidates the token, rather than pausing something that would resume.
+ * it is never turned on by anything but a press here, and turning it off takes
+ * the pipe with it rather than pausing something that would resume.
  *
  * # What the reader has to be able to see
  *
  * Two things, and they are the whole design. **That it is on** — which is why
- * the header carries a pill and not only this panel. And **what to paste
- * where**, because a bridge whose pipe and token cannot be copied out is one
- * nobody can actually use, and the alternative is a reader typing 32 hex
- * characters by hand.
+ * the header carries a pill and not only this panel. And **the one line to
+ * paste**, which never changes, so nobody has to come back here after the
+ * first time.
+ *
+ * There was a per-session token here once, shown beside the pipe. It bought
+ * less than it cost: the pipe's own permissions already answer "is this the
+ * reader's account", and a token that changed on every switch-on meant editing
+ * a config file and restarting a client each session — which reads as a broken
+ * feature long before it reads as a careful one.
  */
 export function BridgeSettings() {
   const status = useBridgeStore((s) => s.status) ?? UNKNOWN_BRIDGE;
@@ -97,19 +111,26 @@ export function BridgeSettings() {
       <p className="text-[10px] leading-snug text-slate-600">
         Lets another program on this computer send view commands to this window —
         isolate a structure, highlight a pathway, reset the view. Only your own
-        account can open the connection, and only a program you have paired with
-        the token below is obeyed.
+        account can open the connection, and only while this switch is on.
       </p>
 
       {running && (
         <div className="mt-2 space-y-2">
-          <CopyRow label="Pipe" value={status.pipe} />
-          <CopyRow label="Token" value={status.token} />
-
+          <CopyRow label="Add this to your MCP client" value={MCP_ENV} />
           <p className="text-[10px] leading-snug text-slate-600">
-            The token is new every time you switch this on. Turning it off makes it
-            wrong, so a program you paired earlier has to be given the new one.
+            Paste it into the <span className="text-slate-400">env</span> block of
+            the Anatria3D entry, then restart that client. It never changes, so this
+            is a once-only step — the server finds this window by itself.
           </p>
+
+          <details>
+            <summary className="cursor-pointer text-[10px] text-slate-600 hover:text-slate-400">
+              Writing your own client?
+            </summary>
+            <div className="mt-1">
+              <CopyRow label="Pipe" value={status.pipe} />
+            </div>
+          </details>
 
           <p className="text-[10px] text-slate-500">
             {status.accepted} command{status.accepted === 1 ? "" : "s"} accepted
@@ -136,8 +157,8 @@ export function BridgeSettings() {
  * One copyable value.
  *
  * Its own component so each row owns its own "copied" flash — sharing one
- * would light up the token when the reader copied the pipe, which in a panel
- * whose whole job is "paste this, not that" is worse than no feedback.
+ * would light up one row when the reader copied another, which in a panel
+ * whose whole job is "paste this" is worse than no feedback.
  */
 function CopyRow({ label, value }: { label: string; value: string | null }) {
   const { copied, copy } = useCopy();

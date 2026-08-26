@@ -508,15 +508,24 @@ ghosting, sectioning and tracing — and they act on the window you have open.
 That is the point rather than a bonus: an agent reaching the atlas from outside
 should be able to do what the assistant inside can do.
 
-Pairing is deliberate and takes two steps. Turn the **control bridge** on in
-the settings drawer, then paste the pipe and the token it shows into the MCP
-client's configuration. Until both are set the tools are **not registered at
-all**, so a client that was not paired is never offered them; the header shows
-a `bridge` badge for as long as it is on; and the token dies when it is
-switched off, so "off" is not a pause. The transport is a named pipe whose
+Setting it up is `"ANATRIA3D_BRIDGE": "1"` in the client's configuration and a
+switch in the settings drawer. Nothing is copied between the two: the pipe is
+named for the account that created it, and the server runs as that account, so
+it finds the window by itself. Without that variable the fifteen tools are
+**not registered at all**, so a client that was not asked to drive is never
+offered them.
+
+The switch is the consent, and it is where consent belongs — a thing the reader
+can see, with a `bridge` badge in the header for as long as it is on, and
+turning it off takes the pipe with it. The transport is a named pipe whose
 permissions admit your account and no other, and it carries scene commands and
-nothing else — the frame type is checked, so nothing arriving over it can
+nothing else: the frame type is checked, so nothing arriving over it can
 impersonate part of a conversation.
+
+There is no token. There was, and it cost a copy-and-restart every session
+while buying nothing the pipe's own permissions did not already give — any
+program running as you could read the journal and the case files long before it
+could move a viewport.
 
 Neither half can read the study journal, the case files or the keys. There is
 no tool for any of them.

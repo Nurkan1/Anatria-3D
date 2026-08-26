@@ -260,29 +260,6 @@ impl ControlPipe {
         }
     }
 
-    /// Send one line back, newline included.
-    pub fn write_line(&self, line: &str) -> Result<(), PipeError> {
-        let payload = format!("{line}\n");
-        let bytes = payload.as_bytes();
-        let mut written = 0u32;
-        // SAFETY: `bytes` is alive for the call and `written` is a valid
-        // out-pointer.
-        let ok = unsafe {
-            WriteFile(
-                self.handle.raw(),
-                bytes.as_ptr(),
-                bytes.len() as u32,
-                &mut written,
-                ptr::null_mut(),
-            )
-        };
-        if ok == 0 {
-            return Err(PipeError::Write(unsafe { GetLastError() }));
-        }
-        Ok(())
-    }
-
-    /// Drop the current client, leaving the pipe open for the next one.
     pub fn disconnect(&mut self) {
         self.pending.clear();
         // SAFETY: `self.handle` is a pipe this struct owns and has not closed.

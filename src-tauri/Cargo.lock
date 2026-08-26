@@ -48,7 +48,6 @@ name = "anatria3d"
 version = "0.2.2"
 dependencies = [
  "base64 0.23.1",
- "getrandom 0.4.3",
  "keyring",
  "rusqlite",
  "serde",

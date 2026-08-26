@@ -62,7 +62,7 @@ from anatria_engine.protocol import (
     SetLayerVisibility,
 )
 from anatria_engine.scene_contract import XRAY_OPACITY, unknown_references
-from bridge import BridgeRefused, BridgeUnavailable, ControlBridge
+from bridge import BridgeUnavailable, ControlBridge
 from mcp.server import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
 from mcp_types import ToolAnnotations
@@ -124,7 +124,7 @@ def register_scene_tools(
             raise ToolError(_no_such(missing, loaded))
         try:
             bridge.send(payload)
-        except (BridgeUnavailable, BridgeRefused) as err:
+        except BridgeUnavailable as err:
             raise ToolError(str(err)) from err
 
     def build(model: type[BaseModel], **fields: object) -> BaseModel:

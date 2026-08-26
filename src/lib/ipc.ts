@@ -104,18 +104,15 @@ export interface BridgeStatus {
   /** Whether this build has a transport at all. Windows only, for now. */
   supported: boolean;
   running: boolean;
-  /** The pipe a client connects to, or null when stopped. */
-  pipe: string | null;
   /**
-   * This session's pairing token, or null when stopped.
+   * The pipe a client connects to, or null when stopped.
    *
-   * The one credential in this application that is meant to be read from the
-   * webview — unlike an API key, which has no command that returns it. This
-   * one grants the ability to drive a viewport on this machine, it dies when
-   * the bridge stops, and its whole purpose is to be copied into another
-   * program's configuration by the person sitting here.
+   * Shown for somebody writing a client of their own. The MCP server does not
+   * need it: the name carries this account's SID, which any program running as
+   * the reader can work out for itself — which is what makes the whole thing
+   * configurable in one line that never changes.
    */
-  token: string | null;
+  pipe: string | null;
   /** Scene commands admitted since the bridge was started. */
   accepted: number;
   /** Lines refused: not a scene command, or malformed. */
@@ -136,7 +133,7 @@ export function startBridge(): Promise<BridgeStatus> {
   return invoke("start_bridge");
 }
 
-/** Turn it off. This session's pairing token stops working with it. */
+/** Turn it off. The pipe goes with it, so there is nothing left to open. */
 export function stopBridge(): Promise<BridgeStatus> {
   return invoke("stop_bridge");
 }

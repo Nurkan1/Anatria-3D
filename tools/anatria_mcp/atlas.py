@@ -5,17 +5,17 @@ application already ships — 3,478 structures in the male atlas and 264 in the
 female trunk, each with its TA2 Latin term, its system and its place in the
 hierarchy. It needs no running application, no API key and no network.
 
-**It reads, unless you pair it.** Every tool in this file reads, and that is
-all a client gets by default. Set `ANATRIA3D_BRIDGE_PIPE` and
-`ANATRIA3D_BRIDGE_TOKEN` from a running application's Control bridge panel and
-fifteen more tools appear, which drive the viewport — the same fifteen the
-application's own assistant has. Without those two variables they are never
-registered, so a client that was not deliberately paired cannot move anything
-and is not told it might.
+**It reads, unless you ask for more.** Every tool in this file reads, and that
+is all a client gets by default. Set `ANATRIA3D_BRIDGE=1` and fifteen more
+tools appear, which drive the viewport — the same fifteen the application's own
+assistant has. Without that variable they are never registered, so a client
+that was not deliberately configured cannot move anything and is not told it
+might.
 
 The read half needs no running application, no key and no network. The other
-half needs all three of an application, a switch the reader turned on, and the
-token it minted.
+half needs an application that is open with its control bridge switched on. It
+needs nothing else: the pipe is named for the account that created it, and this
+process runs as that account, so it finds the window by itself.
 
 Run it over stdio:
 
@@ -294,7 +294,7 @@ def build_server() -> MCPServer:
             "Use search_structures to find an organ_id, then describe_structure "
             "for its full record. "
             + (
-                "This session is paired with a running Anatria3D: the tools "
+                "This session is connected to a running Anatria3D: the tools "
                 "that isolate, illuminate, ghost and trace act on what the "
                 "reader is looking at, immediately. A structure existing in "
                 "this index does not mean it is loaded in their viewport — "
