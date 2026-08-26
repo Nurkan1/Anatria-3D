@@ -1,4 +1,10 @@
 mod commands;
+// Declared so it compiles and its tests run. Nothing calls it: the control
+// bridge's ACL is landed and proven before the pipe that will use it, so this
+// module has no reachable call site and the application's behaviour is
+// unchanged by its presence.
+#[cfg(windows)]
+mod control_acl;
 mod keyring_store;
 pub(crate) mod sidecar;
 mod study_db;
