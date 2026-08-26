@@ -548,30 +548,36 @@ mod tests {
         // two sits `CreateNamedPipeW` silently ignoring the attributes, which
         // is a failure neither side would otherwise notice.
         //
-        // **The two strings are not identical, and that is correct.** We ask
-        // for `GA` (GENERIC_ALL); the object carries `FA` (FILE_ALL_ACCESS),
-        // because generic rights are mapped to the target type's specific ones
-        // when the ACE is applied, and a named pipe is a file-system object.
-        // Comparing against the source SDDL fails here for a reason that has
-        // nothing wrong with it — so the expectation is written in the form the
-        // object actually holds, which is also the form anybody inspecting the
-        // pipe with an external tool will see.
+        // **The readback is not the string we wrote, in two ways, and neither
+        // is a fault.** We ask for `GA` (GENERIC_ALL) and the object carries
+        // `FA` (FILE_ALL_ACCESS), because generic rights are mapped to the
+        // target type's specific ones when the ACE is applied and a named pipe
+        // is a file-system object. And a well-known SID returns under its SDDL
+        // alias — the built-in Administrator as `LA` — which an ordinary
+        // account never shows, so an exact comparison passes on a developer
+        // machine and fails on a CI runner. Asserted as properties for that
+        // reason, with the grantee normalised through Windows' own spelling.
         let pipe = ControlPipe::create(&unique_name()).expect("pipe created");
         let carried = pipe.dacl_sddl().expect("dacl readable");
 
-        let sid = crate::control_acl::current_user_sid().expect("sid");
-        assert_eq!(carried, format!("D:P(D;;FA;;;NU)(A;;FA;;;{sid})"));
+        let us = crate::control_acl::as_windows_spells_it(
+            &crate::control_acl::current_user_sid().expect("sid"),
+        )
+        .expect("spelling");
 
-        // Spelled out separately so a failure says which property broke, and
-        // so a third ACE arriving from anywhere cannot pass unnoticed.
-        assert!(
-            carried.starts_with("D:P"),
-            "DACL is not protected: {carried}"
-        );
+        assert!(carried.starts_with("D:P"), "not protected: {carried}");
         assert_eq!(
-            carried.matches("(").count(),
+            carried.matches('(').count(),
             2,
             "unexpected ACEs: {carried}"
+        );
+        assert!(
+            carried.contains("(D;;FA;;;NU)"),
+            "network allowed: {carried}"
+        );
+        assert!(
+            carried.contains(&format!("(A;;FA;;;{us})")),
+            "wrong grantee: {carried}"
         );
     }
 

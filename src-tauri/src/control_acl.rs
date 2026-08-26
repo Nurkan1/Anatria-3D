@@ -171,6 +171,29 @@ pub fn owner_only_sddl() -> Result<String, AclError> {
     Ok(format!("D:P(D;;GA;;;NU)(A;;GA;;;{sid})"))
 }
 
+/// How Windows spells a principal in SDDL, which is not always how we wrote it.
+///
+/// Windows substitutes well-known aliases for well-known SIDs on the way back
+/// out: the built-in Administrator (`S-1-5-21-…-500`) is returned as `LA`, the
+/// Administrators group as `BA`, and so on. An ordinary account has no alias
+/// and round-trips unchanged — which is why comparing a readback against the
+/// string we wrote passes on a developer machine and fails on a CI runner that
+/// happens to be running as Administrator.
+///
+/// Rather than carrying a copy of Windows' alias table, this asks Windows: it
+/// builds a one-ACE descriptor naming the SID, reads it back, and returns
+/// whatever spelling came out. Comparisons then happen in the vocabulary the
+/// readback uses, whichever machine it is.
+pub fn as_windows_spells_it(sid: &str) -> Result<String, AclError> {
+    let probe = SecurityAttributes::from_sddl(&format!("D:(A;;GA;;;{sid})"))?;
+    let readback = probe.to_sddl()?;
+    readback
+        .rsplit_once(";;;")
+        .and_then(|(_, tail)| tail.strip_suffix(')'))
+        .map(str::to_owned)
+        .ok_or(AclError::Readback(0))
+}
+
 /// A security descriptor, freed when it goes out of scope.
 ///
 /// Wrapped rather than handed back raw so the `LocalFree` cannot be forgotten,
@@ -287,13 +310,46 @@ mod tests {
     }
 
     #[test]
+    fn a_well_known_sid_comes_back_under_its_alias() {
+        // The behaviour `as_windows_spells_it` exists for, pinned on a SID that
+        // aliases on every Windows machine — so this covers the case a
+        // developer account cannot reproduce and a CI runner found the hard
+        // way.
+        assert_eq!(
+            as_windows_spells_it("S-1-5-32-544").expect("administrators"),
+            "BA"
+        );
+        // And an identity with no alias is returned as it was given.
+        let ours = current_user_sid().expect("sid");
+        let spelled = as_windows_spells_it(&ours).expect("ours");
+        assert!(spelled == ours || !spelled.starts_with("S-1-"));
+    }
+
+    #[test]
     fn windows_agrees_with_what_we_wrote() {
-        // Everything above asserts our own string against itself. This one asks
-        // the kernel to parse it and hands back what it actually built, which
-        // is the only version of the question worth asking.
+        // Asks the kernel to parse our string and hands back what it actually
+        // built. Asserted as properties rather than as one string, because the
+        // readback is written in Windows' vocabulary and not ours: a
+        // well-known SID returns under its alias, so an exact comparison would
+        // depend on which account the tests run as.
         let attributes = SecurityAttributes::owner_only().expect("descriptor");
-        let readback = attributes.to_sddl().expect("readback");
-        assert_eq!(readback, owner_only_sddl().expect("sddl"));
+        let carried = attributes.to_sddl().expect("readback");
+        let us = as_windows_spells_it(&current_user_sid().expect("sid")).expect("spelling");
+
+        assert!(carried.starts_with("D:P"), "not protected: {carried}");
+        assert_eq!(
+            carried.matches('(').count(),
+            2,
+            "unexpected ACEs: {carried}"
+        );
+        assert!(
+            carried.contains("(D;;GA;;;NU)"),
+            "network allowed: {carried}"
+        );
+        assert!(
+            carried.contains(&format!("(A;;GA;;;{us})")),
+            "wrong grantee: {carried}"
+        );
     }
 
     #[test]
