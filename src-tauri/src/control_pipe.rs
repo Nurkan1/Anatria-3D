@@ -28,6 +28,7 @@ use std::ffi::c_void;
 use std::fmt;
 use std::os::windows::ffi::OsStrExt;
 use std::ptr;
+use std::sync::Arc;
 
 use windows_sys::Win32::Foundation::{
     CloseHandle, GetLastError, LocalFree, ERROR_SUCCESS, GENERIC_READ, GENERIC_WRITE, HANDLE,
@@ -42,9 +43,10 @@ use windows_sys::Win32::Storage::FileSystem::{
     CreateFileW, ReadFile, WriteFile, FILE_SHARE_NONE, OPEN_EXISTING, PIPE_ACCESS_DUPLEX,
 };
 use windows_sys::Win32::System::Pipes::{
-    ConnectNamedPipe, CreateNamedPipeW, DisconnectNamedPipe, PIPE_READMODE_BYTE,
+    ConnectNamedPipe, CreateNamedPipeW, DisconnectNamedPipe, WaitNamedPipeW, PIPE_READMODE_BYTE,
     PIPE_REJECT_REMOTE_CLIENTS, PIPE_TYPE_BYTE, PIPE_WAIT,
 };
+use windows_sys::Win32::System::IO::CancelIoEx;
 
 use crate::control_acl::SecurityAttributes;
 
@@ -103,9 +105,53 @@ pub fn pipe_path(name: &str) -> String {
     format!(r"\\.\pipe\{name}")
 }
 
+/// The kernel handle, and the only thing that closes it.
+///
+/// Split from [`ControlPipe`] so the accept loop and whatever stops it can hold
+/// the same handle without racing over its lifetime. Stopping means cancelling
+/// a blocking read from another thread, and cancelling a handle that has just
+/// been closed is how a process ends up cancelling I/O on somebody else's
+/// object — handles are reused. An `Arc` makes that impossible to write.
+pub struct PipeHandle {
+    handle: HANDLE,
+}
+
+impl PipeHandle {
+    fn raw(&self) -> HANDLE {
+        self.handle
+    }
+
+    /// Break whatever blocking call this handle is sitting in.
+    ///
+    /// Best effort by nature: there may be nothing pending, in which case it
+    /// fails and there was nothing to do. The caller checks its own stop flag
+    /// afterwards rather than trusting this to have worked.
+    pub fn cancel_io(&self) {
+        // SAFETY: the handle is alive for as long as this `Arc` is, which is
+        // the whole reason the type exists.
+        unsafe { CancelIoEx(self.handle, ptr::null()) };
+    }
+}
+
+impl Drop for PipeHandle {
+    fn drop(&mut self) {
+        if self.handle != INVALID_HANDLE_VALUE && !self.handle.is_null() {
+            // SAFETY: opened by CreateNamedPipeW, closed exactly once here,
+            // and the `Arc` guarantees nobody else is still using it.
+            unsafe { CloseHandle(self.handle) };
+        }
+    }
+}
+
+// SAFETY: a Windows HANDLE is a process-wide table index, not a pointer into
+// this process's memory, and the calls made through it are thread-safe at the
+// kernel. Sharing one across threads is the ordinary way a listener is run.
+unsafe impl Send for PipeHandle {}
+unsafe impl Sync for PipeHandle {}
+
 /// One end of the control pipe, owned by the application.
 pub struct ControlPipe {
-    handle: HANDLE,
+    handle: Arc<PipeHandle>,
     /// Bytes read but not yet returned as a line. A read returns whatever
     /// arrived, which has no reason to align with a newline.
     pending: Vec<u8>,
@@ -143,7 +189,7 @@ impl ControlPipe {
         }
 
         Ok(Self {
-            handle,
+            handle: Arc::new(PipeHandle { handle }),
             pending: Vec::new(),
         })
     }
@@ -155,7 +201,7 @@ impl ControlPipe {
     pub fn wait_for_client(&self) -> Result<(), PipeError> {
         const ERROR_PIPE_CONNECTED: u32 = 535;
         // SAFETY: `self.handle` is a pipe this struct owns and has not closed.
-        if unsafe { ConnectNamedPipe(self.handle, ptr::null_mut()) } != 0 {
+        if unsafe { ConnectNamedPipe(self.handle.raw(), ptr::null_mut()) } != 0 {
             return Ok(());
         }
         match unsafe { GetLastError() } {
@@ -193,7 +239,7 @@ impl ControlPipe {
             // `read` is a valid out-pointer.
             let ok = unsafe {
                 ReadFile(
-                    self.handle,
+                    self.handle.raw(),
                     chunk.as_mut_ptr(),
                     chunk.len() as u32,
                     &mut read,
@@ -226,7 +272,7 @@ impl ControlPipe {
         // out-pointer.
         let ok = unsafe {
             WriteFile(
-                self.handle,
+                self.handle.raw(),
                 bytes.as_ptr(),
                 bytes.len() as u32,
                 &mut written,
@@ -243,7 +289,7 @@ impl ControlPipe {
     pub fn disconnect(&mut self) {
         self.pending.clear();
         // SAFETY: `self.handle` is a pipe this struct owns and has not closed.
-        unsafe { DisconnectNamedPipe(self.handle) };
+        unsafe { DisconnectNamedPipe(self.handle.raw()) };
     }
 
     /// The DACL the **kernel object** carries, in SDDL form.
@@ -259,7 +305,7 @@ impl ControlPipe {
         // GetSecurityInfo documents as "do not return this".
         let status = unsafe {
             GetSecurityInfo(
-                self.handle,
+                self.handle.raw(),
                 SE_KERNEL_OBJECT,
                 DACL_SECURITY_INFORMATION,
                 ptr::null_mut(),
@@ -306,16 +352,11 @@ impl ControlPipe {
     }
 }
 
-// SAFETY: see the note on `ControlClient` — the same argument, for the handle
-// at the other end.
-unsafe impl Send for ControlPipe {}
-
-impl Drop for ControlPipe {
-    fn drop(&mut self) {
-        if self.handle != INVALID_HANDLE_VALUE && !self.handle.is_null() {
-            // SAFETY: opened by CreateNamedPipeW, closed exactly once here.
-            unsafe { CloseHandle(self.handle) };
-        }
+impl ControlPipe {
+    /// A second reference to the handle, for whatever needs to interrupt this
+    /// pipe from another thread. It cannot close it: only the last `Arc` does.
+    pub fn shared_handle(&self) -> Arc<PipeHandle> {
+        Arc::clone(&self.handle)
     }
 }
 
@@ -325,8 +366,45 @@ pub struct ControlClient {
     handle: HANDLE,
 }
 
+/// How long a client waits for the single instance to come free.
+///
+/// Generous, because the thing it waits for is measured in microseconds: the
+/// listener disconnecting one client and looping back round to accept the
+/// next. A timeout this long only expires when something is genuinely wedged.
+const BUSY_PATIENCE_MS: u32 = 2_000;
+
+/// Win32 `ERROR_PIPE_BUSY`: every instance is in use.
+const ERROR_PIPE_BUSY: u32 = 231;
+
 impl ControlClient {
+    /// Open the pipe, waiting if the single instance is momentarily taken.
+    ///
+    /// **The wait is not optional politeness, it is the protocol.** With one
+    /// instance, a client that reconnects the instant another leaves arrives
+    /// before the listener has finished disconnecting the last one and gone
+    /// back to accepting, and gets `ERROR_PIPE_BUSY` — not because anything is
+    /// wrong, but because it was a moment early. `WaitNamedPipeW` is the Win32
+    /// answer and any client of this bridge has to do the same, ours or not.
+    /// It is written down here because an external client will meet it.
     pub fn connect(name: &str) -> Result<Self, PipeError> {
+        match Self::connect_now(name) {
+            Err(PipeError::Connect(ERROR_PIPE_BUSY)) => {}
+            other => return other,
+        }
+
+        let path = wide(&pipe_path(name));
+        // SAFETY: `path` is a null-terminated UTF-16 string alive for the call.
+        // A false return means the wait timed out; the retry below then reports
+        // whatever the real reason turns out to be.
+        unsafe { WaitNamedPipeW(path.as_ptr(), BUSY_PATIENCE_MS) };
+        Self::connect_now(name)
+    }
+
+    /// Open the pipe, or fail immediately if it is busy.
+    ///
+    /// Separate from [`Self::connect`] so a test can observe the one-client
+    /// rule rather than having it waited away.
+    pub fn connect_now(name: &str) -> Result<Self, PipeError> {
         let path = wide(&pipe_path(name));
         // SAFETY: `path` is a null-terminated UTF-16 string alive for the call.
         let handle = unsafe {
@@ -473,6 +551,38 @@ mod tests {
         // The opposite failure to the one above, and the easier one to ship: an
         // ACL so tight that the legitimate client is refused too.
         let (_pipe, _client) = connected();
+    }
+
+    #[test]
+    fn a_pipe_nobody_created_cannot_be_opened() {
+        // It must fail, and it must fail rather than wait: `connect` only waits
+        // on ERROR_PIPE_BUSY, so a name with no listener behind it has to come
+        // back promptly with something else.
+        assert!(ControlClient::connect("anatria3d-no-listener-here").is_err());
+    }
+
+    #[test]
+    fn a_second_client_is_refused_while_the_first_holds_the_pipe() {
+        // `MAX_INSTANCES` is 1, which is what keeps two agents from fighting
+        // over one viewport. Observed through `connect_now`, because `connect`
+        // waits the condition away — right for a client, wrong for a test
+        // trying to see it happen.
+        let name = unique_name();
+        let pipe = ControlPipe::create(&name).expect("pipe created");
+        let joining = {
+            let name = name.clone();
+            std::thread::spawn(move || ControlClient::connect(&name))
+        };
+        pipe.wait_for_client().expect("client accepted");
+        let _first = joining.join().expect("thread").expect("connected");
+
+        assert!(
+            matches!(
+                ControlClient::connect_now(&name),
+                Err(PipeError::Connect(231))
+            ),
+            "a second client got in while the first held the only instance"
+        );
     }
 
     #[test]
