@@ -8,7 +8,8 @@ calls.
 
 Run them with this directory's own virtualenv, not the repository one:
 
-    tools/anatria_mcp/.venv/Scripts/python.exe -m pytest tools/anatria_mcp -q
+    tools/anatria_mcp/.venv/Scripts/python.exe -m pytest tools/anatria_mcp -q  # Windows
+    tools/anatria_mcp/.venv/bin/python -m pytest tools/anatria_mcp -q          # POSIX
 """
 
 from __future__ import annotations

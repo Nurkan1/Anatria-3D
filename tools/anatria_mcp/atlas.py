@@ -11,7 +11,8 @@ this file.
 
 Run it over stdio:
 
-    tools/anatria_mcp/.venv/Scripts/python.exe tools/anatria_mcp/atlas.py
+    tools/anatria_mcp/.venv/Scripts/python.exe tools/anatria_mcp/atlas.py  # Windows
+    tools/anatria_mcp/.venv/bin/python tools/anatria_mcp/atlas.py          # POSIX
 
 See `README.md` beside this file for client configuration.
 """
