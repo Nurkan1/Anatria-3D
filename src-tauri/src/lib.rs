@@ -10,6 +10,8 @@ mod control_frame;
 #[cfg(windows)]
 mod control_listener;
 #[cfg(windows)]
+mod control_pairing;
+#[cfg(windows)]
 mod control_pipe;
 mod keyring_store;
 pub(crate) mod sidecar;

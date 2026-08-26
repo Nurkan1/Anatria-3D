@@ -445,6 +445,35 @@ impl ControlClient {
         Ok(())
     }
 
+    /// Read one line the bridge sent back.
+    ///
+    /// Blocking, and deliberately unbuffered beyond a single read: the only
+    /// things the bridge says are one-line handshake answers, and a client that
+    /// needs streaming is not this one.
+    pub fn read_line(&self) -> Result<Option<String>, PipeError> {
+        let mut chunk = [0u8; 4096];
+        let mut read = 0u32;
+        // SAFETY: `chunk` is a valid buffer of the length passed, and `read` is
+        // a valid out-pointer.
+        let ok = unsafe {
+            ReadFile(
+                self.handle,
+                chunk.as_mut_ptr(),
+                chunk.len() as u32,
+                &mut read,
+                ptr::null_mut(),
+            )
+        };
+        if ok == 0 || read == 0 {
+            return Ok(None);
+        }
+        Ok(Some(
+            String::from_utf8_lossy(&chunk[..read as usize])
+                .trim_end()
+                .to_owned(),
+        ))
+    }
+
     /// Write raw bytes with no newline appended. Tests use it to be a badly
     /// behaved client on purpose.
     pub fn write_raw(&self, bytes: &[u8]) -> Result<(), PipeError> {

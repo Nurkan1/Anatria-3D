@@ -53,6 +53,12 @@ base64 = "0.23.1"
 # The control bridge's named-pipe ACL, and nothing else. Already in the tree by
 # way of Tauri, so declaring it directly adds no new supply chain — see
 # src/control_acl.rs for why the descriptor is written out by hand.
+# The pairing token, and only that. Already in the tree three times over by way
+# of Tauri; declaring it directly reuses one rather than adding a fourth. The
+# OS randomness matters here — a predictable token looks exactly like a working
+# one, which is the failure worth spending a dependency to avoid.
+getrandom = "0.4"
+
 [target.'cfg(windows)'.dependencies]
 windows-sys = { version = "0.61", features = [
   "Win32_Foundation",
