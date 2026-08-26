@@ -249,6 +249,24 @@ def systems_map(structures: list[Structure]) -> dict[str, tuple[list[str], int]]
     return {system: (list(headings), unfiled[0]) for system, (headings, unfiled) in found.items()}
 
 
+def heading_names(structures: list[Structure]) -> set[str]:
+    """Every heading name anywhere in the hierarchy, at any depth.
+
+    `isolate_group` takes a name rather than an identifier, because most groups
+    have none: 109 of the male atlas's 110 groups are headings over many meshes
+    and not meshes themselves. Checking such a command therefore needs the set
+    of names, which is what this is.
+
+    Deliberately *not* the same rule as the viewer's own `groupNames`, which
+    lists only names covering more than one structure — a group of one is not
+    worth offering a reader. That answers "what should be advertised"; this
+    answers "would this command do nothing", and a name covering exactly one
+    structure still isolates it. Being stricter here would reject commands that
+    work.
+    """
+    return {node for structure in structures for node in structure.path}
+
+
 def headings_at(structures: list[Structure], prefix: tuple[str, ...]) -> list[str]:
     """The heading names directly below a point, in manifest order."""
     depth = len(prefix)
