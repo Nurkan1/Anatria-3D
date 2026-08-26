@@ -14,6 +14,7 @@ Run them with this directory's own virtualenv, not the repository one:
 
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
@@ -35,7 +36,19 @@ def anyio_backend():
 @pytest.fixture
 async def client():
     """A live session against the server, spawned exactly as a client spawns it."""
-    params = StdioServerParameters(command=sys.executable, args=[str(SERVER)])
+    # The environment is scrubbed of any bridge configuration rather than
+    # inherited: a developer who exported a token to try the control tools by
+    # hand must not thereby turn this suite's read-only claim into a tautology
+    # that passes for the wrong reason.
+    params = StdioServerParameters(
+        command=sys.executable,
+        args=[str(SERVER)],
+        env={
+            key: value
+            for key, value in os.environ.items()
+            if not key.startswith("ANATRIA3D_BRIDGE_")
+        },
+    )
     async with (
         stdio_client(params) as (read, write),
         ClientSession(read, write) as session,
@@ -52,9 +65,11 @@ async def call(session: ClientSession, name: str, **arguments):
 
 class TestSurface:
     async def test_exposes_the_five_read_tools_and_nothing_else(self, client):
-        # The control surface is a separate server with a separate security
-        # model. If a tool that writes ever appears here, that decision was
-        # made by accident.
+        # This fixture spawns the server with no bridge configuration, and that
+        # is the whole claim: an unpaired client is offered nothing that writes.
+        # The fifteen control tools live in the same process and appear only
+        # when a token is supplied — see `test_scene_server.py`. If one of them
+        # shows up here, the gate that keeps them apart has failed.
         names = {tool.name for tool in (await client.list_tools()).tools}
         assert names == {
             "search_structures",

@@ -22,6 +22,7 @@ from anatria_engine.atlas_search import load_atlas
 from anatria_engine.protocol import SceneCommand
 from anatria_engine.scene_contract import (
     ATLAS_REFERENCES,
+    XRAY_OPACITY,
     UnclassifiedActionError,
     unknown_references,
 )
@@ -114,3 +115,31 @@ class TestAnUnknownActionIsLoud:
     def test_a_missing_action_raises_too(self, atlas):
         with pytest.raises(UnclassifiedActionError):
             unknown_references(atlas, {"organ_id": "whatever"})
+
+
+class TestItAgreesWithTheAgentOnTheXrayValue:
+    """One value, three places, and only two of them can be checked here.
+
+    `scene_tools` needs pydantic-ai and the MCP server's virtualenv does not
+    have it, which is why the value lives in this module rather than there.
+    That makes this test the only thing standing between an agent's x-ray and
+    a reader's looking different from each other.
+    """
+
+    def test_the_agent_uses_the_shared_value(self):
+        from anatria_engine import scene_tools
+
+        assert scene_tools.XRAY_OPACITY == XRAY_OPACITY
+
+    def test_the_viewer_uses_it_too(self):
+        # Read out of the TypeScript rather than restated, so this fails when
+        # somebody edits the store instead of when somebody edits a copy of it.
+        import re
+        from pathlib import Path
+
+        store = Path(__file__).resolve().parents[2] / "src" / "stores" / "sceneStore.ts"
+        found = re.search(
+            r"export const XRAY_OPACITY = ([0-9.]+);", store.read_text(encoding="utf-8")
+        )
+        assert found, "sceneStore.ts no longer declares XRAY_OPACITY the way this test reads it"
+        assert float(found.group(1)) == XRAY_OPACITY

@@ -1,15 +1,15 @@
 # Anatria3D Atlas — MCP server
 
-Read-only anatomical reference over the Model Context Protocol. Answers from the
-manifest Anatria3D already ships: **3,478 structures** in the male atlas and
-**264** in the female trunk, each with its Terminologia Anatomica (TA2) Latin
-term, its system, and its place in the hierarchy.
+Anatomical reference over the Model Context Protocol, and — if you pair it —
+control of a running Anatria3D. Answers from the manifest the application
+already ships: **3,478 structures** in the male atlas and **264** in the female
+trunk, each with its Terminologia Anatomica (TA2) Latin term, its system, and
+its place in the hierarchy.
 
-No running application, no API key, no network.
+## Two halves, and the second one is off
 
-## What it can and cannot do
-
-Five tools, all reads:
+**The read half** needs no running application, no API key and no network.
+Five tools:
 
 | Tool | Answers |
 |---|---|
@@ -19,10 +19,21 @@ Five tools, all reads:
 | `browse_hierarchy` | one level of the atlas tree at a time, paged |
 | `atlas_info` | version, structure count, licence, credit |
 
-**It cannot change anything.** It does not talk to the Anatria3D application,
-cannot move the viewport, and cannot read your study journal, your case files or
-your API keys. Driving the viewer is a different surface with a different
-security model, and it is deliberately not in this server.
+**The control half** drives the viewport of an application you have open, and
+is the same fifteen tools its own assistant has: `focus_organ`,
+`illuminate_structures`, `isolate_structures`, `isolate_region`,
+`isolate_group`, `show_all_structures`, `add_supply`, `set_layer_visibility`,
+`set_layer_opacity`, `xray_system`, `apply_pathology_overlay`,
+`clear_pathology_overlays`, `highlight_pathway`, `clear_pathway`,
+`set_cross_section`.
+
+**They are not registered unless you configure a pipe and a token.** Without
+those two environment variables the server is read-only in the strong sense:
+the tools do not exist, so a model is never offered them and never spends a
+turn discovering they fail. See *Driving the application* below.
+
+Neither half can read your study journal, your case files or your API keys.
+There is no tool for any of them and no code path that opens them.
 
 ## What it does not hold
 
@@ -141,6 +152,42 @@ args = ["C:\\path\\to\\Anatria3D\\tools\\anatria_mcp\\atlas.py"]
   }
 }
 ```
+
+## Driving the application
+
+Two environment variables, both read off the **Control bridge** panel in
+Anatria3D's settings drawer:
+
+```json
+"env": {
+  "ANATRIA3D_BRIDGE_PIPE": "\\\\.\\pipe\\anatria3d-control-S-1-5-21-...",
+  "ANATRIA3D_BRIDGE_TOKEN": "0123456789abcdef0123456789abcdef"
+}
+```
+
+Use the panel's **Copy** buttons. The pipe field is truncated on screen.
+
+- **Windows only for now.** The transport is a named pipe. On other platforms
+  the switch is not offered and the panel says so.
+- **The token is per session.** The application mints a new one every time the
+  bridge is switched on, so a stored one goes stale the moment the reader turns
+  it off. That is what makes "off" mean off. A stale token is reported as such.
+- **One client at a time.** A second program waits for the first to disconnect.
+- **The account owns the pipe.** Its permissions admit the user who created it
+  and nobody else, so another account on the same machine cannot open it even
+  with the token.
+
+### What it cannot know
+
+That a structure is in the manifest does not mean it is on the reader's screen.
+The atlas has two bodies and every system can be switched off, and the bridge
+has no way to ask which. A command naming something real but not loaded is
+accepted here and does nothing there.
+
+Identifiers *are* checked against the manifests before anything is sent, and
+that check is not cosmetic: the bridge cannot report that an action was
+refused, so an invented `organ_id` would reach the viewport and empty it with
+no error at all.
 
 ### Reading the manifests from somewhere else
 

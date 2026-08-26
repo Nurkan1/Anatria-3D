@@ -502,11 +502,29 @@ the same questions inside this application is a second purchase for the same
 model, which is a reason to reach for MCP that has nothing to do with the
 anatomy.
 
-**It cannot change anything.** It does not talk to the running application,
-cannot move the viewport, and cannot read the study journal, the case files or
-the keys. Driving the viewer means a permanent local IPC surface with a consent
-model of its own; that is a different piece of work, and it is deliberately not
-this one.
+**It can also drive the application, once you pair it.** Fifteen further tools
+appear — the same fifteen the built-in assistant has, isolating, illuminating,
+ghosting, sectioning and tracing — and they act on the window you have open.
+That is the point rather than a bonus: an agent reaching the atlas from outside
+should be able to do what the assistant inside can do.
+
+Pairing is deliberate and takes two steps. Turn the **control bridge** on in
+the settings drawer, then paste the pipe and the token it shows into the MCP
+client's configuration. Until both are set the tools are **not registered at
+all**, so a client that was not paired is never offered them; the header shows
+a `bridge` badge for as long as it is on; and the token dies when it is
+switched off, so "off" is not a pause. The transport is a named pipe whose
+permissions admit your account and no other, and it carries scene commands and
+nothing else — the frame type is checked, so nothing arriving over it can
+impersonate part of a conversation.
+
+Neither half can read the study journal, the case files or the keys. There is
+no tool for any of them.
+
+The reason it is worth the two steps: a scene command from the bridge takes the
+**same path** as one from the built-in assistant — the same event, the same
+schema, the same store — so there is no second way of drawing the scene that
+could drift from what the window shows.
 
 ### Its virtualenv is load-bearing
 

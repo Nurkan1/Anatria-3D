@@ -64,6 +64,21 @@ ATLAS_REFERENCES: dict[str, tuple[str, Reference] | None] = {
 }
 
 
+#: How faint the other systems go in an x-ray view.
+#:
+#: Not a limit like the ones in `protocol`, but a value that must agree in three
+#: places at once: here, `scene_tools.XRAY_OPACITY` for the internal agent, and
+#: the viewer's own `XRAY_OPACITY` in `sceneStore.ts`. A view built by an agent
+#: should look like one the reader could have built by hand, and it does not if
+#: the three disagree.
+#:
+#: It lives in this module because this is the only home both callers can reach:
+#: `scene_tools` needs pydantic-ai, which the MCP server's virtualenv does not
+#: have and must not acquire. `test_scene_contract` pins the agent's copy to
+#: this one.
+XRAY_OPACITY = 0.16
+
+
 class UnclassifiedActionError(ValueError):
     """A command names an action this module has no classification for.
 

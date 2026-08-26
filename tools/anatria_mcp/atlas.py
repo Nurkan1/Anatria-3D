@@ -5,9 +5,17 @@ application already ships — 3,478 structures in the male atlas and 264 in the
 female trunk, each with its TA2 Latin term, its system and its place in the
 hierarchy. It needs no running application, no API key and no network.
 
-**It cannot change anything.** Every tool here reads. Driving the viewport is a
-separate surface with a separate security model, and it is deliberately not in
-this file.
+**It reads, unless you pair it.** Every tool in this file reads, and that is
+all a client gets by default. Set `ANATRIA3D_BRIDGE_PIPE` and
+`ANATRIA3D_BRIDGE_TOKEN` from a running application's Control bridge panel and
+fifteen more tools appear, which drive the viewport — the same fifteen the
+application's own assistant has. Without those two variables they are never
+registered, so a client that was not deliberately paired cannot move anything
+and is not told it might.
+
+The read half needs no running application, no key and no network. The other
+half needs all three of an application, a switch the reader turned on, and the
+token it minted.
 
 Run it over stdio:
 
@@ -43,6 +51,7 @@ from anatria_engine.atlas_search import (
     search,
     systems_map,
 )
+from bridge import ControlBridge
 from mcp.server import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
 from mcp_types import ToolAnnotations
@@ -80,6 +89,24 @@ def atlas(gender: Gender) -> Atlas:
             )
         _loaded[gender] = load_atlas(path)
     return _loaded[gender]
+
+
+def available_atlases() -> list[Atlas]:
+    """Every manifest that can be read, in whatever order they load.
+
+    The control tools check an identifier against all of them rather than one,
+    because the application can be showing either body and the bridge cannot
+    say which. A manifest that will not load is skipped rather than fatal: an
+    installation missing the female trunk should still be able to drive the
+    male atlas.
+    """
+    loaded = []
+    for gender in MANIFESTS:
+        try:
+            loaded.append(atlas(gender))
+        except (FileNotFoundError, OSError, ValueError):
+            continue
+    return loaded
 
 
 class StructureOut(BaseModel):
@@ -250,6 +277,13 @@ NO_MATCH_NOTE = (
 
 
 def build_server() -> MCPServer:
+    # Resolved before the server is described, not after its tools are
+    # registered: what this server says it is depends on whether it was paired,
+    # and a set of instructions that promised read-only while carrying fifteen
+    # tools that write would be the worst of the three possible states.
+    bridge = ControlBridge.from_environment()
+    paired = bridge is not None
+
     mcp = MCPServer(
         "anatria-atlas",
         title="Anatria3D Atlas",
@@ -258,8 +292,20 @@ def build_server() -> MCPServer:
             "Anatomical reference from the Anatria3D atlas. Structures carry "
             "Terminologia Anatomica (TA2) Latin terms alongside English names. "
             "Use search_structures to find an organ_id, then describe_structure "
-            "for its full record. This server reads only; it cannot move or "
-            "change anything in the Anatria3D application. "
+            "for its full record. "
+            + (
+                "This session is paired with a running Anatria3D: the tools "
+                "that isolate, illuminate, ghost and trace act on what the "
+                "reader is looking at, immediately. A structure existing in "
+                "this index does not mean it is loaded in their viewport — "
+                "the atlas has two bodies and each system can be switched "
+                "off, and a command naming something not on screen is "
+                "accepted here and does nothing there. "
+                if paired
+                else "This server reads only; it cannot move or change "
+                "anything in the Anatria3D application. "
+            )
+            +
             "What it does NOT hold, so do not answer these from it: the index "
             "is Latin, English and identifiers only — a query in any other "
             "language returns nothing, and that is not evidence the structure "
@@ -404,6 +450,15 @@ def build_server() -> MCPServer:
             credit=loaded.credit,
             attribution=loaded.attribution,
         )
+
+    # Registered only when a bridge is configured, which is what keeps the
+    # read-only promise above literally true for a reader who did not ask for
+    # more. A client given no token is not offered the tools at all, rather
+    # than being offered fifteen that would every one of them fail.
+    if bridge is not None:
+        from scene import register_scene_tools
+
+        register_scene_tools(mcp, bridge, available_atlases)
 
     return mcp
 
