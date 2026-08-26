@@ -805,6 +805,104 @@ const SECTIONS: Section[] = [
     ),
   },
   {
+    id: "bridge",
+    nav: "Another agent",
+    title: "Letting a program you already pay for drive this one",
+    body: (
+      <>
+        <p>
+          The section above ends on a bill. This one is the other way round: if you
+          already pay for Claude Code, Codex or Gemini CLI, that agent can read this
+          atlas and move this window, and the reasoning is charged to the subscription
+          you already have rather than to an API key.
+        </p>
+        <p>
+          It works over the <em>Model Context Protocol</em>, which is how those
+          programs pick up tools. The conversation happens in their window; the
+          anatomy moves in this one. Anatria3D&apos;s own assistant is untouched and
+          keeps working the way it always did.
+        </p>
+        <Callout>
+          <strong>Reading costs you nothing to set up.</strong> Point an agent at the
+          atlas server and it can search structures, read their Latin terms and walk
+          the hierarchy with no application running, no key and no network. Only
+          <em> driving the viewport</em> needs the steps below.
+        </Callout>
+        <h3 className="pt-2 text-[13px] font-semibold text-slate-200">
+          Turning it on
+        </h3>
+        <p>
+          Open <Ui>Settings</Ui> in the assistant panel and scroll to{" "}
+          <Ui>Control bridge</Ui>. Press <Ui>Off</Ui> to turn it on. Two things appear:
+          a <Ui>Pipe</Ui> and a <Ui>Token</Ui>, each with a <Ui>Copy</Ui> button. Paste
+          both into the other program&apos;s configuration — the file its own
+          documentation calls <Ui>mcpServers</Ui> — and it can drive the view.
+        </p>
+        <p>
+          Use the <Ui>Copy</Ui> buttons rather than reading the pipe off the screen.
+          It is longer than the box and is shown cut short.
+        </p>
+        <Callout>
+          <strong>Off means off.</strong> A new token is minted every time you switch
+          the bridge on, so switching it off makes the old one wrong — a program you
+          paired last week cannot quietly reconnect. That is also why closing
+          Anatria3D ends it: there is nothing left listening and nothing left valid.
+        </Callout>
+        <h3 className="pt-2 text-[13px] font-semibold text-slate-200">
+          How to tell it is on
+        </h3>
+        <p>
+          A <Ui>bridge</Ui> badge sits in the panel header next to <Ui>ready</Ui>, for
+          exactly as long as the bridge is running. It is there so you never have to
+          open a drawer to find out whether something outside this window is entitled
+          to move it — if the view changes and you did not do it, the badge tells you
+          whether that is possible.
+        </p>
+        <p>
+          The panel also counts what arrived: how many commands were accepted, and how
+          many were refused. A program that is connected but being ignored looks
+          exactly like one that never connected, and those two numbers are what tell
+          them apart.
+        </p>
+        <h3 className="pt-2 text-[13px] font-semibold text-slate-200">
+          What it can and cannot reach
+        </h3>
+        <p>
+          A paired agent gets the same fifteen tools this application&apos;s own
+          assistant has — isolating, lighting, ghosting a layer, cutting a section,
+          tracing a pathway. That is the point of it: an agent working from outside
+          should be able to do what the one inside can do, not a reduced version.
+        </p>
+        <Callout>
+          <strong>It cannot read what you have written.</strong> Your study journal,
+          your case files and your API keys are not reachable over the bridge — there
+          is no tool for any of them. What crosses is scene commands and nothing else,
+          and the connection admits only your own account on this computer.
+        </Callout>
+        <p>
+          One honest limit. The agent checks a structure against the atlas before
+          sending anything, so it cannot invent anatomy — but the atlas is not the
+          same thing as your screen. If you have the female trunk loaded, or have
+          switched a system off in the left panel, a command naming something real but
+          not currently loaded is accepted and simply does nothing. Nothing breaks; it
+          is just quiet.
+        </p>
+        <Callout>
+          <strong>The bridge itself never touches the network.</strong> It is a local
+          connection between two programs on this computer, so nothing leaves your
+          machine because you switched it on. What the <em>other</em> program does
+          with what it reads is between you and that program — an agent that sends
+          your questions to its own provider was already doing that before you paired
+          it.
+        </Callout>
+        <p>
+          Windows only, for now. On other builds the panel says so rather than showing
+          a switch that cannot work.
+        </p>
+      </>
+    ),
+  },
+  {
     id: "keys",
     nav: "Keyboard",
     title: "Shortcuts",
