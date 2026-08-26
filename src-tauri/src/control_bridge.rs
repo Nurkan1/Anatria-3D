@@ -4,17 +4,13 @@
 //! is the owner: the object the application manages, the settings panel reads,
 //! and the two commands that start and stop it act on.
 //!
-//! # What it does not do yet
+//! # It does not know where the commands go
 //!
-//! **Admitted commands are counted and dropped.** The sink is supplied by the
-//! caller and this module never learns what happens on the other side of it, so
-//! the commit that connects the viewport changes one closure and nothing here.
-//! Until then the bridge is fully operable and observably inert: a client can
-//! connect, pair, and send scene commands, and the viewport does not move.
-//!
-//! That split is deliberate. The bridge is several hundred lines that cannot
-//! affect the application, followed by a handful that can — and the handful is
-//! what deserves to be read closely.
+//! The sink is supplied by the caller, and nothing in this file learns what
+//! happens on the other side of it. That is not indirection for its own sake:
+//! it is what let the whole bridge land and be tested while provably unable to
+//! affect the application, with the connection to the viewport arriving
+//! afterwards as a single closure body. `commands::start_bridge` holds it now.
 //!
 //! # Three rules the switch keeps
 //!

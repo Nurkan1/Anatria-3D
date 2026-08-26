@@ -103,14 +103,6 @@ export function BridgeSettings() {
 
       {running && (
         <div className="mt-2 space-y-2">
-          {/* Deleted by the commit that connects the viewport. Until then the
-              bridge is genuinely inert, and saying so is the difference between
-              a feature being unfinished and a feature being broken. */}
-          <p className="rounded border border-amber-800/50 bg-amber-500/5 px-2 py-1 text-[10px] leading-snug text-amber-300/90">
-            Commands are accepted and counted, and nothing reaches the 3D view yet.
-            The last step is not built.
-          </p>
-
           <CopyRow label="Pipe" value={status.pipe} />
           <CopyRow label="Token" value={status.token} />
 

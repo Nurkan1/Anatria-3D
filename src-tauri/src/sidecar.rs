@@ -380,7 +380,23 @@ fn elided(line: &str) -> String {
     format!("{head}… ({} chars elided)", line.chars().count() - LOG_ELISION)
 }
 
-fn forward_frame(app: &AppHandle, line: &str) {
+/// Put one protocol frame on the channel the frontend listens to.
+///
+/// # Its second caller
+///
+/// The control bridge sends through here too, and that is the whole point of
+/// the bridge rather than an economy. A frame from a paired program lands in
+/// the same event, is validated by the same Zod schema, and reaches the same
+/// `sceneStore` as one the assistant produced — so there is no second render
+/// path that could drift from what the viewport shows.
+///
+/// Two things make that safe rather than merely tidy. `control_frame::admit`
+/// rebuilds the frame with `type` set to exactly `scene_command`, so the
+/// `ready` branch below is unreachable from the bridge and no external caller
+/// can declare the engine up. And `scene_command` is the only frame type the
+/// frontend handles without consulting `request_id`, so a bridge frame cannot
+/// be mistaken for part of a conversation the reader is having.
+pub(crate) fn forward_frame(app: &AppHandle, line: &str) {
     let line = line.trim();
     if line.is_empty() {
         return;

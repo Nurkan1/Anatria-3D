@@ -2,8 +2,9 @@ mod commands;
 // The control bridge. `control_bridge` is the only one of these the rest of the
 // application names; the others are its parts and reach the app through it.
 //
-// It is off unless the reader turns it on, and what it admits is counted and
-// dropped — the sink is supplied at the call site below and does nothing yet.
+// It is off unless the reader turns it on. What it admits goes onto the
+// engine's own event channel, so an external program's scene command and the
+// assistant's take the same path and are checked by the same schema.
 #[cfg(windows)]
 mod control_acl;
 mod control_bridge;

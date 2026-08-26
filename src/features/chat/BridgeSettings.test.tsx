@@ -133,12 +133,14 @@ describe("the switch", () => {
     expect(screen.getByText(/2 refused/i)).toBeTruthy();
   });
 
-  it("says plainly that nothing reaches the 3D view yet", async () => {
-    // Delete this test in the same commit that deletes the notice — if it is
-    // still passing once the viewport is wired up, the panel is lying.
+  it("no longer claims the commands go nowhere", async () => {
+    // The notice this replaces was true for exactly one commit. Kept as an
+    // assertion rather than deleted outright, because a stale warning is the
+    // one thing in this panel a reader would believe over the viewport.
     ipc.bridgeStatus.mockResolvedValue(RUNNING);
     render(<BridgeSettings />);
 
-    expect(await screen.findByText(/nothing reaches the 3D view yet/i)).toBeTruthy();
+    await screen.findByText(RUNNING.token!);
+    expect(screen.queryByText(/nothing reaches the 3D view/i)).toBeNull();
   });
 });

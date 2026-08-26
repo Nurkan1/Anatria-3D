@@ -471,16 +471,24 @@ pub fn bridge_status(bridge: State<'_, ControlBridge>) -> BridgeStatus {
     bridge.status()
 }
 
-/// Turn the bridge on.
+/// Turn the bridge on, and connect it to the viewport.
 ///
-/// **The sink does nothing yet.** Every admitted command is counted and
-/// dropped, so a paired program can connect and send and the viewport will not
-/// move. That is the whole of what this commit changes: the switch, the pipe
-/// and the panel exist and are provably inert, and the closure below is the
-/// only thing the next commit touches.
+/// The closure is the whole of the connection, and it deliberately does no
+/// work of its own: it hands the admitted frame to the same function the
+/// engine's stdout goes through. Everything that makes a scene command safe —
+/// the Zod schema, the discriminated union that cannot match an action it does
+/// not know, the single render path through `sceneStore` — is on the far side
+/// of it and applies to both callers equally. See [`crate::sidecar::forward_frame`].
+///
+/// What arrives here has already been through `control_frame::admit`: it is a
+/// `scene_command` and nothing else, rebuilt from three fields, carrying a
+/// `request_id` the bridge chose rather than the client.
 #[tauri::command]
-pub fn start_bridge(bridge: State<'_, ControlBridge>) -> CommandResult<BridgeStatus> {
-    Ok(bridge.start(|_frame| {})?)
+pub fn start_bridge(
+    app: tauri::AppHandle,
+    bridge: State<'_, ControlBridge>,
+) -> CommandResult<BridgeStatus> {
+    Ok(bridge.start(move |frame| crate::sidecar::forward_frame(&app, &frame))?)
 }
 
 /// Turn it off, and invalidate this session's token with it.
