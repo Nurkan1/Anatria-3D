@@ -6,6 +6,8 @@ mod commands;
 #[cfg(windows)]
 mod control_acl;
 #[cfg(windows)]
+mod control_frame;
+#[cfg(windows)]
 mod control_listener;
 #[cfg(windows)]
 mod control_pipe;
