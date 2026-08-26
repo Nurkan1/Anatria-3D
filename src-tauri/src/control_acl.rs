@@ -17,12 +17,6 @@
 //! part worth having written where it can be read.
 
 #![cfg(windows)]
-// Unreachable from the application on purpose — see the module note above. The
-// tests are the only callers until the pipe lands, and `-D warnings` would
-// otherwise refuse the build for it. This line comes off in the same commit
-// that gives it a call site; if it is still here once the bridge exists,
-// something was wired up wrong.
-#![allow(dead_code)]
 
 use std::ffi::c_void;
 use std::fmt;
@@ -49,6 +43,9 @@ pub enum AclError {
     Token(u32),
     Sid(u32),
     Descriptor(u32),
+    /// A descriptor came back in a shape this code could not read. Built only
+    /// by [`as_windows_spells_it`], which the tests are the only callers of.
+    #[allow(dead_code)]
     Readback(u32),
 }
 
@@ -184,6 +181,10 @@ pub fn owner_only_sddl() -> Result<String, AclError> {
 /// builds a one-ACE descriptor naming the SID, reads it back, and returns
 /// whatever spelling came out. Comparisons then happen in the vocabulary the
 /// readback uses, whichever machine it is.
+///
+/// The tests are its only callers, and that is what it is for: an assertion
+/// about a DACL written in Windows' vocabulary instead of ours.
+#[allow(dead_code)]
 pub fn as_windows_spells_it(sid: &str) -> Result<String, AclError> {
     let probe = SecurityAttributes::from_sddl(&format!("D:(A;;GA;;;{sid})"))?;
     let readback = probe.to_sddl()?;
@@ -250,7 +251,8 @@ impl SecurityAttributes {
     ///
     /// The only assertion in the tests that means anything: whether the string
     /// we wrote parsed into the ACL we intended is a claim only the kernel can
-    /// settle.
+    /// settle. Nothing in the application asks; the tests and `dacl_sddl` do.
+    #[allow(dead_code)]
     pub fn to_sddl(&self) -> Result<String, AclError> {
         let mut text: *mut u16 = ptr::null_mut();
         // SAFETY: `self.descriptor` is valid for as long as `self` lives, and

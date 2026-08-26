@@ -9,6 +9,7 @@ use serde::Deserialize;
 use serde_json::{Map, Value};
 use tauri::State;
 
+use crate::control_bridge::{BridgeError, BridgeStatus, ControlBridge};
 use crate::keyring_store::{self, KeyringError, Provider};
 use crate::sidecar::{EngineError, EngineHandle, EngineStatus};
 use crate::study_db::{
@@ -25,6 +26,8 @@ pub enum CommandError {
     Engine(#[from] EngineError),
     #[error(transparent)]
     Study(#[from] StudyError),
+    #[error(transparent)]
+    Bridge(#[from] BridgeError),
     #[error("{0}")]
     Invalid(String),
 }
@@ -450,4 +453,42 @@ pub async fn import_journal(
     })?;
 
     Ok(Some(db.import(journal)?))
+}
+
+// ---------------------------------------------------------------------------
+// Control bridge
+// ---------------------------------------------------------------------------
+
+/// What the settings panel draws the switch from.
+///
+/// Includes this session's pairing token, which is the one credential in this
+/// application that is meant to be read from the webview. It is not a secret
+/// the way an API key is — it grants the ability to drive a viewport on this
+/// machine, it dies when the bridge stops, and its whole purpose is to be
+/// copied into another program's configuration by the person sitting here.
+#[tauri::command]
+pub fn bridge_status(bridge: State<'_, ControlBridge>) -> BridgeStatus {
+    bridge.status()
+}
+
+/// Turn the bridge on.
+///
+/// **The sink does nothing yet.** Every admitted command is counted and
+/// dropped, so a paired program can connect and send and the viewport will not
+/// move. That is the whole of what this commit changes: the switch, the pipe
+/// and the panel exist and are provably inert, and the closure below is the
+/// only thing the next commit touches.
+#[tauri::command]
+pub fn start_bridge(bridge: State<'_, ControlBridge>) -> CommandResult<BridgeStatus> {
+    Ok(bridge.start(|_frame| {})?)
+}
+
+/// Turn it off, and invalidate this session's token with it.
+///
+/// Returns the new status rather than nothing, so the panel redraws from what
+/// the bridge says about itself instead of from what it assumes stopping did.
+#[tauri::command]
+pub fn stop_bridge(bridge: State<'_, ControlBridge>) -> BridgeStatus {
+    bridge.stop();
+    bridge.status()
 }

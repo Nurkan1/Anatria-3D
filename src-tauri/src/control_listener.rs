@@ -5,8 +5,9 @@
 //! is about stopping — starting a thread that blocks on a pipe is four lines,
 //! and getting it to come back is the rest.
 //!
-//! **Still no call site in the application.** The listener is built and tested
-//! before anything starts one, so its presence cannot change what the app does.
+//! Started by `control_bridge` and by nothing else. What it hands the handler
+//! is a line off the wire; whether that line is allowed anywhere near the
+//! application is decided one layer up.
 //!
 //! It does not know what a line means. Lines go to the handler exactly as they
 //! arrived, and validating them against the manifest belongs a layer up, where
@@ -14,9 +15,6 @@
 //! bridge will apply there.
 
 #![cfg(windows)]
-// No call site yet — see the module note. Removed by the commit that gives it
-// one; still being here once the bridge exists means something was wired wrong.
-#![allow(dead_code)]
 
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;

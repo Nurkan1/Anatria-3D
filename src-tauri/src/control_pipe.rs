@@ -20,9 +20,6 @@
 //! different ways.
 
 #![cfg(windows)]
-// No call site yet — see the module note. Removed by the commit that gives it
-// one; still being here once the bridge exists means something was wired wrong.
-#![allow(dead_code)]
 
 use std::ffi::c_void;
 use std::fmt;
@@ -299,6 +296,7 @@ impl ControlPipe {
     /// private". It stays public rather than living in the tests because it is
     /// also the thing worth printing when somebody reports that the bridge let
     /// in a client it should not have.
+    #[allow(dead_code)]
     pub fn dacl_sddl(&self) -> Result<String, PipeError> {
         let mut descriptor: *mut c_void = ptr::null_mut();
         // SAFETY: every out-parameter is either a valid pointer or null, which
@@ -374,7 +372,12 @@ pub struct ControlClient {
 const BUSY_PATIENCE_MS: u32 = 2_000;
 
 /// Win32 `ERROR_PIPE_BUSY`: every instance is in use.
-const ERROR_PIPE_BUSY: u32 = 231;
+///
+/// Returned by two different calls for two different reasons. From a client it
+/// means "a moment early, try again"; from `CreateNamedPipeW` it means the name
+/// is already taken by a listener that is not ours, which is not a retry —
+/// see `control_bridge`, which turns that one into a sentence.
+pub const ERROR_PIPE_BUSY: u32 = 231;
 
 impl ControlClient {
     /// Open the pipe, waiting if the single instance is momentarily taken.
@@ -424,6 +427,9 @@ impl ControlClient {
         Ok(Self { handle })
     }
 
+    /// Send one line. Exercised by the tests, which are the only client
+    /// this build ships; an external one makes the same three calls.
+    #[allow(dead_code)]
     pub fn write_line(&self, line: &str) -> Result<(), PipeError> {
         let payload = format!("{line}\n");
         let bytes = payload.as_bytes();
@@ -450,6 +456,7 @@ impl ControlClient {
     /// Blocking, and deliberately unbuffered beyond a single read: the only
     /// things the bridge says are one-line handshake answers, and a client that
     /// needs streaming is not this one.
+    #[allow(dead_code)]
     pub fn read_line(&self) -> Result<Option<String>, PipeError> {
         let mut chunk = [0u8; 4096];
         let mut read = 0u32;
@@ -476,6 +483,7 @@ impl ControlClient {
 
     /// Write raw bytes with no newline appended. Tests use it to be a badly
     /// behaved client on purpose.
+    #[allow(dead_code)]
     pub fn write_raw(&self, bytes: &[u8]) -> Result<(), PipeError> {
         let mut written = 0u32;
         // SAFETY: `bytes` is alive for the call, `written` is a valid

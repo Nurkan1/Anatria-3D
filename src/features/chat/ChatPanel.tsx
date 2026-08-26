@@ -42,6 +42,7 @@ import { AimHint, AskingGuide } from "./AskingGuide";
 import { CaseBar } from "./CaseBar";
 import { Markdown } from "./Markdown";
 import { collectOrganRefs, stripOrganRefs } from "./organRefs";
+import { BridgeIndicator } from "./BridgeIndicator";
 import { SettingsDrawer } from "./SettingsDrawer";
 import { SpeakAnswerButton } from "./SpeakAnswerButton";
 import { useCopy } from "./useCopy";
@@ -950,6 +951,7 @@ export function ChatPanel() {
         >
           {engineReady ? "ready" : "offline"}
         </span>
+        <BridgeIndicator />
         {!engineReady && (
           <button
             type="button"

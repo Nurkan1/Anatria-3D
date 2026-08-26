@@ -1,10 +1,12 @@
 mod commands;
-// Declared so it compiles and its tests run. Nothing calls it: the control
-// bridge's ACL is landed and proven before the pipe that will use it, so this
-// module has no reachable call site and the application's behaviour is
-// unchanged by its presence.
+// The control bridge. `control_bridge` is the only one of these the rest of the
+// application names; the others are its parts and reach the app through it.
+//
+// It is off unless the reader turns it on, and what it admits is counted and
+// dropped — the sink is supplied at the call site below and does nothing yet.
 #[cfg(windows)]
 mod control_acl;
+mod control_bridge;
 #[cfg(windows)]
 mod control_frame;
 #[cfg(windows)]
@@ -19,6 +21,7 @@ mod study_db;
 
 use tauri::{Manager, RunEvent, WindowEvent};
 
+use control_bridge::ControlBridge;
 use sidecar::EngineHandle;
 use study_db::StudyDb;
 
@@ -32,6 +35,9 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
         .manage(EngineHandle::default())
+        // Managed, not started. Constructing it opens nothing: there is no
+        // pipe until `start_bridge` is called from the settings panel.
+        .manage(ControlBridge::default())
         .invoke_handler(tauri::generate_handler![
             commands::save_api_key,
             commands::has_api_key,
@@ -69,6 +75,9 @@ pub fn run() {
             commands::export_journal,
             commands::import_journal,
             commands::save_view_image,
+            commands::bridge_status,
+            commands::start_bridge,
+            commands::stop_bridge,
         ])
         .setup(|app| {
             // The journal is opened before anything else can ask for it, and
@@ -102,6 +111,10 @@ pub fn run() {
         .on_window_event(|window, event| {
             if matches!(event, WindowEvent::Destroyed) {
                 window.app_handle().state::<EngineHandle>().shutdown();
+                // The pipe would go with the process anyway. Closed here so
+                // that "the window is gone" and "nothing is listening" are the
+                // same moment rather than nearly the same one.
+                window.app_handle().state::<ControlBridge>().stop();
             }
         })
         .build(tauri::generate_context!())
@@ -112,6 +125,7 @@ pub fn run() {
             // window is gone is the classic Tauri-sidecar failure mode.
             if matches!(event, RunEvent::Exit) {
                 app.state::<EngineHandle>().shutdown();
+                app.state::<ControlBridge>().stop();
             }
         });
 }

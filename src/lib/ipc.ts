@@ -97,6 +97,51 @@ export function cancelRequest(requestId: string): Promise<void> {
 }
 
 // ---------------------------------------------------------------------------
+// Control bridge
+// ---------------------------------------------------------------------------
+
+export interface BridgeStatus {
+  /** Whether this build has a transport at all. Windows only, for now. */
+  supported: boolean;
+  running: boolean;
+  /** The pipe a client connects to, or null when stopped. */
+  pipe: string | null;
+  /**
+   * This session's pairing token, or null when stopped.
+   *
+   * The one credential in this application that is meant to be read from the
+   * webview — unlike an API key, which has no command that returns it. This
+   * one grants the ability to drive a viewport on this machine, it dies when
+   * the bridge stops, and its whole purpose is to be copied into another
+   * program's configuration by the person sitting here.
+   */
+  token: string | null;
+  /** Scene commands admitted since the bridge was started. */
+  accepted: number;
+  /** Lines refused: not a scene command, or malformed. */
+  refused: number;
+}
+
+export function bridgeStatus(): Promise<BridgeStatus> {
+  return invoke("bridge_status");
+}
+
+/**
+ * Turn the bridge on, and get back what it became.
+ *
+ * The status is the return value rather than something to poll for, so the
+ * panel can never draw a switch as on while the pipe failed to open.
+ */
+export function startBridge(): Promise<BridgeStatus> {
+  return invoke("start_bridge");
+}
+
+/** Turn it off. This session's pairing token stops working with it. */
+export function stopBridge(): Promise<BridgeStatus> {
+  return invoke("stop_bridge");
+}
+
+// ---------------------------------------------------------------------------
 // Events
 // ---------------------------------------------------------------------------
 

@@ -6,6 +6,7 @@ import { chatPreferences, patchChatPreferences } from "@/stores/chatPreferences"
 import { askToConfirm } from "@/stores/confirmStore";
 import { useModelStore } from "@/stores/modelStore";
 
+import { BridgeSettings } from "./BridgeSettings";
 import { VoiceSettings } from "./VoiceSettings";
 
 const PROVIDERS: { id: AiProvider; label: string }[] = [
@@ -421,6 +422,12 @@ export function SettingsDrawer({
               </p>
             )}
           </div>
+
+          {/* Last, and on purpose. Everything above changes how this window
+              answers you; this one lets something outside the window act on
+              it, which is a different kind of decision and should not be the
+              first thing a hand lands on. */}
+          <BridgeSettings />
 
           {error && (
             <p className="rounded border border-rose-800/60 bg-rose-900/20 px-2 py-1 text-[10px] text-rose-300">

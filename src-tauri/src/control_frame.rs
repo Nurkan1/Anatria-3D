@@ -12,11 +12,9 @@
 //! this file never heard of is refused at the other end by
 //! `SceneCommandSchema`, which is a discriminated union and cannot match one.
 //!
-//! Nothing calls this yet, like the three modules beside it.
+//! Started by `control_bridge`, which is the only module that names this one.
 
 #![cfg(windows)]
-// No call site yet. Removed by the commit that gives it one.
-#![allow(dead_code)]
 
 use std::fmt;
 

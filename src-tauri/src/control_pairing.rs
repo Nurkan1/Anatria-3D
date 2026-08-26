@@ -13,11 +13,10 @@
 //! is consent, not confidentiality: a viewport that moves because a program the
 //! reader never paired decided to move it is the failure being prevented.
 //!
-//! Nothing calls this yet, like the modules beside it.
+//! Minted by `control_bridge` when the reader turns the switch on, and dropped
+//! when they turn it off.
 
 #![cfg(windows)]
-// No call site in the application yet. Removed by the commit that gives it one.
-#![allow(dead_code)]
 
 use std::fmt;
 
