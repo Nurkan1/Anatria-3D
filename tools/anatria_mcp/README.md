@@ -187,6 +187,18 @@ session, which reads as a broken feature rather than a careful one.
 running as a different account that has deliberately been made reachable.
 Nobody needs it for the ordinary setup.
 
+### What it does not record
+
+**Nothing.** The bridge carries scene commands and nothing else, so a session
+driven from here leaves no trace in the application: no saved conversation, no
+note, no case file, no coverage, no token accounting. What was said stays in
+the client's own window.
+
+That is the design, not a gap. Everything that makes Anatria3D a study tool
+rather than a viewer is built by the assistant inside the application, on the
+reader's own API key. This server drives the atlas; it does not keep a record
+of having done so.
+
 ### What it cannot know
 
 That a structure is in the manifest does not mean it is on the reader's screen.

@@ -527,6 +527,19 @@ while buying nothing the pipe's own permissions did not already give — any
 program running as you could read the journal and the case files long before it
 could move a viewport.
 
+**It moves the model and records nothing.** This is the one thing to understand
+before choosing between the two paths, and it is a design decision rather than
+an omission. The bridge carries scene commands and nothing else, so a session
+driven over MCP leaves no trace here: no saved conversation, no note, no case,
+no coverage, no token accounting. The conversation lives in the other program's
+window and stays there.
+
+Everything that makes Anatria3D a study tool rather than a viewer — the journal,
+the case files, what you have covered and what you have not — is built by the
+assistant inside this window, on your own API key. **If you are here to study,
+use the key.** The bridge is for driving the atlas from an agent you already
+have, and it is worth exactly that.
+
 Neither half can read the study journal, the case files or the keys. There is
 no tool for any of them.
 

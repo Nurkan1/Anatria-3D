@@ -814,7 +814,8 @@ const SECTIONS: Section[] = [
           The section above ends on a bill. This one is the other way round: if you
           already pay for Claude Code, Codex or Gemini CLI, that agent can read this
           atlas and move this window, and the reasoning is charged to the subscription
-          you already have rather than to an API key.
+          you already have rather than to an API key. What it buys you is narrower
+          than it sounds, and the next box says exactly how.
         </p>
         <p>
           It works over the <em>Model Context Protocol</em>, which is how those
@@ -827,6 +828,20 @@ const SECTIONS: Section[] = [
           atlas server and it can search structures, read their Latin terms and walk
           the hierarchy with no application running, no key and no network. Only
           <em> driving the viewport</em> needs the steps below.
+        </Callout>
+        <Callout>
+          <strong>It moves the model and writes nothing down.</strong> Read this
+          before you choose between the two, because it is the whole difference. A
+          session driven from outside leaves no trace here: no saved conversation, no
+          note, no case, no coverage, nothing in <Ui>Usage</Ui>. What was said stays
+          in the other program&apos;s window.
+          <br />
+          <br />
+          Everything that makes this a place to study rather than a model to look at —
+          the journal, the case files, what you have covered and what you have not —
+          is built by the assistant in <em>this</em> window, on your own key. If you
+          are here to study, use the key. The bridge is for driving the atlas from an
+          agent you already have, and it is worth exactly that and no more.
         </Callout>
         <h3 className="pt-2 text-[13px] font-semibold text-slate-200">
           Turning it on
