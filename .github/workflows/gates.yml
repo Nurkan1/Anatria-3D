@@ -96,6 +96,29 @@ jobs:
       - name: Build the Python sidecar
         run: .venv/Scripts/python engine/build_sidecar.py
 
+      # Its own virtualenv, because the SDK must never reach the root one:
+      # build_sidecar.py collects all of pydantic_ai, which declares an `mcp`
+      # extra whose module is already inside that package, so the SDK beside it
+      # would freeze 73 MB of transport stack into the shipped engine. Created
+      # after the sidecar is built rather than before, so the artifact is always
+      # frozen from a root venv that nothing in this job has touched.
+      #
+      # The SDK major is pinned. Its API moved once already — the server class
+      # was renamed and the result attributes changed case — and a gate that
+      # breaks on somebody else's release teaches the team to ignore it.
+      - name: Create the MCP server virtualenv
+        run: |
+          python -m venv tools/anatria_mcp/.venv
+          tools/anatria_mcp/.venv/Scripts/python -m pip install --upgrade pip
+          tools/anatria_mcp/.venv/Scripts/python -m pip install "mcp>=2.1,<3" pytest anyio
+
+      # These spawn the server over stdio exactly as a client does, so they
+      # cover the wire shape and not just the functions behind it. That shape is
+      # the one thing here nobody can change back: an external client reads
+      # these field names, and it is not in this repository.
+      - name: MCP server tests
+        run: tools/anatria_mcp/.venv/Scripts/python -m pytest tools/anatria_mcp -q
+
       - name: Rust tests
         run: cargo test --manifest-path src-tauri/Cargo.toml
 

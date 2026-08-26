@@ -85,7 +85,7 @@ satisfied twice.
 
 ```bash
 python -m venv tools/anatria_mcp/.venv
-tools/anatria_mcp/.venv/Scripts/python.exe -m pip install mcp pytest pytest-asyncio anyio
+tools/anatria_mcp/.venv/Scripts/python.exe -m pip install "mcp>=2.1,<3" pytest anyio
 ```
 
 On Linux and macOS the interpreter is `tools/anatria_mcp/.venv/bin/python`.
