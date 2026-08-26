@@ -5,6 +5,8 @@ mod commands;
 // unchanged by its presence.
 #[cfg(windows)]
 mod control_acl;
+#[cfg(windows)]
+mod control_pipe;
 mod keyring_store;
 pub(crate) mod sidecar;
 mod study_db;
