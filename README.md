@@ -171,6 +171,10 @@ python -m venv .venv
 .venv/Scripts/python -m pip install -e "engine[dev]"   # POSIX: .venv/bin/python
 ```
 
+The MCP atlas server has a virtualenv of its own and **must not** be installed
+into this one — see [Using the atlas from another
+agent](#using-the-atlas-from-another-agent) for what that costs if it is.
+
 ## Development
 
 The Rust process launches the frozen Python engine, so **the engine must be
@@ -267,8 +271,9 @@ src-tauri/      Rust: process ownership, credentials, event forwarding
   src/study_db.rs   SQLite study journal — notes, sessions, case grades
 engine/         Python: NDJSON transport, agent, report compiler
   anatria_engine/protocol.py   Pydantic wire format — the other owner
-public/anatomy/ Meshes and labels (CC BY-SA 4.0 — see NOTICE)
+public/anatomy/ Meshes and labels — two atlases, two licences (see NOTICE)
 tests/          Cross-language contract test
+tools/          Asset pipeline, and the MCP atlas server (own virtualenv)
 ```
 
 ### Protocol ownership
@@ -464,6 +469,64 @@ Two tests hold the line: no shipped Latin term may carry a diacritic, and none
 may repeat a word back to back. Those are the signatures every defect in this
 batch left behind — and the first three were found by reading a printed plate,
 not by any build.
+
+---
+
+## Using the atlas from another agent
+
+The manifest is also served over the **Model Context Protocol**, so an agent
+that is not this application's — Claude Code, Codex, Gemini CLI — can look
+structures up directly. No running application, no API key, no network.
+
+| Tool | Answers |
+|---|---|
+| `search_structures` | "what is the id for the left atrium?" |
+| `describe_structure` | the record, plus the muscle's origin and insertion areas |
+| `list_systems` | each system's size and where in the tree it sits |
+| `browse_hierarchy` | one level of the atlas tree at a time, paged |
+| `atlas_info` | version, structure count, licence, credit |
+
+[`tools/anatria_mcp/README.md`](tools/anatria_mcp/README.md) has the setup for
+each client and the limits in full. Three of them decide whether an answer from
+this server is trustworthy: the index is **TA2 Latin, English and identifiers
+only**, so a query in any other language returns nothing and that is not
+evidence of absence; the manifest records **no relationships**, so nothing here
+says what supplies, innervates or borders a structure; and the two atlases are
+separate works under different licences, so `atlas_info` is the only correct
+place to read one from.
+
+**Why, when the application already has an assistant.** Because the atlas is
+reference data and useful with no viewport at all — and because a reader who
+pays for a coding subscription already has an agent. An API key bought to ask
+the same questions inside this application is a second purchase for the same
+model, which is a reason to reach for MCP that has nothing to do with the
+anatomy.
+
+**It cannot change anything.** It does not talk to the running application,
+cannot move the viewport, and cannot read the study journal, the case files or
+the keys. Driving the viewer means a permanent local IPC surface with a consent
+model of its own; that is a different piece of work, and it is deliberately not
+this one.
+
+### Its virtualenv is load-bearing
+
+Never install the MCP SDK into the repository's `.venv`.
+
+`engine/build_sidecar.py` freezes the engine with `--collect-all=pydantic_ai`,
+and `pydantic-ai-slim` declares an `mcp` extra whose module already sits inside
+that package. Install the SDK beside it and PyInstaller follows the import:
+**73 MB** of `cryptography`, `starlette`, `pywin32` and `opentelemetry` land in
+the shipped sidecar, for a feature the sidecar does not use. The same mechanism
+took the sidecar from 97 MB to 434 MB once already, in an experiment where the
+size was the finding. Isolation is the fix, and it only holds while nobody
+installs the SDK in the root.
+
+The seam between the two environments is
+[`engine/anatria_engine/atlas_search.py`](engine/anatria_engine/atlas_search.py),
+**standard library only** for that reason — a dependency there would have to be
+satisfied twice. It is also the reason the search ranking cannot drift between
+the two: `engine/tests/test_atlas_search.py` passes the engine's own structure
+type straight into the shared function and asserts the order.
 
 ---
 
