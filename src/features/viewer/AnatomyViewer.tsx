@@ -26,6 +26,7 @@ import { LabelOverlay } from "./LabelOverlay";
 import { RenderProbe, RenderStatsPanel } from "./RenderStats";
 import { PointerRouting, StudyViews } from "./StudyViews";
 import { StudyViewsFrame } from "./StudyViewsFrame";
+import { StudyViewsToggle } from "./StudyViewsToggle";
 import { LassoSelect } from "./LassoSelect";
 import { PathwayBar } from "./PathwayBar";
 import { SelectionBar } from "./SelectionBar";
@@ -247,14 +248,14 @@ export function AnatomyViewer() {
           so halving the extent is the whole correction. */}
       <LabelOverlay fraction={splitting ? 0.5 : 1} />
       {splitting && <StudyViewsFrame />}
-      {/* The measuring instrument, and only that: the mode it was built to
-          judge now lives in the left panel beside the other view controls.
-          Vite strips this branch from a production build. */}
-      {import.meta.env.DEV && (
-        <div className="absolute bottom-32 left-3 z-20">
-          <RenderStatsPanel />
-        </div>
-      )}
+      {/* One column, well clear of the bottom edge, so neither of these lands
+          on the chrome already there — the collapse toggle above, the controls
+          hint below. The readout is the measuring instrument and dev-only;
+          Vite strips that branch from a production build. The switch ships. */}
+      <div className="pointer-events-none absolute bottom-32 left-3 z-20 flex flex-col items-start gap-1.5">
+        {import.meta.env.DEV && <RenderStatsPanel />}
+        <StudyViewsToggle />
+      </div>
       <DepthProbe />
       <HoverLabel />
       <ColourLegend />

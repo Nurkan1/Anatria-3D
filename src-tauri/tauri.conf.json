@@ -14,7 +14,8 @@
       {
         "title": "Anatria3D",
         "width": 1440,
-        "height": 900,
+        "height": 860,
+        "center": true,
         "backgroundColor": "#0b1220",
         "minWidth": 1024,
         "minHeight": 700,
