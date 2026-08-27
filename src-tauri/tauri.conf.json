@@ -18,7 +18,7 @@
         "center": true,
         "backgroundColor": "#0b1220",
         "minWidth": 1024,
-        "minHeight": 700,
+        "minHeight": 600,
         "resizable": true,
         "fullscreen": false
       }

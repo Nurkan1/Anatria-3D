@@ -17,6 +17,7 @@ mod control_pipe;
 mod keyring_store;
 pub(crate) mod sidecar;
 mod study_db;
+mod window_fit;
 
 use tauri::{Manager, RunEvent, WindowEvent};
 
@@ -79,6 +80,14 @@ pub fn run() {
             commands::stop_bridge,
         ])
         .setup(|app| {
+            // Before anything else is visible for long enough to be read: a
+            // window hanging off the bottom of the screen takes the view
+            // controls, the viewpoint bar and the four-view switch with it, and
+            // says nothing about having done so.
+            if let Some(window) = app.get_webview_window("main") {
+                window_fit::fit_to_work_area(&window);
+            }
+
             // The journal is opened before anything else can ask for it, and
             // opening it cannot fail — an unusable database degrades to "saving
             // is broken", never to "the atlas will not start".
