@@ -229,9 +229,13 @@ export function AnatomyViewer() {
         <Suspense fallback={null}>
           <AnatomyScene manifest={manifest} onContextMenu={openMenu} />
         </Suspense>
-        {/* An instrument, not a feature. Vite strips the whole branch from a
-            production build, so neither this nor its panel ships. */}
-        {import.meta.env.DEV && <RenderProbe />}
+        {/* Reads the renderer once a frame so the panel below has something to
+            show. It ships: a reader who says the atlas is slow on their machine
+            can give a frame time and a draw count instead of an adjective, and
+            that is the only honest way anyone checks the minimum hardware the
+            README claims. The sweep behind it walks the scene twice a second,
+            not sixty times — see `RenderStats`. */}
+        <RenderProbe />
         {/* Always mounted, so it can put the pointer mapping back however the
             store was left. `StudyViews` mounts and unmounts with the mode; this
             does not, and that is the point. */}
@@ -254,11 +258,9 @@ export function AnatomyViewer() {
           without touching it. That clearance is the reason for the exact
           offset: the hint expands upward from the bottom edge to about 123px,
           and anything sharing this corner has to start above that with room to
-          spare, because those lines wrap on a narrow window. The readout is the
-          measuring instrument and dev-only; Vite strips that branch from a
-          production build. The switch ships. */}
+          spare, because those lines wrap on a narrow window. */}
       <div className="pointer-events-none absolute bottom-40 left-3 z-20 flex flex-col items-start gap-1.5">
-        {import.meta.env.DEV && <RenderStatsPanel />}
+        <RenderStatsPanel />
         {/* Above the switch rather than below it, so the letters sit between
             the mode and the panels they belong to instead of between the mode
             and the controls hint underneath. Renders nothing unless a view is

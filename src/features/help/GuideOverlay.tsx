@@ -982,6 +982,7 @@ const SECTIONS: Section[] = [
             ["F", "Frame the view — the body, or what you are studying"],
             ["A P L R S", "The five anatomical viewpoints, as on the buttons"],
             ["+ −", "Move closer in, or further away"],
+            ["M", "Show what the last frame cost — frame rate, draw calls, memory"],
             ["Enter", "Send your question"],
             ["Shift+Enter", "New line instead of sending"],
             ["Ctrl+Enter", "Save the note you are writing"],
@@ -991,6 +992,14 @@ const SECTIONS: Section[] = [
         <p>
           The viewport shortcuts stand down while you are typing — <Ui>I</Ui> belongs
           to your sentence, not to the model.
+        </p>
+        <p>
+          <Ui>M</Ui> is there for one purpose: so that "the atlas is slow on my
+          machine" can be reported as numbers. The frame rate and the figure
+          beside it — the frame time nineteen frames in twenty come in under —
+          are what tell you whether a system you switched on is the reason.
+          Draw calls rise with the structures actually being drawn, which is why
+          isolating something is the fastest way to make a heavy scene light.
         </p>
       </>
     ),

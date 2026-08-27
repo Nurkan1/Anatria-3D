@@ -6,11 +6,26 @@ import { fps, heapMb, noteFrame, sample } from "./renderSample";
 import { viewportKey } from "./viewportKeys";
 
 /**
- * The frame counter, and the panel that shows it. Development builds only.
+ * The frame counter, and the panel that shows it.
  *
- * Mounted behind `import.meta.env.DEV` at the call site, so neither piece is in
- * the shipped bundle at all — this is an instrument for deciding whether the
- * multi-viewport mode is affordable, not a feature.
+ * # Why it ships
+ *
+ * It was built as an instrument, to decide whether the multi-viewport mode was
+ * affordable, and it was going to be stripped from the release once that
+ * question was answered. It stays because the question it answers did not go
+ * away with the decision: the README claims a minimum machine, and this is the
+ * only way anyone — the reader, or whoever they are reporting to — can check
+ * that claim on the machine actually in front of them. "It feels slow" and
+ * "34 fps, p95 41 ms, 3,478 draw calls" are not the same report.
+ *
+ * # What it costs to leave on
+ *
+ * Per frame: reading six integers off `renderer.info`, which the renderer is
+ * already maintaining. The one measurement that costs anything walks the scene
+ * graph, and that runs twice a second rather than sixty times — see `sweep`.
+ * The readout itself writes through `textContent` on an animation frame and
+ * only while it is open, so a closed panel is one collapsed chip and nothing
+ * else.
  */
 
 /** How often the expensive samples are taken, in milliseconds. */
@@ -149,7 +164,7 @@ export function RenderStatsPanel() {
   return (
     <div className="pointer-events-none select-none rounded border border-slate-700/70 bg-slate-950/90 px-2.5 py-2 font-mono text-[10px] text-slate-300 shadow-lg">
       <p className="mb-1.5 text-[9px] uppercase tracking-wider text-slate-500">
-        Renderer · dev only · M to hide
+        Renderer · M to hide
       </p>
       <div className="grid grid-cols-[auto_auto] gap-x-3 gap-y-0.5 tabular-nums">
         {ROWS.map((row, index) => (
