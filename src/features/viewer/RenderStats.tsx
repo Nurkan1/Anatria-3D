@@ -102,8 +102,12 @@ const ROWS: Row[] = [
  * The readout. Lives outside the canvas, in the DOM, like the label overlay.
  *
  * Written to with `textContent` on an animation frame rather than through
- * state, for the reason in `renderStats`: a panel that re-rendered React sixty
+ * state, for the reason in `renderSample`: a panel that re-rendered React sixty
  * times a second would be measuring itself.
+ *
+ * Positioned by whatever holds it rather than by itself, so the experiment's
+ * controls can be stacked in one column instead of each finding its own corner
+ * and landing on the production chrome already there.
  */
 export function RenderStatsPanel() {
   const [open, setOpen] = useState(false);
@@ -136,14 +140,14 @@ export function RenderStatsPanel() {
 
   if (!open) {
     return (
-      <div className="pointer-events-none absolute bottom-2 left-2 z-20 select-none rounded border border-slate-800/60 bg-slate-950/70 px-1.5 py-0.5 font-mono text-[9px] text-slate-600">
+      <div className="pointer-events-none select-none rounded border border-slate-800/60 bg-slate-950/70 px-1.5 py-0.5 font-mono text-[9px] text-slate-600">
         M · render stats
       </div>
     );
   }
 
   return (
-    <div className="pointer-events-none absolute bottom-2 left-2 z-20 select-none rounded border border-slate-700/70 bg-slate-950/90 px-2.5 py-2 font-mono text-[10px] text-slate-300 shadow-lg">
+    <div className="pointer-events-none select-none rounded border border-slate-700/70 bg-slate-950/90 px-2.5 py-2 font-mono text-[10px] text-slate-300 shadow-lg">
       <p className="mb-1.5 text-[9px] uppercase tracking-wider text-slate-500">
         Renderer · dev only · M to hide
       </p>

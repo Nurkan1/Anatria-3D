@@ -24,6 +24,7 @@ import { IsolationBar } from "./IsolationBar";
 import { LabelOverlay } from "./LabelOverlay";
 import { RenderProbe, RenderStatsPanel } from "./RenderStats";
 import { StudyViews } from "./StudyViews";
+import { StudyViewsFrame } from "./StudyViewsFrame";
 import { LassoSelect } from "./LassoSelect";
 import { PathwayBar } from "./PathwayBar";
 import { SelectionBar } from "./SelectionBar";
@@ -229,25 +230,32 @@ export function AnatomyViewer() {
       </Canvas>
       <LassoSelect container={container} />
       <LabelOverlay />
-      {import.meta.env.DEV && <RenderStatsPanel />}
+      {import.meta.env.DEV && splitting && <StudyViewsFrame />}
+      {/* One column for the experiment's controls, sitting clear of the panel
+          toggle above it and the controls hint below it. Both of those are
+          production furniture and neither should have to move for an
+          instrument that will not ship. */}
       {import.meta.env.DEV && (
-        <button
-          type="button"
-          onClick={() => setStudyViews((on) => !on)}
-          disabled={!canSplit}
-          title={
-            canSplit
-              ? "Four anatomical viewports of the isolated set"
-              : "Isolate a structure first — four views of the whole atlas is 14,000 draw calls"
-          }
-          className={`absolute left-2 top-2 z-20 rounded border px-2 py-1 font-mono text-[10px] ${
-            splitting
-              ? "border-sky-500 bg-sky-500/10 text-sky-300"
-              : "border-slate-700 bg-slate-950/70 text-slate-400 disabled:opacity-40"
-          }`}
-        >
-          study views {splitting ? "on" : "off"}
-        </button>
+        <div className="absolute bottom-32 left-3 z-20 flex flex-col items-start gap-1.5">
+          <RenderStatsPanel />
+          <button
+            type="button"
+            onClick={() => setStudyViews((on) => !on)}
+            disabled={!canSplit}
+            title={
+              canSplit
+                ? "Four anatomical viewports of the isolated set"
+                : "Isolate a structure first — four views of the whole atlas is 14,000 draw calls"
+            }
+            className={`rounded border px-2 py-1 font-mono text-[10px] ${
+              splitting
+                ? "border-sky-500 bg-sky-500/10 text-sky-300"
+                : "border-slate-700 bg-slate-950/70 text-slate-400 disabled:opacity-40"
+            }`}
+          >
+            study views {splitting ? "on" : "off"}
+          </button>
+        </div>
       )}
       <DepthProbe />
       <HoverLabel />

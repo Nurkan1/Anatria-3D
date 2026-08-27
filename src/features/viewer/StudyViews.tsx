@@ -105,7 +105,15 @@ export function StudyViews() {
     // Whatever this component did to the renderer, undone. Without it the
     // single view keeps drawing into a quarter of the canvas — the exact
     // regression the flag exists to make impossible.
+    // `renderer.info` clears itself at the top of every `render()`, so with four
+    // renders a frame it would report the last panel and not the frame. Taking
+    // the reset over is what makes the dev probe tell the truth here: without
+    // it the readout showed a quarter of the real draw calls, which is the one
+    // number this whole experiment is being judged on.
+    gl.info.autoReset = false;
+
     return () => {
+      gl.info.autoReset = true;
       gl.setScissorTest(false);
       gl.setViewport(0, 0, size.width, size.height);
       gl.setScissor(0, 0, size.width, size.height);
@@ -116,6 +124,9 @@ export function StudyViews() {
     const bounds = reframe(graph);
     if (!bounds) return;
 
+    // Once per frame rather than once per render, so the counters add the four
+    // passes together instead of overwriting each other.
+    renderer.info.reset();
     renderer.setScissorTest(true);
 
     for (const [view, cell] of Object.entries(QUADRANTS)) {
