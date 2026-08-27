@@ -1,0 +1,192 @@
+import { useFrame, useThree } from "@react-three/fiber";
+import { useEffect, useMemo, useRef } from "react";
+import * as THREE from "three";
+
+import { lateralSign, viewDirection, type AnatomicalView } from "./cameraViews";
+import { getViewerHandle } from "./viewerBridge";
+
+/**
+ * Four viewports of one scene, on one canvas.
+ *
+ * # What this is not
+ *
+ * Not four canvases, not four scenes, and not a second copy of the mesh tree.
+ * There is one `THREE.Scene` holding one set of geometries, rendered four times
+ * through four cameras into four scissored rectangles of the same drawing
+ * buffer. That is the whole technique, and the reason the feature is affordable
+ * at all.
+ *
+ * # Why it is gated on isolation, and why that is a rule and not advice
+ *
+ * Measured on this atlas: the full body is 3,478 draw calls and 10.9 million
+ * triangles, and the application holds 51 fps drawing it once. Four times that
+ * is roughly fourteen thousand calls and will not hold thirty on anything.
+ *
+ * With one structure isolated it is **one** draw call and 1,888 triangles, at
+ * 60 fps, and the frame time is identical whether the scene holds 342 objects
+ * or 3,499 — hidden meshes cost a visibility check and nothing else. So four
+ * viewports of an isolated selection cost four draw calls, and every panel can
+ * run at full rate.
+ *
+ * Which means the gate below is not a performance *strategy*, it is the entire
+ * performance strategy. Nothing here throttles, freezes or degrades, because
+ * with the gate in place there is nothing to throttle.
+ *
+ * # Reversibility
+ *
+ * Taking a `useFrame` with a render priority means React Three Fiber stops
+ * rendering by itself and this component owns the loop. That is a real
+ * takeover, so it happens only while the component is mounted: switch the mode
+ * off and R3F's own loop resumes untouched, having never known. The cleanup
+ * below restores the viewport, the scissor and the clear state so the single
+ * view cannot inherit a quartered canvas.
+ */
+
+/** The three auxiliary views, in the order they are laid out. */
+const AUXILIARY: AnatomicalView[] = ["anterior", "left", "superior"];
+
+/** Headroom around the framed set, so it does not touch the panel edges. */
+const FRAMING = 1.35;
+
+/** How often the framing is recomputed, in milliseconds. */
+const REFRAME_MS = 400;
+
+/**
+ * Where each panel sits, as fractions of the canvas.
+ *
+ * WebGL's viewport origin is the bottom left, so the main panel — which reads
+ * as the top left — is the one at `y: 0.5`. A 2×2 split gives every panel the
+ * canvas's own aspect ratio, which is why the main camera needs no adjustment
+ * at all: it is the same camera, framing the same thing, in a smaller box.
+ */
+const QUADRANTS = {
+  main: { x: 0, y: 0.5 },
+  anterior: { x: 0.5, y: 0.5 },
+  left: { x: 0, y: 0 },
+  superior: { x: 0.5, y: 0 },
+} as const;
+
+/** The world-space box around everything currently drawn. */
+function visibleBounds(scene: THREE.Scene): THREE.Box3 | null {
+  const box = new THREE.Box3();
+  let found = false;
+  const each = new THREE.Box3();
+
+  scene.traverse((object) => {
+    const mesh = object as THREE.Mesh;
+    if (!mesh.isMesh || !mesh.visible || !mesh.geometry) return;
+    each.setFromObject(mesh);
+    if (each.isEmpty()) return;
+    box.union(each);
+    found = true;
+  });
+
+  return found ? box : null;
+}
+
+export function StudyViews() {
+  const gl = useThree((state) => state.gl);
+  const size = useThree((state) => state.size);
+
+  // One orthographic camera per auxiliary view. Orthographic because these are
+  // anatomical views: an "anterior view" with perspective foreshortening is a
+  // photograph of the front, not the plate an atlas would print.
+  const cameras = useMemo(
+    () =>
+      Object.fromEntries(
+        AUXILIARY.map((view) => [view, new THREE.OrthographicCamera(-1, 1, 1, -1, 0.01, 200)]),
+      ) as Record<AnatomicalView, THREE.OrthographicCamera>,
+    [],
+  );
+
+  const framed = useRef(0);
+
+  useEffect(() => {
+    // Whatever this component did to the renderer, undone. Without it the
+    // single view keeps drawing into a quarter of the canvas — the exact
+    // regression the flag exists to make impossible.
+    return () => {
+      gl.setScissorTest(false);
+      gl.setViewport(0, 0, size.width, size.height);
+      gl.setScissor(0, 0, size.width, size.height);
+    };
+  }, [gl, size.width, size.height]);
+
+  useFrame(({ gl: renderer, scene: graph, camera }) => {
+    const bounds = reframe(graph);
+    if (!bounds) return;
+
+    renderer.setScissorTest(true);
+
+    for (const [view, cell] of Object.entries(QUADRANTS)) {
+      const width = size.width / 2;
+      const height = size.height / 2;
+      const x = cell.x * size.width;
+      const y = cell.y * size.height;
+
+      renderer.setViewport(x, y, width, height);
+      renderer.setScissor(x, y, width, height);
+      renderer.render(graph, view === "main" ? camera : cameras[view as AnatomicalView]);
+    }
+
+    renderer.setScissorTest(false);
+    // Left as it was found, every frame rather than only on unmount: anything
+    // else that draws — a screenshot, a future overlay pass — must not have to
+    // know this component exists.
+    renderer.setViewport(0, 0, size.width, size.height);
+    renderer.setScissor(0, 0, size.width, size.height);
+  }, 1);
+
+  /**
+   * Point the auxiliary cameras at whatever is on screen, on a slow interval.
+   *
+   * Not every frame: the framing only changes when the isolated set does, and
+   * `setFromObject` walks a geometry's vertices. Four times a second is
+   * imperceptible for a change the reader makes by clicking, and it also
+   * catches the explode animation settling without watching for it.
+   */
+  function reframe(graph: THREE.Scene): THREE.Box3 | null {
+    const now = performance.now();
+    const due = now - framed.current > REFRAME_MS;
+    const bounds = visibleBounds(graph);
+    if (!bounds) return null;
+    if (!due) return bounds;
+
+    framed.current = now;
+
+    const centre = bounds.getCenter(new THREE.Vector3());
+    const radius = Math.max(bounds.getBoundingSphere(new THREE.Sphere()).radius, 1e-4);
+    const extent = radius * FRAMING;
+    const aspect = size.width / size.height;
+
+    // Read off the atlas rather than assumed, the same way the viewpoint bar
+    // does it: which end of X is the body's left depends on the export, and a
+    // panel labelled "left" showing the right side is not a cosmetic bug.
+    const handle = getViewerHandle();
+    const sign = handle ? lateralSign(handle.centres.keys(), handle.centres) : 1;
+
+    for (const view of AUXILIARY) {
+      const camera = cameras[view];
+      camera.left = -extent * aspect;
+      camera.right = extent * aspect;
+      camera.top = extent;
+      camera.bottom = -extent;
+      camera.near = 0.01;
+      camera.far = radius * 20 + 10;
+
+      // Anterior is +Z, so pointing it up the screen is what makes a superior
+      // view read the way an atlas plate does.
+      camera.up.set(0, view === "superior" ? 0 : 1, view === "superior" ? 1 : 0);
+      camera.position
+        .copy(centre)
+        .add(viewDirection(view, sign).multiplyScalar(radius * 4 + 1));
+      camera.lookAt(centre);
+      camera.updateProjectionMatrix();
+      camera.updateMatrixWorld();
+    }
+
+    return bounds;
+  }
+
+  return null;
+}

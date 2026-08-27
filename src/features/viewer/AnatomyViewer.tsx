@@ -23,6 +23,7 @@ import { IlluminationBar } from "./IlluminationBar";
 import { IsolationBar } from "./IsolationBar";
 import { LabelOverlay } from "./LabelOverlay";
 import { RenderProbe, RenderStatsPanel } from "./RenderStats";
+import { StudyViews } from "./StudyViews";
 import { LassoSelect } from "./LassoSelect";
 import { PathwayBar } from "./PathwayBar";
 import { SelectionBar } from "./SelectionBar";
@@ -75,6 +76,12 @@ export function AnatomyViewer() {
   const genderModel = useSceneStore((s) => s.genderModel);
   const background = useSceneStore((s) => s.background);
   const restoreView = useSceneStore((s) => s.restoreView);
+  // Experimental, development only, and gated on isolation — see StudyViews for
+  // the measurement that makes the gate the whole performance strategy.
+  const isolatedOrganIds = useSceneStore((s) => s.isolatedOrganIds);
+  const [studyViews, setStudyViews] = useState(false);
+  const canSplit = (isolatedOrganIds?.length ?? 0) > 0;
+  const splitting = studyViews && canSplit;
   const [manifest, setLocalManifest] = useState<AnatomyManifest | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [menu, setMenu] = useState<MenuTarget | null>(null);
@@ -218,10 +225,30 @@ export function AnatomyViewer() {
         {/* An instrument, not a feature. Vite strips the whole branch from a
             production build, so neither this nor its panel ships. */}
         {import.meta.env.DEV && <RenderProbe />}
+        {import.meta.env.DEV && splitting && <StudyViews />}
       </Canvas>
       <LassoSelect container={container} />
       <LabelOverlay />
       {import.meta.env.DEV && <RenderStatsPanel />}
+      {import.meta.env.DEV && (
+        <button
+          type="button"
+          onClick={() => setStudyViews((on) => !on)}
+          disabled={!canSplit}
+          title={
+            canSplit
+              ? "Four anatomical viewports of the isolated set"
+              : "Isolate a structure first — four views of the whole atlas is 14,000 draw calls"
+          }
+          className={`absolute left-2 top-2 z-20 rounded border px-2 py-1 font-mono text-[10px] ${
+            splitting
+              ? "border-sky-500 bg-sky-500/10 text-sky-300"
+              : "border-slate-700 bg-slate-950/70 text-slate-400 disabled:opacity-40"
+          }`}
+        >
+          study views {splitting ? "on" : "off"}
+        </button>
+      )}
       <DepthProbe />
       <HoverLabel />
       <ColourLegend />
