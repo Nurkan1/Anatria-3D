@@ -3,6 +3,7 @@ import { useState } from "react";
 import { StudyPanel } from "@/features/study/StudyPanel";
 import { AnatomyTree } from "@/features/tree/AnatomyTree";
 import { UsagePanel } from "@/features/usage/UsagePanel";
+import { ViewControls } from "@/features/viewer/ViewControls";
 import { APP_VERSION_LABEL } from "@/lib/appVersion";
 import { useStudyStore } from "@/stores/studyStore";
 
@@ -68,6 +69,14 @@ export function LeftPanel() {
       <div className={`min-h-0 flex-1 ${tab === "usage" ? "" : "hidden"}`}>
         <UsagePanel />
       </div>
+
+      {/*
+        Below all three tabs rather than inside one. How the model is drawn is
+        not a property of the tab you happen to be reading: someone taking notes
+        in Study needs the body turned to glass exactly as much as someone
+        browsing the tree, and used to have to leave the tab to do it.
+      */}
+      <ViewControls />
     </div>
   );
 }

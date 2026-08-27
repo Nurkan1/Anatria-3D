@@ -29,7 +29,15 @@ import { getViewerHandle, projectToScreen, structurePosition } from "./viewerBri
 /** Beyond this a column of names stops being readable, whatever the layout. */
 const MAX_LABELS = 40;
 
-export function LabelOverlay() {
+/**
+ * How much of the canvas the camera these labels follow is drawing into.
+ *
+ * `1` when it owns the whole thing, `0.5` in the split study view, where it
+ * owns the top-left quarter. Only a fraction is needed rather than a full
+ * rectangle because that panel shares the container's origin — if the
+ * interactive panel ever moves away from the top left, this becomes a rect.
+ */
+export function LabelOverlay({ fraction = 1 }: { fraction?: number } = {}) {
   const labelsVisible = useSceneStore((s) => s.labelsVisible);
   const organs = useSceneStore((s) => s.organs);
   const selectedOrganIds = useSceneStore((s) => s.selectedOrganIds);
@@ -64,8 +72,8 @@ export function LabelOverlay() {
       const host = container.current;
       if (!handle || !host) return;
 
-      const width = host.clientWidth;
-      const height = host.clientHeight;
+      const width = host.clientWidth * fraction;
+      const height = host.clientHeight * fraction;
 
       const anchors: LabelAnchor[] = targets.map((target) => {
         // Where the structure was drawn, not where the body keeps it: a leader
@@ -126,7 +134,11 @@ export function LabelOverlay() {
 
     frame = requestAnimationFrame(draw);
     return () => cancelAnimationFrame(frame);
-  }, [targets]);
+    // `fraction` is in here because the loop closes over it: without it the
+    // labels would keep laying themselves out for a full canvas after the view
+    // was split, and land in the wrong quarter until the targets happened to
+    // change.
+  }, [targets, fraction]);
 
   // `targets` already carries the setting — see `labelTargets`, which keeps a
   // single selected structure named whatever the box says.

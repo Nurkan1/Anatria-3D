@@ -10,7 +10,6 @@ import { SYSTEM_COLOURS, SYSTEM_LABELS } from "@/features/viewer/palette";
 import { BodySwitch } from "./BodySwitch";
 import { StructureSearch } from "./StructureSearch";
 import {
-  GLASS_OPACITY,
   isOrganVisible,
   organLabel,
   organSubtitle,
@@ -242,20 +241,6 @@ export function AnatomyTree() {
   const systemOpacity = useSceneStore((s) => s.systemOpacity);
   const cycleSystemOpacity = useSceneStore((s) => s.cycleSystemOpacity);
   const xraySystem = useSceneStore((s) => s.xraySystem);
-  const clearGhosting = useSceneStore((s) => s.clearGhosting);
-  const glassBody = useSceneStore((s) => s.glassBody);
-  const scan = useSceneStore((s) => s.scan);
-  const toggleScan = useSceneStore((s) => s.toggleScan);
-  const manifest = useSceneStore((s) => s.manifest);
-  // Every system at the glass setting, which is what the button both makes and
-  // undoes. Derived rather than stored: a flag could disagree with the
-  // opacities the moment one system was cycled by hand. Read from the manifest
-  // because that is the list the action itself works from.
-  const isGlass =
-    (manifest?.systems.length ?? 0) > 0 &&
-    (manifest?.systems ?? []).every(
-      (entry) => systemOpacity[entry.system] === GLASS_OPACITY,
-    );
   const eyeTracking = useSceneStore((s) => s.eyeTracking);
   const setEyeTracking = useSceneStore((s) => s.setEyeTracking);
   const depthProbeVisible = useSceneStore((s) => s.depthProbeVisible);
@@ -264,10 +249,7 @@ export function AnatomyTree() {
   const setLabelsVisible = useSceneStore((s) => s.setLabelsVisible);
   const background = useSceneStore((s) => s.background);
   const setBackground = useSceneStore((s) => s.setBackground);
-  const showAllSystems = useSceneStore((s) => s.showAllSystems);
-  const clearIsolation = useSceneStore((s) => s.clearIsolation);
   const applyCommand = useSceneStore((s) => s.applyCommand);
-  const resetView = useSceneStore((s) => s.resetView);
 
   const bySystem = useMemo(() => {
     const groups = new Map<AnatomicalSystem, ManifestOrgan[]>();
@@ -588,86 +570,6 @@ export function AnatomyTree() {
       <ExplodeControl />
       </div>
 
-      {/*
-        Outside the scrolling column, and pinned, because Systems expands.
-        One open system is hundreds of rows, so every position inside that
-        column — under the systems list as much as at the bottom — is a
-        scroll away the moment somebody opens one. These are the controls
-        reached for most often while actually reading the model, which makes
-        them the ones that must not move.
-
-        No heading, unlike every section above. This strip is on screen
-        permanently, so its height is paid for on every frame, and the
-        buttons already say what they do.
-      */}
-      <section className="flex shrink-0 flex-wrap gap-2 border-t border-slate-800 px-4 py-3">
-        {isolatedOrganIds !== null && (
-          <button
-            type="button"
-            onClick={clearIsolation}
-            className="rounded border border-amber-600/60 bg-amber-500/10 px-2 py-1 text-xs text-amber-300"
-          >
-            Showing {isolatedOrganIds.length} isolated — clear
-          </button>
-        )}
-        <button
-          type="button"
-          onClick={showAllSystems}
-          className="rounded border border-slate-700 px-2 py-1 text-xs text-slate-400"
-        >
-          Show all systems
-        </button>
-        <button
-          type="button"
-          onClick={glassBody}
-          title="Turn the whole body to glass — then point at it, and what lies under the cursor lights up"
-          aria-pressed={isGlass}
-          className={`rounded border px-2 py-1 text-xs ${
-            isGlass
-              ? "border-amber-500/70 bg-amber-400/15 text-amber-200"
-              : "border-slate-700 text-slate-400"
-          }`}
-        >
-          Glass body
-        </button>
-        {/*
-          Beside Glass body rather than as another checkbox above, because it
-          answers the same question those buttons do — *how* the body is drawn,
-          not *what* is drawn. There are already several ways to play down the
-          anatomy, and grouping the ones that change its appearance keeps them
-          from reading as five unrelated switches.
-        */}
-        <button
-          type="button"
-          onClick={toggleScan}
-          title="Drain the colour from everything except what is marked, selected or isolated"
-          aria-pressed={scan}
-          className={`rounded border px-2 py-1 text-xs ${
-            scan
-              ? "border-slate-300/70 bg-slate-200/15 text-slate-100"
-              : "border-slate-700 text-slate-400"
-          }`}
-        >
-          Scan
-        </button>
-        {Object.keys(systemOpacity).length > 0 && (
-          <button
-            type="button"
-            onClick={clearGhosting}
-            title="Make every layer solid again"
-            className="rounded border border-sky-700/70 bg-sky-600/15 px-2 py-1 text-xs text-sky-300"
-          >
-            Solid again
-          </button>
-        )}
-        <button
-          type="button"
-          onClick={resetView}
-          className="rounded border border-slate-700 px-2 py-1 text-xs text-slate-400"
-        >
-          Reset view
-        </button>
-      </section>
     </div>
   );
 }
