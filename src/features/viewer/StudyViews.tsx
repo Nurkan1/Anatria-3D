@@ -88,7 +88,11 @@ export function StudyViews() {
   const gl = useThree((state) => state.gl);
   const size = useThree((state) => state.size);
   const setEvents = useThree((state) => state.setEvents);
-  const previousCompute = useThree((state) => state.events.compute);
+  // Read through `get` rather than subscribed to. Selecting `events.compute`
+  // and then writing to it is a loop: the write changes the value, the value
+  // re-runs the effect, the effect writes again. React caught it as "maximum
+  // update depth exceeded" and took the canvas down with it.
+  const get = useThree((state) => state.get);
 
   // One orthographic camera per auxiliary view. Orthographic because these are
   // anatomical views: an "anterior view" with perspective foreshortening is a
@@ -137,6 +141,8 @@ export function StudyViews() {
      * the depth stack, click selection and the right-click menu all read the
      * raycaster this sets up — so one correction covers them all.
      */
+    const previousCompute = get().events.compute;
+
     setEvents({
       compute: (event, state) => {
         const half = { width: state.size.width / 2, height: state.size.height / 2 };
@@ -162,15 +168,24 @@ export function StudyViews() {
       // with nothing rather than restoring it.
       if (previousCompute) setEvents({ compute: previousCompute });
     };
-  }, [setEvents, previousCompute]);
+  }, [setEvents, get]);
 
   useFrame(({ gl: renderer, scene: graph, camera }) => {
-    const bounds = reframe(graph);
-    if (!bounds) return;
-
     // Once per frame rather than once per render, so the counters add the four
     // passes together instead of overwriting each other.
     renderer.info.reset();
+
+    const bounds = reframe(graph);
+    if (!bounds) {
+      // Nothing visible to frame — mid-load, or everything hidden. Draw the
+      // main view across the whole canvas rather than returning: this callback
+      // owns the render loop, so a frame it declines to draw is a frame nobody
+      // draws, and the reader gets an empty canvas with no explanation.
+      renderer.setScissorTest(false);
+      renderer.setViewport(0, 0, size.width, size.height);
+      renderer.render(graph, camera);
+      return;
+    }
     renderer.setScissorTest(true);
 
     for (const [view, cell] of Object.entries(QUADRANTS)) {
