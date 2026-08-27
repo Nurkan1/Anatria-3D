@@ -248,11 +248,14 @@ export function AnatomyViewer() {
           so halving the extent is the whole correction. */}
       <LabelOverlay fraction={splitting ? 0.5 : 1} />
       {splitting && <StudyViewsFrame />}
-      {/* One column, well clear of the bottom edge, so neither of these lands
-          on the chrome already there — the collapse toggle above, the controls
-          hint below. The readout is the measuring instrument and dev-only;
-          Vite strips that branch from a production build. The switch ships. */}
-      <div className="pointer-events-none absolute bottom-32 left-3 z-20 flex flex-col items-start gap-1.5">
+      {/* One column, high enough that the controls hint can open underneath it
+          without touching it. That clearance is the reason for the exact
+          offset: the hint expands upward from the bottom edge to about 123px,
+          and anything sharing this corner has to start above that with room to
+          spare, because those lines wrap on a narrow window. The readout is the
+          measuring instrument and dev-only; Vite strips that branch from a
+          production build. The switch ships. */}
+      <div className="pointer-events-none absolute bottom-40 left-3 z-20 flex flex-col items-start gap-1.5">
         {import.meta.env.DEV && <RenderStatsPanel />}
         <StudyViewsToggle />
       </div>
@@ -271,21 +274,86 @@ export function AnatomyViewer() {
   );
 }
 
+/** How long the hints stay up once asked for, in milliseconds. */
+const HINT_MS = 10_000;
+
 /**
  * Navigation is not discoverable by looking at a canvas, and panning in
  * particular is the control people never find — which is what makes a full body
  * feel like it can only be inspected from the middle outwards.
+ *
+ * # Why it is not simply printed on screen any more
+ *
+ * Seven lines of small print sat permanently over the lower left of the body.
+ * They are read once, in the first minute, and after that they are only in the
+ * way of the thing the application exists to show. So they collapse to one
+ * quiet marker, and come back when the reader asks for them by putting the
+ * cursor on it.
+ *
+ * Something has to stay visible to be pointed at: a hint that hides completely
+ * is a hint nobody can find twice, which is worse than one that is always
+ * there. The marker is that something, and it is deliberately the same shape
+ * and weight as the other chips in this corner.
+ *
+ * # Why the list itself ignores the pointer
+ *
+ * Only the marker takes pointer events. The expanded list does not, so it never
+ * swallows a drag that begins under it — the reader can start turning the body
+ * while the hints are still up, which is exactly when they would be following
+ * one. That is also why the countdown runs from when the hints opened rather
+ * than from when the pointer left: with the list untouchable there is no
+ * pointer to leave it.
  */
 function ControlsHint() {
+  const [open, setOpen] = useState(false);
+  const closing = useRef<number | null>(null);
+
+  // Cleared on unmount so a timer cannot fire into a component that is gone.
+  useEffect(() => {
+    return () => {
+      if (closing.current !== null) window.clearTimeout(closing.current);
+    };
+  }, []);
+
+  const show = useCallback(() => {
+    if (closing.current !== null) window.clearTimeout(closing.current);
+    setOpen(true);
+    closing.current = window.setTimeout(() => setOpen(false), HINT_MS);
+  }, []);
+
   return (
-    <div className="pointer-events-none absolute bottom-3 left-3 space-y-0.5 text-[10px] leading-tight text-slate-600">
-      <p>Drag to rotate · Scroll to zoom where you point · Lost? Use Fit, bottom right</p>
-      <p>Right-drag to pan · Double-click an organ to open it with its parts</p>
-      <p>Shift+double-click to build a study set · Esc to exit</p>
-      <p>Ctrl+click to select several · Ctrl+drag to draw round a region</p>
-      <p>I isolate · H hide · U bring hidden back · C clear · X explode</p>
-      <p>F fit · A P L R S viewpoints · + − zoom</p>
-      <p>Right-click a structure to isolate the organ it belongs to</p>
+    <div className="pointer-events-none absolute bottom-3 left-3 flex flex-col items-start gap-1">
+      <div
+        aria-hidden={!open}
+        className={`text-[10px] leading-tight text-slate-600 transition-opacity duration-200 motion-reduce:transition-none ${
+          open ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        <p>Drag to rotate · Scroll to zoom where you point · Lost? Use Fit, bottom right</p>
+        <p>Right-drag to pan · Double-click an organ to open it with its parts</p>
+        <p>Shift+double-click to build a study set · Esc to exit</p>
+        <p>Ctrl+click to select several · Ctrl+drag to draw round a region</p>
+        <p>I isolate · H hide · U bring hidden back · C clear · X explode</p>
+        <p>F fit · A P L R S viewpoints · + − zoom</p>
+        <p>Right-click a structure to isolate the organ it belongs to</p>
+      </div>
+      {/*
+        A button rather than a bare label, so it is reachable by keyboard and
+        announces itself. Focus opens it for the same reason hover does: the
+        reader who never touches the mouse is the one most likely to want the
+        list of keys.
+      */}
+      <button
+        type="button"
+        onPointerEnter={show}
+        onFocus={show}
+        onClick={show}
+        aria-expanded={open}
+        title="How to move around the body"
+        className="pointer-events-auto select-none rounded border border-slate-800/60 bg-slate-950/70 px-1.5 py-0.5 font-mono text-[9px] text-slate-600"
+      >
+        Controls
+      </button>
     </div>
   );
 }
