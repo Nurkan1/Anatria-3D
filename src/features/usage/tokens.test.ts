@@ -5,6 +5,7 @@ import {
   formatTokens,
   LONG_CONVERSATION_TOKENS,
   totalTokens,
+  uncachedTokens,
 } from "./tokens";
 
 describe("totalTokens", () => {
@@ -43,7 +44,11 @@ describe("formatTokens", () => {
 });
 
 describe("conversationIsCostly", () => {
-  const usage = (total: number) => ({ input_tokens: total - 100, output_tokens: 100 });
+  const usage = (total: number, cached = 0) => ({
+    input_tokens: total - 100,
+    output_tokens: 100,
+    cache_read_tokens: cached,
+  });
 
   it("says nothing about a conversation that has just started", () => {
     // Warning early would train people to ignore the notice, which costs more
@@ -56,10 +61,39 @@ describe("conversationIsCostly", () => {
     expect(conversationIsCostly(usage(70_000))).toBe(true);
   });
 
+  it("stays quiet when the provider served the transcript from its cache", () => {
+    // The case the old threshold got wrong. A long conversation is the one a
+    // provider caches best, and warning about the cheap turn would teach the
+    // reader to ignore the warning on the expensive one.
+    expect(conversationIsCostly(usage(70_000, 65_000))).toBe(false);
+  });
+
   it("says nothing when the provider reported no usage at all", () => {
     // Absent counts are not zero counts, and a notice built on a blank would
     // appear at the wrong moment or never.
     expect(conversationIsCostly(null)).toBe(false);
     expect(conversationIsCostly(undefined)).toBe(false);
+  });
+});
+
+describe("uncachedTokens", () => {
+  it("counts only the input the provider had to take in fresh", () => {
+    expect(
+      uncachedTokens({ input_tokens: 50_000, output_tokens: 800, cache_read_tokens: 48_000 }),
+    ).toBe(2_800);
+  });
+
+  it("treats a turn with no cache as entirely fresh", () => {
+    expect(
+      uncachedTokens({ input_tokens: 3_000, output_tokens: 400, cache_read_tokens: 0 }),
+    ).toBe(3_400);
+  });
+
+  it("never reports less than the output when the counts disagree", () => {
+    // A provider reporting more cache than input would otherwise make a turn
+    // cost a negative number of tokens.
+    expect(
+      uncachedTokens({ input_tokens: 100, output_tokens: 50, cache_read_tokens: 4_000 }),
+    ).toBe(50);
   });
 });

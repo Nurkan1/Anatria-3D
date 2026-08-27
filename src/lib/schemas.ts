@@ -471,6 +471,15 @@ export type ModelInfo = z.infer<typeof ModelInfoSchema>;
 export const TokenUsageSchema = z.object({
   input_tokens: z.number().int().nonnegative(),
   output_tokens: z.number().int().nonnegative(),
+  /**
+   * How many of `input_tokens` came back out of the provider's prompt cache.
+   *
+   * A subset of the input total, not an addition to it — that is the engine's
+   * convention and pydantic-ai's before it. Defaulted, so a turn recorded by a
+   * build that predates the field, or answered by a provider that reports no
+   * cache, reads as zero rather than failing to parse.
+   */
+  cache_read_tokens: z.number().int().nonnegative().default(0),
 });
 export type TokenUsage = z.infer<typeof TokenUsageSchema>;
 

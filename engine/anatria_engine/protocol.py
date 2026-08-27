@@ -475,6 +475,25 @@ EngineRequest = Annotated[
 class TokenUsage(Strict):
     input_tokens: int = Field(ge=0)
     output_tokens: int = Field(ge=0)
+    #: How many of `input_tokens` the provider served from its prompt cache.
+    #:
+    #: A subset, not an addition. pydantic-ai's own convention is that
+    #: `input_tokens` is the inclusive total — it normalises the providers that
+    #: report cache reads separately, so the same rule holds everywhere — and
+    #: this is carried alongside rather than subtracted because both numbers
+    #: are true and they answer different questions: how much context the turn
+    #: needed, and how much of it had to be paid for at full rate.
+    #:
+    #: It matters most exactly where the app used to be most misleading. Every
+    #: turn re-sends the whole transcript, so a long conversation looks
+    #: alarming — but a long conversation is also the one a provider caches
+    #: best, and cache reads are billed at a fraction. OpenAI caches any prompt
+    #: over 1,024 tokens without being asked.
+    #:
+    #: Defaulted, so a build of the window that predates this field still reads
+    #: the frame, and a provider that reports no cache figure means zero rather
+    #: than an error.
+    cache_read_tokens: int = Field(default=0, ge=0)
 
 
 class ReadyEvent(Strict):

@@ -137,7 +137,7 @@ function Total({
   window,
   loaded,
 }: {
-  sum: { input: number; output: number; total: number; turns: number };
+  sum: { input: number; output: number; cached: number; total: number; turns: number };
   window: string;
   loaded: boolean;
 }) {
@@ -155,6 +155,20 @@ function Total({
         {sum.turns} {sum.turns === 1 ? "answer" : "answers"}
         {sum.turns > 0 && ` · ${formatTokens(sum.total / sum.turns)} each on average`}
       </p>
+      {/*
+        Said only when there is something to say. Every question re-sends the
+        whole conversation, which is what makes the number above grow — but a
+        provider that recognises the repetition charges a fraction for it, and
+        without this line the panel reports the volume as though all of it were
+        paid for at full rate. Turns recorded before the journal counted this
+        contribute nothing, so the figure can only ever understate the saving.
+      */}
+      {sum.cached > 0 && (
+        <p className="mt-0.5 text-[10px] text-slate-500">
+          {formatTokens(sum.cached)} of what was sent came back out of the
+          provider&rsquo;s cache, billed at a reduced rate.
+        </p>
+      )}
     </div>
   );
 }

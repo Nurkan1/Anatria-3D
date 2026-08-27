@@ -50,6 +50,7 @@ function detail(overrides: Partial<SessionDetail> = {}): SessionDetail {
         model: null,
         input_tokens: null,
         output_tokens: null,
+        cache_read_tokens: null,
       },
       {
         role: "assistant",
@@ -58,6 +59,7 @@ function detail(overrides: Partial<SessionDetail> = {}): SessionDetail {
         model: "claude-sonnet-5",
         input_tokens: 800,
         output_tokens: 400,
+        cache_read_tokens: null,
       },
     ],
     structures: ["left_ventricle", "ascending_aorta"],

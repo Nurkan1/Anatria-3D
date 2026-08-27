@@ -195,7 +195,18 @@ def _usage_of(event: AgentRunResultEvent) -> TokenUsage | None:
         )
         return None
 
-    return TokenUsage(input_tokens=input_tokens, output_tokens=output_tokens)
+    # Absent on older pydantic-ai and on providers that report no cache, and
+    # zero is the honest reading of both: nothing is known to have been served
+    # from a cache. Clamped to the input total because it is a subset of it by
+    # the library's own definition, and a figure larger than its parent would
+    # make the notice claim a turn cost less than nothing.
+    cached = _count(getattr(usage, "cache_read_tokens", None)) or 0
+
+    return TokenUsage(
+        input_tokens=input_tokens,
+        output_tokens=output_tokens,
+        cache_read_tokens=min(cached, input_tokens),
+    )
 
 
 def _count(value: object) -> int | None:

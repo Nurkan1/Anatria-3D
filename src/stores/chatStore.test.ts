@@ -71,10 +71,14 @@ describe("chatStore", () => {
   it("completes a turn and releases the pending slot", () => {
     store().startTurn("r1", "Ask");
     store().appendDelta("r1", "Answer");
-    store().finishTurn("r1", { input_tokens: 120, output_tokens: 45 });
+    store().finishTurn("r1", { input_tokens: 120, output_tokens: 45, cache_read_tokens: 0 });
 
     expect(store().messages[1]?.status).toBe("complete");
-    expect(store().messages[1]?.usage).toEqual({ input_tokens: 120, output_tokens: 45 });
+    expect(store().messages[1]?.usage).toEqual({
+      input_tokens: 120,
+      output_tokens: 45,
+      cache_read_tokens: 0,
+    });
     expect(store().pendingRequestId).toBeNull();
   });
 
@@ -161,6 +165,7 @@ describe("chatStore", () => {
         model: null,
         input_tokens: null,
         output_tokens: null,
+        cache_read_tokens: null,
       },
       {
         role: "assistant",
@@ -169,6 +174,7 @@ describe("chatStore", () => {
         model: "gpt-5.2",
         input_tokens: 120,
         output_tokens: 45,
+        cache_read_tokens: null,
       },
     ],
     structures: ["left_ventricle"],
@@ -194,7 +200,13 @@ describe("chatStore", () => {
     store().loadSession(reopened());
     const answer = store().messages[1]!;
     expect(answer.model).toBe("gpt-5.2");
-    expect(answer.usage).toEqual({ input_tokens: 120, output_tokens: 45 });
+    // The journal has no cache figure for this turn — it predates the column —
+    // and that reads as zero here rather than hiding the counts it does have.
+    expect(answer.usage).toEqual({
+      input_tokens: 120,
+      output_tokens: 45,
+      cache_read_tokens: 0,
+    });
   });
 
   it("attributes nothing to the reader's own question", () => {

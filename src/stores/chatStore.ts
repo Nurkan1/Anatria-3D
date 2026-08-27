@@ -218,6 +218,12 @@ export const useChatStore = create<ChatStore>()((set, get) => ({
               usage: {
                 input_tokens: message.input_tokens,
                 output_tokens: message.output_tokens,
+                // Null in the journal means the turn predates the column, and
+                // zero is how that reads downstream: nothing is *known* to
+                // have been cached. The alternative would be to leave the
+                // whole usage record off, which would hide counts the reader
+                // does have because of one they do not.
+                cache_read_tokens: message.cache_read_tokens ?? 0,
               },
             }
           : {}),

@@ -154,6 +154,33 @@ const SECTIONS: Section[] = [
           you want to pull back out. And <Ui>L</Ui> is the body's own left, not the
           left of your screen, read from the model itself.
         </Callout>
+        <Callout>
+          <strong>
+            <Ui>Study views</Ui> shows one structure from four angles at once.
+          </strong>{" "}
+          The button sits over the lower left of the viewport, and it works once
+          something is isolated. The panel you are already driving keeps the top
+          left corner and behaves exactly as it did — orbit, zoom, click, select.
+          The other three are fixed anatomical views of the same thing:{" "}
+          <Ui>A</Ui> anterior, <Ui>L</Ui> left lateral, <Ui>S</Ui> superior,
+          lettered at the middle of the screen.
+          <br />
+          <br />
+          They take their scale from the view you are driving rather than framing
+          themselves, so all four agree about how big the structure is. Move the
+          main camera closer and the other three come with you. They are for
+          looking, not for pointing at: the cursor belongs to the panel you drive,
+          and drawing a region round a selection is unavailable while the view is
+          split, because a lasso across four cameras would enclose things you
+          never drew round.
+          <br />
+          <br />
+          It asks for something isolated first, and that is a limit rather than a
+          preference. Four views of the whole atlas is four passes over three and
+          a half thousand structures, which no machine holds at a usable frame
+          rate. Four views of one isolated structure cost four times almost
+          nothing.
+        </Callout>
         <p>
           How you leave the view is how you find it. Which systems are on, how
           translucent they are, whether names are shown, what the space sits on and
@@ -790,11 +817,31 @@ const SECTIONS: Section[] = [
           provider's own dashboard is the authority.
         </p>
         <Callout>
-          A question costs far more than it looks like it should, and it is worth
-          knowing why: the assistant is sent the anatomy that is currently loaded so it
-          can only ever name structures that exist. Switching off systems you are not
-          studying makes questions cheaper as well as the model clearer.
+          <strong>What makes a question expensive is the conversation, not the
+          anatomy.</strong>{" "}
+          The assistant is told what is loaded so it can only ever name structures
+          that exist, but that description is a summary and a search tool rather
+          than a list — the whole atlas, all three and a half thousand structures,
+          costs about the same to describe as a single one. Switching off systems
+          you are not studying still makes the model clearer to read; it no longer
+          makes the answers meaningfully cheaper.
+          <br />
+          <br />
+          What does grow is the transcript. Every question re-sends the whole
+          conversation, so the tenth question in a session costs several times the
+          first. Starting a fresh session is the way to put that back — and the
+          notice above the message box tells you when it is worth doing.
         </Callout>
+        <p>
+          Providers charge less for context they recognise from a moment ago, and a
+          long conversation is exactly what they recognise. Where a provider says
+          how much of a question it served from its own cache, the{" "}
+          <Ui>Usage</Ui> tab reports it and the notice above the message box says so
+          too — a turn that looks alarming is often mostly re-read rather than
+          re-charged. Turns taken before this app recorded that figure are left
+          uncounted rather than guessed at, so the saving shown can only ever be an
+          understatement.
+        </p>
         <p>
           The record is local, like everything else, and it is a ledger rather than a
           list you curate. Deleting a conversation from <Ui>Study</Ui> removes what was

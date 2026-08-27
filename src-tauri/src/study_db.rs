@@ -26,7 +26,7 @@ use serde::{Deserialize, Serialize};
 /// Schema revision, tracked in SQLite's own `user_version` pragma. Bump it and
 /// add a step to `migrate` — never edit an existing step, or a database written
 /// by a released build becomes unreadable.
-const SCHEMA_VERSION: i32 = 8;
+const SCHEMA_VERSION: i32 = 9;
 
 /// Marker on an exported journal, so an unrelated `.json` is refused with a
 /// sentence rather than a parse error.
@@ -112,6 +112,14 @@ pub struct StoredMessage {
     pub input_tokens: Option<i64>,
     #[serde(default)]
     pub output_tokens: Option<i64>,
+    /// How much of `input_tokens` the provider served from its prompt cache.
+    ///
+    /// `None` on every turn recorded before the journal knew to ask, which is
+    /// not the same as zero and is why this is an option rather than a
+    /// defaulted integer: a reader looking at last month must not be told its
+    /// answers were all charged at full rate when the truth is nobody counted.
+    #[serde(default)]
+    pub cache_read_tokens: Option<i64>,
 }
 
 #[derive(Debug, Serialize)]
@@ -428,6 +436,9 @@ pub struct TurnInput {
     pub input_tokens: Option<i64>,
     #[serde(default)]
     pub output_tokens: Option<i64>,
+    /// How much of `input_tokens` came back out of the provider's cache.
+    #[serde(default)]
+    pub cache_read_tokens: Option<i64>,
     /// The case this session is a visit to, if any.
     ///
     /// `#[serde(default)]` is not decoration: a new field on an existing event
@@ -606,8 +617,8 @@ impl StudyDb {
                 tx.execute(
                     "INSERT INTO study_message
                          (session_id, role, content, created_at,
-                          model, input_tokens, output_tokens)
-                     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
+                          model, input_tokens, output_tokens, cache_read_tokens)
+                     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
                     params![
                         id,
                         role,
@@ -616,6 +627,7 @@ impl StudyDb {
                         answered.then(|| turn.model.clone()).flatten(),
                         answered.then_some(turn.input_tokens).flatten(),
                         answered.then_some(turn.output_tokens).flatten(),
+                        answered.then_some(turn.cache_read_tokens).flatten(),
                     ],
                 )?;
             }
@@ -727,7 +739,8 @@ impl StudyDb {
             };
 
             let mut stmt = conn.prepare(
-                "SELECT role, content, created_at, model, input_tokens, output_tokens
+                "SELECT role, content, created_at, model, input_tokens, output_tokens,
+                        cache_read_tokens
                  FROM study_message WHERE session_id = ?1 ORDER BY id",
             )?;
             let messages = stmt
@@ -739,6 +752,7 @@ impl StudyDb {
                         model: row.get(3)?,
                         input_tokens: row.get(4)?,
                         output_tokens: row.get(5)?,
+                        cache_read_tokens: row.get(6)?,
                     })
                 })?
                 .collect::<rusqlite::Result<Vec<_>>>()?;
@@ -1270,7 +1284,8 @@ impl StudyDb {
 
             let mut sessions = rows;
             let mut messages = conn.prepare(
-                "SELECT role, content, created_at, model, input_tokens, output_tokens
+                "SELECT role, content, created_at, model, input_tokens, output_tokens,
+                        cache_read_tokens
                  FROM study_message WHERE session_id = ?1 ORDER BY id",
             )?;
             let mut structures =
@@ -1285,6 +1300,7 @@ impl StudyDb {
                             model: row.get(3)?,
                             input_tokens: row.get(4)?,
                             output_tokens: row.get(5)?,
+                            cache_read_tokens: row.get(6)?,
                         })
                     })?
                     .collect::<rusqlite::Result<Vec<_>>>()?;
@@ -1802,14 +1818,16 @@ impl StudyDb {
 
             conn.execute(
                 "INSERT INTO token_usage
-                     (session_id, provider, model, input_tokens, output_tokens, created_at)
-                 VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
+                     (session_id, provider, model, input_tokens, output_tokens,
+                      cache_read_tokens, created_at)
+                 VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
                 params![
                     session_id,
                     usage.provider.trim(),
                     usage.model.trim(),
                     usage.input_tokens,
                     usage.output_tokens,
+                    usage.cache_read_tokens,
                     now_ms(),
                 ],
             )?;
@@ -1837,6 +1855,12 @@ impl StudyDb {
                         model,
                         SUM(input_tokens),
                         SUM(output_tokens),
+                        -- Rows written before the column existed are NULL, and
+                        -- a NULL anywhere in SUM does not poison it — but a day
+                        -- with no counted rows at all sums to NULL, so the
+                        -- coalesce is what keeps that day at zero instead of
+                        -- failing to decode into an i64.
+                        COALESCE(SUM(cache_read_tokens), 0),
                         COUNT(*)
                  FROM token_usage
                  WHERE day >= date('now', 'localtime', ?1)
@@ -1853,7 +1877,8 @@ impl StudyDb {
                     model: row.get(2)?,
                     input_tokens: row.get(3)?,
                     output_tokens: row.get(4)?,
-                    turns: row.get(5)?,
+                    cache_read_tokens: row.get(5)?,
+                    turns: row.get(6)?,
                 })
             })?;
             rows.collect::<rusqlite::Result<Vec<_>>>().map_err(Into::into)
@@ -1871,6 +1896,9 @@ pub struct UsageInput {
     pub model: String,
     pub input_tokens: i64,
     pub output_tokens: i64,
+    /// The part of `input_tokens` the provider served from its own cache.
+    #[serde(default)]
+    pub cache_read_tokens: i64,
 }
 
 /// One local day's spend on one model.
@@ -1882,6 +1910,11 @@ pub struct UsageBucket {
     pub model: String,
     pub input_tokens: i64,
     pub output_tokens: i64,
+    /// Of `input_tokens`, how much was served from the provider's cache.
+    ///
+    /// Summed as zero where the rows predate the column, which understates the
+    /// saving for old days rather than inventing one. The panel says so.
+    pub cache_read_tokens: i64,
     /// Turns behind these numbers, so an average per question is available.
     pub turns: i64,
 }
@@ -2190,6 +2223,29 @@ fn migrate(conn: &mut Connection) -> rusqlite::Result<()> {
         tx.execute_batch("ALTER TABLE case_file ADD COLUMN revealed_at INTEGER;")?;
     }
 
+    if version < 9 {
+        // What a turn actually paid for, as opposed to what it sent.
+        //
+        // Every question re-sends the whole conversation, so the input count
+        // grows with the transcript and a long session looks alarming. But a
+        // long session is also the one a provider caches best, and cache reads
+        // are billed at a fraction — OpenAI caches any prompt over 1,024
+        // tokens without being asked. Recording only the inclusive total meant
+        // the application overstated the bill exactly where it warned about it.
+        //
+        // Nullable, and null means "not counted", not "none". Every turn taken
+        // before this column existed is unknowable, and writing a zero there
+        // would be inventing a fact about the reader's own history.
+        //
+        // On the message as well as in `token_usage`, for the same reason the
+        // other two are: the panel reads the daily rollup, and a reopened
+        // conversation reads the message.
+        tx.execute_batch(
+            "ALTER TABLE study_message ADD COLUMN cache_read_tokens INTEGER;
+             ALTER TABLE token_usage ADD COLUMN cache_read_tokens INTEGER;",
+        )?;
+    }
+
     tx.pragma_update(None, "user_version", SCHEMA_VERSION)?;
     tx.commit()
 }
@@ -2403,6 +2459,7 @@ mod tests {
             model: None,
             input_tokens: None,
             output_tokens: None,
+            cache_read_tokens: None,
             case_id: None,
         }
     }
@@ -3073,7 +3130,9 @@ mod tests {
         // the thing it is.
         conn.execute_batch(
             "DROP TABLE case_finding;
-             ALTER TABLE case_file DROP COLUMN revealed_at;",
+             ALTER TABLE case_file DROP COLUMN revealed_at;
+             ALTER TABLE study_message DROP COLUMN cache_read_tokens;
+             ALTER TABLE token_usage DROP COLUMN cache_read_tokens;",
         )
         .unwrap();
         conn.pragma_update(None, "user_version", 6).unwrap();
@@ -3086,6 +3145,84 @@ mod tests {
         assert_eq!(cases, 1, "the existing case survives the upgrade");
         conn.query_row("SELECT COUNT(*) FROM case_finding", [], |_| Ok(()))
             .expect("case_finding should exist");
+    }
+
+    /// A journal written before the cache column keeps every turn it recorded,
+    /// and those turns stay honestly uncounted rather than being told they paid
+    /// full rate.
+    #[test]
+    fn a_v8_journal_gains_the_cache_column_without_inventing_history() {
+        let mut conn = Connection::open_in_memory().unwrap();
+        migrate(&mut conn).unwrap();
+
+        conn.execute_batch(
+            "INSERT INTO study_session
+                 (id, kind, title, profile, language, created_at, updated_at)
+             VALUES ('s1', 'tutor', 'Older question', 'student', 'es', 1, 1);
+             INSERT INTO study_message
+                 (session_id, role, content, created_at, model,
+                  input_tokens, output_tokens)
+             VALUES ('s1', 'assistant', 'An older answer', 1, 'gpt-5', 900, 100);
+             INSERT INTO token_usage
+                 (session_id, provider, model, input_tokens, output_tokens, created_at)
+             VALUES ('s1', 'openai', 'gpt-5', 900, 100, 1);",
+        )
+        .unwrap();
+
+        // Wind the shape back with the stamp, the same way the v6 test does.
+        conn.execute_batch(
+            "ALTER TABLE study_message DROP COLUMN cache_read_tokens;
+             ALTER TABLE token_usage DROP COLUMN cache_read_tokens;",
+        )
+        .unwrap();
+        conn.pragma_update(None, "user_version", 8).unwrap();
+
+        migrate(&mut conn).expect("a v8 journal must migrate");
+
+        let cached: Option<i64> = conn
+            .query_row(
+                "SELECT cache_read_tokens FROM study_message WHERE session_id = 's1'",
+                [],
+                |row| row.get(0),
+            )
+            .unwrap();
+        assert_eq!(
+            cached, None,
+            "a turn recorded before the column must read as uncounted, not as zero cached"
+        );
+
+        let (input, output): (i64, i64) = conn
+            .query_row(
+                "SELECT input_tokens, output_tokens FROM study_message WHERE session_id = 's1'",
+                [],
+                |row| Ok((row.get(0)?, row.get(1)?)),
+            )
+            .unwrap();
+        assert_eq!((input, output), (900, 100), "the counts it did have survive");
+    }
+
+    /// The daily rollup has to keep working across the boundary: days made of
+    /// rows that predate the column, and days made of rows that carry it.
+    #[test]
+    fn usage_sums_across_rows_that_predate_the_cache_column() {
+        let db = StudyDb::in_memory();
+        db.with(|conn| {
+            conn.execute_batch(
+                "INSERT INTO token_usage
+                     (provider, model, input_tokens, output_tokens, cache_read_tokens, created_at)
+                 VALUES ('openai', 'gpt-5', 1000, 100, NULL, strftime('%s','now') * 1000);",
+            )?;
+            Ok(())
+        })
+        .unwrap();
+        db.record_usage(spend(None, "gpt-5", 2000, 200)).unwrap();
+
+        let buckets = db.usage(7).unwrap();
+        let today: i64 = buckets.iter().map(|b| b.input_tokens).sum();
+        let cached: i64 = buckets.iter().map(|b| b.cache_read_tokens).sum();
+
+        assert_eq!(today, 3000, "an uncounted row still contributes its input");
+        assert_eq!(cached, 0, "and contributes nothing it never recorded");
     }
 
     #[test]
@@ -3511,6 +3648,7 @@ mod tests {
             model: model.into(),
             input_tokens: input,
             output_tokens: output,
+            cache_read_tokens: 0,
         }
     }
 

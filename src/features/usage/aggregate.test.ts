@@ -17,6 +17,7 @@ function bucket(
     model,
     input_tokens: input,
     output_tokens: output,
+    cache_read_tokens: 0,
     turns,
   };
 }
@@ -152,10 +153,23 @@ describe("totals", () => {
   it("adds the window up", () => {
     expect(
       totals([bucket("2026-08-10", "flash", 100, 50), bucket("2026-08-12", "pro", 7, 3)]),
-    ).toEqual({ input: 107, output: 53, total: 160, turns: 2 });
+    ).toEqual({ input: 107, output: 53, cached: 0, total: 160, turns: 2 });
+  });
+
+  it("adds up what the provider served from its cache", () => {
+    const cached = (day: string, model: string, input: number, hit: number) => ({
+      ...bucket(day, model, input, 10),
+      cache_read_tokens: hit,
+    });
+
+    // A day that predates the column contributes nothing rather than a guess,
+    // so the figure can only understate the saving.
+    expect(
+      totals([cached("2026-08-10", "flash", 900, 600), bucket("2026-08-12", "pro", 100, 10)]),
+    ).toMatchObject({ input: 1_000, cached: 600 });
   });
 
   it("is zero for an empty window", () => {
-    expect(totals([])).toEqual({ input: 0, output: 0, total: 0, turns: 0 });
+    expect(totals([])).toEqual({ input: 0, output: 0, cached: 0, total: 0, turns: 0 });
   });
 });

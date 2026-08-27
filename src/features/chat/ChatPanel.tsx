@@ -113,7 +113,12 @@ function CostNotice({ messages, mode }: { messages: ChatMessage[]; mode: Session
   return (
     <p className="mx-3 mb-2 rounded border border-slate-700/70 bg-slate-800/40 px-2 py-1 text-[10px] leading-snug text-slate-400">
       Each question re-sends this whole conversation, so answers cost more the
-      longer it runs — this one was {formatTokens(totalTokens(last!))} tokens.{" "}
+      longer it runs — this one sent {formatTokens(totalTokens(last!))} tokens
+      {last!.cache_read_tokens > 0 && (
+        <>, {formatTokens(last!.cache_read_tokens)} of them re-read from the
+        provider&rsquo;s cache at a reduced rate</>
+      )}
+      .{" "}
       {mode === "case" && patient
         ? "Starting a new visit keeps this patient's record and their marked complaints, and drops the transcript."
         : "Starting a new session drops the transcript."}
@@ -648,6 +653,7 @@ export function ChatPanel() {
         model: turn.model ?? null,
         input_tokens: turn.usage?.input_tokens ?? null,
         output_tokens: turn.usage?.output_tokens ?? null,
+        cache_read_tokens: turn.usage?.cache_read_tokens ?? null,
         // Which virtual patient this conversation is a visit to, if any. Read
         // by the journal only when the session row is created: the visit
         // number is fixed then, and a conversation cannot change case halfway
@@ -700,6 +706,7 @@ export function ChatPanel() {
         model,
         input_tokens: usage.input_tokens,
         output_tokens: usage.output_tokens,
+        cache_read_tokens: usage.cache_read_tokens,
       });
     },
     [],

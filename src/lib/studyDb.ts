@@ -57,6 +57,14 @@ export interface StoredMessage {
   model: string | null;
   input_tokens: number | null;
   output_tokens: number | null;
+  /**
+   * How much of `input_tokens` the provider served from its own prompt cache.
+   *
+   * Null means nobody counted, which is every turn taken before the journal
+   * learned to ask — not the same as zero, and not backfilled for the same
+   * reason `model` is not.
+   */
+  cache_read_tokens: number | null;
 }
 
 export interface SessionDetail {
@@ -96,6 +104,7 @@ export interface TurnInput {
   model?: string | null;
   input_tokens?: number | null;
   output_tokens?: number | null;
+  cache_read_tokens?: number | null;
   /**
    * The case this session is a visit to. Read only when the session is first
    * created — a conversation cannot change which case it belongs to halfway
@@ -408,6 +417,8 @@ export interface UsageInput {
   model: string;
   input_tokens: number;
   output_tokens: number;
+  /** The part of `input_tokens` that came back out of the provider's cache. */
+  cache_read_tokens: number;
 }
 
 /** One local day's spend on one model. */
@@ -418,6 +429,13 @@ export interface UsageBucket {
   model: string;
   input_tokens: number;
   output_tokens: number;
+  /**
+   * Of `input_tokens`, how much the provider served from its cache.
+   *
+   * Zero for any day whose rows predate the column, which understates the
+   * saving rather than inventing one.
+   */
+  cache_read_tokens: number;
   /** Turns behind these numbers. */
   turns: number;
 }

@@ -47,6 +47,16 @@ export interface ModelShare {
 export interface UsageTotals {
   input: number;
   output: number;
+  /**
+   * Of `input`, how much the provider served from its own prompt cache.
+   *
+   * Carried separately rather than subtracted because both numbers are true
+   * and they answer different questions: how much context the reader's
+   * questions needed, and how much of it was charged at full rate. Days whose
+   * rows predate the column contribute zero, which understates the saving
+   * rather than inventing one.
+   */
+  cached: number;
   total: number;
   turns: number;
 }
@@ -183,9 +193,10 @@ export function totals(buckets: UsageBucket[]): UsageTotals {
     (sum, bucket) => ({
       input: sum.input + bucket.input_tokens,
       output: sum.output + bucket.output_tokens,
+      cached: sum.cached + bucket.cache_read_tokens,
       total: sum.total + totalTokens(bucket),
       turns: sum.turns + bucket.turns,
     }),
-    { input: 0, output: 0, total: 0, turns: 0 },
+    { input: 0, output: 0, cached: 0, total: 0, turns: 0 },
   );
 }
