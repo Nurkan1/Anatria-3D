@@ -127,8 +127,15 @@ export function PointerRouting({ splitting }: { splitting: boolean }) {
 /** The three auxiliary views, in the order they are laid out. */
 const AUXILIARY: AnatomicalView[] = ["anterior", "left", "superior"];
 
-/** Headroom around the framed set, so it does not touch the panel edges. */
-const FRAMING = 1.35;
+/**
+ * The least headroom the focused set is ever given, as a multiple of its radius.
+ *
+ * A floor rather than the framing rule. The panels take their scale from the
+ * main view, so a reader who has zoomed the main camera inside the structure
+ * would otherwise get three panels cropped to the same sliver. Below this they
+ * stop following the main view down.
+ */
+const MIN_HEADROOM = 1.15;
 
 /** How often the framing is recomputed, in milliseconds. */
 const REFRAME_MS = 400;
@@ -249,7 +256,7 @@ export function StudyViews() {
     // passes together instead of overwriting each other.
     renderer.info.reset();
 
-    const bounds = reframe(graph);
+    const bounds = reframe(graph, camera);
     if (!bounds) {
       // Nothing visible to frame — mid-load, or everything hidden. Draw the
       // main view across the whole canvas rather than returning: this callback
@@ -289,7 +296,7 @@ export function StudyViews() {
    * imperceptible for a change the reader makes by clicking, and it also
    * catches the explode animation settling without watching for it.
    */
-  function reframe(graph: THREE.Scene): THREE.Box3 | null {
+  function reframe(graph: THREE.Scene, main: THREE.Camera): THREE.Box3 | null {
     const now = performance.now();
     const due = now - framed.current > REFRAME_MS;
     const bounds = focusBounds(graph);
@@ -300,8 +307,26 @@ export function StudyViews() {
 
     const centre = bounds.getCenter(new THREE.Vector3());
     const radius = Math.max(bounds.getBoundingSphere(new THREE.Sphere()).radius, 1e-4);
-    const extent = radius * FRAMING;
     const aspect = size.width / size.height;
+
+    /**
+     * How much world the panels show, taken from the main view rather than
+     * from the structure.
+     *
+     * Framing each panel to its contents was the first attempt and it broke the
+     * comparison: selecting something small — an optic chiasm — filled all three
+     * panels with a pale shape at a scale nothing else on screen shared, and the
+     * reader lost every reference they had. Four panels of one thing are only
+     * worth having if the four agree about how big it is.
+     *
+     * So the panels show the same volume the main camera does, centred on what
+     * has the reader's attention. The main view stays the ruler; the auxiliary
+     * views are three more angles on it, not three separate framings.
+     */
+    const perspective = main as THREE.PerspectiveCamera;
+    const fov = typeof perspective.fov === "number" ? perspective.fov : 45;
+    const matched = main.position.distanceTo(centre) * Math.tan((fov * Math.PI) / 360);
+    const extent = Math.max(matched, radius * MIN_HEADROOM);
 
     // Read off the atlas rather than assumed, the same way the viewpoint bar
     // does it: which end of X is the body's left depends on the export, and a
