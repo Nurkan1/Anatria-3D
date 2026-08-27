@@ -1,4 +1,5 @@
 import { GLASS_OPACITY, useSceneStore } from "@/stores/sceneStore";
+import { useStudyViewsStore } from "@/stores/studyViewsStore";
 
 /**
  * How the model is drawn, as opposed to what is in it.
@@ -36,6 +37,8 @@ export function ViewControls() {
   const clearGhosting = useSceneStore((s) => s.clearGhosting);
   const resetView = useSceneStore((s) => s.resetView);
   const manifest = useSceneStore((s) => s.manifest);
+  const studyViews = useStudyViewsStore((s) => s.wanted);
+  const setStudyViews = useStudyViewsStore((s) => s.setWanted);
 
   // Every system at the glass setting, which is what the button both makes and
   // undoes. Derived rather than stored: a flag could disagree with the
@@ -114,6 +117,35 @@ export function ViewControls() {
         className="rounded border border-slate-700 px-2 py-1 text-xs text-slate-400"
       >
         Reset view
+      </button>
+      {/*
+        Here rather than floating over the viewport, because it answers the
+        same question the buttons beside it do: how the model is drawn.
+
+        Only offered once something is isolated, and that is a limit rather than
+        a preference. Four panels of the whole atlas is four passes over 3,478
+        meshes — about fourteen thousand draw calls, which holds no frame rate
+        anywhere. One isolated structure is one draw call, so four panels of it
+        cost four. The gate is the whole reason the mode is affordable, which is
+        why it is enforced here and not written down somewhere as advice.
+      */}
+      <button
+        type="button"
+        onClick={() => setStudyViews(!studyViews)}
+        disabled={isolatedOrganIds === null}
+        aria-pressed={studyViews}
+        title={
+          isolatedOrganIds === null
+            ? "Isolate a structure first — four views of the whole atlas will not hold a frame rate"
+            : "See what is isolated from three fixed angles at once, beside the view you drive"
+        }
+        className={`rounded border px-2 py-1 text-xs disabled:opacity-40 ${
+          studyViews
+            ? "border-sky-500 bg-sky-500/10 text-sky-300"
+            : "border-slate-700 text-slate-400"
+        }`}
+      >
+        Study views
       </button>
     </section>
   );

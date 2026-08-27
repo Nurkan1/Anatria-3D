@@ -5,6 +5,7 @@ import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { loadManifest } from "@/lib/manifest";
 import type { AnatomyManifest } from "@/lib/schemas";
 import { organLabel, organSubtitle, useSceneStore } from "@/stores/sceneStore";
+import { useStudyViewsStore } from "@/stores/studyViewsStore";
 import { readStoredView, sanitiseViewPreferences } from "@/stores/viewPreferences";
 
 import { AnatomyScene } from "./AnatomyScene";
@@ -77,12 +78,14 @@ export function AnatomyViewer() {
   const genderModel = useSceneStore((s) => s.genderModel);
   const background = useSceneStore((s) => s.background);
   const restoreView = useSceneStore((s) => s.restoreView);
-  // Experimental, development only, and gated on isolation — see StudyViews for
-  // the measurement that makes the gate the whole performance strategy.
+  // Asked for in the left panel, allowed only while something is isolated —
+  // see `StudyViews` for the measurement that makes that gate the whole
+  // performance strategy. Enforced here as well as there, because a mode left
+  // on when the reader clears the isolation must switch itself off rather than
+  // start drawing the atlas four times.
   const isolatedOrganIds = useSceneStore((s) => s.isolatedOrganIds);
-  const [studyViews, setStudyViews] = useState(false);
-  const canSplit = (isolatedOrganIds?.length ?? 0) > 0;
-  const splitting = studyViews && canSplit;
+  const studyViews = useStudyViewsStore((s) => s.wanted);
+  const splitting = studyViews && (isolatedOrganIds?.length ?? 0) > 0;
   const [manifest, setLocalManifest] = useState<AnatomyManifest | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [menu, setMenu] = useState<MenuTarget | null>(null);
@@ -229,41 +232,27 @@ export function AnatomyViewer() {
         {/* Always mounted, so it can put the pointer mapping back however the
             store was left. `StudyViews` mounts and unmounts with the mode; this
             does not, and that is the point. */}
-        {import.meta.env.DEV && <PointerRouting splitting={splitting} />}
-        {import.meta.env.DEV && splitting && <StudyViews />}
+        <PointerRouting splitting={splitting} />
+        {splitting && <StudyViews />}
       </Canvas>
-      {/* Both project against a camera that owns the whole canvas, so in split
-          view they point at the wrong place. Withdrawn rather than corrected
-          for now: a leader line confidently naming the wrong structure is the
-          worst thing an anatomy atlas can put on screen, and worse than no
-          label at all. Phase 3 gives them the active panel's rectangle. */}
+      {/* The lasso projects against a camera that owns the whole canvas and has
+          no notion of a panel, so it sits the split out. Drawing a region over
+          four viewports is a question with no obvious answer, and guessing at
+          one would select structures the reader never enclosed. */}
       {!splitting && <LassoSelect container={container} />}
-      {!splitting && <LabelOverlay />}
-      {import.meta.env.DEV && splitting && <StudyViewsFrame />}
-      {/* One column for the experiment's controls, sitting clear of the panel
-          toggle above it and the controls hint below it. Both of those are
-          production furniture and neither should have to move for an
-          instrument that will not ship. */}
+      {/* Labels do not sit it out. "Label what I select" is a setting the
+          reader turned on, and quietly ignoring it in one mode is a small
+          betrayal of it. They project into the interactive panel, which owns
+          the top-left quarter of the canvas and therefore shares its origin —
+          so halving the extent is the whole correction. */}
+      <LabelOverlay fraction={splitting ? 0.5 : 1} />
+      {splitting && <StudyViewsFrame />}
+      {/* The measuring instrument, and only that: the mode it was built to
+          judge now lives in the left panel beside the other view controls.
+          Vite strips this branch from a production build. */}
       {import.meta.env.DEV && (
-        <div className="absolute bottom-32 left-3 z-20 flex flex-col items-start gap-1.5">
+        <div className="absolute bottom-32 left-3 z-20">
           <RenderStatsPanel />
-          <button
-            type="button"
-            onClick={() => setStudyViews((on) => !on)}
-            disabled={!canSplit}
-            title={
-              canSplit
-                ? "Four anatomical viewports of the isolated set"
-                : "Isolate a structure first — four views of the whole atlas is 14,000 draw calls"
-            }
-            className={`rounded border px-2 py-1 font-mono text-[10px] ${
-              splitting
-                ? "border-sky-500 bg-sky-500/10 text-sky-300"
-                : "border-slate-700 bg-slate-950/70 text-slate-400 disabled:opacity-40"
-            }`}
-          >
-            study views {splitting ? "on" : "off"}
-          </button>
         </div>
       )}
       <DepthProbe />
