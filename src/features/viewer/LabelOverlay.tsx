@@ -30,14 +30,30 @@ import { getViewerHandle, projectToScreen, structurePosition } from "./viewerBri
 const MAX_LABELS = 40;
 
 /**
- * How much of the canvas the camera these labels follow is drawing into.
+ * The part of the canvas the camera these labels follow is drawing into, as
+ * fractions of the container.
  *
- * `1` when it owns the whole thing, `0.5` in the split study view, where it
- * owns the top-left quarter. Only a fraction is needed rather than a full
- * rectangle because that panel shares the container's origin — if the
- * interactive panel ever moves away from the top left, this becomes a rect.
+ * Width and height are separate because the split view no longer keeps the
+ * driven panel square: closing a view gives it half the width at full height,
+ * and a single fraction would have squashed the labels onto the wrong half of
+ * the wrong axis.
+ *
+ * `left` and `top` are read but expected to be zero — `panelLayout` pins the
+ * driven panel to the top-left corner in every arrangement, which is what lets
+ * the projection below share the container's origin. The check is here so that
+ * a future layout which moves it fails loudly instead of quietly labelling the
+ * wrong place.
  */
-export function LabelOverlay({ fraction = 1 }: { fraction?: number } = {}) {
+export interface LabelPanel {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+}
+
+export const FULL_CANVAS: LabelPanel = { left: 0, top: 0, width: 1, height: 1 };
+
+export function LabelOverlay({ panel = FULL_CANVAS }: { panel?: LabelPanel } = {}) {
   const labelsVisible = useSceneStore((s) => s.labelsVisible);
   const organs = useSceneStore((s) => s.organs);
   const selectedOrganIds = useSceneStore((s) => s.selectedOrganIds);
@@ -72,8 +88,13 @@ export function LabelOverlay({ fraction = 1 }: { fraction?: number } = {}) {
       const host = container.current;
       if (!handle || !host) return;
 
-      const width = host.clientWidth * fraction;
-      const height = host.clientHeight * fraction;
+      if (panel.left !== 0 || panel.top !== 0) {
+        // Loud rather than subtly wrong: every leader line below is measured
+        // from the container's own origin.
+        throw new Error("LabelOverlay expects the driven panel at the top left");
+      }
+      const width = host.clientWidth * panel.width;
+      const height = host.clientHeight * panel.height;
 
       const anchors: LabelAnchor[] = targets.map((target) => {
         // Where the structure was drawn, not where the body keeps it: a leader
@@ -134,11 +155,11 @@ export function LabelOverlay({ fraction = 1 }: { fraction?: number } = {}) {
 
     frame = requestAnimationFrame(draw);
     return () => cancelAnimationFrame(frame);
-    // `fraction` is in here because the loop closes over it: without it the
-    // labels would keep laying themselves out for a full canvas after the view
-    // was split, and land in the wrong quarter until the targets happened to
-    // change.
-  }, [targets, fraction]);
+    // The panel is in here because the loop closes over it: without it the
+    // labels would keep laying themselves out for the previous layout after a
+    // view was closed, and land in the wrong place until the targets happened
+    // to change.
+  }, [targets, panel.left, panel.top, panel.width, panel.height]);
 
   // `targets` already carries the setting — see `labelTargets`, which keeps a
   // single selected structure named whatever the box says.

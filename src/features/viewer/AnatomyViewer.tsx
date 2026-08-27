@@ -22,10 +22,11 @@ import { DepthProbe } from "./DepthProbe";
 import { ExplodeBar } from "./ExplodeBar";
 import { IlluminationBar } from "./IlluminationBar";
 import { IsolationBar } from "./IsolationBar";
-import { LabelOverlay } from "./LabelOverlay";
+import { FULL_CANVAS, LabelOverlay } from "./LabelOverlay";
 import { RenderProbe, RenderStatsPanel } from "./RenderStats";
 import { PointerRouting, StudyViews } from "./StudyViews";
-import { StudyViewsFrame } from "./StudyViewsFrame";
+import { ClosedViews, StudyViewsFrame } from "./StudyViewsFrame";
+import { domRect, mainRect } from "./studyLayout";
 import { StudyViewsToggle } from "./StudyViewsToggle";
 import { LassoSelect } from "./LassoSelect";
 import { PathwayBar } from "./PathwayBar";
@@ -86,6 +87,7 @@ export function AnatomyViewer() {
   // start drawing the atlas four times.
   const isolatedOrganIds = useSceneStore((s) => s.isolatedOrganIds);
   const studyViews = useStudyViewsStore((s) => s.wanted);
+  const activeViews = useStudyViewsStore((s) => s.active);
   const splitting = studyViews && (isolatedOrganIds?.length ?? 0) > 0;
   const [manifest, setLocalManifest] = useState<AnatomyManifest | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -246,7 +248,7 @@ export function AnatomyViewer() {
           betrayal of it. They project into the interactive panel, which owns
           the top-left quarter of the canvas and therefore shares its origin —
           so halving the extent is the whole correction. */}
-      <LabelOverlay fraction={splitting ? 0.5 : 1} />
+      <LabelOverlay panel={splitting ? domRect(mainRect(activeViews)) : FULL_CANVAS} />
       {splitting && <StudyViewsFrame />}
       {/* One column, high enough that the controls hint can open underneath it
           without touching it. That clearance is the reason for the exact
@@ -257,6 +259,11 @@ export function AnatomyViewer() {
           production build. The switch ships. */}
       <div className="pointer-events-none absolute bottom-40 left-3 z-20 flex flex-col items-start gap-1.5">
         {import.meta.env.DEV && <RenderStatsPanel />}
+        {/* Above the switch rather than below it, so the letters sit between
+            the mode and the panels they belong to instead of between the mode
+            and the controls hint underneath. Renders nothing unless a view is
+            actually closed. */}
+        {splitting && <ClosedViews />}
         <StudyViewsToggle />
       </div>
       <DepthProbe />

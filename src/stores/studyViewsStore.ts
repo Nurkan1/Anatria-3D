@@ -1,5 +1,7 @@
 import { create } from "zustand";
 
+import type { AuxiliaryView } from "@/features/viewer/studyLayout";
+
 /**
  * Whether the viewport is split into four anatomical panels.
  *
@@ -23,13 +25,36 @@ import { create } from "zustand";
  * "on" would come back as a switch that does nothing.
  */
 
+/** Every auxiliary view, in the order they are laid out when all are on. */
+export const AUXILIARY_VIEWS: AuxiliaryView[] = ["anterior", "left", "superior"];
+
 interface StudyViewsStore {
   /** What the reader asked for. Not the same as what is on screen. */
   wanted: boolean;
   setWanted: (wanted: boolean) => void;
+  /**
+   * Which auxiliary views are switched on, in layout order.
+   *
+   * A list rather than a set of flags, because the order is part of the answer:
+   * the panels are laid out in it, and switching one off and on again must not
+   * shuffle the two that never moved.
+   */
+  active: AuxiliaryView[];
+  toggleView: (view: AuxiliaryView) => void;
 }
 
 export const useStudyViewsStore = create<StudyViewsStore>()((set) => ({
   wanted: false,
   setWanted: (wanted) => set({ wanted }),
+  active: [...AUXILIARY_VIEWS],
+  toggleView: (view) =>
+    set((state) => ({
+      active: state.active.includes(view)
+        ? state.active.filter((each) => each !== view)
+        : // Reinserted where it belongs rather than appended, so a view that
+          // comes back lands in the panel it left rather than at the end.
+          AUXILIARY_VIEWS.filter(
+            (each) => each === view || state.active.includes(each),
+          ),
+    })),
 }));

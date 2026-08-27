@@ -4,6 +4,8 @@ import * as THREE from "three";
 
 import { lateralSign, viewDirection, type AnatomicalView } from "./cameraViews";
 import { useSceneStore } from "@/stores/sceneStore";
+import { useStudyViewsStore } from "@/stores/studyViewsStore";
+import { domRect, MAIN, mainRect, panelLayout, type PanelRect } from "./studyLayout";
 
 import { getViewerHandle } from "./viewerBridge";
 
@@ -70,12 +72,18 @@ function fullCanvasCompute(
 }
 
 /**
- * The same, for a camera that owns the top-left quarter of the canvas.
+ * The same, for a camera that owns only part of the canvas.
  *
- * Outside that quarter the raycaster gets a negative far plane, which is the
+ * Which part is not assumed. It is read from `mainRect`, the same function the
+ * render loop lays the panels out with, so a layout that changes because the
+ * reader switched a view off cannot leave the pointer mapped to where the panel
+ * used to be. That divergence is the whole reason the layout is computed in one
+ * place, and this is the call site that would have suffered from it.
+ *
+ * Outside the panel the raycaster gets a negative far plane, which is the
  * cheapest guaranteed miss: every candidate is further away than that, so the
- * three read-only panels report nothing rather than reporting whatever the
- * main camera would have hit behind them.
+ * read-only panels report nothing rather than reporting whatever the main
+ * camera would have hit behind them.
  */
 function quadrantCompute(
   event: { offsetX: number; offsetY: number },
@@ -86,13 +94,18 @@ function quadrantCompute(
     size: { width: number; height: number };
   },
 ): void {
-  const half = { width: state.size.width / 2, height: state.size.height / 2 };
-  const inside = event.offsetX < half.width && event.offsetY < half.height;
+  const panel = domRect(mainRect(useStudyViewsStore.getState().active));
+  const box = {
+    left: panel.left * state.size.width,
+    top: panel.top * state.size.height,
+    width: panel.width * state.size.width,
+    height: panel.height * state.size.height,
+  };
+  const x = event.offsetX - box.left;
+  const y = event.offsetY - box.top;
+  const inside = x >= 0 && y >= 0 && x < box.width && y < box.height;
 
-  state.pointer.set(
-    (event.offsetX / half.width) * 2 - 1,
-    -(event.offsetY / half.height) * 2 + 1,
-  );
+  state.pointer.set((x / box.width) * 2 - 1, -(y / box.height) * 2 + 1);
   state.raycaster.setFromCamera(state.pointer, state.camera);
   state.raycaster.far = inside ? Infinity : -1;
 }
@@ -124,6 +137,22 @@ export function PointerRouting({ splitting }: { splitting: boolean }) {
   return null;
 }
 
+/**
+ * Point a perspective camera at a panel of the given shape.
+ *
+ * Guarded on the value because `updateProjectionMatrix` is not free and this
+ * runs inside the render loop: the aspect only changes when the window is
+ * resized or a view is switched, and doing the work on every frame of a still
+ * scene would be paying for nothing sixty times a second.
+ */
+function matchAspect(camera: THREE.Camera, aspect: number): void {
+  const perspective = camera as THREE.PerspectiveCamera;
+  if (!perspective.isPerspectiveCamera) return;
+  if (Math.abs(perspective.aspect - aspect) < 1e-6) return;
+  perspective.aspect = aspect;
+  perspective.updateProjectionMatrix();
+}
+
 /** The three auxiliary views, in the order they are laid out. */
 const AUXILIARY: AnatomicalView[] = ["anterior", "left", "superior"];
 
@@ -139,21 +168,6 @@ const MIN_HEADROOM = 1.15;
 
 /** How often the framing is recomputed, in milliseconds. */
 const REFRAME_MS = 400;
-
-/**
- * Where each panel sits, as fractions of the canvas.
- *
- * WebGL's viewport origin is the bottom left, so the main panel — which reads
- * as the top left — is the one at `y: 0.5`. A 2×2 split gives every panel the
- * canvas's own aspect ratio, which is why the main camera needs no adjustment
- * at all: it is the same camera, framing the same thing, in a smaller box.
- */
-const QUADRANTS = {
-  main: { x: 0, y: 0.5 },
-  anterior: { x: 0.5, y: 0.5 },
-  left: { x: 0, y: 0 },
-  superior: { x: 0.5, y: 0 },
-} as const;
 
 /**
  * The box the auxiliary views should frame.
@@ -217,7 +231,9 @@ function boundsOf(scene: THREE.Scene, only: Set<string> | null): THREE.Box3 | nu
 
 export function StudyViews() {
   const gl = useThree((state) => state.gl);
+  const camera = useThree((state) => state.camera);
   const size = useThree((state) => state.size);
+  const active = useStudyViewsStore((state) => state.active);
 
   // One orthographic camera per auxiliary view. Orthographic because these are
   // anatomical views: an "anterior view" with perspective foreshortening is a
@@ -248,15 +264,22 @@ export function StudyViews() {
       gl.setScissorTest(false);
       gl.setViewport(0, 0, size.width, size.height);
       gl.setScissor(0, 0, size.width, size.height);
+      // And the reader's camera back to the shape of the whole canvas. React
+      // Three Fiber only revisits this on a resize, so a camera left matched to
+      // a half-width panel would keep that projection over the full viewport
+      // until the window happened to change size — the model subtly stretched,
+      // with nothing on screen to explain it.
+      matchAspect(camera, size.width / size.height);
     };
-  }, [gl, size.width, size.height]);
+  }, [gl, camera, size.width, size.height]);
 
   useFrame(({ gl: renderer, scene: graph, camera }) => {
     // Once per frame rather than once per render, so the counters add the four
     // passes together instead of overwriting each other.
     renderer.info.reset();
 
-    const bounds = reframe(graph, camera);
+    const layout = panelLayout(active);
+    const bounds = reframe(graph, camera, layout);
     if (!bounds) {
       // Nothing visible to frame — mid-load, or everything hidden. Draw the
       // main view across the whole canvas rather than returning: this callback
@@ -269,15 +292,23 @@ export function StudyViews() {
     }
     renderer.setScissorTest(true);
 
-    for (const [view, cell] of Object.entries(QUADRANTS)) {
-      const width = size.width / 2;
-      const height = size.height / 2;
-      const x = cell.x * size.width;
-      const y = cell.y * size.height;
+    for (const panel of layout) {
+      const x = panel.x * size.width;
+      const y = panel.y * size.height;
+      const width = panel.width * size.width;
+      const height = panel.height * size.height;
 
       renderer.setViewport(x, y, width, height);
       renderer.setScissor(x, y, width, height);
-      renderer.render(graph, view === "main" ? camera : cameras[view as AnatomicalView]);
+      // The reader's own camera is a perspective one and React Three Fiber
+      // keeps its aspect matched to the whole canvas. That happened to be right
+      // while every panel was a quarter — a 2×2 cell has the canvas's own
+      // proportions — and stops being right the moment a panel is half the
+      // width at full height. Corrected here, every frame, because this
+      // callback owns the render and nothing else can know the panel it is
+      // about to draw into.
+      if (panel.id === MAIN) matchAspect(camera, width / height);
+      renderer.render(graph, panel.id === MAIN ? camera : cameras[panel.id]);
     }
 
     renderer.setScissorTest(false);
@@ -296,7 +327,11 @@ export function StudyViews() {
    * imperceptible for a change the reader makes by clicking, and it also
    * catches the explode animation settling without watching for it.
    */
-  function reframe(graph: THREE.Scene, main: THREE.Camera): THREE.Box3 | null {
+  function reframe(
+    graph: THREE.Scene,
+    main: THREE.Camera,
+    layout: PanelRect[],
+  ): THREE.Box3 | null {
     const now = performance.now();
     const due = now - framed.current > REFRAME_MS;
     const bounds = focusBounds(graph);
@@ -336,8 +371,15 @@ export function StudyViews() {
 
     for (const view of AUXILIARY) {
       const camera = cameras[view];
-      camera.left = -extent * aspect;
-      camera.right = extent * aspect;
+      // Its own panel's proportions, not the canvas's. A view switched off has
+      // no panel and keeps whatever it had — it is not being drawn, and it will
+      // be reframed on the first pass after it comes back.
+      const panel = layout.find((each) => each.id === view);
+      const shape = panel
+        ? (panel.width * size.width) / (panel.height * size.height)
+        : aspect;
+      camera.left = -extent * shape;
+      camera.right = extent * shape;
       camera.top = extent;
       camera.bottom = -extent;
       camera.near = 0.01;
