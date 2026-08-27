@@ -42,6 +42,31 @@ import { getViewerHandle } from "./viewerBridge";
  * view cannot inherit a quartered canvas.
  */
 
+/**
+ * What React Three Fiber does when nothing has replaced it.
+ *
+ * Written out rather than borrowed because R3F does not expose its default:
+ * `state.events.compute` is undefined until something assigns to it, so there
+ * is nothing to capture and hand back. Leaving that gap unhandled is what
+ * broke single-view selection the first time.
+ */
+function fullCanvasCompute(
+  event: { offsetX: number; offsetY: number },
+  state: {
+    pointer: THREE.Vector2;
+    raycaster: THREE.Raycaster;
+    camera: THREE.Camera;
+    size: { width: number; height: number };
+  },
+): void {
+  state.pointer.set(
+    (event.offsetX / state.size.width) * 2 - 1,
+    -(event.offsetY / state.size.height) * 2 + 1,
+  );
+  state.raycaster.setFromCamera(state.pointer, state.camera);
+  state.raycaster.far = Infinity;
+}
+
 /** The three auxiliary views, in the order they are laid out. */
 const AUXILIARY: AnatomicalView[] = ["anterior", "left", "superior"];
 
@@ -142,6 +167,7 @@ export function StudyViews() {
      * raycaster this sets up — so one correction covers them all.
      */
     const previousCompute = get().events.compute;
+    const previousFar = get().raycaster.far;
 
     setEvents({
       compute: (event, state) => {
@@ -163,10 +189,19 @@ export function StudyViews() {
     });
 
     return () => {
-      // Only if there was one. R3F leaves `compute` undefined until something
-      // sets it, and handing that back as a value would replace the default
-      // with nothing rather than restoring it.
-      if (previousCompute) setEvents({ compute: previousCompute });
+      // Both of these must be put back, and the first version put back neither.
+      //
+      // R3F leaves `compute` undefined until something sets it, so there is
+      // often nothing to restore — and the first attempt read that as "nothing
+      // to do" and left *this* function installed. Single view then went on
+      // mapping the pointer into a quadrant that no longer existed, and the
+      // cursor selected nothing anywhere. Restoring the default explicitly is
+      // the difference between skipping the work and doing it.
+      setEvents({ compute: previousCompute ?? fullCanvasCompute });
+      // And the guard below writes `far` on every event, so whatever it was on
+      // the last pointer move before the mode was switched off is what it
+      // stays at. If that was the miss-everything value, nothing is clickable.
+      get().raycaster.far = previousFar;
     };
   }, [setEvents, get]);
 
