@@ -22,6 +22,7 @@ import { ExplodeBar } from "./ExplodeBar";
 import { IlluminationBar } from "./IlluminationBar";
 import { IsolationBar } from "./IsolationBar";
 import { LabelOverlay } from "./LabelOverlay";
+import { RenderProbe, RenderStatsPanel } from "./RenderStats";
 import { LassoSelect } from "./LassoSelect";
 import { PathwayBar } from "./PathwayBar";
 import { SelectionBar } from "./SelectionBar";
@@ -214,9 +215,13 @@ export function AnatomyViewer() {
         <Suspense fallback={null}>
           <AnatomyScene manifest={manifest} onContextMenu={openMenu} />
         </Suspense>
+        {/* An instrument, not a feature. Vite strips the whole branch from a
+            production build, so neither this nor its panel ships. */}
+        {import.meta.env.DEV && <RenderProbe />}
       </Canvas>
       <LassoSelect container={container} />
       <LabelOverlay />
+      {import.meta.env.DEV && <RenderStatsPanel />}
       <DepthProbe />
       <HoverLabel />
       <ColourLegend />
