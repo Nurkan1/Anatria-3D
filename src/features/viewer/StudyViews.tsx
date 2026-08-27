@@ -3,6 +3,8 @@ import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 import { lateralSign, viewDirection, type AnatomicalView } from "./cameraViews";
+import { useSceneStore } from "@/stores/sceneStore";
+
 import { getViewerHandle } from "./viewerBridge";
 
 /**
@@ -146,15 +148,57 @@ const QUADRANTS = {
   superior: { x: 0.5, y: 0 },
 } as const;
 
-/** The world-space box around everything currently drawn. */
-function visibleBounds(scene: THREE.Scene): THREE.Box3 | null {
+/**
+ * The box the auxiliary views should frame.
+ *
+ * # Why not simply everything on screen
+ *
+ * Because everything on screen is usually far more than the reader is looking
+ * at. Isolating the brain and asking the assistant about the visual pathway
+ * leaves 291 structures visible, 264 of them nerves running the length of the
+ * body — so a box around all of it frames the body, and the three panels show
+ * a brain the size of a full stop. Correct, and useless.
+ *
+ * So the panels follow attention rather than contents, in this order:
+ *
+ * 1. **What the reader selected.** The most deliberate act available: they
+ *    clicked it.
+ * 2. **What the assistant lit.** When nothing is selected, the pathway or set
+ *    it is pointing at is what the question was about.
+ * 3. **Everything drawn.** No selection and no answer in progress — the
+ *    isolated set is all the intent there is.
+ *
+ * A named set that turns out to have nothing visible in it falls through to the
+ * next rule rather than framing nothing: a structure can be selected and then
+ * hidden, and three empty panels would be a worse answer than three wide ones.
+ */
+function focusBounds(scene: THREE.Scene): THREE.Box3 | null {
+  const { selectedOrganIds, illuminated } = useSceneStore.getState();
+
+  for (const wanted of [selectedOrganIds, illuminated, null]) {
+    const only = wanted && wanted.length > 0 ? new Set(wanted) : null;
+    if (wanted !== null && only === null) continue;
+
+    const box = boundsOf(scene, only);
+    if (box) return box;
+  }
+
+  return null;
+}
+
+/** The union box of every visible mesh, optionally restricted to a set of ids. */
+function boundsOf(scene: THREE.Scene, only: Set<string> | null): THREE.Box3 | null {
   const box = new THREE.Box3();
-  let found = false;
   const each = new THREE.Box3();
+  let found = false;
 
   scene.traverse((object) => {
     const mesh = object as THREE.Mesh;
     if (!mesh.isMesh || !mesh.visible || !mesh.geometry) return;
+    // The identifier the atlas knows it by, put there by `OrganMesh` so a raw
+    // intersection can be traced back without React context.
+    if (only && !only.has(String(mesh.userData.organId))) return;
+
     each.setFromObject(mesh);
     if (each.isEmpty()) return;
     box.union(each);
@@ -248,7 +292,7 @@ export function StudyViews() {
   function reframe(graph: THREE.Scene): THREE.Box3 | null {
     const now = performance.now();
     const due = now - framed.current > REFRAME_MS;
-    const bounds = visibleBounds(graph);
+    const bounds = focusBounds(graph);
     if (!bounds) return null;
     if (!due) return bounds;
 
