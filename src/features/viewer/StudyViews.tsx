@@ -67,6 +67,61 @@ function fullCanvasCompute(
   state.raycaster.far = Infinity;
 }
 
+/**
+ * The same, for a camera that owns the top-left quarter of the canvas.
+ *
+ * Outside that quarter the raycaster gets a negative far plane, which is the
+ * cheapest guaranteed miss: every candidate is further away than that, so the
+ * three read-only panels report nothing rather than reporting whatever the
+ * main camera would have hit behind them.
+ */
+function quadrantCompute(
+  event: { offsetX: number; offsetY: number },
+  state: {
+    pointer: THREE.Vector2;
+    raycaster: THREE.Raycaster;
+    camera: THREE.Camera;
+    size: { width: number; height: number };
+  },
+): void {
+  const half = { width: state.size.width / 2, height: state.size.height / 2 };
+  const inside = event.offsetX < half.width && event.offsetY < half.height;
+
+  state.pointer.set(
+    (event.offsetX / half.width) * 2 - 1,
+    -(event.offsetY / half.height) * 2 + 1,
+  );
+  state.raycaster.setFromCamera(state.pointer, state.camera);
+  state.raycaster.far = inside ? Infinity : -1;
+}
+
+/**
+ * Keeps the pointer mapping in step with the layout. Belongs inside the
+ * `Canvas`, and stays mounted whether the split is on or off.
+ *
+ * # Why this is not part of `StudyViews`
+ *
+ * It was, and it left the viewport unable to select anything. A component that
+ * installs a pointer mapping on mount and restores it on unmount depends on its
+ * own cleanup running correctly — and when hot module replacement swaps the
+ * file, the cleanup that runs is the *old* version's. One release with a faulty
+ * cleanup and the broken mapping is installed with nothing left mounted to take
+ * it away.
+ *
+ * Mounted always and *asserting* the right mapping for the current mode, there
+ * is no cleanup to get wrong. Whatever state the store was left in, the next
+ * render puts the correct function back.
+ */
+export function PointerRouting({ splitting }: { splitting: boolean }) {
+  const setEvents = useThree((state) => state.setEvents);
+
+  useEffect(() => {
+    setEvents({ compute: splitting ? quadrantCompute : fullCanvasCompute });
+  }, [splitting, setEvents]);
+
+  return null;
+}
+
 /** The three auxiliary views, in the order they are laid out. */
 const AUXILIARY: AnatomicalView[] = ["anterior", "left", "superior"];
 
@@ -112,12 +167,6 @@ function visibleBounds(scene: THREE.Scene): THREE.Box3 | null {
 export function StudyViews() {
   const gl = useThree((state) => state.gl);
   const size = useThree((state) => state.size);
-  const setEvents = useThree((state) => state.setEvents);
-  // Read through `get` rather than subscribed to. Selecting `events.compute`
-  // and then writing to it is a loop: the write changes the value, the value
-  // re-runs the effect, the effect writes again. React caught it as "maximum
-  // update depth exceeded" and took the canvas down with it.
-  const get = useThree((state) => state.get);
 
   // One orthographic camera per auxiliary view. Orthographic because these are
   // anatomical views: an "anterior view" with perspective foreshortening is a
@@ -150,60 +199,6 @@ export function StudyViews() {
       gl.setScissor(0, 0, size.width, size.height);
     };
   }, [gl, size.width, size.height]);
-
-  useEffect(() => {
-    /**
-     * Where the pointer is, expressed for a camera that owns a quarter of the
-     * canvas rather than all of it.
-     *
-     * React Three Fiber computes normalised device coordinates across the whole
-     * drawing buffer, because ordinarily one camera fills it. Split into
-     * quadrants that assumption puts the ray in the wrong place everywhere: the
-     * first build of this selected structures with the cursor well outside them,
-     * which is exactly the failure it looks like.
-     *
-     * Every pointer interaction in the viewport funnels through here — hover,
-     * the depth stack, click selection and the right-click menu all read the
-     * raycaster this sets up — so one correction covers them all.
-     */
-    const previousCompute = get().events.compute;
-    const previousFar = get().raycaster.far;
-
-    setEvents({
-      compute: (event, state) => {
-        const half = { width: state.size.width / 2, height: state.size.height / 2 };
-        const inside = event.offsetX < half.width && event.offsetY < half.height;
-
-        state.pointer.set(
-          (event.offsetX / half.width) * 2 - 1,
-          -(event.offsetY / half.height) * 2 + 1,
-        );
-        state.raycaster.setFromCamera(state.pointer, state.camera);
-
-        // Only the interactive panel may be pointed at. A negative far plane is
-        // the cheapest guaranteed miss: every candidate is further away than
-        // that, so the three read-only panels report nothing rather than
-        // reporting whatever the main camera would have hit behind them.
-        state.raycaster.far = inside ? Infinity : -1;
-      },
-    });
-
-    return () => {
-      // Both of these must be put back, and the first version put back neither.
-      //
-      // R3F leaves `compute` undefined until something sets it, so there is
-      // often nothing to restore — and the first attempt read that as "nothing
-      // to do" and left *this* function installed. Single view then went on
-      // mapping the pointer into a quadrant that no longer existed, and the
-      // cursor selected nothing anywhere. Restoring the default explicitly is
-      // the difference between skipping the work and doing it.
-      setEvents({ compute: previousCompute ?? fullCanvasCompute });
-      // And the guard below writes `far` on every event, so whatever it was on
-      // the last pointer move before the mode was switched off is what it
-      // stays at. If that was the miss-everything value, nothing is clickable.
-      get().raycaster.far = previousFar;
-    };
-  }, [setEvents, get]);
 
   useFrame(({ gl: renderer, scene: graph, camera }) => {
     // Once per frame rather than once per render, so the counters add the four

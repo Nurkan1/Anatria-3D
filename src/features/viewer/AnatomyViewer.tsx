@@ -23,7 +23,7 @@ import { IlluminationBar } from "./IlluminationBar";
 import { IsolationBar } from "./IsolationBar";
 import { LabelOverlay } from "./LabelOverlay";
 import { RenderProbe, RenderStatsPanel } from "./RenderStats";
-import { StudyViews } from "./StudyViews";
+import { PointerRouting, StudyViews } from "./StudyViews";
 import { StudyViewsFrame } from "./StudyViewsFrame";
 import { LassoSelect } from "./LassoSelect";
 import { PathwayBar } from "./PathwayBar";
@@ -226,6 +226,10 @@ export function AnatomyViewer() {
         {/* An instrument, not a feature. Vite strips the whole branch from a
             production build, so neither this nor its panel ships. */}
         {import.meta.env.DEV && <RenderProbe />}
+        {/* Always mounted, so it can put the pointer mapping back however the
+            store was left. `StudyViews` mounts and unmounts with the mode; this
+            does not, and that is the point. */}
+        {import.meta.env.DEV && <PointerRouting splitting={splitting} />}
         {import.meta.env.DEV && splitting && <StudyViews />}
       </Canvas>
       {/* Both project against a camera that owns the whole canvas, so in split
