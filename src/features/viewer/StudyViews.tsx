@@ -87,6 +87,8 @@ function visibleBounds(scene: THREE.Scene): THREE.Box3 | null {
 export function StudyViews() {
   const gl = useThree((state) => state.gl);
   const size = useThree((state) => state.size);
+  const setEvents = useThree((state) => state.setEvents);
+  const previousCompute = useThree((state) => state.events.compute);
 
   // One orthographic camera per auxiliary view. Orthographic because these are
   // anatomical views: an "anterior view" with perspective foreshortening is a
@@ -119,6 +121,48 @@ export function StudyViews() {
       gl.setScissor(0, 0, size.width, size.height);
     };
   }, [gl, size.width, size.height]);
+
+  useEffect(() => {
+    /**
+     * Where the pointer is, expressed for a camera that owns a quarter of the
+     * canvas rather than all of it.
+     *
+     * React Three Fiber computes normalised device coordinates across the whole
+     * drawing buffer, because ordinarily one camera fills it. Split into
+     * quadrants that assumption puts the ray in the wrong place everywhere: the
+     * first build of this selected structures with the cursor well outside them,
+     * which is exactly the failure it looks like.
+     *
+     * Every pointer interaction in the viewport funnels through here — hover,
+     * the depth stack, click selection and the right-click menu all read the
+     * raycaster this sets up — so one correction covers them all.
+     */
+    setEvents({
+      compute: (event, state) => {
+        const half = { width: state.size.width / 2, height: state.size.height / 2 };
+        const inside = event.offsetX < half.width && event.offsetY < half.height;
+
+        state.pointer.set(
+          (event.offsetX / half.width) * 2 - 1,
+          -(event.offsetY / half.height) * 2 + 1,
+        );
+        state.raycaster.setFromCamera(state.pointer, state.camera);
+
+        // Only the interactive panel may be pointed at. A negative far plane is
+        // the cheapest guaranteed miss: every candidate is further away than
+        // that, so the three read-only panels report nothing rather than
+        // reporting whatever the main camera would have hit behind them.
+        state.raycaster.far = inside ? Infinity : -1;
+      },
+    });
+
+    return () => {
+      // Only if there was one. R3F leaves `compute` undefined until something
+      // sets it, and handing that back as a value would replace the default
+      // with nothing rather than restoring it.
+      if (previousCompute) setEvents({ compute: previousCompute });
+    };
+  }, [setEvents, previousCompute]);
 
   useFrame(({ gl: renderer, scene: graph, camera }) => {
     const bounds = reframe(graph);

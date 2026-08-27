@@ -228,8 +228,13 @@ export function AnatomyViewer() {
         {import.meta.env.DEV && <RenderProbe />}
         {import.meta.env.DEV && splitting && <StudyViews />}
       </Canvas>
-      <LassoSelect container={container} />
-      <LabelOverlay />
+      {/* Both project against a camera that owns the whole canvas, so in split
+          view they point at the wrong place. Withdrawn rather than corrected
+          for now: a leader line confidently naming the wrong structure is the
+          worst thing an anatomy atlas can put on screen, and worse than no
+          label at all. Phase 3 gives them the active panel's rectangle. */}
+      {!splitting && <LassoSelect container={container} />}
+      {!splitting && <LabelOverlay />}
       {import.meta.env.DEV && splitting && <StudyViewsFrame />}
       {/* One column for the experiment's controls, sitting clear of the panel
           toggle above it and the controls hint below it. Both of those are

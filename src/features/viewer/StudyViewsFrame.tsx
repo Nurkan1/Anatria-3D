@@ -21,9 +21,9 @@
  * thing the reader is already holding.
  */
 const PANELS = [
-  { letter: "A", title: "Anterior — looking at the front", corner: "right-0 top-0" },
-  { letter: "L", title: "Left lateral — the body's own left side", corner: "left-0 bottom-0" },
-  { letter: "S", title: "Superior — looking down from above", corner: "right-0 bottom-0" },
+  { letter: "A", title: "Anterior — looking at the front", at: "left-1/2 top-0" },
+  { letter: "L", title: "Left lateral — the body's own left side", at: "left-0 top-1/2" },
+  { letter: "S", title: "Superior — looking down from above", at: "left-1/2 top-1/2" },
 ] as const;
 
 export function StudyViewsFrame() {
@@ -34,13 +34,16 @@ export function StudyViewsFrame() {
       <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-slate-500/30" />
       <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-slate-500/30" />
 
-      {/* Each auxiliary panel's outer corner is also a corner of the viewport,
-          so the label lands inside the panel it names. */}
-      {PANELS.map(({ letter, title, corner }) => (
+      {/* Anchored to each panel's *inner* corner, by the centre cross. The
+          outer corners belong to the application — the collapse toggle, the
+          colour key, the controls hint, the viewpoint bar — and a letter put
+          there lands on top of one of them, which is what the first version
+          did. */}
+      {PANELS.map(({ letter, title, at }) => (
         <span
           key={letter}
           title={title}
-          className={`absolute ${corner} m-2 rounded bg-slate-950/70 px-1.5 py-0.5 font-mono text-[10px] leading-none text-slate-400`}
+          className={`absolute ${at} m-2 rounded bg-slate-950/70 px-1.5 py-0.5 font-mono text-[10px] leading-none text-slate-400`}
         >
           {letter}
         </span>
