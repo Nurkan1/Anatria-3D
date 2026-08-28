@@ -135,7 +135,13 @@ export function checkStorage(): void {
  */
 export function confirmStoragePersists(hasHistory: boolean): void {
   const previous = readLocal(STAMP);
-  if (previous === null && hasHistory) {
+  // A missing stamp is not evidence on its own, and the first build to write
+  // one proved it: every reader upgrading into this feature has no stamp by
+  // definition, and every one of them was told their machine forgets. What
+  // settles it is whether *anything else* the application stored is still
+  // here. On a working store after an upgrade the settings are all present and
+  // only the stamp is new; on a store that forgets there is nothing at all.
+  if (previous === null && hasHistory && !anythingStored()) {
     note(
       new Error(
         "nothing kept by earlier launches survived — the browser engine is " +
@@ -144,4 +150,22 @@ export function confirmStoragePersists(hasHistory: boolean): void {
     );
   }
   writeLocal(STAMP, String(Date.now()));
+}
+
+/** Whether any setting this application wrote is still in the store. */
+function anythingStored(): boolean {
+  try {
+    for (let index = 0; index < localStorage.length; index += 1) {
+      const key = localStorage.key(index);
+      if (key !== null && key !== STAMP && key.startsWith("anatria3d.")) {
+        return true;
+      }
+    }
+    return false;
+  } catch (error) {
+    // Unreadable is its own answer, and `note` has already been told by
+    // whichever read failed first.
+    note(error);
+    return false;
+  }
 }
