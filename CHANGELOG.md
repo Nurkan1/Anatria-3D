@@ -13,6 +13,93 @@ There is **no auto-updater**, by design: the application never reaches the
 network on its own. A new version reaches you only when you download and install
 it, so this file is also the answer to "is it worth reinstalling".
 
+## [0.2.3] — 2026-08-28
+
+### Added
+
+**Four views of one structure, at once.** Isolate something and a new
+`Study views` switch appears over the viewport. The panel you drive keeps the
+top-left corner and behaves exactly as it did — orbit, zoom, click, select —
+and beside it sit three fixed anatomical views of the same thing: anterior,
+left lateral, superior, lettered at the middle of the screen. Click a letter to
+close that panel; the ones left take the space, and a closed view comes back
+from a chip beside the switch.
+
+The three follow the view you drive rather than framing themselves, so all four
+agree about how big the structure is. Move the main camera closer and they come
+with you.
+
+It asks for something isolated first, and that is arithmetic rather than
+fussiness. Four views of the whole atlas is four passes over three and a half
+thousand structures, which no machine holds at a usable frame rate; four views
+of one isolated structure cost four times almost nothing. That was measured
+before any of it was built.
+
+**Another program can drive the atlas.** A read-only Model Context Protocol
+server already let an outside agent search this anatomy. It can now also *move*
+what is on your screen — isolate, light, ghost, cut a section — through the same
+fifteen tools the built-in assistant uses, checked by the same schema.
+
+It is off unless you turn it on, in Settings, and the indicator says when it is
+listening. It records nothing: what an outside agent asks and what it answers
+never reaches your journal, which is why an API key remains the way to get the
+full use of this application. Said plainly here because it is the difference
+between the two, not a detail.
+
+**The application can tell you what is wrong with it.** Click the version number
+beside the tabs. A window opens with what state everything is in — whether your
+settings are being saved, whether the journal opened, how much of the atlas is
+loaded, whether the assistant engine is running — and a log of what has happened,
+kept on disk beside your journal so it survives closing the window.
+
+`Copy report` puts all of it on the clipboard as text, `Save a copy…` writes it
+wherever you like, and `Empty the log` clears it. **Nothing you write goes in
+it** — not a question, not an answer, not a note, not a session title. Only what
+the application did and what went wrong with it.
+
+**The frame counter ships.** Press `M` over the model for frame rate, draw
+calls, triangles and memory. It was built to decide whether the four-panel view
+was affordable and it stays, because "the atlas is slow on my machine" and
+"34 fps, 3,478 draw calls" are not the same report, and only one of them can be
+acted on.
+
+### Changed
+
+**The keyboard and mouse hints fold away.** Seven lines of small print sat
+permanently over the lower left of the body. They collapse to one quiet
+`Controls` marker and come back for ten seconds when you put the cursor on it.
+
+**What a question costs is counted honestly.** Providers charge a fraction for
+context they recognise from a moment ago, and a long conversation is exactly
+what they recognise. That was being counted at full price, so the notice warning
+about expensive conversations overstated them — and did it worst in the case it
+fired on. Cached context is now reported separately, in the notice and in the
+`Usage` tab, and the warning measures what was actually charged.
+
+The guide used to say switching systems off makes questions cheaper. Measured,
+that is no longer true: the whole atlas costs about as much to describe as a
+single structure. It still makes the model clearer to read, and the guide now
+says that instead.
+
+### Fixed
+
+**The window fits the screen it opens on.** It asked for a size that fits a
+1080p desktop with a hundred pixels to spare and did not say where to open, so
+the platform was free to place it low enough that the bottom of the interface
+fell behind the taskbar — taking the view controls, the viewpoint bar and part
+of the keyboard hints with it, with nothing on screen to say anything was
+missing. It now measures itself against the desktop and shrinks to fit if it
+has to.
+
+**The application says when your machine will not let it remember.** Six places
+kept your settings and every one of them swallowed the error if the store
+refused. On a machine where that happens the application opens on the default
+provider, the default model, every system on and the guide in front — exactly
+what a first run looks like — and nothing distinguished "you have not set this
+yet" from "I cannot keep anything you set". It now says so, once, above the view
+controls, and notes that your journal and your API keys are unaffected because
+those are kept elsewhere.
+
 ## [0.2.2] — 2026-08-25
 
 ### Added
