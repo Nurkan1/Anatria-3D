@@ -89,16 +89,59 @@ export function removeLocal(key: string): void {
   }
 }
 
+/** A value written on every launch, read back on the next one. */
+const STAMP = "anatria3d.storage.stamp";
+
 /**
- * Prove the store works, at startup, before anything depends on it.
+ * Prove the store accepts a write at all.
  *
  * A read alone is not proof: an empty store and a refused one both come back
- * `null`, which is how this went unnoticed. Writing a value and taking it away
- * again is the only check that separates them, and it costs one key on one
- * launch.
+ * `null`. Writing a value and taking it away again separates them, and costs
+ * one key on one launch.
  */
 export function checkStorage(): void {
   const key = "anatria3d.storage.probe";
   if (!writeLocal(key, "1")) return;
   removeLocal(key);
+}
+
+/**
+ * Prove the store survives the application closing, which is the harder half.
+ *
+ * # Why the write probe above is not enough
+ *
+ * It was not. On a real machine the browser engine failed to open its own
+ * database, fell back to an in-memory store, and said nothing: every write
+ * succeeded, every read within the session returned what had just been
+ * written, and none of it reached the disk. The probe passed, the notice stayed
+ * quiet, and the application looked exactly like one that had never been
+ * configured. The only thing that can tell that store from a working one is
+ * whether anything survives a restart — which cannot be measured inside a
+ * single run.
+ *
+ * # Why the journal is the reference
+ *
+ * A missing stamp means one of two things, and they are opposite: this is a
+ * first launch, or nothing is being kept. Nothing inside `localStorage` can
+ * distinguish them, because in both cases it is empty. The journal can: it
+ * lives on disk under the application's own directory, written by Rust rather
+ * than by the browser engine, so a reader with sessions or notes behind them is
+ * demonstrably not on their first launch. History without a stamp is the
+ * signature of a store that forgets.
+ *
+ * Deliberately conservative. It reports only when the journal proves the reader
+ * has been here before, so a genuine first run — or a reader who has never
+ * asked a question or written a note — is never told anything is wrong.
+ */
+export function confirmStoragePersists(hasHistory: boolean): void {
+  const previous = readLocal(STAMP);
+  if (previous === null && hasHistory) {
+    note(
+      new Error(
+        "nothing kept by earlier launches survived — the browser engine is " +
+          "storing settings in memory only",
+      ),
+    );
+  }
+  writeLocal(STAMP, String(Date.now()));
 }

@@ -14,7 +14,8 @@ import { ConfirmDialog } from "@/features/common/ConfirmDialog";
 import { PrintSheet } from "@/features/study/PrintSheet";
 import { AnatomyViewer } from "@/features/viewer/AnatomyViewer";
 import { useChatStore } from "@/stores/chatStore";
-import { checkStorage } from "@/lib/localStore";
+import { checkStorage, confirmStoragePersists } from "@/lib/localStore";
+import { useStudyStore } from "@/stores/studyStore";
 import { startViewPersistence } from "@/stores/persistView";
 import { useSceneStore } from "@/stores/sceneStore";
 
@@ -47,6 +48,15 @@ export default function App() {
   // one both read as `null`, which is how a machine that could not save
   // anything went a whole release looking like a machine nobody had configured.
   useEffect(checkStorage, []);
+  // And the harder half, once the journal has answered: whether anything
+  // written by an earlier launch is still here. A browser engine that has
+  // quietly fallen back to an in-memory store passes every check inside a
+  // single run — this is the only one it fails.
+  const journal = useStudyStore((s) => s.stats);
+  useEffect(() => {
+    if (!journal) return;
+    confirmStoragePersists(journal.sessions + journal.notes + journal.cases > 0);
+  }, [journal]);
 
   /**
    * The resting screen waits for the app to be genuinely idle.
