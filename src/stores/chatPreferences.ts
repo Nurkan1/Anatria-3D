@@ -14,6 +14,7 @@ import {
   VOICE_MIN_SPEED,
   VOICE_MIN_VOLUME,
 } from "@/features/chat/speech";
+import { readLocal, writeLocal } from "@/lib/localStore";
 
 /**
  * The assistant settings worth carrying between sessions.
@@ -187,7 +188,7 @@ function readClamped(value: unknown, min: number, max: number): number | null {
 /** The raw stored value, or null. Parsing failures are treated as absence. */
 export function readStoredChat(): unknown {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = readLocal(STORAGE_KEY);
     return raw === null ? null : JSON.parse(raw);
   } catch {
     return null;
@@ -215,7 +216,7 @@ export function chatPreferences(): ChatPreferences {
 export function patchChatPreferences(change: Partial<ChatPreferences>): void {
   current = { ...current, ...change };
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(current));
+    writeLocal(STORAGE_KEY, JSON.stringify(current));
   } catch {
     // A full or disabled store costs the reader their choice next launch, which
     // is not worth interrupting this session for.

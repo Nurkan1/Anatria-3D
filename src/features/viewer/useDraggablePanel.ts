@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { readLocal, removeLocal, writeLocal } from "@/lib/localStore";
 
 /**
  * A floating panel the reader can put where they want it, remembered.
@@ -37,7 +38,7 @@ export function clampToBounds(
 
 function load(key: string): Point | null {
   try {
-    const raw = localStorage.getItem(key);
+    const raw = readLocal(key);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as Partial<Point>;
     const { x, y } = parsed;
@@ -66,7 +67,7 @@ export function useRememberedFlag(
 ): [boolean, (value: boolean) => void] {
   const [value, setValue] = useState<boolean>(() => {
     try {
-      const raw = localStorage.getItem(storageKey);
+      const raw = readLocal(storageKey);
       return raw === null ? fallback : raw === "true";
     } catch {
       return fallback;
@@ -77,7 +78,7 @@ export function useRememberedFlag(
     (next: boolean) => {
       setValue(next);
       try {
-        localStorage.setItem(storageKey, String(next));
+        writeLocal(storageKey, String(next));
       } catch {
         // A full or disabled store costs the reader this preference next time,
         // which is not worth interrupting the session for.
@@ -173,7 +174,7 @@ export function useDraggablePanel(storageKey: string) {
       event.currentTarget.releasePointerCapture(event.pointerId);
       // Written once, on release, rather than on every pointer move.
       try {
-        if (position) localStorage.setItem(storageKey, JSON.stringify(position));
+        if (position) writeLocal(storageKey, JSON.stringify(position));
       } catch {
         // Losing the remembered spot is not worth interrupting a drag over.
       }
@@ -186,7 +187,7 @@ export function useDraggablePanel(storageKey: string) {
     grab.current = null;
     setPosition(null);
     try {
-      localStorage.removeItem(storageKey);
+      removeLocal(storageKey);
     } catch {
       // Nothing to undo if the store is unavailable.
     }

@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { readLocal, writeLocal } from "@/lib/localStore";
 
 /**
  * Whether this is the first time this machine has opened Anatria3D.
@@ -17,7 +18,7 @@ const STORAGE_KEY = "anatria3d.guide.v1";
 
 function hasSeenGuide(): boolean {
   try {
-    return localStorage.getItem(STORAGE_KEY) === "seen";
+    return readLocal(STORAGE_KEY) === "seen";
   } catch {
     return false;
   }
@@ -29,7 +30,7 @@ export function useFirstRun() {
   const markSeen = useCallback(() => {
     setSeen(true);
     try {
-      localStorage.setItem(STORAGE_KEY, "seen");
+      writeLocal(STORAGE_KEY, "seen");
     } catch {
       // Not worth interrupting a session over. The cost is one extra guide.
     }

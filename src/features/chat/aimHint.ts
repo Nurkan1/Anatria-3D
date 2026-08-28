@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 
 import type { SessionMode } from "@/lib/schemas";
+import { readLocal, writeLocal } from "@/lib/localStore";
 
 /**
  * Whether to remind the reader to point at something before they ask.
@@ -33,7 +34,7 @@ const STORAGE_KEY = "anatria3d.aimHint.v1";
 
 function hasLearned(): boolean {
   try {
-    return localStorage.getItem(STORAGE_KEY) === "learned";
+    return readLocal(STORAGE_KEY) === "learned";
   } catch {
     // A full or disabled store fails toward showing the hint. Reading it once
     // more is mild; never seeing it is a student paying for vague answers.
@@ -69,7 +70,7 @@ export function useAimHint() {
   const retire = useCallback(() => {
     setLearned(true);
     try {
-      localStorage.setItem(STORAGE_KEY, "learned");
+      writeLocal(STORAGE_KEY, "learned");
     } catch {
       // Not worth interrupting a session over.
     }

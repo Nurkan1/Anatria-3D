@@ -1,5 +1,6 @@
 import type { BackgroundMode } from "@/features/viewer/background";
 import type { AnatomicalSystem } from "@/lib/schemas";
+import { readLocal, writeLocal } from "@/lib/localStore";
 
 /**
  * The parts of the view worth carrying between sessions.
@@ -95,7 +96,7 @@ export function sanitiseViewPreferences(
 /** The raw stored value, or null. Parsing failures are treated as absence. */
 export function readStoredView(): unknown {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = readLocal(STORAGE_KEY);
     return raw === null ? null : JSON.parse(raw);
   } catch {
     return null;
@@ -104,7 +105,7 @@ export function readStoredView(): unknown {
 
 export function writeStoredView(preferences: ViewPreferences): void {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(preferences));
+    writeLocal(STORAGE_KEY, JSON.stringify(preferences));
   } catch {
     // A full or disabled store costs the reader their layout next time, which
     // is not worth interrupting this session for.

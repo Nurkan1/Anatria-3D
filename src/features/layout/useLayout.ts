@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { readLocal, writeLocal } from "@/lib/localStore";
 
 /**
  * Widths of the two side panels, persisted across sessions.
@@ -45,7 +46,7 @@ const resolve = (update: WidthUpdate, current: number) =>
 
 function load(): LayoutState {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = readLocal(STORAGE_KEY);
     if (!raw) return DEFAULTS;
     const parsed = JSON.parse(raw) as Partial<LayoutState>;
     return {
@@ -80,7 +81,7 @@ export function useLayout() {
     clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(() => {
       try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(layout));
+        writeLocal(STORAGE_KEY, JSON.stringify(layout));
       } catch {
         // A full or disabled store is not worth interrupting the session for.
       }

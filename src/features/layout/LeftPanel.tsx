@@ -4,6 +4,7 @@ import { StudyPanel } from "@/features/study/StudyPanel";
 import { AnatomyTree } from "@/features/tree/AnatomyTree";
 import { UsagePanel } from "@/features/usage/UsagePanel";
 import { ViewControls } from "@/features/viewer/ViewControls";
+import { StorageNotice } from "./StorageNotice";
 import { APP_VERSION_LABEL } from "@/lib/appVersion";
 import { useStudyStore } from "@/stores/studyStore";
 
@@ -76,6 +77,11 @@ export function LeftPanel() {
         in Study needs the body turned to glass exactly as much as someone
         browsing the tree, and used to have to leave the tab to do it.
       */}
+      {/* Above the controls rather than below them, so it is the last thing
+          read before the settings it is about — and so it never lands in the
+          strip's wrapping row, which is the one part of this column that can
+          be pushed out of a short window. */}
+      <StorageNotice />
       <ViewControls />
     </div>
   );

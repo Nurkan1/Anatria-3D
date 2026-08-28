@@ -14,6 +14,7 @@ import { ConfirmDialog } from "@/features/common/ConfirmDialog";
 import { PrintSheet } from "@/features/study/PrintSheet";
 import { AnatomyViewer } from "@/features/viewer/AnatomyViewer";
 import { useChatStore } from "@/stores/chatStore";
+import { checkStorage } from "@/lib/localStore";
 import { startViewPersistence } from "@/stores/persistView";
 import { useSceneStore } from "@/stores/sceneStore";
 
@@ -42,6 +43,10 @@ export default function App() {
 
   // Remember how the reader left the view, so the next launch opens on it.
   useEffect(startViewPersistence, []);
+  // Proved rather than assumed, once, at launch. An empty store and a refused
+  // one both read as `null`, which is how a machine that could not save
+  // anything went a whole release looking like a machine nobody had configured.
+  useEffect(checkStorage, []);
 
   /**
    * The resting screen waits for the app to be genuinely idle.
