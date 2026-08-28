@@ -4,6 +4,7 @@ import { StudyPanel } from "@/features/study/StudyPanel";
 import { AnatomyTree } from "@/features/tree/AnatomyTree";
 import { UsagePanel } from "@/features/usage/UsagePanel";
 import { ViewControls } from "@/features/viewer/ViewControls";
+import { StatusWindow } from "@/features/help/StatusWindow";
 import { StorageNotice } from "./StorageNotice";
 import { APP_VERSION_LABEL } from "@/lib/appVersion";
 import { useStudyStore } from "@/stores/studyStore";
@@ -27,6 +28,7 @@ type Tab = "atlas" | "study" | "usage";
  */
 export function LeftPanel() {
   const [tab, setTab] = useState<Tab>("atlas");
+  const [status, setStatus] = useState(false);
   const noteCount = useStudyStore((s) => s.stats?.notes ?? 0);
 
   return (
@@ -53,13 +55,20 @@ export function LeftPanel() {
           if the answer is three clicks deep. `shrink-0` keeps the three tabs
           sharing the width as they did before.
         */}
-        <span
-          className="shrink-0 self-center px-2 text-[10px] font-medium tabular-nums text-slate-600"
-          title={`Anatria3D ${APP_VERSION_LABEL}`}
+        <button
+          type="button"
+          onClick={() => setStatus(true)}
+          className="shrink-0 self-center px-2 text-[10px] font-medium tabular-nums text-slate-600 transition hover:text-slate-300"
+          title={`Anatria3D ${APP_VERSION_LABEL} — click for status and log`}
         >
           {APP_VERSION_LABEL}
-        </span>
+        </button>
       </div>
+
+      {/* Rendered from here rather than from `App`, because the button that
+          opens it lives here and the two have no reason to know about a third
+          place. It covers the whole window by its own positioning. */}
+      {status && <StatusWindow onClose={() => setStatus(false)} />}
 
       <div className={`min-h-0 flex-1 ${tab === "atlas" ? "" : "hidden"}`}>
         <AnatomyTree />

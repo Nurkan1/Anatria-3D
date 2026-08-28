@@ -1,3 +1,4 @@
+mod app_log;
 mod commands;
 // The control bridge. `control_bridge` is the only one of these the rest of the
 // application names; the others are its parts and reach the app through it.
@@ -21,6 +22,7 @@ mod window_fit;
 
 use tauri::{Manager, RunEvent, WindowEvent};
 
+use app_log::AppLog;
 use control_bridge::ControlBridge;
 use sidecar::EngineHandle;
 use study_db::StudyDb;
@@ -78,6 +80,11 @@ pub fn run() {
             commands::bridge_status,
             commands::start_bridge,
             commands::stop_bridge,
+            commands::read_log,
+            commands::log_location,
+            commands::clear_log,
+            commands::log_event,
+            commands::save_log_copy,
         ])
         .setup(|app| {
             // Before anything else is visible for long enough to be read: a
@@ -88,21 +95,37 @@ pub fn run() {
                 window_fit::fit_to_work_area(&window);
             }
 
+            let data_dir = app
+                .path()
+                .app_data_dir()
+                .unwrap_or_else(|_| std::path::PathBuf::from("."));
+
+            // First, so that everything after it can be recorded — including
+            // the journal failing to open, which is the one thing that used to
+            // vanish without trace.
+            let log = AppLog::open(&data_dir.join(app_log::LOG_FILE));
+            log.append(
+                "info",
+                "app",
+                &format!("started, version {}", app.package_info().version),
+            );
+            app.manage(log);
+
             // The journal is opened before anything else can ask for it, and
             // opening it cannot fail — an unusable database degrades to "saving
             // is broken", never to "the atlas will not start".
-            let study_path = app
-                .path()
-                .app_data_dir()
-                .unwrap_or_else(|_| std::path::PathBuf::from("."))
-                .join(STUDY_DB);
+            let study_path = data_dir.join(STUDY_DB);
             app.manage(StudyDb::open(&study_path));
+            app.state::<AppLog>()
+                .append("info", "journal", "opened");
 
             // A failed engine start must not take the window down with it: the
             // 3D viewer, the anatomy tree and the i18n layer are all useful
             // without AI. The frontend learns about it through the error event.
             if let Err(err) = sidecar::spawn(app.handle()) {
                 eprintln!("[engine] {err}");
+                app.state::<AppLog>()
+                    .append("error", "engine", &format!("failed to start: {err}"));
                 let _ = tauri::Emitter::emit(
                     app.handle(),
                     sidecar::ENGINE_EVENT,

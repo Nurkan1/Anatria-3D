@@ -25,6 +25,8 @@
  * read by one notice, is the whole design.
  */
 
+import { logEvent } from "./appLog";
+
 type Listener = () => void;
 
 let failure: string | null = null;
@@ -47,9 +49,10 @@ function note(error: unknown): void {
   if (failure !== null) return;
   failure =
     error instanceof Error ? `${error.name}: ${error.message}` : String(error);
-  // Also to the console, because the packaged application has no other channel
-  // and this is exactly the line somebody debugging it needs.
   console.error("[storage] localStorage is unavailable:", error);
+  // And to the file, which is the only one of the three that survives the
+  // window closing — the whole reason this failure went undiagnosed.
+  logEvent("error", "storage", failure);
   for (const listener of listeners) listener();
 }
 

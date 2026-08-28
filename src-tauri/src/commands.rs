@@ -9,6 +9,7 @@ use serde::Deserialize;
 use serde_json::{Map, Value};
 use tauri::State;
 
+use crate::app_log::{AppLog, LogEntry};
 use crate::control_bridge::{BridgeError, BridgeStatus, ControlBridge};
 use crate::keyring_store::{self, KeyringError, Provider};
 use crate::sidecar::{EngineError, EngineHandle, EngineStatus};
@@ -500,3 +501,75 @@ pub fn stop_bridge(bridge: State<'_, ControlBridge>) -> BridgeStatus {
     bridge.stop();
     bridge.status()
 }
+
+// ---------------------------------------------------------------------------
+// The application's own record of what happened to it
+// ---------------------------------------------------------------------------
+
+/// The recent entries, oldest first.
+#[tauri::command]
+pub fn read_log(log: State<'_, AppLog>) -> Vec<LogEntry> {
+    log.read()
+}
+
+/// Where the file lives, so the panel can show it and the reader can find it.
+#[tauri::command]
+pub fn log_location(log: State<'_, AppLog>) -> Option<String> {
+    log.path().map(|path| path.display().to_string())
+}
+
+/// Empty it, at the reader's request.
+///
+/// Returns a result rather than swallowing: this one is a deliberate action
+/// with a button behind it, and a clear that quietly did nothing would leave
+/// the reader believing they had cleared it.
+#[tauri::command]
+pub fn clear_log(log: State<'_, AppLog>) -> CommandResult<()> {
+    log.clear()
+        .map_err(|err| CommandError::Invalid(format!("could not clear the log: {err}")))
+}
+
+/// Write a copy of the log wherever the reader chooses.
+///
+/// A copy rather than a move: the file stays where it is and keeps recording.
+/// Given as text rather than by revealing the original, because the point is to
+/// attach it to a message — and a path the reader has to go and find is a step
+/// most people do not take.
+#[tauri::command]
+pub async fn save_log_copy(
+    app: tauri::AppHandle,
+    contents: String,
+) -> CommandResult<Option<String>> {
+    use tauri_plugin_dialog::DialogExt;
+
+    let Some(path) = app
+        .dialog()
+        .file()
+        .set_file_name("anatria3d-log.txt")
+        .add_filter("Text file", &["txt"])
+        .blocking_save_file()
+    else {
+        return Ok(None);
+    };
+    let mut path = path
+        .into_path()
+        .map_err(|e| CommandError::Invalid(e.to_string()))?;
+    if path.extension().is_none_or(|ext| !ext.eq_ignore_ascii_case("txt")) {
+        path.set_extension("txt");
+    }
+
+    std::fs::write(&path, contents).map_err(|e| CommandError::Invalid(e.to_string()))?;
+    Ok(Some(path.display().to_string()))
+}
+
+/// Record something the window saw.
+///
+/// The webview is where most of what goes wrong is visible — storage refused,
+/// a manifest that would not load, a scene command rejected — and none of it
+/// reaches Rust otherwise. Deliberately infallible: a diagnostic that can fail
+/// the caller is one that gets wrapped in a `try` and forgotten.
+#[tauri::command]
+pub fn log_event(log: State<'_, AppLog>, level: String, source: String, message: String) {
+    log.append(&level, &source, &message);
+}
+
