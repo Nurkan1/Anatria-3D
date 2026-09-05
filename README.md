@@ -392,6 +392,14 @@ the structures that were selected when the question was asked. That index is
 what makes *"what have I already studied about the left ventricle?"* a lookup
 rather than a search.
 
+An answer that moved the model files **what it did**, beside what it said. A
+question can isolate a region, take the body to glass and light ten structures,
+and the paragraphs afterwards describe that arrangement — so a transcript
+keeping only the words was a description of something the reader could no longer
+see. The recording is read back through the same schema the live commands pass,
+and one this build cannot read is dropped whole rather than restored in part: a
+view rebuilt from half an answer would be read as the whole of it.
+
 **The journal travels.** It is the one thing in the app that cannot be
 recomputed — an answer can always be asked again, a year of somebody's own notes
 cannot — so it exports to a single JSON file and imports on another machine.
