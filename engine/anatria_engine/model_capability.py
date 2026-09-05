@@ -85,7 +85,15 @@ _SPECIALISED = (
 #: `/v1/chat/completions` — the rejection names `/v1/responses` as the fix. The
 #: alternative it offers, `reasoning_effort='none'`, would throw away the reason
 #: anybody picked one of these.
-_RESPONSES_ONLY = ("gpt-5.6",)
+#:
+#: GPT-6 arrived reasoning by default too and was refused the same way, which
+#: says something about this list rather than about the model: it names families
+#: that already exist, and a family released after a build cannot be on it.
+#: There is no auto-updater here, so an installed copy stays wrong until its
+#: owner reinstalls by hand. The whole family prefix is matched rather than the
+#: exact id — `gpt-6-astra` should not have needed its own entry, and the next
+#: variant of it will not get one.
+_RESPONSES_ONLY = ("gpt-5.6", "gpt-6")
 
 
 def _lower(model_id: str) -> str:

@@ -45,6 +45,17 @@ def test_the_other_providers_are_untouched(provider: str):
     assert endpoint_for(provider, "gpt-5.6-terra") == "chat"
 
 
+@pytest.mark.parametrize(
+    "model_id",
+    ["gpt-6-astra", "gpt-6", "gpt-6.1-mini", "gpt-5.6-terra"],
+)
+def test_a_family_that_reasons_by_default_goes_to_responses(model_id: str):
+    """Reported: gpt-6-astra was refused with "Function tools with
+    reasoning_effort are not supported ... in /v1/chat/completions". The whole
+    family is matched, so a variant nobody has seen yet is routed too."""
+    assert endpoint_for("openai", model_id) == "responses"
+
+
 def test_case_does_not_decide_the_endpoint():
     assert endpoint_for("openai", "GPT-5.6-Terra") == "responses"
 
