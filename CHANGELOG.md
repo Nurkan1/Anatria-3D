@@ -13,6 +13,58 @@ There is **no auto-updater**, by design: the application never reaches the
 network on its own. A new version reaches you only when you download and install
 it, so this file is also the answer to "is it worth reinstalling".
 
+## [0.2.4] — 2026-09-05
+
+### Added
+
+**An answer can put the model back the way it left it.** One question can move
+the model a great deal — isolate a region, take the body to glass, cut a
+section, light ten structures — and then you spend five minutes turning it round
+and the arrangement the words are describing is gone. `Restore this view`, next
+to `Copy answer`, brings it back.
+
+It appears only on answers that moved something, and it is kept in your journal,
+so a session reopened next month restores as well as it did the day you asked
+it. Answers written before this version recorded nothing and carry no button:
+there is nothing to invent for them, and a button that restored a guess would be
+worse than none.
+
+### Changed
+
+**What an answer cost stopped reading as what it sent.** The count under each
+answer added everything the provider reported, which is not what you are
+charged. One real turn here sent 415,895 tokens of context and had 402,775 of
+them — 96.8% — served back out of the provider's own cache at a fraction of the
+price. The line said "418.9k tokens" about a turn charged like sixteen thousand,
+in the one place you look to decide whether an answer was expensive.
+
+That number grows with the number of things the assistant did, not with what you
+asked. A question that drives the model through thirty commands re-sends the
+same context thirty times, which is exactly the shape a provider caches best —
+so the alarming figure and the cheap turn were the same event.
+
+It now reads `16.1k of 418.9k tokens`: what was charged first, because that is
+the question being asked, and what your provider's dashboard will show second,
+because a figure here that appears nowhere on your bill would be one more number
+to reconcile rather than an answer. Where nothing was cached the two are equal
+and only one is shown.
+
+### Fixed
+
+**GPT-6 models can be chosen.** They reason by default, and OpenAI will not
+serve tools to a model doing that over the endpoint this application was using
+for them — so picking one failed with a rejection, and the assistant could not
+drive the atlas at all. The whole family now goes over the same endpoint GPT-5.6
+already used. The list deciding this can only ever name families that exist when
+a version is built, which is why an unfamiliar model is still offered rather
+than hidden: it may well work.
+
+**A journal you import keeps what it was charged.** Exporting has recorded how
+much of each turn came out of the provider's cache since 0.2.3, and importing
+wrote every other figure and skipped that one. A journal carried to a second
+machine arrived claiming every turn had been paid for at full rate — the exact
+overstatement that column was added to correct.
+
 ## [0.2.3] — 2026-08-28
 
 ### Added
