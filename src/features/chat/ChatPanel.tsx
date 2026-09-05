@@ -19,6 +19,7 @@ import type {
   AnatomicalSystem,
   Language,
   ModelInfo,
+  SceneCommand,
   SessionMode,
   TokenUsage,
   UserProfile,
@@ -165,6 +166,44 @@ function ToolTrail({ tools }: { tools: string[] }) {
 }
 
 /**
+ * Put the model back the way this answer left it.
+ *
+ * # Why one button and not thirty
+ *
+ * A single answer can apply more than thirty commands — the trail above shows
+ * them. Making each chip clickable would put thirty ten-pixel targets under
+ * every answer, and several of them mean nothing alone: pressing "focused a
+ * structure ×3" again is not a request anybody has.
+ *
+ * What a reader actually wants is the whole arrangement back. They asked a
+ * question, the model was cut, ghosted and pinned to match the answer, and then
+ * they spent five minutes turning it around. This returns them to the view the
+ * words are describing, which is the only state under which the answer reads
+ * correctly.
+ *
+ * It replays through `applyCommand`, the same door the engine's own commands
+ * came through — so a restored view cannot diverge from a live one, and there
+ * is no second code path to keep in step.
+ */
+function RestoreViewButton({ commands }: { commands: SceneCommand[] }) {
+  const applyCommand = useSceneStore((s) => s.applyCommand);
+  if (commands.length === 0) return null;
+
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        for (const command of commands) applyCommand(command);
+      }}
+      title="Put the model back the way this answer left it"
+      className="rounded border border-slate-700 px-1.5 py-0.5 text-[10px] text-slate-400 transition hover:border-sky-600 hover:text-sky-200"
+    >
+      Restore this view
+    </button>
+  );
+}
+
+/**
  * The structures this answer pointed at, as a legend under the text.
  *
  * The inline pins are small by design so they do not break the reading flow;
@@ -260,6 +299,9 @@ function MessageBubble({ message }: { message: ChatMessage }) {
             {/* Copy the prose the reader sees, not the [[organ_id]] plumbing. */}
             <CopyButton text={stripOrganRefs(message.content)} label="Copy answer" />
             <SaveAsNoteButton content={message.content} />
+            {/* Absent rather than disabled on an answer that moved nothing —
+                a control that never does anything is worse than no control. */}
+            {message.commands && <RestoreViewButton commands={message.commands} />}
             {/* Absent, not disabled, where the machine has no voice for the
                 reader's language — see `SpeakAnswerButton`. */}
             <SpeakAnswerButton content={message.content} language={chatPreferences().language} />
@@ -561,6 +603,7 @@ export function ChatPanel() {
   const messages = useChatStore((s) => s.messages);
   const pendingRequestId = useChatStore((s) => s.pendingRequestId);
   const startTurn = useChatStore((s) => s.startTurn);
+  const noteCommand = useChatStore((s) => s.noteCommand);
   const appendDelta = useChatStore((s) => s.appendDelta);
   const noteTool = useChatStore((s) => s.noteTool);
   const finishTurn = useChatStore((s) => s.finishTurn);
@@ -772,6 +815,10 @@ export function ChatPanel() {
     onToolStarted: useCallback(
       (requestId: string, tool: string) => noteTool(requestId, tool),
       [noteTool],
+    ),
+    onSceneCommand: useCallback(
+      (requestId: string, command: SceneCommand) => noteCommand(requestId, command),
+      [noteCommand],
     ),
     onModels: useCallback(
       (requestId: string, modelProvider: AiProvider, models: ModelInfo[]) =>

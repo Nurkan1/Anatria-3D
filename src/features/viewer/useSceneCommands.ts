@@ -1,13 +1,28 @@
 import { useEffect } from "react";
 
 import { onEngineEvent } from "@/lib/ipc";
-import type { AiProvider, EngineEvent, ModelInfo, TokenUsage } from "@/lib/schemas";
+import type {
+  AiProvider,
+  EngineEvent,
+  ModelInfo,
+  SceneCommand,
+  TokenUsage,
+} from "@/lib/schemas";
 import { useSceneStore } from "@/stores/sceneStore";
 
 export interface SceneCommandBridgeOptions {
   /** Streamed assistant text, delivered per chunk. */
   onTextDelta?: (requestId: string, text: string) => void;
   onToolStarted?: (requestId: string, tool: string) => void;
+  /**
+   * A scene command was applied, and which turn it belonged to.
+   *
+   * Reported *after* it lands, so a listener can only ever record what the
+   * viewport actually did. The command is the whole payload rather than its
+   * name — that is the difference between a trail that says what happened and
+   * one that can be played again.
+   */
+  onSceneCommand?: (requestId: string, command: SceneCommand) => void;
   onModels?: (requestId: string, provider: AiProvider, models: ModelInfo[]) => void;
   /** A case drill was graded. Fires before `onDone` for the same request. */
   onCaseVerdict?: (requestId: string, score: number, verdict: string) => void;
@@ -62,6 +77,7 @@ export function useSceneCommands(options: SceneCommandBridgeOptions = {}) {
   const {
     onTextDelta,
     onToolStarted,
+    onSceneCommand,
     onModels,
     onCaseVerdict,
     onDone,
@@ -82,6 +98,7 @@ export function useSceneCommands(options: SceneCommandBridgeOptions = {}) {
           break;
         case "scene_command":
           applyCommand(event.command);
+          onSceneCommand?.(event.request_id, event.command);
           break;
         case "text_delta":
           onTextDelta?.(event.request_id, event.text);
@@ -128,6 +145,7 @@ export function useSceneCommands(options: SceneCommandBridgeOptions = {}) {
     applyCommand,
     onTextDelta,
     onToolStarted,
+    onSceneCommand,
     onModels,
     onCaseVerdict,
     onDone,

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import type { SessionMode, TokenUsage } from "@/lib/schemas";
+import type { SceneCommand, SessionMode, TokenUsage } from "@/lib/schemas";
 import type { SessionDetail } from "@/lib/studyDb";
 
 /**
@@ -24,6 +24,22 @@ export interface ChatMessage {
   content: string;
   /** Scene tools invoked during this turn, in call order, for the activity trail. */
   tools: string[];
+  /**
+   * The scene commands this answer actually applied, in the order it applied
+   * them — enough to put the model back the way it left it.
+   *
+   * The trail above says *what* happened and is what the reader reads; this is
+   * the payload behind it, and the difference matters: a name cannot be
+   * replayed, a command can. Recorded only once the viewport has applied it, so
+   * nothing here claims a change that did not happen.
+   *
+   * Every action is absolute rather than a toggle — `focus_organ X`,
+   * `isolate_structures [...]` — so replaying the sequence from whatever the
+   * scene looks like now reproduces the same end state. `add_supply` is the one
+   * that adds to what is already isolated; on an unchanged scene it still lands
+   * where it did.
+   */
+  commands?: SceneCommand[];
   status: MessageStatus;
   error?: string;
   usage?: TokenUsage;
@@ -65,6 +81,8 @@ interface ChatStore {
   startTurn: (requestId: string, prompt: string) => void;
   appendDelta: (requestId: string, text: string) => void;
   noteTool: (requestId: string, tool: string) => void;
+  /** Record a command the viewport has applied, against the turn that sent it. */
+  noteCommand: (requestId: string, command: SceneCommand) => void;
   finishTurn: (requestId: string, usage?: TokenUsage, model?: string) => void;
   failTurn: (requestId: string, message: string) => void;
   markCancelled: (requestId: string) => void;
@@ -147,6 +165,14 @@ export const useChatStore = create<ChatStore>()((set, get) => ({
       messages: updateAssistant(state.messages, requestId, (message) => ({
         ...message,
         tools: [...message.tools, tool],
+      })),
+    })),
+
+  noteCommand: (requestId, command) =>
+    set((state) => ({
+      messages: updateAssistant(state.messages, requestId, (message) => ({
+        ...message,
+        commands: [...(message.commands ?? []), command],
       })),
     })),
 

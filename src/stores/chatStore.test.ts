@@ -30,6 +30,49 @@ describe("chatStore", () => {
     expect(store().messages[1]?.content).toBe("The left ventricle");
   });
 
+  /**
+   * The trail says what happened; this is what can be played again. A name
+   * cannot restore a view, a command can — so the payload is kept, in the order
+   * the viewport applied it.
+   */
+  it("keeps the commands an answer applied, in order", () => {
+    store().startTurn("r1", "Show me the kidneys.");
+    store().noteCommand("r1", { action: "focus_organ", organ_id: "ren_right" });
+    store().noteCommand("r1", { action: "reset_view" });
+
+    expect(store().messages[1]?.commands).toEqual([
+      { action: "focus_organ", organ_id: "ren_right" },
+      { action: "reset_view" },
+    ]);
+  });
+
+  it("leaves the field off an answer that moved nothing", () => {
+    store().startTurn("r1", "What is the spleen for?");
+    store().appendDelta("r1", "Filtering blood.");
+    store().finishTurn("r1");
+
+    // Absent rather than empty: the button is hidden on absence, and an empty
+    // array would render a control that does nothing when pressed.
+    expect(store().messages[1]).not.toHaveProperty("commands");
+  });
+
+  it("files a command against its own turn and no other", () => {
+    store().startTurn("r1", "First");
+    store().finishTurn("r1");
+    store().startTurn("r2", "Second");
+    store().noteCommand("r2", { action: "reset_view" });
+
+    expect(store().messages[1]?.commands).toBeUndefined();
+    expect(store().messages[3]?.commands).toEqual([{ action: "reset_view" }]);
+  });
+
+  it("drops a command from a turn the reader already cleared", () => {
+    // Same rule the rest of the store follows: a late frame must not
+    // resurrect a message into an empty transcript.
+    store().noteCommand("gone", { action: "reset_view" });
+    expect(store().messages).toEqual([]);
+  });
+
   it("records the tools used, in call order", () => {
     store().startTurn("r1", "Walk me through it.");
     store().noteTool("r1", "focus_organ");
