@@ -252,6 +252,55 @@ describe("chatStore", () => {
     });
   });
 
+  /**
+   * The recording is what makes the button survive a week. Without it, a
+   * reopened session is words describing an arrangement with no way back to it.
+   */
+  it("restores what a reopened answer did to the model", () => {
+    const detail = reopened();
+    detail.messages[1]!.commands = JSON.stringify([
+      { action: "focus_organ", organ_id: "ren_right" },
+      { action: "reset_view" },
+    ]);
+
+    store().loadSession(detail);
+    expect(store().messages[1]!.commands).toEqual([
+      { action: "focus_organ", organ_id: "ren_right" },
+      { action: "reset_view" },
+    ]);
+    // The reader typed words; the model moved the body.
+    expect(store().messages[0]!.commands).toBeUndefined();
+  });
+
+  it("leaves the field off a reopened answer that recorded nothing", () => {
+    store().loadSession(reopened());
+    expect(store().messages[1]).not.toHaveProperty("commands");
+  });
+
+  it("drops a whole recording it cannot read rather than restoring half of it", () => {
+    // A journal written by a newer build using a command this one does not
+    // know. The session must still open, with its words, and simply no button:
+    // a view restored to half of what the answer described would be read as
+    // the whole of it.
+    const detail = reopened();
+    detail.messages[1]!.commands = JSON.stringify([
+      { action: "focus_organ", organ_id: "ren_right" },
+      { action: "teleport_the_liver" },
+    ]);
+
+    store().loadSession(detail);
+    expect(store().messages[1]!.commands).toBeUndefined();
+    expect(store().messages[1]!.content).toBe("Here is the case.");
+  });
+
+  it("survives a recording that is not JSON at all", () => {
+    const detail = reopened();
+    detail.messages[1]!.commands = "not json";
+
+    expect(() => store().loadSession(detail)).not.toThrow();
+    expect(store().messages[1]!.commands).toBeUndefined();
+  });
+
   it("attributes nothing to the reader's own question", () => {
     store().loadSession(reopened());
     expect(store().messages[0]!.model).toBeUndefined();
@@ -268,6 +317,25 @@ describe("chatStore", () => {
     store().loadSession(detail);
     expect(store().messages[1]!.model).toBeUndefined();
     expect(store().messages[1]!.usage).toBeUndefined();
+  });
+
+  it("hands the journal the commands as text, not as values", () => {
+    store().startTurn("r1", "Show me the kidneys.");
+    store().noteCommand("r1", { action: "focus_organ", organ_id: "ren_right" });
+    store().appendDelta("r1", "Both are retroperitoneal.");
+    store().finishTurn("r1");
+
+    expect(store().turn("r1")?.commands).toBe(
+      JSON.stringify([{ action: "focus_organ", organ_id: "ren_right" }]),
+    );
+  });
+
+  it("offers no recording for a turn that moved nothing", () => {
+    store().startTurn("r1", "What is the spleen for?");
+    store().appendDelta("r1", "Filtering blood.");
+    store().finishTurn("r1");
+
+    expect(store().turn("r1")).not.toHaveProperty("commands");
   });
 
   it("attaches a case grade to the turn that earned it", () => {

@@ -65,6 +65,15 @@ export interface StoredMessage {
    * reason `model` is not.
    */
   cache_read_tokens: number | null;
+  /**
+   * The scene commands this answer applied, as the JSON array that was sent.
+   *
+   * A string rather than a parsed value, because that is what crossed the
+   * boundary and parsing it is a decision with a failure case — see
+   * `parseCommands`. Absent on every question, and on any answer that moved
+   * nothing or was written before the journal recorded it.
+   */
+  commands?: string;
 }
 
 export interface SessionDetail {
@@ -105,6 +114,13 @@ export interface TurnInput {
   input_tokens?: number | null;
   output_tokens?: number | null;
   cache_read_tokens?: number | null;
+  /**
+   * The scene commands the answer applied, as a JSON array.
+   *
+   * Filed against the answer, never the question. The journal checks that it
+   * is a JSON array and refuses anything else before writing a row.
+   */
+  commands?: string | null;
   /**
    * The case this session is a visit to. Read only when the session is first
    * created — a conversation cannot change which case it belongs to halfway

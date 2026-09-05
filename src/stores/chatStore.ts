@@ -1,5 +1,7 @@
+import { z } from "zod";
 import { create } from "zustand";
 
+import { SceneCommandSchema } from "@/lib/schemas";
 import type { SceneCommand, SessionMode, TokenUsage } from "@/lib/schemas";
 import type { SessionDetail } from "@/lib/studyDb";
 
@@ -67,6 +69,14 @@ export interface CompletedTurn {
   /** Which model wrote the answer, and what it cost. Absent if unreported. */
   model?: string;
   usage?: TokenUsage;
+  /**
+   * What the answer did to the model, as the JSON array the journal stores.
+   *
+   * Serialised here rather than in the panel because this is the boundary: the
+   * store holds commands as values, the journal holds them as text, and one
+   * place should decide which is which.
+   */
+  commands?: string;
 }
 
 interface ChatStore {
@@ -103,6 +113,32 @@ let counter = 0;
 const nextId = () => `m${++counter}`;
 
 const newSessionId = () => crypto.randomUUID();
+
+/**
+ * Read a stored command sequence back, or nothing at all.
+ *
+ * Every entry is validated against the same schema the live commands go
+ * through, and one bad entry drops the whole recording rather than restoring a
+ * partial view. That is the safer failure: a button that puts the model into
+ * half of what an answer described is worse than no button, because the reader
+ * would believe they were looking at the arrangement the words explain.
+ *
+ * The ways it can fail are ordinary, not corruption — a journal imported from a
+ * newer build using a command this one does not know. Then the session reopens
+ * with its words intact and simply no button, which is the right outcome.
+ */
+function restoredCommands(raw: string | undefined): { commands?: SceneCommand[] } {
+  if (!raw) return {};
+  try {
+    const parsed = z.array(SceneCommandSchema).safeParse(JSON.parse(raw));
+    if (!parsed.success || parsed.data.length === 0) return {};
+    return { commands: parsed.data };
+  } catch {
+    // Not JSON at all. The journal refuses to write such a thing, so this is
+    // reachable only through a file that reached the database another way.
+    return {};
+  }
+}
 
 /** Apply a change to the assistant message of a turn, ignoring stale requests. */
 function updateAssistant(
@@ -238,6 +274,9 @@ export const useChatStore = create<ChatStore>()((set, get) => ({
         content: message.content,
         tools: [],
         status: "complete" as const,
+        // What this answer did to the model, so a session reopened next month
+        // can be put back the way it was left rather than only read.
+        ...restoredCommands(message.commands),
         ...(message.model ? { model: message.model } : {}),
         ...(message.input_tokens !== null && message.output_tokens !== null
           ? {
@@ -269,6 +308,7 @@ export const useChatStore = create<ChatStore>()((set, get) => ({
       answer: answer.content,
       ...(answer.model ? { model: answer.model } : {}),
       ...(answer.usage ? { usage: answer.usage } : {}),
+      ...(answer.commands?.length ? { commands: JSON.stringify(answer.commands) } : {}),
     };
   },
 

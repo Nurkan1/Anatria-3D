@@ -26,7 +26,7 @@ use serde::{Deserialize, Serialize};
 /// Schema revision, tracked in SQLite's own `user_version` pragma. Bump it and
 /// add a step to `migrate` — never edit an existing step, or a database written
 /// by a released build becomes unreadable.
-const SCHEMA_VERSION: i32 = 9;
+const SCHEMA_VERSION: i32 = 10;
 
 /// Marker on an exported journal, so an unrelated `.json` is refused with a
 /// sentence rather than a parse error.
@@ -37,6 +37,13 @@ pub const EXPORT_VERSION: u32 = 1;
 const MAX_TITLE: usize = 200;
 const MAX_BODY: usize = 20_000;
 const MAX_MESSAGE: usize = 100_000;
+
+/// The largest recorded command sequence an answer may file.
+///
+/// A single answer has been observed applying more than thirty commands; this
+/// leaves room for many times that and still refuses anything that could only
+/// be a fault. It is a ceiling on a fault, not a budget for normal use.
+const MAX_COMMANDS: usize = 64 * 1024;
 
 /// Visits one case may hold.
 ///
@@ -120,6 +127,17 @@ pub struct StoredMessage {
     /// answers were all charged at full rate when the truth is nobody counted.
     #[serde(default)]
     pub cache_read_tokens: Option<i64>,
+    /// The scene commands this answer applied, as the JSON array the window
+    /// sent — enough to put the model back the way the answer left it.
+    ///
+    /// **Opaque here on purpose.** `SceneCommand` is defined in TypeScript and
+    /// mirrored in Python; those two own its shape, and modelling it a third
+    /// time in Rust would mean a command could not be added without editing a
+    /// layer that has no opinion about it. The journal's job is to keep the
+    /// bytes and hand them back — it validates that this is a JSON array and
+    /// nothing further.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub commands: Option<String>,
 }
 
 #[derive(Debug, Serialize)]
@@ -450,6 +468,12 @@ pub struct TurnInput {
     /// which case it belongs to halfway through.
     #[serde(default)]
     pub case_id: Option<String>,
+    /// The scene commands the answer applied, as a JSON array.
+    ///
+    /// Filed against the answer, never the question: the reader typed words,
+    /// the model moved the body. Same rule as `model` and the token counts.
+    #[serde(default)]
+    pub commands: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -539,6 +563,14 @@ impl StudyDb {
 
         let case_id = turn.case_id.as_deref().map(str::trim).filter(|id| !id.is_empty());
 
+        // Checked before the transaction opens: a malformed recording must not
+        // roll back a turn the reader had already finished.
+        let commands = turn
+            .commands
+            .as_deref()
+            .map(check_commands)
+            .transpose()?;
+
         self.with(|conn| {
             let tx = conn.transaction()?;
 
@@ -617,8 +649,9 @@ impl StudyDb {
                 tx.execute(
                     "INSERT INTO study_message
                          (session_id, role, content, created_at,
-                          model, input_tokens, output_tokens, cache_read_tokens)
-                     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
+                          model, input_tokens, output_tokens, cache_read_tokens,
+                          commands)
+                     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
                     params![
                         id,
                         role,
@@ -628,6 +661,7 @@ impl StudyDb {
                         answered.then_some(turn.input_tokens).flatten(),
                         answered.then_some(turn.output_tokens).flatten(),
                         answered.then_some(turn.cache_read_tokens).flatten(),
+                        answered.then(|| commands.clone()).flatten(),
                     ],
                 )?;
             }
@@ -740,7 +774,7 @@ impl StudyDb {
 
             let mut stmt = conn.prepare(
                 "SELECT role, content, created_at, model, input_tokens, output_tokens,
-                        cache_read_tokens
+                        cache_read_tokens, commands
                  FROM study_message WHERE session_id = ?1 ORDER BY id",
             )?;
             let messages = stmt
@@ -753,6 +787,7 @@ impl StudyDb {
                         input_tokens: row.get(4)?,
                         output_tokens: row.get(5)?,
                         cache_read_tokens: row.get(6)?,
+                        commands: row.get(7)?,
                     })
                 })?
                 .collect::<rusqlite::Result<Vec<_>>>()?;
@@ -1285,7 +1320,7 @@ impl StudyDb {
             let mut sessions = rows;
             let mut messages = conn.prepare(
                 "SELECT role, content, created_at, model, input_tokens, output_tokens,
-                        cache_read_tokens
+                        cache_read_tokens, commands
                  FROM study_message WHERE session_id = ?1 ORDER BY id",
             )?;
             let mut structures =
@@ -1301,6 +1336,10 @@ impl StudyDb {
                             input_tokens: row.get(4)?,
                             output_tokens: row.get(5)?,
                             cache_read_tokens: row.get(6)?,
+                            // Small enough to travel, unlike a picture: a few
+                            // kilobytes of JSON keeps the export a text file
+                            // and keeps a restored session restorable.
+                            commands: row.get(7)?,
                         })
                     })?
                     .collect::<rusqlite::Result<Vec<_>>>()?;
@@ -2246,8 +2285,52 @@ fn migrate(conn: &mut Connection) -> rusqlite::Result<()> {
         )?;
     }
 
+    if version < 10 {
+        // What the answer did to the model, so it can be done again.
+        //
+        // The transcript already said *that* an answer isolated, ghosted and
+        // pinned; it could not say what those commands were, so a session
+        // reopened a week later was words describing an arrangement the reader
+        // had no way back to. Short of asking again — and paying for the turn
+        // a second time to watch the same thing happen.
+        //
+        // A column rather than a table, unlike the pictures: this is a few
+        // kilobytes of JSON, read exactly when the message is read, and there
+        // is no query that wants the message without it.
+        //
+        // Nullable, and nothing is backfilled. An answer written before this
+        // column genuinely has no recorded commands; inventing an empty array
+        // would put a button on it that restores nothing.
+        tx.execute_batch("ALTER TABLE study_message ADD COLUMN commands TEXT;")?;
+    }
+
     tx.pragma_update(None, "user_version", SCHEMA_VERSION)?;
     tx.commit()
+}
+
+/// Check a recorded command sequence before it is written.
+///
+/// Two things only: that it is a JSON *array*, and that it is not absurdly
+/// large. Not what the commands mean — see `StoredMessage::commands` for why
+/// this layer deliberately holds no opinion about that. What it does buy is
+/// that whatever comes back out will parse, so a reopened session cannot fail
+/// on a value this journal itself wrote.
+fn check_commands(raw: &str) -> Result<String> {
+    if raw.len() > MAX_COMMANDS {
+        return Err(StudyError::Invalid(format!(
+            "that answer recorded {} bytes of commands, over the {MAX_COMMANDS} limit",
+            raw.len()
+        )));
+    }
+    match serde_json::from_str::<serde_json::Value>(raw) {
+        Ok(serde_json::Value::Array(_)) => Ok(raw.to_owned()),
+        Ok(_) => Err(StudyError::Invalid(
+            "recorded commands must be a JSON array".into(),
+        )),
+        Err(_) => Err(StudyError::Invalid(
+            "recorded commands are not valid JSON".into(),
+        )),
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -2262,8 +2345,9 @@ fn write_messages(tx: &rusqlite::Transaction<'_>, session: &ExportSession) -> ru
         }
         tx.execute(
             "INSERT INTO study_message
-                 (session_id, role, content, created_at, model, input_tokens, output_tokens)
-             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
+                 (session_id, role, content, created_at, model, input_tokens, output_tokens,
+                  commands)
+             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
             params![
                 session.id,
                 message.role,
@@ -2272,6 +2356,11 @@ fn write_messages(tx: &rusqlite::Transaction<'_>, session: &ExportSession) -> ru
                 message.model,
                 message.input_tokens,
                 message.output_tokens,
+                // Dropped rather than trusted when it is not a JSON array: an
+                // imported file is the one input here that did not come from
+                // this application, and a session that reopens without its
+                // button beats one that cannot be reopened at all.
+                message.commands.as_deref().and_then(|raw| check_commands(raw).ok()),
             ],
         )?;
     }
@@ -2461,8 +2550,20 @@ mod tests {
             output_tokens: None,
             cache_read_tokens: None,
             case_id: None,
+            commands: None,
         }
     }
+
+    /// A turn whose answer moved the model, so the tests read as what they mean.
+    fn turn_with_commands(session_id: &str, raw: &str) -> TurnInput {
+        TurnInput {
+            commands: Some(raw.into()),
+            ..turn(session_id, "Show me the kidneys.", "Both are retroperitoneal.")
+        }
+    }
+
+    const TWO_COMMANDS: &str =
+        r#"[{"action":"focus_organ","organ_id":"ren_right"},{"action":"reset_view"}]"#;
 
     fn case(id: &str) -> CaseInput {
         CaseInput {
@@ -2486,6 +2587,149 @@ mod tests {
             case_id: Some(case_id.into()),
             ..turn(session_id, "What is happening?", "Consider ischaemia.")
         }
+    }
+
+    // -- recorded commands -------------------------------------------------
+
+    #[test]
+    fn an_answer_keeps_what_it_did_to_the_model() {
+        let db = StudyDb::in_memory();
+        db.save_turn(turn_with_commands("s1", TWO_COMMANDS)).unwrap();
+
+        let detail = db.session("s1").unwrap().unwrap();
+        let answer = &detail.messages[1];
+        assert_eq!(answer.role, "assistant");
+        // Byte-for-byte, or the window cannot parse its own recording.
+        assert_eq!(answer.commands.as_deref(), Some(TWO_COMMANDS));
+
+        // The reader typed words; the model moved the body. Same rule as the
+        // token counts, and it keeps the question honest.
+        assert!(detail.messages[0].commands.is_none());
+    }
+
+    #[test]
+    fn an_answer_that_moved_nothing_records_nothing() {
+        let db = StudyDb::in_memory();
+        db.save_turn(turn("s1", "What is the spleen for?", "Filtering blood."))
+            .unwrap();
+
+        let detail = db.session("s1").unwrap().unwrap();
+        assert!(detail.messages.iter().all(|message| message.commands.is_none()));
+    }
+
+    #[test]
+    fn each_answer_keeps_its_own_recording() {
+        let db = StudyDb::in_memory();
+        db.save_turn(turn_with_commands("s1", TWO_COMMANDS)).unwrap();
+        db.save_turn(turn("s1", "And the spleen?", "Left hypochondrium."))
+            .unwrap();
+        db.save_turn(turn_with_commands("s1", r#"[{"action":"reset_view"}]"#))
+            .unwrap();
+
+        let detail = db.session("s1").unwrap().unwrap();
+        let recorded: Vec<bool> = detail
+            .messages
+            .iter()
+            .filter(|message| message.role == "assistant")
+            .map(|message| message.commands.is_some())
+            .collect();
+        assert_eq!(recorded, vec![true, false, true]);
+    }
+
+    #[test]
+    fn something_that_is_not_a_command_list_is_refused_before_anything_is_written() {
+        let db = StudyDb::in_memory();
+        assert!(matches!(
+            db.save_turn(turn_with_commands("s1", "not json at all")),
+            Err(StudyError::Invalid(_))
+        ));
+        // A JSON object is valid JSON and still not a sequence of commands.
+        assert!(matches!(
+            db.save_turn(turn_with_commands("s2", r#"{"action":"reset_view"}"#)),
+            Err(StudyError::Invalid(_))
+        ));
+
+        // And neither turn half-landed.
+        assert!(db.session("s1").unwrap().is_none());
+        assert!(db.session("s2").unwrap().is_none());
+    }
+
+    #[test]
+    fn a_recording_over_the_limit_is_refused() {
+        let db = StudyDb::in_memory();
+        let huge = format!("[{:?}]", "x".repeat(MAX_COMMANDS));
+        assert!(matches!(
+            db.save_turn(turn_with_commands("s1", &huge)),
+            Err(StudyError::Invalid(_))
+        ));
+    }
+
+    #[test]
+    fn a_recording_survives_export_and_import() {
+        // Unlike a picture, this is small enough to travel — and a journal
+        // carried to another machine that reopened without its buttons would
+        // be losing something the reader can see is missing.
+        let source = StudyDb::in_memory();
+        source.save_turn(turn_with_commands("s1", TWO_COMMANDS)).unwrap();
+        let export = source.export().unwrap();
+
+        let target = StudyDb::in_memory();
+        target.import(export).unwrap();
+
+        let detail = target.session("s1").unwrap().unwrap();
+        assert_eq!(detail.messages[1].commands.as_deref(), Some(TWO_COMMANDS));
+    }
+
+    #[test]
+    fn an_imported_recording_that_is_not_a_command_list_is_dropped_not_fatal() {
+        // The one input here that did not come from this application. A session
+        // that reopens without its button beats one that will not reopen.
+        let mut export = {
+            let source = StudyDb::in_memory();
+            source.save_turn(turn_with_commands("s1", TWO_COMMANDS)).unwrap();
+            source.export().unwrap()
+        };
+        export.sessions[0].messages[1].commands = Some("not json".into());
+
+        let target = StudyDb::in_memory();
+        target.import(export).expect("a bad recording must not fail the import");
+
+        let detail = target.session("s1").unwrap().unwrap();
+        assert_eq!(detail.messages[1].content, "Both are retroperitoneal.");
+        assert!(detail.messages[1].commands.is_none());
+    }
+
+    #[test]
+    fn a_v9_journal_gains_the_column_without_inventing_history() {
+        // The upgrade every reader's machine will perform on the next release.
+        let mut conn = Connection::open_in_memory().unwrap();
+        migrate(&mut conn).unwrap();
+        conn.execute_batch(
+            "INSERT INTO study_session
+                 (id, kind, title, profile, language, created_at, updated_at)
+             VALUES ('s1', 'tutor', 'An older question', 'student', 'es', 1, 1);
+             INSERT INTO study_message (session_id, role, content, created_at)
+             VALUES ('s1', 'assistant', 'An older answer', 1);",
+        )
+        .unwrap();
+
+        // Wind the shape back with the stamp, as the v6 and v8 tests do.
+        conn.execute_batch("ALTER TABLE study_message DROP COLUMN commands;")
+            .unwrap();
+        conn.pragma_update(None, "user_version", 9).unwrap();
+
+        migrate(&mut conn).expect("a v9 journal must migrate");
+
+        let kept: String = conn
+            .query_row("SELECT content FROM study_message", [], |row| row.get(0))
+            .unwrap();
+        assert_eq!(kept, "An older answer");
+        // An answer written before the column has no recording, and an empty
+        // one would put a button on it that restores nothing.
+        let recorded: Option<String> = conn
+            .query_row("SELECT commands FROM study_message", [], |row| row.get(0))
+            .unwrap();
+        assert_eq!(recorded, None);
     }
 
     #[test]
@@ -3130,6 +3374,7 @@ mod tests {
         // the thing it is.
         conn.execute_batch(
             "DROP TABLE case_finding;
+             ALTER TABLE study_message DROP COLUMN commands;
              ALTER TABLE case_file DROP COLUMN revealed_at;
              ALTER TABLE study_message DROP COLUMN cache_read_tokens;
              ALTER TABLE token_usage DROP COLUMN cache_read_tokens;",
@@ -3171,7 +3416,8 @@ mod tests {
 
         // Wind the shape back with the stamp, the same way the v6 test does.
         conn.execute_batch(
-            "ALTER TABLE study_message DROP COLUMN cache_read_tokens;
+            "ALTER TABLE study_message DROP COLUMN commands;
+             ALTER TABLE study_message DROP COLUMN cache_read_tokens;
              ALTER TABLE token_usage DROP COLUMN cache_read_tokens;",
         )
         .unwrap();

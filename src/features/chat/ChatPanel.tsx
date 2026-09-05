@@ -697,6 +697,9 @@ export function ChatPanel() {
         input_tokens: turn.usage?.input_tokens ?? null,
         output_tokens: turn.usage?.output_tokens ?? null,
         cache_read_tokens: turn.usage?.cache_read_tokens ?? null,
+        // Filed against the answer, so reopening the session can put the model
+        // back the way this answer left it and not merely describe it.
+        commands: turn.commands ?? null,
         // Which virtual patient this conversation is a visit to, if any. Read
         // by the journal only when the session row is created: the visit
         // number is fixed then, and a conversation cannot change case halfway
