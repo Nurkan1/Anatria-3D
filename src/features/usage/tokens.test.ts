@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   conversationIsCostly,
+  describeTurnCost,
   formatTokens,
   LONG_CONVERSATION_TOKENS,
   totalTokens,
@@ -95,5 +96,67 @@ describe("uncachedTokens", () => {
     expect(
       uncachedTokens({ input_tokens: 100, output_tokens: 50, cache_read_tokens: 4_000 }),
     ).toBe(50);
+  });
+});
+
+describe("describeTurnCost", () => {
+  /**
+   * The turn that prompted this. Measured from the real journal: one answer on
+   * gpt-6-astra drove thirty-odd scene commands, which re-sent the same prefix
+   * thirty-odd times, and the provider served 96.8% of it from its cache.
+   *
+   * The panel used to print "418.9k tokens" against a turn charged like
+   * sixteen thousand.
+   */
+  const ASTRA = {
+    input_tokens: 415_895,
+    output_tokens: 3_000,
+    cache_read_tokens: 402_775,
+  };
+
+  it("leads with what was paid for, and keeps the figure the provider will show", () => {
+    expect(describeTurnCost(ASTRA).label).toBe("16.1k of 418.9k tokens");
+  });
+
+  it("says where the difference went, rather than leaving a reader to guess", () => {
+    const detail = describeTurnCost(ASTRA).detail;
+    expect(detail).toContain("415.9k of context sent");
+    expect(detail).toContain("402.8k");
+    expect(detail).toContain("cache");
+    expect(detail).toContain("3,000 received");
+  });
+
+  it("shows one number when nothing was cached", () => {
+    // A reader on a provider that does not cache must not be made to read
+    // "16.1k of 16.1k".
+    expect(
+      describeTurnCost({
+        input_tokens: 12_000,
+        output_tokens: 4_100,
+        cache_read_tokens: 0,
+      }).label,
+    ).toBe("16.1k tokens");
+  });
+
+  it("treats an uncounted turn as uncached rather than as free", () => {
+    // A turn taken before the journal recorded caching reaches here as zero,
+    // which is the honest reading: nothing is *known* to have been cached.
+    // Showing it as fully cached would price a real turn at nothing.
+    expect(
+      describeTurnCost({
+        input_tokens: 900,
+        output_tokens: 100,
+        cache_read_tokens: 0,
+      }).label,
+    ).toBe("1,000 tokens");
+  });
+
+  it("does not go negative if a provider reports more cached than sent", () => {
+    const { label } = describeTurnCost({
+      input_tokens: 100,
+      output_tokens: 10,
+      cache_read_tokens: 500,
+    });
+    expect(label).toBe("10 of 110 tokens");
   });
 });

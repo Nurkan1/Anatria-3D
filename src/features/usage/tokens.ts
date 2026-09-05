@@ -82,6 +82,56 @@ export function conversationIsCostly(usage: TokenUsage | null | undefined): bool
 }
 
 /**
+ * What one answer cost, said in a way that is not alarming and not misleading.
+ *
+ * # The number that was wrong
+ *
+ * This used to show `input + output`, which is the inclusive total and reads as
+ * the bill. Measured against a real journal it is not: one turn recorded
+ * 415,895 tokens of input of which 402,775 — 96.8% — were re-read from the
+ * provider's cache at a fraction of the price. The application was showing
+ * "415.5k" for something charged like sixteen thousand, in the very place a
+ * reader looks to decide whether an answer was expensive.
+ *
+ * That number climbs with the number of tool calls, not with what was asked: a
+ * turn that drives the model through thirty scene commands re-sends the same
+ * prefix thirty times, which is exactly the shape a provider caches best. The
+ * scary figure and the cheap turn are the same event.
+ *
+ * # Why both numbers, and in this order
+ *
+ * The small one first, because it answers the question being asked. The large
+ * one second, because it is what the provider's own dashboard will show, and a
+ * reader who finds a figure here that appears nowhere on their bill has been
+ * given a third number to reconcile rather than an answer.
+ *
+ * When nothing was cached the two are equal and only one is shown — a reader
+ * with a provider that does not cache should not be made to read "16.1k of
+ * 16.1k".
+ */
+export function describeTurnCost(usage: TokenUsage): { label: string; detail: string } {
+  const total = totalTokens(usage);
+  const paid = uncachedTokens(usage);
+  const cached = usage.cache_read_tokens ?? 0;
+
+  const detail =
+    cached > 0
+      ? `${formatTokens(usage.input_tokens)} of context sent, ${formatTokens(
+          cached,
+        )} of it re-read from the provider's cache at a reduced rate · ${formatTokens(
+          usage.output_tokens,
+        )} received`
+      : `${formatTokens(usage.input_tokens)} sent · ${formatTokens(
+          usage.output_tokens,
+        )} received`;
+
+  return {
+    label: paid < total ? `${formatTokens(paid)} of ${formatTokens(total)} tokens` : `${formatTokens(total)} tokens`,
+    detail,
+  };
+}
+
+/**
  * A count at a glance: `1,240`, `12.4k`, `1.2M`.
  *
  * Grouped below ten thousand because at that size the exact number is still

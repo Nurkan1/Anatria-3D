@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
   conversationIsCostly,
+  describeTurnCost,
   formatTokens,
   totalTokens,
 } from "@/features/usage/tokens";
@@ -318,13 +319,8 @@ function MessageBubble({ message }: { message: ChatMessage }) {
             )}
             {message.model && message.usage && <span className="text-slate-700">·</span>}
             {message.usage && (
-              <span
-                className="tabular-nums"
-                title={`${formatTokens(message.usage.input_tokens)} sent · ${formatTokens(
-                  message.usage.output_tokens,
-                )} received`}
-              >
-                {formatTokens(totalTokens(message.usage))} tokens
+              <span className="tabular-nums" title={describeTurnCost(message.usage).detail}>
+                {describeTurnCost(message.usage).label}
               </span>
             )}
           </span>
