@@ -2346,8 +2346,8 @@ fn write_messages(tx: &rusqlite::Transaction<'_>, session: &ExportSession) -> ru
         tx.execute(
             "INSERT INTO study_message
                  (session_id, role, content, created_at, model, input_tokens, output_tokens,
-                  commands)
-             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
+                  cache_read_tokens, commands)
+             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
             params![
                 session.id,
                 message.role,
@@ -2356,6 +2356,12 @@ fn write_messages(tx: &rusqlite::Transaction<'_>, session: &ExportSession) -> ru
                 message.model,
                 message.input_tokens,
                 message.output_tokens,
+                // The export has carried this since v9 and the import dropped
+                // it, so a journal moved between machines arrived claiming
+                // every turn was charged at full rate. Null still means nobody
+                // counted — an imported turn that predates the column keeps
+                // saying so rather than being rewritten as zero cached.
+                message.cache_read_tokens,
                 // Dropped rather than trusted when it is not a JSON array: an
                 // imported file is the one input here that did not come from
                 // this application, and a session that reopens without its
@@ -2662,6 +2668,55 @@ mod tests {
             db.save_turn(turn_with_commands("s1", &huge)),
             Err(StudyError::Invalid(_))
         ));
+    }
+
+    #[test]
+    fn the_cache_figures_survive_export_and_import() {
+        // The export has carried them since v9; the import wrote every other
+        // column and quietly skipped this one, so a journal carried to a second
+        // machine arrived overstating what it had paid.
+        let source = StudyDb::in_memory();
+        source
+            .save_turn(TurnInput {
+                model: Some("gpt-5.2".into()),
+                input_tokens: Some(900),
+                output_tokens: Some(100),
+                cache_read_tokens: Some(700),
+                ..turn("s1", "A question", "An answer")
+            })
+            .unwrap();
+        let export = source.export().unwrap();
+
+        let target = StudyDb::in_memory();
+        target.import(export).unwrap();
+
+        let answer = &target.session("s1").unwrap().unwrap().messages[1];
+        assert_eq!(answer.input_tokens, Some(900));
+        assert_eq!(answer.cache_read_tokens, Some(700));
+    }
+
+    #[test]
+    fn an_imported_turn_that_predates_the_cache_column_stays_uncounted() {
+        // Null means nobody counted, and importing must not rewrite that as
+        // zero cached — the distinction is the whole reason the column is an
+        // option rather than a defaulted integer.
+        let source = StudyDb::in_memory();
+        source
+            .save_turn(TurnInput {
+                input_tokens: Some(900),
+                output_tokens: Some(100),
+                ..turn("s1", "A question", "An answer")
+            })
+            .unwrap();
+        let export = source.export().unwrap();
+
+        let target = StudyDb::in_memory();
+        target.import(export).unwrap();
+
+        assert_eq!(
+            target.session("s1").unwrap().unwrap().messages[1].cache_read_tokens,
+            None
+        );
     }
 
     #[test]
