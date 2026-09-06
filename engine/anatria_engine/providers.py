@@ -45,10 +45,39 @@ def build_model(provider: AiProvider, api_key: str, model: str | None = None) ->
 
     try:
         if provider == "anthropic":
-            from pydantic_ai.models.anthropic import AnthropicModel
+            from pydantic_ai.models.anthropic import (
+                AnthropicModel,
+                AnthropicModelSettings,
+            )
             from pydantic_ai.providers.anthropic import AnthropicProvider
 
-            return AnthropicModel(name, provider=AnthropicProvider(api_key=api_key))
+            return AnthropicModel(
+                name,
+                provider=AnthropicProvider(api_key=api_key),
+                # Anthropic caches nothing unless asked. OpenAI caches any
+                # prompt over 1,024 tokens on its own and Gemini caches
+                # implicitly, so this was the one provider paying full rate for
+                # every repeated byte — measured across 44 turns and 775,199
+                # input tokens in a real journal, all of it at 0% cached.
+                #
+                # Both breakpoints sit in the stable half of the request.
+                # Anthropic orders a request tools → system → messages, so the
+                # tool definitions are the same fifteen schemas on every turn of
+                # every session and can never miss. The instructions are stable
+                # too, except for the inventory and selection deliberately
+                # placed last (see `build_instructions`) — a reader asking two
+                # questions about the same structure hits, and one who moves on
+                # pays a write while the tools above still hit.
+                #
+                # Messages are deliberately not cached. That block grows with
+                # every turn, so a breakpoint there writes a new, larger entry
+                # each time — paying the write premium repeatedly for a prefix
+                # that has already changed.
+                settings=AnthropicModelSettings(
+                    anthropic_cache_tool_definitions=True,
+                    anthropic_cache_instructions=True,
+                ),
+            )
 
         if provider == "openai":
             from pydantic_ai.providers.openai import OpenAIProvider

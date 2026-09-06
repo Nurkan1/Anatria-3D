@@ -185,3 +185,42 @@ def test_an_unchosen_model_still_resolves_to_the_default_route():
     from anatria_engine.providers import build_model
 
     assert isinstance(build_model("openai", "sk-not-a-real-key", None), OpenAIChatModel)
+
+
+# ---------------------------------------------------------------------------
+# Anthropic is the one provider that caches nothing unless asked
+# ---------------------------------------------------------------------------
+
+
+def test_anthropic_asks_for_its_prompt_cache():
+    """Measured, not assumed: a real journal recorded 44 Anthropic turns and
+    775,199 input tokens at 0% cached, while OpenAI on the same journal ran at
+    74-97%. Anthropic caches only where `cache_control` is sent, and nothing
+    sent it."""
+    from anatria_engine.providers import build_model
+
+    model = build_model("anthropic", "sk-not-a-real-key", "claude-haiku-4-5")
+    settings = model.settings or {}
+    assert settings.get("anthropic_cache_tool_definitions") is True
+    assert settings.get("anthropic_cache_instructions") is True
+
+
+def test_anthropic_does_not_cache_the_growing_half():
+    """The messages block grows every turn, so a breakpoint there writes a new
+    and larger entry each time — paying the write premium over and over for a
+    prefix that has already changed."""
+    from anatria_engine.providers import build_model
+
+    model = build_model("anthropic", "sk-not-a-real-key", "claude-haiku-4-5")
+    assert "anthropic_cache_messages" not in (model.settings or {})
+
+
+def test_the_other_providers_are_left_alone():
+    """OpenAI caches any prompt over 1,024 tokens by itself and Gemini caches
+    implicitly. Neither needs asking, and a setting invented for them here
+    would be a guess this file has no way to check."""
+    from anatria_engine.providers import build_model
+
+    for provider, model_id in [("openai", "gpt-5.2"), ("google", "gemini-3.7-flash")]:
+        settings = build_model(provider, "not-a-real-key", model_id).settings or {}
+        assert not any(key.startswith("anthropic_") for key in settings)
