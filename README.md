@@ -38,6 +38,23 @@ under *Systemic arteries*. One button folds in every vessel that reaches what
 you are studying — here, sixty-two of them — and the labelled view turns it into
 a plate you can print.
 
+![Four views of the same head at once. The panel the reader drives sits
+top-left with the vessels and nerves of the head and neck; beside and below it,
+anterior, left lateral and superior views of the same structures, lettered at
+the centre of the screen.](docs/screenshots/study-views.png)
+
+**One structure, from four sides at once.** An atlas plate shows a single view
+and leaves the rest to your imagination. Isolate something and the viewport
+splits: the panel you drive behaves exactly as it did — orbit, zoom, click,
+select — and three fixed anatomical views follow it, so all four agree about how
+big the thing is and where you are looking from. Click a letter to close a view;
+the ones left take the space.
+
+It asks for something isolated first, and that is arithmetic rather than
+fussiness. Four views of the whole atlas is four passes over three and a half
+thousand structures; four views of one isolated structure cost four times almost
+nothing.
+
 ![The revision coverage map: the body coloured by the reader's own notes and
 sessions, with a legend reading not yet, been here,
 most.](docs/screenshots/revision-coverage.png)
@@ -46,6 +63,19 @@ most.](docs/screenshots/revision-coverage.png)
 locally against the structures they were about, so the atlas can be coloured by
 your own revision. Forty notes on the thorax and nothing on the pelvis is
 invisible in a list, and impossible to miss as a shape on a body.
+
+![The settings drawer open beside the four-panel view: the audience and reading
+pace, the answer language, a Claude API key field showing only a placeholder,
+the model picker reporting the stored key valid, and the control bridge switched
+off.](docs/screenshots/settings-and-key.png)
+
+**Your key, your provider, your machine.** Three providers sit side by side and
+you switch between them mid-conversation — the application never picks for you.
+The key you paste goes into your operating system's credential manager, and
+nothing in this window can read it back: no command returns a key, so the
+interface can store one and ask whether one exists, and nothing more. The
+control bridge, which lets another program on this computer move the view, is
+off until you turn it on.
 
 ![The Usage tab beside a case drill in Spanish. The left panel lists fourteen
 days of token consumption broken down by model, with stars annotated against
