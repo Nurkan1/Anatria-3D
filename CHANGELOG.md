@@ -13,6 +13,51 @@ There is **no auto-updater**, by design: the application never reaches the
 network on its own. A new version reaches you only when you download and install
 it, so this file is also the answer to "is it worth reinstalling".
 
+## [0.2.5] — 2026-09-07
+
+### Changed
+
+**Anthropic answers stopped paying full price for the same bytes.** Every
+question re-sends the whole system prompt and every tool definition, and
+Anthropic caches none of it unless the request asks — which this one never did.
+Measured on a real journal: 41 turns and more than 800,000 tokens of input, all
+of it at **exactly zero** cached, while OpenAI on the same journal ran between
+74% and 97%. The first two turns after the fix came back at **72%**, and
+Anthropic bills a cache read at a tenth.
+
+The tool definitions are the same fifteen schemas on every turn of every
+session, so they can never miss. The instructions are stable too, apart from
+the list of what is loaded and what you have selected — so two questions about
+the same structure both hit, and moving to another one still keeps the tools.
+
+**Questions cost less and answers arrive sooner.** The catalogue of loaded
+structures is now the last thing in the prompt rather than the middle, and what
+is listed is in a fixed order. Providers cache by matching the start of a
+request against one they saw a moment ago, and anything that moves breaks the
+match from that point on — so the volatile part belongs at the end. No anatomy
+is described any differently; it is the same prompt in a better order.
+
+### Fixed
+
+**An answer can no longer land in the wrong conversation.** Hiding the chat
+panel mid-answer, starting a new session, reopening an older one from the
+journal, or switching atlas while the assistant was still writing could leave
+the tail of one answer arriving into a transcript it did not belong to. Each
+turn now belongs to the session, mode, atlas and case it was asked in, and a
+turn whose ground moves is ended rather than left running. What it cost is
+still recorded — the transcript may go, the accounting may not.
+
+**A draft you had not sent survives collapsing the panel.** Both in the chat
+and in the notes.
+
+**Very long conversations stopped being refused.** More than fifty exchanges in
+one session exceeded a limit on how much history a request may carry, and the
+request was rejected rather than trimmed. The oldest exchanges are now dropped
+to fit.
+
+**The four-panel study view frames correctly after exporting an image**, and
+the bounds it measures are no longer recomputed on every frame.
+
 ## [0.2.4] — 2026-09-05
 
 ### Added
