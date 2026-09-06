@@ -40,9 +40,14 @@ jobs:
       # deprecate.
       - uses: actions/checkout@v7
 
+      # No `version:` here on purpose. `packageManager` in package.json is the
+      # single source of truth for which pnpm this repository uses, and
+      # `pnpm/action-setup` **refuses to run when both are set** — even when
+      # they agree, which is how this was first broken. The field in
+      # package.json is also the more useful half: it pins an exact version
+      # rather than a major, and it governs a laptop as well as a runner, so
+      # the two cannot drift.
       - uses: pnpm/action-setup@v6
-        with:
-          version: 9
 
       - uses: actions/setup-node@v7
         with:
