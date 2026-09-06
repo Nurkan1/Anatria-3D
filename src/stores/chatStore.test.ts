@@ -359,7 +359,6 @@ describe("chatStore", () => {
     expect(store().history()).toEqual([
       { role: "user", content: "First question" },
       { role: "assistant", content: "First answer" },
-      { role: "user", content: "Second question" },
     ]);
   });
 });

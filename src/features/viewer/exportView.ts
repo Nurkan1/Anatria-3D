@@ -7,6 +7,7 @@ import { backgroundTheme, type BackgroundTheme } from "./background";
 import { layoutLabels, type LabelAnchor } from "./labelLayout";
 import { labelTargets } from "./LabelOverlay";
 import { getViewerHandle, projectToScreen } from "./viewerBridge";
+import { captureView } from "./captureView";
 
 /**
  * The current view, as an image you can put in a slide.
@@ -78,7 +79,7 @@ export async function exportViewImage(): Promise<string | null> {
   const handle = getViewerHandle();
   if (!handle) throw new Error("The viewer is not ready yet.");
 
-  const { gl, scene, camera, centres } = handle;
+  const { gl, centres } = handle;
   const source = gl.domElement;
 
   // Rendered right now, and read in the same synchronous stretch. Without a
@@ -86,7 +87,6 @@ export async function exportViewImage(): Promise<string | null> {
   // the capture comes back black — the classic WebGL screenshot trap. Forcing
   // the frame here avoids paying for `preserveDrawingBuffer` on every frame of
   // every session for the sake of an occasional export.
-  gl.render(scene, camera);
 
   const width = source.width;
   const height = source.height;
@@ -103,9 +103,10 @@ export async function exportViewImage(): Promise<string | null> {
 
   ctx.fillStyle = theme.canvas;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(source, 0, 0);
-
-  drawLabels(ctx, width, height, centres, camera, theme);
+  captureView(handle, (camera) => {
+    ctx.drawImage(source, 0, 0);
+    drawLabels(ctx, width, height, centres, camera, theme);
+  });
   drawFooter(ctx, width, height, theme, attributionLine(useSceneStore.getState().manifest));
 
   const blob = await new Promise<Blob | null>((resolve) =>

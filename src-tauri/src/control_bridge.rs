@@ -495,7 +495,10 @@ mod platform {
     /// yet, because the gates run on Windows only and an untested transport
     /// listening on a socket is worse than an honest absence.
     #[derive(Default)]
-    pub struct ControlBridge;
+    pub struct ControlBridge {
+        // Keep Default construction uniform with the Windows implementation.
+        _private: (),
+    }
 
     impl ControlBridge {
         pub fn status(&self) -> BridgeStatus {

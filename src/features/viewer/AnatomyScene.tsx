@@ -95,9 +95,11 @@ function buildClippingPlanes(
 function ViewerBridge({
   centres,
   offsets,
+  geometryRevision,
 }: {
   centres: Map<string, THREE.Vector3>;
   offsets: Map<string, THREE.Vector3>;
+  geometryRevision: number;
 }) {
   const gl = useThree((state) => state.gl);
   const scene = useThree((state) => state.scene);
@@ -106,10 +108,10 @@ function ViewerBridge({
   const controls = useThree((state) => state.controls) as { enabled: boolean } | null;
 
   useEffect(() => {
-    setViewerHandle({ gl, scene, camera, centres, offsets, controls });
+    setViewerHandle({ gl, scene, camera, centres, offsets, controls, geometryRevision });
     // Cleared on unmount so a reload cannot hand out a dead renderer.
     return () => setViewerHandle(null);
-  }, [gl, scene, camera, centres, offsets, controls]);
+  }, [gl, scene, camera, centres, offsets, controls, geometryRevision]);
 
   return null;
 }
@@ -845,7 +847,7 @@ export function AnatomyScene({
   return (
     <>
       <StudioLights />
-      <ViewerBridge centres={centres.current} offsets={offsets} />
+      <ViewerBridge centres={centres.current} offsets={offsets} geometryRevision={centresRevision} />
 
       {activeFiles.map((file) => (
         <SystemMeshes

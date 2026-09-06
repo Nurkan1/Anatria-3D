@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 
 import { onEngineEvent } from "@/lib/ipc";
 import type {
@@ -11,6 +11,8 @@ import type {
 import { useSceneStore } from "@/stores/sceneStore";
 
 export interface SceneCommandBridgeOptions {
+  /** Checked before a command can touch the viewport. Bridge commands are independent. */
+  acceptSceneCommand?: (requestId: string) => boolean;
   /** Streamed assistant text, delivered per chunk. */
   onTextDelta?: (requestId: string, text: string) => void;
   onToolStarted?: (requestId: string, tool: string) => void;
@@ -73,30 +75,23 @@ export interface SceneCommandBridgeOptions {
  */
 export function useSceneCommands(options: SceneCommandBridgeOptions = {}) {
   const applyCommand = useSceneStore((s) => s.applyCommand);
-
-  const {
-    onTextDelta,
-    onToolStarted,
-    onSceneCommand,
-    onModels,
-    onCaseVerdict,
-    onDone,
-    onError,
-    onReady,
-    onAttached,
-    onProtocolViolation,
-  } = options;
+  const latest = useRef(options);
+  useLayoutEffect(() => { latest.current = options; });
 
   useEffect(() => {
     let stop: (() => void) | undefined;
     let cancelled = false;
 
     onEngineEvent((event: EngineEvent) => {
+      if (cancelled) return;
+      const { onTextDelta, onToolStarted, onSceneCommand, onModels, onCaseVerdict,
+        onDone, onError, onReady, acceptSceneCommand } = latest.current;
       switch (event.type) {
         case "ready":
           onReady?.(event.protocol_version);
           break;
         case "scene_command":
+          if (!/^bridge-\d+$/.test(event.request_id) && !acceptSceneCommand?.(event.request_id)) break;
           applyCommand(event.command);
           onSceneCommand?.(event.request_id, event.command);
           break;
@@ -119,17 +114,20 @@ export function useSceneCommands(options: SceneCommandBridgeOptions = {}) {
           onError?.(event.code, event.message, event.request_id);
           break;
       }
-    }, onProtocolViolation ? { onProtocolViolation } : {}).then(
+    }, { onProtocolViolation: (payload, issues) => {
+      if (!cancelled) latest.current.onProtocolViolation?.(payload, issues);
+    } }).then(
       (off) => {
         if (cancelled) {
           off();
           return;
         }
         stop = off;
-        onAttached?.();
+        latest.current.onAttached?.();
       },
       (err: unknown) => {
-        onError?.(
+        if (cancelled) return;
+        latest.current.onError?.(
           "internal_error",
           `Could not subscribe to engine events: ${String(err)}`,
           null,
@@ -141,17 +139,5 @@ export function useSceneCommands(options: SceneCommandBridgeOptions = {}) {
       cancelled = true;
       stop?.();
     };
-  }, [
-    applyCommand,
-    onTextDelta,
-    onToolStarted,
-    onSceneCommand,
-    onModels,
-    onCaseVerdict,
-    onDone,
-    onError,
-    onReady,
-    onAttached,
-    onProtocolViolation,
-  ]);
+  }, [applyCommand]);
 }

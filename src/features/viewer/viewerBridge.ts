@@ -35,6 +35,8 @@ export interface ViewerHandle {
    * Null until they have mounted.
    */
   controls: { enabled: boolean } | null;
+  /** Advances when a lazy mesh file publishes new measured geometry. */
+  geometryRevision?: number;
 }
 
 let handle: ViewerHandle | null = null;

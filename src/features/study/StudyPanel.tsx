@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { GrowingTextarea } from "@/components/GrowingTextarea";
 import {
@@ -421,20 +421,31 @@ function NoteComposer() {
 
   const [body, setBody] = useState("");
   const [open, setOpen] = useState(false);
+  const savingRef = useRef(false);
+  const [saving, setSaving] = useState(false);
 
   const subject = selectedOrganIds[0] ? organs[selectedOrganIds[0]] : undefined;
 
   async function submit() {
     const text = body.trim();
-    if (!text) return;
-    setBody("");
-    setOpen(false);
-    await addNote({
-      organ_id: subject?.organ_id ?? null,
-      organ_label: subject ? organLabel(subject) : null,
-      session_id: sessionId,
-      body: text,
-    });
+    if (!text || savingRef.current) return;
+    savingRef.current = true;
+    setSaving(true);
+    try {
+      const saved = await addNote({
+        organ_id: subject?.organ_id ?? null,
+        organ_label: subject ? organLabel(subject) : null,
+        session_id: sessionId,
+        body: text,
+      });
+      if (saved) {
+        setBody("");
+        setOpen(false);
+      }
+    } finally {
+      savingRef.current = false;
+      setSaving(false);
+    }
   }
 
   if (!open) {
@@ -458,6 +469,7 @@ function NoteComposer() {
       )}
       <GrowingTextarea
         value={body}
+        disabled={saving}
         onChange={(event) => setBody(event.target.value)}
         onKeyDown={(event) => {
           // Ctrl/Cmd+Enter saves; plain Enter has to stay a newline, because a
@@ -466,7 +478,7 @@ function NoteComposer() {
             event.preventDefault();
             void submit();
           }
-          if (event.key === "Escape") setOpen(false);
+          if (event.key === "Escape" && !savingRef.current) setOpen(false);
         }}
         rows={3}
         autoFocus
@@ -477,7 +489,7 @@ function NoteComposer() {
         <button
           type="button"
           onClick={() => void submit()}
-          disabled={body.trim().length === 0}
+          disabled={saving || body.trim().length === 0}
           className="rounded bg-sky-600 px-2 py-0.5 text-[10px] font-medium disabled:opacity-30"
         >
           Save
@@ -488,6 +500,7 @@ function NoteComposer() {
             setBody("");
             setOpen(false);
           }}
+          disabled={saving}
           className="text-[10px] text-slate-500 hover:text-slate-300"
         >
           Cancel

@@ -87,6 +87,8 @@ interface ChatStore {
   sessionId: string;
   /** Lesson or clinical drill. A session is one or the other for its lifetime. */
   mode: SessionMode;
+  /** Also changes when reopening the same session, invalidating live requests. */
+  sessionRevision: number;
 
   startTurn: (requestId: string, prompt: string) => void;
   appendDelta: (requestId: string, text: string) => void;
@@ -148,7 +150,7 @@ function updateAssistant(
 ): ChatMessage[] {
   let touched = false;
   const next = messages.map((message) => {
-    if (message.role !== "assistant" || message.id !== `a:${requestId}`) return message;
+    if (message.role !== "assistant" || message.id !== `a:${requestId}` || message.status !== "streaming") return message;
     touched = true;
     return change(message);
   });
@@ -162,6 +164,7 @@ export const useChatStore = create<ChatStore>()((set, get) => ({
   pendingRequestId: null,
   sessionId: newSessionId(),
   mode: "tutor",
+  sessionRevision: 0,
 
   startTurn: (requestId, prompt) =>
     set((state) => ({
@@ -253,10 +256,11 @@ export const useChatStore = create<ChatStore>()((set, get) => ({
     })),
 
   beginSession: (mode) =>
-    set({ messages: [], pendingRequestId: null, sessionId: newSessionId(), mode }),
+    set((state) => ({ messages: [], pendingRequestId: null, sessionId: newSessionId(), mode, sessionRevision: state.sessionRevision + 1 })),
 
   loadSession: (detail) =>
     set({
+      sessionRevision: get().sessionRevision + 1,
       pendingRequestId: null,
       sessionId: detail.session.id,
       mode: detail.session.kind,
@@ -312,10 +316,20 @@ export const useChatStore = create<ChatStore>()((set, get) => ({
     };
   },
 
-  history: () =>
-    get()
-      .messages.filter(
-        (message) => message.status === "complete" && message.content.trim().length > 0,
-      )
-      .map((message) => ({ role: message.role, content: message.content })),
+  history: () => completeHistory(get().messages).slice(-100),
 }));
+
+/** Pair before filtering: an unanswered question must not leak into context. */
+export function completeHistory(messages: ChatMessage[]): { role: "user" | "assistant"; content: string }[] {
+  const history: { role: "user" | "assistant"; content: string }[] = [];
+  for (let i = 0; i < messages.length - 1; i++) {
+    const question = messages[i]!;
+    const answer = messages[i + 1]!;
+    if (question.role !== "user" || answer.role !== "assistant") continue;
+    if (question.status !== "complete" || answer.status !== "complete") continue;
+    if (!question.content.trim() || !answer.content.trim()) continue;
+    history.push({ role: "user", content: question.content }, { role: "assistant", content: answer.content });
+    i++;
+  }
+  return history;
+}

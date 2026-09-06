@@ -481,7 +481,7 @@ def _groups_rule(groups: list[str]) -> str:
     """
     if not groups:
         return ""
-    listed = ", ".join(groups)
+    listed = ", ".join(sorted(groups))
     return _joined(
         [
             "GROUPS YOU CAN ISOLATE WHOLE",
@@ -517,7 +517,9 @@ def _scene_inventory(organs: list[OrganMeta], selection: list[OrganContext]) -> 
             "(organ_id — Terminologia Anatomica Latin (clinical English)):",
             "",
         ]
-        lines += [f"  {organ.describe()}" for organ in organs]
+        lines += [
+            f"  {organ.describe()}" for organ in sorted(organs, key=lambda item: item.organ_id)
+        ]
     else:
         by_system: dict[str, int] = {}
         for organ in organs:
@@ -828,16 +830,15 @@ def build_instructions(
     layers += [
         PROFILES[profile],
         _language_rule(language),
-        # Immediately before the inventory, because it is what the inventory
+        # Before the catalogue, because it is what the inventory
         # means: 264 structures is a complete trunk or a broken body depending
         # entirely on which atlas the reader has open.
         _body_rule(gender),
-        _scene_inventory(organs, selection),
     ]
-    # After the inventory, because it is what the inventory cannot express: a
-    # summarised list of 3,478 structures says nothing about the headings they
-    # sit under, and those headings are most of what gets asked for.
+    # Stable catalogue before the changing selection: prefix caches can reuse
+    # it when the reader selects another structure. No anatomy is omitted.
     grouping = _groups_rule(groups or [])
     if grouping:
         layers.append(grouping)
+    layers.append(_scene_inventory(organs, selection))
     return "\n\n".join(layers)

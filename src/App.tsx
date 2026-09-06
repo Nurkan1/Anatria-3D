@@ -84,15 +84,16 @@ export default function App() {
           only thing allowed to interrupt a print preview is a question about
           destroying something. */}
       <ConfirmDialog />
-      {!layout.treeCollapsed && (
         <>
           <aside
+            hidden={layout.treeCollapsed}
+            inert={layout.treeCollapsed}
             className="min-h-0 shrink-0 overflow-hidden"
             style={{ width: layout.treeWidth }}
           >
             <LeftPanel />
           </aside>
-          <ResizeHandle
+          {!layout.treeCollapsed && <ResizeHandle
             width={layout.treeWidth}
             onResize={setTreeWidth}
             side="left"
@@ -100,9 +101,8 @@ export default function App() {
             max={TREE_LIMITS.max}
             defaultWidth={TREE_LIMITS.default}
             label="Resize the anatomy panel"
-          />
+          />}
         </>
-      )}
 
       <main className="relative min-h-0 min-w-0 flex-1">
         <AnatomyViewer />
@@ -118,9 +118,8 @@ export default function App() {
         {guideOpen && <GuideOverlay onClose={closeGuide} />}
       </main>
 
-      {!layout.chatCollapsed && (
         <>
-          <ResizeHandle
+          {!layout.chatCollapsed && <ResizeHandle
             width={layout.chatWidth}
             onResize={setChatWidth}
             side="right"
@@ -128,15 +127,16 @@ export default function App() {
             max={CHAT_LIMITS.max}
             defaultWidth={CHAT_LIMITS.default}
             label="Resize the assistant panel"
-          />
+          />}
           <aside
+            hidden={layout.chatCollapsed}
+            inert={layout.chatCollapsed}
             className="min-h-0 shrink-0 overflow-hidden"
             style={{ width: layout.chatWidth }}
           >
             <ChatPanel />
           </aside>
         </>
-      )}
     </div>
   );
 }

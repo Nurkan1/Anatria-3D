@@ -246,7 +246,12 @@ export function StudyViews() {
     [],
   );
 
-  const framed = useRef(0);
+  const framed = useRef(-Infinity);
+  const cachedBounds = useRef<THREE.Box3 | null>(null);
+  const focusState = useRef<ReturnType<typeof useSceneStore.getState> | null>(null);
+  const geometryRevision = useRef<number | undefined>(undefined);
+  const framingLayout = useMemo(() => ({ active, width: size.width, height: size.height }), [active, size.width, size.height]);
+  const lastLayout = useRef<typeof framingLayout | null>(null);
 
   useEffect(() => {
     // Whatever this component did to the renderer, undone. Without it the
@@ -287,6 +292,7 @@ export function StudyViews() {
       // draws, and the reader gets an empty canvas with no explanation.
       renderer.setScissorTest(false);
       renderer.setViewport(0, 0, size.width, size.height);
+      matchAspect(camera, size.width / size.height);
       renderer.render(graph, camera);
       return;
     }
@@ -323,7 +329,7 @@ export function StudyViews() {
    * Point the auxiliary cameras at whatever is on screen, on a slow interval.
    *
    * Not every frame: the framing only changes when the isolated set does, and
-   * `setFromObject` walks a geometry's vertices. Four times a second is
+   * `setFromObject` inspects the mesh bounds. Every 400 ms is
    * imperceptible for a change the reader makes by clicking, and it also
    * catches the explode animation settling without watching for it.
    */
@@ -333,12 +339,21 @@ export function StudyViews() {
     layout: PanelRect[],
   ): THREE.Box3 | null {
     const now = performance.now();
-    const due = now - framed.current > REFRAME_MS;
-    const bounds = focusBounds(graph);
-    if (!bounds) return null;
-    if (!due) return bounds;
-
+    const state = useSceneStore.getState();
+    const previous = focusState.current;
+    const revision = getViewerHandle()?.geometryRevision;
+    const changed = previous === null ||
+      previous.selectedOrganIds !== state.selectedOrganIds || previous.illuminated !== state.illuminated ||
+      previous.isolatedOrganIds !== state.isolatedOrganIds || previous.hiddenSystems !== state.hiddenSystems ||
+      previous.organs !== state.organs || geometryRevision.current !== revision || lastLayout.current !== framingLayout;
+    if (!changed && now - framed.current < REFRAME_MS) return cachedBounds.current;
     framed.current = now;
+    focusState.current = state;
+    geometryRevision.current = revision;
+    lastLayout.current = framingLayout;
+    const bounds = focusBounds(graph);
+    cachedBounds.current = bounds;
+    if (!bounds) return null;
 
     const centre = bounds.getCenter(new THREE.Vector3());
     const radius = Math.max(bounds.getBoundingSphere(new THREE.Sphere()).radius, 1e-4);

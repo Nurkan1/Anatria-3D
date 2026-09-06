@@ -14,7 +14,8 @@ import {
   newRequestId,
   restartEngine,
 } from "@/lib/ipc";
-import { PROTOCOL_VERSION } from "@/lib/schemas";
+import { AgentRequestSchema, PROTOCOL_VERSION } from "@/lib/schemas";
+import { sameTurnScope, TurnRegistry, type SpendContext, type TurnContext, type TurnScope } from "./turnRegistry";
 import type {
   AiProvider,
   AnatomicalSystem,
@@ -31,7 +32,7 @@ import {
   useCaseStore,
   virtualPatientContext,
 } from "@/stores/caseStore";
-import { useChatStore, type ChatMessage } from "@/stores/chatStore";
+import { completeHistory, useChatStore, type ChatMessage } from "@/stores/chatStore";
 import { chatPreferences, patchChatPreferences } from "@/stores/chatPreferences";
 import { useModelStore } from "@/stores/modelStore";
 import { groupNames, organLabel, useSceneStore } from "@/stores/sceneStore";
@@ -114,7 +115,7 @@ function CostNotice({ messages, mode }: { messages: ChatMessage[]; mode: Session
 
   return (
     <p className="mx-3 mb-2 rounded border border-slate-700/70 bg-slate-800/40 px-2 py-1 text-[10px] leading-snug text-slate-400">
-      Each question re-sends this whole conversation, so answers cost more the
+      Each question re-sends recent conversation context, so answers cost more the
       longer it runs — this one sent {formatTokens(totalTokens(last!))} tokens
       {last!.cache_read_tokens > 0 && (
         <>, {formatTokens(last!.cache_read_tokens)} of them re-read from the
@@ -588,6 +589,15 @@ function ReviewIntro({ onAsk, disabled }: { onAsk: () => void; disabled: boolean
   );
 }
 
+function currentTurnScope(): TurnScope {
+  const chat = useChatStore.getState();
+  return {
+    sessionId: chat.sessionId, sessionRevision: chat.sessionRevision, mode: chat.mode,
+    genderModel: useSceneStore.getState().genderModel,
+    caseId: useCaseStore.getState().activeCaseId,
+  };
+}
+
 export function ChatPanel() {
   const organs = useSceneStore((s) => s.organs);
   const selectedOrganIds = useSceneStore((s) => s.selectedOrganIds);
@@ -604,7 +614,6 @@ export function ChatPanel() {
   const noteTool = useChatStore((s) => s.noteTool);
   const finishTurn = useChatStore((s) => s.finishTurn);
   const failTurn = useChatStore((s) => s.failTurn);
-  const markCancelled = useChatStore((s) => s.markCancelled);
   const noteScore = useChatStore((s) => s.noteScore);
   const mode = useChatStore((s) => s.mode);
   const beginSession = useChatStore((s) => s.beginSession);
@@ -620,48 +629,39 @@ export function ChatPanel() {
   const [spokenVolume, setSpokenVolume] = useState<number>(() => chatPreferences().spokenVolume);
   const [draft, setDraft] = useState("");
   const [transportError, setTransportError] = useState<string | null>(null);
+  const [preparing, setPreparing] = useState(false);
+  const preparingRef = useRef(false);
 
   const receiveModels = useModelStore((s) => s.receiveModels);
   const failCheck = useModelStore((s) => s.failCheck);
   const selectedModel = useModelStore((s) => s.byProvider[provider]?.selected ?? null);
 
   const scrollRef = useRef<HTMLDivElement>(null);
-  const pendingRef = useRef<string | null>(null);
-  pendingRef.current = pendingRequestId;
-
-  // Read by the engine-event callbacks. Held in a ref rather than in their
-  // dependency lists so changing the profile does not tear down and rebuild the
-  // event subscription mid-answer.
-  const turnContextRef = useRef({ profile, language });
-  turnContextRef.current = { profile, language };
-
-  /** Structures selected when each question was sent, so the journal files the
-   *  turn under the anatomy it was actually about rather than under whatever
-   *  happens to be selected once the answer lands. */
-  const askedAboutRef = useRef(new Map<string, string[]>());
-  /** Grades arrive mid-turn, before the session row exists. Applied on `done`. */
   const verdictRef = useRef(new Map<string, { score: number; verdict: string }>());
-  /**
-   * The provider each question was sent to.
-   *
-   * Per request rather than read back off the drawer when the answer lands: the
-   * reader can switch provider mid-answer, and the one thing a ledger may never
-   * do is file a turn's cost against a provider that did not serve it.
-   */
-  const askedWithRef = useRef(new Map<string, AiProvider>());
+  const [turns] = useState(() => new TurnRegistry(currentTurnScope, (id, sent) => {
+    useChatStore.getState().markCancelled(id);
+    verdictRef.current.delete(id);
+    if (sent) void cancelRequest(id).catch((error: unknown) => {
+      setTransportError(`The previous request was detached, but the engine could not confirm cancellation: ${String(error)}`);
+    });
+  }));
 
-  /** Drop a turn's bookkeeping. A turn that failed is never going to be filed. */
-  const forgetTurn = useCallback((requestId: string) => {
-    askedAboutRef.current.delete(requestId);
-    verdictRef.current.delete(requestId);
-    askedWithRef.current.delete(requestId);
-  }, []);
+  useEffect(() => {
+    const stops = [
+      useChatStore.subscribe(turns.checkScope),
+      useSceneStore.subscribe(turns.checkScope),
+      useCaseStore.subscribe(turns.checkScope),
+    ];
+    return () => {
+      stops.forEach((off) => off());
+      turns.invalidate();
+    };
+  }, [turns]);
 
-  const persistTurn = useCallback((requestId: string) => {
+  const persistTurn = useCallback((requestId: string, context: Readonly<TurnContext>) => {
     const chat = useChatStore.getState();
     const turn = chat.turn(requestId);
-    const organIds = askedAboutRef.current.get(requestId) ?? [];
-    askedAboutRef.current.delete(requestId);
+    const organIds = [...context.organIds];
     const grade = verdictRef.current.get(requestId);
     verdictRef.current.delete(requestId);
     if (!turn) return;
@@ -670,16 +670,16 @@ export function ChatPanel() {
     // put generated prose into a record that otherwise holds only what the
     // reader did — and the journal's own CHECK on `kind` would refuse it
     // anyway. What it *does* cost is tokens, and `recordSpend` still runs.
-    if (chat.mode === "review") return;
+    if (context.mode === "review") return;
 
     const study = useStudyStore.getState();
-    const { profile: askedProfile, language: askedLanguage } = turnContextRef.current;
+    const { profile: askedProfile, language: askedLanguage } = context;
 
     void study
       .saveTurn({
-        session_id: chat.sessionId,
-        kind: chat.mode,
-        title: chat.messages.find((message) => message.role === "user")?.content ?? "",
+        session_id: context.sessionId,
+        kind: context.mode,
+        title: context.title,
         profile: askedProfile,
         language: askedLanguage,
         question: turn.question,
@@ -703,7 +703,7 @@ export function ChatPanel() {
         //
         // Only in case mode. A tutor conversation that happened to be open
         // while a case was selected is not a consultation.
-        case_id: chat.mode === "case" ? useCaseStore.getState().activeCaseId : null,
+        case_id: context.mode === "case" ? context.caseId : null,
       })
       // Strictly after the turn, and only if it landed: the session row is
       // created by that save, so grading a failed one would raise a second,
@@ -711,13 +711,13 @@ export function ChatPanel() {
       .then((saved) => {
         if (!saved) return;
         if (grade) {
-          void study.recordVerdict(chat.sessionId, grade.score, grade.verdict);
+          void study.recordVerdict(context.sessionId, grade.score, grade.verdict);
         }
         // The case store holds `visit_count`, and filing a visit is what
         // changes it. Reloading only the study store left the chip saying
         // "visit 8" while the journal beside it listed visit 10 — the same
         // two-stores-one-write mistake the journal restore made.
-        if (chat.mode === "case" && useCaseStore.getState().activeCaseId) {
+        if (context.mode === "case" && context.caseId) {
           void useCaseStore.getState().refresh();
         }
       });
@@ -737,13 +737,12 @@ export function ChatPanel() {
    * nobody can check against a provider's bill.
    */
   const recordSpend = useCallback(
-    (requestId: string, usage: TokenUsage | null, model: string | null) => {
-      const provider = askedWithRef.current.get(requestId);
-      askedWithRef.current.delete(requestId);
-      if (!usage || !model || !provider) return;
+    (context: Readonly<SpendContext>, usage: TokenUsage | null, model: string | null) => {
+      if (!usage || !model) return;
+      const { provider } = context;
 
       void useUsageStore.getState().record({
-        session_id: useChatStore.getState().sessionId,
+        session_id: context.sessionId,
         provider,
         model,
         input_tokens: usage.input_tokens,
@@ -784,6 +783,7 @@ export function ChatPanel() {
   }, []);
 
   useSceneCommands({
+    acceptSceneCommand: (id) => turns.accepts(id),
     onReady: acceptEngine,
     // The engine boots before the window does, so its `ready` frame — or the
     // reason it never came — is usually already gone by the time we are
@@ -808,12 +808,12 @@ export function ChatPanel() {
       );
     }, [acceptEngine]),
     onTextDelta: useCallback(
-      (requestId: string, text: string) => appendDelta(requestId, text),
-      [appendDelta],
+      (requestId: string, text: string) => { if (turns.accepts(requestId)) appendDelta(requestId, text); },
+      [appendDelta, turns],
     ),
     onToolStarted: useCallback(
-      (requestId: string, tool: string) => noteTool(requestId, tool),
-      [noteTool],
+      (requestId: string, tool: string) => { if (turns.accepts(requestId)) noteTool(requestId, tool); },
+      [noteTool, turns],
     ),
     onSceneCommand: useCallback(
       (requestId: string, command: SceneCommand) => noteCommand(requestId, command),
@@ -826,21 +826,24 @@ export function ChatPanel() {
     ),
     onCaseVerdict: useCallback(
       (requestId: string, score: number, verdict: string) => {
+        if (!turns.accepts(requestId)) return;
         noteScore(requestId, score);
         verdictRef.current.set(requestId, { score, verdict });
       },
-      [noteScore],
+      [noteScore, turns],
     ),
     onDone: useCallback(
       (requestId: string, usage: TokenUsage | null, model: string | null) => {
-        finishTurn(requestId, usage ?? undefined, model ?? undefined);
-        // Saving is best-effort by construction: `studyStore` swallows its own
-        // failures, so a broken journal costs the student their history, never
-        // the answer they are reading.
-        persistTurn(requestId);
-        recordSpend(requestId, usage, model);
+        const entry = turns.take(requestId);
+        if (!entry) return;
+        if (entry.active) {
+          finishTurn(requestId, usage ?? undefined, model ?? undefined);
+          persistTurn(requestId, entry.context);
+        }
+        verdictRef.current.delete(requestId);
+        recordSpend(entry.context, usage, model);
       },
-      [finishTurn, persistTurn, recordSpend],
+      [finishTurn, persistTurn, recordSpend, turns],
     ),
     // A frame this build cannot read is not a quiet degradation — it is an
     // answer that arrives looking fine while nothing behind it happens. Said
@@ -848,12 +851,20 @@ export function ChatPanel() {
     // building from source and the cause is never obvious from the symptom.
     onProtocolViolation: useCallback((_payload: unknown, issues: string) => {
       console.error("[engine] protocol violation", issues);
-      setTransportError(
-        "The engine sent something this build could not read, so the last " +
-          "answer was not filed or counted. If you built from source, rebuild " +
-          "the analysis engine — it is probably older than this window.",
-      );
-    }, []),
+      const requestId = _payload && typeof _payload === "object" && "request_id" in _payload
+        ? _payload.request_id : null;
+      if (typeof requestId === "string" && !turns.accepts(requestId)) {
+        if (useModelStore.getState().providerFor(requestId)) {
+          failCheck(requestId, "invalid_response", "The engine sent an unreadable model catalogue.");
+        }
+        return;
+      }
+      const message = "The engine sent an unreadable response. This turn was stopped. Retry, or restart the engine if the problem persists.";
+      const id = useChatStore.getState().pendingRequestId;
+      if (id) failTurn(id, message);
+      turns.invalidate();
+      setTransportError(message);
+    }, [failTurn, failCheck, turns]),
     onError: useCallback(
       (code: string, message: string, requestId: string | null) => {
         // The engine reports its own death with no request id. Clearing the
@@ -867,15 +878,16 @@ export function ChatPanel() {
           failCheck(requestId, code, message);
           return;
         }
-        const turnId = requestId ?? pendingRef.current;
+        const turnId = requestId ?? useChatStore.getState().pendingRequestId;
+        if (requestId && !turns.accepts(requestId)) return;
         // Engine-level failures (a dead sidecar) carry no request id, so they
         // cannot be attached to a turn — surface them above the composer.
         if (turnId) {
           failTurn(turnId, `${code}: ${message}`);
-          forgetTurn(turnId);
+          turns.invalidate(turnId);
         } else setTransportError(message);
       },
-      [failTurn, failCheck, forgetTurn],
+      [failTurn, failCheck, turns],
     ),
   });
 
@@ -911,82 +923,69 @@ export function ChatPanel() {
   // What the assistant may isolate whole. Names rather than ids, because most
   // groups have no mesh of their own — see `isolate_group`.
   const groups = useMemo(() => groupNames(structures), [structures]);
-  const canSend = engineReady && draft.trim().length > 0 && !pendingRequestId;
+  const contextTrimmed = useMemo(() => completeHistory(messages).length > 100, [messages]);
+  const canSend = engineReady && draft.trim().length > 0 && !pendingRequestId && !preparing;
 
   async function send(text?: string) {
     const prompt = (text ?? draft).trim();
-    if (!prompt || !engineReady || pendingRequestId) return;
-
+    if (!prompt || !engineReady || useChatStore.getState().pendingRequestId || preparingRef.current) return;
     const requestId = newRequestId();
-    const history = useChatStore.getState().history();
-    // The whole selection travels, so a question can be about the set.
-    const selection = selectedOrganIds
-      .map((id) => organs[id])
-      .filter((organ) => !!organ)
-      .map((organ) => ({
-        organ_id: organ.organ_id,
-        ta2_latin: organ.ta2_latin,
-        name_en: organ.name_en,
-        system: organ.system,
-      }));
+    const chat = useChatStore.getState();
+    const selection = selectedOrganIds.map((id) => organs[id]).filter((organ) => !!organ)
+      .map(({ organ_id, ta2_latin, name_en, system }) => ({ organ_id, ta2_latin, name_en, system }));
+    if (prompt.length > 8000 || selection.length > 64) {
+      setTransportError(prompt.length > 8000
+        ? "Use at most 8,000 characters per question. Your draft has been kept."
+        : "Select at most 64 structures before asking. Your draft has been kept.");
+      return;
+    }
 
-    // Asking with something selected is the behaviour the hint exists to ask
-    // for, so doing it once retires the hint. Nobody who already works this way
-    // is ever told to.
-    if (selection.length > 0) retireAimHint();
-
-    setDraft("");
-    setTransportError(null);
-    startTurn(requestId, prompt);
-    askedAboutRef.current.set(
-      requestId,
-      selection.map((organ) => organ.organ_id),
-    );
-    askedWithRef.current.set(requestId, provider);
-
+    preparingRef.current = true;
+    setPreparing(true);
+    const context: TurnContext = {
+      ...currentTurnScope(), provider, model: selectedModel, profile, language,
+      organIds: selection.map((organ) => organ.organ_id),
+      title: chat.messages.find((message) => message.role === "user")?.content ?? prompt,
+    };
+    turns.begin(requestId, context);
+    let dispatched = false;
     try {
-      await askAgent({
-        request_id: requestId,
-        query: prompt,
-        history,
-        provider,
+      const patient = mode === "case" || mode === "review"
+        ? await virtualPatientContext(context.sessionId, (id) => organs[id] ? organLabel(organs[id]) : null, mode)
+        : {};
+      // Preparation can await the journal. Its result belongs to the original scope.
+      if (!turns.accepts(requestId)) return;
+      const request = AgentRequestSchema.parse({
+        request_id: requestId, query: prompt, history: chat.history(), provider,
         ...(selectedModel ? { model: selectedModel } : {}),
-        profile,
-        language,
-        gender_model: genderModel,
-        mode,
-        selection,
-        // The engine validates every organ_id the model produces against this
-        // list, so its scene tools cannot reference anatomy that is not loaded.
+        profile, language, gender_model: genderModel, mode, selection,
         available_organs: structures.map(({ mesh_file: _f, node: _n, ...meta }) => meta),
-        available_groups: groups,
-        // Who the drill is about, when it is about anyone. Read fresh at send
-        // time rather than captured, because the reader can pick a patient
-        // between one question and the next.
-        ...(mode === "case" || mode === "review"
-          ? await virtualPatientContext(
-              useChatStore.getState().sessionId,
-              (organId) => {
-                const organ = useSceneStore.getState().organs[organId];
-                return organ ? organLabel(organ) : null;
-              },
-              mode,
-            )
-          : {}),
+        available_groups: groups, ...patient,
       });
-    } catch (err) {
-      failTurn(requestId, String(err));
+      if (!turns.markSent(requestId)) return;
+      startTurn(requestId, prompt);
+      setTransportError(null);
+      dispatched = true;
+      await askAgent(request);
+      // Preserve edits made while the IPC acknowledgement was pending.
+      if (text === undefined && sameTurnScope(context, currentTurnScope())) {
+        setDraft((current) => current.trim() === prompt ? "" : current);
+      }
+      if (selection.length > 0) retireAimHint();
+    } catch (error) {
+      if (turns.accepts(requestId)) {
+        if (dispatched) failTurn(requestId, String(error));
+        setTransportError(`Could not send the question. Your draft has been kept. ${String(error)}`);
+      }
+      turns.invalidate(requestId);
+    } finally {
+      preparingRef.current = false;
+      setPreparing(false);
     }
   }
 
-  async function stop() {
-    if (!pendingRequestId) return;
-    try {
-      await cancelRequest(pendingRequestId);
-    } finally {
-      markCancelled(pendingRequestId);
-      forgetTurn(pendingRequestId);
-    }
+  function stop() {
+    turns.invalidate(useChatStore.getState().pendingRequestId);
   }
 
   return (
@@ -1128,6 +1127,11 @@ export function ChatPanel() {
         </p>
       )}
 
+      {contextTrimmed && (
+        <p role="status" className="mx-3 mb-2 text-[11px] text-slate-400">
+          The assistant receives the latest 50 complete exchanges. Your full journal is kept.
+        </p>
+      )}
       <CostNotice messages={messages} mode={mode} />
 
       {shouldShowAimHint({

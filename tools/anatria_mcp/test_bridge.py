@@ -71,13 +71,20 @@ def test_not_asking_for_it_is_not_an_error(monkeypatch: pytest.MonkeyPatch) -> N
 
 
 @pytest.mark.parametrize("said", ["1", "true", "TRUE", "yes", "on"])
-def test_every_ordinary_spelling_of_yes_works(
+def test_every_ordinary_spelling_of_yes_requests_the_transport(
     monkeypatch: pytest.MonkeyPatch, said: str
 ) -> None:
     # Generous on purpose. Somebody who wrote `true` because every other tool
     # takes `true` should not get five tools instead of twenty with no clue why.
     monkeypatch.setenv("ANATRIA3D_BRIDGE", said)
-    assert ControlBridge.from_environment() is not None
+    monkeypatch.delenv("ANATRIA3D_BRIDGE_PIPE", raising=False)
+    if sys.platform == "win32":
+        assert ControlBridge.from_environment() is not None
+    else:
+        # Enabling an unsupported transport must fail explicitly, not silently
+        # return None as though the reader had disabled it.
+        with pytest.raises(BridgeUnavailable, match="Windows transport"):
+            ControlBridge.from_environment()
 
 
 @pytest.mark.parametrize("said", ["0", "false", "no", ""])
