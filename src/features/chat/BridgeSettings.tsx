@@ -83,6 +83,22 @@ export function BridgeSettings() {
           Not in this build. The bridge lets another program on your computer drive
           the 3D view, and so far it is only built for Windows.
         </p>
+        {/* The bridge is the half that is missing, not the whole thing. The
+            five read-only tools are plain Python and run anywhere — they do not
+            need the bridge, or this window open, or a key. Saying nothing here
+            would ship a working server nobody could find. */}
+        {status.server && (
+          <div className="mt-2 space-y-1">
+            <CopyRow label="Atlas MCP server" value={`${status.server}/atlas.py`} />
+            <p className="text-[10px] leading-snug text-slate-600">
+              The five read-only tools do work here: search the atlas, read a
+              structure, walk the hierarchy. Point an MCP client at this file
+              with a Python 3.10+ environment of your own. The fifteen that move
+              the view need the bridge, so they are absent. See INSTALLED.md
+              beside it.
+            </p>
+          </div>
+        )}
       </div>
     );
   }

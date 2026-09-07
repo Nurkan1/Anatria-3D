@@ -68,6 +68,35 @@ describe("the switch", () => {
     expect(screen.queryByRole("switch")).toBeNull();
   });
 
+  it("still points a Linux reader at the half that does work there", async () => {
+    // The bridge is missing on Linux; the five read-only tools are not. They
+    // are plain Python and need neither the bridge nor this window. Shipping a
+    // working server nobody can find is worse than not shipping it.
+    ipc.bridgeStatus.mockResolvedValue(
+      status({ supported: false, server: "/usr/lib/anatria3d/anatria-mcp" }),
+    );
+    render(<BridgeSettings />);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("/usr/lib/anatria3d/anatria-mcp/atlas.py"),
+      ).toBeTruthy();
+    });
+    expect(screen.getByText(/five read-only tools do work here/i)).toBeTruthy();
+    // And it must not imply the other fifteen are available.
+    expect(screen.getByText(/need the bridge, so they are absent/i)).toBeTruthy();
+  });
+
+  it("says nothing about a server a build does not carry", async () => {
+    ipc.bridgeStatus.mockResolvedValue(status({ supported: false, server: null }));
+    render(<BridgeSettings />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/not in this build/i)).toBeTruthy();
+    });
+    expect(screen.queryByText(/atlas mcp server/i)).toBeNull();
+  });
+
   it("starts off, with nothing to paste anywhere", async () => {
     ipc.bridgeStatus.mockResolvedValue(status());
     render(<BridgeSettings />);
