@@ -2,6 +2,7 @@ import { useEffect } from "react";
 
 import { UNKNOWN_BRIDGE, useBridgeStore } from "@/stores/bridgeStore";
 
+import { agentBriefing } from "./agentBriefing";
 import { useCopy } from "./useCopy";
 
 /**
@@ -129,8 +130,22 @@ export function BridgeSettings() {
             <summary className="cursor-pointer text-[10px] text-slate-600 hover:text-slate-400">
               Writing your own client?
             </summary>
-            <div className="mt-1">
+            <div className="mt-1 space-y-2">
               <CopyRow label="Pipe" value={status.pipe} />
+              {status.pipe && (
+                <>
+                  <CopyButton
+                    label="Copy instructions for an external agent"
+                    value={agentBriefing(status.pipe)}
+                  />
+                  <p className="text-[10px] leading-snug text-slate-600">
+                    Paste it into the agent. It names the MCP server first, the
+                    pipe only as a fallback, and the three things that otherwise
+                    look like a broken bridge. It contains the pipe path above,
+                    which identifies your Windows account on this machine.
+                  </p>
+                </>
+              )}
             </div>
           </details>
 
@@ -162,6 +177,26 @@ export function BridgeSettings() {
  * would light up one row when the reader copied another, which in a panel
  * whose whole job is "paste this" is worse than no feedback.
  */
+/**
+ * A copy control for something too long to show — a briefing, not a value.
+ *
+ * `CopyRow` prints what it copies, which is right for a pipe path and wrong for
+ * forty lines: truncated to one line it would look like a fragment, and shown
+ * whole it would bury the panel.
+ */
+function CopyButton({ label, value }: { label: string; value: string }) {
+  const { copied, copy } = useCopy();
+  return (
+    <button
+      type="button"
+      onClick={() => void copy(value)}
+      className="w-full rounded border border-slate-700 px-2 py-1 text-[10px] text-slate-400 transition hover:border-sky-600 hover:text-sky-200"
+    >
+      {copied ? "Copied" : label}
+    </button>
+  );
+}
+
 function CopyRow({ label, value }: { label: string; value: string | null }) {
   const { copied, copy } = useCopy();
   if (!value) return null;
