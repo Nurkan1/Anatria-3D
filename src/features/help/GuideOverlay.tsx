@@ -483,6 +483,21 @@ const SECTIONS: Section[] = [
           the other did not.
         </p>
         <p>
+          Where a provider served part of the question from its own cache, that reads{" "}
+          <em>16.1k of 418.9k tokens</em>: what was charged first, and the figure your
+          provider&apos;s dashboard will show second. The large number grows with how
+          much the assistant <em>did</em> rather than with what you asked — a question
+          answered with thirty scene commands re-sends the same context thirty times,
+          which is exactly what a provider caches. Hover it for the breakdown.
+        </p>
+        <p>
+          An answer that moved the model carries <Ui>Restore this view</Ui> beside{" "}
+          <Ui>Copy answer</Ui>. One question can isolate a region, take the body to
+          glass and light ten structures; five minutes of turning the model round
+          later, the arrangement those paragraphs describe is gone. That button puts
+          it back. Answers that moved nothing do not show it.
+        </p>
+        <p>
           Your provider, model, profile and language are remembered. Set them once; the
           next launch opens on them.
         </p>
@@ -734,7 +749,10 @@ const SECTIONS: Section[] = [
         </p>
         <p>
           Reopening a session brings back its transcript and the structures it was
-          about. All of it lives in a local file; nothing is uploaded anywhere.
+          about — and <Ui>Restore this view</Ui> still works on its answers, so a
+          conversation from a month ago can put the model back the way it left it
+          rather than only describe it. All of it lives in a local file; nothing is
+          uploaded anywhere.
         </p>
         <p>
           Because it is local, it is yours to carry. <Ui>Export</Ui> writes the whole
@@ -871,17 +889,29 @@ const SECTIONS: Section[] = [
           keeps working the way it always did.
         </p>
         <Callout>
-          <strong>Reading costs you nothing to set up.</strong> Point an agent at the
-          atlas server and it can search structures, read their Latin terms and walk
-          the hierarchy with no application running, no key and no network. Only
-          <em> driving the viewport</em> needs the steps below.
+          <strong>Reading costs you nothing to set up, and the server is already
+          here.</strong> It installs with Anatria3D — the panel names the file, under{" "}
+          <Ui>Writing your own client?</Ui> — so there is nothing to download. Point
+          an agent at it with a Python environment of its own and it can search
+          structures, read their Latin terms and walk the hierarchy with no
+          application running, no key and no network. Only <em>driving the
+          viewport</em> needs the steps below.
         </Callout>
         <Callout>
           <strong>It moves the model and writes nothing down.</strong> Read this
           before you choose between the two, because it is the whole difference. A
-          session driven from outside leaves no trace here: no saved conversation, no
-          note, no case, no coverage, nothing in <Ui>Usage</Ui>. What was said stays
-          in the other program&apos;s window.
+          session driven from outside is never <em>filed</em> here: no saved
+          conversation, no note, no case, no coverage, nothing in <Ui>Usage</Ui>.
+          <br />
+          <br />
+          It can put words on your screen, and they are marked. An outside agent may
+          post a message into an <Ui>External messages</Ui> lane below the
+          conversation — every entry labelled <em>via the control bridge</em>, in its
+          own colour, never in the assistant&apos;s own bubbles. The last twenty are
+          kept, they vanish when you turn the switch off, and they are never saved to
+          your journal or sent to your AI provider. The labelling is the point: that
+          text was written by a program Anatria3D does not control and cannot hold to
+          its rules, so it must never be mistaken for the assistant.
           <br />
           <br />
           Everything that makes this a place to study rather than a model to look at —
@@ -906,6 +936,16 @@ const SECTIONS: Section[] = [
           other program finds this window by itself: the connection is named after
           your own account, which it already knows.
         </Callout>
+        <p>
+          For an agent that cannot be configured that way, open{" "}
+          <Ui>Writing your own client?</Ui> and press{" "}
+          <Ui>Copy instructions for an external agent</Ui>. It writes out everything
+          such a program needs — where the server is on this machine, and failing that
+          how to speak to the connection directly — and you paste it in as your first
+          message. It contains the connection&apos;s name, which identifies your
+          Windows account on this computer; that is worth knowing before you paste it
+          into a hosted model.
+        </p>
         <Callout>
           <strong>Off means off.</strong> Turning the switch off closes the
           connection, so there is nothing left to connect to. Closing Anatria3D does
@@ -934,8 +974,10 @@ const SECTIONS: Section[] = [
         <p>
           A connected agent gets the same fifteen tools this application&apos;s own
           assistant has — isolating, lighting, ghosting a layer, cutting a section,
-          tracing a pathway. That is the point of it: an agent working from outside
-          should be able to do what the one inside can do, not a reduced version.
+          tracing a pathway — and one the assistant has no use for: posting a message
+          into the lane described above. That is the point of it: an agent working
+          from outside should be able to do what the one inside can do, not a reduced
+          version.
         </p>
         <Callout>
           <strong>It cannot read what you have written.</strong> Your study journal,
@@ -960,8 +1002,12 @@ const SECTIONS: Section[] = [
           connected it here.
         </Callout>
         <p>
-          Windows only, for now. On other builds the panel says so rather than showing
-          a switch that cannot work.
+          <strong>Windows only — but only the driving half.</strong> Moving the
+          viewport needs a Windows pipe, so on Linux and macOS the panel says so
+          rather than showing a switch that cannot work. The five reading tools are
+          ordinary Python and run everywhere, and the panel names the installed server
+          there too, so an agent on those machines can still search the atlas and read
+          it.
         </p>
       </>
     ),
