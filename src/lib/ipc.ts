@@ -117,6 +117,16 @@ export interface BridgeStatus {
   accepted: number;
   /** Lines refused: not a scene command, or malformed. */
   refused: number;
+  /**
+   * Where the MCP server was installed, or null in a build without it.
+   *
+   * It ships as source — seventy kilobytes of Python — rather than a second
+   * frozen binary, which would have cost about ninety megabytes for something
+   * most readers never touch. An agent that can run a shell can build an
+   * environment for it; what it cannot do is invent the code, and until this
+   * shipped the only copy was in a repository it had no reason to have.
+   */
+  server: string | null;
 }
 
 export function bridgeStatus(): Promise<BridgeStatus> {

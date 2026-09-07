@@ -52,6 +52,7 @@ export const UNKNOWN_BRIDGE: BridgeStatus = {
   pipe: null,
   accepted: 0,
   refused: 0,
+  server: null,
 };
 
 export const useBridgeStore = create<BridgeStore>()((set, get) => {

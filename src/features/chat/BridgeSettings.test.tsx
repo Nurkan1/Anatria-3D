@@ -32,6 +32,7 @@ function status(overrides: Partial<BridgeStatus> = {}): BridgeStatus {
     pipe: null,
     accepted: 0,
     refused: 0,
+    server: null,
     ...overrides,
   };
 }

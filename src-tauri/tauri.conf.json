@@ -37,7 +37,12 @@
       "icons/icon.ico"
     ],
     "resources": {
-      "../engine/dist/anatria-engine/": "anatria-engine/"
+      "../engine/dist/anatria-engine/": "anatria-engine/",
+      "../tools/anatria_mcp/atlas.py": "anatria-mcp/atlas.py",
+      "../tools/anatria_mcp/scene.py": "anatria-mcp/scene.py",
+      "../tools/anatria_mcp/bridge.py": "anatria-mcp/bridge.py",
+      "../tools/anatria_mcp/pipe_server.py": "anatria-mcp/pipe_server.py",
+      "../tools/anatria_mcp/INSTALLED.md": "anatria-mcp/INSTALLED.md"
     },
     "category": "Education",
     "publisher": "PYSBG",

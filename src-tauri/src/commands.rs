@@ -7,7 +7,7 @@
 
 use serde::Deserialize;
 use serde_json::{Map, Value};
-use tauri::State;
+use tauri::{Manager, State};
 
 use crate::app_log::{AppLog, LogEntry};
 use crate::control_bridge::{BridgeError, BridgeStatus, ControlBridge};
@@ -468,8 +468,29 @@ pub async fn import_journal(
 /// machine, it dies when the bridge stops, and its whole purpose is to be
 /// copied into another program's configuration by the person sitting here.
 #[tauri::command]
-pub fn bridge_status(bridge: State<'_, ControlBridge>) -> BridgeStatus {
-    bridge.status()
+pub fn bridge_status(app: tauri::AppHandle, bridge: State<'_, ControlBridge>) -> BridgeStatus {
+    let mut status = bridge.status();
+    status.server = mcp_server_dir(&app);
+    status
+}
+
+/// Where the bundled MCP server landed, or `None` if this build has none.
+///
+/// The installer carries the server as source — some seventy kilobytes of
+/// Python — rather than a second frozen binary, which would have cost about
+/// ninety megabytes for a feature most readers never touch. An agent that can
+/// run a shell can make an environment for it; what it cannot do is invent the
+/// code, and until now the only copy was in a repository it had no reason to
+/// have.
+///
+/// The presence of `atlas.py` is the test rather than the directory's: a
+/// directory can exist and be empty, and reporting a path to nothing would send
+/// somebody looking for a file that is not there.
+fn mcp_server_dir(app: &tauri::AppHandle) -> Option<String> {
+    let dir = app.path().resource_dir().ok()?.join("anatria-mcp");
+    dir.join("atlas.py")
+        .is_file()
+        .then(|| dir.to_string_lossy().into_owned())
 }
 
 /// Turn the bridge on, and connect it to the viewport.

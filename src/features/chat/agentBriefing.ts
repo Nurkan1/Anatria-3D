@@ -14,14 +14,16 @@
  *
  * # Why it must stand alone
  *
- * The first version of this text sent the agent to `tools/anatria_mcp/atlas.py`
- * and `bridge.py`. That worked in testing and would have failed for every real
- * reader: the installer bundles the frozen sidecar and nothing else, so on a
- * machine where somebody installed the `.exe` those files do not exist. The
- * test only passed because the repository happened to be on the same disk.
+ * The first version of this text sent the agent to `tools/anatria_mcp/atlas.py`.
+ * That worked in testing and would have failed for every real reader: the
+ * installer bundled the frozen sidecar and nothing else, so on a machine where
+ * somebody installed the `.exe` the file did not exist. The test only passed
+ * because the repository happened to be on the same disk.
  *
- * So the pipe half is written for someone who has the application and no source
- * at all, and it carries a whole client rather than a description of one.
+ * Two things came out of that. The server now ships with the application, so
+ * the path here is the one on *this* machine, resolved at runtime rather than
+ * written down. And the pipe half carries a whole client rather than a
+ * description of one, for the reader who has no Python at all.
  *
  * # The three things that cost an attempt
  *
@@ -32,25 +34,36 @@
  * And the encoding: a byte order mark is now tolerated, but writing without one
  * is still the correct thing to do.
  */
-export function agentBriefing(pipe: string): string {
+export function agentBriefing(pipe: string, server: string | null): string {
   // `\\.\pipe\name` → `name`. The Win32 API takes the last segment alone, and
   // handing it the full path is the commonest way to fail at this.
   const name = pipe.replace(/^\\\\\.\\pipe\\/, "");
+
+  // The installed server if this build carries one, the checkout path if it
+  // does not. Naming a file that is not there is how the first version of this
+  // briefing failed, and it failed silently: the agent went looking, found
+  // nothing, and fell back to guessing at the transport.
+  const serverPath = server
+    ? `${server}\\atlas.py`
+    : "tools/anatria_mcp/atlas.py (in the Anatria3D source)";
 
   return `You are driving Anatria3D, a 3D anatomy atlas already running on this
 computer. It offers twenty tools: five that read the atlas and fifteen that move
 what is on screen. The control bridge switch is on, or you would not have been
 given this.
 
-IF YOU HAVE THE ANATRIA3D SOURCE — best, and skip the rest.
-Configure its MCP server and restart your client:
-  server: tools/anatria_mcp/atlas.py
+BEST — configure the MCP server and restart your client.
+  server: ${serverPath}
   env:    {"ANATRIA3D_BRIDGE": "1"}
-The tools then arrive typed, validated and documented, and you never touch the
-wire format. The installed application does NOT include this server — it ships
-the engine only — so if you have no source, use the pipe below.
+It needs Python 3.10+ and one package. Build an environment of your own — do
+not install anything into the application's folder:
+  python -m venv <somewhere>/mcpenv
+  <somewhere>/mcpenv/Scripts/python -m pip install "mcp>=2.1,<3"
+The tools then arrive typed, validated and documented, you can SEARCH for
+structure identifiers, and you never touch the wire format. Read INSTALLED.md
+beside the server for the rest.
 
-OTHERWISE — write to the named pipe. This needs no source and no Python.
+OTHERWISE — write to the named pipe. This needs no Python at all.
   full path:  ${pipe}
   pipe name:  ${name}
 
@@ -81,8 +94,9 @@ WHAT WILL SURPRISE YOU OTHERWISE
 - A command naming a structure that is not loaded is accepted and does nothing
   on screen. That is not an error, and not evidence the structure is absent:
   the reader can switch whole systems off.
-- Identifiers are not guessable. There is no way to search over the pipe, so
-  ask the reader for the identifier, or use the MCP server, which can search.
+- Identifiers are not guessable, and there is no way to search over the pipe.
+  Ask the reader, or take the MCP route above, which can search. Inventing one
+  produces a command that is accepted and does nothing.
 - Your text appears in a separate lane marked "via the control bridge". It is
   not the Anatria3D assistant, it is not saved, and it is never sent to the
   reader's AI provider. Write accordingly.`;

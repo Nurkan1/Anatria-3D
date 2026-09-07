@@ -66,7 +66,7 @@ const usage = { input_tokens: 100, output_tokens: 12, cache_read_tokens: 80 };
 
 describe("external bridge prose", () => {
   it("receives prose with the panel hidden and retains it after reopening", async () => {
-    useBridgeStore.setState({ status: { supported: true, running: true, pipe: "test", accepted: 0, refused: 0 } });
+    useBridgeStore.setState({ status: { supported: true, running: true, pipe: "test", accepted: 0, refused: 0, server: null } });
     const view = render(<div hidden><ChatPanel /></div>);
     await act(async () => {});
     emit({ type: "scene_command", request_id: "bridge-3", command: { action: "say", text: "While hidden" } });
@@ -78,7 +78,7 @@ describe("external bridge prose", () => {
   });
 
   it("renders in its own lane without entering messages, history, commands or saveTurn", async () => {
-    useBridgeStore.setState({ status: { supported: true, running: true, pipe: "test", accepted: 0, refused: 0 } });
+    useBridgeStore.setState({ status: { supported: true, running: true, pipe: "test", accepted: 0, refused: 0, server: null } });
     const apply = vi.spyOn(useSceneStore.getState(), "applyCommand");
     const note = vi.spyOn(useChatStore.getState(), "noteCommand");
     const { id, draft } = await mountAndSend();
@@ -109,7 +109,7 @@ describe("external bridge prose", () => {
   it("ignores say from local request ids and from a bridge that is off", async () => {
     const { id } = await mountAndSend();
     emit({ type: "scene_command", request_id: "bridge-2", command: { action: "say", text: "Off" } });
-    useBridgeStore.setState({ status: { supported: true, running: true, pipe: "test", accepted: 0, refused: 0 } });
+    useBridgeStore.setState({ status: { supported: true, running: true, pipe: "test", accepted: 0, refused: 0, server: null } });
     emit({ type: "scene_command", request_id: id, command: { action: "say", text: "Wrong lane" } });
     expect(useBridgeStore.getState().prose).toEqual([]);
     expect(screen.queryByRole("region", { name: "Control bridge messages" })).toBeNull();

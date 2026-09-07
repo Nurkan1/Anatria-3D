@@ -136,7 +136,7 @@ export function BridgeSettings() {
                 <>
                   <CopyButton
                     label="Copy instructions for an external agent"
-                    value={agentBriefing(status.pipe)}
+                    value={agentBriefing(status.pipe, status.server)}
                   />
                   <p className="text-[10px] leading-snug text-slate-600">
                     Paste it into the agent. It names the MCP server first, the
@@ -171,13 +171,6 @@ export function BridgeSettings() {
 }
 
 /**
- * One copyable value.
- *
- * Its own component so each row owns its own "copied" flash — sharing one
- * would light up one row when the reader copied another, which in a panel
- * whose whole job is "paste this" is worse than no feedback.
- */
-/**
  * A copy control for something too long to show — a briefing, not a value.
  *
  * `CopyRow` prints what it copies, which is right for a pipe path and wrong for
@@ -197,6 +190,13 @@ function CopyButton({ label, value }: { label: string; value: string }) {
   );
 }
 
+/**
+ * One copyable value.
+ *
+ * Its own component so each row owns its own "copied" flash — sharing one
+ * would light up one row when the reader copied another, which in a panel
+ * whose whole job is "paste this" is worse than no feedback.
+ */
 function CopyRow({ label, value }: { label: string; value: string | null }) {
   const { copied, copy } = useCopy();
   if (!value) return null;

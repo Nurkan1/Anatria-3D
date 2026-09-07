@@ -55,6 +55,15 @@ pub struct BridgeStatus {
     /// client that is connected and being ignored looks exactly like one that
     /// never connected, and the difference matters to whoever is debugging it.
     pub refused: u64,
+    /// Where the MCP server was installed, or `None` in a build without it.
+    ///
+    /// Filled in by the command rather than here: this struct is the bridge's
+    /// own state, and where a file landed on disk is the application's. It
+    /// travels beside `pipe` because they answer one question between them —
+    /// *how does another program reach this window* — and a reader looking for
+    /// one is looking for the other.
+    #[serde(default)]
+    pub server: Option<String>,
 }
 
 impl BridgeStatus {
@@ -66,6 +75,7 @@ impl BridgeStatus {
             pipe: None,
             accepted: 0,
             refused: 0,
+            server: None,
         }
     }
 }
@@ -181,6 +191,9 @@ mod platform {
                     pipe: Some(pipe_path(state.listener.name())),
                     accepted: state.tally.accepted.load(Ordering::Relaxed),
                     refused: state.tally.refused.load(Ordering::Relaxed),
+                    // Filled in by the command, which is the only layer that
+                    // knows where this build put its resources.
+                    server: None,
                 },
             }
         }
