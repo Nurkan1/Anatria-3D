@@ -87,7 +87,10 @@ function OrganPin({ organId, label }: { organId: string; label: string }) {
   );
 }
 
-export const Markdown = memo(function Markdown({ children }: { children: string }) {
+export const Markdown = memo(function Markdown({ children, structurePins = true }: {
+  children: string;
+  structurePins?: boolean;
+}) {
   const organs = useSceneStore((s) => s.organs);
 
   // Markers are resolved against the structures actually loaded, so an id the
@@ -98,6 +101,7 @@ export const Markdown = memo(function Markdown({ children }: { children: string 
   // bracket between the full stop and the hashes where there was none.
   const source = useMemo(() => {
     const repaired = repairGluedHeadings(children);
+    if (!structurePins) return repaired;
     const refs = collectOrganRefs(repaired, (organId) => organId in organs);
     // Always, even with nothing to link. Skipping this when no marker resolved
     // was a cheap-looking guard that switched off the cleanup in precisely the
@@ -106,7 +110,7 @@ export const Markdown = memo(function Markdown({ children }: { children: string 
     // atlas has no single heart mesh — it is seventeen parts — so that is not
     // even an unlikely id for a model to reach for.
     return linkifyOrganRefs(repaired, refs);
-  }, [children, organs]);
+  }, [children, organs, structurePins]);
 
   return (
     <div className="space-y-2 text-[13px] leading-relaxed text-slate-200">
@@ -130,9 +134,11 @@ export const Markdown = memo(function Markdown({ children }: { children: string 
          * check.
          */
         urlTransform={(url) =>
-          url.startsWith(REF_SCHEME) ? url : defaultUrlTransform(url)
+          structurePins && url.startsWith(REF_SCHEME) ? url : defaultUrlTransform(url)
         }
         components={{
+          // External prose is text-only: no remote images or structure actions.
+          img: structurePins ? "img" : ({ alt }) => <span>{alt}</span>,
           h1: ({ children }) => (
             <h3 className="mt-3 text-sm font-semibold text-slate-100">{children}</h3>
           ),
@@ -161,7 +167,7 @@ export const Markdown = memo(function Markdown({ children }: { children: string 
             </blockquote>
           ),
           a: ({ children, href }) => {
-            if (href?.startsWith(REF_SCHEME)) {
+            if (structurePins && href?.startsWith(REF_SCHEME)) {
               return (
                 <OrganPin
                   organId={href.slice(REF_SCHEME.length)}

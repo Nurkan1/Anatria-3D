@@ -9,6 +9,7 @@ import type {
   TokenUsage,
 } from "@/lib/schemas";
 import { useSceneStore } from "@/stores/sceneStore";
+import { useBridgeStore } from "@/stores/bridgeStore";
 
 export interface SceneCommandBridgeOptions {
   /** Checked before a command can touch the viewport. Bridge commands are independent. */
@@ -91,6 +92,13 @@ export function useSceneCommands(options: SceneCommandBridgeOptions = {}) {
           onReady?.(event.protocol_version);
           break;
         case "scene_command":
+          // Prose never reaches the scene, activity trail or turn persistence.
+          if (event.command.action === "say") {
+            if (/^bridge-\d+$/.test(event.request_id)) {
+              useBridgeStore.getState().receiveProse(event.request_id, event.command.text);
+            }
+            break;
+          }
           if (!/^bridge-\d+$/.test(event.request_id) && !acceptSceneCommand?.(event.request_id)) break;
           applyCommand(event.command);
           onSceneCommand?.(event.request_id, event.command);

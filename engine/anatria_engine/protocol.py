@@ -368,6 +368,16 @@ class ResetView(Strict):
     action: Literal["reset_view"] = "reset_view"
 
 
+BridgeText = Annotated[str, Field(max_length=4000)]
+
+
+class Say(Strict):
+    """External prose for the bridge lane, never an assistant turn."""
+
+    action: Literal["say"] = "say"
+    text: BridgeText
+
+
 SceneCommand = Annotated[
     FocusOrgan
     | SetLayerVisibility
@@ -382,7 +392,8 @@ SceneCommand = Annotated[
     | ClearPathway
     | IlluminateStructures
     | SetCrossSection
-    | ResetView,
+    | ResetView
+    | Say,
     Field(discriminator="action"),
 ]
 

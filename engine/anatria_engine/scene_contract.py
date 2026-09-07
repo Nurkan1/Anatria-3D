@@ -47,6 +47,7 @@ Reference = Literal["id", "ids", "group"]
 #: itself, so a fifteenth action fails the build until somebody classifies it
 #: rather than silently arriving unchecked.
 ATLAS_REFERENCES: dict[str, tuple[str, Reference] | None] = {
+    "say": None,
     "focus_organ": ("organ_id", "id"),
     "isolate_region": ("organ_id", "id"),
     "apply_pathology_overlay": ("organ_id", "id"),

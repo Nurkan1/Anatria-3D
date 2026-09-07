@@ -7,6 +7,7 @@ import { useSceneStore } from "@/stores/sceneStore";
 import { useStudyStore } from "@/stores/studyStore";
 import { useUsageStore } from "@/stores/usageStore";
 import { useCaseStore } from "@/stores/caseStore";
+import { useBridgeStore } from "@/stores/bridgeStore";
 
 const ipc = vi.hoisted(() => ({
   ask: vi.fn(), cancel: vi.fn(), detach: vi.fn(), subscribe: vi.fn(), patient: vi.fn(),
@@ -47,8 +48,9 @@ beforeEach(() => {
   useCaseStore.setState({ activeCaseId: null });
   useStudyStore.setState({ saveTurn: vi.fn().mockResolvedValue(true), recordVerdict: vi.fn() });
   useUsageStore.setState({ record: vi.fn().mockResolvedValue(undefined) });
+  useBridgeStore.setState({ status: null, prose: [], busy: false, error: null });
 });
-afterEach(cleanup);
+afterEach(() => { cleanup(); vi.restoreAllMocks(); });
 
 async function mountAndSend(prompt = "Explain the anatomy") {
   render(<ChatPanel />);
@@ -61,6 +63,59 @@ async function mountAndSend(prompt = "Explain the anatomy") {
 
 function emit(event: EngineEvent) { act(() => ipc.event!(event)); }
 const usage = { input_tokens: 100, output_tokens: 12, cache_read_tokens: 80 };
+
+describe("external bridge prose", () => {
+  it("receives prose with the panel hidden and retains it after reopening", async () => {
+    useBridgeStore.setState({ status: { supported: true, running: true, pipe: "test", accepted: 0, refused: 0 } });
+    const view = render(<div hidden><ChatPanel /></div>);
+    await act(async () => {});
+    emit({ type: "scene_command", request_id: "bridge-3", command: { action: "say", text: "While hidden" } });
+    view.rerender(<div><ChatPanel /></div>);
+    expect(screen.getByText("While hidden")).toBeTruthy();
+    expect(ipc.subscribe).toHaveBeenCalledTimes(1);
+    expect(useChatStore.getState().messages).toEqual([]);
+    expect(useStudyStore.getState().saveTurn).not.toHaveBeenCalled();
+  });
+
+  it("renders in its own lane without entering messages, history, commands or saveTurn", async () => {
+    useBridgeStore.setState({ status: { supported: true, running: true, pipe: "test", accepted: 0, refused: 0 } });
+    const apply = vi.spyOn(useSceneStore.getState(), "applyCommand");
+    const note = vi.spyOn(useChatStore.getState(), "noteCommand");
+    const { id, draft } = await mountAndSend();
+    const before = useChatStore.getState().messages;
+    emit({ type: "scene_command", request_id: "bridge-1", command: { action: "say", text: "**External prose** [[corpus_callosum]]" } });
+    expect(screen.getByRole("region", { name: "Control bridge messages" }).querySelector("strong")?.textContent).toBe("External prose");
+    expect(screen.getByText("via the control bridge")).toBeTruthy();
+    expect(useChatStore.getState().messages).toBe(before);
+    expect(useChatStore.getState().history()).toEqual([]);
+    expect(useStudyStore.getState().saveTurn).not.toHaveBeenCalled();
+    expect(apply).not.toHaveBeenCalled();
+    expect(note).not.toHaveBeenCalled();
+    apply.mockRestore();
+    note.mockRestore();
+
+    // Even completing the local turn later must not file the external prose.
+    emit({ type: "text_delta", request_id: id, text: "Local explanation" });
+    emit({ type: "done", request_id: id, usage, model: "test-model" });
+    expect(useStudyStore.getState().saveTurn).toHaveBeenCalledTimes(1);
+    expect(JSON.stringify(vi.mocked(useStudyStore.getState().saveTurn).mock.calls)).not.toContain("External prose");
+    expect(JSON.stringify(useChatStore.getState().history())).not.toContain("External prose");
+    fireEvent.change(draft, { target: { value: "Continue locally" } });
+    fireEvent.click(screen.getByRole("button", { name: "Send" }));
+    await waitFor(() => expect(ipc.ask).toHaveBeenCalledTimes(2));
+    expect(JSON.stringify(ipc.ask.mock.calls[1])).not.toContain("External prose");
+  });
+
+  it("ignores say from local request ids and from a bridge that is off", async () => {
+    const { id } = await mountAndSend();
+    emit({ type: "scene_command", request_id: "bridge-2", command: { action: "say", text: "Off" } });
+    useBridgeStore.setState({ status: { supported: true, running: true, pipe: "test", accepted: 0, refused: 0 } });
+    emit({ type: "scene_command", request_id: id, command: { action: "say", text: "Wrong lane" } });
+    expect(useBridgeStore.getState().prose).toEqual([]);
+    expect(screen.queryByRole("region", { name: "Control bridge messages" })).toBeNull();
+    expect(useStudyStore.getState().saveTurn).not.toHaveBeenCalled();
+  });
+});
 
 describe("live event routing", () => {
   it("files the preferences used at send, not the ones selected during the answer", async () => {

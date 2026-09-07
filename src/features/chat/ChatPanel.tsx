@@ -46,6 +46,7 @@ import { CaseBar } from "./CaseBar";
 import { Markdown } from "./Markdown";
 import { collectOrganRefs, stripOrganRefs } from "./organRefs";
 import { BridgeIndicator } from "./BridgeIndicator";
+import { BridgeProse } from "./BridgeProse";
 import { SettingsDrawer } from "./SettingsDrawer";
 import { SpeakAnswerButton } from "./SpeakAnswerButton";
 import { useCopy } from "./useCopy";
@@ -1120,6 +1121,8 @@ export function ChatPanel() {
           <MessageBubble key={message.id} message={message} />
         ))}
       </div>
+
+      <BridgeProse />
 
       {transportError && (
         <p className="mx-3 mb-2 rounded border border-rose-800/60 bg-rose-900/20 px-2 py-1 text-[11px] text-rose-300">

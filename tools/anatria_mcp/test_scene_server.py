@@ -126,11 +126,10 @@ class TestSurface:
             "set_cross_section",
         }
 
-    async def test_it_is_the_same_surface_the_assistant_has(self, driving):
-        # Parity is the requirement, not a round number. The read tools stay,
-        # and the fifteen are added to them.
+    async def test_it_adds_only_say_beyond_the_existing_surface(self, driving):
         names = {tool.name for tool in (await driving.list_tools()).tools}
-        assert len(names) == 20
+        assert len(names) == 21
+        assert "say" in names
 
     async def test_the_control_tools_do_not_claim_to_be_read_only(self, driving):
         # A client that trusts the annotation would otherwise call these
@@ -164,6 +163,31 @@ class TestSurface:
 
 
 class TestItReachesTheApplication:
+    async def test_say_advertises_attribution_and_its_schema_limit(self, driving):
+        tools = {tool.name: tool for tool in (await driving.list_tools()).tools}
+        tool = tools["say"]
+        assert tool.input_schema["properties"]["text"]["maxLength"] == 4000
+        assert "via the control bridge" in tool.description
+        assert "NOT the Anatria3D assistant" in tool.description
+        assert tool.annotations.read_only_hint is False
+        assert tool.annotations.idempotent_hint is False
+
+    @pytest.mark.parametrize("character", ["x", "🫀"])
+    async def test_say_sends_exactly_4000_characters(self, driving, app, character):
+        text = character * 4000
+        await drive(driving, "say", text=text)
+        (line,) = app.wait_for_lines(1)
+        assert json.loads(line)["command"] == {"action": "say", "text": text}
+
+    async def test_say_rejects_overflow_as_a_sentence_without_sending(self, driving, app):
+        result = await driving.call_tool("say", {"text": "x" * 4001})
+        assert result.is_error
+        assert "at most 4000 characters" in str(result.content)
+        # A later valid frame proves the invalid one was not truncated and sent.
+        await drive(driving, "say", text="Valid retry")
+        (line,) = app.wait_for_lines(1)
+        assert json.loads(line)["command"] == {"action": "say", "text": "Valid retry"}
+
     async def test_a_command_arrives_whole_and_alone(self, driving, app):
         await drive(driving, "focus_organ", organ_id=REAL_ID)
 
