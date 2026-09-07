@@ -4,55 +4,86 @@
  * # Why this exists
  *
  * Reported from the field: an agent that was not already configured with the
- * MCP server worked out the bridge by reading the repository — it identified
- * the named pipe, the frame shape and the client module on its own, and spent
- * its first attempt on a refusal. Every part of that was discoverable and none
- * of it was *offered*, so the reader paid for the discovery in round trips.
+ * MCP server worked the bridge out by reading the repository — it found the
+ * named pipe, the frame shape and the client module on its own, and spent its
+ * first attempt on a refusal. Every part of that was discoverable and none of
+ * it was *offered*, so the reader paid for the discovery in round trips.
  *
  * A capable agent finding its own way to the answer is not a success. It is the
- * application failing to say something it knows.
+ * application failing to say something it already knows.
  *
- * # Why the preferred path is named first
+ * # Why it must stand alone
  *
- * Configuring the MCP server is better in every way — the tools arrive typed,
- * validated and documented, and the agent never touches the wire format. Hand
- * a model two options and it will often take the one it can start immediately,
- * so the fallback is written second and marked as the fallback.
+ * The first version of this text sent the agent to `tools/anatria_mcp/atlas.py`
+ * and `bridge.py`. That worked in testing and would have failed for every real
+ * reader: the installer bundles the frozen sidecar and nothing else, so on a
+ * machine where somebody installed the `.exe` those files do not exist. The
+ * test only passed because the repository happened to be on the same disk.
  *
- * # Why the caveats are in here rather than left to the model
+ * So the pipe half is written for someone who has the application and no source
+ * at all, and it carries a whole client rather than a description of one.
  *
- * The last three lines are the ones that cost a reader real time otherwise: a
- * command naming a structure that is not loaded is accepted and does nothing,
- * which reads exactly like a broken bridge; identifiers cannot be guessed; and
- * the index holds no Spanish or Bulgarian, so an empty search is not evidence
- * of absence. Those are the same warnings the MCP server states about itself,
- * repeated here because an agent on the fallback path never sees them.
+ * # The three things that cost an attempt
+ *
+ * **The API wants the bare name**, not the `\\.\pipe\` path — passing the whole
+ * path to `NamedPipeClientStream` fails in a way that reads like the bridge
+ * being down. **One client at a time**, so a configured MCP client holding the
+ * pipe will refuse a second connection, which reads like the switch being off.
+ * And the encoding: a byte order mark is now tolerated, but writing without one
+ * is still the correct thing to do.
  */
 export function agentBriefing(pipe: string): string {
+  // `\\.\pipe\name` → `name`. The Win32 API takes the last segment alone, and
+  // handing it the full path is the commonest way to fail at this.
+  const name = pipe.replace(/^\\\\\.\\pipe\\/, "");
+
   return `You are driving Anatria3D, a 3D anatomy atlas already running on this
-computer. It offers twenty tools over the Model Context Protocol: five that read
-the atlas and fifteen that move what is on screen.
+computer. It offers twenty tools: five that read the atlas and fifteen that move
+what is on screen. The control bridge switch is on, or you would not have been
+given this.
 
-PREFERRED — configure the MCP server, then restart your client.
-  server: tools/anatria_mcp/atlas.py in the Anatria3D repository
+IF YOU HAVE THE ANATRIA3D SOURCE — best, and skip the rest.
+Configure its MCP server and restart your client:
+  server: tools/anatria_mcp/atlas.py
   env:    {"ANATRIA3D_BRIDGE": "1"}
-The five read-only tools are always there. The fifteen that move the view appear
-only with that variable set, and only while the control bridge switch is on.
+The tools then arrive typed, validated and documented, and you never touch the
+wire format. The installed application does NOT include this server — it ships
+the engine only — so if you have no source, use the pipe below.
 
-FALLBACK — only if your client cannot be configured with an MCP server, write to
-the named pipe directly:
-  ${pipe}
-One JSON object per line, UTF-8:
-  {"type":"scene_command","command":{"action":"focus_organ","organ_id":"heart"}}
-The bridge stamps its own request_id and drops every field it does not model, so
-sending one of your own has no effect. tools/anatria_mcp/bridge.py in the
-repository is a working client — read it before writing another.
+OTHERWISE — write to the named pipe. This needs no source and no Python.
+  full path:  ${pipe}
+  pipe name:  ${name}
+
+The Windows API takes the NAME, not the path. Passing the full path fails in a
+way that looks like the bridge being down.
+
+  $pipe = New-Object System.IO.Pipes.NamedPipeClientStream(
+      '.', '${name}', [System.IO.Pipes.PipeDirection]::Out)
+  $pipe.Connect(5000)
+  $writer = New-Object System.IO.StreamWriter(
+      $pipe, (New-Object System.Text.UTF8Encoding $false))
+  $writer.AutoFlush = $true
+  $writer.WriteLine('{"type":"scene_command","command":{"action":"say","text":"hello"}}')
+  $writer.Dispose(); $pipe.Dispose()
+
+One JSON object per line, UTF-8, at most 64 KB per line. Useful actions:
+  {"action":"say","text":"..."}                      up to 4000 characters
+  {"action":"focus_organ","organ_id":"..."}
+  {"action":"isolate_structures","organ_ids":["...","..."]}
+  {"action":"illuminate_structures","organ_ids":["..."]}
+  {"action":"reset_view"}
+The bridge stamps its own request_id and drops every field it does not model,
+so sending one of your own has no effect.
 
 WHAT WILL SURPRISE YOU OTHERWISE
-- A command naming a structure that is not loaded is accepted here and does
-  nothing on screen. That is not an error, and not evidence the structure is
-  absent: the reader can switch whole systems off.
-- Identifiers are not guessable. Call search_structures before naming one.
-- The index holds Terminologia Anatomica Latin, English and identifiers only. A
-  query in any other language finds nothing even when the structure exists.`;
+- One client at a time. If an MCP client already holds the pipe, your
+  connection is refused — which reads exactly like the switch being off.
+- A command naming a structure that is not loaded is accepted and does nothing
+  on screen. That is not an error, and not evidence the structure is absent:
+  the reader can switch whole systems off.
+- Identifiers are not guessable. There is no way to search over the pipe, so
+  ask the reader for the identifier, or use the MCP server, which can search.
+- Your text appears in a separate lane marked "via the control bridge". It is
+  not the Anatria3D assistant, it is not saved, and it is never sent to the
+  reader's AI provider. Write accordingly.`;
 }
