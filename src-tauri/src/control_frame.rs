@@ -76,6 +76,19 @@ impl fmt::Display for Refusal {
 /// server generates commands from the schema and so should not produce one;
 /// a client that hand-rolls its frames can still be surprised.
 pub fn admit(line: &str, request_id: &str) -> Result<String, Refusal> {
+    // A leading byte order mark is dropped rather than refused.
+    //
+    // RFC 8259 §8.1 says a sender must not add one and a parser *may* ignore
+    // it, so refusing was defensible and still lost: this is a Windows named
+    // pipe, and PowerShell writes UTF-8 with a BOM by default. Being strict
+    // exactly where the platform is careless bought nothing — the first agent
+    // to drive this bridge by hand spent its attempt on `NotJson` with three
+    // invisible bytes to show for it.
+    //
+    // Exactly one, and only at the start. This is a well-defined three-byte
+    // sequence, not a licence to be lenient about the rest of the frame.
+    let line = line.strip_prefix('\u{feff}').unwrap_or(line);
+
     let parsed: Value = serde_json::from_str(line).map_err(|_| Refusal::NotJson)?;
     let object = parsed.as_object().ok_or(Refusal::NotAnObject)?;
 
@@ -168,6 +181,38 @@ mod tests {
             r#"{"type":"scene_command","command":{"action":"isolate_structures","organ_ids":["a","b"]}}"#,
         );
         assert_eq!(out["command"]["organ_ids"][1], "b");
+    }
+
+    #[test]
+    fn a_leading_byte_order_mark_is_dropped_rather_than_refused() {
+        // Reported from the field: an agent driving the bridge from PowerShell
+        // had its first attempt refused as `NotJson`, because PowerShell writes
+        // UTF-8 with a BOM by default and three invisible bytes look like
+        // nothing at all in a terminal.
+        let out = admitted(
+            "\u{feff}{\"type\":\"scene_command\",\"command\":{\"action\":\"reset_view\"}}",
+        );
+        assert_eq!(out["command"]["action"], "reset_view");
+    }
+
+    #[test]
+    fn only_one_mark_and_only_at_the_start() {
+        // Dropping the mark is a concession to one well-defined sequence in one
+        // position, not a general licence to be lenient about the frame.
+        assert!(matches!(
+            admit(
+                "\u{feff}\u{feff}{\"type\":\"scene_command\",\"command\":{\"action\":\"reset_view\"}}",
+                ID
+            ),
+            Err(Refusal::NotJson)
+        ));
+        assert!(matches!(
+            admit(
+                "{\"type\":\"scene_command\",\u{feff}\"command\":{\"action\":\"reset_view\"}}",
+                ID
+            ),
+            Err(Refusal::NotJson)
+        ));
     }
 
     #[test]
