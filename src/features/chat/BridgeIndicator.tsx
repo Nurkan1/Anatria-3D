@@ -34,7 +34,7 @@ export function BridgeIndicator() {
   return (
     <span
       className="rounded-full bg-sky-500/15 px-1.5 py-0.5 text-[9px] font-medium uppercase text-sky-300"
-      title="The control bridge is on: a paired program on this computer may send view commands to this window. Turn it off in Settings."
+      title="The control bridge is on: a program on this computer may control the view and display external, unsaved messages. Turn it off in Settings."
     >
       bridge
     </span>

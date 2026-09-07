@@ -46,10 +46,17 @@ const CONFIG = '"ANATRIA3D_BRIDGE": "1"';
 
 beforeEach(() => {
   vi.clearAllMocks();
-  useBridgeStore.setState({ status: null, error: null, busy: false });
+  useBridgeStore.setState({ status: null, error: null, busy: false, prose: [] });
 });
 
 describe("the switch", () => {
+  it("discloses external prose and its exclusion from the assistant, journal and provider", async () => {
+    ipc.bridgeStatus.mockResolvedValue(status());
+    render(<BridgeSettings />);
+    await screen.findByRole("switch");
+    expect(screen.getByText(/external messages in the assistant panel/).textContent).toContain("not the Anatria3D assistant");
+    expect(screen.getByText(/external messages in the assistant panel/).textContent).toContain("not saved to the journal or sent to your provider");
+  });
   it("offers no switch on a platform with no bridge", async () => {
     ipc.bridgeStatus.mockResolvedValue(status({ supported: false }));
     render(<BridgeSettings />);

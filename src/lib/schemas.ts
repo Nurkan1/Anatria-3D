@@ -141,6 +141,13 @@ export type OrganContext = z.infer<typeof OrganContextSchema>;
 
 export const SceneCommandSchema = z.discriminatedUnion("action", [
   z.object({
+    action: z.literal("say"),
+    // Count Unicode code points, as Pydantic does, not UTF-16 code units.
+    text: z.string().refine((text) => [...text].length <= 4000, {
+      message: "Text must contain at most 4000 characters.",
+    }),
+  }),
+  z.object({
     action: z.literal("focus_organ"),
     organ_id: z.string().min(1),
   }),

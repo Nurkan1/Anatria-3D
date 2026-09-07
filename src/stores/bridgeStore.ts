@@ -27,6 +27,9 @@ import { startBridge, stopBridge, bridgeStatus, type BridgeStatus } from "@/lib/
 
 interface BridgeStore {
   status: BridgeStatus | null;
+  /** Ephemeral external prose, never shared with the assistant or journal. */
+  prose: { id: string; text: string }[];
+  receiveProse: (id: string, text: string) => void;
   /** What went wrong last, as the reader should read it. */
   error: string | null;
   /** A start or stop is in flight; the switch is disabled meanwhile. */
@@ -51,41 +54,59 @@ export const UNKNOWN_BRIDGE: BridgeStatus = {
   refused: 0,
 };
 
-export const useBridgeStore = create<BridgeStore>()((set) => ({
-  status: null,
-  error: null,
-  busy: false,
+export const useBridgeStore = create<BridgeStore>()((set, get) => {
+  // A poll begun before a switch operation cannot overwrite its outcome.
+  let revision = 0;
+  const updateStatus = (status: BridgeStatus) => set({
+    status,
+    ...(!status.running ? { prose: [] } : {}),
+  });
+  return {
+    status: null,
+    prose: [],
+    receiveProse: (id, text) => {
+      if (!get().status?.running || get().busy) return;
+      set((state) => ({ prose: [...state.prose.slice(-19), { id, text }] }));
+    },
+    error: null,
+    busy: false,
 
-  refresh: async () => {
-    try {
-      set({ status: await bridgeStatus() });
-    } catch (err) {
-      // Deliberately does not clear the last known status. A poll that failed
-      // says nothing about whether the pipe is open, and blanking the pill
-      // would claim it had closed.
-      set({ error: String(err) });
-    }
-  },
+    refresh: async () => {
+      if (get().busy) return;
+      const started = revision;
+      try {
+        const status = await bridgeStatus();
+        if (started === revision) updateStatus(status);
+      } catch (err) {
+        // A failed poll says nothing about whether the pipe is open.
+        if (started === revision) set({ error: String(err) });
+      }
+    },
 
-  turnOn: async () => {
-    set({ busy: true, error: null });
-    try {
-      set({ status: await startBridge() });
-    } catch (err) {
-      set({ error: String(err) });
-    } finally {
-      set({ busy: false });
-    }
-  },
+    turnOn: async () => {
+      if (get().busy) return;
+      revision++;
+      set({ busy: true, error: null });
+      try {
+        updateStatus(await startBridge());
+      } catch (err) {
+        set({ error: String(err) });
+      } finally {
+        set({ busy: false });
+      }
+    },
 
-  turnOff: async () => {
-    set({ busy: true, error: null });
-    try {
-      set({ status: await stopBridge() });
-    } catch (err) {
-      set({ error: String(err) });
-    } finally {
-      set({ busy: false });
-    }
-  },
-}));
+    turnOff: async () => {
+      if (get().busy) return;
+      revision++;
+      set({ busy: true, error: null });
+      try {
+        updateStatus(await stopBridge());
+      } catch (err) {
+        set({ error: String(err) });
+      } finally {
+        set({ busy: false });
+      }
+    },
+  };
+});

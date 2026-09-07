@@ -109,8 +109,10 @@ export function BridgeSettings() {
       </div>
 
       <p className="text-[10px] leading-snug text-slate-600">
-        Lets another program on this computer send view commands to this window —
-        isolate a structure, highlight a pathway, reset the view. Only your own
+        Lets another program on this computer control the view and display
+        external messages in the assistant panel. These messages are attributed
+        to the control bridge, not the Anatria3D assistant. They are not saved
+        to the journal or sent to your provider. Only your own
         account can open the connection, and only while this switch is on.
       </p>
 

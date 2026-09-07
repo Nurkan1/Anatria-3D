@@ -272,6 +272,9 @@ export function applySceneCommand(
   command: SceneCommand,
 ): SceneViewState {
   switch (command.action) {
+    case "say":
+      // Routed to the bridge lane before this reducer; never a viewport action.
+      return state;
     case "focus_organ":
       return {
         ...state,

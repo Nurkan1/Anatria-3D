@@ -6,6 +6,9 @@ reaching the atlas over MCP should be able to do what the assistant in the
 window can do, and a smaller surface would be a different product wearing the
 same name.
 
+The bridge-only `say` tool adds attributed prose in a separate, unsaved lane.
+It is not part of the application's own assistant tool set.
+
 # Where the wire format comes from
 
 From `anatria_engine.protocol`, the actual Pydantic models the engine emits.
@@ -47,6 +50,7 @@ from anatria_engine.protocol import (
     AddSupply,
     AnatomicalSystem,
     ApplyPathologyOverlay,
+    BridgeText,
     ClearPathologyOverlays,
     ClearPathway,
     FocusOrgan,
@@ -56,6 +60,7 @@ from anatria_engine.protocol import (
     IsolateRegion,
     IsolateStructures,
     ResetView,
+    Say,
     SectionPlane,
     SetCrossSection,
     SetLayerOpacity,
@@ -109,8 +114,9 @@ def register_scene_tools(
     def send(command: BaseModel) -> None:
         """Check what a command names, then put it on the wire."""
         payload = command.model_dump()
-        loaded = atlases()
-        if not loaded:
+        # Prose names no atlas entities and also works before meshes load.
+        loaded = [] if isinstance(command, Say) else atlases()
+        if not loaded and not isinstance(command, Say):
             # Sending anyway would mean skipping the one check that stands
             # between a mistyped identifier and an empty viewport with no
             # error. Refusing says which file is missing; proceeding would not.
@@ -138,6 +144,19 @@ def register_scene_tools(
             return model(**fields)
         except ValidationError as err:
             raise ToolError(_readable(err)) from err
+
+    @mcp.tool(annotations=ToolAnnotations(
+        read_only_hint=False, destructive_hint=False, idempotent_hint=False,
+    ))
+    def say(text: BridgeText) -> str:
+        """Show Markdown in the reader's window, attributed 'via the control bridge'.
+
+        This is external text, NOT the Anatria3D assistant's response. It stays
+        outside the journal and provider history. No structure pins. Up to 4000
+        characters; only the latest 20 messages remain, until the bridge is off.
+        """
+        send(build(Say, text=text))
+        return "Sent to the control bridge lane; not saved to the journal."
 
     # ------------------------------------------------------------------
     # Pointing at things

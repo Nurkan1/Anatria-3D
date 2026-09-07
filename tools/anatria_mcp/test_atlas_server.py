@@ -46,7 +46,7 @@ async def client():
         env={
             key: value
             for key, value in os.environ.items()
-            if not key.startswith("ANATRIA3D_BRIDGE_")
+            if key != "ANATRIA3D_BRIDGE" and not key.startswith("ANATRIA3D_BRIDGE_")
         },
     )
     async with (
@@ -64,6 +64,12 @@ async def call(session: ClientSession, name: str, **arguments):
 
 
 class TestSurface:
+    async def test_say_is_not_available_without_bridge_configuration(self, client):
+        names = {tool.name for tool in (await client.list_tools()).tools}
+        assert "say" not in names
+        result = await client.call_tool("say", {"text": "Must not be sent"})
+        assert result.is_error
+
     async def test_exposes_the_five_read_tools_and_nothing_else(self, client):
         # This fixture spawns the server with no bridge configuration, and that
         # is the whole claim: an unpaired client is offered nothing that writes.
