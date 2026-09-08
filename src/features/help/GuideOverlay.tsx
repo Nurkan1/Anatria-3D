@@ -314,6 +314,34 @@ const SECTIONS: Section[] = [
           list; isolate the heart and it shrinks to what the heart is made of. Drag it
           anywhere, or collapse it with <Ui>▴</Ui>.
         </p>
+
+        <Sub>The scanner</Sub>
+        <p>
+          <Ui>Scanner</Ui> sweeps a plane of light through the body from the feet to
+          the head and back. It is not decoration: every structure the plane reaches
+          lights up whole while it passes, and a panel names what it is crossing as it
+          goes — the six largest, with the rest counted, because a plane through the
+          chest passes two hundred structures and naming all of them would tell you
+          nothing.
+        </p>
+        <p>
+          Drag the slider beside it to put the light where you want it, and press{" "}
+          <Ui>Hold</Ui> to keep it there so you can look without keeping a finger
+          down. Let go, or release the hold, and it carries on from that height rather
+          than jumping back — move it to the diaphragm, look, and the sweep continues
+          downward from the diaphragm.
+        </p>
+        <Callout>
+          <strong>It also runs by itself while the assistant is writing.</strong> That
+          is the one moment here where you are waiting with nothing to look at, so the
+          atlas reads itself instead — and the ring is left out of that one, because a
+          solid ring passing across the body would hide the structure the answer is
+          about. The light alone passes through and covers nothing.
+          <br />
+          <br />
+          If your machine would rather not, the checkbox under the switch turns that
+          half off and is remembered. Everything else about the scanner stays.
+        </Callout>
       </>
     ),
   },
@@ -496,6 +524,12 @@ const SECTIONS: Section[] = [
           glass and light ten structures; five minutes of turning the model round
           later, the arrangement those paragraphs describe is gone. That button puts
           it back. Answers that moved nothing do not show it.
+        </p>
+        <p>
+          While an answer is being written, a plane of light sweeps the body and names
+          what it passes. It is the <Ui>Scanner</Ui> described under{" "}
+          <em>Moving around</em>, and the checkbox under that switch turns it off for
+          a machine that would rather not.
         </p>
         <p>
           Your provider, model, profile and language are remembered. Set them once; the
