@@ -33,6 +33,10 @@ const SUPINE: ScanAxis = [0, 0, -1];
 
 beforeEach(() => {
   resetScanBand();
+  // Up, unless a test is about the arrival itself. The sweep travels at the
+  // rate the instrument is up, so a suite left at zero would be testing a
+  // scanner that has not finished switching on.
+  advanceScanEntry(SCAN_ENTRY_S);
   advanceScanBand(0, STANDING, 0, 0);
 });
 
@@ -267,10 +271,24 @@ it("publishes where it is so a control can follow without React", () => {
 // this one uniform — the ring never runs a clock of its own.
 
 it("starts dark, so nothing is lit the frame the switch is thrown", () => {
+  resetScanEntry();
   expect(SCAN_ENTRY.value).toBe(0);
 });
 
+it("does not travel until the instrument is up", () => {
+  // The entrance would otherwise contradict itself: lights rising slowly over
+  // a plane already crossing the body at full speed.
+  resetScanEntry();
+  advanceScanBand(SWEEP_CYCLE_S / 4, STANDING, -1, 1);
+  expect(SWEEP_PROGRESS.value).toBe(0);
+
+  advanceScanEntry(SCAN_ENTRY_S);
+  advanceScanBand(SWEEP_CYCLE_S / 4, STANDING, -1, 1);
+  expect(SWEEP_PROGRESS.value).toBeCloseTo(0.5);
+});
+
 it("is fully up after its own duration, and goes no further", () => {
+  resetScanEntry();
   advanceScanEntry(SCAN_ENTRY_S);
   expect(SCAN_ENTRY.value).toBeCloseTo(1);
   advanceScanEntry(SCAN_ENTRY_S * 4);
@@ -281,6 +299,7 @@ it("eases rather than ramping, so the arrival has weight at the start", () => {
   // A linear ramp reads as a fade between two pictures. This one is behind
   // linear early and ahead of it late, which is what a machine powering up
   // looks like.
+  resetScanEntry();
   advanceScanEntry(SCAN_ENTRY_S * 0.25);
   expect(SCAN_ENTRY.value).toBeLessThan(0.25);
   advanceScanEntry(SCAN_ENTRY_S * 0.5);
@@ -288,6 +307,7 @@ it("eases rather than ramping, so the arrival has weight at the start", () => {
 });
 
 it("winds the arrival back with the sweep, and on its own", () => {
+  resetScanEntry();
   advanceScanEntry(SCAN_ENTRY_S);
   resetScanBand();
   expect(SCAN_ENTRY.value).toBe(0);

@@ -62,11 +62,12 @@ export const SCAN_ENTRY = { value: 0 };
 /**
  * How long the arrival takes, in seconds.
  *
- * Short enough that nobody waits for it, long enough to be a movement rather
- * than a frame. Past a second it stops being an entrance and starts being a
- * delay between pressing a switch and the switch working.
+ * It was 0.9 and that was too quick to see: with an eased curve the middle of
+ * a short ramp goes past in a handful of frames, so what arrives is a flash
+ * rather than a movement. Two and a bit seconds is long enough for the aperture
+ * to read as closing and short enough that nobody is waiting on a switch.
  */
-export const SCAN_ENTRY_S = 0.9;
+export const SCAN_ENTRY_S = 2.2;
 
 let elapsed = 0;
 let entry = 0;
@@ -198,7 +199,11 @@ export function resetScanEntry(): void {
  */
 export function advanceScanEntry(delta: number): number {
   entry = Math.max(0, Math.min(1, entry + delta / SCAN_ENTRY_S));
-  SCAN_ENTRY.value = entry * entry * (3 - 2 * entry);
+  // Smootherstep rather than smoothstep: its first *and* second derivatives are
+  // zero at both ends, so there is no moment where the movement visibly starts
+  // or visibly stops. Smoothstep still arrives with a small kick, which is what
+  // made the short entrance read as a switch being flipped.
+  SCAN_ENTRY.value = entry * entry * entry * (entry * (entry * 6 - 15) + 10);
   return SCAN_ENTRY.value;
 }
 
@@ -267,7 +272,13 @@ export function advanceScanBand(
   SHARED_AXIS.value[1] = unit[1];
   SHARED_AXIS.value[2] = unit[2];
 
-  elapsed = (elapsed + delta) % SWEEP_CYCLE_S;
+  // The sweep travels at the rate the instrument is up.
+  //
+  // Without this the entrance is a contradiction: lights rising slowly over a
+  // plane already crossing the body at full speed. Scaled by the arrival, the
+  // machine powers up almost still and eases into its cadence — and once it is
+  // up the factor is 1, so nothing about the sweep's own timing changes.
+  elapsed = (elapsed + delta * SCAN_ENTRY.value) % SWEEP_CYCLE_S;
   const half = SWEEP_CYCLE_S / 2;
   const progress = elapsed <= half ? elapsed / half : (SWEEP_CYCLE_S - elapsed) / half;
   SWEEP_PROGRESS.value = progress;

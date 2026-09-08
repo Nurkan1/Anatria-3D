@@ -280,7 +280,10 @@ export function ScanRing({
     const group = ring.current;
     if (!group) return;
     group.position.y = SHARED_SCAN.value;
-    group.rotation.y += delta * Math.PI * 2 * TURNS_PER_SECOND;
+    // Turning at the rate it is up, so the ring is nearly still as it appears
+    // and eases into its cadence. A hoop already spinning at full rate while
+    // its lamps are still coming on is two entrances at once.
+    group.rotation.y += delta * Math.PI * 2 * TURNS_PER_SECOND * SCAN_ENTRY.value;
 
     /**
      * Light that never changes does not read as light.
