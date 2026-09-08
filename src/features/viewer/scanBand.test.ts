@@ -1,7 +1,17 @@
 import { beforeEach, expect, it, vi } from "vitest";
 import { Material, MeshStandardMaterial, ShaderLib, UniformsUtils, type WebGLRenderer } from "three";
 
-import { advanceScanBand, resetScanBand, scanBandMaterialProps, scanBandOnBeforeCompile, SHARED_SCAN } from "./scanBand";
+import {
+  advanceScanBand,
+  resetScanBand,
+  scanBandMaterialProps,
+  scanBandOnBeforeCompile,
+  scanRangeAlong,
+  SHARED_AXIS,
+  SHARED_SCAN,
+  STANDING,
+  type ScanAxis,
+} from "./scanBand";
 
 function shader() {
   return {
@@ -10,7 +20,14 @@ function shader() {
     uniforms: UniformsUtils.clone(ShaderLib.standard.uniforms),
   } as Parameters<Material["onBeforeCompile"]>[0];
 }
-beforeEach(resetScanBand);
+
+/** Feet to head for a body laid on its back, head towards −Z. */
+const SUPINE: ScanAxis = [0, 0, -1];
+
+beforeEach(() => {
+  resetScanBand();
+  advanceScanBand(0, STANDING, 0, 0);
+});
 
 it("uses the same callback and default cache key for two separate materials", () => {
   const first = new MeshStandardMaterial(scanBandMaterialProps(true));
@@ -22,15 +39,18 @@ it("uses the same callback and default cache key for two separate materials", ()
   expect(first.customProgramCacheKey).toBe(Material.prototype.customProgramCacheKey);
 });
 
-it("binds exactly the same uniform object into two independent shader objects", () => {
+it("binds exactly the same uniform objects into two independent shaders", () => {
   const first = new MeshStandardMaterial(scanBandMaterialProps(true));
   const second = new MeshStandardMaterial(scanBandMaterialProps(true));
   const a = shader();
   const b = shader();
   first.onBeforeCompile(a, {} as WebGLRenderer);
   second.onBeforeCompile(b, {} as WebGLRenderer);
-  expect(a.uniforms.uScanY).toBe(SHARED_SCAN);
-  expect(b.uniforms.uScanY).toBe(a.uniforms.uScanY);
+  expect(a.uniforms.uScanAt).toBe(SHARED_SCAN);
+  expect(b.uniforms.uScanAt).toBe(a.uniforms.uScanAt);
+  // The axis travels the same way. One write, every material.
+  expect(a.uniforms.uScanAxis).toBe(SHARED_AXIS);
+  expect(b.uniforms.uScanAxis).toBe(a.uniforms.uScanAxis);
   expect(a.vertexShader).toBe(b.vertexShader);
   expect(a.fragmentShader).toBe(b.fragmentShader);
 });
@@ -44,24 +64,76 @@ it("writes the shared value once per advance regardless of attached materials", 
   const write = vi.fn((next: number) => { value = next; });
   Object.defineProperty(SHARED_SCAN, "value", { configurable: true, get: () => value, set: write });
   try {
-    advanceScanBand(3, -1, 1);
+    advanceScanBand(3, STANDING, -1, 1);
     expect(write).toHaveBeenCalledExactlyOnceWith(0);
-    expect(a.uniforms.uScanY?.value).toBe(0);
-    expect(b.uniforms.uScanY?.value).toBe(0);
+    expect(a.uniforms.uScanAt?.value).toBe(0);
+    expect(b.uniforms.uScanAt?.value).toBe(0);
   } finally {
     Object.defineProperty(SHARED_SCAN, "value", { configurable: true, writable: true, value });
   }
 });
 
-it("goes from feet to head and back without walking any materials", () => {
-  advanceScanBand(0, -1, 1);
+it("goes from one end to the other and back without walking any materials", () => {
+  advanceScanBand(0, STANDING, -1, 1);
   expect(SHARED_SCAN.value).toBe(-1);
-  advanceScanBand(6, -1, 1);
+  advanceScanBand(6, STANDING, -1, 1);
   expect(SHARED_SCAN.value).toBe(1);
-  advanceScanBand(3, -1, 1);
+  advanceScanBand(3, STANDING, -1, 1);
   expect(SHARED_SCAN.value).toBe(0);
-  advanceScanBand(3, -1, 1);
+  advanceScanBand(3, STANDING, -1, 1);
   expect(SHARED_SCAN.value).toBe(-1);
+});
+
+// ---------------------------------------------------------------------------
+// The axis is a parameter, and this is why
+// ---------------------------------------------------------------------------
+//
+// The band began sweeping world Y, which is feet-to-head only while the body
+// stands. Laying it on a gurney turns world Y into shoulder-to-shoulder. These
+// fail if anyone reintroduces the assumption, which is the point of them: the
+// decision then cannot be lost in a refactor the way a sentence in a brief can.
+
+it("sweeps along the axis it is given, not along Y", () => {
+  advanceScanBand(0, SUPINE, -1, 1);
+  expect(SHARED_AXIS.value).toEqual([0, 0, -1]);
+  expect(SHARED_SCAN.value).toBe(-1);
+
+  advanceScanBand(6, SUPINE, -1, 1);
+  expect(SHARED_SCAN.value).toBe(1);
+});
+
+it("normalises the axis, so a caller may hand it any length", () => {
+  advanceScanBand(0, [0, 0, -4], -1, 1);
+  expect(SHARED_AXIS.value).toEqual([0, 0, -1]);
+});
+
+it("refuses an axis with no direction rather than lighting the whole body", () => {
+  // A zero vector projects every vertex onto 0, so every fragment sits in the
+  // band at once. Silently glowing everything is a worse failure than an error.
+  expect(() => advanceScanBand(0, [0, 0, 0], -1, 1)).toThrow(/must have a direction/);
+});
+
+it("measures a box's reach along the axis, not along Y", () => {
+  // A standing body: 0.4 wide, 1.8 tall, 0.3 deep, centred on the origin.
+  const min = [-0.2, -0.9, -0.15] as const;
+  const max = [0.2, 0.9, 0.15] as const;
+
+  expect(scanRangeAlong(min, max, STANDING)).toEqual({ from: -0.9, to: 0.9 });
+  // Along Z the same box reaches 0.15 either way. Reusing the Y extent here
+  // would sweep 0.9 of empty space before the band ever touched the body.
+  expect(scanRangeAlong(min, max, [0, 0, 1])).toEqual({ from: -0.15, to: 0.15 });
+});
+
+it("measures the reach of a box that is not centred on the origin", () => {
+  const range = scanRangeAlong([0, 1, 0], [2, 3, 0], [1, 0, 0]);
+  expect(range).toEqual({ from: 0, to: 2 });
+});
+
+it("measures a diagonal axis rather than the nearest cardinal one", () => {
+  // A unit cube from the origin, swept corner to corner: the projection of its
+  // half-extent onto a normalised diagonal, twice.
+  const range = scanRangeAlong([0, 0, 0], [1, 1, 1], [1, 1, 1]);
+  expect(range.to - range.from).toBeCloseTo(Math.sqrt(3), 10);
 });
 
 it("does not assign onBeforeCompile at all when disabled, including after a toggle", () => {
@@ -78,7 +150,7 @@ it("does not assign onBeforeCompile at all when disabled, including after a togg
 it("injects into the installed r185 chunks and fails explicitly if they change", () => {
   const input = shader();
   scanBandOnBeforeCompile(input);
-  expect(input.vertexShader).toContain("(modelMatrix * vec4(transformed, 1.0)).y");
+  expect(input.vertexShader).toContain("dot((modelMatrix * vec4(transformed, 1.0)).xyz, uScanAxis)");
   expect(input.fragmentShader).toContain("totalEmissiveRadiance +=");
   expect(() => scanBandOnBeforeCompile({ ...shader(), vertexShader: "changed" })).toThrow(/chunks are missing/);
 });

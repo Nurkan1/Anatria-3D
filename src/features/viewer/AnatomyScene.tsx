@@ -2,7 +2,7 @@ import { OrbitControls, useGLTF } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
-import { advanceScanBand, resetScanBand } from "./scanBand";
+import { advanceScanBand, resetScanBand, scanRangeAlong, STANDING } from "./scanBand";
 import { viewportKey } from "./viewportKeys";
 import { fps, sample } from "./renderSample";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
@@ -769,7 +769,16 @@ export function AnatomyScene({
       }
     }
     if (scanBandEnabled && bounds && !bounds.isEmpty()) {
-      advanceScanBand(delta, bounds.min.y, bounds.max.y);
+      // The axis is named here rather than assumed inside the band. The body
+      // stands today and world Y is feet-to-head; the moment it is laid on a
+      // gurney this call is the one line that has to change, and it will not
+      // compile until somebody answers the question.
+      const { from, to } = scanRangeAlong(
+        [bounds.min.x, bounds.min.y, bounds.min.z],
+        [bounds.max.x, bounds.max.y, bounds.max.z],
+        STANDING,
+      );
+      advanceScanBand(delta, STANDING, from, to);
     }
   });
   const [finestDetail, setFinestDetail] = useState(0.01);
