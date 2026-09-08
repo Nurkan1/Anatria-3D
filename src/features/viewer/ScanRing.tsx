@@ -84,6 +84,45 @@ function fadeToBlack(
 /** Slow enough to read as a machine working, not as something spinning. */
 const TURNS_PER_SECOND = 0.04;
 
+/** How many times the name repeats around the band. */
+const NAMEPLATE_REPEATS = 5;
+
+/**
+ * The name, drawn once into a canvas and wrapped around the outside.
+ *
+ * A canvas texture rather than 3D text: real glyphs would mean a font to load,
+ * a text engine to pull in and geometry per letter, for something read at a
+ * glance from across the viewport. This is one texture and one draw call, and
+ * repeating it around the band means it is legible from any angle instead of
+ * only from the side the plate happens to face.
+ *
+ * Drawn on transparent black so it can be additive like the rest of the ring's
+ * light — see the note on why additive is the safe blend in this scene.
+ */
+function nameplateTexture(): THREE.CanvasTexture {
+  const canvas = document.createElement("canvas");
+  canvas.width = 512;
+  canvas.height = 64;
+  const context = canvas.getContext("2d");
+  if (context) {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.font = "600 34px ui-sans-serif, system-ui, sans-serif";
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.letterSpacing = "10px";
+    context.shadowColor = "#1ae0ff";
+    context.shadowBlur = 18;
+    context.fillStyle = "#d6fbff";
+    context.fillText("ANATRIA 3D", canvas.width / 2, canvas.height / 2);
+  }
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.repeat.x = NAMEPLATE_REPEATS;
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.anisotropy = 4;
+  return texture;
+}
+
 /**
  * How strong the light is at rest.
  *
@@ -170,6 +209,8 @@ export function ScanRing({ bounds }: { bounds: THREE.Box3 | null }) {
     return { disc, skirt };
   }, [shape]);
 
+  const nameplate = useMemo(nameplateTexture, []);
+
   useEffect(
     () => () => {
       glow?.disc.dispose();
@@ -177,6 +218,7 @@ export function ScanRing({ bounds }: { bounds: THREE.Box3 | null }) {
     },
     [glow],
   );
+  useEffect(() => () => nameplate.dispose(), [nameplate]);
 
   useLayoutEffect(() => {
     const mesh = emitters.current;
@@ -237,6 +279,23 @@ export function ScanRing({ bounds }: { bounds: THREE.Box3 | null }) {
       <mesh rotation={[Math.PI / 2, 0, 0]}>
         <torusGeometry args={[shape.radius, shape.tube, 10, 96]} />
         <meshStandardMaterial color="#1b2735" roughness={0.3} metalness={0.75} />
+      </mesh>
+
+      {/* The name, wrapped around the outside of the shell and turning with it.
+          Sits just clear of the shell's own radius so the two surfaces cannot
+          fight over the depth test — the mistake that speckled the first ring. */}
+      <mesh>
+        <cylinderGeometry
+          args={[shape.radius + shape.tube * 1.02, shape.radius + shape.tube * 1.02,
+                 shape.tube * 1.6, 96, 1, true]}
+        />
+        <meshBasicMaterial
+          map={nameplate}
+          transparent
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+          toneMapped={false}
+        />
       </mesh>
 
       {/* The emitter array: what makes it read as an instrument. */}
