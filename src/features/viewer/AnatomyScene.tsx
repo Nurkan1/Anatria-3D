@@ -309,25 +309,29 @@ function CameraRig({
       desiredPosition.current
         .copy(orbit.target)
         .add(offsetFrom.normalize().multiplyScalar(next));
-    } else if (viewpoint.kind === "orient") {
+    } else if (viewpoint.kind === "orient" || viewpoint.kind === "scan") {
+      /**
+       * Both turn, and neither reframes.
+       *
+       * The scanner takes its own angle because the shot needs one, and it
+       * keeps the reader's distance because that is theirs. Framing the body
+       * on switch-on was the wrong call: somebody who has moved in close to a
+       * kidney and reaches for the scanner wants the light on the kidney, and
+       * being pulled back to the whole body means placing the view a second
+       * time to get back where they already were.
+       */
       desiredTarget.current.copy(orbit.target);
       desiredPosition.current
         .copy(orbit.target)
-        .add(viewDirection(viewpoint.view, leftSign).multiplyScalar(distance));
+        .add(
+          (viewpoint.kind === "scan"
+            ? scanStance()
+            : viewDirection(viewpoint.view, leftSign)
+          ).multiplyScalar(distance),
+        );
     } else {
-      /**
-       * `scan` frames the body, not the study.
-       *
-       * `fit` scopes to whatever is isolated, and that is right for a reader
-       * who has pulled out a heart and wants to see it. The scanner's subject
-       * is the patient — a sweep framed on an isolated heart would put the ring
-       * and most of its travel outside the frame. It also stands somewhere
-       * rather than reframing from where the camera already is, because this
-       * one *is* a shot.
-       */
-      const scanning = viewpoint.kind === "scan";
       const framing = studyEnvelope(
-        scanning ? boxes.current.keys() : (isolatedOrganIds ?? boxes.current.keys()),
+        isolatedOrganIds ?? boxes.current.keys(),
         boxes.current,
       );
       if (!framing) return;
@@ -337,14 +341,13 @@ function CameraRig({
 
       desiredTarget.current.copy(centre);
       // Framed from where the camera already stands, so "fit" reframes without
-      // also spinning the model round to a viewpoint nobody asked for. The
-      // scanner is the exception: it names its own angle.
+      // also spinning the model round to a viewpoint nobody asked for.
       desiredPosition.current
         .copy(centre)
         .add(
-          (scanning ? scanStance() : offsetFrom.normalize()).multiplyScalar(
-            framingDistance(radius, perspective.fov),
-          ),
+          offsetFrom
+            .normalize()
+            .multiplyScalar(framingDistance(radius, perspective.fov)),
         );
     }
 
@@ -792,15 +795,16 @@ export function AnatomyScene({
   /**
    * Switching the scanner on is a shot, not a state change.
    *
-   * The sweep winds back to the feet and the camera pulls back to take in
-   * whatever is on screen, so the light starts at one end of a subject that is
-   * wholly in frame. It reads as an instrument being started rather than an
+   * The sweep winds back to the crown and the camera turns to the angle the
+   * shot is taken from, so the ring can descend onto a body that has some depth
+   * to descend against. It reads as an instrument being started rather than an
    * effect being enabled, which is the whole of the difference.
    *
-   * **It frames and does not turn.** Orienting to the front would have been the
-   * more filmic move and it is the wrong one here: a reader who deliberately
-   * turned to a lateral view and then reaches for the scanner has their angle
-   * taken away from them. A pull-back reveals without overruling.
+   * **It turns and does not reframe.** It framed the whole body first and that
+   * was wrong: somebody who had moved in close to a structure and reached for
+   * the scanner was pulled back off it and had to place the view a second time
+   * to get back where they already were. The distance is the reader's; only the
+   * angle belongs to the shot.
    *
    * Only on the switch. The sweep also runs while an answer is written, and
    * moving the camera on every question would be unbearable.

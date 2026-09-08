@@ -90,13 +90,14 @@ export type ViewpointRequest =
   | { kind: "orient"; view: AnatomicalView; seq: number }
   | { kind: "dolly"; factor: number; seq: number }
   /**
-   * The opening shot of the scanner: the whole body, from a three-quarter
-   * stance.
+   * The opening shot of the scanner: a three-quarter stance, at the distance
+   * the reader already had.
    *
-   * A kind of its own rather than an orient followed by a fit. Chaining the two
-   * cannot work — `fit` frames from where the camera *currently* stands, and
-   * during an eased move that is somewhere between the old angle and the new
-   * one, so the framing would come out at a distance nobody chose.
+   * Its own kind rather than an `orient` to a named view, because the angle it
+   * takes is a composition and not one of the anatomical viewpoints — see
+   * `scanStance`. Like `orient` and unlike `fit`, it never changes the
+   * distance: turning the shot is the mode's to decide, how close you are
+   * looking is yours.
    */
   | { kind: "scan"; seq: number };
 
@@ -604,7 +605,7 @@ interface SceneStore extends SceneViewState {
   fitView: () => void;
   /** Turn to a standard anatomical viewpoint, keeping the current distance. */
   orientView: (view: AnatomicalView) => void;
-  /** Frame the whole body for the scanner, from the angle that shot is taken. */
+  /** Turn to the angle the scanner's opening shot is taken from, keeping the distance. */
   scanView: () => void;
   /** Step closer to, or further from, whatever the camera is looking at. */
   dollyView: (factor: number) => void;
