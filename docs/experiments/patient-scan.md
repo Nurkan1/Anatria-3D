@@ -8,8 +8,9 @@ The question this phase existed to answer, and nothing else:
 If it compiled per material, the whole idea was dead: entering the mode would
 stall for seconds and no amount of geometry work afterwards would fix it.
 
-**Answer: one shared program. `programs` reads 4 with the band running.**
-The premise holds and phase 1 is worth building.
+**Answer: one shared program.** Measured against the same view with the band
+off, `programs` goes from 2 to 3 — one more for the whole atlas. The premise
+holds and phase 1 is worth building.
 
 ## What was built
 
@@ -106,16 +107,15 @@ materials are not being disposed and that is a leak, not a cost.
   it on a gurney, and world Y stops being the feet-to-head axis. Either the band
   follows the body's own axis or the rotation is applied to the sweep — decide
   this before rotating anything.
-- **Two materials live per mesh while the band is on.** The original is kept
-  attached-but-unused so its warmed program survives the toggle. That is
-  deliberate, and it costs 3,478 extra material objects for as long as the mode
-  runs. Heap across off → on → off has not been measured.
+- **"Keeping both materials alive is worth it."** It was a reasonable guess
+  before the numbers and the numbers retire it: see above. It costs 46 MB to
+  avoid a recompile that turns out to be one program.
 
 ## What would still abort this
 
 - `programs` climbing with the atlas size rather than staying at a handful.
-- Frames in the mode materially below the glass-body baseline once that
-  baseline exists.
+- Frames materially below the band-off baseline. Measured: they are not — 48
+  fps either way, p95 +0.6 ms.
 - Draw calls, programs or heap not returning to their pre-toggle readings.
 - Needing postprocessing to make the sweep look right. There is no
   `EffectComposer` in this project and phase 0 does not introduce one.
