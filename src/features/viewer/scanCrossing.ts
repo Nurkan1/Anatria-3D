@@ -98,6 +98,17 @@ export function sameCrossing(a: Crossing, b: Crossing): boolean {
  */
 export const CURRENT_CROSSING: { value: Crossing } = { value: NOTHING_CROSSED };
 
+/**
+ * Whether the sweep is running at all.
+ *
+ * Published beside the reading so the readout can show itself without the
+ * sweep's own switch being lifted out of the scene and through the Canvas. It
+ * also removes an ambiguity that cost a debugging round: a panel that appears
+ * only when something is crossed cannot tell "the sweep is off" from "the
+ * crossing test found nothing", and those are different bugs.
+ */
+export const SWEEP_RUNNING = { value: false };
+
 /** How often the crossing is recomputed. Sixty times a second buys nothing. */
 export const CROSSING_INTERVAL_S = 1 / 6;
 

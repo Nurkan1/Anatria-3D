@@ -11,6 +11,7 @@ import {
   crossingAt,
   NOTHING_CROSSED,
   sameCrossing,
+  SWEEP_RUNNING,
 } from "./scanCrossing";
 import { viewportKey } from "./viewportKeys";
 import { fps, sample } from "./renderSample";
@@ -793,13 +794,15 @@ export function AnatomyScene({
       // What it is passing through, six times a second rather than sixty. The
       // sweep moves a millimetre a frame and crosses the same structures it
       // did last frame; recomputing that is work nobody sees.
+      SWEEP_RUNNING.value = true;
       sinceCrossing.current += delta;
       if (sinceCrossing.current >= CROSSING_INTERVAL_S) {
         sinceCrossing.current = 0;
         const next = crossingAt(boxes.current, SHARED_SCAN.value, STANDING, CROSSING_LIMIT);
         if (!sameCrossing(next, CURRENT_CROSSING.value)) CURRENT_CROSSING.value = next;
       }
-    } else if (CURRENT_CROSSING.value !== NOTHING_CROSSED) {
+    } else if (SWEEP_RUNNING.value || CURRENT_CROSSING.value !== NOTHING_CROSSED) {
+      SWEEP_RUNNING.value = false;
       // Nothing is being read when the sweep is off, and the readout must not
       // keep showing the last thing it saw.
       CURRENT_CROSSING.value = NOTHING_CROSSED;
