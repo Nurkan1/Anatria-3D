@@ -38,6 +38,35 @@ under *Systemic arteries*. One button folds in every vessel that reaches what
 you are studying — here, sixty-two of them — and the labelled view turns it into
 a plate you can print.
 
+![The scanner running on a glass body: a lit ring around the standing figure
+with a plane of light across the chest, the vagus nerve pinned inside it, and a
+panel listing the structures the plane is crossing — fascia, intercostal nodes,
+pleura, and 292 more. The renderer's own counters sit beside it: 2,792 draw
+calls, 8 programs, 492 MB.](docs/screenshots/patient-scan.png)
+
+**A plane of light that reads the body, and says what it finds.** Press
+*Scanner* and a ring comes down onto the crown of the head, then travels to the
+feet and back. Every structure the plane reaches lights up *whole* while it
+passes — not the slice of it the plane happens to cut — and a panel names what
+is being crossed as it goes: the six largest, with the rest counted, because a
+plane through the chest passes two hundred structures and listing them all tells
+you nothing.
+
+It is a way of reading rather than an effect. Structures you would never think
+to click on announce themselves on the way past, in the order they actually lie
+in the body — which is the one thing a list of names in a sidebar cannot show
+you. Drag the slider to hold the light where you want it, or press *Hold* to pin
+it there and look. It also runs by itself while the assistant is writing, which
+is the one moment you are waiting with nothing to look at.
+
+**What it costs, since the screenshot is showing you the counters anyway:** no
+extra draw calls, no extra triangles, one extra compiled shader program, and
+0.6 ms on the 95th-percentile frame. Three and a half thousand materials share
+that one program rather than compiling one each — three.js builds its program
+cache key from the source of `onBeforeCompile`, so handing every material the
+same module-level function is the whole trick, and the difference between a mode
+that opens instantly and one that freezes the window for several seconds.
+
 ![Four views of the same head at once. The panel the reader drives sits
 top-left with the vessels and nerves of the head and neck; beside and below it,
 anterior, left lateral and superior views of the same structures, lettered at
