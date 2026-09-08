@@ -935,23 +935,28 @@ describe("multi-selection", () => {
   });
 });
 
-describe("the scan view", () => {
+describe("the body's tone", () => {
   beforeEach(() => {
     useSceneStore.setState({ ...initialViewState });
   });
 
-  it("starts off", () => {
-    expect(useSceneStore.getState().scan).toBe(false);
+  it("starts as the body's own colour", () => {
+    expect(useSceneStore.getState().bodyTone).toBe("solid");
   });
 
-  it("toggles both ways from the same control", () => {
-    const { toggleScan } = useSceneStore.getState();
+  it("steps through the three tones and back, from one control", () => {
+    // One button rather than three: they are mutually exclusive answers to a
+    // single question, and pressing it again has to be the way out of carbon.
+    const { cycleBodyTone } = useSceneStore.getState();
 
-    toggleScan();
-    expect(useSceneStore.getState().scan).toBe(true);
+    cycleBodyTone();
+    expect(useSceneStore.getState().bodyTone).toBe("scan");
 
-    toggleScan();
-    expect(useSceneStore.getState().scan).toBe(false);
+    cycleBodyTone();
+    expect(useSceneStore.getState().bodyTone).toBe("carbon");
+
+    cycleBodyTone();
+    expect(useSceneStore.getState().bodyTone).toBe("solid");
   });
 
   it("survives the assistant showing everything again", () => {
@@ -961,24 +966,24 @@ describe("the scan view", () => {
     // to solid, full-colour and opaque in the middle of an explanation the
     // reader was following through the scan. Nothing the assistant can call
     // turns the scan on, so nothing it calls may turn it off.
-    useSceneStore.getState().toggleScan();
+    useSceneStore.getState().cycleBodyTone();
     useSceneStore.setState({ systemOpacity: { muscular: GLASS_OPACITY } });
 
     const state = applySceneCommand(useSceneStore.getState(), { action: "reset_view" });
 
-    expect(state.scan).toBe(true);
+    expect(state.bodyTone).toBe("scan");
     expect(state.systemOpacity).toEqual({ muscular: GLASS_OPACITY });
   });
 
   it("but the reader's own Reset view button clears it", () => {
     // A different intention wearing the same name. Someone pressing a button
     // labelled Reset view is asking for the body they started with.
-    useSceneStore.getState().toggleScan();
+    useSceneStore.getState().cycleBodyTone();
     useSceneStore.setState({ systemOpacity: { muscular: GLASS_OPACITY } });
 
     useSceneStore.getState().resetView();
 
-    expect(useSceneStore.getState().scan).toBe(false);
+    expect(useSceneStore.getState().bodyTone).toBe("solid");
     expect(useSceneStore.getState().systemOpacity).toEqual({});
   });
 });

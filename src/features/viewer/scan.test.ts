@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import * as THREE from "three";
 
-import { keepsColour, scanColour, SCAN_SATURATION } from "./scan";
+import { keepsColour, nextBodyTone, scanColour, SCAN_SATURATION } from "./scan";
 import { tissueColour } from "./palette";
 
 const hsl = () => ({ h: 0, s: 0, l: 0 });
@@ -88,5 +88,41 @@ describe("what keeps its colour", () => {
 
   it("is nothing else", () => {
     expect(keepsColour({ lit: false, selected: false, isolated: false })).toBe(false);
+  });
+});
+
+describe("carbon", () => {
+  it("keeps the body a body: bone stays lighter than muscle", () => {
+    // Compressed towards black, not floored at it. A tone that flattened the
+    // lightness would win the contrast fight by deleting the anatomy.
+    const hsl = { h: 0, s: 0, l: 0 };
+    const bone = scanColour(new THREE.Color("#e8e0d0"), "carbon");
+    const muscle = scanColour(new THREE.Color("#8c3a37"), "carbon");
+    bone.getHSL(hsl);
+    const boneLightness = hsl.l;
+    muscle.getHSL(hsl);
+    expect(boneLightness).toBeGreaterThan(hsl.l);
+  });
+
+  it("is darker than the drained body it is a step past", () => {
+    // The whole point: additive light saturates on a mid-lit surface, and the
+    // falloff that carries the shape of what was reached disappears into it.
+    const hsl = { h: 0, s: 0, l: 0 };
+    const tissue = new THREE.Color("#8c3a37");
+    scanColour(tissue, "scan").getHSL(hsl);
+    const drained = hsl.l;
+    scanColour(tissue, "carbon").getHSL(hsl);
+    expect(hsl.l).toBeLessThan(drained);
+  });
+
+  it("leaves a solid structure exactly as it was", () => {
+    const tissue = new THREE.Color("#8c3a37");
+    expect(scanColour(tissue, "solid").getHex()).toBe(tissue.getHex());
+  });
+
+  it("steps solid to scan to carbon and back", () => {
+    expect(nextBodyTone("solid")).toBe("scan");
+    expect(nextBodyTone("scan")).toBe("carbon");
+    expect(nextBodyTone("carbon")).toBe("solid");
   });
 });

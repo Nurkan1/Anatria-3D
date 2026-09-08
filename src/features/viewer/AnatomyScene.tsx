@@ -492,7 +492,7 @@ function SystemMeshes({
    */
   const depthStack = useSceneStore((s) => s.depthStack);
   const illuminated = useSceneStore((s) => s.illuminated);
-  const scan = useSceneStore((s) => s.scan);
+  const bodyTone = useSceneStore((s) => s.bodyTone);
   /**
    * What the assistant has pointed at, and how deep into the list each one sits.
    *
@@ -695,13 +695,14 @@ function SystemMeshes({
         coverageBusiest={coverage?.busiest}
         probeDepth={probeDepth.get(organ.organ_id)}
         litGlow={litGlow.get(organ.organ_id)}
-        scanned={
-          scan &&
-          !keepsColour({
+        tone={
+          keepsColour({
             lit: litGlow.has(organ.organ_id),
             selected: selectedOrganIds.includes(organ.organ_id),
             isolated: isolatedOrganIds?.includes(organ.organ_id) ?? false,
           })
+            ? "solid"
+            : bodyTone
         }
         clippingPlanes={clippingPlanes}
         onHover={setHovered}

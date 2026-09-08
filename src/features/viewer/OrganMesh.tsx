@@ -8,7 +8,7 @@ import { pressTravelled } from "./dragGuard";
 
 import { shouldSuppressClick } from "./areaSelect";
 import { coverageColour } from "./coverage";
-import { scanColour } from "./scan";
+import { scanColour, type BodyTone } from "./scan";
 import { scanBandMaterialProps, scanRangeAlong, STANDING } from "./scanBand";
 import { probeGlow, reportDepthStack, stackFromCrossings } from "./depthStack";
 import type { ManifestOrgan } from "@/lib/schemas";
@@ -200,11 +200,13 @@ interface OrganMeshProps {
    */
   litGlow: number | undefined;
   /**
-   * Drain this structure's colour: the body is scanned and this one is not
-   * what is being looked at. Resolved in the parent so the rule lives in one
-   * place rather than three thousand.
+   * How to draw this structure: as itself, drained of colour, or as carbon.
+   *
+   * Already resolved against what keeps its own colour, so a structure the
+   * assistant lit arrives here as `solid` even while the body is carbon. The
+   * rule lives in the parent rather than in three thousand copies of it.
    */
-  scanned: boolean;
+  tone: BodyTone;
   /** Temporary Patient Scan PoC, independent of the existing colour-drain view. */
   scanBandEnabled?: boolean;
   clippingPlanes: THREE.Plane[];
@@ -257,7 +259,7 @@ export const OrganMesh = memo(function OrganMesh({
   coverageBusiest,
   probeDepth,
   litGlow: litGlowProp,
-  scanned,
+  tone,
   scanBandEnabled = false,
   clippingPlanes,
   onHover,
@@ -340,9 +342,7 @@ export const OrganMesh = memo(function OrganMesh({
     const tissue =
       coverageTouches !== undefined && coverageBusiest !== undefined
         ? coverageColour(coverageTouches, coverageBusiest)
-        : scanned
-          ? scanColour(tissueColour(organ))
-          : tissueColour(organ);
+        : scanColour(tissueColour(organ), tone);
     const base = overlay ? pathologyColour(tissue, overlay.severity) : tissue;
     /*
      * Selection tints the tissue rather than washing light over it.
@@ -439,7 +439,7 @@ export const OrganMesh = memo(function OrganMesh({
     coverageBusiest,
     probeDepth,
     litGlow,
-    scanned,
+    tone,
   ]);
 
   /**
