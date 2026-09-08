@@ -60,6 +60,32 @@ export const SHARED_AXIS: { value: number[] } = { value: [...STANDING] };
 export const SCAN_ENTRY = { value: 0 };
 
 /**
+ * The colour of the light, as emissive radiance rather than a screen colour.
+ *
+ * A shared uniform like the rest, and mutated in place rather than replaced:
+ * every material holds a reference to *this* object, so assigning a new one
+ * here would leave 3,478 shaders pointing at the old value. Changing the colour
+ * therefore costs three float writes, not a walk of the scene.
+ */
+export const SCAN_TINT: { value: number[] } = { value: [0.1, 1.2, 1.5] };
+
+/**
+ * How bright the whole structure is, relative to the plane crossing it.
+ *
+ * One ratio rather than a second colour: the wake and the band are the same
+ * light seen at two strengths, and letting them drift apart in hue was how an
+ * early version ended up with a green plane trailing a blue-green body.
+ */
+const WAKE_OF_BAND = 0.29;
+
+/** Point the light at a colour. See `scanTints` for why the list is short. */
+export function setScanTint(light: readonly [number, number, number]): void {
+  SCAN_TINT.value[0] = light[0];
+  SCAN_TINT.value[1] = light[1];
+  SCAN_TINT.value[2] = light[2];
+}
+
+/**
  * How long the arrival takes, in seconds.
  *
  * It was 0.9 and that was too quick to see: with an eased curve the middle of
@@ -114,6 +140,7 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
   shader.uniforms.uScanAt = SHARED_SCAN;
   shader.uniforms.uScanAxis = SHARED_AXIS;
   shader.uniforms.uScanEntry = SCAN_ENTRY;
+  shader.uniforms.uScanTint = SCAN_TINT;
 
   // This structure's own reach along the axis, read off the material through
   // `this`. Written once at compile and never touched again, so the per-frame
@@ -132,7 +159,8 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
       `${vertexChunk}\nvScanAlong = dot((modelMatrix * vec4(transformed, 1.0)).xyz, uScanAxis);`,
     );
   shader.fragmentShader =
-    "uniform float uScanAt;\nuniform float uScanEntry;\nuniform vec2 uOrganSpan;\nvarying float vScanAlong;\n" +
+    "uniform float uScanAt;\nuniform float uScanEntry;\nuniform vec3 uScanTint;\n" +
+    "uniform vec2 uOrganSpan;\nvarying float vScanAlong;\n" +
     shader.fragmentShader.replace(
       fragmentChunk,
       `${fragmentChunk}
@@ -145,8 +173,7 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
                * (1.0 - smoothstep(uOrganSpan.y - 0.02, uOrganSpan.y + 0.02, uScanAt));
     // Everything this mode adds is scaled by the arrival, so the light comes
     // up on the body instead of being there the frame the switch is thrown.
-    totalEmissiveRadiance += (vec3(0.1, 1.2, 1.5) * scanBand
-                           + vec3(0.04, 0.34, 0.44) * wake) * uScanEntry;`,
+    totalEmissiveRadiance += uScanTint * (scanBand + ${WAKE_OF_BAND} * wake) * uScanEntry;`,
     );
 }
 

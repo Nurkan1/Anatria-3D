@@ -9,6 +9,8 @@ import {
   resetScanEntry,
   SCAN_ENTRY,
   SCAN_ENTRY_S,
+  SCAN_TINT,
+  setScanTint,
   scanBandMaterialProps,
   scanBandOnBeforeCompile,
   scanRangeAlong,
@@ -334,8 +336,7 @@ it("scales everything the mode adds by the arrival, from one shared uniform", ()
   // Both terms inside the multiplication: an entrance that brought the band up
   // but left the wake at full strength would light a structure before the
   // instrument that is supposed to be reading it exists.
-  expect(a.fragmentShader).toContain("* uScanEntry;");
-  expect(a.fragmentShader).toContain("+ vec3(0.04, 0.34, 0.44) * wake) * uScanEntry;");
+  expect(a.fragmentShader).toContain("(scanBand + 0.29 * wake) * uScanEntry;");
 });
 
 it("opens at the crown, because the ring arrives from above it", () => {
@@ -343,4 +344,36 @@ it("opens at the crown, because the ring arrives from above it", () => {
   advanceScanBand(0, STANDING, -1, 1);
   expect(SWEEP_PROGRESS.value).toBe(1);
   expect(SHARED_SCAN.value).toBe(1);
+});
+
+// ---------------------------------------------------------------------------
+// The colour of the light
+// ---------------------------------------------------------------------------
+
+it("shares one colour uniform, and changes it without replacing the object", () => {
+  // Every material holds a reference to this object. Assigning a new one would
+  // leave 3,478 shaders pointing at the value the mode started with, and the
+  // symptom would be a colour that changes on the ring and nowhere else.
+  const first = new MeshStandardMaterial(scanBandMaterialProps(true));
+  const second = new MeshStandardMaterial(scanBandMaterialProps(true));
+  const a = shader();
+  const b = shader();
+  first.onBeforeCompile(a, {} as WebGLRenderer);
+  second.onBeforeCompile(b, {} as WebGLRenderer);
+  expect(a.uniforms.uScanTint).toBe(SCAN_TINT);
+  expect(b.uniforms.uScanTint).toBe(a.uniforms.uScanTint);
+
+  const held = SCAN_TINT.value;
+  setScanTint([1.5, 0.72, 0.14]);
+  expect(SCAN_TINT.value).toBe(held);
+  expect(SCAN_TINT.value).toEqual([1.5, 0.72, 0.14]);
+});
+
+it("tints the band and its wake with the same colour", () => {
+  // Two colours would let them drift apart in hue, which is how an early
+  // version ended up with a green plane trailing a blue-green body.
+  const compiled = shader();
+  scanBandOnBeforeCompile(compiled);
+  expect(compiled.fragmentShader).toContain("uniform vec3 uScanTint;");
+  expect(compiled.fragmentShader).toContain("uScanTint * (scanBand +");
 });

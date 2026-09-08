@@ -11,6 +11,7 @@ beforeEach(() => {
     pinned: false,
     at: 0.5,
     sweepOnAnswer: true,
+    tint: "cyan",
   });
   localStorage.clear();
 });
@@ -99,5 +100,19 @@ describe("sweeping while the assistant answers", () => {
     localStorage.clear();
     store().setSweepOnAnswer(true);
     expect(localStorage.getItem("anatria3d.scan.sweepOnAnswer.v1")).toBeNull();
+  });
+});
+
+describe("the colour of the light", () => {
+  it("remembers the choice, because it is a way of reading and not a theme", () => {
+    store().setTint("amber");
+    expect(store().tint).toBe("amber");
+    expect(localStorage.getItem("anatria3d.scan.tint.v1")).toBe("amber");
+  });
+
+  it("writes nothing when the colour has not changed", () => {
+    localStorage.clear();
+    store().setTint("cyan");
+    expect(localStorage.getItem("anatria3d.scan.tint.v1")).toBeNull();
   });
 });

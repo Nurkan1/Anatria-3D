@@ -9,10 +9,12 @@ import {
   resetScanBand,
   resetScanEntry,
   scanRangeAlong,
+  setScanTint,
   SHARED_SCAN,
   STANDING,
 } from "./scanBand";
 import { ScanRing } from "./ScanRing";
+import { scanTint } from "./scanTints";
 import {
   CROSSING_INTERVAL_S,
   CROSSING_LIMIT,
@@ -826,6 +828,15 @@ export function AnatomyScene({
   useEffect(() => {
     if (scanBandEnabled) resetScanEntry();
   }, [scanBandEnabled]);
+
+  /**
+   * The colour reaches the shader as three float writes.
+   *
+   * Not a prop on 3,478 materials and not a re-render: the tint is a shared
+   * uniform, so changing it is the same kind of operation as moving the sweep.
+   */
+  const tint = useScanStore((s) => s.tint);
+  useEffect(() => setScanTint(scanTint(tint).light), [tint]);
 
   useFrame((_, delta) => {
     // PoC measurement only: M's rolling p95 can miss a single compile stall,

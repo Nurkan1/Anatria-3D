@@ -2,6 +2,8 @@ import { create } from "zustand";
 
 import { readLocal, writeLocal } from "@/lib/localStore";
 
+import { scanTint, type ScanTintId } from "@/features/viewer/scanTints";
+
 /**
  * The scanner, as the reader controls it.
  *
@@ -25,6 +27,18 @@ import { readLocal, writeLocal } from "@/lib/localStore";
  */
 
 const SWEEP_ON_ANSWER_KEY = "anatria3d.scan.sweepOnAnswer.v1";
+const TINT_KEY = "anatria3d.scan.tint.v1";
+
+/**
+ * The colour of the light, remembered.
+ *
+ * Validated through `scanTint` on the way in rather than trusted: this is a
+ * string a previous version wrote into a file a person can edit, and an
+ * unknown one must give the default rather than a scanner that lights nothing.
+ */
+function storedTint(): ScanTintId {
+  return scanTint(readLocal(TINT_KEY)).id;
+}
 
 /**
  * Whether the sweep runs by itself while an answer is written.
@@ -62,6 +76,15 @@ interface ScanStore {
   at: number;
   /** Sweep by itself while the assistant is composing an answer. */
   sweepOnAnswer: boolean;
+  /**
+   * The colour of the light.
+   *
+   * It is not decoration: the light is added to the tissue's own colour, so the
+   * hue decides which structures separate from their neighbours and which sink
+   * into them. Green over muscle and amber over bone select different halves of
+   * the same body.
+   */
+  tint: ScanTintId;
 
   toggle: () => void;
   /** Take hold of the sweep and put it at `at`. */
@@ -70,6 +93,7 @@ interface ScanStore {
   release: () => void;
   togglePin: () => void;
   setSweepOnAnswer: (on: boolean) => void;
+  setTint: (tint: ScanTintId) => void;
 }
 
 export const useScanStore = create<ScanStore>()((set, get) => ({
@@ -78,6 +102,7 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
   pinned: false,
   at: 0.5,
   sweepOnAnswer: storedSweepOnAnswer(),
+  tint: storedTint(),
 
   // Letting go and unpinning on the way out, so switching the scanner off never
   // leaves the next session holding an invisible sweep at somebody's ankle.
@@ -90,6 +115,11 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
     if (on === get().sweepOnAnswer) return;
     writeLocal(SWEEP_ON_ANSWER_KEY, on ? "on" : "off");
     set({ sweepOnAnswer: on });
+  },
+  setTint: (tint) => {
+    if (tint === get().tint) return;
+    writeLocal(TINT_KEY, tint);
+    set({ tint });
   },
 }));
 

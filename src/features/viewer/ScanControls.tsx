@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { useScanStore } from "@/stores/scanStore";
 
 import { SWEEP_PROGRESS } from "./scanBand";
+import { SCAN_TINTS } from "./scanTints";
 
 /**
  * The scanner's switch, and the handle that puts its light where you want it.
@@ -33,6 +34,8 @@ export function ScanControls() {
   const release = useScanStore((s) => s.release);
   const togglePin = useScanStore((s) => s.togglePin);
   const setSweepOnAnswer = useScanStore((s) => s.setSweepOnAnswer);
+  const tint = useScanStore((s) => s.tint);
+  const setTint = useScanStore((s) => s.setTint);
   const slider = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -114,6 +117,35 @@ export function ScanControls() {
             at the screen, and it is out of reach on a machine driven by touch
             or by one hand. A button that says what it does works everywhere.
           */}
+          {/*
+            The colour of the light.
+
+            Swatches rather than names, and no picker. The light is added to the
+            tissue's own colour, so the hue is what decides which structures
+            separate and which sink into their neighbours — which makes this a
+            reading control, not a theme. Four that are known to separate from
+            something beat several hundred thousand that mostly do not.
+          */}
+          <div className="mt-1.5 flex gap-1" role="group" aria-label="Light colour">
+            {SCAN_TINTS.map((swatch) => (
+              <button
+                key={swatch.id}
+                type="button"
+                onClick={() => setTint(swatch.id)}
+                aria-pressed={tint === swatch.id}
+                title={`${swatch.label} light`}
+                className={`h-4 flex-1 rounded-sm border transition-colors ${
+                  tint === swatch.id
+                    ? "border-slate-200"
+                    : "border-slate-700 hover:border-slate-500"
+                }`}
+                style={{ backgroundColor: swatch.hex }}
+              >
+                <span className="sr-only">{swatch.label}</span>
+              </button>
+            ))}
+          </div>
+
           <button
             type="button"
             onClick={togglePin}
