@@ -24,6 +24,8 @@ import { IlluminationBar } from "./IlluminationBar";
 import { IsolationBar } from "./IsolationBar";
 import { FULL_CANVAS, LabelOverlay } from "./LabelOverlay";
 import { RenderProbe, RenderStatsPanel } from "./RenderStats";
+import { ScanControls } from "./ScanControls";
+import { ScanReadout } from "./ScanReadout";
 import { PointerRouting, StudyViews } from "./StudyViews";
 import { ClosedViews, StudyViewsFrame } from "./StudyViewsFrame";
 import { domRect, mainRect } from "./studyLayout";
@@ -261,11 +263,15 @@ export function AnatomyViewer() {
           spare, because those lines wrap on a narrow window. */}
       <div className="pointer-events-none absolute bottom-40 left-3 z-20 flex flex-col items-start gap-1.5">
         <RenderStatsPanel />
+        {/* Hides itself when the sweep is off — see `ScanReadout`. */}
+        <ScanReadout />
         {/* Above the switch rather than below it, so the letters sit between
             the mode and the panels they belong to instead of between the mode
             and the controls hint underneath. Renders nothing unless a view is
             actually closed. */}
         {splitting && <ClosedViews />}
+        {/* Beside the other switch that changes how the model is drawn. */}
+        <ScanControls />
         <StudyViewsToggle />
       </div>
       <DepthProbe />

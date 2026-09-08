@@ -125,6 +125,29 @@ export function viewDirection(view: AnatomicalView, leftSign: 1 | -1): THREE.Vec
 }
 
 /**
+ * Where the camera stands when the scanner is switched on.
+ *
+ * Deliberately not one of the anatomical views. Those exist to read a
+ * structure, and square-on to the front is the flattest angle there is: the
+ * body becomes a diagram and the ring around it becomes a line. A third of the
+ * way round and a little above gives the ring an ellipse and the body some
+ * depth, which is what lets a descent read as a descent rather than as
+ * something getting shorter.
+ *
+ * Turning towards +X is what puts the face towards the left of the frame — at
+ * this angle the camera's right vector projects the body's anterior onto
+ * screen-left. That is a composition rather than an anatomical claim, which is
+ * why it does not consult `lateralSign`: it is about where the light and the
+ * machine sit in the shot, not about which side of the patient you are on.
+ */
+const SCAN_YAW = (32 * Math.PI) / 180;
+const SCAN_RISE = 0.17;
+
+export function scanStance(): THREE.Vector3 {
+  return new THREE.Vector3(Math.sin(SCAN_YAW), SCAN_RISE, Math.cos(SCAN_YAW)).normalize();
+}
+
+/**
  * How far back a sphere of this radius has to be to fill the frame.
  *
  * The 2.2 is headroom: framed exactly, a body touches all four edges and reads

@@ -2,6 +2,26 @@ import { OrbitControls, useGLTF } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
+import {
+  advanceScanBand,
+  advanceScanEntry,
+  holdScanBand,
+  resetScanBand,
+  resetScanEntry,
+  scanRangeAlong,
+  SHARED_SCAN,
+  STANDING,
+} from "./scanBand";
+import { ScanRing } from "./ScanRing";
+import {
+  CROSSING_INTERVAL_S,
+  CROSSING_LIMIT,
+  CURRENT_CROSSING,
+  crossingAt,
+  NOTHING_CROSSED,
+  sameCrossing,
+  SWEEP_RUNNING,
+} from "./scanCrossing";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
 import { meshUrl, organsInFile } from "@/lib/manifest";
@@ -14,13 +34,15 @@ import {
   type FocusRequest,
   type ViewpointRequest,
 } from "@/stores/sceneStore";
+import { useChatStore } from "@/stores/chatStore";
+import { scanIsStill, useScanStore } from "@/stores/scanStore";
 import { useStudyStore } from "@/stores/studyStore";
 
 import { illuminationGlow } from "./depthStack";
 import { buildEyeGroups } from "./eyes";
 import { EyeGlobe } from "./EyeGlobe";
 import { backgroundTheme } from "./background";
-import { framingDistance, lateralSign, viewDirection } from "./cameraViews";
+import { framingDistance, lateralSign, scanStance, viewDirection } from "./cameraViews";
 import { busiestTouches } from "./coverage";
 import { explodeMembers, explodeOffsets } from "./explode";
 import { studioLightDirections } from "./lighting";
@@ -287,11 +309,26 @@ function CameraRig({
       desiredPosition.current
         .copy(orbit.target)
         .add(offsetFrom.normalize().multiplyScalar(next));
-    } else if (viewpoint.kind === "orient") {
+    } else if (viewpoint.kind === "orient" || viewpoint.kind === "scan") {
+      /**
+       * Both turn, and neither reframes.
+       *
+       * The scanner takes its own angle because the shot needs one, and it
+       * keeps the reader's distance because that is theirs. Framing the body
+       * on switch-on was the wrong call: somebody who has moved in close to a
+       * kidney and reaches for the scanner wants the light on the kidney, and
+       * being pulled back to the whole body means placing the view a second
+       * time to get back where they already were.
+       */
       desiredTarget.current.copy(orbit.target);
       desiredPosition.current
         .copy(orbit.target)
-        .add(viewDirection(viewpoint.view, leftSign).multiplyScalar(distance));
+        .add(
+          (viewpoint.kind === "scan"
+            ? scanStance()
+            : viewDirection(viewpoint.view, leftSign)
+          ).multiplyScalar(distance),
+        );
     } else {
       const framing = studyEnvelope(
         isolatedOrganIds ?? boxes.current.keys(),
@@ -378,6 +415,7 @@ function SystemMeshes({
   file,
   clippingPlanes,
   explodeOffsets: offsets,
+  scanBandEnabled,
   onMeasured,
   onContextMenu,
 }: {
@@ -386,6 +424,7 @@ function SystemMeshes({
   clippingPlanes: THREE.Plane[];
   /** Displacements for the exploded view, keyed across the whole atlas. */
   explodeOffsets: Map<string, THREE.Vector3>;
+  scanBandEnabled: boolean;
   onMeasured: (
     centres: Map<string, THREE.Vector3>,
     boxes: Map<string, THREE.Box3>,
@@ -633,6 +672,7 @@ function SystemMeshes({
     return (
       <OrganMesh
         key={organ.organ_id}
+        scanBandEnabled={scanBandEnabled}
         organ={organ}
         geometry={entry.geometry}
         matrix={matrix ?? entry.matrix}
@@ -731,6 +771,101 @@ export function AnatomyScene({
   const centres = useRef(new Map<string, THREE.Vector3>());
   const boxes = useRef(new Map<string, THREE.Box3>());
   const [bounds, setBounds] = useState<THREE.Box3 | null>(null);
+  const manualScan = useScanStore((s) => s.enabled);
+  /**
+   * The sweep also runs while an answer is being written.
+   *
+   * This is what the mode is *for*, rather than a use found for it afterwards.
+   * Waiting on a model is the one moment in this application where the reader
+   * has nothing to look at and no idea how long it will be; the sweep turns
+   * that into the atlas reading itself, and the readout names what it passes
+   * while the answer is still being composed.
+   *
+   * An OR rather than a mode: the switch still forces it on and off, and a
+   * question that arrives while it is already running does not switch it off
+   * when the answer lands.
+   */
+  const answering = useChatStore((s) => s.pendingRequestId !== null);
+  // Off is remembered: somebody who turned this down did it because their
+  // machine struggles, and it must stay down without being asked again.
+  const sweepOnAnswer = useScanStore((s) => s.sweepOnAnswer);
+  const scanBandEnabled = manualScan || (answering && sweepOnAnswer);
+  const sinceCrossing = useRef(0);
+
+  /**
+   * Switching the scanner on is a shot, not a state change.
+   *
+   * The sweep winds back to the crown and the camera turns to the angle the
+   * shot is taken from, so the ring can descend onto a body that has some depth
+   * to descend against. It reads as an instrument being started rather than an
+   * effect being enabled, which is the whole of the difference.
+   *
+   * **It turns and does not reframe.** It framed the whole body first and that
+   * was wrong: somebody who had moved in close to a structure and reached for
+   * the scanner was pulled back off it and had to place the view a second time
+   * to get back where they already were. The distance is the reader's; only the
+   * angle belongs to the shot.
+   *
+   * Only on the switch. The sweep also runs while an answer is written, and
+   * moving the camera on every question would be unbearable.
+   */
+  const scanView = useSceneStore((s) => s.scanView);
+  useEffect(() => {
+    resetScanBand();
+    if (manualScan) scanView();
+  }, [manualScan, scanView]);
+
+  /**
+   * A sweep started by a question arrives the same way one started by hand does.
+   *
+   * Only the arrival is wound back, not the sweep: an answer should not drag
+   * the light back to the feet mid-stroke. Without this the second question of
+   * a session gets no entrance at all, because the ramp is still sitting at 1
+   * from the first.
+   */
+  useEffect(() => {
+    if (scanBandEnabled) resetScanEntry();
+  }, [scanBandEnabled]);
+
+  useFrame((_, delta) => {
+    // PoC measurement only: M's rolling p95 can miss a single compile stall,
+    if (scanBandEnabled && bounds && !bounds.isEmpty()) {
+      // The axis is named here rather than assumed inside the band. The body
+      // stands today and world Y is feet-to-head; the moment it is laid on a
+      // gurney this call is the one line that has to change, and it will not
+      // compile until somebody answers the question.
+      const { from, to } = scanRangeAlong(
+        [bounds.min.x, bounds.min.y, bounds.min.z],
+        [bounds.max.x, bounds.max.y, bounds.max.z],
+        STANDING,
+      );
+      // Read rather than subscribed: this runs sixty times a second and must
+      // not make the scene re-render when the reader touches the slider.
+      const grip = useScanStore.getState();
+      if (scanIsStill(grip)) holdScanBand(grip.at, STANDING, from, to);
+      else advanceScanBand(delta, STANDING, from, to);
+
+      // Outside the hold branch on purpose: the mode still has to finish
+      // arriving for a reader who pins the light before it is fully up.
+      advanceScanEntry(delta);
+
+      // What it is passing through, six times a second rather than sixty. The
+      // sweep moves a millimetre a frame and crosses the same structures it
+      // did last frame; recomputing that is work nobody sees.
+      SWEEP_RUNNING.value = true;
+      sinceCrossing.current += delta;
+      if (sinceCrossing.current >= CROSSING_INTERVAL_S) {
+        sinceCrossing.current = 0;
+        const next = crossingAt(boxes.current, SHARED_SCAN.value, STANDING, CROSSING_LIMIT);
+        if (!sameCrossing(next, CURRENT_CROSSING.value)) CURRENT_CROSSING.value = next;
+      }
+    } else if (SWEEP_RUNNING.value || CURRENT_CROSSING.value !== NOTHING_CROSSED) {
+      SWEEP_RUNNING.value = false;
+      // Nothing is being read when the sweep is off, and the readout must not
+      // keep showing the last thing it saw.
+      CURRENT_CROSSING.value = NOTHING_CROSSED;
+    }
+  });
   const [finestDetail, setFinestDetail] = useState(0.01);
   // `centres` is a ref, so filling it cannot invalidate a memo downstream. This
   // counter is the signal that it changed — a route built before the digestive
@@ -856,10 +991,15 @@ export function AnatomyScene({
           file={file}
           clippingPlanes={clippingPlanes}
           explodeOffsets={offsets}
+          scanBandEnabled={scanBandEnabled}
           onMeasured={onMeasured}
           onContextMenu={onContextMenu}
         />
       ))}
+
+      {/* Mounted with the sweep and gone with it. Nothing of this mode outlives
+          the toggle — see the unmount discipline in `StudyViews`. */}
+      {scanBandEnabled && <ScanRing bounds={bounds} instrument={manualScan} />}
 
       {pathway && (
         <PathwayFlow
