@@ -10,6 +10,7 @@ import {
   SHARED_AXIS,
   SHARED_SCAN,
   STANDING,
+  SWEEP_CYCLE_S,
   type ScanAxis,
 } from "./scanBand";
 
@@ -64,7 +65,7 @@ it("writes the shared value once per advance regardless of attached materials", 
   const write = vi.fn((next: number) => { value = next; });
   Object.defineProperty(SHARED_SCAN, "value", { configurable: true, get: () => value, set: write });
   try {
-    advanceScanBand(3, STANDING, -1, 1);
+    advanceScanBand(SWEEP_CYCLE_S / 4, STANDING, -1, 1);
     expect(write).toHaveBeenCalledExactlyOnceWith(0);
     expect(a.uniforms.uScanAt?.value).toBe(0);
     expect(b.uniforms.uScanAt?.value).toBe(0);
@@ -74,13 +75,17 @@ it("writes the shared value once per advance regardless of attached materials", 
 });
 
 it("goes from one end to the other and back without walking any materials", () => {
+  // Written in fractions of a cycle rather than seconds: the invariant is
+  // "half a sweep reaches the far end", and tying it to the current duration
+  // made three tests fail when the sweep was slowed down for readability.
+  const quarter = SWEEP_CYCLE_S / 4;
   advanceScanBand(0, STANDING, -1, 1);
   expect(SHARED_SCAN.value).toBe(-1);
-  advanceScanBand(6, STANDING, -1, 1);
+  advanceScanBand(quarter * 2, STANDING, -1, 1);
   expect(SHARED_SCAN.value).toBe(1);
-  advanceScanBand(3, STANDING, -1, 1);
+  advanceScanBand(quarter, STANDING, -1, 1);
   expect(SHARED_SCAN.value).toBe(0);
-  advanceScanBand(3, STANDING, -1, 1);
+  advanceScanBand(quarter, STANDING, -1, 1);
   expect(SHARED_SCAN.value).toBe(-1);
 });
 
@@ -98,7 +103,7 @@ it("sweeps along the axis it is given, not along Y", () => {
   expect(SHARED_AXIS.value).toEqual([0, 0, -1]);
   expect(SHARED_SCAN.value).toBe(-1);
 
-  advanceScanBand(6, SUPINE, -1, 1);
+  advanceScanBand(SWEEP_CYCLE_S / 2, SUPINE, -1, 1);
   expect(SHARED_SCAN.value).toBe(1);
 });
 

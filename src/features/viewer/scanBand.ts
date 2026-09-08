@@ -43,8 +43,15 @@ export const SHARED_AXIS: { value: number[] } = { value: [...STANDING] };
 
 let elapsed = 0;
 
-/** One full there-and-back, in seconds. */
-const CYCLE = 12;
+/**
+ * One full there-and-back, in seconds.
+ *
+ * Twelve was too quick to read: a structure lit and went dark before the eye
+ * had found the name of it in the readout, which defeats the point of naming
+ * anything. Twenty gives a body about ten seconds head to feet — slow enough
+ * to follow, fast enough not to feel like waiting.
+ */
+export const SWEEP_CYCLE_S = 20;
 
 type Shader = Parameters<Material["onBeforeCompile"]>[0];
 
@@ -173,9 +180,9 @@ export function advanceScanBand(
   SHARED_AXIS.value[1] = unit[1];
   SHARED_AXIS.value[2] = unit[2];
 
-  elapsed = (elapsed + delta) % CYCLE;
-  const half = CYCLE / 2;
-  const progress = elapsed <= half ? elapsed / half : (CYCLE - elapsed) / half;
+  elapsed = (elapsed + delta) % SWEEP_CYCLE_S;
+  const half = SWEEP_CYCLE_S / 2;
+  const progress = elapsed <= half ? elapsed / half : (SWEEP_CYCLE_S - elapsed) / half;
   SHARED_SCAN.value = from + (to - from) * progress;
 }
 
