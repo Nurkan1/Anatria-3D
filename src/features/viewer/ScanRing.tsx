@@ -1,5 +1,5 @@
 import { useFrame } from "@react-three/fiber";
-import { useLayoutEffect, useMemo, useRef } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 import { SHARED_SCAN } from "./scanBand";
@@ -42,7 +42,7 @@ import { SHARED_SCAN } from "./scanBand";
  *
  * # What it costs
  *
- * Four draw calls. The shell and the emitters are ordinary opaque geometry. The
+ * Five draw calls. The shell and the emitters are ordinary opaque geometry. The
  * wash across the reading plane is additive with depth writing off, which is
  * why it is safe where the emissive plane rejected in phase 0 was not:
  * **additive blending is order-independent**, so it needs no correct sort
@@ -51,6 +51,35 @@ import { SHARED_SCAN } from "./scanBand";
 
 /** Emitter blocks around the inner face. One instanced draw call, not 24. */
 const EMITTERS = 24;
+
+/**
+ * Fade a geometry out along one measure of its own vertices.
+ *
+ * **In additive blending, black is transparent**: the fragment adds nothing, so
+ * a colour ramp to black *is* a fade to invisible. That is the whole trick
+ * here, and it buys a gradient with no texture to load, no alpha to sort and no
+ * shader of our own to compile — a `MeshBasicMaterial` with `vertexColors` on
+ * ordinary geometry.
+ *
+ * `weight` receives each vertex and returns 1 where the light is strongest and
+ * 0 where it should vanish.
+ */
+function fadeToBlack(
+  geometry: THREE.BufferGeometry,
+  tint: THREE.Color,
+  weight: (x: number, y: number, z: number) => number,
+): THREE.BufferGeometry {
+  const position = geometry.getAttribute("position");
+  const colours = new Float32Array(position.count * 3);
+  for (let i = 0; i < position.count; i++) {
+    const t = Math.max(0, Math.min(1, weight(position.getX(i), position.getY(i), position.getZ(i))));
+    colours[i * 3] = tint.r * t;
+    colours[i * 3 + 1] = tint.g * t;
+    colours[i * 3 + 2] = tint.b * t;
+  }
+  geometry.setAttribute("color", new THREE.BufferAttribute(colours, 3));
+  return geometry;
+}
 
 /** Slow enough to read as a machine working, not as something spinning. */
 const TURNS_PER_SECOND = 0.04;
@@ -79,6 +108,47 @@ export function ScanRing({ bounds }: { bounds: THREE.Box3 | null }) {
       emitter: tube * 0.9,
     };
   }, [bounds]);
+
+  /**
+   * The light itself: a disc thrown inward across the plane being read, and a
+   * skirt that gives it height either side of the ring.
+   *
+   * Both are built once per shape and disposed with it. Symmetric about the
+   * ring plane on purpose — the ring sweeps up as well as down, and light that
+   * only fell downwards would look wrong for half of every cycle.
+   */
+  const glow = useMemo(() => {
+    if (!shape) return null;
+    const tint = new THREE.Color("#1ae0ff");
+
+    // Brightest at the rim, where the emitters are, fading towards the axis.
+    // Squared so the falloff is soft near the body rather than a flat wash.
+    const disc = fadeToBlack(
+      new THREE.RingGeometry(shape.lightRadius * 0.05, shape.lightRadius, 64, 8),
+      tint,
+      (x, y) => Math.pow(Math.hypot(x, y) / shape.lightRadius, 2),
+    );
+
+    // A short open cylinder centred on the ring plane, brightest where it meets
+    // it. This is what makes the light look like it has volume rather than
+    // being painted on a plane.
+    const height = shape.radius * 0.5;
+    const skirt = fadeToBlack(
+      new THREE.CylinderGeometry(shape.lightRadius, shape.lightRadius, height, 64, 6, true),
+      tint,
+      (_x, y) => Math.pow(1 - Math.abs(y) / (height / 2), 2.2),
+    );
+
+    return { disc, skirt };
+  }, [shape]);
+
+  useEffect(
+    () => () => {
+      glow?.disc.dispose();
+      glow?.skirt.dispose();
+    },
+    [glow],
+  );
 
   useLayoutEffect(() => {
     const mesh = emitters.current;
@@ -137,19 +207,35 @@ export function ScanRing({ bounds }: { bounds: THREE.Box3 | null }) {
         <meshBasicMaterial color="#8ff4ff" toneMapped={false} />
       </mesh>
 
-      {/* The wash of light across the plane being read. Additive, and never
-          occluding — see the note above on why this shape is safe here. */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]}>
-        <circleGeometry args={[shape.lightRadius, 64]} />
-        <meshBasicMaterial
-          color="#1ae0ff"
-          transparent
-          opacity={0.05}
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
+      {/* The light. Additive and never occluding — see the note above on why
+          this shape is safe here where a blended plane was not. Both carry
+          their fade in vertex colour, so neither needs alpha or a texture. */}
+      {glow && (
+        <>
+          <mesh geometry={glow.disc} rotation={[-Math.PI / 2, 0, 0]}>
+            <meshBasicMaterial
+              vertexColors
+              transparent
+              opacity={0.5}
+              depthWrite={false}
+              blending={THREE.AdditiveBlending}
+              side={THREE.DoubleSide}
+              toneMapped={false}
+            />
+          </mesh>
+          <mesh geometry={glow.skirt}>
+            <meshBasicMaterial
+              vertexColors
+              transparent
+              opacity={0.28}
+              depthWrite={false}
+              blending={THREE.AdditiveBlending}
+              side={THREE.DoubleSide}
+              toneMapped={false}
+            />
+          </mesh>
+        </>
+      )}
     </group>
   );
 }
