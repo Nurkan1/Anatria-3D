@@ -3,6 +3,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { advanceScanBand, resetScanBand, scanRangeAlong, STANDING } from "./scanBand";
+import { ScanRing } from "./ScanRing";
 import { viewportKey } from "./viewportKeys";
 import { fps, sample } from "./renderSample";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
@@ -911,6 +912,10 @@ export function AnatomyScene({
           onContextMenu={onContextMenu}
         />
       ))}
+
+      {/* Mounted with the sweep and gone with it. Nothing of this mode outlives
+          the toggle — see the unmount discipline in `StudyViews`. */}
+      {scanBandEnabled && <ScanRing bounds={bounds} />}
 
       {pathway && (
         <PathwayFlow
