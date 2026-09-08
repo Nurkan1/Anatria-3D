@@ -317,12 +317,17 @@ const SECTIONS: Section[] = [
 
         <Sub>The scanner</Sub>
         <p>
-          <Ui>Scanner</Ui> sweeps a plane of light through the body from the feet to
-          the head and back. It is not decoration: every structure the plane reaches
-          lights up whole while it passes, and a panel names what it is crossing as it
-          goes — the six largest, with the rest counted, because a plane through the
-          chest passes two hundred structures and naming all of them would tell you
-          nothing.
+          <Ui>Scanner</Ui> brings a ring down onto the crown of the head and sweeps
+          a plane of light through the body, head to feet and back. It is not
+          decoration: every structure the plane reaches lights up whole while it
+          passes, and a panel names what it is crossing as it goes — the six largest,
+          with the rest counted, because a plane through the chest passes two hundred
+          structures and naming all of them would tell you nothing.
+        </p>
+        <p>
+          Switching it on turns the view a little, so the ring reads as a ring rather
+          than as a line across the body. It turns without moving you: whatever you
+          had zoomed in on, you are still that close to it.
         </p>
         <p>
           Drag the slider beside it to put the light where you want it, and press{" "}
