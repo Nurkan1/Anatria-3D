@@ -27,6 +27,7 @@ import {
   type FocusRequest,
   type ViewpointRequest,
 } from "@/stores/sceneStore";
+import { useChatStore } from "@/stores/chatStore";
 import { useStudyStore } from "@/stores/studyStore";
 
 import { illuminationGlow } from "./depthStack";
@@ -748,7 +749,22 @@ export function AnatomyScene({
   const boxes = useRef(new Map<string, THREE.Box3>());
   const [bounds, setBounds] = useState<THREE.Box3 | null>(null);
   // Temporary PoC scaffolding: B toggles the band; M remains the existing meter.
-  const [scanBandEnabled, setScanBandEnabled] = useState(false);
+  const [manualScan, setManualScan] = useState(false);
+  /**
+   * The sweep also runs while an answer is being written.
+   *
+   * This is what the mode is *for*, rather than a use found for it afterwards.
+   * Waiting on a model is the one moment in this application where the reader
+   * has nothing to look at and no idea how long it will be; the sweep turns
+   * that into the atlas reading itself, and the readout names what it passes
+   * while the answer is still being composed.
+   *
+   * An OR rather than a mode: the key still forces it on and off, and a
+   * question that arrives while it is already running does not switch it off
+   * when the answer lands.
+   */
+  const waitingOnAnswer = useChatStore((s) => s.pendingRequestId !== null);
+  const scanBandEnabled = manualScan || waitingOnAnswer;
   const sinceCrossing = useRef(0);
   const scanTransition = useRef<{
     target: boolean; start: number; frames: number; maxFrameMs: number;
@@ -757,13 +773,13 @@ export function AnatomyScene({
     const onKey = (event: KeyboardEvent) => {
       if (event.repeat || viewportKey(event) !== "b") return;
       resetScanBand();
-      const target = !scanBandEnabled;
+      const target = !manualScan;
       scanTransition.current = { target, start: performance.now(), frames: 0, maxFrameMs: 0 };
-      setScanBandEnabled(target);
+      setManualScan(target);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [scanBandEnabled]);
+  }, [manualScan]);
   useFrame((_, delta) => {
     // PoC measurement only: M's rolling p95 can miss a single compile stall,
     // and its normal sampler excludes intervals over one second altogether.
