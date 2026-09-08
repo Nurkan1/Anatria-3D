@@ -177,9 +177,29 @@ export function scanBandMaterialProps(
  */
 export const SWEEP_PROGRESS = { value: 0 };
 
+/**
+ * How far above the crown the ring starts, as a fraction of the body's height.
+ *
+ * Shared with the ring rather than owned by it: the descent has to end exactly
+ * where the sweep begins, and two numbers that have to agree are one number.
+ */
+export const SCAN_DROP = 0.42;
+
+/**
+ * Back to the start of the mode: at the head, still, and dark.
+ *
+ * **The sweep starts at the crown and travels down**, which is a consequence of
+ * how the mode opens rather than a preference. The ring descends into frame
+ * from above; a sweep that then began at the feet would mean the instrument
+ * arriving at the head and the light appearing at the ankles. Head-first is
+ * also the order a reader expects of a scan, and the order the crossing readout
+ * names structures in.
+ */
 export function resetScanBand(): void {
-  elapsed = 0;
-  SWEEP_PROGRESS.value = 0;
+  // Half a cycle is the far end of the outward stroke, so the next frame is the
+  // first of the return leg: downward, from the crown.
+  elapsed = SWEEP_CYCLE_S / 2;
+  SWEEP_PROGRESS.value = 1;
   resetScanEntry();
 }
 

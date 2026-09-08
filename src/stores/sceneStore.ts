@@ -88,7 +88,17 @@ export interface FocusRequest {
 export type ViewpointRequest =
   | { kind: "fit"; seq: number }
   | { kind: "orient"; view: AnatomicalView; seq: number }
-  | { kind: "dolly"; factor: number; seq: number };
+  | { kind: "dolly"; factor: number; seq: number }
+  /**
+   * The opening shot of the scanner: the whole body, from a three-quarter
+   * stance.
+   *
+   * A kind of its own rather than an orient followed by a fit. Chaining the two
+   * cannot work — `fit` frames from where the camera *currently* stands, and
+   * during an eased move that is somewhere between the old angle and the new
+   * one, so the framing would come out at a distance nobody chose.
+   */
+  | { kind: "scan"; seq: number };
 
 /**
  * A physiological route being traced through the model.
@@ -594,6 +604,8 @@ interface SceneStore extends SceneViewState {
   fitView: () => void;
   /** Turn to a standard anatomical viewpoint, keeping the current distance. */
   orientView: (view: AnatomicalView) => void;
+  /** Frame the whole body for the scanner, from the angle that shot is taken. */
+  scanView: () => void;
   /** Step closer to, or further from, whatever the camera is looking at. */
   dollyView: (factor: number) => void;
   /** Push the current group's parts apart. 0 puts them back. */
@@ -930,6 +942,9 @@ export const useSceneStore = create<SceneStore>()((set, get) => ({
     set((state) => ({
       viewpoint: { kind: "orient", view, seq: (state.viewpoint?.seq ?? 0) + 1 },
     })),
+
+  scanView: () =>
+    set((state) => ({ viewpoint: { kind: "scan", seq: (state.viewpoint?.seq ?? 0) + 1 } })),
 
   dollyView: (factor) =>
     set((state) => ({

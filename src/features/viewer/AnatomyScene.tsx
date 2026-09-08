@@ -42,7 +42,7 @@ import { illuminationGlow } from "./depthStack";
 import { buildEyeGroups } from "./eyes";
 import { EyeGlobe } from "./EyeGlobe";
 import { backgroundTheme } from "./background";
-import { framingDistance, lateralSign, viewDirection } from "./cameraViews";
+import { framingDistance, lateralSign, scanStance, viewDirection } from "./cameraViews";
 import { busiestTouches } from "./coverage";
 import { explodeMembers, explodeOffsets } from "./explode";
 import { studioLightDirections } from "./lighting";
@@ -315,8 +315,19 @@ function CameraRig({
         .copy(orbit.target)
         .add(viewDirection(viewpoint.view, leftSign).multiplyScalar(distance));
     } else {
+      /**
+       * `scan` frames the body, not the study.
+       *
+       * `fit` scopes to whatever is isolated, and that is right for a reader
+       * who has pulled out a heart and wants to see it. The scanner's subject
+       * is the patient — a sweep framed on an isolated heart would put the ring
+       * and most of its travel outside the frame. It also stands somewhere
+       * rather than reframing from where the camera already is, because this
+       * one *is* a shot.
+       */
+      const scanning = viewpoint.kind === "scan";
       const framing = studyEnvelope(
-        isolatedOrganIds ?? boxes.current.keys(),
+        scanning ? boxes.current.keys() : (isolatedOrganIds ?? boxes.current.keys()),
         boxes.current,
       );
       if (!framing) return;
@@ -326,13 +337,14 @@ function CameraRig({
 
       desiredTarget.current.copy(centre);
       // Framed from where the camera already stands, so "fit" reframes without
-      // also spinning the model round to a viewpoint nobody asked for.
+      // also spinning the model round to a viewpoint nobody asked for. The
+      // scanner is the exception: it names its own angle.
       desiredPosition.current
         .copy(centre)
         .add(
-          offsetFrom
-            .normalize()
-            .multiplyScalar(framingDistance(radius, perspective.fov)),
+          (scanning ? scanStance() : offsetFrom.normalize()).multiplyScalar(
+            framingDistance(radius, perspective.fov),
+          ),
         );
     }
 
@@ -793,11 +805,11 @@ export function AnatomyScene({
    * Only on the switch. The sweep also runs while an answer is written, and
    * moving the camera on every question would be unbearable.
    */
-  const fitView = useSceneStore((s) => s.fitView);
+  const scanView = useSceneStore((s) => s.scanView);
   useEffect(() => {
     resetScanBand();
-    if (manualScan) fitView();
-  }, [manualScan, fitView]);
+    if (manualScan) scanView();
+  }, [manualScan, scanView]);
 
   /**
    * A sweep started by a question arrives the same way one started by hand does.

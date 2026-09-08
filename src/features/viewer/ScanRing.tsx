@@ -2,7 +2,7 @@ import { useFrame } from "@react-three/fiber";
 import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
-import { SCAN_ENTRY, SHARED_SCAN } from "./scanBand";
+import { SCAN_DROP, SCAN_ENTRY, SHARED_SCAN } from "./scanBand";
 
 /**
  * The ring the sweep appears to come from.
@@ -176,6 +176,17 @@ export function ScanRing({
   const emitterMaterial = useRef<THREE.MeshStandardMaterial>(null);
   const nameplateMaterial = useRef<THREE.MeshBasicMaterial>(null);
   const edgeMaterial = useRef<THREE.MeshBasicMaterial>(null);
+  const shellMaterial = useRef<THREE.MeshStandardMaterial>(null);
+  /**
+   * Whether the hardware was blended on the previous frame.
+   *
+   * `transparent` is a render-state flag, not a value: flipping it puts the
+   * mesh in the sorted pass and out of the opaque one. So it is switched twice
+   * in the life of an entrance — on at the start, off at the end — rather than
+   * assigned every frame, and the shell goes back to being ordinary opaque
+   * geometry the moment it has arrived.
+   */
+  const blended = useRef(false);
 
   const shape = useMemo(() => {
     if (!bounds || bounds.isEmpty()) return null;
@@ -195,6 +206,11 @@ export function ScanRing({
       emitterRadius: radius - tube * 2.6,
       lightRadius: radius - tube * 4.4,
       emitter: tube * 0.9,
+      // Where the descent starts, measured from where it ends. A fraction of
+      // the body rather than a fixed distance: the two atlases are not the same
+      // height, and a drop that reads as an approach on one would be a twitch
+      // on the other.
+      drop: size.y * SCAN_DROP,
     };
   }, [bounds]);
 
@@ -278,8 +294,7 @@ export function ScanRing({
 
   useFrame((state, delta) => {
     const group = ring.current;
-    if (!group) return;
-    group.position.y = SHARED_SCAN.value;
+    if (!group || !shape) return;
     // Turning at the rate it is up, so the ring is nearly still as it appears
     // and eases into its cadence. A hoop already spinning at full rate while
     // its lamps are still coming on is two entrances at once.
@@ -311,6 +326,17 @@ export function ScanRing({
      * ends read the one value.
      */
     const arrival = SCAN_ENTRY.value;
+
+    /**
+     * It comes down onto the body rather than appearing at it.
+     *
+     * The offset is above the sweep position and closes to nothing, so the
+     * descent lands exactly where the light is about to start — and because the
+     * sweep opens at the crown and travels down, the arrival and the first
+     * stroke are one continuous movement instead of two.
+     */
+    group.position.y = SHARED_SCAN.value + (1 - arrival) * shape.drop;
+
     const aperture = 1 + ENTRY_APERTURE * (1 - arrival);
     // Radial only. Scaling Y as well would squash the lens of light through the
     // ring plane, and the plane is the one thing that must stay where the band
@@ -324,6 +350,23 @@ export function ScanRing({
     if (edgeMaterial.current) edgeMaterial.current.color.copy(EDGE_LIT).multiplyScalar(arrival);
     if (emitterMaterial.current) {
       emitterMaterial.current.emissiveIntensity = EMITTER_GLOW * (0.85 + 0.3 * breath) * arrival;
+    }
+
+    // The hardware itself, which cannot be faded by brightness because it is
+    // lit metal rather than light: while it is on its way down it is see-
+    // through, and it becomes solid as it settles.
+    const arriving = arrival < 1;
+    const hardware = [shellMaterial.current, emitterMaterial.current];
+    if (arriving !== blended.current) {
+      blended.current = arriving;
+      for (const material of hardware) {
+        if (!material) continue;
+        material.transparent = arriving;
+        material.opacity = arriving ? arrival : 1;
+        material.needsUpdate = true;
+      }
+    } else if (arriving) {
+      for (const material of hardware) if (material) material.opacity = arrival;
     }
   });
 
@@ -350,7 +393,12 @@ export function ScanRing({
               it reads as an object in the room and not as a light. */}
           <mesh rotation={[Math.PI / 2, 0, 0]}>
             <torusGeometry args={[shape.radius, shape.tube, 10, 96]} />
-            <meshStandardMaterial color="#1b2735" roughness={0.3} metalness={0.75} />
+            <meshStandardMaterial
+              ref={shellMaterial}
+              color="#1b2735"
+              roughness={0.3}
+              metalness={0.75}
+            />
           </mesh>
 
           {/* The name, wrapped around the outside of the shell and turning with

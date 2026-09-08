@@ -88,15 +88,18 @@ it("goes from one end to the other and back without walking any materials", () =
   // Written in fractions of a cycle rather than seconds: the invariant is
   // "half a sweep reaches the far end", and tying it to the current duration
   // made three tests fail when the sweep was slowed down for readability.
+  //
+  // It opens at `to` rather than at `from`: the mode's entrance is a ring
+  // descending onto the crown, so the first stroke goes down.
   const quarter = SWEEP_CYCLE_S / 4;
   advanceScanBand(0, STANDING, -1, 1);
-  expect(SHARED_SCAN.value).toBe(-1);
-  advanceScanBand(quarter * 2, STANDING, -1, 1);
   expect(SHARED_SCAN.value).toBe(1);
+  advanceScanBand(quarter * 2, STANDING, -1, 1);
+  expect(SHARED_SCAN.value).toBe(-1);
   advanceScanBand(quarter, STANDING, -1, 1);
   expect(SHARED_SCAN.value).toBe(0);
   advanceScanBand(quarter, STANDING, -1, 1);
-  expect(SHARED_SCAN.value).toBe(-1);
+  expect(SHARED_SCAN.value).toBe(1);
 });
 
 // ---------------------------------------------------------------------------
@@ -111,10 +114,10 @@ it("goes from one end to the other and back without walking any materials", () =
 it("sweeps along the axis it is given, not along Y", () => {
   advanceScanBand(0, SUPINE, -1, 1);
   expect(SHARED_AXIS.value).toEqual([0, 0, -1]);
-  expect(SHARED_SCAN.value).toBe(-1);
+  expect(SHARED_SCAN.value).toBe(1);
 
   advanceScanBand(SWEEP_CYCLE_S / 2, SUPINE, -1, 1);
-  expect(SHARED_SCAN.value).toBe(1);
+  expect(SHARED_SCAN.value).toBe(-1);
 });
 
 it("normalises the axis, so a caller may hand it any length", () => {
@@ -278,9 +281,11 @@ it("starts dark, so nothing is lit the frame the switch is thrown", () => {
 it("does not travel until the instrument is up", () => {
   // The entrance would otherwise contradict itself: lights rising slowly over
   // a plane already crossing the body at full speed.
-  resetScanEntry();
+  resetScanBand();
   advanceScanBand(SWEEP_CYCLE_S / 4, STANDING, -1, 1);
-  expect(SWEEP_PROGRESS.value).toBe(0);
+  // Still at the crown, where it was put: a quarter of a cycle of travel that
+  // moved it nowhere.
+  expect(SWEEP_PROGRESS.value).toBe(1);
 
   advanceScanEntry(SCAN_ENTRY_S);
   advanceScanBand(SWEEP_CYCLE_S / 4, STANDING, -1, 1);
@@ -331,4 +336,11 @@ it("scales everything the mode adds by the arrival, from one shared uniform", ()
   // instrument that is supposed to be reading it exists.
   expect(a.fragmentShader).toContain("* uScanEntry;");
   expect(a.fragmentShader).toContain("+ vec3(0.04, 0.34, 0.44) * wake) * uScanEntry;");
+});
+
+it("opens at the crown, because the ring arrives from above it", () => {
+  resetScanBand();
+  advanceScanBand(0, STANDING, -1, 1);
+  expect(SWEEP_PROGRESS.value).toBe(1);
+  expect(SHARED_SCAN.value).toBe(1);
 });
