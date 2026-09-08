@@ -154,3 +154,52 @@ it("injects into the installed r185 chunks and fails explicitly if they change",
   expect(input.fragmentShader).toContain("totalEmissiveRadiance +=");
   expect(() => scanBandOnBeforeCompile({ ...shader(), vertexShader: "changed" })).toThrow(/chunks are missing/);
 });
+
+// ---------------------------------------------------------------------------
+// A uniform of its own, without losing the shared program
+// ---------------------------------------------------------------------------
+//
+// Lighting a whole structure needs its own reach along the axis, which is
+// per-material data. The obvious way to supply it — a closure per mesh — is
+// exactly what would end the shared compile. three calls the callback as a
+// method, so `this` is the material and one function can serve them all.
+
+it("keeps one cache key even when each material carries its own span", () => {
+  const first = new MeshStandardMaterial(scanBandMaterialProps(true, [0.2, 0.5]));
+  const second = new MeshStandardMaterial(scanBandMaterialProps(true, [1.1, 1.4]));
+  expect(first.onBeforeCompile).toBe(second.onBeforeCompile);
+  expect(first.customProgramCacheKey()).toBe(second.customProgramCacheKey());
+});
+
+it("gives each material the span it was built with", () => {
+  const first = new MeshStandardMaterial(scanBandMaterialProps(true, [0.2, 0.5]));
+  const second = new MeshStandardMaterial(scanBandMaterialProps(true, [1.1, 1.4]));
+  const a = shader();
+  const b = shader();
+  first.onBeforeCompile(a, {} as WebGLRenderer);
+  second.onBeforeCompile(b, {} as WebGLRenderer);
+  expect(a.uniforms.uOrganSpan?.value).toEqual([0.2, 0.5]);
+  expect(b.uniforms.uOrganSpan?.value).toEqual([1.1, 1.4]);
+  // The sweep position stays shared even though the spans are not.
+  expect(a.uniforms.uScanAt).toBe(b.uniforms.uScanAt);
+});
+
+it("gives a material with no span one the sweep can never be inside", () => {
+  // A zero span would have lit the structure whenever the sweep passed the
+  // origin, which on this atlas is around the hips — a bug that looks like a
+  // feature.
+  const material = new MeshStandardMaterial(scanBandMaterialProps(true));
+  const compiled = shader();
+  material.onBeforeCompile(compiled, {} as WebGLRenderer);
+  const [from, to] = compiled.uniforms.uOrganSpan?.value as [number, number];
+  expect(from).toBeGreaterThan(to);
+});
+
+it("lights the whole structure as well as the slice", () => {
+  const compiled = shader();
+  scanBandOnBeforeCompile(compiled);
+  expect(compiled.fragmentShader).toContain("uniform vec2 uOrganSpan");
+  // Feathered at both ends: a structure arrives and leaves rather than blinks.
+  expect(compiled.fragmentShader).toContain("smoothstep(uOrganSpan.x - 0.02");
+  expect(compiled.fragmentShader).toContain("1.0 - smoothstep(uOrganSpan.y - 0.02");
+});

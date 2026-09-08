@@ -9,7 +9,7 @@ import { pressTravelled } from "./dragGuard";
 import { shouldSuppressClick } from "./areaSelect";
 import { coverageColour } from "./coverage";
 import { scanColour } from "./scan";
-import { scanBandMaterialProps } from "./scanBand";
+import { scanBandMaterialProps, scanRangeAlong, STANDING } from "./scanBand";
 import { probeGlow, reportDepthStack, stackFromCrossings } from "./depthStack";
 import type { ManifestOrgan } from "@/lib/schemas";
 
@@ -442,6 +442,28 @@ export const OrganMesh = memo(function OrganMesh({
     scanned,
   ]);
 
+  /**
+   * How far this structure reaches along the sweep axis, in world space.
+   *
+   * Measured the same way `SystemMeshes` measures its boxes — the geometry's
+   * own bounds put through the node transform — so the span the shader tests
+   * against is the same extent the rest of the viewer would report. Computed
+   * once per structure and handed to the material, never per frame.
+   */
+  const scanSpan = useMemo((): readonly [number, number] | undefined => {
+    if (!scanBandEnabled) return undefined;
+    if (!geometry.boundingBox) geometry.computeBoundingBox();
+    const box = geometry.boundingBox;
+    if (!box) return undefined;
+    const world = box.clone().applyMatrix4(matrix);
+    const { from, to } = scanRangeAlong(
+      [world.min.x, world.min.y, world.min.z],
+      [world.max.x, world.max.y, world.max.z],
+      STANDING,
+    );
+    return [from, to];
+  }, [scanBandEnabled, geometry, matrix]);
+
   const surface = {
     color,
     emissive,
@@ -549,7 +571,7 @@ export const OrganMesh = memo(function OrganMesh({
           the original attachment on unmount and disposes the temporary material.
           Keep the original alive so its warmed program cache also survives. */}
       {scanBandEnabled && (
-        <meshStandardMaterial ref={scanMaterial} {...surface} {...scanBandMaterialProps(true)} />
+        <meshStandardMaterial ref={scanMaterial} {...surface} {...scanBandMaterialProps(true, scanSpan)} />
       )}
 
       {/*

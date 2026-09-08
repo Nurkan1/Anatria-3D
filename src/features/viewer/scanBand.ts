@@ -48,8 +48,25 @@ const CYCLE = 12;
 
 type Shader = Parameters<Material["onBeforeCompile"]>[0];
 
-/** The same function object is attached to every experimental material. */
-export function scanBandOnBeforeCompile(shader: Shader): void {
+/**
+ * A span the plane can never be inside, for a material given none.
+ *
+ * `from` above `to` fails the test for every value. A zero span would have been
+ * the obvious placeholder and is a trap: it lights the structure whenever the
+ * sweep passes the origin, which on this atlas is somewhere around the hips.
+ */
+const NEVER: readonly [number, number] = [1, -1];
+
+/**
+ * The same function object is attached to every experimental material.
+ *
+ * three calls this as `material.onBeforeCompile(...)` — a method call, so
+ * `this` **is the material**. That is what lets one shared function give every
+ * structure a uniform of its own without a closure per mesh, and therefore
+ * without losing the shared program: uniform *values* play no part in the
+ * cache key, only the source of this function does.
+ */
+export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
   const vertexChunk = "#include <project_vertex>";
   const fragmentChunk = "#include <emissivemap_fragment>";
   if (
@@ -61,6 +78,13 @@ export function scanBandOnBeforeCompile(shader: Shader): void {
   shader.uniforms.uScanAt = SHARED_SCAN;
   shader.uniforms.uScanAxis = SHARED_AXIS;
 
+  // This structure's own reach along the axis, read off the material through
+  // `this`. Written once at compile and never touched again, so the per-frame
+  // cost stays the single shared write for the sweep position.
+  const owner = this as { userData?: { scanSpan?: readonly [number, number] } } | undefined;
+  const span = owner?.userData?.scanSpan ?? NEVER;
+  shader.uniforms.uOrganSpan = { value: [span[0], span[1]] };
+
   // How far along the axis this fragment sits. The projection happens in the
   // vertex shader and travels as a single float, so the fragment shader does a
   // subtract and a smoothstep and nothing else.
@@ -71,21 +95,38 @@ export function scanBandOnBeforeCompile(shader: Shader): void {
       `${vertexChunk}\nvScanAlong = dot((modelMatrix * vec4(transformed, 1.0)).xyz, uScanAxis);`,
     );
   shader.fragmentShader =
-    "uniform float uScanAt;\nvarying float vScanAlong;\n" +
+    "uniform float uScanAt;\nuniform vec2 uOrganSpan;\nvarying float vScanAlong;\n" +
     shader.fragmentShader.replace(
       fragmentChunk,
       `${fragmentChunk}
     float scanBand = 1.0 - smoothstep(0.008, 0.025, abs(vScanAlong - uScanAt));
-    totalEmissiveRadiance += vec3(0.1, 1.2, 1.5) * scanBand;`,
+    // The whole structure, while the plane is anywhere inside it. Feathered at
+    // both ends so a structure arrives and leaves rather than blinking, which
+    // is the difference between a scanner finding something and a bulb
+    // switching on.
+    float wake = smoothstep(uOrganSpan.x - 0.02, uOrganSpan.x + 0.02, uScanAt)
+               * (1.0 - smoothstep(uOrganSpan.y - 0.02, uOrganSpan.y + 0.02, uScanAt));
+    totalEmissiveRadiance += vec3(0.1, 1.2, 1.5) * scanBand
+                           + vec3(0.04, 0.34, 0.44) * wake;`,
     );
 }
 
 const ON = Object.freeze({ onBeforeCompile: scanBandOnBeforeCompile });
 const OFF = Object.freeze({});
 
-/** Off means no callback prop at all, not an identity shader callback. */
-export function scanBandMaterialProps(enabled: boolean) {
-  return enabled ? ON : OFF;
+/**
+ * Off means no callback prop at all, not an identity shader callback.
+ *
+ * `span` is this structure's own reach along the sweep axis. It travels on
+ * `userData` because that is where the shared `onBeforeCompile` can reach it —
+ * see the note about `this` there.
+ */
+export function scanBandMaterialProps(
+  enabled: boolean,
+  span?: readonly [number, number],
+) {
+  if (!enabled) return OFF;
+  return span ? { ...ON, userData: { scanSpan: span } } : ON;
 }
 
 export function resetScanBand(): void {
