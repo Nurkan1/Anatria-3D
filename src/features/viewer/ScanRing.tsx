@@ -129,14 +129,26 @@ export function ScanRing({ bounds }: { bounds: THREE.Box3 | null }) {
       (x, y) => Math.pow(Math.hypot(x, y) / shape.lightRadius, 2),
     );
 
-    // A short open cylinder centred on the ring plane, brightest where it meets
-    // it. This is what makes the light look like it has volume rather than
-    // being painted on a plane.
-    const height = shape.radius * 0.5;
+    // A flattened sphere, not a cylinder.
+    //
+    // The first attempt was an open cylinder and it read as a box: a cylinder
+    // seen near edge-on is a rectangle, and its silhouette ends abruptly at the
+    // left and right — which is exactly where an additive surface is brightest,
+    // because that is where the view grazes it. Bright light stopping at a
+    // straight edge is the one thing that cannot look like light.
+    //
+    // **A sphere has no hard silhouette from any angle.** Flattened onto the
+    // ring plane and faded from equator to poles it reads as a lens of light
+    // around the ring, and it stays round however the reader orbits.
     const skirt = fadeToBlack(
-      new THREE.CylinderGeometry(shape.lightRadius, shape.lightRadius, height, 64, 6, true),
+      new THREE.SphereGeometry(shape.lightRadius, 48, 24),
       tint,
-      (_x, y) => Math.pow(1 - Math.abs(y) / (height / 2), 2.2),
+      (x, y, z) => {
+        const r = Math.hypot(x, y, z) || 1;
+        // Brightest at the equator, which is the plane the ring is reading,
+        // and gone by the poles.
+        return Math.pow(1 - Math.abs(y / r), 2.6);
+      },
     );
 
     return { disc, skirt };
@@ -223,7 +235,9 @@ export function ScanRing({ bounds }: { bounds: THREE.Box3 | null }) {
               toneMapped={false}
             />
           </mesh>
-          <mesh geometry={glow.skirt}>
+          {/* Flattened here rather than in the geometry, so the fade above is
+              written in the sphere's own frame and stays readable. */}
+          <mesh geometry={glow.skirt} scale={[1, 0.42, 1]}>
             <meshBasicMaterial
               vertexColors
               transparent
