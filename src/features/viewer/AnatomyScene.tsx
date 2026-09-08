@@ -4,8 +4,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import {
   advanceScanBand,
+  advanceScanEntry,
   holdScanBand,
   resetScanBand,
+  resetScanEntry,
   scanRangeAlong,
   SHARED_SCAN,
   STANDING,
@@ -775,11 +777,40 @@ export function AnatomyScene({
   const scanBandEnabled = manualScan || (answering && sweepOnAnswer);
   const sinceCrossing = useRef(0);
 
-  // Wound back when the scanner is switched off, so the next one starts at the
-  // feet rather than resuming mid-body from a session nobody remembers.
+  /**
+   * Switching the scanner on is a shot, not a state change.
+   *
+   * The sweep winds back to the feet and the camera pulls back to take in
+   * whatever is on screen, so the light starts at one end of a subject that is
+   * wholly in frame. It reads as an instrument being started rather than an
+   * effect being enabled, which is the whole of the difference.
+   *
+   * **It frames and does not turn.** Orienting to the front would have been the
+   * more filmic move and it is the wrong one here: a reader who deliberately
+   * turned to a lateral view and then reaches for the scanner has their angle
+   * taken away from them. A pull-back reveals without overruling.
+   *
+   * Only on the switch. The sweep also runs while an answer is written, and
+   * moving the camera on every question would be unbearable.
+   */
+  const fitView = useSceneStore((s) => s.fitView);
   useEffect(() => {
-    if (!manualScan) resetScanBand();
-  }, [manualScan]);
+    resetScanBand();
+    if (manualScan) fitView();
+  }, [manualScan, fitView]);
+
+  /**
+   * A sweep started by a question arrives the same way one started by hand does.
+   *
+   * Only the arrival is wound back, not the sweep: an answer should not drag
+   * the light back to the feet mid-stroke. Without this the second question of
+   * a session gets no entrance at all, because the ramp is still sitting at 1
+   * from the first.
+   */
+  useEffect(() => {
+    if (scanBandEnabled) resetScanEntry();
+  }, [scanBandEnabled]);
+
   useFrame((_, delta) => {
     // PoC measurement only: M's rolling p95 can miss a single compile stall,
     if (scanBandEnabled && bounds && !bounds.isEmpty()) {
@@ -797,6 +828,10 @@ export function AnatomyScene({
       const grip = useScanStore.getState();
       if (scanIsStill(grip)) holdScanBand(grip.at, STANDING, from, to);
       else advanceScanBand(delta, STANDING, from, to);
+
+      // Outside the hold branch on purpose: the mode still has to finish
+      // arriving for a reader who pins the light before it is fully up.
+      advanceScanEntry(delta);
 
       // What it is passing through, six times a second rather than sixty. The
       // sweep moves a millimetre a frame and crosses the same structures it

@@ -41,7 +41,35 @@ export const STANDING: ScanAxis = [0, 1, 0];
 export const SHARED_SCAN = { value: 0 };
 export const SHARED_AXIS: { value: number[] } = { value: [...STANDING] };
 
+/**
+ * How far the mode is into its arrival: 0 the instant it is switched on, 1 once
+ * it is fully up.
+ *
+ * # Why the entrance is a uniform and not an animation in the ring
+ *
+ * The instrument and the light on the body have to arrive *together*. Two
+ * separate ramps — one in a component's frame loop, one here — drift apart the
+ * first time a frame is long, and what the reader sees is a ring that is
+ * already lit throwing light that has not caught up. One clock, read by both,
+ * cannot do that.
+ *
+ * It is a shared uniform for the same reason the sweep position is: one write a
+ * frame reaches all 3,478 materials, and uniform *values* play no part in the
+ * program cache key, so the entrance costs nothing at compile time.
+ */
+export const SCAN_ENTRY = { value: 0 };
+
+/**
+ * How long the arrival takes, in seconds.
+ *
+ * Short enough that nobody waits for it, long enough to be a movement rather
+ * than a frame. Past a second it stops being an entrance and starts being a
+ * delay between pressing a switch and the switch working.
+ */
+export const SCAN_ENTRY_S = 0.9;
+
 let elapsed = 0;
+let entry = 0;
 
 /**
  * One full there-and-back, in seconds.
@@ -84,6 +112,7 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
   }
   shader.uniforms.uScanAt = SHARED_SCAN;
   shader.uniforms.uScanAxis = SHARED_AXIS;
+  shader.uniforms.uScanEntry = SCAN_ENTRY;
 
   // This structure's own reach along the axis, read off the material through
   // `this`. Written once at compile and never touched again, so the per-frame
@@ -102,7 +131,7 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
       `${vertexChunk}\nvScanAlong = dot((modelMatrix * vec4(transformed, 1.0)).xyz, uScanAxis);`,
     );
   shader.fragmentShader =
-    "uniform float uScanAt;\nuniform vec2 uOrganSpan;\nvarying float vScanAlong;\n" +
+    "uniform float uScanAt;\nuniform float uScanEntry;\nuniform vec2 uOrganSpan;\nvarying float vScanAlong;\n" +
     shader.fragmentShader.replace(
       fragmentChunk,
       `${fragmentChunk}
@@ -113,8 +142,10 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
     // switching on.
     float wake = smoothstep(uOrganSpan.x - 0.02, uOrganSpan.x + 0.02, uScanAt)
                * (1.0 - smoothstep(uOrganSpan.y - 0.02, uOrganSpan.y + 0.02, uScanAt));
-    totalEmissiveRadiance += vec3(0.1, 1.2, 1.5) * scanBand
-                           + vec3(0.04, 0.34, 0.44) * wake;`,
+    // Everything this mode adds is scaled by the arrival, so the light comes
+    // up on the body instead of being there the frame the switch is thrown.
+    totalEmissiveRadiance += (vec3(0.1, 1.2, 1.5) * scanBand
+                           + vec3(0.04, 0.34, 0.44) * wake) * uScanEntry;`,
     );
 }
 
@@ -148,6 +179,27 @@ export const SWEEP_PROGRESS = { value: 0 };
 export function resetScanBand(): void {
   elapsed = 0;
   SWEEP_PROGRESS.value = 0;
+  resetScanEntry();
+}
+
+/** Put the arrival back to the start, so the mode comes up again. */
+export function resetScanEntry(): void {
+  entry = 0;
+  SCAN_ENTRY.value = 0;
+}
+
+/**
+ * Advance the arrival. Called once per frame while the mode is on.
+ *
+ * Eased at both ends rather than linear: a ramp that starts and stops abruptly
+ * reads as a fade, and a fade is a transition between two pictures. This is
+ * meant to read as a machine powering up, which has weight at the beginning and
+ * settles at the end.
+ */
+export function advanceScanEntry(delta: number): number {
+  entry = Math.max(0, Math.min(1, entry + delta / SCAN_ENTRY_S));
+  SCAN_ENTRY.value = entry * entry * (3 - 2 * entry);
+  return SCAN_ENTRY.value;
 }
 
 /**

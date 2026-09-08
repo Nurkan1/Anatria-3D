@@ -2,7 +2,7 @@ import { useFrame } from "@react-three/fiber";
 import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
-import { SHARED_SCAN } from "./scanBand";
+import { SCAN_ENTRY, SHARED_SCAN } from "./scanBand";
 
 /**
  * The ring the sweep appears to come from.
@@ -84,6 +84,16 @@ function fadeToBlack(
 /** Slow enough to read as a machine working, not as something spinning. */
 const TURNS_PER_SECOND = 0.04;
 
+/**
+ * How much wider the ring is at the moment it appears, as a fraction.
+ *
+ * The aperture closes onto the body as the light comes up. It is the same
+ * movement a real gantry makes when it is brought to a patient, and it is the
+ * reason the entrance reads as a machine arriving rather than an effect fading
+ * in — a fade is a change of picture, a movement is an event.
+ */
+const ENTRY_APERTURE = 0.34;
+
 /** How many times the name repeats around the band. */
 const NAMEPLATE_REPEATS = 5;
 
@@ -136,6 +146,16 @@ const DISC_OPACITY = 0.14;
 const LENS_OPACITY = 0.1;
 const EMITTER_GLOW = 2.2;
 
+/**
+ * The colour of the lit inner edge, at full power.
+ *
+ * It comes up by being darkened towards black rather than by being made
+ * transparent: it is opaque geometry inboard of the emitters, and turning it
+ * transparent would put a thin ring into the sorted pass for no reason. A lamp
+ * that is not yet at full brightness is dimmer, not see-through.
+ */
+const EDGE_LIT = new THREE.Color("#8ff4ff");
+
 export function ScanRing({
   bounds,
   instrument,
@@ -154,6 +174,8 @@ export function ScanRing({
   const discMaterial = useRef<THREE.MeshBasicMaterial>(null);
   const lensMaterial = useRef<THREE.MeshBasicMaterial>(null);
   const emitterMaterial = useRef<THREE.MeshStandardMaterial>(null);
+  const nameplateMaterial = useRef<THREE.MeshBasicMaterial>(null);
+  const edgeMaterial = useRef<THREE.MeshBasicMaterial>(null);
 
   const shape = useMemo(() => {
     if (!bounds || bounds.isEmpty()) return null;
@@ -277,10 +299,28 @@ export function ScanRing({
     const drift = Math.sin(state.clock.elapsedTime * 1.7);
     const breath = 0.78 + 0.22 * (travel * 0.6 + drift * 0.4);
 
-    if (discMaterial.current) discMaterial.current.opacity = DISC_OPACITY * breath;
-    if (lensMaterial.current) lensMaterial.current.opacity = LENS_OPACITY * breath;
+    /**
+     * The arrival, read from the same uniform the body's light is scaled by.
+     *
+     * Not a clock of its own: the ring and the band it appears to cast have to
+     * come up together, and two ramps started in the same second still drift
+     * apart the first time a frame is long. The scene advances it once; both
+     * ends read the one value.
+     */
+    const arrival = SCAN_ENTRY.value;
+    const aperture = 1 + ENTRY_APERTURE * (1 - arrival);
+    // Radial only. Scaling Y as well would squash the lens of light through the
+    // ring plane, and the plane is the one thing that must stay where the band
+    // says it is.
+    group.scale.x = aperture;
+    group.scale.z = aperture;
+
+    if (discMaterial.current) discMaterial.current.opacity = DISC_OPACITY * breath * arrival;
+    if (lensMaterial.current) lensMaterial.current.opacity = LENS_OPACITY * breath * arrival;
+    if (nameplateMaterial.current) nameplateMaterial.current.opacity = arrival;
+    if (edgeMaterial.current) edgeMaterial.current.color.copy(EDGE_LIT).multiplyScalar(arrival);
     if (emitterMaterial.current) {
-      emitterMaterial.current.emissiveIntensity = EMITTER_GLOW * (0.85 + 0.3 * breath);
+      emitterMaterial.current.emissiveIntensity = EMITTER_GLOW * (0.85 + 0.3 * breath) * arrival;
     }
   });
 
@@ -320,6 +360,7 @@ export function ScanRing({
                      shape.tube * 1.6, 96, 1, true]}
             />
             <meshBasicMaterial
+              ref={nameplateMaterial}
               map={nameplate}
               transparent
               depthWrite={false}
@@ -345,7 +386,7 @@ export function ScanRing({
               radii. This is the edge that is meant to look switched on. */}
           <mesh rotation={[Math.PI / 2, 0, 0]}>
             <torusGeometry args={[shape.lightRadius, shape.tube * 0.22, 6, 96]} />
-            <meshBasicMaterial color="#8ff4ff" toneMapped={false} />
+            <meshBasicMaterial ref={edgeMaterial} color="#8ff4ff" toneMapped={false} />
           </mesh>
         </>
       )}

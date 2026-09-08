@@ -3,8 +3,12 @@ import { Material, MeshStandardMaterial, ShaderLib, UniformsUtils, type WebGLRen
 
 import {
   advanceScanBand,
+  advanceScanEntry,
   holdScanBand,
   resetScanBand,
+  resetScanEntry,
+  SCAN_ENTRY,
+  SCAN_ENTRY_S,
   scanBandMaterialProps,
   scanBandOnBeforeCompile,
   scanRangeAlong,
@@ -252,4 +256,59 @@ it("publishes where it is so a control can follow without React", () => {
   expect(SWEEP_PROGRESS.value).toBeCloseTo(0.3);
   advanceScanBand(0, STANDING, -1, 1);
   expect(SWEEP_PROGRESS.value).toBeCloseTo(0.3);
+});
+
+// ---------------------------------------------------------------------------
+// The arrival
+// ---------------------------------------------------------------------------
+//
+// Switching the mode on is a shot rather than a state change, and the ring and
+// the light on the body have to come up together. They do because both read
+// this one uniform — the ring never runs a clock of its own.
+
+it("starts dark, so nothing is lit the frame the switch is thrown", () => {
+  expect(SCAN_ENTRY.value).toBe(0);
+});
+
+it("is fully up after its own duration, and goes no further", () => {
+  advanceScanEntry(SCAN_ENTRY_S);
+  expect(SCAN_ENTRY.value).toBeCloseTo(1);
+  advanceScanEntry(SCAN_ENTRY_S * 4);
+  expect(SCAN_ENTRY.value).toBe(1);
+});
+
+it("eases rather than ramping, so the arrival has weight at the start", () => {
+  // A linear ramp reads as a fade between two pictures. This one is behind
+  // linear early and ahead of it late, which is what a machine powering up
+  // looks like.
+  advanceScanEntry(SCAN_ENTRY_S * 0.25);
+  expect(SCAN_ENTRY.value).toBeLessThan(0.25);
+  advanceScanEntry(SCAN_ENTRY_S * 0.5);
+  expect(SCAN_ENTRY.value).toBeGreaterThan(0.75);
+});
+
+it("winds the arrival back with the sweep, and on its own", () => {
+  advanceScanEntry(SCAN_ENTRY_S);
+  resetScanBand();
+  expect(SCAN_ENTRY.value).toBe(0);
+
+  advanceScanEntry(SCAN_ENTRY_S);
+  resetScanEntry();
+  expect(SCAN_ENTRY.value).toBe(0);
+});
+
+it("scales everything the mode adds by the arrival, from one shared uniform", () => {
+  const first = new MeshStandardMaterial(scanBandMaterialProps(true, [0.2, 0.5]));
+  const second = new MeshStandardMaterial(scanBandMaterialProps(true, [1.1, 1.4]));
+  const a = shader();
+  const b = shader();
+  first.onBeforeCompile(a, {} as WebGLRenderer);
+  second.onBeforeCompile(b, {} as WebGLRenderer);
+  expect(a.uniforms.uScanEntry).toBe(SCAN_ENTRY);
+  expect(b.uniforms.uScanEntry).toBe(a.uniforms.uScanEntry);
+  // Both terms inside the multiplication: an entrance that brought the band up
+  // but left the wake at full strength would light a structure before the
+  // instrument that is supposed to be reading it exists.
+  expect(a.fragmentShader).toContain("* uScanEntry;");
+  expect(a.fragmentShader).toContain("+ vec3(0.04, 0.34, 0.44) * wake) * uScanEntry;");
 });
