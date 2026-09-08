@@ -26,13 +26,20 @@ import { SWEEP_PROGRESS } from "./scanBand";
 export function ScanControls() {
   const enabled = useScanStore((s) => s.enabled);
   const held = useScanStore((s) => s.held);
+  const pinned = useScanStore((s) => s.pinned);
+  const sweepOnAnswer = useScanStore((s) => s.sweepOnAnswer);
   const toggle = useScanStore((s) => s.toggle);
   const hold = useScanStore((s) => s.hold);
   const release = useScanStore((s) => s.release);
+  const togglePin = useScanStore((s) => s.togglePin);
+  const setSweepOnAnswer = useScanStore((s) => s.setSweepOnAnswer);
   const slider = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (!enabled || held) return;
+    // Nothing to follow while the reader has it, and nothing to follow while it
+    // is pinned either — the sweep is not moving, and writing the same value
+    // sixty times a second would fight a thumb somebody is about to drag.
+    if (!enabled || held || pinned) return;
     let frame = 0;
     const tick = () => {
       if (slider.current) slider.current.value = String(SWEEP_PROGRESS.value);
@@ -40,7 +47,7 @@ export function ScanControls() {
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [enabled, held]);
+  }, [enabled, held, pinned]);
 
   return (
     <div className="pointer-events-auto flex flex-col items-start gap-1.5">
@@ -98,8 +105,50 @@ export function ScanControls() {
             }}
             onBlur={release}
           />
+
+          {/*
+            A control rather than a held modifier.
+
+            Ctrl-drag was the obvious shape for this and it is the wrong one: it
+            binds a feature to a keyboard layout, it cannot be found by looking
+            at the screen, and it is out of reach on a machine driven by touch
+            or by one hand. A button that says what it does works everywhere.
+          */}
+          <button
+            type="button"
+            onClick={togglePin}
+            aria-pressed={pinned}
+            title={
+              pinned
+                ? "Let the light travel again"
+                : "Keep the light where it is, so you can look without holding it"
+            }
+            className={`mt-1.5 w-full rounded border px-1 py-0.5 text-[9px] ${
+              pinned
+                ? "border-cyan-500 bg-cyan-500/15 text-cyan-200"
+                : "border-slate-700 text-slate-400 hover:border-slate-600"
+            }`}
+          >
+            {pinned ? "Held" : "Hold"}
+          </button>
         </div>
       )}
+
+      {/*
+        The one setting, and it is here rather than buried in a drawer because
+        this is where somebody is when they decide their machine cannot take it.
+        Remembered across launches: being asked to turn it off every morning is
+        the application forgetting the only thing it was told.
+      */}
+      <label className="flex max-w-[9.5rem] cursor-pointer items-start gap-1.5 rounded border border-slate-800/70 bg-slate-950/70 px-1.5 py-1 text-[9px] leading-snug text-slate-400">
+        <input
+          type="checkbox"
+          checked={sweepOnAnswer}
+          onChange={(event) => setSweepOnAnswer(event.target.checked)}
+          className="mt-[1px] accent-cyan-500"
+        />
+        Sweep while the assistant answers
+      </label>
     </div>
   );
 }

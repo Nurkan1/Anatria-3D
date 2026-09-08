@@ -33,7 +33,7 @@ import {
   type ViewpointRequest,
 } from "@/stores/sceneStore";
 import { useChatStore } from "@/stores/chatStore";
-import { useScanStore } from "@/stores/scanStore";
+import { scanIsStill, useScanStore } from "@/stores/scanStore";
 import { useStudyStore } from "@/stores/studyStore";
 
 import { illuminationGlow } from "./depthStack";
@@ -768,8 +768,11 @@ export function AnatomyScene({
    * question that arrives while it is already running does not switch it off
    * when the answer lands.
    */
-  const waitingOnAnswer = useChatStore((s) => s.pendingRequestId !== null);
-  const scanBandEnabled = manualScan || waitingOnAnswer;
+  const answering = useChatStore((s) => s.pendingRequestId !== null);
+  // Off is remembered: somebody who turned this down did it because their
+  // machine struggles, and it must stay down without being asked again.
+  const sweepOnAnswer = useScanStore((s) => s.sweepOnAnswer);
+  const scanBandEnabled = manualScan || (answering && sweepOnAnswer);
   const sinceCrossing = useRef(0);
 
   // Wound back when the scanner is switched off, so the next one starts at the
@@ -792,7 +795,7 @@ export function AnatomyScene({
       // Read rather than subscribed: this runs sixty times a second and must
       // not make the scene re-render when the reader touches the slider.
       const grip = useScanStore.getState();
-      if (grip.held) holdScanBand(grip.at, STANDING, from, to);
+      if (scanIsStill(grip)) holdScanBand(grip.at, STANDING, from, to);
       else advanceScanBand(delta, STANDING, from, to);
 
       // What it is passing through, six times a second rather than sixty. The

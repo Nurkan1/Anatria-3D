@@ -1,11 +1,18 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { useScanStore } from "./scanStore";
+import { scanIsStill, useScanStore } from "./scanStore";
 
 const store = () => useScanStore.getState();
 
 beforeEach(() => {
-  useScanStore.setState({ enabled: false, held: false, at: 0.5 });
+  useScanStore.setState({
+    enabled: false,
+    held: false,
+    pinned: false,
+    at: 0.5,
+    sweepOnAnswer: true,
+  });
+  localStorage.clear();
 });
 
 describe("scanStore", () => {
@@ -48,5 +55,49 @@ describe("scanStore", () => {
     store().release();
     expect(store().held).toBe(false);
     expect(store().at).toBeCloseTo(0.8);
+  });
+});
+
+describe("pinning, so the light stays without a finger on it", () => {
+  it("keeps the sweep still when pinned, with nothing held", () => {
+    store().togglePin();
+    expect(scanIsStill(useScanStore.getState())).toBe(true);
+    expect(store().held).toBe(false);
+  });
+
+  it("still holds while a finger is on it, unpinned", () => {
+    store().hold(0.3);
+    expect(scanIsStill(useScanStore.getState())).toBe(true);
+  });
+
+  it("travels again once neither is true", () => {
+    store().hold(0.3);
+    store().release();
+    expect(scanIsStill(useScanStore.getState())).toBe(false);
+  });
+
+  it("unpins when the scanner is switched off", () => {
+    useScanStore.setState({ enabled: true });
+    store().togglePin();
+    store().toggle();
+    expect(store().pinned).toBe(false);
+  });
+});
+
+describe("sweeping while the assistant answers", () => {
+  it("is on unless it was turned off", () => {
+    expect(store().sweepOnAnswer).toBe(true);
+  });
+
+  it("remembers being turned off, because that was a decision about a machine", () => {
+    store().setSweepOnAnswer(false);
+    expect(store().sweepOnAnswer).toBe(false);
+    expect(localStorage.getItem("anatria3d.scan.sweepOnAnswer.v1")).toBe("off");
+  });
+
+  it("writes nothing when the setting has not changed", () => {
+    localStorage.clear();
+    store().setSweepOnAnswer(true);
+    expect(localStorage.getItem("anatria3d.scan.sweepOnAnswer.v1")).toBeNull();
   });
 });
