@@ -2,8 +2,16 @@ import { OrbitControls, useGLTF } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
-import { advanceScanBand, resetScanBand, scanRangeAlong, STANDING } from "./scanBand";
+import { advanceScanBand, resetScanBand, scanRangeAlong, SHARED_SCAN, STANDING } from "./scanBand";
 import { ScanRing } from "./ScanRing";
+import {
+  CROSSING_INTERVAL_S,
+  CROSSING_LIMIT,
+  CURRENT_CROSSING,
+  crossingAt,
+  NOTHING_CROSSED,
+  sameCrossing,
+} from "./scanCrossing";
 import { viewportKey } from "./viewportKeys";
 import { fps, sample } from "./renderSample";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
@@ -740,6 +748,7 @@ export function AnatomyScene({
   const [bounds, setBounds] = useState<THREE.Box3 | null>(null);
   // Temporary PoC scaffolding: B toggles the band; M remains the existing meter.
   const [scanBandEnabled, setScanBandEnabled] = useState(false);
+  const sinceCrossing = useRef(0);
   const scanTransition = useRef<{
     target: boolean; start: number; frames: number; maxFrameMs: number;
   } | null>(null);
@@ -780,6 +789,20 @@ export function AnatomyScene({
         STANDING,
       );
       advanceScanBand(delta, STANDING, from, to);
+
+      // What it is passing through, six times a second rather than sixty. The
+      // sweep moves a millimetre a frame and crosses the same structures it
+      // did last frame; recomputing that is work nobody sees.
+      sinceCrossing.current += delta;
+      if (sinceCrossing.current >= CROSSING_INTERVAL_S) {
+        sinceCrossing.current = 0;
+        const next = crossingAt(boxes.current, SHARED_SCAN.value, STANDING, CROSSING_LIMIT);
+        if (!sameCrossing(next, CURRENT_CROSSING.value)) CURRENT_CROSSING.value = next;
+      }
+    } else if (CURRENT_CROSSING.value !== NOTHING_CROSSED) {
+      // Nothing is being read when the sweep is off, and the readout must not
+      // keep showing the last thing it saw.
+      CURRENT_CROSSING.value = NOTHING_CROSSED;
     }
   });
   const [finestDetail, setFinestDetail] = useState(0.01);
