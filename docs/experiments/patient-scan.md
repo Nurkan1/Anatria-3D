@@ -92,10 +92,34 @@ material before mounting the new ones, the program could be released and
 recompiled. Measure the toggle stall after removing the duplicate; do not
 assume either way.
 
-### Still unmeasured
+### After toggling back off: no leak
 
-Heap after toggling **back off**. If it does not return towards 529 MB, the
-materials are not being disposed and that is a leak, not a cost.
+Measured: the reading fluctuates between **493 and 570 MB**.
+
+The floor matters and the ceiling does not. `heapMb` reads
+`performance.memory.usedJSHeapSize`, which is the garbage-collected JS heap —
+it sawtooths continuously and reports what is allocated and not yet collected,
+not what is retained. A 570 MB peak is a heap that has not collected recently.
+
+**A floor of 493 MB is below the 529 MB the session started at, and leaked
+materials cannot make a heap fall below where it began.** The memory comes
+back.
+
+One observation is not a proof, and the rigorous version is cheap: toggle five
+times and watch *only the floor*. A stable floor near 490 confirms it; a floor
+climbing 490 → 540 → 590 is a ratchet and a real leak. A wide sawtooth says
+nothing either way.
+
+### The instrument is missing a counter
+
+We are squinting at a garbage-collected number because **the panel cannot count
+materials**. `renderer.info.memory` exposes geometries and textures only, and
+materials are precisely what this design duplicates.
+
+`RenderStats` already walks the scene twice a second for its other figures.
+Adding a material count to that sweep is cheap and turns this question from an
+inference into a measurement — worth doing before phase 1 removes the
+duplicate, so the removal can be verified rather than believed.
 
 ## Theories that were wrong, or not yet right
 
@@ -116,6 +140,7 @@ materials are not being disposed and that is a leak, not a cost.
 - `programs` climbing with the atlas size rather than staying at a handful.
 - Frames materially below the band-off baseline. Measured: they are not — 48
   fps either way, p95 +0.6 ms.
-- Draw calls, programs or heap not returning to their pre-toggle readings.
+- A heap *floor* that ratchets upward across repeated toggles. The peak is
+  meaningless; only the floor is evidence.
 - Needing postprocessing to make the sweep look right. There is no
   `EffectComposer` in this project and phase 0 does not introduce one.
