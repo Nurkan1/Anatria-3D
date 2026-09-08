@@ -136,7 +136,19 @@ const DISC_OPACITY = 0.14;
 const LENS_OPACITY = 0.1;
 const EMITTER_GLOW = 2.2;
 
-export function ScanRing({ bounds }: { bounds: THREE.Box3 | null }) {
+export function ScanRing({
+  bounds,
+  instrument,
+}: {
+  bounds: THREE.Box3 | null;
+  /**
+   * Draw the hardware, or only the light it throws.
+   *
+   * False while an answer is being written: the assistant is moving the scene
+   * then, and a solid ring passing over the body hides the thing it is showing.
+   */
+  instrument: boolean;
+}) {
   const ring = useRef<THREE.Group>(null);
   const emitters = useRef<THREE.InstancedMesh>(null);
   const discMaterial = useRef<THREE.MeshBasicMaterial>(null);
@@ -209,7 +221,9 @@ export function ScanRing({ bounds }: { bounds: THREE.Box3 | null }) {
     return { disc, skirt };
   }, [shape]);
 
-  const nameplate = useMemo(nameplateTexture, []);
+  // Only drawn when the hardware is. Built unconditionally it meant a canvas
+  // and a texture upload for every question asked, to be disposed unused.
+  const nameplate = useMemo(() => (instrument ? nameplateTexture() : null), [instrument]);
 
   useEffect(
     () => () => {
@@ -218,7 +232,7 @@ export function ScanRing({ bounds }: { bounds: THREE.Box3 | null }) {
     },
     [glow],
   );
-  useEffect(() => () => nameplate.dispose(), [nameplate]);
+  useEffect(() => () => nameplate?.dispose(), [nameplate]);
 
   useLayoutEffect(() => {
     const mesh = emitters.current;
@@ -274,49 +288,67 @@ export function ScanRing({ bounds }: { bounds: THREE.Box3 | null }) {
 
   return (
     <group ref={ring} position={[shape.x, 0, shape.z]}>
-      {/* The shell. Lit like the rest of the scene rather than emissive, so it
-          reads as an object in the room and not as a light. */}
-      <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[shape.radius, shape.tube, 10, 96]} />
-        <meshStandardMaterial color="#1b2735" roughness={0.3} metalness={0.75} />
-      </mesh>
+      {/*
+        The machine, or only its light.
+        =============================
 
-      {/* The name, wrapped around the outside of the shell and turning with it.
-          Sits just clear of the shell's own radius so the two surfaces cannot
-          fight over the depth test — the mistake that speckled the first ring. */}
-      <mesh>
-        <cylinderGeometry
-          args={[shape.radius + shape.tube * 1.02, shape.radius + shape.tube * 1.02,
-                 shape.tube * 1.6, 96, 1, true]}
-        />
-        <meshBasicMaterial
-          map={nameplate}
-          transparent
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
-          toneMapped={false}
-        />
-      </mesh>
+        While an answer is being written the assistant is isolating structures
+        and lighting the ones it names, and a solid ring sliding across the body
+        hides exactly what the reader is being shown. So the hardware is for the
+        reader who asked for it by hand; a sweep that runs by itself is light
+        alone, passing through without covering anything.
 
-      {/* The emitter array: what makes it read as an instrument. */}
-      <instancedMesh ref={emitters} args={[undefined, undefined, EMITTERS]}>
-        <boxGeometry args={[shape.emitter * 0.55, shape.emitter * 0.7, shape.emitter * 2.2]} />
-        <meshStandardMaterial
-          color="#0b1c24"
-          ref={emitterMaterial}
-          emissive="#1ae0ff"
-          emissiveIntensity={EMITTER_GLOW}
-          roughness={0.25}
-          metalness={0.4}
-        />
-      </instancedMesh>
+        It is also cheapest in the busiest moment, which is the right way round:
+        four fewer draw calls precisely while the assistant is moving the scene.
+      */}
+      {instrument && (
+        <>
+          {/* The shell. Lit like the rest of the scene rather than emissive, so
+              it reads as an object in the room and not as a light. */}
+          <mesh rotation={[Math.PI / 2, 0, 0]}>
+            <torusGeometry args={[shape.radius, shape.tube, 10, 96]} />
+            <meshStandardMaterial color="#1b2735" roughness={0.3} metalness={0.75} />
+          </mesh>
 
-      {/* A thin bright line inboard of the emitters, clear of both other
-          radii. This is the edge that is meant to look switched on. */}
-      <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[shape.lightRadius, shape.tube * 0.22, 6, 96]} />
-        <meshBasicMaterial color="#8ff4ff" toneMapped={false} />
-      </mesh>
+          {/* The name, wrapped around the outside of the shell and turning with
+              it. Sits just clear of the shell's own radius so the two surfaces
+              cannot fight over the depth test — the mistake that speckled the
+              first ring. */}
+          <mesh>
+            <cylinderGeometry
+              args={[shape.radius + shape.tube * 1.02, shape.radius + shape.tube * 1.02,
+                     shape.tube * 1.6, 96, 1, true]}
+            />
+            <meshBasicMaterial
+              map={nameplate}
+              transparent
+              depthWrite={false}
+              blending={THREE.AdditiveBlending}
+              toneMapped={false}
+            />
+          </mesh>
+
+          {/* The emitter array: what makes it read as an instrument. */}
+          <instancedMesh ref={emitters} args={[undefined, undefined, EMITTERS]}>
+            <boxGeometry args={[shape.emitter * 0.55, shape.emitter * 0.7, shape.emitter * 2.2]} />
+            <meshStandardMaterial
+              color="#0b1c24"
+              ref={emitterMaterial}
+              emissive="#1ae0ff"
+              emissiveIntensity={EMITTER_GLOW}
+              roughness={0.25}
+              metalness={0.4}
+            />
+          </instancedMesh>
+
+          {/* A thin bright line inboard of the emitters, clear of both other
+              radii. This is the edge that is meant to look switched on. */}
+          <mesh rotation={[Math.PI / 2, 0, 0]}>
+            <torusGeometry args={[shape.lightRadius, shape.tube * 0.22, 6, 96]} />
+            <meshBasicMaterial color="#8ff4ff" toneMapped={false} />
+          </mesh>
+        </>
+      )}
 
       {/* The light. Additive and never occluding — see the note above on why
           this shape is safe here where a blended plane was not. Both carry

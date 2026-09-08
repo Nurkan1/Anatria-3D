@@ -957,7 +957,7 @@ export function AnatomyScene({
 
       {/* Mounted with the sweep and gone with it. Nothing of this mode outlives
           the toggle — see the unmount discipline in `StudyViews`. */}
-      {scanBandEnabled && <ScanRing bounds={bounds} />}
+      {scanBandEnabled && <ScanRing bounds={bounds} instrument={manualScan} />}
 
       {pathway && (
         <PathwayFlow
