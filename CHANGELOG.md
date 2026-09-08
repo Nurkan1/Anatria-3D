@@ -49,6 +49,40 @@ percentile frame. 3,478 materials share a single compiled program rather than
 compiling one each, which is the only reason a mode like this is affordable
 here at all.
 
+**The MCP server now ships with the application.** Another program on this
+machine — an AI agent — could already open the bridge and move the view, but
+only somebody who had cloned the repository could give it the half that
+searches, and identifiers are not guessable. In practice that meant an agent
+that could talk and reset the camera. The five read-only tools now travel in the
+installer: they search the atlas, read a structure and walk the hierarchy
+without the bridge, without this window open and without a key. They are source
+rather than a second frozen binary — 72 KB against a 61 MB installer.
+
+**And the application hands an agent its instructions instead of making it
+look.** An agent that had not been configured with the server worked the bridge
+out by reading the repository — it found the pipe, the frame shape and the
+client on its own, and spent its first attempt on a refusal. All of that was
+discoverable and none of it was offered. One button under *Writing your own
+client?* now copies a briefing that names the server first, carries the pipe
+this window is actually listening on, and gives the three warnings that
+otherwise read as a broken bridge. The panel says out loud that the briefing
+contains a path identifying a Windows account, because somebody about to paste
+it into a hosted model should know that before they do and not after.
+
+**On Linux, the panel now says which half is there.** Shipping the server put it
+in the `.deb` and the AppImage as well, while the panel returned early on an
+unsupported platform — so a Linux reader had a working server installed and no
+way to find out. It now names the file and says plainly that the fifteen tools
+which move the view are absent, so nobody configures a client expecting them.
+
+### Fixed
+
+**A client that writes a byte order mark is no longer refused.** PowerShell
+writes UTF-8 with one by default, and three invisible bytes look like nothing at
+all in a terminal — an agent's first attempt came back `NotJson` with nothing on
+screen to explain it. Exactly one mark, and only at the start: two of them, or
+one inside the frame, are still refused.
+
 ## [0.2.5] — 2026-09-07
 
 ### Changed
