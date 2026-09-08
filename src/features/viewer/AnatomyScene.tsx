@@ -2,7 +2,14 @@ import { OrbitControls, useGLTF } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
-import { advanceScanBand, resetScanBand, scanRangeAlong, SHARED_SCAN, STANDING } from "./scanBand";
+import {
+  advanceScanBand,
+  holdScanBand,
+  resetScanBand,
+  scanRangeAlong,
+  SHARED_SCAN,
+  STANDING,
+} from "./scanBand";
 import { ScanRing } from "./ScanRing";
 import {
   CROSSING_INTERVAL_S,
@@ -13,8 +20,6 @@ import {
   sameCrossing,
   SWEEP_RUNNING,
 } from "./scanCrossing";
-import { viewportKey } from "./viewportKeys";
-import { fps, sample } from "./renderSample";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
 import { meshUrl, organsInFile } from "@/lib/manifest";
@@ -28,6 +33,7 @@ import {
   type ViewpointRequest,
 } from "@/stores/sceneStore";
 import { useChatStore } from "@/stores/chatStore";
+import { useScanStore } from "@/stores/scanStore";
 import { useStudyStore } from "@/stores/studyStore";
 
 import { illuminationGlow } from "./depthStack";
@@ -748,8 +754,7 @@ export function AnatomyScene({
   const centres = useRef(new Map<string, THREE.Vector3>());
   const boxes = useRef(new Map<string, THREE.Box3>());
   const [bounds, setBounds] = useState<THREE.Box3 | null>(null);
-  // Temporary PoC scaffolding: B toggles the band; M remains the existing meter.
-  const [manualScan, setManualScan] = useState(false);
+  const manualScan = useScanStore((s) => s.enabled);
   /**
    * The sweep also runs while an answer is being written.
    *
@@ -759,42 +764,21 @@ export function AnatomyScene({
    * that into the atlas reading itself, and the readout names what it passes
    * while the answer is still being composed.
    *
-   * An OR rather than a mode: the key still forces it on and off, and a
+   * An OR rather than a mode: the switch still forces it on and off, and a
    * question that arrives while it is already running does not switch it off
    * when the answer lands.
    */
   const waitingOnAnswer = useChatStore((s) => s.pendingRequestId !== null);
   const scanBandEnabled = manualScan || waitingOnAnswer;
   const sinceCrossing = useRef(0);
-  const scanTransition = useRef<{
-    target: boolean; start: number; frames: number; maxFrameMs: number;
-  } | null>(null);
+
+  // Wound back when the scanner is switched off, so the next one starts at the
+  // feet rather than resuming mid-body from a session nobody remembers.
   useEffect(() => {
-    const onKey = (event: KeyboardEvent) => {
-      if (event.repeat || viewportKey(event) !== "b") return;
-      resetScanBand();
-      const target = !manualScan;
-      scanTransition.current = { target, start: performance.now(), frames: 0, maxFrameMs: 0 };
-      setManualScan(target);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    if (!manualScan) resetScanBand();
   }, [manualScan]);
   useFrame((_, delta) => {
     // PoC measurement only: M's rolling p95 can miss a single compile stall,
-    // and its normal sampler excludes intervals over one second altogether.
-    const transition = scanTransition.current;
-    if (transition && transition.target === scanBandEnabled) {
-      transition.maxFrameMs = Math.max(transition.maxFrameMs, delta * 1000);
-      if (++transition.frames === 2) {
-        console.info("[Patient Scan PoC]", JSON.stringify({
-          ...sample, fps: fps(sample), programs: gl.info.programs?.length ?? 0,
-          enabled: scanBandEnabled, maxFrameMs: transition.maxFrameMs,
-          transitionMs: performance.now() - transition.start,
-        }));
-        scanTransition.current = null;
-      }
-    }
     if (scanBandEnabled && bounds && !bounds.isEmpty()) {
       // The axis is named here rather than assumed inside the band. The body
       // stands today and world Y is feet-to-head; the moment it is laid on a
@@ -805,7 +789,11 @@ export function AnatomyScene({
         [bounds.max.x, bounds.max.y, bounds.max.z],
         STANDING,
       );
-      advanceScanBand(delta, STANDING, from, to);
+      // Read rather than subscribed: this runs sixty times a second and must
+      // not make the scene re-render when the reader touches the slider.
+      const grip = useScanStore.getState();
+      if (grip.held) holdScanBand(grip.at, STANDING, from, to);
+      else advanceScanBand(delta, STANDING, from, to);
 
       // What it is passing through, six times a second rather than sixty. The
       // sweep moves a millimetre a frame and crosses the same structures it

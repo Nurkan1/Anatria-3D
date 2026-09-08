@@ -3,6 +3,7 @@ import { Material, MeshStandardMaterial, ShaderLib, UniformsUtils, type WebGLRen
 
 import {
   advanceScanBand,
+  holdScanBand,
   resetScanBand,
   scanBandMaterialProps,
   scanBandOnBeforeCompile,
@@ -11,6 +12,7 @@ import {
   SHARED_SCAN,
   STANDING,
   SWEEP_CYCLE_S,
+  SWEEP_PROGRESS,
   type ScanAxis,
 } from "./scanBand";
 
@@ -207,4 +209,47 @@ it("lights the whole structure as well as the slice", () => {
   // Feathered at both ends: a structure arrives and leaves rather than blinks.
   expect(compiled.fragmentShader).toContain("smoothstep(uOrganSpan.x - 0.02");
   expect(compiled.fragmentShader).toContain("1.0 - smoothstep(uOrganSpan.y - 0.02");
+});
+
+// ---------------------------------------------------------------------------
+// Holding the sweep where the reader put it
+// ---------------------------------------------------------------------------
+
+it("puts the sweep exactly where it is held", () => {
+  holdScanBand(0, STANDING, -1, 1);
+  expect(SHARED_SCAN.value).toBe(-1);
+  holdScanBand(1, STANDING, -1, 1);
+  expect(SHARED_SCAN.value).toBe(1);
+  holdScanBand(0.25, STANDING, -1, 1);
+  expect(SHARED_SCAN.value).toBeCloseTo(-0.5);
+});
+
+it("resumes from the height it was left at, not from the clock", () => {
+  // The difference between a control and an interruption. A reader who moved
+  // the light to the chest and let go expects it to carry on from the chest.
+  holdScanBand(0.5, STANDING, -1, 1);
+  advanceScanBand(0, STANDING, -1, 1);
+  expect(SHARED_SCAN.value).toBeCloseTo(0);
+});
+
+it("carries on in the outward direction after a hold", () => {
+  // Wound onto the first half of the stroke, so the next movement is a gentle
+  // continuation rather than a snap to the far end.
+  holdScanBand(0.5, STANDING, -1, 1);
+  advanceScanBand(SWEEP_CYCLE_S / 4, STANDING, -1, 1);
+  expect(SHARED_SCAN.value).toBeGreaterThan(0);
+});
+
+it("clamps a hold to the travel it actually has", () => {
+  holdScanBand(4, STANDING, -1, 1);
+  expect(SHARED_SCAN.value).toBe(1);
+  holdScanBand(-4, STANDING, -1, 1);
+  expect(SHARED_SCAN.value).toBe(-1);
+});
+
+it("publishes where it is so a control can follow without React", () => {
+  holdScanBand(0.3, STANDING, -1, 1);
+  expect(SWEEP_PROGRESS.value).toBeCloseTo(0.3);
+  advanceScanBand(0, STANDING, -1, 1);
+  expect(SWEEP_PROGRESS.value).toBeCloseTo(0.3);
 });

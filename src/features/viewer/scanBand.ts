@@ -136,8 +136,43 @@ export function scanBandMaterialProps(
   return span ? { ...ON, userData: { scanSpan: span } } : ON;
 }
 
+/**
+ * Where the sweep is, from 0 at one end of its travel to 1 at the other.
+ *
+ * Published so a control can follow the sweep without the sweep having to
+ * report to React sixty times a second — the slider reads this in its own frame
+ * loop, exactly as the readout reads what is being crossed.
+ */
+export const SWEEP_PROGRESS = { value: 0 };
+
 export function resetScanBand(): void {
   elapsed = 0;
+  SWEEP_PROGRESS.value = 0;
+}
+
+/**
+ * Put the sweep where the reader wants it.
+ *
+ * `elapsed` is wound to match, so letting go resumes from that height instead
+ * of jumping back to wherever the clock had got to. Always on the outward half
+ * of the stroke: a reader who released at the chest expects the next movement
+ * to be gentle and downward, not a snap to the far end.
+ */
+export function holdScanBand(
+  progress: number,
+  axis: ScanAxis,
+  from: number,
+  to: number,
+): void {
+  const clamped = Math.max(0, Math.min(1, progress));
+  const unit = normalise(axis);
+  SHARED_AXIS.value[0] = unit[0];
+  SHARED_AXIS.value[1] = unit[1];
+  SHARED_AXIS.value[2] = unit[2];
+
+  elapsed = clamped * (SWEEP_CYCLE_S / 2);
+  SWEEP_PROGRESS.value = clamped;
+  SHARED_SCAN.value = from + (to - from) * clamped;
 }
 
 /**
@@ -183,6 +218,7 @@ export function advanceScanBand(
   elapsed = (elapsed + delta) % SWEEP_CYCLE_S;
   const half = SWEEP_CYCLE_S / 2;
   const progress = elapsed <= half ? elapsed / half : (SWEEP_CYCLE_S - elapsed) / half;
+  SWEEP_PROGRESS.value = progress;
   SHARED_SCAN.value = from + (to - from) * progress;
 }
 

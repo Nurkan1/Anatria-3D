@@ -24,6 +24,7 @@ import { IlluminationBar } from "./IlluminationBar";
 import { IsolationBar } from "./IsolationBar";
 import { FULL_CANVAS, LabelOverlay } from "./LabelOverlay";
 import { RenderProbe, RenderStatsPanel } from "./RenderStats";
+import { ScanControls } from "./ScanControls";
 import { ScanReadout } from "./ScanReadout";
 import { PointerRouting, StudyViews } from "./StudyViews";
 import { ClosedViews, StudyViewsFrame } from "./StudyViewsFrame";
@@ -269,6 +270,8 @@ export function AnatomyViewer() {
             and the controls hint underneath. Renders nothing unless a view is
             actually closed. */}
         {splitting && <ClosedViews />}
+        {/* Beside the other switch that changes how the model is drawn. */}
+        <ScanControls />
         <StudyViewsToggle />
       </div>
       <DepthProbe />
