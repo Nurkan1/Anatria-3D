@@ -54,24 +54,47 @@ count and worst frame time across the transition. Anything that measures a rare,
 large stall has to be written for that, not inherited from a sampler tuned for
 steady state.
 
-## Numbers, band on
+## Numbers
 
-Whole male atlas, glass body, 3,478 structures.
+Whole male atlas, 3,478 structures, same camera for both, measured on the
+owner's machine 2026-09-07.
 
-```
-fps            43
-p95            65.4 ms
-draw calls   2,346
-triangles    8,958,626
-meshes       3,478
-programs         4
-heap           680 MB
-```
+| | off | on | change |
+|---|---|---|---|
+| fps | 48 | 48 | none |
+| p95 | 23.1 ms | 23.7 ms | +0.6 ms |
+| draw calls | 3,478 | 3,478 | none |
+| triangles | 10,944,456 | 10,944,456 | none |
+| programs | 2 | 3 | **+1** |
+| heap | 529 MB | 575 MB | **+46 MB** |
 
-**Still to be recorded: the same six with the band off, same camera.** Without
-it there is no baseline and the band's cost is unknown — the reading above may
-be entirely the glass body, which was already the most expensive state the
-application ships. Do not quote a cost from this page until that line exists.
+**On the GPU the band is close to free.** No extra draw call, no extra
+triangle, one extra program for the whole atlas, and the frame rate does not
+move. That is the shared-uniform design behaving exactly as the theory said it
+would, now measured rather than argued.
+
+### The 46 MB, and what it teaches
+
+That is the only real cost, and its source is known: **3,478 duplicate
+materials**, about 13 KB each. The original is kept alive but unattached so its
+warmed program survives a toggle.
+
+**That trade was made before this measurement existed, and the measurement
+retires it.** The duplicate bought one thing — avoiding a recompile on toggle —
+and the recompile turns out to be *a single program*, which three keeps in its
+own cache keyed by parameters. Phase 1 should drop the duplicate and reclaim
+the 46 MB.
+
+One caveat to check rather than assume: three refcounts programs and releases
+one when the last material using it is disposed. If React unmounts every old
+material before mounting the new ones, the program could be released and
+recompiled. Measure the toggle stall after removing the duplicate; do not
+assume either way.
+
+### Still unmeasured
+
+Heap after toggling **back off**. If it does not return towards 529 MB, the
+materials are not being disposed and that is a leak, not a cost.
 
 ## Theories that were wrong, or not yet right
 
