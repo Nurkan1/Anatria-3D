@@ -13,6 +13,42 @@ There is **no auto-updater**, by design: the application never reaches the
 network on its own. A new version reaches you only when you download and install
 it, so this file is also the answer to "is it worth reinstalling".
 
+## [0.2.6] — 2026-09-08
+
+### Added
+
+**Scanner: a plane of light that sweeps the body and names what it reaches.**
+Press <kbd>Scanner</kbd> in the left column and a ring comes down onto the crown
+of the head, then travels to the feet and back. Every structure the plane
+reaches lights up *whole* while it passes — not a slice of it — and a panel
+names what is being crossed as it goes: the six largest, with the rest counted,
+because a plane through the chest passes two hundred structures and listing all
+of them tells you nothing.
+
+It is a way of reading the body rather than an effect. Structures you would
+never think to click on announce themselves on the way past, in the order they
+actually lie, which is the one thing a list of names in a sidebar cannot show
+you.
+
+**You can put the light where you want it.** Drag the slider beside the switch
+to hold the light at a height, and press <kbd>Hold</kbd> to pin it there so you
+can look without keeping a finger down. Let go and the sweep carries on from
+that height rather than jumping back — move it to the diaphragm, look, and it
+continues downward from the diaphragm.
+
+**It also runs by itself while the assistant is writing.** That is the one
+moment where you are waiting with nothing to look at, so the atlas reads itself
+instead. The ring is left out of that half, because a solid ring crossing the
+body would hide the structure the answer is about — the light alone passes
+through and covers nothing. A checkbox under the switch turns that half off for
+a machine that would rather not, and it is remembered.
+
+**What it costs, measured on the whole male atlas:** no extra draw calls, no
+extra triangles, one extra compiled shader program, and 0.6 ms on the 95th
+percentile frame. 3,478 materials share a single compiled program rather than
+compiling one each, which is the only reason a mode like this is affordable
+here at all.
+
 ## [0.2.5] — 2026-09-07
 
 ### Changed
