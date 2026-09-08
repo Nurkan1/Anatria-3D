@@ -9,6 +9,7 @@ import { pressTravelled } from "./dragGuard";
 import { shouldSuppressClick } from "./areaSelect";
 import { coverageColour } from "./coverage";
 import { scanColour } from "./scan";
+import { scanBandMaterialProps } from "./scanBand";
 import { probeGlow, reportDepthStack, stackFromCrossings } from "./depthStack";
 import type { ManifestOrgan } from "@/lib/schemas";
 
@@ -204,6 +205,8 @@ interface OrganMeshProps {
    * place rather than three thousand.
    */
   scanned: boolean;
+  /** Temporary Patient Scan PoC, independent of the existing colour-drain view. */
+  scanBandEnabled?: boolean;
   clippingPlanes: THREE.Plane[];
   onHover: (organId: string | null) => void;
   onSelect: (organId: string, additive: boolean) => void;
@@ -255,6 +258,7 @@ export const OrganMesh = memo(function OrganMesh({
   probeDepth,
   litGlow: litGlowProp,
   scanned,
+  scanBandEnabled = false,
   clippingPlanes,
   onHover,
   onSelect,
@@ -318,8 +322,10 @@ export const OrganMesh = memo(function OrganMesh({
    * compile and the rest are cache hits.
    */
   const material = useRef<THREE.MeshStandardMaterial>(null);
+  const scanMaterial = useRef<THREE.MeshStandardMaterial>(null);
   useEffect(() => {
     if (material.current) material.current.needsUpdate = true;
+    if (scanMaterial.current) scanMaterial.current.needsUpdate = true;
   }, [ghosted]);
   const { color, emissive, emissiveIntensity } = useMemo(() => {
     // The revision map replaces the tissue colour outright rather than tinting
@@ -436,6 +442,34 @@ export const OrganMesh = memo(function OrganMesh({
     scanned,
   ]);
 
+  const surface = {
+    color,
+    emissive,
+    emissiveIntensity,
+    roughness: tissueRoughness(organ.system),
+    metalness: 0.05,
+    transparent: ghosted,
+    opacity,
+    // The detail that makes layered ghosting work instead of producing the
+    // spattered mess an earlier build had. Transparent meshes render in a
+    // pass sorted back-to-front *per object*, which cannot be right for
+    // thousands of interpenetrating structures. Letting them write depth
+    // makes them occlude each other in that arbitrary order; not writing it
+    // makes them accumulate instead — which is exactly the X-ray look.
+    //
+    // Solid meshes still write depth, so a ghosted layer never hides a
+    // solid one behind it.
+    depthWrite: !ghosted,
+    // Sheets that lie flat on other tissue — see `tissueDepthBias`.
+    polygonOffset: depthBias !== 0,
+    polygonOffsetFactor: depthBias,
+    polygonOffsetUnits: depthBias,
+    clippingPlanes,
+    // Without this the cut face of a clipped organ is invisible, and the
+    // section reads as a hollow shell rather than a cut through tissue.
+    side: clippingPlanes.length > 0 ? THREE.DoubleSide : THREE.FrontSide,
+  };
+
   return (
     <mesh
       ref={register}
@@ -510,34 +544,13 @@ export const OrganMesh = memo(function OrganMesh({
         onStudy(organ.organ_id, additive);
       }}
     >
-      <meshStandardMaterial
-        ref={material}
-        color={color}
-        emissive={emissive}
-        emissiveIntensity={emissiveIntensity}
-        roughness={tissueRoughness(organ.system)}
-        metalness={0.05}
-        transparent={ghosted}
-        opacity={opacity}
-        // The detail that makes layered ghosting work instead of producing the
-        // spattered mess an earlier build had. Transparent meshes render in a
-        // pass sorted back-to-front *per object*, which cannot be right for
-        // thousands of interpenetrating structures. Letting them write depth
-        // makes them occlude each other in that arbitrary order; not writing it
-        // makes them accumulate instead — which is exactly the X-ray look.
-        //
-        // Solid meshes still write depth, so a ghosted layer never hides a
-        // solid one behind it.
-        depthWrite={!ghosted}
-        // Sheets that lie flat on other tissue — see `tissueDepthBias`.
-        polygonOffset={depthBias !== 0}
-        polygonOffsetFactor={depthBias}
-        polygonOffsetUnits={depthBias}
-        clippingPlanes={clippingPlanes}
-        // Without this the cut face of a clipped organ is invisible, and the
-        // section reads as a hollow shell rather than a cut through tissue.
-        side={clippingPlanes.length > 0 ? THREE.DoubleSide : THREE.FrontSide}
-      />
+      <meshStandardMaterial ref={material} {...surface} />
+      {/* PoC scaffolding: only the last material is attached/drawn. R3F restores
+          the original attachment on unmount and disposes the temporary material.
+          Keep the original alive so its warmed program cache also survives. */}
+      {scanBandEnabled && (
+        <meshStandardMaterial ref={scanMaterial} {...surface} {...scanBandMaterialProps(true)} />
+      )}
 
       {/*
         The buried part of what the assistant is explaining — see

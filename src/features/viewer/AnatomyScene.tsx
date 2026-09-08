@@ -2,6 +2,9 @@ import { OrbitControls, useGLTF } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
+import { advanceScanBand, resetScanBand } from "./scanBand";
+import { viewportKey } from "./viewportKeys";
+import { fps, sample } from "./renderSample";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
 import { meshUrl, organsInFile } from "@/lib/manifest";
@@ -378,6 +381,7 @@ function SystemMeshes({
   file,
   clippingPlanes,
   explodeOffsets: offsets,
+  scanBandEnabled,
   onMeasured,
   onContextMenu,
 }: {
@@ -386,6 +390,7 @@ function SystemMeshes({
   clippingPlanes: THREE.Plane[];
   /** Displacements for the exploded view, keyed across the whole atlas. */
   explodeOffsets: Map<string, THREE.Vector3>;
+  scanBandEnabled: boolean;
   onMeasured: (
     centres: Map<string, THREE.Vector3>,
     boxes: Map<string, THREE.Box3>,
@@ -633,6 +638,7 @@ function SystemMeshes({
     return (
       <OrganMesh
         key={organ.organ_id}
+        scanBandEnabled={scanBandEnabled}
         organ={organ}
         geometry={entry.geometry}
         matrix={matrix ?? entry.matrix}
@@ -731,6 +737,41 @@ export function AnatomyScene({
   const centres = useRef(new Map<string, THREE.Vector3>());
   const boxes = useRef(new Map<string, THREE.Box3>());
   const [bounds, setBounds] = useState<THREE.Box3 | null>(null);
+  // Temporary PoC scaffolding: B toggles the band; M remains the existing meter.
+  const [scanBandEnabled, setScanBandEnabled] = useState(false);
+  const scanTransition = useRef<{
+    target: boolean; start: number; frames: number; maxFrameMs: number;
+  } | null>(null);
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.repeat || viewportKey(event) !== "b") return;
+      resetScanBand();
+      const target = !scanBandEnabled;
+      scanTransition.current = { target, start: performance.now(), frames: 0, maxFrameMs: 0 };
+      setScanBandEnabled(target);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [scanBandEnabled]);
+  useFrame((_, delta) => {
+    // PoC measurement only: M's rolling p95 can miss a single compile stall,
+    // and its normal sampler excludes intervals over one second altogether.
+    const transition = scanTransition.current;
+    if (transition && transition.target === scanBandEnabled) {
+      transition.maxFrameMs = Math.max(transition.maxFrameMs, delta * 1000);
+      if (++transition.frames === 2) {
+        console.info("[Patient Scan PoC]", JSON.stringify({
+          ...sample, fps: fps(sample), programs: gl.info.programs?.length ?? 0,
+          enabled: scanBandEnabled, maxFrameMs: transition.maxFrameMs,
+          transitionMs: performance.now() - transition.start,
+        }));
+        scanTransition.current = null;
+      }
+    }
+    if (scanBandEnabled && bounds && !bounds.isEmpty()) {
+      advanceScanBand(delta, bounds.min.y, bounds.max.y);
+    }
+  });
   const [finestDetail, setFinestDetail] = useState(0.01);
   // `centres` is a ref, so filling it cannot invalidate a memo downstream. This
   // counter is the signal that it changed — a route built before the digestive
@@ -856,6 +897,7 @@ export function AnatomyScene({
           file={file}
           clippingPlanes={clippingPlanes}
           explodeOffsets={offsets}
+          scanBandEnabled={scanBandEnabled}
           onMeasured={onMeasured}
           onContextMenu={onContextMenu}
         />
