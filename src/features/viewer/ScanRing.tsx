@@ -84,9 +84,25 @@ function fadeToBlack(
 /** Slow enough to read as a machine working, not as something spinning. */
 const TURNS_PER_SECOND = 0.04;
 
+/**
+ * How strong the light is at rest.
+ *
+ * These were four times higher and the disc read as a solid cyan slab: additive
+ * blending saturates fast, and past a point the gradient underneath it stops
+ * being visible at all. Kept low enough that the falloff shows and the body
+ * stays readable through it — the light is meant to reveal the anatomy, not
+ * replace it.
+ */
+const DISC_OPACITY = 0.14;
+const LENS_OPACITY = 0.1;
+const EMITTER_GLOW = 2.2;
+
 export function ScanRing({ bounds }: { bounds: THREE.Box3 | null }) {
   const ring = useRef<THREE.Group>(null);
   const emitters = useRef<THREE.InstancedMesh>(null);
+  const discMaterial = useRef<THREE.MeshBasicMaterial>(null);
+  const lensMaterial = useRef<THREE.MeshBasicMaterial>(null);
+  const emitterMaterial = useRef<THREE.MeshStandardMaterial>(null);
 
   const shape = useMemo(() => {
     if (!bounds || bounds.isEmpty()) return null;
@@ -182,11 +198,34 @@ export function ScanRing({ bounds }: { bounds: THREE.Box3 | null }) {
     mesh.instanceMatrix.needsUpdate = true;
   }, [shape]);
 
-  useFrame((_, delta) => {
+  useFrame((state, delta) => {
     const group = ring.current;
     if (!group) return;
     group.position.y = SHARED_SCAN.value;
     group.rotation.y += delta * Math.PI * 2 * TURNS_PER_SECOND;
+
+    /**
+     * Light that never changes does not read as light.
+     *
+     * A real beam varies as it travels — what it crosses reflects differently
+     * from one moment to the next — and a constant additive surface is the one
+     * thing that gives the trick away. So the intensity breathes.
+     *
+     * **The phase is driven by where the sweep is, not only by the clock.** Tie
+     * it to time alone and it pulses on its own like a decoration; tie it to
+     * travel and the variation belongs to the movement, which is what the eye
+     * is actually reading. The slower clock term is there so it is still alive
+     * at the top and bottom of the stroke, where travel briefly stops.
+     */
+    const travel = Math.sin(SHARED_SCAN.value * 34);
+    const drift = Math.sin(state.clock.elapsedTime * 1.7);
+    const breath = 0.78 + 0.22 * (travel * 0.6 + drift * 0.4);
+
+    if (discMaterial.current) discMaterial.current.opacity = DISC_OPACITY * breath;
+    if (lensMaterial.current) lensMaterial.current.opacity = LENS_OPACITY * breath;
+    if (emitterMaterial.current) {
+      emitterMaterial.current.emissiveIntensity = EMITTER_GLOW * (0.85 + 0.3 * breath);
+    }
   });
 
   if (!shape) return null;
@@ -205,8 +244,9 @@ export function ScanRing({ bounds }: { bounds: THREE.Box3 | null }) {
         <boxGeometry args={[shape.emitter * 0.55, shape.emitter * 0.7, shape.emitter * 2.2]} />
         <meshStandardMaterial
           color="#0b1c24"
+          ref={emitterMaterial}
           emissive="#1ae0ff"
-          emissiveIntensity={2.2}
+          emissiveIntensity={EMITTER_GLOW}
           roughness={0.25}
           metalness={0.4}
         />
@@ -226,9 +266,10 @@ export function ScanRing({ bounds }: { bounds: THREE.Box3 | null }) {
         <>
           <mesh geometry={glow.disc} rotation={[-Math.PI / 2, 0, 0]}>
             <meshBasicMaterial
+              ref={discMaterial}
               vertexColors
               transparent
-              opacity={0.5}
+              opacity={DISC_OPACITY}
               depthWrite={false}
               blending={THREE.AdditiveBlending}
               side={THREE.DoubleSide}
@@ -239,9 +280,10 @@ export function ScanRing({ bounds }: { bounds: THREE.Box3 | null }) {
               written in the sphere's own frame and stays readable. */}
           <mesh geometry={glow.skirt} scale={[1, 0.42, 1]}>
             <meshBasicMaterial
+              ref={lensMaterial}
               vertexColors
               transparent
-              opacity={0.28}
+              opacity={LENS_OPACITY}
               depthWrite={false}
               blending={THREE.AdditiveBlending}
               side={THREE.DoubleSide}
