@@ -144,3 +144,85 @@ duplicate, so the removal can be verified rather than believed.
   meaningless; only the floor is evidence.
 - Needing postprocessing to make the sweep look right. There is no
   `EffectComposer` in this project and phase 0 does not introduce one.
+
+---
+
+# Phases 1 and 2
+
+Built after phase 0 proved the shared program. Both work; the owner has driven
+them on the real atlas.
+
+**The ring, not a gurney.** The staging was going to be a body laid on a table
+and the owner replaced it with a ring around a standing body. It is the better
+idea for a reason that is not aesthetic: laying the body down means either
+rotating the scene root — which moves the ground under picking, labels,
+clipping planes, `orientView` and every bounds calculation that assumes up is
++Y — or faking it with the camera, which collapses the moment the reader
+orbits, and orbiting is a requirement. A ring has neither problem and reads
+correctly from every angle.
+
+**The sweep axis is a parameter.** It began as world Y, which is feet-to-head
+only while the body stands. It is now a unit vector named at the call site,
+with `scanRangeAlong` to project a box onto it, and three tests that fail if
+anyone reintroduces the assumption. The decision lives in a signature rather
+than in a brief, which is the only way it survives a refactor.
+
+**The whole structure lights, not just the slice.** Each material carries its
+own span through `userData`, read by the shared `onBeforeCompile` — three calls
+it as a method, so `this` is the material. One function still serves all 3,478,
+because uniform *values* play no part in the cache key.
+
+**And it says what it found.** Six structures named, biggest first, with the
+rest counted. Volume is the honest order: a plane through the thorax crosses
+two hundred structures and the big ones are what somebody is learning.
+
+## What was wrong along the way
+
+Kept because each one looked like something else.
+
+- **"A cylinder makes a good light shaft."** It reads as a box. A cylinder seen
+  near edge-on *is* a rectangle, and its silhouette ends abruptly at the sides —
+  which is exactly where an additive surface is brightest, because that is
+  where the view grazes it. Bright light stopping at a straight edge is the one
+  thing light never does. A flattened sphere has no hard silhouette from any
+  angle; no falloff curve would have saved the cylinder.
+- **"The white speckles are a texture problem."** They were z-fighting. Two
+  concentric rings shared the span `[r-t, r-0.65t]` and fought over the depth
+  test. Concentric geometry that shares space always will; the radii are now
+  disjoint by construction.
+- **"Light can be a constant."** It cannot. A real beam varies as it travels,
+  and an unchanging additive surface is what an eye reads as painted on. The
+  intensity now breathes, phased on *where the sweep is* rather than on the
+  clock alone — tied to time it pulses like a decoration, tied to travel the
+  variation belongs to the movement.
+- **"Twelve seconds is a good sweep."** Too quick to read: a structure lit and
+  went dark before the eye found its name below, which defeats the point of
+  naming it. Twenty. And three tests failed on that change and were right to —
+  they were written in seconds rather than in fractions of a cycle. The
+  duration is exported now and they say the invariant instead.
+- **"The panel can toggle its own visibility imperatively."** Twice: first the
+  `hidden` attribute, then `style.display`. Both tell React one thing and write
+  another to an element React renders and therefore owns, which is a race
+  nobody can watch losing. It hid the panel behind what looked like a logic bug
+  for two rounds. Visibility is state; only the words are imperative.
+- **"A cache on the readout text is free."** It cost the feature. On the first
+  pass the panel is not mounted, so the guarded write was skipped while the
+  cache was updated anyway; from then on the ids always matched and the text
+  was never written. It saved two `textContent` assignments a frame.
+
+## One that should worry a reader more than the rest
+
+A **NUL byte** reached the source through an editing script of mine —
+`organIds.join("\0")` where a space belonged. It compiled, it typechecked and
+it passed 958 tests, because that separator only fed the equality check that
+has since been deleted.
+
+Nothing in the toolchain objects to a NUL in a string literal. What surfaced it
+was an exact-match edit refusing to touch the block. Worth knowing before
+trusting a scripted edit over a diff read by eye.
+
+## Where it stands
+
+Still a proof of concept behind a scaffolding `B` key, deliberately not
+documented in the guide. No entry animation, no camera work, no mode. `main` is
+untouched and this branch has never been pushed.
