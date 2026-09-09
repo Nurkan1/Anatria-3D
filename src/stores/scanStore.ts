@@ -29,6 +29,19 @@ import { scanTint, type ScanTintId } from "@/features/viewer/scanTints";
 const SWEEP_ON_ANSWER_KEY = "anatria3d.scan.sweepOnAnswer.v1";
 const TINT_KEY = "anatria3d.scan.tint.v1";
 const REVEAL_KEY = "anatria3d.scan.reveal.v1";
+const READOUT_KEY = "anatria3d.scan.readout.v1";
+
+/**
+ * Whether the panel naming what is being crossed is shown.
+ *
+ * On unless it was turned off, because it is the half of the mode that teaches
+ * anything — a glowing line that never says *lung* is a screensaver. But it
+ * sits over the viewport, and a reader looking closely at what the plane just
+ * lit is entitled to move it out of the way.
+ */
+function storedReadout(): boolean {
+  return readLocal(READOUT_KEY) !== "off";
+}
 
 /**
  * Whether the sweep gives structures their colour back instead of lighting them.
@@ -104,6 +117,8 @@ interface ScanStore {
    * sets it says as much rather than sitting there doing nothing.
    */
   reveal: boolean;
+  /** Show the panel that names what the plane is crossing. */
+  readout: boolean;
 
   toggle: () => void;
   /** Take hold of the sweep and put it at `at`. */
@@ -114,6 +129,7 @@ interface ScanStore {
   setSweepOnAnswer: (on: boolean) => void;
   setTint: (tint: ScanTintId) => void;
   setReveal: (on: boolean) => void;
+  toggleReadout: () => void;
 }
 
 export const useScanStore = create<ScanStore>()((set, get) => ({
@@ -124,6 +140,7 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
   sweepOnAnswer: storedSweepOnAnswer(),
   tint: storedTint(),
   reveal: storedReveal(),
+  readout: storedReadout(),
 
   // Letting go and unpinning on the way out, so switching the scanner off never
   // leaves the next session holding an invisible sweep at somebody's ankle.
@@ -146,6 +163,11 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
     if (on === get().reveal) return;
     writeLocal(REVEAL_KEY, on ? "on" : "off");
     set({ reveal: on });
+  },
+  toggleReadout: () => {
+    const readout = !get().readout;
+    writeLocal(READOUT_KEY, readout ? "on" : "off");
+    set({ readout });
   },
 }));
 

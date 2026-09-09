@@ -13,6 +13,7 @@ beforeEach(() => {
     sweepOnAnswer: true,
     tint: "cyan",
     reveal: false,
+    readout: true,
   });
   localStorage.clear();
 });
@@ -135,5 +136,24 @@ describe("revealing colour instead of lighting", () => {
     localStorage.clear();
     store().setReveal(false);
     expect(localStorage.getItem("anatria3d.scan.reveal.v1")).toBeNull();
+  });
+});
+
+describe("the panel that names what is being crossed", () => {
+  it("is shown until somebody hides it", () => {
+    expect(store().readout).toBe(true);
+  });
+
+  it("remembers being hidden, and remembers being brought back", () => {
+    // Both directions are written. Remembering only the hiding would mean a
+    // reader who wanted it back got it back once, and then lost it again on
+    // the next launch with no way to tell why.
+    store().toggleReadout();
+    expect(store().readout).toBe(false);
+    expect(localStorage.getItem("anatria3d.scan.readout.v1")).toBe("off");
+
+    store().toggleReadout();
+    expect(store().readout).toBe(true);
+    expect(localStorage.getItem("anatria3d.scan.readout.v1")).toBe("on");
   });
 });
