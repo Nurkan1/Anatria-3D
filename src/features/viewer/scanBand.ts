@@ -60,6 +60,69 @@ export const SHARED_AXIS: { value: number[] } = { value: [...STANDING] };
 export const SCAN_ENTRY = { value: 0 };
 
 /**
+ * The colour of the light, as emissive radiance rather than a screen colour.
+ *
+ * A shared uniform like the rest, and mutated in place rather than replaced:
+ * every material holds a reference to *this* object, so assigning a new one
+ * here would leave 3,478 shaders pointing at the old value. Changing the colour
+ * therefore costs three float writes, not a walk of the scene.
+ */
+export const SCAN_TINT: { value: number[] } = { value: [0.1, 1.2, 1.5] };
+
+/**
+ * How bright the whole structure is, relative to the plane crossing it.
+ *
+ * One ratio rather than a second colour: the wake and the band are the same
+ * light seen at two strengths, and letting them drift apart in hue was how an
+ * early version ended up with a green plane trailing a blue-green body.
+ */
+const WAKE_OF_BAND = 0.29;
+
+/**
+ * Reveal the tissue's own colour instead of throwing light at it.
+ *
+ * # What this is for
+ *
+ * On a carbon body the sweep is a light in the dark, which reads well and tells
+ * you *where* the plane is. This is the other question — *what* it reached —
+ * and colour answers it better than brightness does: a lit grey liver is a lit
+ * grey shape, while a liver that comes back to its own colour against a black
+ * body is a liver.
+ *
+ * # Why it replaces the glow rather than joining it
+ *
+ * Both at once is worse than either. Added radiance washes towards white, and a
+ * hue seen through a white wash is a paler version of itself — so the glow
+ * would be hiding the very thing this exists to show. One or the other, chosen
+ * by the reader.
+ *
+ * A shared uniform, so the switch costs one float write rather than a walk of
+ * 3,478 materials.
+ */
+export const SCAN_REVEAL = { value: 0 };
+
+export function setScanReveal(on: boolean): void {
+  SCAN_REVEAL.value = on ? 1 : 0;
+}
+
+/**
+ * The colour a structure has when nothing is draining it.
+ *
+ * A material given none keeps whatever it is already drawn in: the mix runs
+ * against its own diffuse, which is a no-op rather than a black structure. That
+ * matters because it is the state every material is in for the first render
+ * after the mode is switched on.
+ */
+const KEEPS_ITS_OWN: readonly [number, number, number] = [-1, -1, -1];
+
+/** Point the light at a colour. See `scanTints` for why the list is short. */
+export function setScanTint(light: readonly [number, number, number]): void {
+  SCAN_TINT.value[0] = light[0];
+  SCAN_TINT.value[1] = light[1];
+  SCAN_TINT.value[2] = light[2];
+}
+
+/**
  * How long the arrival takes, in seconds.
  *
  * It was 0.9 and that was too quick to see: with an eased curve the middle of
@@ -114,13 +177,28 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
   shader.uniforms.uScanAt = SHARED_SCAN;
   shader.uniforms.uScanAxis = SHARED_AXIS;
   shader.uniforms.uScanEntry = SCAN_ENTRY;
+  shader.uniforms.uScanTint = SCAN_TINT;
+  shader.uniforms.uScanReveal = SCAN_REVEAL;
 
-  // This structure's own reach along the axis, read off the material through
-  // `this`. Written once at compile and never touched again, so the per-frame
-  // cost stays the single shared write for the sweep position.
-  const owner = this as { userData?: { scanSpan?: readonly [number, number] } } | undefined;
+  // This structure's own reach along the axis, and its own undrained colour,
+  // both read off the material through `this`. Written once at compile and
+  // never touched again, so the per-frame cost stays the single shared write
+  // for the sweep position. Per-material *values* play no part in the program
+  // cache key — only the source of this function does — which is why every
+  // structure can carry a colour of its own without any of them compiling a
+  // shader of its own.
+  const owner = this as
+    | {
+        userData?: {
+          scanSpan?: readonly [number, number];
+          revealColour?: readonly [number, number, number];
+        };
+      }
+    | undefined;
   const span = owner?.userData?.scanSpan ?? NEVER;
   shader.uniforms.uOrganSpan = { value: [span[0], span[1]] };
+  const reveal = owner?.userData?.revealColour ?? KEEPS_ITS_OWN;
+  shader.uniforms.uRevealColour = { value: [reveal[0], reveal[1], reveal[2]] };
 
   // How far along the axis this fragment sits. The projection happens in the
   // vertex shader and travels as a single float, so the fragment shader does a
@@ -132,7 +210,9 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
       `${vertexChunk}\nvScanAlong = dot((modelMatrix * vec4(transformed, 1.0)).xyz, uScanAxis);`,
     );
   shader.fragmentShader =
-    "uniform float uScanAt;\nuniform float uScanEntry;\nuniform vec2 uOrganSpan;\nvarying float vScanAlong;\n" +
+    "uniform float uScanAt;\nuniform float uScanEntry;\nuniform vec3 uScanTint;\n" +
+    "uniform float uScanReveal;\nuniform vec3 uRevealColour;\n" +
+    "uniform vec2 uOrganSpan;\nvarying float vScanAlong;\n" +
     shader.fragmentShader.replace(
       fragmentChunk,
       `${fragmentChunk}
@@ -143,10 +223,19 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
     // switching on.
     float wake = smoothstep(uOrganSpan.x - 0.02, uOrganSpan.x + 0.02, uScanAt)
                * (1.0 - smoothstep(uOrganSpan.y - 0.02, uOrganSpan.y + 0.02, uScanAt));
+    // Give the structure its colour back while the plane is inside it.
+    //
+    // This lands *before* the lighting model runs, so what comes back is lit
+    // like tissue rather than pasted on flat — which is the whole reason the
+    // effect costs a mix and not a shader of its own. A material with no
+    // colour to reveal mixes against its own diffuse and changes nothing.
+    vec3 revealTo = uRevealColour.r < 0.0 ? diffuseColor.rgb : uRevealColour;
+    diffuseColor.rgb = mix(diffuseColor.rgb, revealTo, wake * uScanReveal * uScanEntry);
     // Everything this mode adds is scaled by the arrival, so the light comes
     // up on the body instead of being there the frame the switch is thrown.
-    totalEmissiveRadiance += (vec3(0.1, 1.2, 1.5) * scanBand
-                           + vec3(0.04, 0.34, 0.44) * wake) * uScanEntry;`,
+    // The glow stands aside when colour is doing the telling.
+    totalEmissiveRadiance += uScanTint * (scanBand + ${WAKE_OF_BAND} * wake)
+                           * uScanEntry * (1.0 - uScanReveal);`,
     );
 }
 
@@ -163,9 +252,11 @@ const OFF = Object.freeze({});
 export function scanBandMaterialProps(
   enabled: boolean,
   span?: readonly [number, number],
+  revealColour?: readonly [number, number, number],
 ) {
   if (!enabled) return OFF;
-  return span ? { ...ON, userData: { scanSpan: span } } : ON;
+  if (!span && !revealColour) return ON;
+  return { ...ON, userData: { scanSpan: span, revealColour } };
 }
 
 /**

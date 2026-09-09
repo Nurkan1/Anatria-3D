@@ -1,8 +1,10 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 
+import { useSceneStore } from "@/stores/sceneStore";
 import { useScanStore } from "@/stores/scanStore";
 
 import { SWEEP_PROGRESS } from "./scanBand";
+import { SCAN_TINTS } from "./scanTints";
 
 /**
  * The scanner's switch, and the handle that puts its light where you want it.
@@ -23,6 +25,19 @@ import { SWEEP_PROGRESS } from "./scanBand";
  * an interruption: the reader moves the light to the diaphragm, looks, lets go,
  * and the sweep carries on downward from the diaphragm.
  */
+/**
+ * Put the handle at `progress`, and paint the track under it.
+ *
+ * The fill is a CSS variable rather than `accent-color` because the track is
+ * ours: see the note in `index.css` about the two engines this ships on. Both
+ * writes belong together — a thumb that moved while the coloured part stayed
+ * put would look like a rendering bug on one platform and be one on both.
+ */
+function show(input: HTMLInputElement, progress: number): void {
+  input.value = String(progress);
+  input.style.setProperty("--scan-fill", `${Math.max(0, Math.min(1, progress)) * 100}%`);
+}
+
 export function ScanControls() {
   const enabled = useScanStore((s) => s.enabled);
   const held = useScanStore((s) => s.held);
@@ -33,7 +48,26 @@ export function ScanControls() {
   const release = useScanStore((s) => s.release);
   const togglePin = useScanStore((s) => s.togglePin);
   const setSweepOnAnswer = useScanStore((s) => s.setSweepOnAnswer);
+  const tint = useScanStore((s) => s.tint);
+  const setTint = useScanStore((s) => s.setTint);
+  const reveal = useScanStore((s) => s.reveal);
+  const setReveal = useScanStore((s) => s.setReveal);
+  // There is nothing to reveal on a body that already has its colour: the
+  // control says so rather than sitting there apparently broken.
+  const drained = useSceneStore((s) => s.bodyTone) !== "solid";
   const slider = useRef<HTMLInputElement>(null);
+
+  /**
+   * Paint it once on mount, before the loop below has run a frame.
+   *
+   * The loop does not run while the light is held or pinned, so a scanner
+   * opened in that state would otherwise show a thumb at the sweep's position
+   * and a coloured track at the stylesheet's fallback — the one mismatch this
+   * whole change exists to prevent.
+   */
+  useLayoutEffect(() => {
+    if (slider.current) show(slider.current, SWEEP_PROGRESS.value);
+  }, [enabled]);
 
   useEffect(() => {
     // Nothing to follow while the reader has it, and nothing to follow while it
@@ -42,7 +76,7 @@ export function ScanControls() {
     if (!enabled || held || pinned) return;
     let frame = 0;
     const tick = () => {
-      if (slider.current) slider.current.value = String(SWEEP_PROGRESS.value);
+      if (slider.current) show(slider.current, SWEEP_PROGRESS.value);
       frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);
@@ -77,6 +111,19 @@ export function ScanControls() {
           >
             Drag to hold the light
           </label>
+          {/*
+            Vertical, because the thing it moves is: a horizontal handle for a
+            light that travels head to feet reads backwards in the hand.
+
+            The wrapper is the vertical box; the input inside it is an ordinary
+            horizontal range turned a quarter turn, which is the one way of
+            doing this that every engine has understood for fifteen years. It
+            replaced `writing-mode: vertical-lr`, which WebView2 draws and the
+            WebKitGTK on a Debian desktop did not — there the control stayed
+            horizontal in a 16px box, with no visible track and sixteen pixels
+            of travel.
+          */}
+          <div className="relative h-28 w-4">
           <input
             ref={slider}
             id="scan-position"
@@ -85,26 +132,29 @@ export function ScanControls() {
             max={1}
             step={0.001}
             defaultValue={SWEEP_PROGRESS.value}
-            // Vertical, because the thing it moves is: a horizontal handle for
-            // a light that travels head to feet reads backwards in the hand.
-            className="h-28 w-4 cursor-ns-resize accent-cyan-400"
-            style={{ writingMode: "vertical-lr", direction: "rtl" }}
+            className="scan-slider absolute top-1/2 left-1/2 h-4 w-28 -translate-x-1/2 -translate-y-1/2 -rotate-90 cursor-ns-resize"
             onPointerDown={(event) => {
               hold(Number(event.currentTarget.value));
               // Keep receiving the drag even when the pointer leaves the
               // handle, which on a 4px-wide control is most of the time.
               event.currentTarget.setPointerCapture(event.pointerId);
             }}
-            onChange={(event) => hold(Number(event.target.value))}
+            onChange={(event) => {
+              show(event.currentTarget, Number(event.currentTarget.value));
+              hold(Number(event.currentTarget.value));
+            }}
             onPointerUp={release}
             onPointerCancel={release}
             onKeyDown={(event) => {
               // Arrow keys move a range input, and a reader who nudges it and
               // then watches it snap back has been told the control is broken.
-              if (event.key.startsWith("Arrow")) hold(Number(event.currentTarget.value));
+              if (!event.key.startsWith("Arrow")) return;
+              show(event.currentTarget, Number(event.currentTarget.value));
+              hold(Number(event.currentTarget.value));
             }}
             onBlur={release}
           />
+          </div>
 
           {/*
             A control rather than a held modifier.
@@ -114,6 +164,64 @@ export function ScanControls() {
             at the screen, and it is out of reach on a machine driven by touch
             or by one hand. A button that says what it does works everywhere.
           */}
+          {/*
+            The colour of the light.
+
+            Swatches rather than names, and no picker. The light is added to the
+            tissue's own colour, so the hue is what decides which structures
+            separate and which sink into their neighbours — which makes this a
+            reading control, not a theme. Four that are known to separate from
+            something beat several hundred thousand that mostly do not.
+          */}
+          <div className="mt-1.5 flex gap-1" role="group" aria-label="Light colour">
+            {SCAN_TINTS.map((swatch) => (
+              <button
+                key={swatch.id}
+                type="button"
+                onClick={() => setTint(swatch.id)}
+                aria-pressed={tint === swatch.id}
+                title={`${swatch.label} light`}
+                className={`h-4 flex-1 rounded-sm border transition-colors ${
+                  tint === swatch.id
+                    ? "border-slate-200"
+                    : "border-slate-700 hover:border-slate-500"
+                }`}
+                style={{ backgroundColor: swatch.hex }}
+              >
+                <span className="sr-only">{swatch.label}</span>
+              </button>
+            ))}
+          </div>
+
+          {/*
+            Colour instead of light.
+
+            The glow says where the plane is; this says what it reached, and on
+            a drained body colour carries that better than brightness can — a
+            lit grey liver is a lit grey shape. They are alternatives rather
+            than layers, because an additive wash over a hue returns a paler
+            version of the hue.
+          */}
+          <label
+            className={`mt-1.5 flex cursor-pointer items-start gap-1.5 text-[9px] leading-snug ${
+              drained ? "text-slate-400" : "cursor-not-allowed text-slate-600"
+            }`}
+            title={
+              drained
+                ? "Give each structure its own colour back as the plane reaches it, instead of lighting it"
+                : "Switch the body to Scan or Carbon first — at full colour there is nothing to reveal"
+            }
+          >
+            <input
+              type="checkbox"
+              checked={reveal}
+              disabled={!drained}
+              onChange={(event) => setReveal(event.target.checked)}
+              className="mt-[1px] accent-cyan-500"
+            />
+            Reveal colour, not light
+          </label>
+
           <button
             type="button"
             onClick={togglePin}

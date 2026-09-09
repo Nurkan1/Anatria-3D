@@ -30,8 +30,8 @@ export function ViewControls() {
   const clearIsolation = useSceneStore((s) => s.clearIsolation);
   const showAllSystems = useSceneStore((s) => s.showAllSystems);
   const glassBody = useSceneStore((s) => s.glassBody);
-  const scan = useSceneStore((s) => s.scan);
-  const toggleScan = useSceneStore((s) => s.toggleScan);
+  const bodyTone = useSceneStore((s) => s.bodyTone);
+  const cycleBodyTone = useSceneStore((s) => s.cycleBodyTone);
   const systemOpacity = useSceneStore((s) => s.systemOpacity);
   const clearGhosting = useSceneStore((s) => s.clearGhosting);
   const resetView = useSceneStore((s) => s.resetView);
@@ -85,18 +85,35 @@ export function ViewControls() {
         anatomy, and grouping the ones that change its appearance keeps them
         from reading as five unrelated switches.
       */}
+      {/*
+        One button stepping through three tones rather than three buttons.
+
+        They are mutually exclusive answers to one question — how much of the
+        tissue's own appearance survives — and a row of three would read as
+        three unrelated switches in a column that already has several. The label
+        says what you are looking at, not what the next press does: a control
+        that names a state you cannot see is a riddle.
+      */}
       <button
         type="button"
-        onClick={toggleScan}
-        title="Drain the colour from everything except what is marked, selected or isolated"
-        aria-pressed={scan}
+        onClick={cycleBodyTone}
+        title={
+          bodyTone === "solid"
+            ? "Drain the colour from everything except what is marked, selected or isolated"
+            : bodyTone === "scan"
+              ? "Press the drained body down towards black, so the scanner's light has somewhere to go"
+              : "Give the body its colour back"
+        }
+        aria-pressed={bodyTone !== "solid"}
         className={`rounded border px-2 py-1 text-xs ${
-          scan
-            ? "border-slate-300/70 bg-slate-200/15 text-slate-100"
-            : "border-slate-700 text-slate-400"
+          bodyTone === "carbon"
+            ? "border-slate-100/80 bg-slate-950 text-slate-100"
+            : bodyTone === "scan"
+              ? "border-slate-300/70 bg-slate-200/15 text-slate-100"
+              : "border-slate-700 text-slate-400"
         }`}
       >
-        Scan
+        {bodyTone === "carbon" ? "Carbon" : "Scan"}
       </button>
       {Object.keys(systemOpacity).length > 0 && (
         <button

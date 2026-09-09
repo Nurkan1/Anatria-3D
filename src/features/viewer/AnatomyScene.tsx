@@ -9,10 +9,13 @@ import {
   resetScanBand,
   resetScanEntry,
   scanRangeAlong,
+  setScanReveal,
+  setScanTint,
   SHARED_SCAN,
   STANDING,
 } from "./scanBand";
 import { ScanRing } from "./ScanRing";
+import { scanTint } from "./scanTints";
 import {
   CROSSING_INTERVAL_S,
   CROSSING_LIMIT,
@@ -490,7 +493,7 @@ function SystemMeshes({
    */
   const depthStack = useSceneStore((s) => s.depthStack);
   const illuminated = useSceneStore((s) => s.illuminated);
-  const scan = useSceneStore((s) => s.scan);
+  const bodyTone = useSceneStore((s) => s.bodyTone);
   /**
    * What the assistant has pointed at, and how deep into the list each one sits.
    *
@@ -694,13 +697,14 @@ function SystemMeshes({
         coverageBusiest={coverage?.busiest}
         probeDepth={probeDepth.get(organ.organ_id)}
         litGlow={litGlow.get(organ.organ_id)}
-        scanned={
-          scan &&
-          !keepsColour({
+        tone={
+          keepsColour({
             lit: litGlow.has(organ.organ_id),
             selected: selectedOrganIds.includes(organ.organ_id),
             isolated: isolatedOrganIds?.includes(organ.organ_id) ?? false,
           })
+            ? "solid"
+            : bodyTone
         }
         clippingPlanes={clippingPlanes}
         onHover={setHovered}
@@ -827,6 +831,18 @@ export function AnatomyScene({
   useEffect(() => {
     if (scanBandEnabled) resetScanEntry();
   }, [scanBandEnabled]);
+
+  /**
+   * The colour reaches the shader as three float writes.
+   *
+   * Not a prop on 3,478 materials and not a re-render: the tint is a shared
+   * uniform, so changing it is the same kind of operation as moving the sweep.
+   */
+  const tint = useScanStore((s) => s.tint);
+  useEffect(() => setScanTint(scanTint(tint).light), [tint]);
+
+  const reveal = useScanStore((s) => s.reveal);
+  useEffect(() => setScanReveal(reveal), [reveal]);
 
   useFrame((_, delta) => {
     // PoC measurement only: M's rolling p95 can miss a single compile stall,

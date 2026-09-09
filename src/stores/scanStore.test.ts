@@ -11,6 +11,9 @@ beforeEach(() => {
     pinned: false,
     at: 0.5,
     sweepOnAnswer: true,
+    tint: "cyan",
+    reveal: false,
+    readout: true,
   });
   localStorage.clear();
 });
@@ -99,5 +102,58 @@ describe("sweeping while the assistant answers", () => {
     localStorage.clear();
     store().setSweepOnAnswer(true);
     expect(localStorage.getItem("anatria3d.scan.sweepOnAnswer.v1")).toBeNull();
+  });
+});
+
+describe("the colour of the light", () => {
+  it("remembers the choice, because it is a way of reading and not a theme", () => {
+    store().setTint("amber");
+    expect(store().tint).toBe("amber");
+    expect(localStorage.getItem("anatria3d.scan.tint.v1")).toBe("amber");
+  });
+
+  it("writes nothing when the colour has not changed", () => {
+    localStorage.clear();
+    store().setTint("cyan");
+    expect(localStorage.getItem("anatria3d.scan.tint.v1")).toBeNull();
+  });
+});
+
+describe("revealing colour instead of lighting", () => {
+  it("is off until it is asked for", () => {
+    // The glow is what the mode is recognised by; a reader meeting the scanner
+    // for the first time should meet the half that explains itself.
+    expect(store().reveal).toBe(false);
+  });
+
+  it("remembers being turned on", () => {
+    store().setReveal(true);
+    expect(store().reveal).toBe(true);
+    expect(localStorage.getItem("anatria3d.scan.reveal.v1")).toBe("on");
+  });
+
+  it("writes nothing when it has not changed", () => {
+    localStorage.clear();
+    store().setReveal(false);
+    expect(localStorage.getItem("anatria3d.scan.reveal.v1")).toBeNull();
+  });
+});
+
+describe("the panel that names what is being crossed", () => {
+  it("is shown until somebody hides it", () => {
+    expect(store().readout).toBe(true);
+  });
+
+  it("remembers being hidden, and remembers being brought back", () => {
+    // Both directions are written. Remembering only the hiding would mean a
+    // reader who wanted it back got it back once, and then lost it again on
+    // the next launch with no way to tell why.
+    store().toggleReadout();
+    expect(store().readout).toBe(false);
+    expect(localStorage.getItem("anatria3d.scan.readout.v1")).toBe("off");
+
+    store().toggleReadout();
+    expect(store().readout).toBe(true);
+    expect(localStorage.getItem("anatria3d.scan.readout.v1")).toBe("on");
   });
 });

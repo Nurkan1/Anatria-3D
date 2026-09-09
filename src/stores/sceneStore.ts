@@ -13,6 +13,7 @@ import type { AnatomicalView } from "@/features/viewer/cameraViews";
 import { sameStack } from "@/features/viewer/depthStack";
 import { tissueFamily } from "@/features/viewer/palette";
 import { MAX_EXPLODE, nextExplodeStop } from "@/features/viewer/explode";
+import { nextBodyTone, type BodyTone } from "@/features/viewer/scan";
 import { SUPPLY_SYSTEM, type SupplyKind } from "@/features/viewer/supply";
 import type { ViewPreferences } from "./viewPreferences";
 
@@ -242,13 +243,14 @@ export interface SceneViewState {
    */
   explode: number;
   /**
-   * Whether the body is drained of colour so that what is marked stands out.
+   * How the body is drawn: as itself, drained of colour, or as carbon.
    *
    * Working state rather than a preference, like `explode` and the ghosting:
    * it is a way of looking at one thing, and "show me everything again" should
-   * put the colour back. See `scan.ts` for what keeps its own.
+   * put the colour back. See `scan.ts` for what each tone does and what keeps
+   * its own colour through them.
    */
-  scan: boolean;
+  bodyTone: BodyTone;
 }
 
 export const initialViewState: SceneViewState = {
@@ -264,7 +266,7 @@ export const initialViewState: SceneViewState = {
   viewpoint: null,
   pathway: null,
   explode: 0,
-  scan: false,
+  bodyTone: "solid",
   supplyRequest: null,
   supplyResult: null,
   illuminated: [],
@@ -423,7 +425,7 @@ export function applySceneCommand(
         ...initialViewState,
         selectedOrganIds: state.selectedOrganIds,
         systemOpacity: state.systemOpacity,
-        scan: state.scan,
+        bodyTone: state.bodyTone,
       };
   }
 }
@@ -548,7 +550,8 @@ interface SceneStore extends SceneViewState {
   setDepthProbeVisible: (visible: boolean) => void;
   setLabelsVisible: (visible: boolean) => void;
   setHideConnective: (hidden: boolean) => void;
-  toggleScan: () => void;
+  /** Step the body's appearance: as itself, drained of colour, carbon. */
+  cycleBodyTone: () => void;
   setBackground: (mode: BackgroundMode) => void;
   /** Apply the view settings carried over from the last session. */
   restoreView: (preferences: Partial<ViewPreferences>) => void;
@@ -735,7 +738,7 @@ export const useSceneStore = create<SceneStore>()((set, get) => ({
 
   setHideConnective: (hidden) => set({ hideConnective: hidden }),
 
-  toggleScan: () => set((state) => ({ scan: !state.scan })),
+  cycleBodyTone: () => set((state) => ({ bodyTone: nextBodyTone(state.bodyTone) })),
 
   setBackground: (mode) => set({ background: mode }),
 
@@ -1041,7 +1044,7 @@ export const useSceneStore = create<SceneStore>()((set, get) => ({
     set((state) => ({
       ...applySceneCommand(state, { action: "reset_view" }),
       systemOpacity: {},
-      scan: false,
+      bodyTone: "solid",
     })),
 }));
 

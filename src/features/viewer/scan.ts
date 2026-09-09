@@ -37,14 +37,60 @@ import * as THREE from "three";
  */
 export const SCAN_SATURATION = 0.06;
 
+/**
+ * How the body is drawn: as itself, drained of colour, or as carbon.
+ *
+ * Three values rather than two booleans, so "carbon but not drained" cannot be
+ * written down. The tones are ordered by how much of the tissue's own
+ * appearance survives.
+ */
+export type BodyTone = "solid" | "scan" | "carbon";
+
+/**
+ * Carbon: the same drained body, pressed down towards black.
+ *
+ * # Why darkness is not decoration here
+ *
+ * **The scanner's light is additive.** It is added to whatever the surface
+ * already has, so on a mid-lit body it saturates almost immediately and the
+ * falloff — which is the part carrying the shape of what was reached —
+ * disappears into white. Against a dark body the same light has somewhere to
+ * go. This is the reason radiology is read on black, and it is why this mode
+ * makes the sweep show *more* rather than merely look better.
+ *
+ * Lightness is compressed rather than floored: bone stays lighter than muscle,
+ * and the body keeps being a body. A little of a blue-black graphite is mixed
+ * in on top, because a body that is only "the same thing, darker" reads as
+ * underexposed, where a slight cool cast reads as a material.
+ *
+ * **What it costs, said plainly:** discrimination in the dark half. The scan
+ * tone already trades hue away — two tissues that differ only in hue become one
+ * grey — and this one narrows what is left. It is a mode to look at something
+ * in, not a mode to work in, which is why it sits behind the tone that keeps
+ * more and not in front of it.
+ */
+export const CARBON_LIGHTNESS = 0.34;
+export const CARBON_GRAPHITE = 0.3;
+const GRAPHITE = new THREE.Color("#0b1016");
+
 const hsl = { h: 0, s: 0, l: 0 };
 
-/** A tissue colour with its saturation taken out and its lightness kept. */
-export function scanColour(tissue: THREE.Color): THREE.Color {
+/** A tissue colour as the given tone draws it. */
+export function scanColour(tissue: THREE.Color, tone: BodyTone = "scan"): THREE.Color {
+  if (tone === "solid") return tissue.clone();
   const scanned = tissue.clone();
   scanned.getHSL(hsl);
-  scanned.setHSL(hsl.h, hsl.s * SCAN_SATURATION, hsl.l);
-  return scanned;
+  if (tone === "scan") {
+    scanned.setHSL(hsl.h, hsl.s * SCAN_SATURATION, hsl.l);
+    return scanned;
+  }
+  scanned.setHSL(hsl.h, hsl.s * SCAN_SATURATION, hsl.l * CARBON_LIGHTNESS);
+  return scanned.lerp(GRAPHITE, CARBON_GRAPHITE);
+}
+
+/** The next tone the appearance button steps to. */
+export function nextBodyTone(tone: BodyTone): BodyTone {
+  return tone === "solid" ? "scan" : tone === "scan" ? "carbon" : "solid";
 }
 
 /**

@@ -2,7 +2,10 @@ import { useFrame } from "@react-three/fiber";
 import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
+import { useScanStore } from "@/stores/scanStore";
+
 import { SCAN_DROP, SCAN_ENTRY, SHARED_SCAN } from "./scanBand";
+import { scanTint } from "./scanTints";
 
 /**
  * The ring the sweep appears to come from.
@@ -63,19 +66,24 @@ const EMITTERS = 24;
  *
  * `weight` receives each vertex and returns 1 where the light is strongest and
  * 0 where it should vanish.
+ *
+ * **The ramp is written in grey, not in the light's colour.** three multiplies
+ * the vertex colour by the material's own, so a grey ramp times a tinted
+ * material is the same picture — and changing the colour then costs one
+ * assignment instead of rebuilding and re-uploading two geometries. Baking the
+ * hue in here was right while there was one hue.
  */
 function fadeToBlack(
   geometry: THREE.BufferGeometry,
-  tint: THREE.Color,
   weight: (x: number, y: number, z: number) => number,
 ): THREE.BufferGeometry {
   const position = geometry.getAttribute("position");
   const colours = new Float32Array(position.count * 3);
   for (let i = 0; i < position.count; i++) {
     const t = Math.max(0, Math.min(1, weight(position.getX(i), position.getY(i), position.getZ(i))));
-    colours[i * 3] = tint.r * t;
-    colours[i * 3 + 1] = tint.g * t;
-    colours[i * 3 + 2] = tint.b * t;
+    colours[i * 3] = t;
+    colours[i * 3 + 1] = t;
+    colours[i * 3 + 2] = t;
   }
   geometry.setAttribute("color", new THREE.BufferAttribute(colours, 3));
   return geometry;
@@ -109,7 +117,7 @@ const NAMEPLATE_REPEATS = 5;
  * Drawn on transparent black so it can be additive like the rest of the ring's
  * light — see the note on why additive is the safe blend in this scene.
  */
-function nameplateTexture(): THREE.CanvasTexture {
+function nameplateTexture(glow: string): THREE.CanvasTexture {
   const canvas = document.createElement("canvas");
   canvas.width = 512;
   canvas.height = 64;
@@ -120,7 +128,7 @@ function nameplateTexture(): THREE.CanvasTexture {
     context.textAlign = "center";
     context.textBaseline = "middle";
     context.letterSpacing = "10px";
-    context.shadowColor = "#1ae0ff";
+    context.shadowColor = glow;
     context.shadowBlur = 18;
     context.fillStyle = "#d6fbff";
     context.fillText("ANATRIA 3D", canvas.width / 2, canvas.height / 2);
@@ -147,14 +155,19 @@ const LENS_OPACITY = 0.1;
 const EMITTER_GLOW = 2.2;
 
 /**
- * The colour of the lit inner edge, at full power.
+ * The lit inner edge is a paler version of whatever colour the light is.
  *
- * It comes up by being darkened towards black rather than by being made
- * transparent: it is opaque geometry inboard of the emitters, and turning it
- * transparent would put a thin ring into the sorted pass for no reason. A lamp
- * that is not yet at full brightness is dimmer, not see-through.
+ * Mixed towards white rather than named per colour: an edge that is exactly the
+ * light's hue reads as a painted ring, and one that is white reads as a
+ * different lamp. A little of both is what a bright emitter actually looks
+ * like — the centre blows out towards white while the spill keeps the colour.
+ *
+ * It comes up during the entrance by being darkened towards black rather than
+ * by being made transparent: it is opaque geometry inboard of the emitters, and
+ * turning it transparent would put a thin ring into the sorted pass for no
+ * reason. A lamp that is not yet at full brightness is dimmer, not see-through.
  */
-const EDGE_LIT = new THREE.Color("#8ff4ff");
+const EDGE_TOWARDS_WHITE = 0.55;
 
 export function ScanRing({
   bounds,
@@ -169,6 +182,20 @@ export function ScanRing({
    */
   instrument: boolean;
 }) {
+  /**
+   * The colour, read here rather than passed down.
+   *
+   * The ring is a leaf: subscribing to it here re-renders four meshes when the
+   * reader picks a colour, where threading it through the scene would re-render
+   * a tree with 3,478 of them.
+   */
+  const tint = scanTint(useScanStore((s) => s.tint));
+  const lit = useMemo(() => new THREE.Color(tint.hex), [tint]);
+  const edgeLit = useMemo(
+    () => new THREE.Color(tint.hex).lerp(new THREE.Color("#ffffff"), EDGE_TOWARDS_WHITE),
+    [tint],
+  );
+
   const ring = useRef<THREE.Group>(null);
   const emitters = useRef<THREE.InstancedMesh>(null);
   const discMaterial = useRef<THREE.MeshBasicMaterial>(null);
@@ -224,13 +251,11 @@ export function ScanRing({
    */
   const glow = useMemo(() => {
     if (!shape) return null;
-    const tint = new THREE.Color("#1ae0ff");
 
     // Brightest at the rim, where the emitters are, fading towards the axis.
     // Squared so the falloff is soft near the body rather than a flat wash.
     const disc = fadeToBlack(
       new THREE.RingGeometry(shape.lightRadius * 0.05, shape.lightRadius, 64, 8),
-      tint,
       (x, y) => Math.pow(Math.hypot(x, y) / shape.lightRadius, 2),
     );
 
@@ -247,7 +272,6 @@ export function ScanRing({
     // around the ring, and it stays round however the reader orbits.
     const skirt = fadeToBlack(
       new THREE.SphereGeometry(shape.lightRadius, 48, 24),
-      tint,
       (x, y, z) => {
         const r = Math.hypot(x, y, z) || 1;
         // Brightest at the equator, which is the plane the ring is reading,
@@ -261,7 +285,10 @@ export function ScanRing({
 
   // Only drawn when the hardware is. Built unconditionally it meant a canvas
   // and a texture upload for every question asked, to be disposed unused.
-  const nameplate = useMemo(() => (instrument ? nameplateTexture() : null), [instrument]);
+  const nameplate = useMemo(
+    () => (instrument ? nameplateTexture(tint.hex) : null),
+    [instrument, tint],
+  );
 
   useEffect(
     () => () => {
@@ -347,7 +374,7 @@ export function ScanRing({
     if (discMaterial.current) discMaterial.current.opacity = DISC_OPACITY * breath * arrival;
     if (lensMaterial.current) lensMaterial.current.opacity = LENS_OPACITY * breath * arrival;
     if (nameplateMaterial.current) nameplateMaterial.current.opacity = arrival;
-    if (edgeMaterial.current) edgeMaterial.current.color.copy(EDGE_LIT).multiplyScalar(arrival);
+    if (edgeMaterial.current) edgeMaterial.current.color.copy(edgeLit).multiplyScalar(arrival);
     if (emitterMaterial.current) {
       emitterMaterial.current.emissiveIntensity = EMITTER_GLOW * (0.85 + 0.3 * breath) * arrival;
     }
@@ -426,7 +453,7 @@ export function ScanRing({
             <meshStandardMaterial
               color="#0b1c24"
               ref={emitterMaterial}
-              emissive="#1ae0ff"
+              emissive={tint.hex}
               emissiveIntensity={EMITTER_GLOW}
               roughness={0.25}
               metalness={0.4}
@@ -437,7 +464,7 @@ export function ScanRing({
               radii. This is the edge that is meant to look switched on. */}
           <mesh rotation={[Math.PI / 2, 0, 0]}>
             <torusGeometry args={[shape.lightRadius, shape.tube * 0.22, 6, 96]} />
-            <meshBasicMaterial ref={edgeMaterial} color="#8ff4ff" toneMapped={false} />
+            <meshBasicMaterial ref={edgeMaterial} color={edgeLit} toneMapped={false} />
           </mesh>
         </>
       )}
@@ -450,6 +477,7 @@ export function ScanRing({
           <mesh geometry={glow.disc} rotation={[-Math.PI / 2, 0, 0]}>
             <meshBasicMaterial
               ref={discMaterial}
+              color={lit}
               vertexColors
               transparent
               opacity={DISC_OPACITY}
@@ -464,6 +492,7 @@ export function ScanRing({
           <mesh geometry={glow.skirt} scale={[1, 0.42, 1]}>
             <meshBasicMaterial
               ref={lensMaterial}
+              color={lit}
               vertexColors
               transparent
               opacity={LENS_OPACITY}

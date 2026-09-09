@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { organLabel, useSceneStore } from "@/stores/sceneStore";
+import { useScanStore } from "@/stores/scanStore";
 
 import { CURRENT_CROSSING, SWEEP_RUNNING } from "./scanCrossing";
 
@@ -43,6 +44,8 @@ export function ScanReadout() {
    * thing while writing another to the DOM is a race nobody can see losing.
    */
   const [running, setRunning] = useState(false);
+  const shown = useScanStore((s) => s.readout);
+  const toggleReadout = useScanStore((s) => s.toggleReadout);
   const list = useRef<HTMLParagraphElement>(null);
   const rest = useRef<HTMLParagraphElement>(null);
 
@@ -88,11 +91,36 @@ export function ScanReadout() {
 
   if (!running) return null;
 
+  if (!shown) {
+    return (
+      <button
+        type="button"
+        onClick={toggleReadout}
+        title="Name what the plane is crossing again"
+        className="pointer-events-auto select-none rounded border border-slate-800/60 bg-slate-950/70 px-1.5 py-0.5 font-mono text-[9px] text-slate-500 hover:border-cyan-800/60 hover:text-cyan-500/80"
+      >
+        crossing · show
+      </button>
+    );
+  }
+
   return (
+    /*
+     * The panel itself stays transparent to the pointer, and only the header
+     * takes clicks. It lies over the model, and a reader aiming at a structure
+     * behind it should reach the structure — the one thing this panel must
+     * never do is become an obstacle while claiming to be a label.
+     */
     <div className="pointer-events-none select-none rounded border border-cyan-800/50 bg-slate-950/80 px-2.5 py-1.5 shadow-lg">
-      <p className="text-[9px] uppercase tracking-wider text-cyan-500/70">
-        Crossing now
-      </p>
+      <button
+        type="button"
+        onClick={toggleReadout}
+        title="Hide this, and look at what the plane has lit"
+        className="pointer-events-auto flex w-full items-center justify-between gap-4 text-[9px] uppercase tracking-wider text-cyan-500/70 hover:text-cyan-300"
+      >
+        <span>Crossing now</span>
+        <span className="text-slate-500">hide</span>
+      </button>
       <p ref={list} className="max-w-md text-[11px] italic leading-snug text-cyan-100" />
       <p ref={rest} className="text-[9px] text-slate-500" />
     </div>

@@ -263,3 +263,79 @@ button:not(:disabled),
     width: auto;
   }
 }
+
+/*
+ * The scanner's vertical slider, drawn the same on both engines.
+ *
+ * # Why it is rotated rather than `writing-mode: vertical-lr`
+ *
+ * A vertical range input through `writing-mode` is a recent addition to the
+ * platform, and the two engines this ships on are not the same age: WebView2 on
+ * Windows took it, the WebKitGTK on a Debian desktop may not. Where it is not
+ * implemented the control stays horizontal inside a 16px-wide box — you see the
+ * thumb, there is no track to colour, and a drag maps to sixteen pixels of
+ * travel instead of a hundred and twelve. Reported from a Kali desktop, and
+ * every symptom follows from that one line.
+ *
+ * Rotating a plain horizontal input has worked in every engine for fifteen
+ * years. The wrapper carries the vertical box; the input keeps its own.
+ *
+ * # Why the track is painted here and not with `accent-color`
+ *
+ * Same reason. `accent-color` is the modern way to tint a native control and it
+ * is exactly the kind of thing that is present on one engine and absent on the
+ * other — and when it is absent there is nothing to say the light is cyan. The
+ * track below is ordinary CSS: a gradient whose stop is written from the sweep,
+ * so the filled part means "where the light is" on every machine.
+ */
+.scan-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+}
+
+.scan-slider::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 9999px;
+  /* Rotated with the input, so "to right" is up the body. */
+  background: linear-gradient(
+    to right,
+    var(--color-cyan-400) 0 var(--scan-fill, 50%),
+    var(--color-slate-700) var(--scan-fill, 50%) 100%
+  );
+}
+
+.scan-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  margin-top: -4px; /* centred on a 4px track */
+  border-radius: 9999px;
+  background: var(--color-cyan-200);
+  box-shadow: 0 0 6px var(--color-cyan-500);
+}
+
+.scan-slider:focus-visible {
+  outline: 1px solid var(--color-cyan-400);
+  outline-offset: 3px;
+}
+
+/* Firefox is not a target today, and costs two rules to not be wrong on. */
+.scan-slider::-moz-range-track {
+  height: 4px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    to right,
+    var(--color-cyan-400) 0 var(--scan-fill, 50%),
+    var(--color-slate-700) var(--scan-fill, 50%) 100%
+  );
+}
+
+.scan-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--color-cyan-200);
+}
