@@ -13,6 +13,58 @@ There is **no auto-updater**, by design: the application never reaches the
 network on its own. A new version reaches you only when you download and install
 it, so this file is also the answer to "is it worth reinstalling".
 
+## [0.2.7] — 2026-09-09
+
+### Added
+
+**The scanner's light has a colour, and it is a way of reading rather than a
+theme.** The light is *added* to the colour the tissue already has, so the hue
+decides which structures separate from their neighbours and which sink into
+them. Four to choose from, each picked for what it separates from: cyan is the
+neutral one, because nothing in the body is cyan; green reads against muscle and
+anything vascular; amber buries the reds and lifts bone, cartilage and fascia,
+which is the opposite selection; violet separates from both and shows the pale
+structures — nerves, tendon, the fatty planes — that cyan washes out.
+
+**A carbon body, so the light has somewhere to go.** The appearance button now
+steps *Solid → Scan → Carbon*. Carbon is the drained body pressed down towards
+black, and the reason is not decoration: additive light saturates almost at once
+on a mid-lit surface, and the falloff that carries the shape of what was reached
+disappears into white. Against a dark body the same light has range. It is why
+radiology is read on black. Bone still sits lighter than muscle — the lightness
+is compressed, not flattened — and whatever is marked, selected or isolated
+keeps its own colour through every tone.
+
+**The sweep can give each structure its colour back instead of lighting it.**
+The glow says *where* the plane is; this answers *what* it reached, and on a
+drained or carbon body colour carries that far better than brightness — a lit
+grey liver is a lit grey shape. Tick *Reveal colour, not light* under the
+swatches. It replaces the glow rather than joining it, because a hue seen
+through an additive wash is a paler version of itself. What comes back is the
+colour the structure would have at full tone, including a revision colour or a
+pathology overlay.
+
+**The panel naming what is being crossed can be moved out of the way.** Click
+*hide* on the panel itself — it sits over the model, and the moment you want it
+gone you are looking straight at it. It leaves the chip it collapsed into, which
+is its own way back.
+
+### Fixed
+
+**The eyes lit up when the sweep reached the ankles.** The eye parts are drawn
+inside a group that turns them to follow you, so their matrices are rebased onto
+the eye's own centre — near the origin, which is the height of the feet. The
+sweep read its extent from one of those while the shader read each fragment's
+real position, so the two disagreed: the eyes lit at the ankles and never lit
+when the plane crossed the face. Both halves are now right.
+
+**On Linux the scanner's slider showed a handle and no line, and answered badly
+to a drag.** A vertical range input through `writing-mode` is a recent addition
+to the platform: the Windows engine draws it and the WebKitGTK on a Debian
+desktop did not, so the control stayed horizontal inside a 16-pixel-wide box.
+It is now a plain horizontal control turned a quarter turn, and the coloured
+track is drawn by the application rather than left to the browser.
+
 ## [0.2.6] — 2026-09-08
 
 ### Added
