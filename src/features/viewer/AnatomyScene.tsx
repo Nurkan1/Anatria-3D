@@ -673,6 +673,7 @@ function SystemMeshes({
       <OrganMesh
         key={organ.organ_id}
         scanBandEnabled={scanBandEnabled}
+        worldBox={measured.boxes.get(organ.organ_id)}
         organ={organ}
         geometry={entry.geometry}
         matrix={matrix ?? entry.matrix}

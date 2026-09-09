@@ -344,3 +344,26 @@ it("opens at the crown, because the ring arrives from above it", () => {
   expect(SWEEP_PROGRESS.value).toBe(1);
   expect(SHARED_SCAN.value).toBe(1);
 });
+
+it("reads a structure's height from where it is, not from where it is drawn", () => {
+  // The eye bug, written down.
+  //
+  // The eye parts are drawn inside a group that turns them, so their matrices
+  // are rebased onto the eye's own centre and sit near the origin. A span taken
+  // from one of those is the span of a structure at the height of the feet —
+  // while the shader reads each fragment's world position from `modelMatrix`
+  // and knows perfectly well the eye is in the head. The eyes lit when the
+  // plane reached the ankles and never lit when it crossed the face.
+  const inTheHead = scanRangeAlong([-0.03, 1.62, 0.08], [0.03, 1.66, 0.12], STANDING);
+  expect(inTheHead.from).toBeCloseTo(1.62);
+  expect(inTheHead.to).toBeCloseTo(1.66);
+
+  // The same eye, in the space it is drawn in.
+  const asDrawn = scanRangeAlong([-0.03, -0.02, -0.02], [0.03, 0.02, 0.02], STANDING);
+  expect(asDrawn.from).toBeCloseTo(-0.02);
+  expect(asDrawn.to).toBeCloseTo(0.02);
+
+  // Which is why the span must come from the scene's own measurement: the two
+  // answers are a whole body apart, and only one of them is where the light is.
+  expect(Math.abs(inTheHead.from - asDrawn.from)).toBeGreaterThan(1.5);
+});

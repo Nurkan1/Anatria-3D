@@ -207,6 +207,23 @@ interface OrganMeshProps {
   scanned: boolean;
   /** Temporary Patient Scan PoC, independent of the existing colour-drain view. */
   scanBandEnabled?: boolean;
+  /**
+   * Where this structure actually is in the body, as the scene measured it.
+   *
+   * **Not derived from `matrix` here, and that is the whole point.** The eye
+   * parts are drawn inside a group that turns them, so their matrices are
+   * rebased onto the eye's own centre — near the origin. A span computed from
+   * one of those said the eyes lived at the height of the feet, and since the
+   * shader reads each fragment's *world* position from `modelMatrix`, the two
+   * disagreed: the eyes lit whenever the plane reached the ankles, and never
+   * lit when it crossed the face.
+   *
+   * Taking it from the scene's own measurement is also what keeps the light and
+   * the crossing panel telling the same story. That panel was already reading
+   * these boxes, which is exactly why it named the soles of the feet correctly
+   * while the light was on the eyes.
+   */
+  worldBox?: THREE.Box3 | undefined;
   clippingPlanes: THREE.Plane[];
   onHover: (organId: string | null) => void;
   onSelect: (organId: string, additive: boolean) => void;
@@ -259,6 +276,7 @@ export const OrganMesh = memo(function OrganMesh({
   litGlow: litGlowProp,
   scanned,
   scanBandEnabled = false,
+  worldBox,
   clippingPlanes,
   onHover,
   onSelect,
@@ -451,18 +469,14 @@ export const OrganMesh = memo(function OrganMesh({
    * once per structure and handed to the material, never per frame.
    */
   const scanSpan = useMemo((): readonly [number, number] | undefined => {
-    if (!scanBandEnabled) return undefined;
-    if (!geometry.boundingBox) geometry.computeBoundingBox();
-    const box = geometry.boundingBox;
-    if (!box) return undefined;
-    const world = box.clone().applyMatrix4(matrix);
+    if (!scanBandEnabled || !worldBox) return undefined;
     const { from, to } = scanRangeAlong(
-      [world.min.x, world.min.y, world.min.z],
-      [world.max.x, world.max.y, world.max.z],
+      [worldBox.min.x, worldBox.min.y, worldBox.min.z],
+      [worldBox.max.x, worldBox.max.y, worldBox.max.z],
       STANDING,
     );
     return [from, to];
-  }, [scanBandEnabled, geometry, matrix]);
+  }, [scanBandEnabled, worldBox]);
 
   const surface = {
     color,
