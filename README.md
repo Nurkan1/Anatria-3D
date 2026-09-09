@@ -19,6 +19,16 @@ actually loaded.
 
 ---
 
+![The scanner running on a carbon body: a lit ring descends onto the head and
+a plane of light travels down through the figure, giving each structure its own
+colour as it reaches it while a panel names what is being
+crossed.](docs/screenshots/patient-scan.gif)
+
+**The scanner, running.** A plane of light sweeps the body and lights each
+structure *whole* as it reaches it, naming what it crosses on the way — and on a
+carbon body it can give each one its own colour back instead of lighting it.
+There is a still of it further down, with the measured cost of drawing it.
+
 ![The atlas with the body surface ghosted, showing the brain and the cerebral
 vessels, while the assistant explains why a smell recalls a memory. Numbered
 pins in the answer link each named structure to the model.](docs/screenshots/atlas-and-tutor.png)
