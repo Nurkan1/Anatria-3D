@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 
+import { useSceneStore } from "@/stores/sceneStore";
 import { useScanStore } from "@/stores/scanStore";
 
 import { SWEEP_PROGRESS } from "./scanBand";
@@ -36,6 +37,11 @@ export function ScanControls() {
   const setSweepOnAnswer = useScanStore((s) => s.setSweepOnAnswer);
   const tint = useScanStore((s) => s.tint);
   const setTint = useScanStore((s) => s.setTint);
+  const reveal = useScanStore((s) => s.reveal);
+  const setReveal = useScanStore((s) => s.setReveal);
+  // There is nothing to reveal on a body that already has its colour: the
+  // control says so rather than sitting there apparently broken.
+  const drained = useSceneStore((s) => s.bodyTone) !== "solid";
   const slider = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -145,6 +151,35 @@ export function ScanControls() {
               </button>
             ))}
           </div>
+
+          {/*
+            Colour instead of light.
+
+            The glow says where the plane is; this says what it reached, and on
+            a drained body colour carries that better than brightness can — a
+            lit grey liver is a lit grey shape. They are alternatives rather
+            than layers, because an additive wash over a hue returns a paler
+            version of the hue.
+          */}
+          <label
+            className={`mt-1.5 flex cursor-pointer items-start gap-1.5 text-[9px] leading-snug ${
+              drained ? "text-slate-400" : "cursor-not-allowed text-slate-600"
+            }`}
+            title={
+              drained
+                ? "Give each structure its own colour back as the plane reaches it, instead of lighting it"
+                : "Switch the body to Scan or Carbon first — at full colour there is nothing to reveal"
+            }
+          >
+            <input
+              type="checkbox"
+              checked={reveal}
+              disabled={!drained}
+              onChange={(event) => setReveal(event.target.checked)}
+              className="mt-[1px] accent-cyan-500"
+            />
+            Reveal colour, not light
+          </label>
 
           <button
             type="button"

@@ -9,7 +9,9 @@ import {
   resetScanEntry,
   SCAN_ENTRY,
   SCAN_ENTRY_S,
+  SCAN_REVEAL,
   SCAN_TINT,
+  setScanReveal,
   setScanTint,
   scanBandMaterialProps,
   scanBandOnBeforeCompile,
@@ -336,7 +338,8 @@ it("scales everything the mode adds by the arrival, from one shared uniform", ()
   // Both terms inside the multiplication: an entrance that brought the band up
   // but left the wake at full strength would light a structure before the
   // instrument that is supposed to be reading it exists.
-  expect(a.fragmentShader).toContain("(scanBand + 0.29 * wake) * uScanEntry;");
+  expect(a.fragmentShader).toContain("uScanTint * (scanBand + 0.29 * wake)");
+  expect(a.fragmentShader).toContain("* uScanEntry * (1.0 - uScanReveal);");
 });
 
 it("opens at the crown, because the ring arrives from above it", () => {
@@ -376,4 +379,71 @@ it("tints the band and its wake with the same colour", () => {
   scanBandOnBeforeCompile(compiled);
   expect(compiled.fragmentShader).toContain("uniform vec3 uScanTint;");
   expect(compiled.fragmentShader).toContain("uScanTint * (scanBand +");
+});
+
+// ---------------------------------------------------------------------------
+// Colour instead of light
+// ---------------------------------------------------------------------------
+
+it("keeps one program even though every structure carries its own colour", () => {
+  // The whole mode rests on this. A per-material *value* plays no part in the
+  // cache key; a per-material closure would, and 3,478 compiles would freeze
+  // the window for seconds on the way in.
+  const first = new MeshStandardMaterial(scanBandMaterialProps(true, [0.2, 0.5], [0.9, 0.1, 0.1]));
+  const second = new MeshStandardMaterial(scanBandMaterialProps(true, [1.1, 1.4], [0.1, 0.2, 0.9]));
+  expect(first.onBeforeCompile).toBe(second.onBeforeCompile);
+  expect(first.customProgramCacheKey()).toBe(second.customProgramCacheKey());
+});
+
+it("gives each material the colour it was built with", () => {
+  const first = new MeshStandardMaterial(scanBandMaterialProps(true, [0.2, 0.5], [0.9, 0.1, 0.1]));
+  const second = new MeshStandardMaterial(scanBandMaterialProps(true, [1.1, 1.4], [0.1, 0.2, 0.9]));
+  const a = shader();
+  const b = shader();
+  first.onBeforeCompile(a, {} as WebGLRenderer);
+  second.onBeforeCompile(b, {} as WebGLRenderer);
+  expect(a.uniforms.uRevealColour?.value).toEqual([0.9, 0.1, 0.1]);
+  expect(b.uniforms.uRevealColour?.value).toEqual([0.1, 0.2, 0.9]);
+  // The switch itself is shared: one write turns the mode on everywhere.
+  expect(a.uniforms.uScanReveal).toBe(SCAN_REVEAL);
+  expect(b.uniforms.uScanReveal).toBe(a.uniforms.uScanReveal);
+});
+
+it("leaves a material with no colour of its own alone", () => {
+  // Every material is in this state for the first render after the mode is
+  // switched on. A sentinel that read as a colour would flash the body black.
+  const material = new MeshStandardMaterial(scanBandMaterialProps(true, [0.2, 0.5]));
+  const compiled = shader();
+  material.onBeforeCompile(compiled, {} as WebGLRenderer);
+  expect(compiled.uniforms.uRevealColour?.value[0]).toBeLessThan(0);
+  expect(compiled.fragmentShader).toContain("uRevealColour.r < 0.0 ? diffuseColor.rgb");
+});
+
+it("reveals the colour before the lighting runs, not after", () => {
+  // The reason this costs a mix and not a shader of its own: the injection
+  // point sits ahead of the lighting model, so a revealed structure is lit
+  // like tissue instead of looking pasted on.
+  const compiled = shader();
+  scanBandOnBeforeCompile(compiled);
+  const mix = compiled.fragmentShader.indexOf("diffuseColor.rgb = mix(");
+  const lighting = compiled.fragmentShader.indexOf("#include <lights_physical_fragment>");
+  expect(mix).toBeGreaterThan(0);
+  expect(lighting).toBeGreaterThan(mix);
+});
+
+it("stands the glow down while colour is doing the telling", () => {
+  // Both at once is worse than either: a hue seen through an additive wash is
+  // a paler version of itself.
+  const compiled = shader();
+  scanBandOnBeforeCompile(compiled);
+  expect(compiled.fragmentShader).toContain("* uScanEntry * (1.0 - uScanReveal);");
+});
+
+it("switches with one float write, into the object every shader holds", () => {
+  const held = SCAN_REVEAL.value;
+  setScanReveal(true);
+  expect(SCAN_REVEAL.value).toBe(1);
+  setScanReveal(false);
+  expect(SCAN_REVEAL.value).toBe(0);
+  expect(typeof held).toBe("number");
 });

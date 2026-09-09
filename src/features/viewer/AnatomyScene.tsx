@@ -9,6 +9,7 @@ import {
   resetScanBand,
   resetScanEntry,
   scanRangeAlong,
+  setScanReveal,
   setScanTint,
   SHARED_SCAN,
   STANDING,
@@ -838,6 +839,9 @@ export function AnatomyScene({
    */
   const tint = useScanStore((s) => s.tint);
   useEffect(() => setScanTint(scanTint(tint).light), [tint]);
+
+  const reveal = useScanStore((s) => s.reveal);
+  useEffect(() => setScanReveal(reveal), [reveal]);
 
   useFrame((_, delta) => {
     // PoC measurement only: M's rolling p95 can miss a single compile stall,

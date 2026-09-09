@@ -12,6 +12,7 @@ beforeEach(() => {
     at: 0.5,
     sweepOnAnswer: true,
     tint: "cyan",
+    reveal: false,
   });
   localStorage.clear();
 });
@@ -114,5 +115,25 @@ describe("the colour of the light", () => {
     localStorage.clear();
     store().setTint("cyan");
     expect(localStorage.getItem("anatria3d.scan.tint.v1")).toBeNull();
+  });
+});
+
+describe("revealing colour instead of lighting", () => {
+  it("is off until it is asked for", () => {
+    // The glow is what the mode is recognised by; a reader meeting the scanner
+    // for the first time should meet the half that explains itself.
+    expect(store().reveal).toBe(false);
+  });
+
+  it("remembers being turned on", () => {
+    store().setReveal(true);
+    expect(store().reveal).toBe(true);
+    expect(localStorage.getItem("anatria3d.scan.reveal.v1")).toBe("on");
+  });
+
+  it("writes nothing when it has not changed", () => {
+    localStorage.clear();
+    store().setReveal(false);
+    expect(localStorage.getItem("anatria3d.scan.reveal.v1")).toBeNull();
   });
 });

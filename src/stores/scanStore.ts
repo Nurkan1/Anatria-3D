@@ -28,6 +28,17 @@ import { scanTint, type ScanTintId } from "@/features/viewer/scanTints";
 
 const SWEEP_ON_ANSWER_KEY = "anatria3d.scan.sweepOnAnswer.v1";
 const TINT_KEY = "anatria3d.scan.tint.v1";
+const REVEAL_KEY = "anatria3d.scan.reveal.v1";
+
+/**
+ * Whether the sweep gives structures their colour back instead of lighting them.
+ *
+ * Off by default: the glow is what the mode is recognised by, and a reader who
+ * has never seen either should meet the one that explains itself.
+ */
+function storedReveal(): boolean {
+  return readLocal(REVEAL_KEY) === "on";
+}
 
 /**
  * The colour of the light, remembered.
@@ -85,6 +96,14 @@ interface ScanStore {
    * the same body.
    */
   tint: ScanTintId;
+  /**
+   * Reveal the tissue's own colour rather than throwing light at it.
+   *
+   * It has nothing to reveal on a body that is already at full colour — the
+   * colour it would restore is the colour already there — so the control that
+   * sets it says as much rather than sitting there doing nothing.
+   */
+  reveal: boolean;
 
   toggle: () => void;
   /** Take hold of the sweep and put it at `at`. */
@@ -94,6 +113,7 @@ interface ScanStore {
   togglePin: () => void;
   setSweepOnAnswer: (on: boolean) => void;
   setTint: (tint: ScanTintId) => void;
+  setReveal: (on: boolean) => void;
 }
 
 export const useScanStore = create<ScanStore>()((set, get) => ({
@@ -103,6 +123,7 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
   at: 0.5,
   sweepOnAnswer: storedSweepOnAnswer(),
   tint: storedTint(),
+  reveal: storedReveal(),
 
   // Letting go and unpinning on the way out, so switching the scanner off never
   // leaves the next session holding an invisible sweep at somebody's ankle.
@@ -120,6 +141,11 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
     if (tint === get().tint) return;
     writeLocal(TINT_KEY, tint);
     set({ tint });
+  },
+  setReveal: (on) => {
+    if (on === get().reveal) return;
+    writeLocal(REVEAL_KEY, on ? "on" : "off");
+    set({ reveal: on });
   },
 }));
 

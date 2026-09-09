@@ -464,6 +464,31 @@ export const OrganMesh = memo(function OrganMesh({
     return [from, to];
   }, [scanBandEnabled, geometry, matrix]);
 
+  /**
+   * The colour this structure has when nothing is draining it.
+   *
+   * The same chain the material's own colour goes through, with the body's tone
+   * left out — so a structure carrying a revision colour or a pathology overlay
+   * reveals *that*, not the raw tissue underneath it. Two colour rules that
+   * disagreed about the same structure would be worse than either.
+   *
+   * Handed over exactly as it is stored, and that is the correct thing rather
+   * than a shortcut. Colour management is on, so `new Color('#8c3a37')` already
+   * holds the renderer's working-space value (0.262, not 0.549) — the same
+   * numbers three would upload for a material's own colour. Converting here
+   * would convert a second time and the revealed colour would come back dark,
+   * which reads as a broken palette rather than as a broken line.
+   */
+  const revealColour = useMemo((): readonly [number, number, number] | undefined => {
+    if (!scanBandEnabled) return undefined;
+    const tissue =
+      coverageTouches !== undefined && coverageBusiest !== undefined
+        ? coverageColour(coverageTouches, coverageBusiest)
+        : tissueColour(organ);
+    const shown = overlay ? pathologyColour(tissue, overlay.severity) : tissue;
+    return [shown.r, shown.g, shown.b];
+  }, [scanBandEnabled, organ, overlay, coverageTouches, coverageBusiest]);
+
   const surface = {
     color,
     emissive,
@@ -571,7 +596,11 @@ export const OrganMesh = memo(function OrganMesh({
           the original attachment on unmount and disposes the temporary material.
           Keep the original alive so its warmed program cache also survives. */}
       {scanBandEnabled && (
-        <meshStandardMaterial ref={scanMaterial} {...surface} {...scanBandMaterialProps(true, scanSpan)} />
+        <meshStandardMaterial
+          ref={scanMaterial}
+          {...surface}
+          {...scanBandMaterialProps(true, scanSpan, revealColour)}
+        />
       )}
 
       {/*
