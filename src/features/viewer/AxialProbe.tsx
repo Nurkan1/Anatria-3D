@@ -243,40 +243,53 @@ export function AxialProbe({
     camera.updateProjectionMatrix();
     AXIAL_PROBE.frameCm = framing.halfWidth * 200;
 
+    /*
+     * Everything the pass borrows is given back in a `finally`.
+     *
+     * Meshes hidden, materials made opaque, a clipping plane installed, the
+     * render target swapped. If anything threw in the middle of that, the
+     * reader would be left with a body permanently half-hidden and half-solid
+     * and no way back but a restart — a far worse outcome than a missing
+     * section.
+     */
+    // Declared out here so the `finally` can still see them.
     const previousClipping = gl.clippingPlanes;
     const previousTarget = gl.getRenderTarget();
-    // The cut keeps everything below the plane and reads as solid; the slab
-    // keeps only that level and is the truthful section. See `cutPlanes`.
-    gl.clippingPlanes = useScanStore.getState().cut ? cutPlanes(at) : slabPlanes(at);
+    try {
+      // The cut keeps everything below the plane and reads as solid; the slab
+      // keeps only that level and is the truthful section. See `cutPlanes`.
+      gl.clippingPlanes = useScanStore.getState().cut ? cutPlanes(at) : slabPlanes(at);
 
-    // `renderer.info` accumulates over a frame, so it is reset immediately
-    // before the pass and read immediately after: what it reports is then this
-    // pass and nothing else.
-    gl.info.reset();
-    const startedRender = performance.now();
-    gl.setRenderTarget(target);
-    gl.render(scene, camera);
-    // `finish` before stopping the clock, or the number measured is how long
-    // the driver took to *accept* the commands rather than to run them — which
-    // on a modern driver is close to zero and completely useless.
-    gl.getContext().finish();
-    AXIAL_PROBE.renderMs = performance.now() - startedRender;
-    AXIAL_PROBE.drawCalls = gl.info.render.calls;
+      // `renderer.info` accumulates over a frame, so it is reset immediately
+      // before the pass and read immediately after: what it reports is then this
+      // pass and nothing else.
+      gl.info.reset();
+      const startedRender = performance.now();
+      gl.setRenderTarget(target);
+      gl.render(scene, camera);
+      // `finish` before stopping the clock, or the number measured is how long
+      // the driver took to *accept* the commands rather than to run them — which
+      // on a modern driver is close to zero and completely useless.
+      gl.getContext().finish();
+      AXIAL_PROBE.renderMs = performance.now() - startedRender;
+      AXIAL_PROBE.drawCalls = gl.info.render.calls;
 
-    const startedReadback = performance.now();
-    gl.readRenderTargetPixels(target, 0, 0, SIZE, SIZE, pixels);
-    AXIAL_PROBE.readbackMs = performance.now() - startedReadback;
-
-    gl.setRenderTarget(previousTarget);
-    gl.clippingPlanes = previousClipping;
-    if (ring) ring.visible = ringWasVisible;
-    for (const mesh of hidden) mesh.visible = true;
-    for (const was of solid) {
-      was.material.transparent = was.transparent;
-      was.material.opacity = was.opacity;
-      was.material.depthWrite = was.depthWrite;
+      const startedReadback = performance.now();
+      gl.readRenderTargetPixels(target, 0, 0, SIZE, SIZE, pixels);
+      AXIAL_PROBE.readbackMs = performance.now() - startedReadback;
+    } finally {
+      gl.setRenderTarget(previousTarget);
+      gl.clippingPlanes = previousClipping;
+      if (ring) ring.visible = ringWasVisible;
+      for (const mesh of hidden) mesh.visible = true;
+      for (const was of solid) {
+        was.material.transparent = was.transparent;
+        was.material.opacity = was.opacity;
+        was.material.depthWrite = was.depthWrite;
+        was.material.needsUpdate = true;
+      }
+      solid.length = 0;
     }
-    solid.length = 0;
     AXIAL_PROBE.drawn = considered - hidden.length;
     hidden.length = 0;
     AXIAL_PROBE.runs += 1;
