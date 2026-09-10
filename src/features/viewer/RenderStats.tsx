@@ -4,6 +4,7 @@ import * as THREE from "three";
 
 import { fps, heapMb, noteFrame, sample } from "./renderSample";
 import { viewportKey } from "./viewportKeys";
+import { AXIAL_PROBE } from "./AxialProbe";
 
 /**
  * The frame counter, and the panel that shows it.
@@ -111,6 +112,26 @@ const ROWS: Row[] = [
     label: "heap",
     read: () => (sample.heapMb === null ? "—" : `${sample.heapMb.toFixed(0)} MB`),
   },
+  /*
+   * Phase 0 for the axial slice, and temporary with it.
+   *
+   * A dash until the probe has run once, so an empty reading is visibly "not
+   * measured yet" rather than "measured as zero" — the two look identical in a
+   * screenshot and mean opposite things.
+   */
+  {
+    label: "axial render",
+    read: () => (AXIAL_PROBE.renderMs < 0 ? "—" : `${AXIAL_PROBE.renderMs.toFixed(1)} ms`),
+  },
+  {
+    label: "axial readback",
+    read: () => (AXIAL_PROBE.readbackMs < 0 ? "—" : `${AXIAL_PROBE.readbackMs.toFixed(1)} ms`),
+  },
+  {
+    label: "axial calls",
+    read: () => (AXIAL_PROBE.drawCalls < 0 ? "—" : AXIAL_PROBE.drawCalls.toLocaleString()),
+  },
+  { label: "axial runs", read: () => String(AXIAL_PROBE.runs) },
 ];
 
 /**

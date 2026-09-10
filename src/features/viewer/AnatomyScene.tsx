@@ -18,6 +18,7 @@ import {
   STANDING,
 } from "./scanBand";
 import { ScanRing } from "./ScanRing";
+import { AxialProbe } from "./AxialProbe";
 import { scanTint } from "./scanTints";
 import { playScanPing } from "./scanSound";
 import {
@@ -853,6 +854,9 @@ export function AnatomyScene({
 
   /** Whether the reader had hold of the light on the previous frame. */
   const wasHeld = useRef(false);
+  /** Bumped when an axial measurement is wanted. See `AxialProbe`. */
+  const axialRequest = useRef(0);
+  const [axialRuns, setAxialRuns] = useState(0);
 
   useFrame((_, delta) => {
     // PoC measurement only: M's rolling p95 can miss a single compile stall,
@@ -882,6 +886,10 @@ export function AnatomyScene({
        */
       if (wasHeld.current && !grip.held) {
         firePulse();
+        // Phase 0: the measurement is taken at the one moment the design says
+        // a slice would be rendered — when the gantry comes to rest.
+        axialRequest.current += 1;
+        setAxialRuns(axialRequest.current);
         // Read from the store rather than subscribed: this runs sixty times a
         // second, and a preference nobody changes mid-frame is not worth a
         // re-render of 3,478 meshes to observe.
@@ -1048,6 +1056,7 @@ export function AnatomyScene({
       {/* Mounted with the sweep and gone with it. Nothing of this mode outlives
           the toggle — see the unmount discipline in `StudyViews`. */}
       {scanBandEnabled && <ScanRing bounds={bounds} instrument={manualScan} />}
+      {scanBandEnabled && <AxialProbe bounds={bounds} request={axialRuns} />}
 
       {pathway && (
         <PathwayFlow

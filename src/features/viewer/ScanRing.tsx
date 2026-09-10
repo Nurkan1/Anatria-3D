@@ -430,7 +430,10 @@ export function ScanRing({
   if (!shape) return null;
 
   return (
-    <group ref={ring} position={[shape.x, 0, shape.z]}>
+    // Named so the axial probe can hide it: the ring sits at exactly the height
+    // being sliced, and from above it would fill the frame with its own
+    // hardware — a photograph of the instrument rather than of the patient.
+    <group ref={ring} name="scan-ring" position={[shape.x, 0, shape.z]}>
       {/*
         The machine, or only its light.
         =============================
