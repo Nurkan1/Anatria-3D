@@ -314,6 +314,11 @@ export function AxialProbe({
     // this is affordable: one frame to make it, nothing per frame to keep it.
     const surface = AXIAL_CANVAS.value;
     if (surface) paintSlice(surface, pixels, SIZE);
+
+    // Last, and only now: the picture is on the canvas and the crossing list
+    // was recomputed the frame the plane moved, so this is the one instant
+    // where everything the panel shows agrees with everything else.
+    useScanStore.getState().sectionTaken();
   });
 
   return null;

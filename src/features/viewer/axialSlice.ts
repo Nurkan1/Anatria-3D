@@ -115,6 +115,68 @@ export function sliceFraming(
 export const SLICE_UP = new THREE.Vector3(0, 0, -1);
 
 /**
+ * A fresh section is wanted, from somewhere outside the render loop.
+ *
+ * The wheel lives in the DOM overlay and the pass lives inside the canvas, and
+ * between them is a boundary React does not cross for free — the same one the
+ * picture itself already crosses through `AXIAL_CANVAS`. A counter rather than
+ * a flag, so two requests in a row are two sections; the scene compares it once
+ * a frame, which costs an integer.
+ */
+export const SECTION_WANTED = { value: 0 };
+
+/** Ask for one. See `SECTION_WANTED`. */
+export function wantSection(): void {
+  SECTION_WANTED.value += 1;
+}
+
+/**
+ * How far a wheel has to turn before the plane moves one step.
+ *
+ * A notch of a mouse wheel reports a hundred on every browser this runs in, so
+ * a notch is a step and a step is a centimetre. A trackpad reports small
+ * amounts continuously instead, which is why this accumulates rather than
+ * counting events: otherwise one flick of two fingers would cross the thorax.
+ */
+export const WHEEL_PER_STEP = 100;
+
+/**
+ * How many whole steps a wheel gesture has earned, and what to carry forward.
+ *
+ * Reversing direction throws the carry away rather than spending it. Somebody
+ * who has scrolled most of the way towards the next level and then changes
+ * their mind means *back*, and making them fight eighty units of leftover
+ * intent before the plane moves the other way feels like a stuck control.
+ */
+export function wheelSteps(
+  carried: number,
+  deltaY: number,
+  perStep: number = WHEEL_PER_STEP,
+): { steps: number; carry: number } {
+  const reversed = carried !== 0 && deltaY !== 0 && carried > 0 !== deltaY > 0;
+  const total = reversed ? deltaY : carried + deltaY;
+  const steps = Math.trunc(total / perStep);
+  return { steps, carry: total - steps * perStep };
+}
+
+/**
+ * How long the wheel has to be quiet before the section is retaken.
+ *
+ * # Why the picture does not follow every notch
+ *
+ * Measured: one section is 8 ms of render and 7 ms of readback. A wheel spun
+ * hard produces twenty notches a second, and paying that per notch is three
+ * hundred milliseconds of work a second for twenty pictures nobody looked at —
+ * on the slowest machine here it would be a freeze.
+ *
+ * The plane itself moves on every notch, immediately, because moving it is
+ * free: the ring travels, the body lights, the crossing list follows. Only the
+ * section waits, and it waits for the gesture to end rather than for a clock,
+ * so the cost is one picture per gesture however hard the wheel is spun.
+ */
+export const WHEEL_SETTLE_MS = 130;
+
+/**
  * Whether magnifying this far draws source pixels bigger than screen pixels.
  *
  * The enlarged view smooths the picture right up until it runs out of source,

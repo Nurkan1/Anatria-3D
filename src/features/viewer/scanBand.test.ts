@@ -28,6 +28,9 @@ import {
   STANDING,
   SWEEP_CYCLE_S,
   SWEEP_PROGRESS,
+  SCAN_TRAVEL_M,
+  SECTION_STEP_CM,
+  stepFraction,
   type ScanAxis,
 } from "./scanBand";
 
@@ -616,4 +619,22 @@ it("falls back to the lamp for a structure with no colour of its own", () => {
   const fallback = compiled.fragmentShader.indexOf(": uScanTint;");
   expect(guard).toBeGreaterThan(0);
   expect(fallback).toBeGreaterThan(guard);
+});
+
+it("measures a step in centimetres of body, not in slider", () => {
+  // A 1.75 m atlas: one centimetre is 1/175th of the travel, not 1/100th.
+  SCAN_TRAVEL_M.value = 1.75;
+  expect(stepFraction(SECTION_STEP_CM)).toBeCloseTo(0.01 / 1.75, 12);
+  // And a shorter body gets a larger fraction for the same distance, which is
+  // the whole reason this is not a constant.
+  SCAN_TRAVEL_M.value = 1.6;
+  expect(stepFraction(SECTION_STEP_CM)).toBeCloseTo(0.01 / 1.6, 12);
+});
+
+it("refuses to step before the body has been measured", () => {
+  // Zero travel would otherwise divide into an infinity and send the plane
+  // to one end on the first notch.
+  SCAN_TRAVEL_M.value = 0;
+  expect(stepFraction()).toBe(0);
+  SCAN_TRAVEL_M.value = 1.75;
 });

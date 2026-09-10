@@ -470,6 +470,42 @@ export function holdScanBand(
 }
 
 /**
+ * How far the sweep travels end to end, in metres.
+ *
+ * Published because `at` is a fraction and a step is a distance. A reader
+ * asking for the next centimetre is asking about the body, not about the
+ * slider, and the two are only the same number on a body exactly a metre
+ * tall — this atlas is about 1.75, and the female one is not the same height
+ * as the male one.
+ *
+ * Written by the scene each frame, from the bounds it already computes.
+ */
+export const SCAN_TRAVEL_M = { value: 0 };
+
+/** One notch of the wheel, in centimetres of body. See `stepFraction`. */
+export const SECTION_STEP_CM = 1;
+
+/**
+ * One step, as a fraction of the sweep's travel.
+ *
+ * # Why the step is a fixed distance and not a fraction of the gesture
+ *
+ * A section is read in regular increments. That is what makes *three levels
+ * above T7* a sentence a person can say and another person can reproduce —
+ * a picture reached by dragging until it looked right is a picture nobody can
+ * return to. Proportional stepping would be smoother to use and would throw
+ * that away.
+ *
+ * Zero before the body has been measured, and the caller does nothing rather
+ * than stepping by an infinity.
+ */
+export function stepFraction(cm: number = SECTION_STEP_CM): number {
+  const travel = SCAN_TRAVEL_M.value;
+  if (!(travel > 0)) return 0;
+  return cm / 100 / travel;
+}
+
+/**
  * How far a box reaches along an arbitrary axis.
  *
  * The band used to sweep `bounds.min.y` to `bounds.max.y`, which is only the

@@ -6,6 +6,7 @@ import {
   forgetSlice,
   paintSlice,
   pastNativeSize,
+  wheelSteps,
   restoreSlice,
   SLAB_HALF_THICKNESS,
   SLICE_UP,
@@ -211,5 +212,37 @@ describe("pastNativeSize", () => {
     // First paint, before the observer has reported: a section that flashed
     // blocky and then resolved would read as a rendering fault.
     expect(pastNativeSize(4, 0, 2048)).toBe(false);
+  });
+});
+
+describe("wheelSteps", () => {
+  it("turns one notch of a mouse wheel into exactly one step", () => {
+    expect(wheelSteps(0, 100)).toEqual({ steps: 1, carry: 0 });
+    expect(wheelSteps(0, -100)).toEqual({ steps: -1, carry: 0 });
+  });
+
+  it("saves up a trackpad rather than flying through the body", () => {
+    // Three small pushes that together are one notch.
+    let carry = 0;
+    let total = 0;
+    for (const delta of [40, 40, 40]) {
+      const moved = wheelSteps(carry, delta);
+      carry = moved.carry;
+      total += moved.steps;
+    }
+    expect(total).toBe(1);
+    expect(carry).toBe(20);
+  });
+
+  it("throws the carry away when the reader changes their mind", () => {
+    // Eighty units towards the head, then a notch back: the plane must move
+    // back immediately rather than spending the leftover intent first.
+    const back = wheelSteps(80, -100);
+    expect(back.steps).toBe(-1);
+    expect(back.carry).toBe(0);
+  });
+
+  it("keeps counting in the same direction across events", () => {
+    expect(wheelSteps(80, 100)).toEqual({ steps: 1, carry: 80 });
   });
 });

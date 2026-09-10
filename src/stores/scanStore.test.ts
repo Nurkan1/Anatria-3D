@@ -17,6 +17,7 @@ beforeEach(() => {
     panel: true,
     ghost: false,
     sound: false,
+    sections: 0,
   });
   localStorage.clear();
 });
@@ -206,5 +207,41 @@ describe("the tone when the light is let go", () => {
   it("remembers being turned on", () => {
     store().setSound(true);
     expect(localStorage.getItem("anatria3d.scan.sound.v1")).toBe("on");
+  });
+});
+
+describe("stepping the light", () => {
+  it("moves by the fraction it is given", () => {
+    store().step(0.1);
+    expect(store().at).toBeCloseTo(0.6, 10);
+  });
+
+  it("pins it, because stepping means stay here", () => {
+    // Otherwise the sweep resumes on the next frame and the section is taken
+    // at a height the plane has already left.
+    expect(store().pinned).toBe(false);
+    store().step(-0.02);
+    expect(store().pinned).toBe(true);
+  });
+
+  it("stops at the crown and at the soles", () => {
+    store().step(5);
+    expect(store().at).toBe(1);
+    store().step(-5);
+    expect(store().at).toBe(0);
+  });
+
+  it("does nothing at all when there is nothing to move", () => {
+    // `stepFraction` answers zero until the body has been measured, and a
+    // no-op must not pin the light as a side effect.
+    store().step(0);
+    expect(store().at).toBe(0.5);
+    expect(store().pinned).toBe(false);
+  });
+
+  it("counts sections rather than announcing them", () => {
+    store().sectionTaken();
+    store().sectionTaken();
+    expect(store().sections).toBe(2);
   });
 });

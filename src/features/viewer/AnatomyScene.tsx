@@ -11,6 +11,7 @@ import {
   resetScanBand,
   resetScanEntry,
   scanRangeAlong,
+  SCAN_TRAVEL_M,
   setScanGhost,
   setScanReveal,
   setScanTint,
@@ -19,6 +20,7 @@ import {
 } from "./scanBand";
 import { ScanRing } from "./ScanRing";
 import { AxialProbe } from "./AxialProbe";
+import { SECTION_WANTED } from "./axialSlice";
 import { scanTint } from "./scanTints";
 import { CURRENT_LEVEL, levelAt } from "./vertebralLevel";
 import { playScanPing } from "./scanSound";
@@ -858,6 +860,8 @@ export function AnatomyScene({
   /** Bumped when an axial measurement is wanted. See `AxialProbe`. */
   const axialRequest = useRef(0);
   const [axialRuns, setAxialRuns] = useState(0);
+  /** The last request seen from outside the loop. See `SECTION_WANTED`. */
+  const lastWanted = useRef(SECTION_WANTED.value);
 
   useFrame((_, delta) => {
     // PoC measurement only: M's rolling p95 can miss a single compile stall,
@@ -871,6 +875,9 @@ export function AnatomyScene({
         [bounds.max.x, bounds.max.y, bounds.max.z],
         STANDING,
       );
+      // How tall this body is, for anything that has to convert a fraction of
+      // the slider into a distance through a person. See `stepFraction`.
+      SCAN_TRAVEL_M.value = to - from;
       // Read rather than subscribed: this runs sixty times a second and must
       // not make the scene re-render when the reader touches the slider.
       const grip = useScanStore.getState();
@@ -902,6 +909,25 @@ export function AnatomyScene({
       }
       wasHeld.current = grip.held;
       advanceScanPulse(delta);
+
+      /**
+       * The other way to ask for a section: the wheel, from the DOM.
+       *
+       * The plane has already moved by the time this is seen — the wheel wrote
+       * `at` on the store and this frame is reading it — so the only work here
+       * is to order the pass and to bring the crossing list forward. That list
+       * is on a six-times-a-second tick, and a section captioned with the
+       * level the plane has just left is worse than one captioned with
+       * nothing.
+       */
+      if (SECTION_WANTED.value !== lastWanted.current) {
+        lastWanted.current = SECTION_WANTED.value;
+        if (grip.axial) {
+          axialRequest.current += 1;
+          setAxialRuns(axialRequest.current);
+        }
+        sinceCrossing.current = CROSSING_INTERVAL_S;
+      }
 
       if (scanIsStill(grip)) holdScanBand(grip.at, STANDING, from, to);
       else advanceScanBand(delta, STANDING, from, to);

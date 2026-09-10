@@ -163,6 +163,16 @@ interface ScanStore {
   pinned: boolean;
   /** Where it is held or pinned, 0 at the feet and 1 at the head. */
   at: number;
+  /**
+   * How many cross-sections have been taken this session.
+   *
+   * Transient, never written to disk, and bumped by the probe once the picture
+   * has been painted. It is the only honest moment to tell the panel to look
+   * again: the table beside the section and the picture itself come from two
+   * different places, and refreshing on anything earlier shows one of them
+   * describing a level the other has already left.
+   */
+  sections: number;
   /** Sweep by itself while the assistant is composing an answer. */
   sweepOnAnswer: boolean;
   /**
@@ -203,6 +213,15 @@ interface ScanStore {
   toggle: () => void;
   /** Take hold of the sweep and put it at `at`. */
   hold: (at: number) => void;
+  /**
+   * Move the light by a fraction of its travel, and leave it there.
+   *
+   * The reading gesture, as opposed to the dragging one. See `stepFraction`
+   * for why the caller passes a fraction of the body rather than a distance.
+   */
+  step: (by: number) => void;
+  /** The probe has finished a section. Nothing else may call this. */
+  sectionTaken: () => void;
   /** Let the finger go. The light stays only if it is pinned. */
   release: () => void;
   togglePin: () => void;
@@ -222,6 +241,7 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
   held: false,
   pinned: false,
   at: 0.5,
+  sections: 0,
   sweepOnAnswer: storedSweepOnAnswer(),
   tint: storedTint(),
   reveal: storedReveal(),
@@ -237,6 +257,22 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
   toggle: () =>
     set((state) => ({ enabled: !state.enabled, held: false, pinned: false })),
   hold: (at) => set({ held: true, at: Math.max(0, Math.min(1, at)) }),
+  step: (by) => {
+    if (by === 0) return;
+    set((state) => ({
+      at: Math.max(0, Math.min(1, state.at + by)),
+      /**
+       * Stepping means "stay here and let me look at it".
+       *
+       * Without this the sweep resumes travelling on the next frame and takes
+       * the level away from the reader who just chose it — and the section
+       * they asked for would be of a height the plane had already left. The
+       * pin is a visible control, so the reader also sees what happened.
+       */
+      pinned: true,
+    }));
+  },
+  sectionTaken: () => set((state) => ({ sections: state.sections + 1 })),
   release: () => set({ held: false }),
   togglePin: () => set((state) => ({ pinned: !state.pinned })),
   setSweepOnAnswer: (on) => {

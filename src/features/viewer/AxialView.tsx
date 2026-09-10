@@ -4,7 +4,15 @@ import { organLabel, useSceneStore } from "@/stores/sceneStore";
 import { useScanStore } from "@/stores/scanStore";
 
 import { SLICE_SIZE } from "./AxialProbe";
-import { AXIAL_CANVAS, pastNativeSize, restoreSlice } from "./axialSlice";
+import {
+  AXIAL_CANVAS,
+  pastNativeSize,
+  restoreSlice,
+  wantSection,
+  wheelSteps,
+  WHEEL_SETTLE_MS,
+} from "./axialSlice";
+import { SECTION_STEP_CM, stepFraction } from "./scanBand";
 import { AXIAL_PROBE } from "./AxialProbe";
 import { CURRENT_CROSSING } from "./scanCrossing";
 import { CURRENT_LEVEL } from "./vertebralLevel";
@@ -103,10 +111,15 @@ export function AxialView() {
    *
    * `CURRENT_CROSSING` is a plain object the render loop writes into, and
    * nothing re-renders when it changes — deliberately, because it changes
-   * several times a second. But a section is taken at the instant the light is
-   * let go, which is exactly when this flips, so reading it here is both a
-   * cheap trigger and the correct moment.
+   * several times a second. This counter changes once per section, after the
+   * picture has been painted, which is the one instant where the table and the
+   * image are describing the same level.
+   *
+   * It used to watch the finger instead, which worked only because a section
+   * was only ever taken by letting go. The wheel takes one without the finger
+   * moving at all.
    */
+  const sections = useScanStore((s) => s.sections);
   const held = useScanStore((s) => s.held);
   const cut = useScanStore((s) => s.cut);
   const [full, setFull] = useState(false);
@@ -133,6 +146,56 @@ export function AxialView() {
    */
   const frame = useRef<HTMLDivElement>(null);
   const [frameWidth, setFrameWidth] = useState(0);
+  /**
+   * How this section was arrived at, which changes what the panel may claim.
+   *
+   * "Where you let go" is the truth about a section taken by releasing the
+   * light and a small lie about one reached with the wheel, and a caption that
+   * quietly stops being true is how a reader learns to ignore captions.
+   */
+  const [stepped, setStepped] = useState(false);
+  /** Wheel movement not yet worth a step. See `wheelSteps`. */
+  const carried = useRef(0);
+  /** The pending retake, cancelled by the next notch. See `WHEEL_SETTLE_MS`. */
+  const settle = useRef<number | null>(null);
+
+  /**
+   * Turn a wheel gesture into whole centimetres of travel.
+   *
+   * The plane moves now and the picture follows when the hand stops: moving
+   * the plane is a uniform write, and the section is fifteen milliseconds.
+   */
+  const wheelToSteps = (deltaY: number) => {
+    const per = stepFraction();
+    // Before the body has been measured there is no such thing as a
+    // centimetre, and stepping by nothing is better than stepping by NaN.
+    if (per === 0) return;
+    const { steps, carry } = wheelSteps(carried.current, deltaY);
+    carried.current = carry;
+    if (steps === 0) return;
+    // Down the page is down the body: the slider has the head at the top, and
+    // a wheel that disagreed with the control beside it would be a puzzle.
+    useScanStore.getState().step(-steps * per);
+    setStepped(true);
+    if (settle.current !== null) window.clearTimeout(settle.current);
+    settle.current = window.setTimeout(() => {
+      settle.current = null;
+      wantSection();
+    }, WHEEL_SETTLE_MS);
+  };
+
+  useEffect(
+    () => () => {
+      if (settle.current !== null) window.clearTimeout(settle.current);
+    },
+    [],
+  );
+
+  // Taking hold of the light again is the other way of choosing a level, and
+  // the panel goes back to describing that one.
+  useEffect(() => {
+    if (held) setStepped(false);
+  }, [held]);
 
   useEffect(() => {
     const element = frame.current;
@@ -156,7 +219,7 @@ export function AxialView() {
     return () => {
       AXIAL_CANVAS.value = null;
     };
-  }, [enabled, axial, full, held]);
+  }, [enabled, axial, full, sections]);
 
   useEffect(() => {
     if (!full) return;
@@ -211,11 +274,12 @@ export function AxialView() {
     " Drawn solid whatever the viewport shows. Not a radiograph.";
 
   if (full) {
-    const step = (by: number) => setZoom((z) => Math.min(6, Math.max(1, z * by)));
+    const magnify = (by: number) => setZoom((z) => Math.min(6, Math.max(1, z * by)));
     return (
       <div className="pointer-events-auto fixed inset-0 z-40 flex flex-col items-center justify-center gap-2 bg-slate-950/95 p-4">
         <p className="text-[10px] uppercase tracking-wider text-cyan-500/70">
-          Axial{level ? ` · ${level}` : ""} · where you let go
+          Axial{level ? ` · ${level}` : ""} ·{" "}
+          {stepped ? `${SECTION_STEP_CM} cm steps` : "where you let go"}
         </p>
 
         {/*
@@ -226,7 +290,19 @@ export function AxialView() {
         <div
           ref={frame}
           className="relative h-[58vh] w-[58vh] max-w-[90vw] overflow-hidden rounded bg-black"
-          onWheel={(event) => step(event.deltaY < 0 ? 1.15 : 1 / 1.15)}
+          /*
+            The wheel reads the body, and that is not a preference — it is the
+            gesture every reader of a cross-section already has. Magnifying
+            moves to the modifier and to the two buttons under the picture,
+            which is where a viewer that reads sections keeps it.
+          */
+          onWheel={(event) => {
+            if (event.ctrlKey || event.metaKey) {
+              magnify(event.deltaY < 0 ? 1.15 : 1 / 1.15);
+              return;
+            }
+            wheelToSteps(event.deltaY);
+          }}
           onPointerDown={(event) => {
             if (zoom === 1) return;
             dragging.current = { x: event.clientX - pan.x, y: event.clientY - pan.y };
@@ -265,7 +341,7 @@ export function AxialView() {
         <div className="flex items-center gap-1.5 text-xs">
           <button
             type="button"
-            onClick={() => step(1 / 1.4)}
+            onClick={() => magnify(1 / 1.4)}
             className="rounded border border-slate-700 px-2 py-0.5 text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
           >
             −
@@ -282,7 +358,7 @@ export function AxialView() {
           </button>
           <button
             type="button"
-            onClick={() => step(1.4)}
+            onClick={() => magnify(1.4)}
             className="rounded border border-slate-700 px-2 py-0.5 text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
           >
             +
@@ -299,7 +375,8 @@ export function AxialView() {
         <div className="flex max-w-3xl items-start gap-6">
           <SliceTable compact={false} />
           <p className="max-w-sm text-[11px] leading-snug text-slate-500">
-            {caption} Scroll or use −/+ to magnify; drag to move.
+            {caption} The wheel steps {SECTION_STEP_CM} cm through the body;
+            Ctrl and the wheel, or −/+, magnify; drag to move.
           </p>
         </div>
       </div>
@@ -309,12 +386,14 @@ export function AxialView() {
   return (
     <div className="pointer-events-none select-none rounded border border-cyan-900/60 bg-slate-950/85 p-1.5 shadow-lg">
       <p className="mb-1 text-[9px] uppercase tracking-wider text-cyan-500/70">
-        Axial{level ? ` · ${level}` : ""} · where you let go
+        Axial{level ? ` · ${level}` : ""} ·{" "}
+        {stepped ? `${SECTION_STEP_CM} cm steps` : "where you let go"}
       </p>
       <button
         type="button"
         onClick={() => setFull(true)}
-        title="See it full size"
+        onWheel={(event) => wheelToSteps(event.deltaY)}
+        title={`See it full size. The wheel steps ${SECTION_STEP_CM} cm through the body.`}
         className="pointer-events-auto block cursor-zoom-in rounded-sm"
       >
         <canvas
@@ -335,7 +414,9 @@ export function AxialView() {
       <p className="mt-1 max-w-36 text-[9px] leading-snug text-slate-500">
         {across > 0 ? `${across.toFixed(0)} cm · ` : ""}
         {cut ? "cut" : "slab"} · {CURRENT_CROSSING.value.total} structures
-        <span className="block text-cyan-500/70">click to enlarge</span>
+        <span className="block text-cyan-500/70">
+          wheel to step · click to enlarge
+        </span>
       </p>
     </div>
   );
