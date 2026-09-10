@@ -16,6 +16,7 @@ beforeEach(() => {
     readout: true,
     panel: true,
     ghost: false,
+    sound: false,
   });
   localStorage.clear();
 });
@@ -192,5 +193,18 @@ describe("fading what the plane has passed", () => {
   it("remembers being turned on", () => {
     store().setGhost(true);
     expect(localStorage.getItem("anatria3d.scan.ghost.v1")).toBe("on");
+  });
+});
+
+describe("the tone when the light is let go", () => {
+  it("is off until it is asked for", () => {
+    // Sound is the one thing here that can embarrass somebody: a lecture
+    // theatre, a consulting room, a shared office.
+    expect(store().sound).toBe(false);
+  });
+
+  it("remembers being turned on", () => {
+    store().setSound(true);
+    expect(localStorage.getItem("anatria3d.scan.sound.v1")).toBe("on");
   });
 });

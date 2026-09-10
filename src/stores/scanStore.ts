@@ -32,6 +32,19 @@ const REVEAL_KEY = "anatria3d.scan.reveal.v1";
 const READOUT_KEY = "anatria3d.scan.readout.v1";
 const PANEL_KEY = "anatria3d.scan.panel.v1";
 const GHOST_KEY = "anatria3d.scan.ghost.v1";
+const SOUND_KEY = "anatria3d.scan.sound.v1";
+
+/**
+ * Whether letting the light go makes a sound.
+ *
+ * Off by default, and not out of caution about performance. Sound is the one
+ * thing here that can embarrass somebody — a lecture theatre, a consulting
+ * room, a shared office — and a tool that makes a noise nobody chose is a tool
+ * they close rather than configure.
+ */
+function storedSound(): boolean {
+  return readLocal(SOUND_KEY) === "on";
+}
 
 /**
  * Whether what the plane has already crossed is played down.
@@ -154,6 +167,8 @@ interface ScanStore {
    * drag as readily as it follows the sweep.
    */
   ghost: boolean;
+  /** Play a short tone at the moment the light is let go. */
+  sound: boolean;
 
   toggle: () => void;
   /** Take hold of the sweep and put it at `at`. */
@@ -167,6 +182,7 @@ interface ScanStore {
   toggleReadout: () => void;
   togglePanel: () => void;
   setGhost: (on: boolean) => void;
+  setSound: (on: boolean) => void;
 }
 
 export const useScanStore = create<ScanStore>()((set, get) => ({
@@ -180,6 +196,7 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
   readout: storedReadout(),
   panel: storedPanel(),
   ghost: storedGhost(),
+  sound: storedSound(),
 
   // Letting go and unpinning on the way out, so switching the scanner off never
   // leaves the next session holding an invisible sweep at somebody's ankle.
@@ -217,6 +234,11 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
     if (on === get().ghost) return;
     writeLocal(GHOST_KEY, on ? "on" : "off");
     set({ ghost: on });
+  },
+  setSound: (on) => {
+    if (on === get().sound) return;
+    writeLocal(SOUND_KEY, on ? "on" : "off");
+    set({ sound: on });
   },
 }));
 

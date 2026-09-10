@@ -5,6 +5,7 @@ import { useScanStore } from "@/stores/scanStore";
 
 import { SWEEP_PROGRESS } from "./scanBand";
 import { SCAN_TINTS, scanTint } from "./scanTints";
+import { primeScanSound } from "./scanSound";
 
 /**
  * The scanner's switch, and the handle that puts its light where you want it.
@@ -54,6 +55,8 @@ export function ScanControls() {
   const setReveal = useScanStore((s) => s.setReveal);
   const ghost = useScanStore((s) => s.ghost);
   const setGhost = useScanStore((s) => s.setGhost);
+  const sound = useScanStore((s) => s.sound);
+  const setSound = useScanStore((s) => s.setSound);
   const panel = useScanStore((s) => s.panel);
   const togglePanel = useScanStore((s) => s.togglePanel);
   // There is nothing to reveal on a body that already has its colour: the
@@ -168,6 +171,11 @@ export function ScanControls() {
             defaultValue={SWEEP_PROGRESS.value}
             className="scan-slider absolute top-1/2 left-1/2 h-4 w-28 -translate-x-1/2 -translate-y-1/2 -rotate-90 cursor-ns-resize"
             onPointerDown={(event) => {
+              // Here, and not where the tone is played: audio does not start
+              // without a gesture, and the pulse fires a frame after the
+              // pointer goes up — immediate to a reader, too late for the
+              // browser. Pointer *down* is unambiguous.
+              if (sound) primeScanSound();
               hold(Number(event.currentTarget.value));
               // Keep receiving the drag even when the pointer leaves the
               // handle, which on a 4px-wide control is most of the time.
@@ -264,6 +272,21 @@ export function ScanControls() {
             version would mean putting the whole body in the sorted pass. This
             reads the same at a glance and costs a mix.
           */}
+          <label className="mt-1 flex cursor-pointer items-start gap-1.5 text-[9px] leading-snug text-slate-400">
+            <input
+              type="checkbox"
+              checked={sound}
+              onChange={(event) => {
+                // Primed on the tick itself, which is also a gesture, so the
+                // very next release makes a sound rather than the one after.
+                if (event.target.checked) primeScanSound();
+                setSound(event.target.checked);
+              }}
+              className="mt-[1px] accent-cyan-500"
+            />
+            Sound when I let go
+          </label>
+
           <label className="mt-1 flex cursor-pointer items-start gap-1.5 text-[9px] leading-snug text-slate-400">
             <input
               type="checkbox"

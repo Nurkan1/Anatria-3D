@@ -19,6 +19,7 @@ import {
 } from "./scanBand";
 import { ScanRing } from "./ScanRing";
 import { scanTint } from "./scanTints";
+import { playScanPing } from "./scanSound";
 import {
   CROSSING_INTERVAL_S,
   CROSSING_LIMIT,
@@ -879,7 +880,13 @@ export function AnatomyScene({
        * it is a rendering event — the store holds what is true, not what just
        * happened.
        */
-      if (wasHeld.current && !grip.held) firePulse();
+      if (wasHeld.current && !grip.held) {
+        firePulse();
+        // Read from the store rather than subscribed: this runs sixty times a
+        // second, and a preference nobody changes mid-frame is not worth a
+        // re-render of 3,478 meshes to observe.
+        if (grip.sound) playScanPing();
+      }
       wasHeld.current = grip.held;
       advanceScanPulse(delta);
 
