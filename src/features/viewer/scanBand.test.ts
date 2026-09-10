@@ -9,8 +9,11 @@ import {
   resetScanEntry,
   SCAN_ENTRY,
   SCAN_ENTRY_S,
+  SCAN_DIRECTION,
+  SCAN_GHOST,
   SCAN_REVEAL,
   SCAN_TINT,
+  setScanGhost,
   setScanReveal,
   setScanTint,
   scanBandMaterialProps,
@@ -469,4 +472,72 @@ it("reads a structure's height from where it is, not from where it is drawn", ()
   // Which is why the span must come from the scene's own measurement: the two
   // answers are a whole body apart, and only one of them is where the light is.
   expect(Math.abs(inTheHead.from - asDrawn.from)).toBeGreaterThan(1.5);
+});
+
+// ---------------------------------------------------------------------------
+// What has already been read
+// ---------------------------------------------------------------------------
+
+it("takes the direction from the movement, not from the clock", () => {
+  // The clock version assumes `from` lies below `to`, which is true for one
+  // axis and one body position, and it says nothing at all while a reader is
+  // dragging the light — the moment the direction is most obviously real.
+  resetScanBand();
+  advanceScanEntry(SCAN_ENTRY_S);
+
+  advanceScanBand(0, STANDING, -1, 1);
+  advanceScanBand(SWEEP_CYCLE_S / 8, STANDING, -1, 1);
+  expect(SCAN_DIRECTION.value).toBe(-1); // opens at the crown, travels down
+
+  // In steps the size of a frame, deliberately. The direction is sampled from
+  // one position to the next, so a single huge step reports the chord rather
+  // than the travel — jump half a cycle and it can say "down" while the sweep
+  // is on its way back up. At sixteen milliseconds a frame the two agree.
+  for (let i = 0; i < 40; i++) advanceScanBand(0.25, STANDING, -1, 1);
+  expect(SCAN_DIRECTION.value).toBe(1); // past the feet and back up
+});
+
+it("follows a drag as readily as it follows the sweep", () => {
+  holdScanBand(0.2, STANDING, -1, 1);
+  holdScanBand(0.8, STANDING, -1, 1);
+  expect(SCAN_DIRECTION.value).toBe(1);
+  holdScanBand(0.1, STANDING, -1, 1);
+  expect(SCAN_DIRECTION.value).toBe(-1);
+});
+
+it("holds its last direction when nothing moves", () => {
+  // A light standing still still arrived from somewhere, and the body behind
+  // it must not un-fade because the reader stopped.
+  holdScanBand(0.8, STANDING, -1, 1);
+  const settled = SCAN_DIRECTION.value;
+  holdScanBand(0.8, STANDING, -1, 1);
+  expect(SCAN_DIRECTION.value).toBe(settled);
+});
+
+it("plays down what is behind the plane, and lets the reveal win", () => {
+  const compiled = shader();
+  scanBandOnBeforeCompile(compiled);
+  expect(compiled.fragmentShader).toContain("uniform float uScanGhost;");
+  expect(compiled.fragmentShader).toContain("(uScanAt - vScanAlong) * uScanDirection");
+
+  // Order is the whole of it: a structure the plane is inside is the one being
+  // read right now, and dimming it because most of it lies behind the plane
+  // would play down the only thing worth looking at.
+  const ghost = compiled.fragmentShader.indexOf("vec3(grey) * 0.32");
+  const reveal = compiled.fragmentShader.indexOf("revealTo, wake * uScanReveal");
+  expect(ghost).toBeGreaterThan(0);
+  expect(reveal).toBeGreaterThan(ghost);
+});
+
+it("switches with one float write into the shared object", () => {
+  const first = new MeshStandardMaterial(scanBandMaterialProps(true));
+  const a = shader();
+  first.onBeforeCompile(a, {} as WebGLRenderer);
+  expect(a.uniforms.uScanGhost).toBe(SCAN_GHOST);
+  expect(a.uniforms.uScanDirection).toBe(SCAN_DIRECTION);
+
+  setScanGhost(true);
+  expect(SCAN_GHOST.value).toBe(1);
+  setScanGhost(false);
+  expect(SCAN_GHOST.value).toBe(0);
 });

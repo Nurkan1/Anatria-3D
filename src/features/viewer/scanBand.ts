@@ -101,6 +101,48 @@ const WAKE_OF_BAND = 0.29;
  */
 export const SCAN_REVEAL = { value: 0 };
 
+/**
+ * Which way the plane is travelling: +1 or -1 along the sweep axis.
+ *
+ * Derived from the movement itself rather than from the clock. The obvious
+ * version reads the half of the cycle `elapsed` is in — and it is wrong twice
+ * over: it assumes `from` is below `to`, which is only true for one axis and
+ * one body position, and it says nothing at all while a reader is dragging the
+ * light by hand, which is exactly when the direction is most obviously real.
+ * The sign of what actually changed is true in every one of those cases.
+ *
+ * It holds its last value when nothing moves, because a light standing still
+ * still arrived from somewhere.
+ */
+export const SCAN_DIRECTION = { value: -1 };
+
+/**
+ * How strongly the already-read part of the body is played down.
+ *
+ * # Why tonal and not transparent
+ *
+ * The obvious design is that what has been crossed turns see-through. It is
+ * not available from here: **transparency is not a fragment's decision.** It
+ * depends on `material.transparent`, a CPU-side flag that decides which pass a
+ * mesh is drawn in and whether blending happens at all, so an alpha written in
+ * an opaque material's shader is simply ignored. Making it work would mean
+ * putting all 3,478 structures in the sorted pass — which is `Glass body`, and
+ * carries its cost.
+ *
+ * Dimming and desaturating reads the same way at a glance and costs a mix.
+ */
+export const SCAN_GHOST = { value: 0 };
+
+export function setScanGhost(on: boolean): void {
+  SCAN_GHOST.value = on ? 1 : 0;
+}
+
+/** Remember which way the light went, from the only thing that knows. */
+function rememberDirection(next: number): void {
+  const moved = next - SHARED_SCAN.value;
+  if (moved !== 0) SCAN_DIRECTION.value = Math.sign(moved);
+}
+
 export function setScanReveal(on: boolean): void {
   SCAN_REVEAL.value = on ? 1 : 0;
 }
@@ -179,6 +221,8 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
   shader.uniforms.uScanEntry = SCAN_ENTRY;
   shader.uniforms.uScanTint = SCAN_TINT;
   shader.uniforms.uScanReveal = SCAN_REVEAL;
+  shader.uniforms.uScanGhost = SCAN_GHOST;
+  shader.uniforms.uScanDirection = SCAN_DIRECTION;
 
   // This structure's own reach along the axis, and its own undrained colour,
   // both read off the material through `this`. Written once at compile and
@@ -212,6 +256,7 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
   shader.fragmentShader =
     "uniform float uScanAt;\nuniform float uScanEntry;\nuniform vec3 uScanTint;\n" +
     "uniform float uScanReveal;\nuniform vec3 uRevealColour;\n" +
+    "uniform float uScanGhost;\nuniform float uScanDirection;\n" +
     "uniform vec2 uOrganSpan;\nvarying float vScanAlong;\n" +
     shader.fragmentShader.replace(
       fragmentChunk,
@@ -229,6 +274,21 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
     // like tissue rather than pasted on flat — which is the whole reason the
     // effect costs a mix and not a shader of its own. A material with no
     // colour to reveal mixes against its own diffuse and changes nothing.
+    // What the plane has already gone past, played down.
+    //
+    // Dimmed and desaturated rather than made see-through — see the note on
+    // SCAN_GHOST for why translucency is not a fragment's to give. The
+    // feather is wider than the band's own: this is a state the body is left
+    // in, not an edge, and a hard line across a thigh reads as a bug.
+    float behind = (uScanAt - vScanAlong) * uScanDirection;
+    float ghost = smoothstep(0.0, 0.06, behind) * uScanGhost * uScanEntry;
+    float grey = dot(diffuseColor.rgb, vec3(0.2126, 0.7152, 0.0722));
+    diffuseColor.rgb = mix(diffuseColor.rgb, vec3(grey) * 0.32, ghost);
+
+    // The reveal lands *after* the ghost and therefore wins where both apply.
+    // A structure the plane is inside is the one being read right now; leaving
+    // it dimmed because most of it lies behind the plane would play down the
+    // only thing on screen worth looking at.
     vec3 revealTo = uRevealColour.r < 0.0 ? diffuseColor.rgb : uRevealColour;
     diffuseColor.rgb = mix(diffuseColor.rgb, revealTo, wake * uScanReveal * uScanEntry);
     // Everything this mode adds is scaled by the arrival, so the light comes
@@ -340,7 +400,9 @@ export function holdScanBand(
 
   elapsed = clamped * (SWEEP_CYCLE_S / 2);
   SWEEP_PROGRESS.value = clamped;
-  SHARED_SCAN.value = from + (to - from) * clamped;
+  const held = from + (to - from) * clamped;
+  rememberDirection(held);
+  SHARED_SCAN.value = held;
 }
 
 /**
@@ -393,7 +455,9 @@ export function advanceScanBand(
   const half = SWEEP_CYCLE_S / 2;
   const progress = elapsed <= half ? elapsed / half : (SWEEP_CYCLE_S - elapsed) / half;
   SWEEP_PROGRESS.value = progress;
-  SHARED_SCAN.value = from + (to - from) * progress;
+  const next = from + (to - from) * progress;
+  rememberDirection(next);
+  SHARED_SCAN.value = next;
 }
 
 /** A zero-length axis would put the whole body in the band; refuse it. */

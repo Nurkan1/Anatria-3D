@@ -52,6 +52,8 @@ export function ScanControls() {
   const setTint = useScanStore((s) => s.setTint);
   const reveal = useScanStore((s) => s.reveal);
   const setReveal = useScanStore((s) => s.setReveal);
+  const ghost = useScanStore((s) => s.ghost);
+  const setGhost = useScanStore((s) => s.setGhost);
   const panel = useScanStore((s) => s.panel);
   const togglePanel = useScanStore((s) => s.togglePanel);
   // There is nothing to reveal on a body that already has its colour: the
@@ -252,6 +254,24 @@ export function ScanControls() {
               className="mt-[1px] accent-cyan-500"
             />
             Reveal colour, not light
+          </label>
+
+          {/*
+            What has been read, played down.
+
+            Dimmed and desaturated rather than made see-through: transparency
+            is decided by the material, not by the fragment, so the see-through
+            version would mean putting the whole body in the sorted pass. This
+            reads the same at a glance and costs a mix.
+          */}
+          <label className="mt-1 flex cursor-pointer items-start gap-1.5 text-[9px] leading-snug text-slate-400">
+            <input
+              type="checkbox"
+              checked={ghost}
+              onChange={(event) => setGhost(event.target.checked)}
+              className="mt-[1px] accent-cyan-500"
+            />
+            Fade what it has passed
           </label>
 
           <button

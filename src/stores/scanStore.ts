@@ -31,6 +31,18 @@ const TINT_KEY = "anatria3d.scan.tint.v1";
 const REVEAL_KEY = "anatria3d.scan.reveal.v1";
 const READOUT_KEY = "anatria3d.scan.readout.v1";
 const PANEL_KEY = "anatria3d.scan.panel.v1";
+const GHOST_KEY = "anatria3d.scan.ghost.v1";
+
+/**
+ * Whether what the plane has already crossed is played down.
+ *
+ * Off by default. It changes how the whole body looks, and a mode that
+ * rearranges the picture the first time somebody presses the switch is a mode
+ * they turn off before they understand it.
+ */
+function storedGhost(): boolean {
+  return readLocal(GHOST_KEY) === "on";
+}
 
 /**
  * Whether the scanner's own controls are unfolded.
@@ -135,6 +147,13 @@ interface ScanStore {
   readout: boolean;
   /** Show the scanner's own controls, rather than the pill they fold into. */
   panel: boolean;
+  /**
+   * Play down what the plane has already gone past.
+   *
+   * The direction is read from the light's own movement, so this follows a
+   * drag as readily as it follows the sweep.
+   */
+  ghost: boolean;
 
   toggle: () => void;
   /** Take hold of the sweep and put it at `at`. */
@@ -147,6 +166,7 @@ interface ScanStore {
   setReveal: (on: boolean) => void;
   toggleReadout: () => void;
   togglePanel: () => void;
+  setGhost: (on: boolean) => void;
 }
 
 export const useScanStore = create<ScanStore>()((set, get) => ({
@@ -159,6 +179,7 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
   reveal: storedReveal(),
   readout: storedReadout(),
   panel: storedPanel(),
+  ghost: storedGhost(),
 
   // Letting go and unpinning on the way out, so switching the scanner off never
   // leaves the next session holding an invisible sweep at somebody's ankle.
@@ -191,6 +212,11 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
     const panel = !get().panel;
     writeLocal(PANEL_KEY, panel ? "on" : "off");
     set({ panel });
+  },
+  setGhost: (on) => {
+    if (on === get().ghost) return;
+    writeLocal(GHOST_KEY, on ? "on" : "off");
+    set({ ghost: on });
   },
 }));
 

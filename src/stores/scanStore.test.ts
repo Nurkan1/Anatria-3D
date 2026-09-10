@@ -15,6 +15,7 @@ beforeEach(() => {
     reveal: false,
     readout: true,
     panel: true,
+    ghost: false,
   });
   localStorage.clear();
 });
@@ -177,5 +178,19 @@ describe("the scanner's own controls", () => {
     useScanStore.setState({ enabled: true });
     store().togglePanel();
     expect(store().enabled).toBe(true);
+  });
+});
+
+describe("fading what the plane has passed", () => {
+  it("is off until it is asked for", () => {
+    // It changes how the whole body looks; a mode that rearranges the picture
+    // the first time somebody presses the switch is one they turn off before
+    // they understand it.
+    expect(store().ghost).toBe(false);
+  });
+
+  it("remembers being turned on", () => {
+    store().setGhost(true);
+    expect(localStorage.getItem("anatria3d.scan.ghost.v1")).toBe("on");
   });
 });
