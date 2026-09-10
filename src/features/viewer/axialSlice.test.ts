@@ -2,7 +2,9 @@ import { describe, expect, it } from "vitest";
 import * as THREE from "three";
 
 import {
+  forgetSlice,
   paintSlice,
+  restoreSlice,
   SLAB_HALF_THICKNESS,
   SLICE_UP,
   sliceFraming,
@@ -125,5 +127,47 @@ describe("painting what came back from the GPU", () => {
   it("does nothing rather than throwing where there is no 2D context", () => {
     const canvas = { getContext: () => null } as unknown as HTMLCanvasElement;
     expect(() => paintSlice(canvas, twoByTwo(), 2)).not.toThrow();
+  });
+});
+
+describe("keeping the last section", () => {
+  function canvasStub() {
+    let written: ImageData | null = null;
+    const context = {
+      createImageData: (w: number, h: number) => ({
+        data: new Uint8ClampedArray(w * h * 4),
+        width: w,
+        height: h,
+      }),
+      putImageData: (image: ImageData) => {
+        written = image;
+      },
+    };
+    return {
+      canvas: { getContext: () => context } as unknown as HTMLCanvasElement,
+      read: () => written,
+    };
+  }
+
+  it("puts the last one back on a canvas that has just appeared", () => {
+    // Enlarging the panel mounts a different element. A section that blanked
+    // at the moment somebody asked to see it properly would be answering the
+    // wrong question.
+    forgetSlice();
+    const first = canvasStub();
+    const pixels = new Uint8Array(2 * 2 * 4).fill(200);
+    paintSlice(first.canvas, pixels, 2);
+
+    const enlarged = canvasStub();
+    restoreSlice(enlarged.canvas);
+    expect(enlarged.read()).not.toBeNull();
+    expect(enlarged.read()).toBe(first.read());
+  });
+
+  it("does nothing when there is nothing to remember", () => {
+    forgetSlice();
+    const fresh = canvasStub();
+    restoreSlice(fresh.canvas);
+    expect(fresh.read()).toBeNull();
   });
 });

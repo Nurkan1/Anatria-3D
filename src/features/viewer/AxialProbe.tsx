@@ -55,8 +55,15 @@ export const AXIAL_PROBE = {
   drawn: -1,
 };
 
-/** Square, and small: a slice read at a glance does not need more. */
-export const SLICE_SIZE = 320;
+/**
+ * Square, and larger than the panel shows.
+ *
+ * Measured: the cost of this pass is draw calls, not pixels — 363 calls at the
+ * chest either way — so a bigger target is very nearly free, while a small one
+ * cannot be enlarged later without inventing detail. It is rendered at 512 and
+ * shown at 144 until somebody asks to see it properly.
+ */
+export const SLICE_SIZE = 512;
 const SIZE = SLICE_SIZE;
 
 export function AxialProbe({
@@ -91,6 +98,10 @@ export function AxialProbe({
   const pixels = useMemo(() => new Uint8Array(SIZE * SIZE * 4), []);
   /** Reused, because allocating an array of meshes per measurement is silly. */
   const hiddenMeshes = useRef<THREE.Mesh[]>([]);
+  /** What each drawn material looked like before the section borrowed it. */
+  const forcedSolid = useRef<
+    { material: THREE.Material; transparent: boolean; opacity: number; depthWrite: boolean }[]
+  >([]);
   const reach = useMemo(() => new THREE.Vector3(), []);
 
   useFrame(() => {
@@ -137,7 +148,9 @@ export function AxialProbe({
      * it, because the very next frame is the reader's.
      */
     const hidden = hiddenMeshes.current;
+    const solid = forcedSolid.current;
     hidden.length = 0;
+    solid.length = 0;
     // Counted rather than assumed: the number of meshes on screen depends on
     // which systems are switched on and which body is loaded, so a constant
     // here would be a figure that reads as measured and is not.
@@ -157,6 +170,34 @@ export function AxialProbe({
       if (Math.abs(reach.y - at) > radius + SLAB_HALF_THICKNESS) {
         mesh.visible = false;
         hidden.push(mesh);
+        return;
+      }
+
+      /**
+       * What survives is drawn solid, whatever the viewport is doing.
+       *
+       * A section is a different instrument from the view it was taken in. On
+       * a glass body every surface is a low-opacity blend that does not write
+       * depth, and the slab comes back as a wash of overlapping ghosts —
+       * legible as a mood, useless as a section. Forced opaque, the same
+       * structures come back as clean outlines.
+       *
+       * `transparent` decides which list an object is drawn in and is read
+       * when the list is built, so changing it needs no recompile — the flag
+       * is put back before the next frame, which belongs to the reader.
+       */
+      const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+      for (const material of materials) {
+        if (!material) continue;
+        solid.push({
+          material,
+          transparent: material.transparent,
+          opacity: material.opacity,
+          depthWrite: material.depthWrite,
+        });
+        material.transparent = false;
+        material.opacity = 1;
+        material.depthWrite = true;
       }
     });
 
@@ -186,6 +227,12 @@ export function AxialProbe({
     gl.clippingPlanes = previousClipping;
     if (ring) ring.visible = ringWasVisible;
     for (const mesh of hidden) mesh.visible = true;
+    for (const was of solid) {
+      was.material.transparent = was.transparent;
+      was.material.opacity = was.opacity;
+      was.material.depthWrite = was.depthWrite;
+    }
+    solid.length = 0;
     AXIAL_PROBE.drawn = considered - hidden.length;
     hidden.length = 0;
     AXIAL_PROBE.runs += 1;

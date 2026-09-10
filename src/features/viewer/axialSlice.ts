@@ -116,4 +116,28 @@ export function paintSlice(
     image.data.set(pixels.subarray(from, from + row), y * row);
   }
   context.putImageData(image, 0, 0);
+  last = image;
+}
+
+/**
+ * The last section drawn, kept so a new canvas can show it immediately.
+ *
+ * Enlarging the panel mounts a different element, and a slice that went blank
+ * the moment somebody asked to see it properly would be the wrong answer to
+ * the only question they asked. The image is kept rather than the pixels
+ * because it is already flipped and already allocated — the producer's own
+ * buffer is reused every run and would be overwritten underneath us.
+ */
+let last: ImageData | null = null;
+
+/** Put the last section back on a canvas that has just appeared. */
+export function restoreSlice(canvas: HTMLCanvasElement): void {
+  if (!last) return;
+  const context = canvas.getContext("2d");
+  context?.putImageData(last, 0, 0);
+}
+
+/** For tests, and for a mode being switched off with nothing to remember. */
+export function forgetSlice(): void {
+  last = null;
 }
