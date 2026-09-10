@@ -123,6 +123,50 @@ export const SLICE_UP = new THREE.Vector3(0, 0, -1);
 export const SLICE_FORWARD = new THREE.Vector3(0, -1, 0);
 
 /**
+ * How many pixels a section is read at, and what the second setting buys.
+ *
+ * # Why this is a switch and not a number that goes up
+ *
+ * The render side does not care: the cost of the pass is draw calls, and it is
+ * the same few hundred at any size. **The readback scales with pixels**, and so
+ * does the memory — at four thousand and ninety-six the picture is sixty-seven
+ * megabytes, and there are four of it alive at once: the render target, the
+ * buffer it is read into, the canvas it is painted on, and the copy kept so a
+ * remounted canvas is not blank. A quarter of a gigabyte is a fair price on a
+ * desktop and an insult on the 2010 machine this also runs on.
+ *
+ * So it is asked for. The default reads at a scale finer than a real CT and
+ * looks smooth until the enlarged view passes native size; the high setting
+ * doubles that, and doubles it in the one direction a reader notices, which is
+ * how far they can magnify before the picture admits it has run out.
+ */
+export const SLICE_PIXELS_NORMAL = 2048;
+export const SLICE_PIXELS_HIGH = 4096;
+
+/**
+ * The size to read at, clamped to what the card will actually give.
+ *
+ * `maxTexture` is not a formality. WebGL2 only guarantees two thousand and
+ * forty-eight, and asking for a render target the driver cannot allocate does
+ * not fail politely — it gives an incomplete framebuffer and a black picture,
+ * which reads as a broken feature rather than as an unavailable one.
+ */
+export function sliceSize(high: boolean, maxTexture: number): number {
+  const wanted = high ? SLICE_PIXELS_HIGH : SLICE_PIXELS_NORMAL;
+  if (!(maxTexture > 0)) return SLICE_PIXELS_NORMAL;
+  return Math.min(wanted, maxTexture);
+}
+
+/**
+ * The size the last section was actually read at.
+ *
+ * Published because the panel has to know: it decides the point past which
+ * magnifying is inventing detail, and the card may have refused the size that
+ * was asked for.
+ */
+export const SLICE_PIXELS = { value: SLICE_PIXELS_NORMAL };
+
+/**
  * How big the enlarged section is allowed to be, as CSS.
  *
  * Square, and limited by whichever edge runs out first: the height, or the
@@ -312,6 +356,11 @@ export function paintSlice(
   pixels: Uint8Array,
   size: number,
 ): void {
+  // The canvas is resized to the picture rather than the picture to the canvas.
+  // The size is a setting now, and a 2048 image put into a 4096 canvas would
+  // sit in one corner of a mostly empty square. Assigning clears it, which is
+  // harmless here because the next thing that happens is a full repaint.
+  fit(canvas, size);
   const context = canvas.getContext("2d");
   if (!context) return;
   const image = context.createImageData(size, size);
@@ -358,9 +407,16 @@ function markSlice(context: CanvasRenderingContext2D, size: number): void {
  */
 let last: ImageData | null = null;
 
+/** Match a canvas to a picture, without clearing it needlessly. */
+function fit(canvas: HTMLCanvasElement, size: number): void {
+  if (canvas.width !== size) canvas.width = size;
+  if (canvas.height !== size) canvas.height = size;
+}
+
 /** Put the last section back on a canvas that has just appeared. */
 export function restoreSlice(canvas: HTMLCanvasElement): void {
   if (!last) return;
+  fit(canvas, last.width);
   const context = canvas.getContext("2d");
   context?.putImageData(last, 0, 0);
 }

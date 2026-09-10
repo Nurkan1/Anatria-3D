@@ -36,6 +36,20 @@ const SOUND_KEY = "anatria3d.scan.sound.v1";
 const AXIAL_KEY = "anatria3d.scan.axial.v1";
 const CUT_KEY = "anatria3d.scan.cut.v1";
 const TORCH_KEY = "anatria3d.scan.torch.v1";
+const DETAIL_KEY = "anatria3d.scan.detail.v1";
+
+/**
+ * Whether sections are read at the larger size.
+ *
+ * Off by default, and this is the one setting here aimed squarely at a machine
+ * rather than at a preference: it quadruples the readback and holds about a
+ * quarter of a gigabyte while it is on. What it buys is how far the enlarged
+ * view can be magnified before it runs out of picture, which is the only place
+ * a reader ever notices resolution.
+ */
+function storedDetail(): boolean {
+  return readLocal(DETAIL_KEY) === "on";
+}
 
 /**
  * Whether the pointer aims the light on the section.
@@ -225,6 +239,8 @@ interface ScanStore {
   cut: boolean;
   /** Let the pointer aim the light while it is over the section. */
   torch: boolean;
+  /** Read sections at the larger size. Costs memory and readback time. */
+  detail: boolean;
 
   toggle: () => void;
   /** Take hold of the sweep and put it at `at`. */
@@ -251,6 +267,7 @@ interface ScanStore {
   setAxial: (on: boolean) => void;
   setCut: (on: boolean) => void;
   setTorch: (on: boolean) => void;
+  setDetail: (on: boolean) => void;
 }
 
 export const useScanStore = create<ScanStore>()((set, get) => ({
@@ -269,6 +286,7 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
   axial: storedAxial(),
   cut: storedCut(),
   torch: storedTorch(),
+  detail: storedDetail(),
 
   // Letting go and unpinning on the way out, so switching the scanner off never
   // leaves the next session holding an invisible sweep at somebody's ankle.
@@ -342,6 +360,11 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
     if (on === get().torch) return;
     writeLocal(TORCH_KEY, on ? "on" : "off");
     set({ torch: on });
+  },
+  setDetail: (on) => {
+    if (on === get().detail) return;
+    writeLocal(DETAIL_KEY, on ? "on" : "off");
+    set({ detail: on });
   },
 }));
 

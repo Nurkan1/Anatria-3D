@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { fps, heapMb, noteFrame, sample } from "./renderSample";
 import { viewportKey } from "./viewportKeys";
 import { AXIAL_PROBE } from "./AxialProbe";
+import { SLICE_PIXELS } from "./axialSlice";
 import { readLocal, writeLocal } from "@/lib/localStore";
 
 /**
@@ -137,6 +138,9 @@ const ROWS: Row[] = [
     read: () => (AXIAL_PROBE.drawn < 0 ? "—" : AXIAL_PROBE.drawn.toLocaleString()),
   },
   { label: "axial runs", read: () => String(AXIAL_PROBE.runs) },
+  // What it actually read at, which is not always what was asked for: the card
+  // has the last word on the size of a render target.
+  { label: "axial pixels", read: () => `${SLICE_PIXELS.value}²` },
 ];
 
 /**

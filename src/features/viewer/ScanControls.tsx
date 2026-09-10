@@ -63,6 +63,8 @@ export function ScanControls() {
   const setCut = useScanStore((s) => s.setCut);
   const torch = useScanStore((s) => s.torch);
   const setTorch = useScanStore((s) => s.setTorch);
+  const detail = useScanStore((s) => s.detail);
+  const setDetail = useScanStore((s) => s.setDetail);
   const panel = useScanStore((s) => s.panel);
   const togglePanel = useScanStore((s) => s.togglePanel);
   // There is nothing to reveal on a body that already has its colour: the
@@ -338,6 +340,24 @@ export function ScanControls() {
                 className="mt-[1px] accent-cyan-500"
               />
               Aim the light with the pointer
+            </label>
+          )}
+
+          {/*
+            Aimed at a machine rather than at a taste, and worded that way. It
+            is the reader's own hardware being spent, so the sentence says what
+            it buys and roughly what it costs instead of calling itself quality.
+          */}
+          {axial && (
+            <label className="mt-1 flex cursor-pointer items-start gap-1.5 text-[9px] leading-snug text-slate-400">
+              <input
+                type="checkbox"
+                checked={detail}
+                onChange={(event) => setDetail(event.target.checked)}
+                className="mt-[1px] accent-cyan-500"
+              />
+              Read sections at four times the pixels — magnify twice as far,
+              on a machine with the memory for it
             </label>
           )}
 

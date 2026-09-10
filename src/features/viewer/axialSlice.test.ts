@@ -6,6 +6,9 @@ import {
   forgetSlice,
   paintSlice,
   pastNativeSize,
+  SLICE_PIXELS_HIGH,
+  SLICE_PIXELS_NORMAL,
+  sliceSize,
   torchDirection,
   wheelSteps,
   restoreSlice,
@@ -277,5 +280,23 @@ describe("torchDirection", () => {
     const corner = torchDirection(3, 3);
     expect(corner.y).toBeGreaterThan(0.1);
     expect(corner.length()).toBeCloseTo(1, 12);
+  });
+});
+
+describe("sliceSize", () => {
+  it("gives the reader the size they asked for", () => {
+    expect(sliceSize(false, 16384)).toBe(SLICE_PIXELS_NORMAL);
+    expect(sliceSize(true, 16384)).toBe(SLICE_PIXELS_HIGH);
+  });
+
+  it("never asks a card for more than it has", () => {
+    // WebGL2 only guarantees 2048. An over-sized target does not fail politely
+    // — the framebuffer comes back incomplete and the picture comes back black.
+    expect(sliceSize(true, 2048)).toBe(2048);
+    expect(sliceSize(true, 4096)).toBe(SLICE_PIXELS_HIGH);
+  });
+
+  it("falls back rather than trusting a renderer that reports nothing", () => {
+    expect(sliceSize(true, 0)).toBe(SLICE_PIXELS_NORMAL);
   });
 });

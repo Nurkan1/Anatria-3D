@@ -862,6 +862,9 @@ export function AnatomyScene({
   useEffect(() => setScanReveal(reveal), [reveal]);
 
   const ghost = useScanStore((s) => s.ghost);
+  // Subscribed rather than read in the loop: changing it rebuilds the render
+  // target, which is a React concern and happens once when a person clicks.
+  const axialDetail = useScanStore((s) => s.detail);
   useEffect(() => setScanGhost(ghost), [ghost]);
 
   /** Whether the reader had hold of the light on the previous frame. */
@@ -1099,7 +1102,9 @@ export function AnatomyScene({
       {/* Mounted with the sweep and gone with it. Nothing of this mode outlives
           the toggle — see the unmount discipline in `StudyViews`. */}
       {scanBandEnabled && <ScanRing bounds={bounds} instrument={manualScan} />}
-      {scanBandEnabled && <AxialProbe bounds={bounds} request={axialRuns} />}
+      {scanBandEnabled && (
+        <AxialProbe bounds={bounds} request={axialRuns} high={axialDetail} />
+      )}
 
       {pathway && (
         <PathwayFlow

@@ -13,7 +13,9 @@ import {
   slabPlanes,
   SLAB_HALF_THICKNESS,
   SLICE_FORWARD,
+  SLICE_PIXELS,
   SLICE_UP,
+  sliceSize,
   TORCH,
 } from "./axialSlice";
 import { aimStudioAt, rakingKey } from "./lighting";
@@ -73,20 +75,17 @@ export const AXIAL_PROBE = {
 /**
  * Square, and much larger than the panel shows.
  *
- * # Why two thousand and forty-eight
+ * # Why the picture is read far bigger than it is displayed
  *
  * The frame follows the slab, and at the chest the slab reaches the arms: a
- * picture about 116 cm across. At a thousand and twenty-four that is 1.1 mm
- * per pixel — roughly a real CT — and the enlarged view went visibly blocky
- * as soon as it passed native size, which on a laptop is a little over twice.
- * Doubling puts it at 0.57 mm per pixel, finer than anything visible in the
- * picture, and that is the point: the panel almost always draws the section
- * *smaller* than the source, so the browser's downscale acts as supersampling
- * and the outlines arrive smooth with no multisample buffer at all.
+ * picture about 108 cm across. At the default two thousand and forty-eight that
+ * is 0.53 mm per pixel, finer than a real CT, and the panel almost always draws
+ * it *smaller* than that — so the browser's downscale acts as supersampling and
+ * the outlines arrive smooth with no multisample buffer at all.
  *
- * Multisampling was the other candidate and was rejected on the weakest
- * machine this has to run on. A four-sample colour and depth pair at this size
- * is something like a hundred and thirty megabytes of renderbuffer, and the
+ * Multisampling was the other candidate and was rejected on the weakest machine
+ * this has to run on: a four-sample colour and depth pair at this size is
+ * something like a hundred and thirty megabytes of renderbuffer, and the
  * slowest machine here is a 2010 Pentium with integrated graphics. Resolution
  * costs an ordinary texture and needs no extension.
  *
@@ -94,17 +93,17 @@ export const AXIAL_PROBE = {
  *
  * The render side barely notices: the cost of this pass is draw calls rather
  * than pixels, and it is the same few hundred calls whatever the size. **The
- * readback scales with pixels, so this quadruples it.** That is a one-off at
- * the moment the light is let go rather than a per-frame cost, and the panel
- * behind M reports the render and the readback separately — the trade stays
- * visible instead of assumed.
+ * readback scales with pixels**, which is why the larger setting is asked for
+ * rather than assumed — see `sliceSize`. Either way it is a one-off at the
+ * moment the light is let go, and the panel behind M reports the render and the
+ * readback separately, so the trade stays visible instead of assumed.
  */
-export const SLICE_SIZE = 2048;
-const SIZE = SLICE_SIZE;
+
 
 export function AxialProbe({
   bounds,
   request,
+  high,
 }: {
   bounds: THREE.Box3 | null;
   /**
@@ -115,23 +114,39 @@ export function AxialProbe({
    * shader cache behind it, and the difference between them is worth seeing.
    */
   request: number;
+  /** Read at the larger size. The reader's choice; see `sliceSize`. */
+  high: boolean;
 }) {
   const gl = useThree((state) => state.gl);
   const scene = useThree((state) => state.scene);
   const done = useRef(0);
 
+  /**
+   * What the card will actually give, not what was asked for.
+   *
+   * An over-sized render target does not fail politely: the framebuffer comes
+   * back incomplete and the picture comes back black, which a reader would
+   * quite reasonably report as a broken feature rather than an unavailable one.
+   */
+  const size = sliceSize(high, gl.capabilities.maxTextureSize);
+  useEffect(() => {
+    SLICE_PIXELS.value = size;
+  }, [size]);
+
   const target = useMemo(
     () =>
-      new THREE.WebGLRenderTarget(SIZE, SIZE, {
+      new THREE.WebGLRenderTarget(size, size, {
         depthBuffer: true,
         stencilBuffer: false,
       }),
-    [],
+    [size],
   );
   useEffect(() => () => target.dispose(), [target]);
 
   const camera = useMemo(() => new THREE.OrthographicCamera(-1, 1, 1, -1, 0.01, 2), []);
-  const pixels = useMemo(() => new Uint8Array(SIZE * SIZE * 4), []);
+  // Sixty-seven megabytes at the high setting, so it is allocated when the
+  // setting changes and never per section.
+  const pixels = useMemo(() => new Uint8Array(size * size * 4), [size]);
   /** Reused, because allocating an array of meshes per measurement is silly. */
   const hiddenMeshes = useRef<THREE.Mesh[]>([]);
   /** What each drawn material looked like before the section borrowed it. */
@@ -318,7 +333,7 @@ export function AxialProbe({
       AXIAL_PROBE.drawCalls = gl.info.render.calls;
 
       const startedReadback = performance.now();
-      gl.readRenderTargetPixels(target, 0, 0, SIZE, SIZE, pixels);
+      gl.readRenderTargetPixels(target, 0, 0, size, size, pixels);
       AXIAL_PROBE.readbackMs = performance.now() - startedReadback;
     } finally {
       restoreLights();
@@ -342,7 +357,7 @@ export function AxialProbe({
     // canvas the render loop never touches again, which is the whole reason
     // this is affordable: one frame to make it, nothing per frame to keep it.
     const surface = AXIAL_CANVAS.value;
-    if (surface) paintSlice(surface, pixels, SIZE);
+    if (surface) paintSlice(surface, pixels, size);
 
     // Last, and only now: the picture is on the canvas and the crossing list
     // was recomputed the frame the plane moved, so this is the one instant

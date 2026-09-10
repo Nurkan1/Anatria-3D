@@ -3,12 +3,12 @@ import { useEffect, useRef, useState } from "react";
 import { organLabel, useSceneStore } from "@/stores/sceneStore";
 import { useScanStore } from "@/stores/scanStore";
 
-import { SLICE_SIZE } from "./AxialProbe";
 import {
   AXIAL_CANVAS,
   pastNativeSize,
   restoreSlice,
   SECTION_WINDOW,
+  SLICE_PIXELS,
   TORCH,
   torchDirection,
   TORCH_INTERVAL_MS,
@@ -127,6 +127,10 @@ export function AxialView() {
   const held = useScanStore((s) => s.held);
   const cut = useScanStore((s) => s.cut);
   const torch = useScanStore((s) => s.torch);
+  // Subscribed only so the panel re-renders when the size changes: the canvas
+  // is resized by the painter, but the point past which magnifying invents
+  // detail moves the moment the setting does.
+  useScanStore((s) => s.detail);
   const [full, setFull] = useState(false);
   /**
    * How much of the picture to fill the screen with, and where.
@@ -400,14 +404,14 @@ export function AxialView() {
         >
           <canvas
             ref={canvas}
-            width={SLICE_SIZE}
-            height={SLICE_SIZE}
+            width={SLICE_PIXELS.value}
+            height={SLICE_PIXELS.value}
             className="absolute inset-0 h-full w-full"
             style={{
               transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
               // Smooth while there is still source to smooth, and honest
               // blocks once there is not. See `pastNativeSize`.
-              imageRendering: pastNativeSize(zoom, frameWidth, SLICE_SIZE)
+              imageRendering: pastNativeSize(zoom, frameWidth, SLICE_PIXELS.value)
                 ? "pixelated"
                 : "auto",
             }}
@@ -485,8 +489,8 @@ export function AxialView() {
       >
         <canvas
           ref={canvas}
-          width={SLICE_SIZE}
-          height={SLICE_SIZE}
+          width={SLICE_PIXELS.value}
+          height={SLICE_PIXELS.value}
           className="block h-36 w-36 rounded-sm bg-black"
           aria-label="Cross-section at the height of the scanner. Click to enlarge."
         />
