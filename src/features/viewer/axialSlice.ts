@@ -1,5 +1,7 @@
 import * as THREE from "three";
 
+import { DISCLAIMER } from "./exportView";
+
 /**
  * The geometry of an axial slice, worked out before anything is drawn.
  *
@@ -44,10 +46,25 @@ export function slabPlanes(at: number, half = SLAB_HALF_THICKNESS): THREE.Plane[
  * lie: structures further from the lens would come out smaller, and comparing
  * left with right is most of what a section is for.
  *
- * The frame is the body's own width and depth plus a margin, so the same
- * structure sits in the same place in the image at every height — a slice that
- * rescaled itself as the plane travelled would be unreadable as a sequence.
+ * # Why the frame follows the contents rather than the body
+ *
+ * It framed the whole body's width at every height, which is the radiological
+ * convention and was the wrong call here: at the ankles two legs occupied a
+ * sixth of a picture sized for outstretched arms, and on a laptop that is a
+ * detail nobody can read. The caller passes the box it wants framed — what the
+ * slab actually contains — and the scale is published beside the image so
+ * sizes stay comparable even though the magnification does not.
  */
+/**
+ * Never zoom in past this, in metres of half-width.
+ *
+ * A slab containing one small structure would otherwise fill the frame with a
+ * magnified sliver, which reads as an error rather than as a close-up. Ten
+ * centimetres across is about the narrowest picture of a body that still looks
+ * like a picture of a body.
+ */
+export const SLICE_MIN_HALF = 0.05;
+
 export function sliceFraming(
   bounds: THREE.Box3,
   at: number,
@@ -57,7 +74,7 @@ export function sliceFraming(
   const size = bounds.getSize(new THREE.Vector3());
   // Square, from the larger of the two, so nothing is stretched and the image
   // can be a square texture without letterboxing.
-  const half = (Math.max(size.x, size.z) / 2) * margin;
+  const half = Math.max((Math.max(size.x, size.z) / 2) * margin, SLICE_MIN_HALF);
   return {
     // Just above the slab rather than far away: an orthographic camera does not
     // care about distance, and staying close keeps the depth range tight.
@@ -116,7 +133,30 @@ export function paintSlice(
     image.data.set(pixels.subarray(from, from + row), y * row);
   }
   context.putImageData(image, 0, 0);
-  last = image;
+  markSlice(context, size);
+  // Stored *after* the mark, so anything that puts this back gets the whole
+  // picture rather than an unmarked copy of it.
+  last = context.getImageData(0, 0, size, size);
+}
+
+/**
+ * The same line the exported image carries, on the section too.
+ *
+ * A slice is the frame of this application most likely to be photographed and
+ * passed on — it looks like a scan, which is exactly why it must say what it is
+ * not. The wording is imported rather than retyped: two disclaimers that drift
+ * apart are worse than one, and this one is a regulatory statement rather than
+ * a caption.
+ */
+function markSlice(context: CanvasRenderingContext2D, size: number): void {
+  const height = Math.round(size * 0.075);
+  context.fillStyle = "rgba(2, 6, 23, 0.82)";
+  context.fillRect(0, size - height, size, height);
+  context.fillStyle = "rgba(148, 163, 184, 0.9)";
+  context.font = `${Math.round(height * 0.46)}px system-ui, "Segoe UI", sans-serif`;
+  context.textBaseline = "middle";
+  context.textAlign = "left";
+  context.fillText(DISCLAIMER, Math.round(size * 0.02), size - height / 2);
 }
 
 /**

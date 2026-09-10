@@ -53,6 +53,15 @@ export const AXIAL_PROBE = {
   runs: 0,
   /** Meshes the slab test kept. The rest were never submitted. */
   drawn: -1,
+  /**
+   * How wide the picture is, in centimetres of body.
+   *
+   * The frame follows what the slab contains rather than the body's full
+   * width, so the magnification changes with the height. Publishing the scale
+   * is what keeps sizes comparable anyway — an ankle and a chest are then two
+   * readings rather than two unrelated pictures.
+   */
+  frameCm: -1,
 };
 
 /**
@@ -103,21 +112,14 @@ export function AxialProbe({
     { material: THREE.Material; transparent: boolean; opacity: number; depthWrite: boolean }[]
   >([]);
   const reach = useMemo(() => new THREE.Vector3(), []);
+  /** The extent of what the slab holds, rebuilt on every run. */
+  const content = useMemo(() => new THREE.Box3(), []);
 
   useFrame(() => {
     if (request === done.current || !bounds || bounds.isEmpty()) return;
     done.current = request;
 
     const at = SHARED_SCAN.value;
-    const framing = sliceFraming(bounds, at);
-    camera.left = -framing.halfWidth;
-    camera.right = framing.halfWidth;
-    camera.top = framing.halfDepth;
-    camera.bottom = -framing.halfDepth;
-    camera.position.copy(framing.position);
-    camera.up.copy(SLICE_UP);
-    camera.lookAt(framing.target);
-    camera.updateProjectionMatrix();
 
     /**
      * The ring is hidden for the measurement.
@@ -155,6 +157,10 @@ export function AxialProbe({
     // which systems are switched on and which body is loaded, so a constant
     // here would be a figure that reads as measured and is not.
     let considered = 0;
+    // What the slab actually contains, gathered on the same walk. Spheres
+    // rather than boxes, so it is slightly generous — which is the right way
+    // to be wrong about a frame.
+    content.makeEmpty();
     scene.traverse((object) => {
       const mesh = object as THREE.Mesh;
       if (!mesh.isMesh || !mesh.visible) return;
@@ -186,6 +192,9 @@ export function AxialProbe({
        * when the list is built, so changing it needs no recompile — the flag
        * is put back before the next frame, which belongs to the reader.
        */
+      content.expandByPoint(reach.clone().addScalar(radius));
+      content.expandByPoint(reach.clone().addScalar(-radius));
+
       const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
       for (const material of materials) {
         if (!material) continue;
@@ -200,6 +209,26 @@ export function AxialProbe({
         material.depthWrite = true;
       }
     });
+
+    /**
+     * Framed on what is there, not on the body.
+     *
+     * Reported from a laptop and correct: at the ankles two legs occupied a
+     * sixth of a picture sized for outstretched arms. The radiological
+     * convention of a constant frame buys comparability between heights, and
+     * it costs more legibility than it buys on a panel this size — so the
+     * frame follows the contents and the scale is published instead.
+     */
+    const framing = sliceFraming(content.isEmpty() ? bounds : content, at);
+    camera.left = -framing.halfWidth;
+    camera.right = framing.halfWidth;
+    camera.top = framing.halfDepth;
+    camera.bottom = -framing.halfDepth;
+    camera.position.copy(framing.position);
+    camera.up.copy(SLICE_UP);
+    camera.lookAt(framing.target);
+    camera.updateProjectionMatrix();
+    AXIAL_PROBE.frameCm = framing.halfWidth * 200;
 
     const previousClipping = gl.clippingPlanes;
     const previousTarget = gl.getRenderTarget();

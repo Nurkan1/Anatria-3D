@@ -11,6 +11,37 @@ import {
   slabPlanes,
 } from "./axialSlice";
 
+/**
+ * Enough of a 2D context for the painter: the flip, and the mark drawn over it.
+ *
+ * `getImageData` hands back whatever was last put, which is what the real one
+ * would do and what lets the "keep the last section" test mean something.
+ */
+function canvasStub() {
+  let written: ImageData | null = null;
+  const context = {
+    fillStyle: "",
+    font: "",
+    textBaseline: "",
+    textAlign: "",
+    createImageData: (w: number, h: number) => ({
+      data: new Uint8ClampedArray(w * h * 4),
+      width: w,
+      height: h,
+    }),
+    putImageData: (image: ImageData) => {
+      written = image;
+    },
+    getImageData: () => written,
+    fillRect: () => {},
+    fillText: () => {},
+  };
+  return {
+    canvas: { getContext: () => context } as unknown as HTMLCanvasElement,
+    read: () => written,
+  };
+}
+
 describe("the slab", () => {
   it("keeps what is inside it and nothing else", () => {
     // three keeps a fragment where `normal · p + constant > 0`. Getting the
@@ -94,22 +125,6 @@ describe("painting what came back from the GPU", () => {
     return px;
   }
 
-  function canvasStub() {
-    let written: ImageData | null = null;
-    const context = {
-      createImageData: (w: number, h: number) => ({
-        data: new Uint8ClampedArray(w * h * 4),
-        width: w,
-        height: h,
-      }),
-      putImageData: (image: ImageData) => {
-        written = image;
-      },
-    };
-    const canvas = { getContext: () => context } as unknown as HTMLCanvasElement;
-    return { canvas, read: () => written };
-  }
-
   it("turns the picture the right way up", () => {
     // WebGL numbers rows from the bottom and a canvas from the top. A straight
     // copy is a body lying the wrong way round — and on an axial slice that is
@@ -131,24 +146,6 @@ describe("painting what came back from the GPU", () => {
 });
 
 describe("keeping the last section", () => {
-  function canvasStub() {
-    let written: ImageData | null = null;
-    const context = {
-      createImageData: (w: number, h: number) => ({
-        data: new Uint8ClampedArray(w * h * 4),
-        width: w,
-        height: h,
-      }),
-      putImageData: (image: ImageData) => {
-        written = image;
-      },
-    };
-    return {
-      canvas: { getContext: () => context } as unknown as HTMLCanvasElement,
-      read: () => written,
-    };
-  }
-
   it("puts the last one back on a canvas that has just appeared", () => {
     // Enlarging the panel mounts a different element. A section that blanked
     // at the moment somebody asked to see it properly would be answering the
