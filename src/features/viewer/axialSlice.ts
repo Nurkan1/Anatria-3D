@@ -40,6 +40,25 @@ export function slabPlanes(at: number, half = SLAB_HALF_THICKNESS): THREE.Plane[
 }
 
 /**
+ * The other way to cut, and it answers a different question.
+ *
+ * One plane, keeping everything *below* the cut. Seen from above you are then
+ * looking at the top surfaces of what is left, which read as solid volumes
+ * rather than as the open rings a thin slab gives — the body opened at a level,
+ * which is what an anatomical cut looks like in a dissecting room.
+ *
+ * It costs exactly the same: one plane instead of two, the same meshes, the
+ * same draw calls. What it gives up is truthfulness about depth — structures
+ * below the plane are visible where the nearest surface happens to be theirs,
+ * so it is a view *through* the cut rather than a section *at* it. The slab is
+ * the honest section; this one is the legible dissection. Both are worth
+ * having, which is why both are here.
+ */
+export function cutPlanes(at: number): THREE.Plane[] {
+  return [new THREE.Plane(new THREE.Vector3(0, -1, 0), at)];
+}
+
+/**
  * Where the camera stands to look down at the slab, and how wide it sees.
  *
  * Orthographic, because a perspective view of a section is a section plus a

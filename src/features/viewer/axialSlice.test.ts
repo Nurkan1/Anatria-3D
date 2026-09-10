@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import * as THREE from "three";
 
 import {
+  cutPlanes,
   forgetSlice,
   paintSlice,
   restoreSlice,
@@ -166,5 +167,22 @@ describe("keeping the last section", () => {
     const fresh = canvasStub();
     restoreSlice(fresh.canvas);
     expect(fresh.read()).toBeNull();
+  });
+});
+
+describe("the dissection cut", () => {
+  it("keeps everything below the plane and nothing above it", () => {
+    // The whole difference from the slab: seen from above, what is left has
+    // top surfaces, and top surfaces read as solid volumes where a thin slab
+    // gives open rings.
+    const [plane] = cutPlanes(1.2);
+    expect(plane!.distanceToPoint(new THREE.Vector3(0, 1.1, 0))).toBeGreaterThan(0);
+    expect(plane!.distanceToPoint(new THREE.Vector3(0, 0.2, 0))).toBeGreaterThan(0);
+    expect(plane!.distanceToPoint(new THREE.Vector3(0, 1.3, 0))).toBeLessThan(0);
+  });
+
+  it("costs one plane where the slab costs two", () => {
+    expect(cutPlanes(1).length).toBe(1);
+    expect(slabPlanes(1).length).toBe(2);
   });
 });

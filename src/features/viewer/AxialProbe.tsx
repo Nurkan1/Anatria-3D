@@ -3,8 +3,11 @@ import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 import { SHARED_SCAN } from "./scanBand";
+import { useScanStore } from "@/stores/scanStore";
+
 import {
   AXIAL_CANVAS,
+  cutPlanes,
   paintSlice,
   sliceFraming,
   slabPlanes,
@@ -179,6 +182,10 @@ export function AxialProbe({
       // through `matrixWorld`, so a scaled structure is not culled early.
       reach.copy(sphere.center).applyMatrix4(mesh.matrixWorld);
       const radius = sphere.radius * mesh.matrixWorld.getMaxScaleOnAxis();
+      // Culled by the slab in both modes, even when the cut would keep more.
+      // A dissection view framed on everything below the plane would frame the
+      // legs from the neck; what is worth seeing is still what is *at* this
+      // level, and anything lower only fills in behind it.
       if (Math.abs(reach.y - at) > radius + SLAB_HALF_THICKNESS) {
         mesh.visible = false;
         hidden.push(mesh);
@@ -238,7 +245,9 @@ export function AxialProbe({
 
     const previousClipping = gl.clippingPlanes;
     const previousTarget = gl.getRenderTarget();
-    gl.clippingPlanes = slabPlanes(at);
+    // The cut keeps everything below the plane and reads as solid; the slab
+    // keeps only that level and is the truthful section. See `cutPlanes`.
+    gl.clippingPlanes = useScanStore.getState().cut ? cutPlanes(at) : slabPlanes(at);
 
     // `renderer.info` accumulates over a frame, so it is reset immediately
     // before the pass and read immediately after: what it reports is then this

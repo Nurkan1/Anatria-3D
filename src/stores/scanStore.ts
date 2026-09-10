@@ -34,6 +34,18 @@ const PANEL_KEY = "anatria3d.scan.panel.v1";
 const GHOST_KEY = "anatria3d.scan.ghost.v1";
 const SOUND_KEY = "anatria3d.scan.sound.v1";
 const AXIAL_KEY = "anatria3d.scan.axial.v1";
+const CUT_KEY = "anatria3d.scan.cut.v1";
+
+/**
+ * Whether the section is a dissection cut rather than a thin slab.
+ *
+ * On by default, because it is the more legible of the two and legibility is
+ * what the panel is for. The slab is the truthful section — only what lies at
+ * that exact level — and it is one press away for anyone who wants it.
+ */
+function storedCut(): boolean {
+  return readLocal(CUT_KEY) !== "off";
+}
 
 /**
  * Whether an axial slice is drawn each time the light is let go.
@@ -185,6 +197,8 @@ interface ScanStore {
   sound: boolean;
   /** Draw a cross-section at the height the light was left at. */
   axial: boolean;
+  /** Cut the body open at the plane, rather than showing only that level. */
+  cut: boolean;
 
   toggle: () => void;
   /** Take hold of the sweep and put it at `at`. */
@@ -200,6 +214,7 @@ interface ScanStore {
   setGhost: (on: boolean) => void;
   setSound: (on: boolean) => void;
   setAxial: (on: boolean) => void;
+  setCut: (on: boolean) => void;
 }
 
 export const useScanStore = create<ScanStore>()((set, get) => ({
@@ -215,6 +230,7 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
   ghost: storedGhost(),
   sound: storedSound(),
   axial: storedAxial(),
+  cut: storedCut(),
 
   // Letting go and unpinning on the way out, so switching the scanner off never
   // leaves the next session holding an invisible sweep at somebody's ankle.
@@ -262,6 +278,11 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
     if (on === get().axial) return;
     writeLocal(AXIAL_KEY, on ? "on" : "off");
     set({ axial: on });
+  },
+  setCut: (on) => {
+    if (on === get().cut) return;
+    writeLocal(CUT_KEY, on ? "on" : "off");
+    set({ cut: on });
   },
 }));
 

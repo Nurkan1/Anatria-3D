@@ -59,6 +59,8 @@ export function ScanControls() {
   const setSound = useScanStore((s) => s.setSound);
   const axial = useScanStore((s) => s.axial);
   const setAxial = useScanStore((s) => s.setAxial);
+  const cut = useScanStore((s) => s.cut);
+  const setCut = useScanStore((s) => s.setCut);
   const panel = useScanStore((s) => s.panel);
   const togglePanel = useScanStore((s) => s.togglePanel);
   // There is nothing to reveal on a body that already has its colour: the
@@ -288,6 +290,36 @@ export function ScanControls() {
             />
             Cross-section where I let go
           </label>
+
+          {/*
+            Two questions, one press apart. The cut keeps everything below the
+            plane and reads as solid volumes — the body opened at a level. The
+            slab keeps only what lies *at* the level and is the truthful
+            section. Neither is the better one in general.
+          */}
+          {axial && (
+            <div className="mt-1 flex gap-1" role="group" aria-label="Section style">
+              {[
+                { on: true, label: "Cut", hint: "Open the body at the plane — solid, and easier to read" },
+                { on: false, label: "Slab", hint: "Only what lies at that exact level — a true section" },
+              ].map((choice) => (
+                <button
+                  key={choice.label}
+                  type="button"
+                  onClick={() => setCut(choice.on)}
+                  aria-pressed={cut === choice.on}
+                  title={choice.hint}
+                  className={`flex-1 rounded border px-1 py-0.5 text-[9px] ${
+                    cut === choice.on
+                      ? "border-cyan-500 bg-cyan-500/15 text-cyan-200"
+                      : "border-slate-700 text-slate-400 hover:border-slate-600"
+                  }`}
+                >
+                  {choice.label}
+                </button>
+              ))}
+            </div>
+          )}
 
           <label className="mt-1 flex cursor-pointer items-start gap-1.5 text-[9px] leading-snug text-slate-400">
             <input
