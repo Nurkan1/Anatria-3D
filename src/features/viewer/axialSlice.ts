@@ -77,3 +77,43 @@ export function sliceFraming(
  * `viewDirection` relies on for the anterior viewpoint.
  */
 export const SLICE_UP = new THREE.Vector3(0, 0, -1);
+
+/**
+ * Where the picture goes, once it has been read back.
+ *
+ * A module-level handle rather than a prop, because the two halves live on
+ * opposite sides of a boundary React does not cross for free: the pixels are
+ * produced inside the canvas, by a frame callback, and the picture is shown in
+ * the DOM overlay beside the controls. The same arrangement the crossing
+ * readout and the sweep position already use.
+ *
+ * Null whenever the panel is not mounted, which is most of the time, and the
+ * producer checks rather than assumes.
+ */
+export const AXIAL_CANVAS: { value: HTMLCanvasElement | null } = { value: null };
+
+/**
+ * Paint a slice that was read out of the GPU.
+ *
+ * **The rows arrive upside down**, and that is not a quirk to work around
+ * quietly: WebGL numbers its rows from the bottom and a canvas numbers them
+ * from the top, so a picture copied straight across is a body lying the wrong
+ * way up — which on an axial slice is a silent error, because anterior and
+ * posterior look plausible either way. Flipping here is the correction, and
+ * `SLICE_UP` is what makes the flipped result anterior-up.
+ */
+export function paintSlice(
+  canvas: HTMLCanvasElement,
+  pixels: Uint8Array,
+  size: number,
+): void {
+  const context = canvas.getContext("2d");
+  if (!context) return;
+  const image = context.createImageData(size, size);
+  const row = size * 4;
+  for (let y = 0; y < size; y++) {
+    const from = (size - 1 - y) * row;
+    image.data.set(pixels.subarray(from, from + row), y * row);
+  }
+  context.putImageData(image, 0, 0);
+}

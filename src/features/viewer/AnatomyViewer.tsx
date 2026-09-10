@@ -24,6 +24,7 @@ import { IlluminationBar } from "./IlluminationBar";
 import { IsolationBar } from "./IsolationBar";
 import { FULL_CANVAS, LabelOverlay } from "./LabelOverlay";
 import { RenderProbe, RenderStatsPanel } from "./RenderStats";
+import { AxialView } from "./AxialView";
 import { ScanControls } from "./ScanControls";
 import { ScanReadout } from "./ScanReadout";
 import { PointerRouting, StudyViews } from "./StudyViews";
@@ -272,6 +273,8 @@ export function AnatomyViewer() {
         {splitting && <ClosedViews />}
         {/* Beside the other switch that changes how the model is drawn. */}
         <ScanControls />
+        {/* Under the controls, and only when asked for — see `AxialView`. */}
+        <AxialView />
         <StudyViewsToggle />
       </div>
       <DepthProbe />

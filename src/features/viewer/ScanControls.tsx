@@ -57,6 +57,8 @@ export function ScanControls() {
   const setGhost = useScanStore((s) => s.setGhost);
   const sound = useScanStore((s) => s.sound);
   const setSound = useScanStore((s) => s.setSound);
+  const axial = useScanStore((s) => s.axial);
+  const setAxial = useScanStore((s) => s.setAxial);
   const panel = useScanStore((s) => s.panel);
   const togglePanel = useScanStore((s) => s.togglePanel);
   // There is nothing to reveal on a body that already has its colour: the
@@ -272,6 +274,21 @@ export function ScanControls() {
             version would mean putting the whole body in the sorted pass. This
             reads the same at a glance and costs a mix.
           */}
+          {/*
+            The one setting here that costs measurable time: a second pass over
+            the body, about ten milliseconds at the chest, at the moment of
+            release. Named for what it draws rather than for how it works.
+          */}
+          <label className="mt-1 flex cursor-pointer items-start gap-1.5 text-[9px] leading-snug text-slate-400">
+            <input
+              type="checkbox"
+              checked={axial}
+              onChange={(event) => setAxial(event.target.checked)}
+              className="mt-[1px] accent-cyan-500"
+            />
+            Cross-section where I let go
+          </label>
+
           <label className="mt-1 flex cursor-pointer items-start gap-1.5 text-[9px] leading-snug text-slate-400">
             <input
               type="checkbox"

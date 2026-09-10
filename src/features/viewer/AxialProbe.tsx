@@ -3,7 +3,14 @@ import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 import { SHARED_SCAN } from "./scanBand";
-import { sliceFraming, slabPlanes, SLAB_HALF_THICKNESS, SLICE_UP } from "./axialSlice";
+import {
+  AXIAL_CANVAS,
+  paintSlice,
+  sliceFraming,
+  slabPlanes,
+  SLAB_HALF_THICKNESS,
+  SLICE_UP,
+} from "./axialSlice";
 
 /**
  * Phase 0 for the axial slice: measure, and decide afterwards.
@@ -49,7 +56,8 @@ export const AXIAL_PROBE = {
 };
 
 /** Square, and small: a slice read at a glance does not need more. */
-const SIZE = 320;
+export const SLICE_SIZE = 320;
+const SIZE = SLICE_SIZE;
 
 export function AxialProbe({
   bounds,
@@ -181,6 +189,12 @@ export function AxialProbe({
     AXIAL_PROBE.drawn = considered - hidden.length;
     hidden.length = 0;
     AXIAL_PROBE.runs += 1;
+
+    // Handed to the DOM and forgotten. From here the picture is an ordinary
+    // canvas the render loop never touches again, which is the whole reason
+    // this is affordable: one frame to make it, nothing per frame to keep it.
+    const surface = AXIAL_CANVAS.value;
+    if (surface) paintSlice(surface, pixels, SIZE);
   });
 
   return null;

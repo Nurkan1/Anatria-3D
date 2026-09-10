@@ -33,6 +33,20 @@ const READOUT_KEY = "anatria3d.scan.readout.v1";
 const PANEL_KEY = "anatria3d.scan.panel.v1";
 const GHOST_KEY = "anatria3d.scan.ghost.v1";
 const SOUND_KEY = "anatria3d.scan.sound.v1";
+const AXIAL_KEY = "anatria3d.scan.axial.v1";
+
+/**
+ * Whether an axial slice is drawn each time the light is let go.
+ *
+ * Off by default, and this one is not politeness — it is the only setting here
+ * that costs real time when it is on. Measured on this atlas: about ten
+ * milliseconds at the chest, once, at the moment of release. That is a frame,
+ * which is why it is offered at all; it is also not nothing, which is why
+ * nobody pays it without asking.
+ */
+function storedAxial(): boolean {
+  return readLocal(AXIAL_KEY) === "on";
+}
 
 /**
  * Whether letting the light go makes a sound.
@@ -169,6 +183,8 @@ interface ScanStore {
   ghost: boolean;
   /** Play a short tone at the moment the light is let go. */
   sound: boolean;
+  /** Draw a cross-section at the height the light was left at. */
+  axial: boolean;
 
   toggle: () => void;
   /** Take hold of the sweep and put it at `at`. */
@@ -183,6 +199,7 @@ interface ScanStore {
   togglePanel: () => void;
   setGhost: (on: boolean) => void;
   setSound: (on: boolean) => void;
+  setAxial: (on: boolean) => void;
 }
 
 export const useScanStore = create<ScanStore>()((set, get) => ({
@@ -197,6 +214,7 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
   panel: storedPanel(),
   ghost: storedGhost(),
   sound: storedSound(),
+  axial: storedAxial(),
 
   // Letting go and unpinning on the way out, so switching the scanner off never
   // leaves the next session holding an invisible sweep at somebody's ankle.
@@ -239,6 +257,11 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
     if (on === get().sound) return;
     writeLocal(SOUND_KEY, on ? "on" : "off");
     set({ sound: on });
+  },
+  setAxial: (on) => {
+    if (on === get().axial) return;
+    writeLocal(AXIAL_KEY, on ? "on" : "off");
+    set({ axial: on });
   },
 }));
 

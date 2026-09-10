@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest";
 import * as THREE from "three";
 
-import { SLAB_HALF_THICKNESS, SLICE_UP, sliceFraming, slabPlanes } from "./axialSlice";
+import {
+  paintSlice,
+  SLAB_HALF_THICKNESS,
+  SLICE_UP,
+  sliceFraming,
+  slabPlanes,
+} from "./axialSlice";
 
 describe("the slab", () => {
   it("keeps what is inside it and nothing else", () => {
@@ -70,5 +76,54 @@ describe("the framing", () => {
     // relies on.
     expect(SLICE_UP.z).toBeLessThan(0);
     expect(SLICE_UP.y).toBe(0);
+  });
+});
+
+describe("painting what came back from the GPU", () => {
+  /** A 2x2 image whose rows differ, so an unflipped copy cannot pass. */
+  function twoByTwo(): Uint8Array {
+    const px = new Uint8Array(2 * 2 * 4);
+    // Bottom row as WebGL numbers them: red, red.
+    px.set([255, 0, 0, 255], 0);
+    px.set([255, 0, 0, 255], 4);
+    // Top row: blue, blue.
+    px.set([0, 0, 255, 255], 8);
+    px.set([0, 0, 255, 255], 12);
+    return px;
+  }
+
+  function canvasStub() {
+    let written: ImageData | null = null;
+    const context = {
+      createImageData: (w: number, h: number) => ({
+        data: new Uint8ClampedArray(w * h * 4),
+        width: w,
+        height: h,
+      }),
+      putImageData: (image: ImageData) => {
+        written = image;
+      },
+    };
+    const canvas = { getContext: () => context } as unknown as HTMLCanvasElement;
+    return { canvas, read: () => written };
+  }
+
+  it("turns the picture the right way up", () => {
+    // WebGL numbers rows from the bottom and a canvas from the top. A straight
+    // copy is a body lying the wrong way round — and on an axial slice that is
+    // a *silent* error, because anterior and posterior both look plausible.
+    const { canvas, read } = canvasStub();
+    paintSlice(canvas, twoByTwo(), 2);
+
+    const out = read();
+    expect(out).not.toBeNull();
+    // The blue row was the top in GPU order, so it must land in row 0.
+    expect(Array.from(out!.data.slice(0, 4))).toEqual([0, 0, 255, 255]);
+    expect(Array.from(out!.data.slice(8, 12))).toEqual([255, 0, 0, 255]);
+  });
+
+  it("does nothing rather than throwing where there is no 2D context", () => {
+    const canvas = { getContext: () => null } as unknown as HTMLCanvasElement;
+    expect(() => paintSlice(canvas, twoByTwo(), 2)).not.toThrow();
   });
 });

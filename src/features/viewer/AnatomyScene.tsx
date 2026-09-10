@@ -886,10 +886,14 @@ export function AnatomyScene({
        */
       if (wasHeld.current && !grip.held) {
         firePulse();
-        // Phase 0: the measurement is taken at the one moment the design says
-        // a slice would be rendered — when the gantry comes to rest.
-        axialRequest.current += 1;
-        setAxialRuns(axialRequest.current);
+        // Only when it will be looked at. This is the one part of the mode
+        // that costs real time — about ten milliseconds at the chest, once —
+        // and paying it to produce a picture nobody asked for is exactly the
+        // sort of quiet cost this experiment was measured to avoid.
+        if (grip.axial) {
+          axialRequest.current += 1;
+          setAxialRuns(axialRequest.current);
+        }
         // Read from the store rather than subscribed: this runs sixty times a
         // second, and a preference nobody changes mid-frame is not worth a
         // re-render of 3,478 meshes to observe.
