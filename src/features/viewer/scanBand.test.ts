@@ -595,3 +595,25 @@ it("shares the one pulse with the ring, so both answer the same event", () => {
   material.onBeforeCompile(compiled, {} as WebGLRenderer);
   expect(compiled.uniforms.uScanPulse).toBe(SCAN_PULSE);
 });
+
+it("flashes in the tissue's own colour when that is what was asked for", () => {
+  // The switch already means "the tissue's own rather than the lamp's". The
+  // flash obeying the same one is what keeps that setting meaning a single
+  // thing instead of two.
+  const compiled = shader();
+  scanBandOnBeforeCompile(compiled);
+  expect(compiled.fragmentShader).toContain("uScanReveal > 0.5 && uRevealColour.r >= 0.0");
+  expect(compiled.fragmentShader).toContain("uRevealColour * 2.4");
+  expect(compiled.fragmentShader).toContain("pulseColour * wake * uScanPulse");
+});
+
+it("falls back to the lamp for a structure with no colour of its own", () => {
+  // Every material is in that state for one render after the mode is switched
+  // on, and a flash of black would be a hole in the body.
+  const compiled = shader();
+  scanBandOnBeforeCompile(compiled);
+  const guard = compiled.fragmentShader.indexOf("uRevealColour.r >= 0.0");
+  const fallback = compiled.fragmentShader.indexOf(": uScanTint;");
+  expect(guard).toBeGreaterThan(0);
+  expect(fallback).toBeGreaterThan(guard);
+});

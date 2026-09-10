@@ -159,6 +159,18 @@ export const SCAN_PULSE_S = 0.4;
 /** Brightest at the instant of release, relative to the band itself. */
 const PULSE_GAIN = 1.6;
 
+/**
+ * How much a tissue's own colour is lifted when it is the one flashing.
+ *
+ * The light's colours are radiance and run past 1; a tissue colour is a
+ * surface and sits well below it — a red muscle is 0.26 in the renderer's
+ * working space, not 0.55. Added as emissive at the same gain it would barely
+ * show, so the natural flash is lifted to arrive with the same weight as the
+ * coloured one. It is a brightness correction, not a hue change: the colour
+ * that comes back is still the structure's own.
+ */
+const NATURAL_PULSE_GAIN = 2.4;
+
 export function firePulse(): void {
   SCAN_PULSE.value = 1;
 }
@@ -338,7 +350,16 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
     // The answer to letting go: the level the reader stopped at says so once.
     // Outside the reveal's suppression on purpose — this is a transient reply
     // to a hand, not the mode's way of showing what it found.
-    totalEmissiveRadiance += uScanTint * wake * uScanPulse * ${PULSE_GAIN} * uScanEntry;`,
+    //
+    // In whichever colour the reader asked for. "Reveal colour, not light"
+    // already means "the tissue's own rather than the lamp's", and the flash
+    // obeying the same switch is what keeps that setting meaning one thing
+    // instead of two. A material with no colour of its own falls back to the
+    // lamp, which is also what it does everywhere else.
+    vec3 pulseColour = uScanReveal > 0.5 && uRevealColour.r >= 0.0
+      ? uRevealColour * ${NATURAL_PULSE_GAIN}
+      : uScanTint;
+    totalEmissiveRadiance += pulseColour * wake * uScanPulse * ${PULSE_GAIN} * uScanEntry;`,
     );
 }
 
