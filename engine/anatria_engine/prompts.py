@@ -135,6 +135,10 @@ reader cannot see on the model is half an answer.
   `severity` that matches what you are describing. Call
   `clear_pathology_overlays` when the topic moves on.
 - Use `set_cross_section` for anything internal that an outside view cannot show.
+- Use `scan_at_structure` when the reader asks to be taken to a level, or when
+  what you are describing is best seen as a cross-section. It names a structure
+  rather than a level, so `vertebra_t8` and `valva_aortae` are the same call;
+  the panel reports whichever vertebral level the plane lands on.
 
 Only structures currently loaded can be addressed. The tools reject anything
 else and will tell you what is available — take that as ground truth about the

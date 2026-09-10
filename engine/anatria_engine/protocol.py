@@ -364,6 +364,20 @@ class SetCrossSection(Strict):
     position: float = Field(ge=-1.0, le=1.0)
 
 
+class ScanAtStructure(Strict):
+    """Put the scanner's plane at the height of a structure.
+
+    A height rather than a named vertebral level. A level is only one kind of
+    answer to "take me there", and somebody asking for the aortic valve or the
+    hilum of the left kidney deserves the same instrument; the levels come out
+    of it for free, because a vertebra is a structure like any other and the
+    panel names whichever level the plane lands on.
+    """
+
+    action: Literal["scan_at_structure"] = "scan_at_structure"
+    organ_id: str = Field(min_length=1)
+
+
 class ResetView(Strict):
     action: Literal["reset_view"] = "reset_view"
 
@@ -392,6 +406,7 @@ SceneCommand = Annotated[
     | ClearPathway
     | IlluminateStructures
     | SetCrossSection
+    | ScanAtStructure
     | ResetView
     | Say,
     Field(discriminator="action"),

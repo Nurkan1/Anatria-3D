@@ -75,6 +75,23 @@ export interface FocusRequest {
 }
 
 /**
+ * A height the scanner should move to, named by a structure.
+ *
+ * An event with a counter, for the same reason a focus is: asking twice for the
+ * same level is two answers, not one, and the reader may well have moved the
+ * light in between.
+ *
+ * The structure is named rather than the height, because the store does not
+ * know where anything is. Only the viewer has measured the meshes, so only the
+ * viewer can turn `vertebra_t8` into a number — and doing the lookup there
+ * means the request survives being made before the body has finished loading.
+ */
+export interface ScanRequest {
+  organId: string;
+  seq: number;
+}
+
+/**
  * A move the camera should make, asked for by a button.
  *
  * An event rather than a stored viewpoint, for the same reason a focus is: the
@@ -211,6 +228,8 @@ export interface SceneViewState {
   caseMarks: Record<string, PathologyOverlay>;
   crossSection: CrossSection | null;
   focusRequest: FocusRequest | null;
+  /** An outstanding move of the scanner's plane; `null` when there is none. */
+  scanRequest: ScanRequest | null;
   /** An outstanding camera move; `null` when the reader has not asked for one. */
   viewpoint: ViewpointRequest | null;
   /** `null` means no route is being traced. */
@@ -263,6 +282,7 @@ export const initialViewState: SceneViewState = {
   caseMarks: {},
   crossSection: null,
   focusRequest: null,
+  scanRequest: null,
   viewpoint: null,
   pathway: null,
   explode: 0,
@@ -397,6 +417,23 @@ export function applySceneCommand(
       return {
         ...state,
         crossSection: { plane: command.plane, position: command.position },
+      };
+
+    case "scan_at_structure":
+      return {
+        ...state,
+        /**
+         * Brought into view first, like a focus and a light are.
+         *
+         * A plane at the height of something switched off passes through a gap
+         * and lights nothing, which reads as the command having failed. The
+         * same body every pointing gesture here uses.
+         */
+        ...revealing(state, [command.organ_id]),
+        scanRequest: {
+          organId: command.organ_id,
+          seq: (state.scanRequest?.seq ?? 0) + 1,
+        },
       };
 
     case "reset_view":

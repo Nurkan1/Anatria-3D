@@ -10,6 +10,7 @@ import {
   holdScanBand,
   resetScanBand,
   resetScanEntry,
+  scanFractionFor,
   scanRangeAlong,
   SCAN_TRAVEL_M,
   setScanGhost,
@@ -20,7 +21,7 @@ import {
 } from "./scanBand";
 import { ScanRing } from "./ScanRing";
 import { AxialProbe } from "./AxialProbe";
-import { SECTION_WANTED } from "./axialSlice";
+import { SECTION_WANTED, wantSection } from "./axialSlice";
 import { scanTint } from "./scanTints";
 import { CURRENT_LEVEL, levelAt } from "./vertebralLevel";
 import { playScanPing } from "./scanSound";
@@ -849,6 +850,7 @@ export function AnatomyScene({
     if (scanBandEnabled) resetScanEntry();
   }, [scanBandEnabled]);
 
+
   /**
    * The colour reaches the shader as three float writes.
    *
@@ -973,6 +975,43 @@ export function AnatomyScene({
   // counter is the signal that it changed — a route built before the digestive
   // meshes finished loading would otherwise stay empty for ever.
   const [centresRevision, setCentresRevision] = useState(0);
+
+  /**
+   * The assistant taking the reader to a level.
+   *
+   * The store cannot do this on its own: it knows the light is at 0.62 of the
+   * body and nothing at all about where `vertebra_t8` is. Only the viewer has
+   * measured the meshes, so the request names a structure and is resolved here.
+   *
+   * The sequence number is left unconsumed when the structure has not been
+   * measured yet, so a request made while the body is still loading lands as
+   * soon as it arrives instead of being dropped -- which is why the revision
+   * counter is a dependency.
+   */
+  const scanRequest = useSceneStore((s) => s.scanRequest);
+  const lastScanSeq = useRef(0);
+  useEffect(() => {
+    if (!scanRequest || scanRequest.seq === lastScanSeq.current) return;
+    if (!bounds || bounds.isEmpty()) return;
+    const box = boxes.current.get(scanRequest.organId);
+    if (!box) return;
+    lastScanSeq.current = scanRequest.seq;
+
+    const { from, to } = scanRangeAlong(
+      [bounds.min.x, bounds.min.y, bounds.min.z],
+      [bounds.max.x, bounds.max.y, bounds.max.z],
+      STANDING,
+    );
+    // The middle of the structure along the sweep. For a vertebra that is the
+    // level; for something long it is the middle of it, which is the honest
+    // answer to "put the plane at the aorta" and the one the panel will then
+    // describe.
+    useScanStore
+      .getState()
+      .putAt(scanFractionFor((box.min.y + box.max.y) / 2, from, to));
+    // Only draws one if the reader has sections switched on; the scene checks.
+    wantSection();
+  }, [scanRequest, bounds, centresRevision]);
 
   const onMeasured = useCallback(
     (

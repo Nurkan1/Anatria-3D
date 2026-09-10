@@ -54,6 +54,7 @@ import { useCopy } from "./useCopy";
 /** Human-readable names for the scene tools, for the activity trail. */
 const TOOL_LABELS: Record<string, string> = {
   focus_organ: "focused a structure",
+  scan_at_structure: "moved the scanner",
   isolate_structures: "isolated structures",
   isolate_group: "isolated a region",
   show_all_structures: "restored the full view",

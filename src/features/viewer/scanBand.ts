@@ -506,6 +506,21 @@ export function stepFraction(cm: number = SECTION_STEP_CM): number {
 }
 
 /**
+ * Where a height falls along the sweep, from 0 at the feet to 1 at the head.
+ *
+ * The inverse of what `holdScanBand` does with the slider, and it exists so
+ * that something which knows *where a structure is* can ask for the light to be
+ * put there. Clamped rather than refused: a structure at the very crown lands
+ * at 1 and a request from outside the body's extent is a request for its end,
+ * not an error worth failing a whole answer over.
+ */
+export function scanFractionFor(along: number, from: number, to: number): number {
+  const travel = to - from;
+  if (!(travel > 0)) return 0.5;
+  return Math.max(0, Math.min(1, (along - from) / travel));
+}
+
+/**
  * How far a box reaches along an arbitrary axis.
  *
  * The band used to sweep `bounds.min.y` to `bounds.max.y`, which is only the

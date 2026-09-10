@@ -245,3 +245,33 @@ describe("stepping the light", () => {
     expect(store().sections).toBe(2);
   });
 });
+
+describe("being taken to a level", () => {
+  it("switches the scanner on rather than quietly doing nothing", () => {
+    // A plane nobody can see is not an answer to "show me T8".
+    expect(store().enabled).toBe(false);
+    store().putAt(0.62);
+    expect(store().enabled).toBe(true);
+    expect(store().at).toBeCloseTo(0.62, 12);
+  });
+
+  it("pins it, so the sweep does not carry it away again", () => {
+    store().putAt(0.62);
+    expect(store().pinned).toBe(true);
+  });
+
+  it("leaves no finger down", () => {
+    // `held` describes a hand on the slider. Left set, the control would
+    // believe it was being dragged for the rest of the session.
+    useScanStore.setState({ held: true });
+    store().putAt(0.3);
+    expect(store().held).toBe(false);
+  });
+
+  it("stops at the ends of the body", () => {
+    store().putAt(5);
+    expect(store().at).toBe(1);
+    store().putAt(-5);
+    expect(store().at).toBe(0);
+  });
+});

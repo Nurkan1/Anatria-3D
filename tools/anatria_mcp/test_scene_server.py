@@ -106,7 +106,7 @@ def commands(app) -> list[dict]:
 
 
 class TestSurface:
-    async def test_asking_for_the_bridge_adds_the_fifteen(self, driving):
+    async def test_asking_for_the_bridge_adds_the_sixteen(self, driving):
         names = {tool.name for tool in (await driving.list_tools()).tools}
         assert names >= {
             "focus_organ",
@@ -124,11 +124,12 @@ class TestSurface:
             "highlight_pathway",
             "clear_pathway",
             "set_cross_section",
+            "scan_at_structure",
         }
 
     async def test_it_adds_only_say_beyond_the_existing_surface(self, driving):
         names = {tool.name for tool in (await driving.list_tools()).tools}
-        assert len(names) == 21
+        assert len(names) == 22
         assert "say" in names
 
     async def test_the_control_tools_do_not_claim_to_be_read_only(self, driving):

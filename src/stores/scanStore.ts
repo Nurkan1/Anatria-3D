@@ -246,6 +246,16 @@ interface ScanStore {
   /** Take hold of the sweep and put it at `at`. */
   hold: (at: number) => void;
   /**
+   * Put the light at a height and leave it there, switching on if need be.
+   *
+   * What the assistant does when it is asked to take somebody to a level. It
+   * switches the scanner on rather than quietly doing nothing, because a plane
+   * nobody can see is not an answer to "show me T8" -- and it pins, because the
+   * reader was taken somewhere and a sweep that immediately carried on would
+   * take it away again before they had looked.
+   */
+  putAt: (at: number) => void;
+  /**
    * Move the light by a fraction of its travel, and leave it there.
    *
    * The reading gesture, as opposed to the dragging one. See `stepFraction`
@@ -293,6 +303,15 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
   toggle: () =>
     set((state) => ({ enabled: !state.enabled, held: false, pinned: false })),
   hold: (at) => set({ held: true, at: Math.max(0, Math.min(1, at)) }),
+  putAt: (at) =>
+    set({
+      enabled: true,
+      pinned: true,
+      // Not held: no finger is down, and leaving it set would keep the slider
+      // believing it was being dragged for the rest of the session.
+      held: false,
+      at: Math.max(0, Math.min(1, at)),
+    }),
   step: (by) => {
     if (by === 0) return;
     set((state) => ({

@@ -36,6 +36,7 @@ from anatria_engine.protocol import (
     Language,
     OrganMeta,
     ResetView,
+    ScanAtStructure,
     SectionPlane,
     SetCrossSection,
     SetLayerOpacity,
@@ -533,6 +534,22 @@ def register_scene_tools(agent: Agent[SceneContext, str]) -> None:
         """Stop tracing the current route. Call this when the topic moves on."""
         ctx.deps.dispatch(ClearPathway())
         return "Cleared the pathway."
+
+    @agent.tool(sequential=True)
+    def scan_at_structure(ctx: RunContext[SceneContext], organ_id: str) -> str:
+        """Put the scanner's plane at the height of a structure.
+
+        Use it when the reader asks to be taken to a level -- "show me T8",
+        "take me to where the renal arteries leave" -- or when a cross-section
+        is the clearest way to explain what you are describing.
+
+        The scanner is switched on if it is off, because a plane nobody can see
+        is not an answer. The panel names the vertebral level the plane lands
+        on, so asking for a vertebra and asking for an organ are the same call.
+        """
+        organ = _resolve(ctx, organ_id)
+        ctx.deps.dispatch(ScanAtStructure(organ_id=organ.organ_id))
+        return f"Put the scanner at {organ.ta2_latin} ({organ.name_en})."
 
     @agent.tool(sequential=True)
     def set_cross_section(

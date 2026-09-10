@@ -29,6 +29,7 @@ import {
   SWEEP_CYCLE_S,
   SWEEP_PROGRESS,
   SCAN_TRAVEL_M,
+  scanFractionFor,
   SECTION_STEP_CM,
   stepFraction,
   type ScanAxis,
@@ -637,4 +638,22 @@ it("refuses to step before the body has been measured", () => {
   SCAN_TRAVEL_M.value = 0;
   expect(stepFraction()).toBe(0);
   SCAN_TRAVEL_M.value = 1.75;
+});
+
+it("turns a height in the body into a place on the slider", () => {
+  // Feet at 0.1 and crown at 1.85, as a standing atlas gives.
+  expect(scanFractionFor(0.1, 0.1, 1.85)).toBeCloseTo(0, 12);
+  expect(scanFractionFor(1.85, 0.1, 1.85)).toBeCloseTo(1, 12);
+  expect(scanFractionFor(0.975, 0.1, 1.85)).toBeCloseTo(0.5, 12);
+});
+
+it("answers the nearest end rather than refusing a height outside the body", () => {
+  // A request from beyond the extent is a request for its end, not a reason to
+  // fail a whole answer.
+  expect(scanFractionFor(-4, 0.1, 1.85)).toBe(0);
+  expect(scanFractionFor(9, 0.1, 1.85)).toBe(1);
+});
+
+it("gives the middle when there is no body to measure against", () => {
+  expect(scanFractionFor(1, 0, 0)).toBe(0.5);
 });

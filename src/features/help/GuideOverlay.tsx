@@ -504,6 +504,16 @@ const SECTIONS: Section[] = [
           interface, because a caption on screen does not travel with a screenshot.
         </p>
 
+        <Sub>Asking to be taken somewhere</Sub>
+        <p>
+          The assistant can move the plane for you. Ask to be taken to T8, or to
+          the level where the renal arteries leave, and it puts the scanner there
+          — switching it on if it was off, because a plane nobody can see is not
+          an answer. It names a structure rather than a level, so asking for a
+          vertebra and asking for the aortic valve are the same request; the
+          panel then reports whichever level the plane landed on.
+        </p>
+
         <Sub>Two switches with a cost, and what they buy</Sub>
         <p>
           <Ui>Aim the light with the pointer</Ui> makes the cursor the lamp while it is
