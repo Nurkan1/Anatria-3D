@@ -14,6 +14,7 @@ beforeEach(() => {
     tint: "cyan",
     reveal: false,
     readout: true,
+    panel: true,
   });
   localStorage.clear();
 });
@@ -155,5 +156,26 @@ describe("the panel that names what is being crossed", () => {
     store().toggleReadout();
     expect(store().readout).toBe(true);
     expect(localStorage.getItem("anatria3d.scan.readout.v1")).toBe("on");
+  });
+});
+
+describe("the scanner's own controls", () => {
+  it("are unfolded until somebody folds them", () => {
+    expect(store().panel).toBe(true);
+  });
+
+  it("remember being folded, in both directions", () => {
+    store().togglePanel();
+    expect(store().panel).toBe(false);
+    expect(localStorage.getItem("anatria3d.scan.panel.v1")).toBe("off");
+
+    store().togglePanel();
+    expect(localStorage.getItem("anatria3d.scan.panel.v1")).toBe("on");
+  });
+
+  it("folding is not switching the scanner off", () => {
+    useScanStore.setState({ enabled: true });
+    store().togglePanel();
+    expect(store().enabled).toBe(true);
   });
 });

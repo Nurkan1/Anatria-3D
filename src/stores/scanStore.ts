@@ -30,6 +30,20 @@ const SWEEP_ON_ANSWER_KEY = "anatria3d.scan.sweepOnAnswer.v1";
 const TINT_KEY = "anatria3d.scan.tint.v1";
 const REVEAL_KEY = "anatria3d.scan.reveal.v1";
 const READOUT_KEY = "anatria3d.scan.readout.v1";
+const PANEL_KEY = "anatria3d.scan.panel.v1";
+
+/**
+ * Whether the scanner's own controls are unfolded.
+ *
+ * Open unless it was folded away: somebody who has just switched the scanner on
+ * needs to see that there is a handle and a palette at all. But the panel sits
+ * over the viewport, and getting it out of the way must not mean switching the
+ * instrument off — stopping the sweep to see the body is the thing this exists
+ * to prevent.
+ */
+function storedPanel(): boolean {
+  return readLocal(PANEL_KEY) !== "off";
+}
 
 /**
  * Whether the panel naming what is being crossed is shown.
@@ -119,6 +133,8 @@ interface ScanStore {
   reveal: boolean;
   /** Show the panel that names what the plane is crossing. */
   readout: boolean;
+  /** Show the scanner's own controls, rather than the pill they fold into. */
+  panel: boolean;
 
   toggle: () => void;
   /** Take hold of the sweep and put it at `at`. */
@@ -130,6 +146,7 @@ interface ScanStore {
   setTint: (tint: ScanTintId) => void;
   setReveal: (on: boolean) => void;
   toggleReadout: () => void;
+  togglePanel: () => void;
 }
 
 export const useScanStore = create<ScanStore>()((set, get) => ({
@@ -141,6 +158,7 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
   tint: storedTint(),
   reveal: storedReveal(),
   readout: storedReadout(),
+  panel: storedPanel(),
 
   // Letting go and unpinning on the way out, so switching the scanner off never
   // leaves the next session holding an invisible sweep at somebody's ankle.
@@ -168,6 +186,11 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
     const readout = !get().readout;
     writeLocal(READOUT_KEY, readout ? "on" : "off");
     set({ readout });
+  },
+  togglePanel: () => {
+    const panel = !get().panel;
+    writeLocal(PANEL_KEY, panel ? "on" : "off");
+    set({ panel });
   },
 }));
 

@@ -4,7 +4,7 @@ import { useSceneStore } from "@/stores/sceneStore";
 import { useScanStore } from "@/stores/scanStore";
 
 import { SWEEP_PROGRESS } from "./scanBand";
-import { SCAN_TINTS } from "./scanTints";
+import { SCAN_TINTS, scanTint } from "./scanTints";
 
 /**
  * The scanner's switch, and the handle that puts its light where you want it.
@@ -52,6 +52,8 @@ export function ScanControls() {
   const setTint = useScanStore((s) => s.setTint);
   const reveal = useScanStore((s) => s.reveal);
   const setReveal = useScanStore((s) => s.setReveal);
+  const panel = useScanStore((s) => s.panel);
+  const togglePanel = useScanStore((s) => s.togglePanel);
   // There is nothing to reveal on a body that already has its colour: the
   // control says so rather than sitting there apparently broken.
   const drained = useSceneStore((s) => s.bodyTone) !== "solid";
@@ -67,13 +69,13 @@ export function ScanControls() {
    */
   useLayoutEffect(() => {
     if (slider.current) show(slider.current, SWEEP_PROGRESS.value);
-  }, [enabled]);
+  }, [enabled, panel]);
 
   useEffect(() => {
     // Nothing to follow while the reader has it, and nothing to follow while it
     // is pinned either — the sweep is not moving, and writing the same value
     // sixty times a second would fight a thumb somebody is about to drag.
-    if (!enabled || held || pinned) return;
+    if (!enabled || !panel || held || pinned) return;
     let frame = 0;
     const tick = () => {
       if (slider.current) show(slider.current, SWEEP_PROGRESS.value);
@@ -81,7 +83,7 @@ export function ScanControls() {
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [enabled, held, pinned]);
+  }, [enabled, panel, held, pinned]);
 
   return (
     <div className="pointer-events-auto flex flex-col items-start gap-1.5">
@@ -103,14 +105,43 @@ export function ScanControls() {
         Scanner
       </button>
 
-      {enabled && (
+      {/*
+        Folded away, the controls leave the one thing worth keeping on screen:
+        which colour the light is. A pill rather than nothing, for the same
+        reason the crossing panel leaves one — a control that can only be
+        recovered from memory is a control somebody loses.
+
+        And folding is not switching off. Clearing the view of the palette used
+        to mean stopping the instrument, which is the opposite of what somebody
+        wants when they are finally looking at something.
+      */}
+      {enabled && !panel && (
+        <button
+          type="button"
+          onClick={togglePanel}
+          title="Show the scanner's controls again"
+          className="pointer-events-auto flex items-center gap-1.5 rounded border border-slate-800/60 bg-slate-950/70 px-1.5 py-0.5 font-mono text-[9px] text-slate-500 hover:border-cyan-800/60 hover:text-cyan-500/80"
+        >
+          <span
+            aria-hidden
+            className="inline-block h-2 w-2 rounded-sm"
+            style={{ backgroundColor: scanTint(tint).hex }}
+          />
+          light · show
+        </button>
+      )}
+
+      {enabled && panel && (
         <div className="rounded border border-cyan-900/60 bg-slate-950/80 px-2 py-1.5">
-          <label
-            htmlFor="scan-position"
-            className="mb-1 block text-[9px] uppercase tracking-wider text-cyan-500/70"
+          <button
+            type="button"
+            onClick={togglePanel}
+            title="Fold these away without stopping the scanner"
+            className="mb-1 flex w-full items-center justify-between gap-3 text-[9px] uppercase tracking-wider text-cyan-500/70 hover:text-cyan-300"
           >
-            Drag to hold the light
-          </label>
+            <span>Drag to hold the light</span>
+            <span className="text-slate-500 normal-case">hide</span>
+          </button>
           {/*
             Vertical, because the thing it moves is: a horizontal handle for a
             light that travels head to feet reads backwards in the hand.
@@ -127,6 +158,7 @@ export function ScanControls() {
           <input
             ref={slider}
             id="scan-position"
+            aria-label="Drag to hold the light"
             type="range"
             min={0}
             max={1}

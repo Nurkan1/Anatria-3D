@@ -8,7 +8,7 @@ import { ScanControls } from "./ScanControls";
 import { SWEEP_PROGRESS } from "./scanBand";
 
 beforeEach(() => {
-  useScanStore.setState({ enabled: true, held: false, pinned: false, at: 0.5 });
+  useScanStore.setState({ enabled: true, held: false, pinned: false, at: 0.5, panel: true });
   useSceneStore.setState({ bodyTone: "carbon" });
   SWEEP_PROGRESS.value = 0.25;
 });
@@ -34,4 +34,28 @@ it("does not ask the engine for a vertical range input", () => {
   const slider = screen.getByLabelText(/drag to hold the light/i);
   expect(slider.style.writingMode).toBe("");
   expect(slider.className).toContain("-rotate-90");
+});
+
+it("folds away without stopping the scanner, and leaves the way back", () => {
+  // Clearing the palette off the viewport used to mean switching the
+  // instrument off, which is the opposite of what somebody wants at the moment
+  // they are finally looking at something.
+  render(<ScanControls />);
+  fireEvent.click(screen.getByText("hide"));
+
+  expect(useScanStore.getState().enabled).toBe(true);
+  expect(screen.queryByLabelText(/drag to hold the light/i)).toBeNull();
+
+  const pill = screen.getByText(/light · show/);
+  fireEvent.click(pill);
+  expect(screen.getByLabelText(/drag to hold the light/i)).toBeTruthy();
+});
+
+it("keeps the active colour visible while folded", () => {
+  // The one thing worth a pixel when the controls are gone: which colour the
+  // light is. Otherwise the pill is an anonymous button.
+  useScanStore.setState({ tint: "amber", panel: false });
+  const { container } = render(<ScanControls />);
+  const dot = container.querySelector('[aria-hidden][style*="background"]');
+  expect(dot).not.toBeNull();
 });
