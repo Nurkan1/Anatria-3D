@@ -1,5 +1,5 @@
 import { useFrame, useThree } from "@react-three/fiber";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useLayoutEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
 import { fps, heapMb, noteFrame, sample } from "./renderSample";
@@ -185,6 +185,7 @@ export function RenderStatsPanel() {
   const cells = useRef<(HTMLSpanElement | null)[]>([]);
   const [place, setPlace] = useState<{ x: number; y: number } | null>(storedPlace);
   const grab = useRef<{ x: number; y: number } | null>(null);
+  const panel = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // A window that shrank while the panel was elsewhere must not strand it.
@@ -192,6 +193,26 @@ export function RenderStatsPanel() {
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
+
+  /**
+   * If it opened off the screen, it rescues itself.
+   *
+   * The handle is the header, and when the panel is too tall for the column
+   * the header is exactly the part that has gone: there is nothing left to
+   * grab, and dragging it back is impossible by the only means provided.
+   * Reported from a laptop, and it is the kind of bug that makes a feature
+   * look like it does not work rather than like it is out of reach.
+   *
+   * Measured after layout rather than guessed from a row count, so it holds
+   * however many rows the panel grows to next.
+   */
+  useLayoutEffect(() => {
+    if (!open || place) return;
+    const box = panel.current?.getBoundingClientRect();
+    if (!box) return;
+    const escaped = box.top < 0 || box.left < 0 || box.bottom > window.innerHeight;
+    if (escaped) setPlace(clampToWindow({ x: Math.max(box.left, 8), y: 8 }));
+  }, [open, place]);
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
@@ -228,6 +249,7 @@ export function RenderStatsPanel() {
 
   return (
     <div
+      ref={panel}
       className={`pointer-events-none select-none rounded border border-slate-700/70 bg-slate-950/90 px-2.5 py-2 font-mono text-[10px] text-slate-300 shadow-lg ${
         place ? "fixed z-30" : ""
       }`}
