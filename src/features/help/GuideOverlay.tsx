@@ -439,6 +439,7 @@ const SECTIONS: Section[] = [
             ["Drag", "Move the window"],
             ["The button under the picture", "Back to the whole section"],
             ["Measure", "Drag across the section for a distance"],
+            ["Save", "Write this section out as a PNG"],
           ]}
         />
         <p>
@@ -493,6 +494,15 @@ const SECTIONS: Section[] = [
           modelled rather than imaged. It is a scale to learn proportions on, not a
           number to put in a report.
         </Callout>
+
+        <p>
+          <Ui>Save</Ui> writes the section out as a PNG — what is on screen, so a
+          magnified one saves the window you are looking at, with the caliper on it if
+          you drew one. The file is named after what it is: the level, the width and
+          which cut it was, so a folder of them can be read without opening any of
+          them. The disclaimer is part of the picture rather than part of the
+          interface, because a caption on screen does not travel with a screenshot.
+        </p>
 
         <Sub>Two switches with a cost, and what they buy</Sub>
         <p>

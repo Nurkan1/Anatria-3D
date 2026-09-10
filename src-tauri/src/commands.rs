@@ -397,10 +397,35 @@ pub async fn export_journal(
 /// that accepted a path would be a general write-anywhere capability handed to
 /// the renderer. The extension is forced rather than trusted — this writes PNG
 /// bytes, so the file has to be named like one however the dialog came back.
+/// A name suggested by the webview is a string, not a path.
+///
+/// The reader still chooses where the file goes, so this only decides what the
+/// dialog opens with — but a suggestion is untrusted input either way, and the
+/// cheapest moment to refuse a separator or a `..` is before anything is built
+/// out of it. Everything but letters, digits, dash, underscore and dot is
+/// dropped rather than replaced: a name is a label here, not data to preserve.
+fn suggested_file_name(raw: &str) -> String {
+    let cleaned: String = raw
+        .chars()
+        .filter(|c| c.is_ascii_alphanumeric() || matches!(c, '-' | '_' | '.'))
+        .take(80)
+        .collect();
+    let cleaned = cleaned.trim_matches('.').to_string();
+    if cleaned.is_empty() {
+        return String::new();
+    }
+    if cleaned.to_ascii_lowercase().ends_with(".png") {
+        cleaned
+    } else {
+        format!("{cleaned}.png")
+    }
+}
+
 #[tauri::command]
 pub async fn save_view_image(
     app: tauri::AppHandle,
     png_base64: String,
+    file_name: Option<String>,
 ) -> CommandResult<Option<String>> {
     use base64::Engine as _;
     use tauri_plugin_dialog::DialogExt;
@@ -409,10 +434,16 @@ pub async fn save_view_image(
         .decode(png_base64.as_bytes())
         .map_err(|_| CommandError::Invalid("The image could not be decoded.".into()))?;
 
+    let suggested = file_name
+        .as_deref()
+        .map(suggested_file_name)
+        .filter(|name| !name.is_empty())
+        .unwrap_or_else(|| "anatria3d-view.png".to_string());
+
     let Some(path) = app
         .dialog()
         .file()
-        .set_file_name("anatria3d-view.png")
+        .set_file_name(&suggested)
         .add_filter("PNG image", &["png"])
         .blocking_save_file()
     else {
@@ -594,3 +625,32 @@ pub fn log_event(log: State<'_, AppLog>, level: String, source: String, message:
     log.append(&level, &source, &message);
 }
 
+#[cfg(test)]
+mod tests {
+    use super::suggested_file_name;
+
+    #[test]
+    fn keeps_a_reasonable_name() {
+        assert_eq!(suggested_file_name("anatria3d-axial-T8-13cm-cut.png"), "anatria3d-axial-T8-13cm-cut.png");
+    }
+
+    #[test]
+    fn adds_the_extension_when_it_is_missing() {
+        assert_eq!(suggested_file_name("section"), "section.png");
+    }
+
+    #[test]
+    fn refuses_to_carry_a_path() {
+        // The reader still picks where the file goes, but a suggestion is
+        // untrusted input and the cheapest moment to drop a separator is
+        // before anything is built out of it.
+        assert_eq!(suggested_file_name("../../etc/passwd"), "etcpasswd.png");
+        assert_eq!(suggested_file_name("C:\\Windows\\system32\\a"), "CWindowssystem32a.png");
+    }
+
+    #[test]
+    fn falls_back_rather_than_naming_a_file_nothing() {
+        assert!(suggested_file_name("...").is_empty());
+        assert!(suggested_file_name("").is_empty());
+    }
+}

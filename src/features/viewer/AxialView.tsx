@@ -10,6 +10,8 @@ import {
   panWindow,
   pointInSection,
   pointOnScreen,
+  sectionFileName,
+  sectionImage,
   RETAKE_INTERVAL_MS,
   restoreSlice,
   SECTION_VIEW,
@@ -25,6 +27,7 @@ import {
 import type { SectionMeasure, SliceWindow } from "./axialSlice";
 import { SECTION_STEP_CM, stepFraction } from "./scanBand";
 import { AXIAL_PROBE } from "./AxialProbe";
+import { saveViewImage } from "@/lib/studyDb";
 import { CURRENT_CROSSING } from "./scanCrossing";
 import { CURRENT_LEVEL } from "./vertebralLevel";
 import { tissueColour } from "./palette";
@@ -166,6 +169,9 @@ export function AxialView() {
   const [measure, setMeasure] = useState<SectionMeasure | null>(null);
   /** True while an end is being dragged out, so a click alone leaves nothing. */
   const drawing = useRef(false);
+  /** The save, and whatever it had to say afterwards. */
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState<string | null>(null);
   /**
    * How wide the enlarged window actually is, in screen pixels.
    *
@@ -643,7 +649,43 @@ export function AxialView() {
                 {measure ? formatDistance(measureCm(measure)) : "drag across it"}
               </span>
             )}
+            <button
+              type="button"
+              disabled={saving}
+              onClick={() => {
+                setSaving(true);
+                setSaved(null);
+                // The window as it is right now, so a magnified section saves
+                // what is on screen rather than what it started as.
+                sectionImage(looking(), measure)
+                  .then((png) =>
+                    png
+                      ? saveViewImage(png, sectionFileName(level, across, cut))
+                      : Promise.reject(new Error("There is no section to save yet.")),
+                  )
+                  .then((path) => setSaved(path ? `Saved to ${path}` : null))
+                  .catch((error: unknown) =>
+                    setSaved(error instanceof Error ? error.message : String(error)),
+                  )
+                  .finally(() => setSaving(false));
+              }}
+              title="Save this section as a PNG, with its measurement"
+              className="ml-auto rounded border border-slate-700 px-2 py-0.5 text-slate-300 hover:border-cyan-700 hover:text-cyan-300 disabled:opacity-40"
+            >
+              {saving ? "Saving…" : "Save"}
+            </button>
           </div>
+
+          {saved && (
+            <button
+              type="button"
+              onClick={() => setSaved(null)}
+              title={saved}
+              className="truncate text-left text-[10px] text-slate-500 hover:text-slate-300"
+            >
+              {saved}
+            </button>
+          )}
 
           {measuring && (
             <p className="text-[11px] leading-snug text-slate-500">

@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { DISCLAIMER } from "./exportView";
+import { DISCLAIMER, encodeImageBytes } from "./exportView";
 
 /**
  * The geometry of an axial slice, worked out before anything is drawn.
@@ -373,6 +373,120 @@ export function formatDistance(cm: number): string {
   if (!(cm > 0)) return "";
   if (cm < 1) return `${Math.round(cm * 10)} mm`;
   return `${cm.toFixed(1)} cm`;
+}
+
+/**
+ * The section as a PNG, with the caliper on it if one was drawn.
+ *
+ * # Why this composes a second canvas
+ *
+ * The panel's canvas already carries the disclaimer, which is baked in
+ * deliberately — a picture that looks like a scan has to say what it is
+ * wherever it ends up, and a caption in the interface does not travel with a
+ * screenshot. The caliper is the opposite: drawn *over* the canvas, so that a
+ * measurement is not stuck in every copy of the section from then on.
+ *
+ * Saving is the one moment those two rules point opposite ways — the reader
+ * measured something and wants the number in the file. Composing a copy gives
+ * both: the live picture stays clean, and the saved one is complete.
+ *
+ * The window is passed in rather than read from anywhere. There is one place
+ * that knows what the section is framed on, and adding a second copy of it here
+ * would be the same mistake that made magnifying jump.
+ *
+ * Returns null when there is nothing to save, rather than an empty image.
+ */
+export async function sectionImage(
+  window: SliceWindow,
+  line: SectionMeasure | null,
+): Promise<string | null> {
+  const source = AXIAL_CANVAS.value;
+  if (!source || source.width === 0) return null;
+
+  const size = source.width;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const context = canvas.getContext("2d");
+  if (!context) return null;
+  context.drawImage(source, 0, 0);
+
+  if (line && window.half > 0) drawMeasure(context, line, window, size);
+
+  const blob = await new Promise<Blob | null>((resolve) =>
+    canvas.toBlob(resolve, "image/png"),
+  );
+  if (!blob) return null;
+  return encodeImageBytes(new Uint8Array(await blob.arrayBuffer()));
+}
+
+/**
+ * The caliper, drawn at the picture's own scale rather than the screen's.
+ *
+ * The overlay on screen is sized in CSS pixels over a window a few hundred
+ * across; the file is two or four thousand. Reusing those numbers would put a
+ * hairline and unreadable text on the saved image, so everything here is a
+ * fraction of the image instead.
+ */
+function drawMeasure(
+  context: CanvasRenderingContext2D,
+  line: SectionMeasure,
+  window: SliceWindow,
+  size: number,
+): void {
+  const a = pointOnScreen(window, line.ax, line.az, size);
+  const b = pointOnScreen(window, line.bx, line.bz, size);
+
+  context.strokeStyle = "#22d3ee";
+  context.lineWidth = Math.max(2, size / 512);
+  context.beginPath();
+  context.moveTo(a.x, a.y);
+  context.lineTo(b.x, b.y);
+  context.stroke();
+
+  const dot = Math.max(3, size / 340);
+  context.fillStyle = "#22d3ee";
+  for (const end of [a, b]) {
+    context.beginPath();
+    context.arc(end.x, end.y, dot, 0, Math.PI * 2);
+    context.fill();
+  }
+
+  const label = formatDistance(measureCm(line));
+  if (!label) return;
+  const type = Math.round(size / 42);
+  context.font = `${type}px system-ui, "Segoe UI", sans-serif`;
+  context.textBaseline = "alphabetic";
+  context.textAlign = "left";
+  context.lineWidth = Math.max(3, type / 5);
+  context.strokeStyle = "rgba(2, 6, 23, 0.9)";
+  context.fillStyle = "#a5f3fc";
+  const x = (a.x + b.x) / 2 + type * 0.6;
+  const y = (a.y + b.y) / 2 - type * 0.6;
+  // Stroked first and filled over it, which is how text stays readable on a
+  // picture whose background is whatever the body happened to be there.
+  context.strokeText(label, x, y);
+  context.fillText(label, x, y);
+}
+
+/**
+ * A name for the file, made of what the picture actually is.
+ *
+ * Somebody saving one section is saving several, and a folder of
+ * `anatria3d-view.png` and `anatria3d-view (1).png` is a folder nobody can
+ * read. The level and the width are what tell two of them apart.
+ *
+ * ASCII only, and deliberately: the level of a disc is written with an en dash
+ * on screen, and a file name is not the place to find out how somebody's file
+ * system feels about that.
+ */
+export function sectionFileName(level: string | null, acrossCm: number, cut: boolean): string {
+  const parts = ["anatria3d", "axial"];
+  const named = level?.replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  if (named) parts.push(named);
+  if (acrossCm > 0) parts.push(`${Math.round(acrossCm)}cm`);
+  parts.push(cut ? "cut" : "slab");
+  return `${parts.join("-")}.png`;
 }
 
 /**

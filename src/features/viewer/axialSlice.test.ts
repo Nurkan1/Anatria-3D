@@ -11,6 +11,7 @@ import {
   panWindow,
   pointInSection,
   pointOnScreen,
+  sectionFileName,
   SLICE_PIXELS_HIGH,
   SLICE_PIXELS_NORMAL,
   sliceSize,
@@ -403,5 +404,27 @@ describe("the caliper", () => {
     expect(formatDistance(3.44)).toBe("3.4 cm");
     expect(formatDistance(12.06)).toBe("12.1 cm");
     expect(formatDistance(0)).toBe("");
+  });
+});
+
+describe("sectionFileName", () => {
+  it("names the file after what the picture is", () => {
+    expect(sectionFileName("T8", 13, true)).toBe("anatria3d-axial-T8-13cm-cut.png");
+    expect(sectionFileName("T8", 108, false)).toBe("anatria3d-axial-T8-108cm-slab.png");
+  });
+
+  it("keeps a disc level readable without its en dash", () => {
+    // A file name is not the place to find out how a file system feels about
+    // punctuation the interface uses freely.
+    expect(sectionFileName("L4–L5", 9, false)).toBe("anatria3d-axial-L4-L5-9cm-slab.png");
+  });
+
+  it("says nothing about a level where there is none", () => {
+    expect(sectionFileName(null, 40, true)).toBe("anatria3d-axial-40cm-cut.png");
+  });
+
+  it("leaves the width out rather than writing a nonsense one", () => {
+    // Before the first section has been taken there is no width to report.
+    expect(sectionFileName("T8", -1, true)).toBe("anatria3d-axial-T8-cut.png");
   });
 });
