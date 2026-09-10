@@ -1,7 +1,15 @@
 import * as THREE from "three";
 import { describe, expect, it } from "vitest";
 
-import { studioLightDirections } from "./lighting";
+import {
+  aimStudioAt,
+  SECTION_AMBIENT,
+  STUDIO_AMBIENT,
+  STUDIO_FILL,
+  STUDIO_KEY,
+  STUDIO_RIM,
+  studioLightDirections,
+} from "./lighting";
 
 const UP = new THREE.Vector3(0, 1, 0);
 /** Looking down -Z, the default camera direction. */
@@ -70,5 +78,76 @@ describe("studioLightDirections", () => {
     const long = studioLightDirections(new THREE.Vector3(0, 0, -50), UP);
     const unit = studioLightDirections(AHEAD, UP);
     expect(long.key.angleTo(unit.key)).toBeCloseTo(0);
+  });
+});
+
+/** A scene with the rig in it, named the way `StudioLights` names it. */
+function riggedScene() {
+  const scene = new THREE.Scene();
+  const ambient = new THREE.AmbientLight(0xffffff, 0.34);
+  ambient.name = STUDIO_AMBIENT;
+  const key = new THREE.DirectionalLight(0xffffff, 1.75);
+  key.name = STUDIO_KEY;
+  key.position.set(4.2, 4.6, 7.7);
+  const fill = new THREE.DirectionalLight(0xffffff, 0.5);
+  fill.name = STUDIO_FILL;
+  fill.position.set(-8, -2, 6);
+  const rim = new THREE.DirectionalLight(0xffffff, 0.75);
+  rim.name = STUDIO_RIM;
+  rim.position.set(2.5, 5.5, -9);
+  scene.add(ambient, key, fill, rim);
+  return { scene, ambient, key, fill, rim };
+}
+
+const LOOKING_DOWN = new THREE.Vector3(0, -1, 0);
+/** Anterior at the top of the picture. Same vector the section's camera uses. */
+const SLICE_UP = new THREE.Vector3(0, 0, -1);
+
+describe("aimStudioAt", () => {
+  it("puts the key light above the section rather than in front of it", () => {
+    const { scene, key } = riggedScene();
+    // Before: a light aimed at a camera looking horizontally, so a surface
+    // facing straight up catches it at a glance.
+    const before = key.position.clone().normalize().y;
+    aimStudioAt(scene, LOOKING_DOWN, SLICE_UP);
+    const after = key.position.clone().normalize().y;
+    expect(after).toBeGreaterThan(before);
+    // And it is genuinely overhead, not merely better than it was.
+    expect(after).toBeGreaterThan(0.7);
+  });
+
+  it("opens the walls of the cut without erasing the shading", () => {
+    const { scene, ambient } = riggedScene();
+    aimStudioAt(scene, LOOKING_DOWN, SLICE_UP);
+    expect(ambient.intensity).toBe(SECTION_AMBIENT);
+  });
+
+  it("never dims a scene that was already brighter", () => {
+    const { scene, ambient } = riggedScene();
+    ambient.intensity = 0.9;
+    aimStudioAt(scene, LOOKING_DOWN, SLICE_UP);
+    expect(ambient.intensity).toBe(0.9);
+  });
+
+  it("gives the rig back exactly as it found it", () => {
+    // The next frame belongs to the reader, and a body left lit from above
+    // after one section would be a far worse bug than a dark section.
+    const { scene, ambient, key, fill, rim } = riggedScene();
+    const was = [key, fill, rim].map((light) => light.position.clone());
+    const restore = aimStudioAt(scene, LOOKING_DOWN, SLICE_UP);
+    restore();
+    [key, fill, rim].forEach((light, i) => {
+      expect(light.position.x).toBeCloseTo(was[i]!.x, 12);
+      expect(light.position.y).toBeCloseTo(was[i]!.y, 12);
+      expect(light.position.z).toBeCloseTo(was[i]!.z, 12);
+    });
+    expect(ambient.intensity).toBe(0.34);
+  });
+
+  it("does nothing rather than throwing when the rig is not there", () => {
+    // A scene assembled differently — a test harness, a future viewport — must
+    // get a dark section, not a crash in the middle of a borrowed render.
+    const scene = new THREE.Scene();
+    expect(() => aimStudioAt(scene, LOOKING_DOWN, SLICE_UP)()).not.toThrow();
   });
 });

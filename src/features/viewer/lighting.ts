@@ -86,3 +86,77 @@ export function studioLightDirections(
 
   return out;
 }
+
+/**
+ * The names the section's pass finds the rig by.
+ *
+ * Named rather than picked out by intensity or by index: a light identified as
+ * "the bright one" stops being the bright one the first time somebody balances
+ * the rig, and it fails silently by lighting the wrong thing.
+ */
+export const STUDIO_KEY = "studio-key";
+export const STUDIO_FILL = "studio-fill";
+export const STUDIO_RIM = "studio-rim";
+export const STUDIO_AMBIENT = "studio-ambient";
+
+/** Placed out past everything; a directional light only carries a direction. */
+const REACH = 10;
+
+/**
+ * The least ambient a section is drawn with.
+ *
+ * The viewport keeps ambient low on purpose, because on anatomy the shading is
+ * the information. A cut is the one view where that argument weakens: the walls
+ * of the cut face sideways, nothing in the rig is aimed sideways, and shadow
+ * there hides structures rather than shaping them.
+ */
+export const SECTION_AMBIENT = 0.45;
+
+/**
+ * Point the studio rig at another camera for one pass, and give it back.
+ *
+ * # Why the rig is borrowed rather than a light being added
+ *
+ * **Adding one would recompile every material.** The number of lights is baked
+ * into the program — `NUM_DIR_LIGHTS` is a `#define` — so a light switched on
+ * for the section and off afterwards is two full recompiles per picture, which
+ * costs more than the picture. Moving a light that already exists changes a
+ * uniform and nothing else. Same reasoning as forcing the materials opaque in
+ * `AxialProbe`, and the same discipline: everything is put back.
+ *
+ * # Why it was dark
+ *
+ * The rig follows the camera, which is what stops the far side of an orbited
+ * body being lit from the front. The section has a camera of its own, looking
+ * straight down, and it was the one camera the rig never followed — so the
+ * surfaces a reader is looking at were being lit almost edge-on by lamps aimed
+ * at the front of the body.
+ */
+export function aimStudioAt(
+  scene: THREE.Object3D,
+  forward: THREE.Vector3,
+  up: THREE.Vector3,
+  ambientFloor: number = SECTION_AMBIENT,
+): () => void {
+  const aimed = studioLightDirections(forward, up);
+  const moved: { light: THREE.Object3D; position: THREE.Vector3 }[] = [];
+
+  const place = (name: string, direction: THREE.Vector3) => {
+    const light = scene.getObjectByName(name);
+    if (!light) return;
+    moved.push({ light, position: light.position.clone() });
+    light.position.copy(direction).multiplyScalar(REACH);
+  };
+  place(STUDIO_KEY, aimed.key);
+  place(STUDIO_FILL, aimed.fill);
+  place(STUDIO_RIM, aimed.rim);
+
+  const ambient = scene.getObjectByName(STUDIO_AMBIENT) as THREE.AmbientLight | undefined;
+  const wasAmbient = ambient?.intensity ?? 0;
+  if (ambient) ambient.intensity = Math.max(wasAmbient, ambientFloor);
+
+  return () => {
+    for (const { light, position } of moved) light.position.copy(position);
+    if (ambient) ambient.intensity = wasAmbient;
+  };
+}

@@ -8,6 +8,7 @@ import {
   AXIAL_CANVAS,
   pastNativeSize,
   restoreSlice,
+  SECTION_WINDOW,
   wantSection,
   wheelSteps,
   WHEEL_SETTLE_MS,
@@ -69,7 +70,7 @@ function SliceTable({ compact }: { compact: boolean }) {
   const rest = Math.max(0, total - organIds.length);
 
   return (
-    <ul className={compact ? "mt-1 space-y-0.5" : "mt-1 w-72 space-y-1"}>
+    <ul className={compact ? "mt-1 space-y-0.5" : "space-y-1"}>
       {organIds.map((organId) => {
         const organ = organs[organId];
         return (
@@ -276,24 +277,30 @@ export function AxialView() {
   if (full) {
     const magnify = (by: number) => setZoom((z) => Math.min(6, Math.max(1, z * by)));
     return (
-      <div className="pointer-events-auto fixed inset-0 z-40 flex flex-col items-center justify-center gap-2 bg-slate-950/95 p-4">
-        <p className="text-[10px] uppercase tracking-wider text-cyan-500/70">
-          Axial{level ? ` · ${level}` : ""} ·{" "}
-          {stepped ? `${SECTION_STEP_CM} cm steps` : "where you let go"}
-        </p>
-
+      <div className="pointer-events-auto fixed inset-0 z-40 flex items-center justify-center gap-6 bg-slate-950/95 p-4">
         {/*
-          The window is a fixed square and the picture moves inside it, rather
-          than the picture growing and pushing the table off the screen. Panning
-          is only offered once there is something outside the window to pan to.
+          The picture takes the height and the reading material stands beside
+          it. Stacked, the caption and the table were spending most of a laptop
+          on four lines of prose and leaving the section — the only thing on
+          screen that cannot be read at half size — squeezed into what was
+          left. Beside it, the same words cost nothing the picture wanted.
+
+          Sized against both edges rather than the height alone: the column
+          next to it is a fixed width, so what the picture can have is the
+          window minus that, and a square that only watched `vh` would run off
+          a wide-and-short window.
+
+          It stays a fixed square with the picture moving inside it. Growing
+          the picture instead would push the table off the screen, and panning
+          is only offered once there is something outside the square to pan to.
         */}
         <div
           ref={frame}
-          className="relative h-[58vh] w-[58vh] max-w-[90vw] overflow-hidden rounded bg-black"
+          className="relative shrink-0 overflow-hidden rounded bg-black"
           /*
             The wheel reads the body, and that is not a preference — it is the
             gesture every reader of a cross-section already has. Magnifying
-            moves to the modifier and to the two buttons under the picture,
+            moves to the modifier and to the two buttons beside the picture,
             which is where a viewer that reads sections keeps it.
           */
           onWheel={(event) => {
@@ -319,7 +326,11 @@ export function AxialView() {
           onPointerCancel={() => {
             dragging.current = null;
           }}
-          style={{ cursor: zoom === 1 ? "default" : dragging.current ? "grabbing" : "grab" }}
+          style={{
+            width: SECTION_WINDOW,
+            height: SECTION_WINDOW,
+            cursor: zoom === 1 ? "default" : dragging.current ? "grabbing" : "grab",
+          }}
         >
           <canvas
             ref={canvas}
@@ -338,43 +349,49 @@ export function AxialView() {
           />
         </div>
 
-        <div className="flex items-center gap-1.5 text-xs">
-          <button
-            type="button"
-            onClick={() => magnify(1 / 1.4)}
-            className="rounded border border-slate-700 px-2 py-0.5 text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
-          >
-            −
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setZoom(1);
-              setPan({ x: 0, y: 0 });
-            }}
-            className="w-16 rounded border border-slate-700 px-2 py-0.5 tabular-nums text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
-          >
-            {zoom.toFixed(1)}×
-          </button>
-          <button
-            type="button"
-            onClick={() => magnify(1.4)}
-            className="rounded border border-slate-700 px-2 py-0.5 text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
-          >
-            +
-          </button>
-          <button
-            type="button"
-            onClick={() => setFull(false)}
-            className="ml-2 rounded border border-slate-700 px-3 py-0.5 text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
-          >
-            Close · Esc
-          </button>
-        </div>
+        <div className="flex w-72 flex-col gap-3 self-center">
+          <p className="text-[10px] uppercase tracking-wider text-cyan-500/70">
+            Axial{level ? ` · ${level}` : ""} ·{" "}
+            {stepped ? `${SECTION_STEP_CM} cm steps` : "where you let go"}
+          </p>
 
-        <div className="flex max-w-3xl items-start gap-6">
+          <div className="flex items-center gap-1.5 text-xs">
+            <button
+              type="button"
+              onClick={() => magnify(1 / 1.4)}
+              className="rounded border border-slate-700 px-2 py-0.5 text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
+            >
+              −
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setZoom(1);
+                setPan({ x: 0, y: 0 });
+              }}
+              className="w-16 rounded border border-slate-700 px-2 py-0.5 tabular-nums text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
+            >
+              {zoom.toFixed(1)}×
+            </button>
+            <button
+              type="button"
+              onClick={() => magnify(1.4)}
+              className="rounded border border-slate-700 px-2 py-0.5 text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
+            >
+              +
+            </button>
+            <button
+              type="button"
+              onClick={() => setFull(false)}
+              className="ml-auto rounded border border-slate-700 px-3 py-0.5 text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
+            >
+              Close · Esc
+            </button>
+          </div>
+
           <SliceTable compact={false} />
-          <p className="max-w-sm text-[11px] leading-snug text-slate-500">
+
+          <p className="text-[11px] leading-snug text-slate-500">
             {caption} The wheel steps {SECTION_STEP_CM} cm through the body;
             Ctrl and the wheel, or −/+, magnify; drag to move.
           </p>

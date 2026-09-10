@@ -115,6 +115,28 @@ export function sliceFraming(
 export const SLICE_UP = new THREE.Vector3(0, 0, -1);
 
 /**
+ * The direction the section is looked at from: straight down.
+ *
+ * Named because the lighting needs it as well as the camera does, and two
+ * places agreeing by coincidence is how a section ends up lit from behind.
+ */
+export const SLICE_FORWARD = new THREE.Vector3(0, -1, 0);
+
+/**
+ * How big the enlarged section is allowed to be, as CSS.
+ *
+ * Square, and limited by whichever edge runs out first: the height, or the
+ * width left over once the column of reading material beside it has taken its
+ * own. A square measured against the height alone looks right on this desktop
+ * and runs off the side of a wide, short window.
+ *
+ * The 23rem is that column plus the gap and the padding around it, with a
+ * little slack. It is stated here rather than guessed twice because the layout
+ * and this number have to agree or the picture pushes the words off the screen.
+ */
+export const SECTION_WINDOW = "min(90vh, calc(100vw - 23rem))";
+
+/**
  * A fresh section is wanted, from somewhere outside the render loop.
  *
  * The wheel lives in the DOM overlay and the pass lives inside the canvas, and

@@ -56,7 +56,13 @@ import { backgroundTheme } from "./background";
 import { framingDistance, lateralSign, scanStance, viewDirection } from "./cameraViews";
 import { busiestTouches } from "./coverage";
 import { explodeMembers, explodeOffsets } from "./explode";
-import { studioLightDirections } from "./lighting";
+import {
+  STUDIO_AMBIENT,
+  STUDIO_FILL,
+  STUDIO_KEY,
+  STUDIO_RIM,
+  studioLightDirections,
+} from "./lighting";
 import { keepsColour } from "./scan";
 import {
   collectSupply,
@@ -184,10 +190,13 @@ function StudioLights() {
       {/* Ambient is deliberately low. Filling the scene evenly flattens every
           surface, and on anatomy the shading *is* the information: the groove
           between two muscle bellies is a shadow, not a colour change. */}
-      <ambientLight intensity={backgroundTheme(background).ambient} />
-      <directionalLight ref={key} intensity={1.75} />
-      <directionalLight ref={fill} intensity={0.5} color="#a8cfe8" />
-      <directionalLight ref={rim} intensity={0.75} color="#8fd4ff" />
+      {/* Named so the axial pass can aim the same rig at its own camera for a
+          frame. Adding a light of its own would recompile every material; see
+          `aimStudioAt`. */}
+      <ambientLight name={STUDIO_AMBIENT} intensity={backgroundTheme(background).ambient} />
+      <directionalLight name={STUDIO_KEY} ref={key} intensity={1.75} />
+      <directionalLight name={STUDIO_FILL} ref={fill} intensity={0.5} color="#a8cfe8" />
+      <directionalLight name={STUDIO_RIM} ref={rim} intensity={0.75} color="#8fd4ff" />
       {/* The one light that stays put. A bounce from below is environmental —
           it belongs to the room, not to the viewer — and keeping it in world
           space leaves a cue that the body has an underside at all. */}

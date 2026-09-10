@@ -12,8 +12,10 @@ import {
   sliceFraming,
   slabPlanes,
   SLAB_HALF_THICKNESS,
+  SLICE_FORWARD,
   SLICE_UP,
 } from "./axialSlice";
+import { aimStudioAt } from "./lighting";
 
 /**
  * Phase 0 for the axial slice: measure, and decide afterwards.
@@ -270,6 +272,14 @@ export function AxialProbe({
     // Declared out here so the `finally` can still see them.
     const previousClipping = gl.clippingPlanes;
     const previousTarget = gl.getRenderTarget();
+    /**
+     * The rig follows the camera, and this is a camera it never followed.
+     *
+     * Aimed straight down for the pass and put back afterwards. The lights are
+     * moved rather than added on purpose — a light switched on for one picture
+     * is two shader recompiles per picture. See `aimStudioAt`.
+     */
+    const restoreLights = aimStudioAt(scene, SLICE_FORWARD, SLICE_UP);
     try {
       // The cut keeps everything below the plane and reads as solid; the slab
       // keeps only that level and is the truthful section. See `cutPlanes`.
@@ -293,6 +303,7 @@ export function AxialProbe({
       gl.readRenderTargetPixels(target, 0, 0, SIZE, SIZE, pixels);
       AXIAL_PROBE.readbackMs = performance.now() - startedReadback;
     } finally {
+      restoreLights();
       gl.setRenderTarget(previousTarget);
       gl.clippingPlanes = previousClipping;
       if (ring) ring.visible = ringWasVisible;
