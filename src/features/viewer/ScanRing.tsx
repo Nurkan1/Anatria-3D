@@ -4,7 +4,7 @@ import * as THREE from "three";
 
 import { useScanStore } from "@/stores/scanStore";
 
-import { SCAN_DROP, SCAN_ENTRY, SHARED_SCAN } from "./scanBand";
+import { SCAN_DROP, SCAN_ENTRY, SCAN_PULSE, SHARED_SCAN } from "./scanBand";
 import { scanTint } from "./scanTints";
 
 /**
@@ -101,6 +101,17 @@ const TURNS_PER_SECOND = 0.04;
  * in — a fade is a change of picture, a movement is an event.
  */
 const ENTRY_APERTURE = 0.34;
+
+/**
+ * How far the wash opens out at the moment the light is let go.
+ *
+ * The ring does not move — it is where the reader put it, and shifting it would
+ * undo the placing they just made. What travels is the light it throws: the
+ * disc widens and brightens and settles back, which reads as the instrument
+ * taking a reading rather than as the instrument being knocked.
+ */
+const PULSE_SPREAD = 0.35;
+const PULSE_GLOW = 1.8;
 
 /** How many times the name repeats around the band. */
 const NAMEPLATE_REPEATS = 5;
@@ -204,6 +215,8 @@ export function ScanRing({
   const nameplateMaterial = useRef<THREE.MeshBasicMaterial>(null);
   const edgeMaterial = useRef<THREE.MeshBasicMaterial>(null);
   const shellMaterial = useRef<THREE.MeshStandardMaterial>(null);
+  /** The two lit surfaces, grouped so the pulse widens both as one. */
+  const glowGroup = useRef<THREE.Group>(null);
   /**
    * Whether the hardware was blended on the previous frame.
    *
@@ -371,8 +384,25 @@ export function ScanRing({
     group.scale.x = aperture;
     group.scale.z = aperture;
 
-    if (discMaterial.current) discMaterial.current.opacity = DISC_OPACITY * breath * arrival;
-    if (lensMaterial.current) lensMaterial.current.opacity = LENS_OPACITY * breath * arrival;
+    /**
+     * The answer to letting go, on the light rather than on the hardware.
+     *
+     * Read from the same shared value the body's flash uses, so the widening
+     * wash and the level lighting up are one event seen twice instead of two
+     * animations that agree only while the frame rate is good.
+     */
+    const pulse = SCAN_PULSE.value;
+    if (glowGroup.current) {
+      const spread = 1 + PULSE_SPREAD * pulse;
+      glowGroup.current.scale.set(spread, 1, spread);
+    }
+
+    if (discMaterial.current) {
+      discMaterial.current.opacity = DISC_OPACITY * breath * arrival * (1 + PULSE_GLOW * pulse);
+    }
+    if (lensMaterial.current) {
+      lensMaterial.current.opacity = LENS_OPACITY * breath * arrival * (1 + PULSE_GLOW * pulse);
+    }
     if (nameplateMaterial.current) nameplateMaterial.current.opacity = arrival;
     if (edgeMaterial.current) edgeMaterial.current.color.copy(edgeLit).multiplyScalar(arrival);
     if (emitterMaterial.current) {
@@ -473,7 +503,7 @@ export function ScanRing({
           this shape is safe here where a blended plane was not. Both carry
           their fade in vertex colour, so neither needs alpha or a texture. */}
       {glow && (
-        <>
+        <group ref={glowGroup}>
           <mesh geometry={glow.disc} rotation={[-Math.PI / 2, 0, 0]}>
             <meshBasicMaterial
               ref={discMaterial}
@@ -502,7 +532,7 @@ export function ScanRing({
               toneMapped={false}
             />
           </mesh>
-        </>
+        </group>
       )}
     </group>
   );

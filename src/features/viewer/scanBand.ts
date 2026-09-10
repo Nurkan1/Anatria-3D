@@ -133,6 +133,43 @@ export const SCAN_DIRECTION = { value: -1 };
  */
 export const SCAN_GHOST = { value: 0 };
 
+/**
+ * The moment of letting go, decaying to nothing.
+ *
+ * One at the instant the reader releases the light, zero four hundred
+ * milliseconds later. It exists so the instrument answers the hand: you move
+ * the plane to a height, you let go, and the level you stopped at announces
+ * itself once before settling.
+ *
+ * # What flashes, and why it is the whole level
+ *
+ * Everything the plane is inside, not the largest two or three. The shader
+ * knows which structures contain the plane — that is the wake it already
+ * computes — and it does not know their volumes; ranking them is CPU knowledge,
+ * held in the crossing list. Flashing by rank would mean a registry of
+ * materials by structure, kept in step as they mount and unmount, for a
+ * four-hundred-millisecond effect. The level responding as one reads like a
+ * pulse through a slab, which is what was wanted, and costs a multiply.
+ */
+export const SCAN_PULSE = { value: 0 };
+
+/** How long the answer lasts. Long enough to see, short enough not to wait. */
+export const SCAN_PULSE_S = 0.4;
+
+/** Brightest at the instant of release, relative to the band itself. */
+const PULSE_GAIN = 1.6;
+
+export function firePulse(): void {
+  SCAN_PULSE.value = 1;
+}
+
+/** Fade the answer. Eased, so it leaves rather than switching off. */
+export function advanceScanPulse(delta: number): number {
+  const left = Math.max(0, SCAN_PULSE.value - delta / SCAN_PULSE_S);
+  SCAN_PULSE.value = left * left;
+  return SCAN_PULSE.value;
+}
+
 export function setScanGhost(on: boolean): void {
   SCAN_GHOST.value = on ? 1 : 0;
 }
@@ -222,6 +259,7 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
   shader.uniforms.uScanTint = SCAN_TINT;
   shader.uniforms.uScanReveal = SCAN_REVEAL;
   shader.uniforms.uScanGhost = SCAN_GHOST;
+  shader.uniforms.uScanPulse = SCAN_PULSE;
   shader.uniforms.uScanDirection = SCAN_DIRECTION;
 
   // This structure's own reach along the axis, and its own undrained colour,
@@ -257,6 +295,7 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
     "uniform float uScanAt;\nuniform float uScanEntry;\nuniform vec3 uScanTint;\n" +
     "uniform float uScanReveal;\nuniform vec3 uRevealColour;\n" +
     "uniform float uScanGhost;\nuniform float uScanDirection;\n" +
+    "uniform float uScanPulse;\n" +
     "uniform vec2 uOrganSpan;\nvarying float vScanAlong;\n" +
     shader.fragmentShader.replace(
       fragmentChunk,
@@ -295,7 +334,11 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
     // up on the body instead of being there the frame the switch is thrown.
     // The glow stands aside when colour is doing the telling.
     totalEmissiveRadiance += uScanTint * (scanBand + ${WAKE_OF_BAND} * wake)
-                           * uScanEntry * (1.0 - uScanReveal);`,
+                           * uScanEntry * (1.0 - uScanReveal);
+    // The answer to letting go: the level the reader stopped at says so once.
+    // Outside the reveal's suppression on purpose — this is a transient reply
+    // to a hand, not the mode's way of showing what it found.
+    totalEmissiveRadiance += uScanTint * wake * uScanPulse * ${PULSE_GAIN} * uScanEntry;`,
     );
 }
 

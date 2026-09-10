@@ -11,8 +11,12 @@ import {
   SCAN_ENTRY_S,
   SCAN_DIRECTION,
   SCAN_GHOST,
+  SCAN_PULSE,
+  SCAN_PULSE_S,
   SCAN_REVEAL,
   SCAN_TINT,
+  advanceScanPulse,
+  firePulse,
   setScanGhost,
   setScanReveal,
   setScanTint,
@@ -540,4 +544,54 @@ it("switches with one float write into the shared object", () => {
   expect(SCAN_GHOST.value).toBe(1);
   setScanGhost(false);
   expect(SCAN_GHOST.value).toBe(0);
+});
+
+// ---------------------------------------------------------------------------
+// The answer to letting go
+// ---------------------------------------------------------------------------
+
+it("is silent until the light is let go", () => {
+  advanceScanPulse(1);
+  expect(SCAN_PULSE.value).toBe(0);
+});
+
+it("answers once and is gone within its own duration", () => {
+  firePulse();
+  expect(SCAN_PULSE.value).toBe(1);
+
+  advanceScanPulse(SCAN_PULSE_S / 2);
+  const halfway = SCAN_PULSE.value;
+  expect(halfway).toBeGreaterThan(0);
+  expect(halfway).toBeLessThan(1);
+
+  advanceScanPulse(SCAN_PULSE_S);
+  expect(SCAN_PULSE.value).toBe(0);
+});
+
+it("leaves rather than switching off", () => {
+  // Squared on the way out: a linear fade ends on a visible edge, and an edge
+  // is what makes a transient read as a bug rather than as a reply.
+  firePulse();
+  advanceScanPulse(SCAN_PULSE_S * 0.5);
+  expect(SCAN_PULSE.value).toBeLessThan(0.5);
+});
+
+it("flashes the level even while the reveal has the glow stood down", () => {
+  // It is a reply to a hand, not the mode's way of showing what it found, so
+  // it is deliberately outside the reveal's suppression.
+  const compiled = shader();
+  scanBandOnBeforeCompile(compiled);
+  expect(compiled.fragmentShader).toContain("uniform float uScanPulse;");
+  expect(compiled.fragmentShader).toContain("wake * uScanPulse * 1.6 * uScanEntry;");
+
+  const suppressed = compiled.fragmentShader.indexOf("(1.0 - uScanReveal);");
+  const pulse = compiled.fragmentShader.indexOf("uScanPulse * 1.6");
+  expect(pulse).toBeGreaterThan(suppressed);
+});
+
+it("shares the one pulse with the ring, so both answer the same event", () => {
+  const material = new MeshStandardMaterial(scanBandMaterialProps(true));
+  const compiled = shader();
+  material.onBeforeCompile(compiled, {} as WebGLRenderer);
+  expect(compiled.uniforms.uScanPulse).toBe(SCAN_PULSE);
 });

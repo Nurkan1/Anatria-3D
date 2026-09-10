@@ -5,6 +5,8 @@ import * as THREE from "three";
 import {
   advanceScanBand,
   advanceScanEntry,
+  advanceScanPulse,
+  firePulse,
   holdScanBand,
   resetScanBand,
   resetScanEntry,
@@ -848,6 +850,9 @@ export function AnatomyScene({
   const ghost = useScanStore((s) => s.ghost);
   useEffect(() => setScanGhost(ghost), [ghost]);
 
+  /** Whether the reader had hold of the light on the previous frame. */
+  const wasHeld = useRef(false);
+
   useFrame((_, delta) => {
     // PoC measurement only: M's rolling p95 can miss a single compile stall,
     if (scanBandEnabled && bounds && !bounds.isEmpty()) {
@@ -863,6 +868,21 @@ export function AnatomyScene({
       // Read rather than subscribed: this runs sixty times a second and must
       // not make the scene re-render when the reader touches the slider.
       const grip = useScanStore.getState();
+
+      /**
+       * The instrument answers the hand.
+       *
+       * Fired on the edge, not on the state: `held` is false for most of the
+       * session, and reacting to the value rather than to the moment it
+       * changed would pulse on every frame the reader is not touching
+       * anything. The comparison lives here rather than in the store because
+       * it is a rendering event — the store holds what is true, not what just
+       * happened.
+       */
+      if (wasHeld.current && !grip.held) firePulse();
+      wasHeld.current = grip.held;
+      advanceScanPulse(delta);
+
       if (scanIsStill(grip)) holdScanBand(grip.at, STANDING, from, to);
       else advanceScanBand(delta, STANDING, from, to);
 
