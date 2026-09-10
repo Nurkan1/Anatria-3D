@@ -144,8 +144,15 @@ export function ScanControls() {
         </button>
       )}
 
+      {/*
+        Capped, because the panel sits over the body and a label is all it
+        takes to push it there. This is a hard stop rather than a layout:
+        the width is set by whatever line inside is longest, and the next
+        control somebody adds should wrap instead of reaching across the
+        viewport.
+      */}
       {enabled && panel && (
-        <div className="rounded border border-cyan-900/60 bg-slate-950/80 px-2 py-1.5">
+        <div className="max-w-52 rounded border border-cyan-900/60 bg-slate-950/80 px-2 py-1.5">
           <button
             type="button"
             onClick={togglePanel}
@@ -344,20 +351,31 @@ export function ScanControls() {
           )}
 
           {/*
-            Aimed at a machine rather than at a taste, and worded that way. It
-            is the reader's own hardware being spent, so the sentence says what
-            it buys and roughly what it costs instead of calling itself quality.
+            One word, and the sentence on hover.
+
+            It was the whole sentence, and a two-line label set the width of
+            the panel: the controls grew wide enough to reach across the
+            viewport for the sake of a caption read once. What it costs still
+            has to be said — it is the reader's own memory being spent — but
+            a title says it to whoever asks rather than to everybody, for ever.
           */}
           {axial && (
-            <label className="mt-1 flex cursor-pointer items-start gap-1.5 text-[9px] leading-snug text-slate-400">
+            <label
+              title={
+                "Read each section at four times the pixels: magnify twice as " +
+                "far before the picture runs out. Four times the readback and " +
+                "about a quarter of a gigabyte held while it is on, so it is " +
+                "for a machine with the room to spare."
+              }
+              className="mt-1 flex cursor-pointer items-start gap-1.5 text-[9px] leading-snug text-slate-400"
+            >
               <input
                 type="checkbox"
                 checked={detail}
                 onChange={(event) => setDetail(event.target.checked)}
                 className="mt-[1px] accent-cyan-500"
               />
-              Read sections at four times the pixels — magnify twice as far,
-              on a machine with the memory for it
+              Quality
             </label>
           )}
 
