@@ -464,7 +464,14 @@ def register_scene_tools(
 
     @mcp.tool(annotations=CHANGES_THE_VIEW)
     def set_cross_section(plane: SectionPlane, position: float) -> str:
-        """Cut the model open along a plane to reveal internal structure.
+        """Cut the model itself open along a plane, and leave it cut.
+
+        A standing change to the body, until the reader resets the view.
+
+        **It is not the way to show a cross-section at a level.** For an axial
+        slice, a level, or "a section at" something, call `scan_at_structure`:
+        it puts the scanner there, draws the section in its own panel, and
+        leaves the body whole.
 
         `position` runs -1 to 1 across the model's extent on that axis; 0 cuts
         through the middle.

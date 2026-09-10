@@ -353,7 +353,18 @@ export function ScanRing({
       mesh.setMatrixAt(i, matrix);
     }
     mesh.instanceMatrix.needsUpdate = true;
-  }, [shape]);
+    /**
+     * `instrument` is a dependency because the mesh only exists while it is true.
+     *
+     * The hardware appears and disappears under a ring that stays mounted: the
+     * assistant switching the scanner on mid-answer flips it without touching
+     * `shape`. Keyed on the shape alone, this ran while there was no mesh to
+     * write to, returned, and never ran again — leaving all twenty-four
+     * matrices at the zeros three.js allocates them with. A zero matrix is not
+     * an off-screen instance, it is a degenerate one, and the driver draws it
+     * as a speck at the ring's axis.
+     */
+  }, [shape, instrument]);
 
   useFrame((state, delta) => {
     const group = ring.current;
