@@ -257,12 +257,27 @@ export function AnatomyViewer() {
           so halving the extent is the whole correction. */}
       <LabelOverlay panel={splitting ? domRect(mainRect(activeViews)) : FULL_CANVAS} />
       {splitting && <StudyViewsFrame />}
-      {/* One column, high enough that the controls hint can open underneath it
-          without touching it. That clearance is the reason for the exact
-          offset: the hint expands upward from the bottom edge to about 123px,
-          and anything sharing this corner has to start above that with room to
-          spare, because those lines wrap on a narrow window. */}
-      <div className="pointer-events-none absolute bottom-40 left-3 z-20 flex flex-col items-start gap-1.5">
+      {/*
+        One column, high enough that the controls hint can open underneath it
+        without touching it. That clearance is the reason for the exact offset:
+        the hint expands upward from the bottom edge to about 123px, and
+        anything sharing this corner has to start above that with room to
+        spare, because those lines wrap on a narrow window.
+
+        **Bounded at the top as well as the bottom, and that is not decoration.**
+        The column is anchored to the bottom and grows upward, so every panel
+        added to it pushed the stack further up — and on a short laptop screen
+        the top of it left the window entirely, taking the scanner's own
+        controls with it. Reported from a 766-pixel-high window.
+
+        Given a top edge it cannot cross, the overflow now clips instead of
+        escaping, and it clips in the right order: what sits at the top of this
+        column is what can already be dismissed — the renderer panel, which
+        drags anywhere, and the crossing readout, which folds to a chip. The
+        controls and the section, which cannot be recovered any other way, are
+        at the bottom and stay.
+      */}
+      <div className="pointer-events-none absolute top-3 bottom-40 left-3 z-20 flex flex-col items-start justify-end gap-1.5 overflow-hidden">
         <RenderStatsPanel />
         {/* Hides itself when the sweep is off — see `ScanReadout`. */}
         <ScanReadout />

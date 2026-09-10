@@ -301,10 +301,18 @@ export function AxialView() {
           aria-label="Cross-section at the height of the scanner. Click to enlarge."
         />
       </button>
-      <div className="max-w-36">
-        <SliceTable compact />
-        <p className="mt-1 text-[9px] leading-snug text-slate-500">{caption}</p>
-      </div>
+      {/*
+        A thumbnail says there is a section and invites a look at it. The table
+        and the explanation are reading material, and reading material belongs
+        where there is room to read — five lines of caption under a 144-pixel
+        picture is most of a laptop's spare column spent on a sentence somebody
+        needs once.
+      */}
+      <p className="mt-1 max-w-36 text-[9px] leading-snug text-slate-500">
+        {across > 0 ? `${across.toFixed(0)} cm · ` : ""}
+        {cut ? "cut" : "slab"} · {CURRENT_CROSSING.value.total} structures
+        <span className="block text-cyan-500/70">click to enlarge</span>
+      </p>
     </div>
   );
 }
