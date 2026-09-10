@@ -302,6 +302,80 @@ function clamp(value: number, low: number, high: number): number {
 }
 
 /**
+ * Two points on a section, and the distance between them.
+ *
+ * # Why the ends are in metres and not in pixels
+ *
+ * Because everything else about the picture moves. Magnifying re-renders the
+ * section on a narrower window, stepping moves the plane, and either one would
+ * strand a measurement drawn in pixels somewhere it never was. Held in the
+ * body's own coordinates, the line stays on the anatomy it was drawn across and
+ * its length does not change when the picture does — which is the only way a
+ * measurement is worth anything.
+ *
+ * Both ends lie in the plane of the section, so the distance is the real
+ * distance between those two points in space rather than a projection of one.
+ * What that means about the *structures* under them is a different question,
+ * and the caption is the place that answers it.
+ */
+export interface SectionMeasure {
+  ax: number;
+  az: number;
+  bx: number;
+  bz: number;
+}
+
+/** Where a point on screen falls in the body, in metres. */
+export function pointInSection(
+  window: SliceWindow,
+  offsetXPx: number,
+  offsetYPx: number,
+  windowPx: number,
+): { x: number; z: number } {
+  const across = (2 * window.half) / windowPx;
+  return {
+    x: window.x + (offsetXPx - windowPx / 2) * across,
+    // Canvas rows run downwards and so does world +z here, which is what the
+    // flip in `paintSlice` arranges.
+    z: window.z + (offsetYPx - windowPx / 2) * across,
+  };
+}
+
+/** Where a point in the body falls on screen, in pixels from the corner. */
+export function pointOnScreen(
+  window: SliceWindow,
+  x: number,
+  z: number,
+  windowPx: number,
+): { x: number; y: number } {
+  if (!(window.half > 0)) return { x: 0, y: 0 };
+  const perMetre = windowPx / (2 * window.half);
+  return {
+    x: windowPx / 2 + (x - window.x) * perMetre,
+    y: windowPx / 2 + (z - window.z) * perMetre,
+  };
+}
+
+/** How long the line is, in centimetres of body. */
+export function measureCm(line: SectionMeasure): number {
+  return Math.hypot(line.bx - line.ax, line.bz - line.az) * 100;
+}
+
+/**
+ * The length, written the way somebody would say it.
+ *
+ * Millimetres below a centimetre, because "0.7 cm" is a number nobody uses out
+ * loud, and one decimal above it. Never more: the atlas is a model of a body
+ * rather than a measurement of one, and a third decimal would be a precision
+ * this cannot honestly claim.
+ */
+export function formatDistance(cm: number): string {
+  if (!(cm > 0)) return "";
+  if (cm < 1) return `${Math.round(cm * 10)} mm`;
+  return `${cm.toFixed(1)} cm`;
+}
+
+/**
  * How big the enlarged section is allowed to be, as CSS.
  *
  * Square, and limited by whichever edge runs out first: the height, or the

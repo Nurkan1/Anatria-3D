@@ -438,6 +438,7 @@ const SECTIONS: Section[] = [
             ["Ctrl and the wheel", "Magnify, about the pointer"],
             ["Drag", "Move the window"],
             ["The button under the picture", "Back to the whole section"],
+            ["Measure", "Drag across the section for a distance"],
           ]}
         />
         <p>
@@ -468,6 +469,29 @@ const SECTIONS: Section[] = [
           rather than as a fraction of the picture, so it stays over the same anatomy as
           you travel through it — which is the whole reason for being able to do both
           at once: find the mediastinum, then read up and down through it.
+        </Callout>
+
+        <Sub>Measuring one</Sub>
+        <p>
+          <Ui>Measure</Ui> puts a caliper on the picture: drag across it and the
+          length appears on the line. Both ends lie in the plane of the section, so
+          it is the true distance between those two points in space rather than a
+          projection of one, and it is held in the body’s own coordinates — magnify
+          or step, and the line stays on the anatomy it was drawn across with the
+          same length beside it.
+        </p>
+        <Callout>
+          <strong>Measure in <Ui>Slab</Ui>, not in <Ui>Cut</Ui>.</strong> The
+          distance is always right about the two points; what changes is what is
+          under them. A slab holds four millimetres, so everything you can see is at
+          the level you are measuring. A cut shows the surfaces below the plane, so
+          the structure under an end may lie well beneath it and you would be
+          measuring across the level rather than across the thing.
+          <br />
+          <br />
+          And what is measured is the atlas, not a patient: one body, at one size,
+          modelled rather than imaged. It is a scale to learn proportions on, not a
+          number to put in a report.
         </Callout>
 
         <Sub>Two switches with a cost, and what they buy</Sub>

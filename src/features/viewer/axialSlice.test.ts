@@ -5,8 +5,12 @@ import {
   cutPlanes,
   forgetSlice,
   paintSlice,
+  formatDistance,
+  measureCm,
   MIN_SECTION_HALF_M,
   panWindow,
+  pointInSection,
+  pointOnScreen,
   SLICE_PIXELS_HIGH,
   SLICE_PIXELS_NORMAL,
   sliceSize,
@@ -338,5 +342,66 @@ describe("panWindow", () => {
     const frame = { x: 0, z: 0, half: 0.27 };
     const shown = panWindow(frame, BASE, 99999, 0, 900)!;
     expect(shown.x).toBeCloseTo(-(BASE.half - frame.half), 12);
+  });
+});
+
+describe("the caliper", () => {
+  const WINDOW = { x: 0.1, z: -0.2, half: 0.27 };
+
+  it("puts the middle of the picture at the middle of the window", () => {
+    const at = pointInSection(WINDOW, 450, 450, 900);
+    expect(at.x).toBeCloseTo(WINDOW.x, 12);
+    expect(at.z).toBeCloseTo(WINDOW.z, 12);
+  });
+
+  it("puts the corners where the window ends", () => {
+    const at = pointInSection(WINDOW, 0, 900, 900);
+    expect(at.x).toBeCloseTo(WINDOW.x - WINDOW.half, 12);
+    // Canvas rows run downwards and so does world +z.
+    expect(at.z).toBeCloseTo(WINDOW.z + WINDOW.half, 12);
+  });
+
+  it("comes back to the same pixel it came from", () => {
+    // The round trip is what keeps a line drawn at one magnification lying on
+    // the same anatomy at the next one.
+    const back = pointOnScreen(WINDOW, ...(() => {
+      const at = pointInSection(WINDOW, 137, 612, 900);
+      return [at.x, at.z] as const;
+    })(), 900);
+    expect(back.x).toBeCloseTo(137, 9);
+    expect(back.y).toBeCloseTo(612, 9);
+  });
+
+  it("measures across the window, not across the screen", () => {
+    // A 54 cm window drawn 900 pixels wide: half the picture is 27 cm.
+    const a = pointInSection(WINDOW, 225, 450, 900);
+    const b = pointInSection(WINDOW, 675, 450, 900);
+    expect(measureCm({ ax: a.x, az: a.z, bx: b.x, bz: b.z })).toBeCloseTo(27, 9);
+  });
+
+  it("survives the picture being magnified under it", () => {
+    // The point of holding the ends in metres. A line drawn across the whole
+    // body, then read through a window a fifth as wide: it has to land on the
+    // same anatomy and report the same length, or a measurement is worth
+    // nothing the moment somebody looks closer.
+    const whole = { x: 0, z: 0, half: 0.27 };
+    const a = pointInSection(whole, 400, 430, 900);
+    const b = pointInSection(whole, 470, 500, 900);
+    const line = { ax: a.x, az: a.z, bx: b.x, bz: b.z };
+
+    const close = { x: a.x, z: a.z, half: 0.054 };
+    const onScreen = pointOnScreen(close, line.ax, line.az, 900);
+    // The near end is the centre of the magnified window, so it draws there.
+    expect(onScreen.x).toBeCloseTo(450, 9);
+    expect(onScreen.y).toBeCloseTo(450, 9);
+    // And the length is a property of the body, not of the window.
+    expect(measureCm(line)).toBeCloseTo(Math.hypot(0.042, 0.042) * 100, 9);
+  });
+
+  it("says millimetres below a centimetre and never a third decimal", () => {
+    expect(formatDistance(0.72)).toBe("7 mm");
+    expect(formatDistance(3.44)).toBe("3.4 cm");
+    expect(formatDistance(12.06)).toBe("12.1 cm");
+    expect(formatDistance(0)).toBe("");
   });
 });

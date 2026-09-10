@@ -5,7 +5,11 @@ import { useScanStore } from "@/stores/scanStore";
 
 import {
   AXIAL_CANVAS,
+  formatDistance,
+  measureCm,
   panWindow,
+  pointInSection,
+  pointOnScreen,
   RETAKE_INTERVAL_MS,
   restoreSlice,
   SECTION_VIEW,
@@ -18,7 +22,7 @@ import {
   WHEEL_SETTLE_MS,
   zoomWindow,
 } from "./axialSlice";
-import type { SliceWindow } from "./axialSlice";
+import type { SectionMeasure, SliceWindow } from "./axialSlice";
 import { SECTION_STEP_CM, stepFraction } from "./scanBand";
 import { AXIAL_PROBE } from "./AxialProbe";
 import { CURRENT_CROSSING } from "./scanCrossing";
@@ -150,6 +154,18 @@ export function AxialView() {
   const [shown, setShown] = useState<SliceWindow | null>(null);
   /** The last pointer position of a drag, so moves are deltas. */
   const dragging = useRef<{ x: number; y: number } | null>(null);
+  /**
+   * The caliper: whether it is out, and what it is across.
+   *
+   * A visible control rather than a held modifier. Shift-drag was the obvious
+   * shape and it is the wrong one for the same reasons the pin was: it binds a
+   * feature to a keyboard layout, it cannot be discovered by looking, and it is
+   * unreachable on a machine driven by touch or one hand.
+   */
+  const [measuring, setMeasuring] = useState(false);
+  const [measure, setMeasure] = useState<SectionMeasure | null>(null);
+  /** True while an end is being dragged out, so a click alone leaves nothing. */
+  const drawing = useRef(false);
   /**
    * How wide the enlarged window actually is, in screen pixels.
    *
@@ -321,11 +337,18 @@ export function AxialView() {
     // Escape closes it, because a thing that covers the viewport has to have an
     // exit that does not require finding it first.
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setFull(false);
+      if (event.key !== "Escape") return;
+      // The line first, then the panel: Escape should undo the smaller thing
+      // the reader is holding before it throws away the bigger one.
+      if (measure) {
+        setMeasure(null);
+        return;
+      }
+      setFull(false);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [full]);
+  }, [full, measure]);
 
   useEffect(() => {
     // A section nobody can see should not be left open across a switch-off.
@@ -337,6 +360,7 @@ export function AxialView() {
     // a thumbnail showing a nine-centimetre crop of somebody's last look is
     // not a thumbnail of the section, and a view that reopened at the
     // magnification left an hour ago is a view that looks broken.
+    setMeasure(null);
     if (SECTION_VIEW.value === null) return;
     SECTION_VIEW.value = null;
     setShown(null);
@@ -421,11 +445,37 @@ export function AxialView() {
             wheelToSteps(event.deltaY);
           }}
           onPointerDown={(event) => {
+            if (measuring) {
+              const box = event.currentTarget.getBoundingClientRect();
+              const at = pointInSection(
+                looking(),
+                event.clientX - box.left,
+                event.clientY - box.top,
+                box.width,
+              );
+              drawing.current = true;
+              setMeasure({ ax: at.x, az: at.z, bx: at.x, bz: at.z });
+              event.currentTarget.setPointerCapture(event.pointerId);
+              return;
+            }
             if (!shown) return;
             dragging.current = { x: event.clientX, y: event.clientY };
             event.currentTarget.setPointerCapture(event.pointerId);
           }}
           onPointerMove={(event) => {
+            if (drawing.current) {
+              const box = event.currentTarget.getBoundingClientRect();
+              const at = pointInSection(
+                looking(),
+                event.clientX - box.left,
+                event.clientY - box.top,
+                box.width,
+              );
+              // Only the far end moves. The near one was placed where the
+              // reader put it and must not drift under them.
+              setMeasure((line) => (line ? { ...line, bx: at.x, bz: at.z } : line));
+              return;
+            }
             const from = dragging.current;
             if (from) {
               // Deltas, not an offset from where the drag began: the window is
@@ -450,20 +500,28 @@ export function AxialView() {
           }}
           onPointerUp={() => {
             dragging.current = null;
+            if (!drawing.current) return;
+            drawing.current = false;
+            // A click that never moved is not a measurement; it is somebody
+            // finding out what the button does.
+            setMeasure((line) => (line && measureCm(line) > 0 ? line : null));
           }}
           onPointerCancel={() => {
             dragging.current = null;
+            drawing.current = false;
           }}
           style={{
             width: SECTION_WINDOW,
             height: SECTION_WINDOW,
-            cursor: dragging.current
-              ? "grabbing"
-              : torch
-                ? "crosshair"
-                : shown
-                  ? "grab"
-                  : "default",
+            cursor: measuring
+              ? "crosshair"
+              : dragging.current
+                ? "grabbing"
+                : torch
+                  ? "crosshair"
+                  : shown
+                    ? "grab"
+                    : "default",
           }}
         >
           <canvas
@@ -473,6 +531,52 @@ export function AxialView() {
             className="absolute inset-0 h-full w-full"
             aria-label="Cross-section at the height of the scanner"
           />
+          {/*
+            Drawn over the picture rather than into it. A caliper baked into the
+            canvas would be in every copy of the section from then on, including
+            the one somebody photographs, and it would have to be repainted by
+            the render loop every time the plane moved.
+          */}
+          {measure && frameWidth > 0 && (
+            <svg
+              className="pointer-events-none absolute inset-0 h-full w-full"
+              viewBox={`0 0 ${frameWidth} ${frameWidth}`}
+              aria-hidden
+            >
+              {(() => {
+                const a = pointOnScreen(looking(), measure.ax, measure.az, frameWidth);
+                const b = pointOnScreen(looking(), measure.bx, measure.bz, frameWidth);
+                const cm = measureCm(measure);
+                return (
+                  <>
+                    <line
+                      x1={a.x}
+                      y1={a.y}
+                      x2={b.x}
+                      y2={b.y}
+                      stroke="#22d3ee"
+                      strokeWidth={1.5}
+                    />
+                    <circle cx={a.x} cy={a.y} r={3} fill="#22d3ee" />
+                    <circle cx={b.x} cy={b.y} r={3} fill="#22d3ee" />
+                    {cm > 0 && (
+                      <text
+                        x={(a.x + b.x) / 2 + 8}
+                        y={(a.y + b.y) / 2 - 8}
+                        fill="#a5f3fc"
+                        fontSize={13}
+                        stroke="#020617"
+                        strokeWidth={3}
+                        paintOrder="stroke"
+                      >
+                        {formatDistance(cm)}
+                      </text>
+                    )}
+                  </>
+                );
+              })()}
+            </svg>
+          )}
         </div>
 
         <div className="flex w-72 flex-col gap-3 self-center">
@@ -515,6 +619,41 @@ export function AxialView() {
               Close · Esc
             </button>
           </div>
+
+          <div className="flex items-center gap-2 text-xs">
+            <button
+              type="button"
+              onClick={() => {
+                const next = !measuring;
+                setMeasuring(next);
+                if (!next) setMeasure(null);
+              }}
+              aria-pressed={measuring}
+              title="Drag across the section to measure it"
+              className={`rounded border px-2 py-0.5 ${
+                measuring
+                  ? "border-cyan-500 bg-cyan-500/15 text-cyan-200"
+                  : "border-slate-700 text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
+              }`}
+            >
+              Measure
+            </button>
+            {measuring && (
+              <span className="tabular-nums text-cyan-200">
+                {measure ? formatDistance(measureCm(measure)) : "drag across it"}
+              </span>
+            )}
+          </div>
+
+          {measuring && (
+            <p className="text-[11px] leading-snug text-slate-500">
+              Both ends lie in the plane, so this is the true distance between
+              those two points —{" "}
+              {cut
+                ? "but in Cut you are seeing surfaces below the plane, so the structures under the ends may not be at this level. Slab is the mode to measure a level in."
+                : "and in Slab everything shown is within four millimetres of it."}
+            </p>
+          )}
 
           <SliceTable compact={false} />
 
