@@ -5,8 +5,11 @@ import { useScanStore } from "@/stores/scanStore";
 
 import {
   AXIAL_CANVAS,
+  MIN_SECTION_HALF_M,
   pastNativeSize,
+  residualTransform,
   restoreSlice,
+  SECTION_VIEW,
   SECTION_WINDOW,
   SLICE_PIXELS,
   TORCH,
@@ -15,6 +18,7 @@ import {
   wantSection,
   wheelSteps,
   WHEEL_SETTLE_MS,
+  windowFromTransform,
 } from "./axialSlice";
 import { SECTION_STEP_CM, stepFraction } from "./scanBand";
 import { AXIAL_PROBE } from "./AxialProbe";
@@ -167,6 +171,19 @@ export function AxialView() {
   const carried = useRef(0);
   /** The pending retake, cancelled by the next notch. See `WHEEL_SETTLE_MS`. */
   const settle = useRef<number | null>(null);
+  /**
+   * The magnification already rendered into the picture, and the one that is
+   * not yet.
+   *
+   * `zoom` and `pan` are a CSS transform, which is what makes a gesture feel
+   * immediate — nothing waits on a render. But CSS cannot add detail, so once
+   * the hand stops the same window is rendered *as a camera*, at the full
+   * resolution, and the transform is taken back out. This holds the gesture
+   * that was sent to be rendered until the picture that answers it arrives.
+   */
+  const takenBy = useRef<{ zoom: number; panX: number; panY: number } | null>(null);
+  /** The pending commit of a magnification. See `WHEEL_SETTLE_MS`. */
+  const settleView = useRef<number | null>(null);
   /** When the torch last cost a section. See `TORCH_INTERVAL_MS`. */
   const lastTorch = useRef(0);
   /** The retake owed to a pointer that stopped between two intervals. */
@@ -205,6 +222,55 @@ export function AxialView() {
     TORCH.value = torchDirection(u, v);
     retakeForTorch();
   };
+
+  /**
+   * Send the window the reader is looking at to be rendered properly.
+   *
+   * Nothing is asked for when the gesture came to rest where it started, which
+   * is most pointer-ups: a section costs fifteen milliseconds and re-taking an
+   * identical one is fifteen milliseconds of nothing.
+   */
+  const commitMagnification = () => {
+    if (frameWidth <= 0 || AXIAL_PROBE.base.half <= 0) return;
+    const settled = pan.x === 0 && pan.y === 0 && zoom === 1;
+    if (settled) return;
+    const next = windowFromTransform(
+      AXIAL_PROBE.shown,
+      AXIAL_PROBE.base,
+      zoom,
+      pan.x,
+      pan.y,
+      frameWidth,
+    );
+    takenBy.current = { zoom, panX: pan.x, panY: pan.y };
+    SECTION_VIEW.value = next;
+    wantSection();
+  };
+
+  const commitWhenStill = () => {
+    if (settleView.current !== null) window.clearTimeout(settleView.current);
+    settleView.current = window.setTimeout(() => {
+      settleView.current = null;
+      commitMagnification();
+    }, WHEEL_SETTLE_MS);
+  };
+
+  /**
+   * The rendered picture has caught up with the gesture; take the CSS back out.
+   *
+   * Whatever the hand did while the section was being made stays applied, so
+   * the swap is invisible: the picture on screen is the same picture, made of
+   * pixels that were measured rather than stretched.
+   */
+  useEffect(() => {
+    const taken = takenBy.current;
+    if (!taken) return;
+    takenBy.current = null;
+    const left = residualTransform(taken, { zoom, panX: pan.x, panY: pan.y });
+    setZoom(left.zoom);
+    setPan({ x: left.panX, y: left.panY });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sections]);
 
   /**
    * Switched off, the light goes back to the one the mode chooses for itself.
@@ -246,6 +312,7 @@ export function AxialView() {
   useEffect(
     () => () => {
       if (settle.current !== null) window.clearTimeout(settle.current);
+      if (settleView.current !== null) window.clearTimeout(settleView.current);
       if (torchTrail.current !== null) window.clearTimeout(torchTrail.current);
     },
     [],
@@ -298,17 +365,31 @@ export function AxialView() {
   }, [enabled, axial]);
 
   useEffect(() => {
-    // Opening always starts from the whole picture. A view that reopened at
-    // the magnification somebody left an hour ago is a view that looks broken.
-    if (full) {
-      setZoom(1);
-      setPan({ x: 0, y: 0 });
+    // Opening always starts from the whole picture, and closing puts it back:
+    // a thumbnail showing a nine-centimetre crop of somebody's last look is
+    // not a thumbnail of the section, and a view that reopened at the
+    // magnification left an hour ago is a view that looks broken.
+    setZoom(1);
+    setPan({ x: 0, y: 0 });
+    takenBy.current = null;
+    if (SECTION_VIEW.value !== null) {
+      SECTION_VIEW.value = null;
+      wantSection();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [full]);
 
   if (!enabled || !axial) return null;
 
-  const across = AXIAL_PROBE.frameCm;
+  /**
+   * How wide the picture is, in centimetres of body.
+   *
+   * Taken from what the pass was framed on and then divided by whatever CSS is
+   * doing on top, so it is right during a gesture as well as after it. It
+   * replaces the magnification factor on the button: "9 cm" is a measurement a
+   * reader can use, and "5.4x" is a number about the software.
+   */
+  const across = AXIAL_PROBE.frameCm / zoom;
   /**
    * The level, when the plane is at one.
    *
@@ -334,7 +415,24 @@ export function AxialView() {
     " Drawn solid whatever the viewport shows. Not a radiograph.";
 
   if (full) {
-    const magnify = (by: number) => setZoom((z) => Math.min(6, Math.max(1, z * by)));
+    /**
+     * Magnify, as far as there is anything left to magnify.
+     *
+     * The limit is a width of body rather than a factor: past six centimetres
+     * across a reader is magnifying the atlas's own triangles, and the ceiling
+     * has to hold whatever the frame at this level happens to be. Zooming out
+     * stops at the whole section, which `windowFromTransform` reads as a
+     * return to automatic framing.
+     */
+    const magnify = (by: number) =>
+      setZoom((z) => {
+        const wanted = z * by;
+        const half = AXIAL_PROBE.shown.half / wanted;
+        if (half < MIN_SECTION_HALF_M) return AXIAL_PROBE.shown.half / MIN_SECTION_HALF_M;
+        const widest = AXIAL_PROBE.base.half;
+        if (widest > 0 && half > widest) return AXIAL_PROBE.shown.half / widest;
+        return wanted;
+      });
     return (
       <div className="pointer-events-auto fixed inset-0 z-40 flex items-center justify-center gap-6 bg-slate-950/95 p-4">
         {/*
@@ -365,6 +463,8 @@ export function AxialView() {
           onWheel={(event) => {
             if (event.ctrlKey || event.metaKey) {
               magnify(event.deltaY < 0 ? 1.15 : 1 / 1.15);
+              // Rendered properly once the hand stops, not once per notch.
+              commitWhenStill();
               return;
             }
             wheelToSteps(event.deltaY);
@@ -385,7 +485,9 @@ export function AxialView() {
             aimTorch(event.currentTarget.getBoundingClientRect(), event.clientX, event.clientY);
           }}
           onPointerUp={() => {
+            if (!dragging.current) return;
             dragging.current = null;
+            commitMagnification();
           }}
           onPointerCancel={() => {
             dragging.current = null;
@@ -428,24 +530,35 @@ export function AxialView() {
           <div className="flex items-center gap-1.5 text-xs">
             <button
               type="button"
-              onClick={() => magnify(1 / 1.4)}
+              onClick={() => {
+              magnify(1 / 1.4);
+              commitWhenStill();
+            }}
               className="rounded border border-slate-700 px-2 py-0.5 text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
             >
               −
             </button>
             <button
               type="button"
+              title="Back to the whole section"
               onClick={() => {
                 setZoom(1);
                 setPan({ x: 0, y: 0 });
+                takenBy.current = null;
+                if (SECTION_VIEW.value === null) return;
+                SECTION_VIEW.value = null;
+                wantSection();
               }}
-              className="w-16 rounded border border-slate-700 px-2 py-0.5 tabular-nums text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
+              className="w-20 rounded border border-slate-700 px-2 py-0.5 tabular-nums text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
             >
-              {zoom.toFixed(1)}×
+              {across > 0 ? `${across.toFixed(across < 10 ? 1 : 0)} cm` : "—"}
             </button>
             <button
               type="button"
-              onClick={() => magnify(1.4)}
+              onClick={() => {
+              magnify(1.4);
+              commitWhenStill();
+            }}
               className="rounded border border-slate-700 px-2 py-0.5 text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
             >
               +
@@ -463,7 +576,10 @@ export function AxialView() {
 
           <p className="text-[11px] leading-snug text-slate-500">
             {caption} The wheel steps {SECTION_STEP_CM} cm through the body;
-            Ctrl and the wheel, or −/+, magnify; drag to move.
+            Ctrl and the wheel, or −/+, magnify. Magnifying re-renders the
+            section at the narrower width rather than enlarging what is there,
+            so it adds detail instead of pixels. Drag to move; the button gives
+            the whole section back.
             {torch
               ? " The pointer is the light: the middle is overhead, and the" +
                 " edges rake it flat across the section."

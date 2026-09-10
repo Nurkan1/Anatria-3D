@@ -167,6 +167,121 @@ export function sliceSize(high: boolean, maxTexture: number): number {
 export const SLICE_PIXELS = { value: SLICE_PIXELS_NORMAL };
 
 /**
+ * A square of the body, in metres, that a section is framed on.
+ *
+ * `x` and `z` are its centre in world space and `half` is half its width. The
+ * camera looks straight down, so those two axes are the picture's own.
+ */
+export interface SliceWindow {
+  x: number;
+  z: number;
+  half: number;
+}
+
+/**
+ * What the section is framed on, or null to frame it on what the slab holds.
+ *
+ * # Why magnifying re-renders instead of scaling
+ *
+ * Scaling the picture cannot add anything to it. Read at 108 cm across, the
+ * section is 0.53 mm per pixel, and a reader magnifying past that is asking for
+ * detail that was never measured — which is why the enlarged view went blocky
+ * and why reading at four times the pixels only moved the wall rather than
+ * removing it.
+ *
+ * Framing the *pass* on the region being looked at spends the same pixels on a
+ * twentieth of the body. At a nine-centimetre window that is 0.044 mm per
+ * pixel: a hundred and twenty times the detail of the whole-body frame, for the
+ * same draw calls, the same readback and not one byte more memory. The cost is
+ * one more section per gesture, which is the cost of every other gesture here.
+ *
+ * # Why the window is in metres and not in fractions of the picture
+ *
+ * Because the plane moves. The automatic frame follows what the slab contains,
+ * and that is 108 cm at the chest and a third of it at the neck — so a window
+ * remembered as "the middle fifth" would swing across the body as the reader
+ * stepped through it. In metres it stays over the same anatomy, which is the
+ * entire point of being able to step while magnified.
+ */
+export const SECTION_VIEW: { value: SliceWindow | null } = { value: null };
+
+/**
+ * The smallest window the section may be framed on, in metres of half-width.
+ *
+ * Three centimetres of half-width is six across. Past that a reader is
+ * magnifying the atlas's own triangles, and a picture of a triangle is not more
+ * information — it is the same information drawn larger, which is the thing
+ * this was built to stop pretending to do.
+ */
+export const MIN_SECTION_HALF_M = 0.03;
+
+/**
+ * The window a CSS zoom and pan are currently showing, in metres.
+ *
+ * `frame` is what the last pass was framed on and `base` is what the automatic
+ * framing would give at this level; `windowPx` is how wide the picture is drawn
+ * on screen. Returns null when the reader has zoomed back out to the whole
+ * section, because "the whole thing" has to keep tracking the level rather than
+ * freezing at whatever the frame happened to be when they let go.
+ *
+ * The pan is subtracted, and that is the half worth stating: dragging the
+ * picture to the right shows what was off to the left, so the window travels
+ * the opposite way to the hand.
+ */
+export function windowFromTransform(
+  frame: SliceWindow,
+  base: SliceWindow,
+  zoom: number,
+  panX: number,
+  panY: number,
+  windowPx: number,
+): SliceWindow | null {
+  if (!(windowPx > 0) || !(zoom > 0)) return SECTION_VIEW.value;
+
+  const half = Math.max(MIN_SECTION_HALF_M, frame.half / zoom);
+  if (half >= base.half) return null;
+
+  const reach = base.half - half;
+  const travel = (2 * frame.half) / (windowPx * zoom);
+  // Kept inside the automatic frame: panning into the black past the edge of
+  // the body is a way to lose the section with no way back but the reset.
+  const x = clamp(frame.x - panX * travel, base.x - reach, base.x + reach);
+  // Canvas rows run downwards and so does world +z here — the flip in
+  // `paintSlice` is what makes anterior the top, and this follows it.
+  const z = clamp(frame.z - panY * travel, base.z - reach, base.z + reach);
+  return { x, z, half };
+}
+
+function clamp(value: number, low: number, high: number): number {
+  return Math.max(low, Math.min(high, value));
+}
+
+/**
+ * What is left of a gesture once the part already rendered is taken out.
+ *
+ * A section takes a few tens of milliseconds to arrive, and a reader may have
+ * kept moving. Snapping the transform back to nothing on arrival would throw
+ * that movement away and jump the picture; leaving it alone would apply it
+ * twice, once in the new framing and again in CSS.
+ *
+ * Composing the two and solving for the remainder gives both in closed form,
+ * and when nothing moved in between it returns exactly the identity — which is
+ * the case that matters, because it is what makes the swap invisible.
+ */
+export function residualTransform(
+  taken: { zoom: number; panX: number; panY: number },
+  now: { zoom: number; panX: number; panY: number },
+): { zoom: number; panX: number; panY: number } {
+  if (!(taken.zoom > 0)) return { zoom: 1, panX: 0, panY: 0 };
+  const zoom = now.zoom / taken.zoom;
+  return {
+    zoom,
+    panX: now.panX - taken.panX * zoom,
+    panY: now.panY - taken.panY * zoom,
+  };
+}
+
+/**
  * How big the enlarged section is allowed to be, as CSS.
  *
  * Square, and limited by whichever edge runs out first: the height, or the

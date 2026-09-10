@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 import { SHARED_SCAN } from "./scanBand";
+import type { SliceWindow } from "./axialSlice";
 import { useScanStore } from "@/stores/scanStore";
 
 import {
@@ -13,6 +14,7 @@ import {
   slabPlanes,
   SLAB_HALF_THICKNESS,
   SLICE_FORWARD,
+  SECTION_VIEW,
   SLICE_PIXELS,
   SLICE_UP,
   sliceSize,
@@ -70,6 +72,16 @@ export const AXIAL_PROBE = {
    * readings rather than two unrelated pictures.
    */
   frameCm: -1,
+  /**
+   * What the automatic framing would give at this level, in metres.
+   *
+   * Published because the panel does the zoom arithmetic and cannot do it
+   * without knowing where the whole section is: it is what a magnified window
+   * is kept inside, and what deciding "zoomed all the way out" means.
+   */
+  base: { x: 0, z: 0, half: 0 } as SliceWindow,
+  /** What the last pass was actually framed on. */
+  shown: { x: 0, z: 0, half: 0 } as SliceWindow,
 };
 
 /**
@@ -266,15 +278,31 @@ export function AxialProbe({
      * frame follows the contents and the scale is published instead.
      */
     const framing = sliceFraming(content.isEmpty() ? bounds : content, at);
-    camera.left = -framing.halfWidth;
-    camera.right = framing.halfWidth;
-    camera.top = framing.halfDepth;
-    camera.bottom = -framing.halfDepth;
-    camera.position.copy(framing.position);
+    const base: SliceWindow = {
+      x: framing.position.x,
+      z: framing.position.z,
+      half: framing.halfWidth,
+    };
+    /**
+     * The reader's own window, when they have magnified into one.
+     *
+     * This is where the wall on magnification goes: the same two thousand
+     * pixels spent on a ninth of the body are nine times finer, for the same
+     * draw calls and the same readback. Framing is a camera, and a camera is
+     * free. See `SECTION_VIEW`.
+     */
+    const shown = SECTION_VIEW.value ?? base;
+    camera.left = -shown.half;
+    camera.right = shown.half;
+    camera.top = shown.half;
+    camera.bottom = -shown.half;
+    camera.position.set(shown.x, at + 0.5, shown.z);
     camera.up.copy(SLICE_UP);
-    camera.lookAt(framing.target);
+    camera.lookAt(shown.x, at, shown.z);
     camera.updateProjectionMatrix();
-    AXIAL_PROBE.frameCm = framing.halfWidth * 200;
+    AXIAL_PROBE.frameCm = shown.half * 200;
+    AXIAL_PROBE.base = base;
+    AXIAL_PROBE.shown = shown;
 
     /*
      * Everything the pass borrows is given back in a `finally`.
