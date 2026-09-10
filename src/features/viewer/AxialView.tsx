@@ -106,6 +106,7 @@ export function AxialView() {
    * cheap trigger and the correct moment.
    */
   const held = useScanStore((s) => s.held);
+  const cut = useScanStore((s) => s.cut);
   const [full, setFull] = useState(false);
   /**
    * How much of the picture to fill the screen with, and where.
@@ -163,10 +164,22 @@ export function AxialView() {
   if (!enabled || !axial) return null;
 
   const across = AXIAL_PROBE.frameCm;
+  /**
+   * The caption describes what is actually on screen, which means it changes.
+   *
+   * It said the cut surfaces were open in both modes — true of the slab, and
+   * plainly false of the cut, where the surfaces below the plane read as
+   * solid. A caption that keeps insisting on something the picture contradicts
+   * teaches the reader to stop reading captions.
+   */
   const caption =
     `Anterior at the top${across > 0 ? ` · ${across.toFixed(0)} cm across` : ""}. ` +
-    "Drawn solid whatever the viewport shows, and the cut surfaces are open — " +
-    "an outline, not a radiograph.";
+    (cut
+      ? "The body opened at this plane: you are seeing the surfaces below the " +
+        "cut, so there is depth behind what is at this level."
+      : "Only what lies at this level, and the cut surfaces are open — an " +
+        "outline rather than a filled section.") +
+    " Drawn solid whatever the viewport shows. Not a radiograph.";
 
   if (full) {
     const step = (by: number) => setZoom((z) => Math.min(6, Math.max(1, z * by)));
