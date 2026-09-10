@@ -107,6 +107,19 @@ export function AxialView() {
    */
   const held = useScanStore((s) => s.held);
   const [full, setFull] = useState(false);
+  /**
+   * How much of the picture to fill the screen with, and where.
+   *
+   * Reported from a laptop: at the abdomen the slab reaches the arms, so the
+   * frame is well over a metre wide and the trunk inside it is a third of the
+   * picture. Framing on the contents did not help, because the contents *are*
+   * spread across the whole span — a wider frame is the honest answer to what
+   * the plane actually cut, and the reader wanting a closer look is a separate
+   * need with a separate control.
+   */
+  const [zoom, setZoom] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const dragging = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
     // Published while mounted, and taken back on the way out: the producer runs
@@ -138,6 +151,15 @@ export function AxialView() {
     if (!enabled || !axial) setFull(false);
   }, [enabled, axial]);
 
+  useEffect(() => {
+    // Opening always starts from the whole picture. A view that reopened at
+    // the magnification somebody left an hour ago is a view that looks broken.
+    if (full) {
+      setZoom(1);
+      setPan({ x: 0, y: 0 });
+    }
+  }, [full]);
+
   if (!enabled || !axial) return null;
 
   const across = AXIAL_PROBE.frameCm;
@@ -147,27 +169,94 @@ export function AxialView() {
     "an outline, not a radiograph.";
 
   if (full) {
+    const step = (by: number) => setZoom((z) => Math.min(6, Math.max(1, z * by)));
     return (
-      <div className="pointer-events-auto fixed inset-0 z-40 flex flex-col items-center justify-center gap-3 bg-slate-950/95 p-6">
+      <div className="pointer-events-auto fixed inset-0 z-40 flex flex-col items-center justify-center gap-2 bg-slate-950/95 p-4">
         <p className="text-[10px] uppercase tracking-wider text-cyan-500/70">
           Axial · where you let go
         </p>
-        <canvas
-          ref={canvas}
-          width={SLICE_SIZE}
-          height={SLICE_SIZE}
-          className="max-h-[70vh] max-w-[70vh] rounded bg-black"
-          aria-label="Cross-section at the height of the scanner"
-        />
-        <SliceTable compact={false} />
-        <p className="max-w-md text-center text-[11px] leading-snug text-slate-500">{caption}</p>
-        <button
-          type="button"
-          onClick={() => setFull(false)}
-          className="rounded border border-slate-700 px-3 py-1 text-xs text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
+
+        {/*
+          The window is a fixed square and the picture moves inside it, rather
+          than the picture growing and pushing the table off the screen. Panning
+          is only offered once there is something outside the window to pan to.
+        */}
+        <div
+          className="relative h-[58vh] w-[58vh] max-w-[90vw] overflow-hidden rounded bg-black"
+          onWheel={(event) => step(event.deltaY < 0 ? 1.15 : 1 / 1.15)}
+          onPointerDown={(event) => {
+            if (zoom === 1) return;
+            dragging.current = { x: event.clientX - pan.x, y: event.clientY - pan.y };
+            event.currentTarget.setPointerCapture(event.pointerId);
+          }}
+          onPointerMove={(event) => {
+            const from = dragging.current;
+            if (!from) return;
+            setPan({ x: event.clientX - from.x, y: event.clientY - from.y });
+          }}
+          onPointerUp={() => {
+            dragging.current = null;
+          }}
+          onPointerCancel={() => {
+            dragging.current = null;
+          }}
+          style={{ cursor: zoom === 1 ? "default" : dragging.current ? "grabbing" : "grab" }}
         >
-          Close · Esc
-        </button>
+          <canvas
+            ref={canvas}
+            width={SLICE_SIZE}
+            height={SLICE_SIZE}
+            className="absolute inset-0 h-full w-full"
+            style={{
+              transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+              // Sharp on the way up: this is an outline on black, and smoothing
+              // a magnified outline turns a clean edge into a grey smear.
+              imageRendering: zoom > 2 ? "pixelated" : "auto",
+            }}
+            aria-label="Cross-section at the height of the scanner"
+          />
+        </div>
+
+        <div className="flex items-center gap-1.5 text-xs">
+          <button
+            type="button"
+            onClick={() => step(1 / 1.4)}
+            className="rounded border border-slate-700 px-2 py-0.5 text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
+          >
+            −
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setZoom(1);
+              setPan({ x: 0, y: 0 });
+            }}
+            className="w-16 rounded border border-slate-700 px-2 py-0.5 tabular-nums text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
+          >
+            {zoom.toFixed(1)}×
+          </button>
+          <button
+            type="button"
+            onClick={() => step(1.4)}
+            className="rounded border border-slate-700 px-2 py-0.5 text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
+          >
+            +
+          </button>
+          <button
+            type="button"
+            onClick={() => setFull(false)}
+            className="ml-2 rounded border border-slate-700 px-3 py-0.5 text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
+          >
+            Close · Esc
+          </button>
+        </div>
+
+        <div className="flex max-w-3xl items-start gap-6">
+          <SliceTable compact={false} />
+          <p className="max-w-sm text-[11px] leading-snug text-slate-500">
+            {caption} Scroll or use −/+ to magnify; drag to move.
+          </p>
+        </div>
       </div>
     );
   }

@@ -68,11 +68,17 @@ export const AXIAL_PROBE = {
  * Square, and larger than the panel shows.
  *
  * Measured: the cost of this pass is draw calls, not pixels — 363 calls at the
- * chest either way — so a bigger target is very nearly free, while a small one
- * cannot be enlarged later without inventing detail. It is rendered at 512 and
- * shown at 144 until somebody asks to see it properly.
+ * chest whatever the size — so resolution is very nearly free on the render
+ * side, while a small target cannot be enlarged later without inventing
+ * detail. The readback does scale with pixels, and at this size it is the
+ * larger of the two halves; the panel behind M reports both, so the trade is
+ * visible rather than assumed.
+ *
+ * Shown at 144 in the panel and zoomable full size, which is what a thousand
+ * and twenty-four is for: at the abdomen the slab reaches the arms, so the
+ * frame is over a metre wide and the trunk inside it is worth magnifying.
  */
-export const SLICE_SIZE = 512;
+export const SLICE_SIZE = 1024;
 const SIZE = SLICE_SIZE;
 
 export function AxialProbe({
