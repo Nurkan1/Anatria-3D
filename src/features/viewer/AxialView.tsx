@@ -4,7 +4,7 @@ import { organLabel, useSceneStore } from "@/stores/sceneStore";
 import { useScanStore } from "@/stores/scanStore";
 
 import { SLICE_SIZE } from "./AxialProbe";
-import { AXIAL_CANVAS, restoreSlice } from "./axialSlice";
+import { AXIAL_CANVAS, pastNativeSize, restoreSlice } from "./axialSlice";
 import { AXIAL_PROBE } from "./AxialProbe";
 import { CURRENT_CROSSING } from "./scanCrossing";
 import { CURRENT_LEVEL } from "./vertebralLevel";
@@ -27,9 +27,10 @@ import { tissueColour } from "./palette";
  *
  * # Why there is one canvas and two sizes
  *
- * The pass is rendered at 512 because its cost is draw calls rather than
- * pixels, so the resolution is nearly free — but a panel that size would cover
- * the body it is a section of. It sits small until somebody asks to see it,
+ * The pass is rendered far larger than the panel because its cost is draw
+ * calls rather than pixels, so resolution is nearly free on the render side —
+ * but a panel that size would cover the body it is a section of. It sits small
+ * until somebody asks to see it,
  * and the enlarged view is the *same* canvas element moved, not a copy: two
  * canvases would mean painting twice, and the producer knows about one.
  */
@@ -122,6 +123,26 @@ export function AxialView() {
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const dragging = useRef<{ x: number; y: number } | null>(null);
+  /**
+   * How wide the enlarged window actually is, in screen pixels.
+   *
+   * Measured rather than assumed, because it is sized in viewport units: a
+   * laptop and this desktop get different numbers, and neither changes in a
+   * way React would re-render for. It is what decides whether magnifying has
+   * run past the source, and a guess there is exactly the bug being fixed.
+   */
+  const frame = useRef<HTMLDivElement>(null);
+  const [frameWidth, setFrameWidth] = useState(0);
+
+  useEffect(() => {
+    const element = frame.current;
+    if (!element) return;
+    const measure = () => setFrameWidth(element.clientWidth);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [full]);
 
   useEffect(() => {
     // Published while mounted, and taken back on the way out: the producer runs
@@ -203,6 +224,7 @@ export function AxialView() {
           is only offered once there is something outside the window to pan to.
         */}
         <div
+          ref={frame}
           className="relative h-[58vh] w-[58vh] max-w-[90vw] overflow-hidden rounded bg-black"
           onWheel={(event) => step(event.deltaY < 0 ? 1.15 : 1 / 1.15)}
           onPointerDown={(event) => {
@@ -230,9 +252,11 @@ export function AxialView() {
             className="absolute inset-0 h-full w-full"
             style={{
               transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
-              // Sharp on the way up: this is an outline on black, and smoothing
-              // a magnified outline turns a clean edge into a grey smear.
-              imageRendering: zoom > 2 ? "pixelated" : "auto",
+              // Smooth while there is still source to smooth, and honest
+              // blocks once there is not. See `pastNativeSize`.
+              imageRendering: pastNativeSize(zoom, frameWidth, SLICE_SIZE)
+                ? "pixelated"
+                : "auto",
             }}
             aria-label="Cross-section at the height of the scanner"
           />

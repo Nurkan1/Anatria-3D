@@ -5,6 +5,7 @@ import {
   cutPlanes,
   forgetSlice,
   paintSlice,
+  pastNativeSize,
   restoreSlice,
   SLAB_HALF_THICKNESS,
   SLICE_UP,
@@ -184,5 +185,31 @@ describe("the dissection cut", () => {
   it("costs one plane where the slab costs two", () => {
     expect(cutPlanes(1).length).toBe(1);
     expect(slabPlanes(1).length).toBe(2);
+  });
+});
+
+describe("pastNativeSize", () => {
+  it("smooths while the source still has pixels to spare", () => {
+    // 2048 pixels of section drawn into a 586-pixel window: even at three
+    // times, the browser is still shrinking the picture.
+    expect(pastNativeSize(1, 586, 2048)).toBe(false);
+    expect(pastNativeSize(3, 586, 2048)).toBe(false);
+  });
+
+  it("gives up at the point the source runs out", () => {
+    // 586 * 3.5 is 2051, which is the first magnification past 2048.
+    expect(pastNativeSize(3.5, 586, 2048)).toBe(true);
+    expect(pastNativeSize(6, 586, 2048)).toBe(true);
+  });
+
+  it("moves with the window rather than assuming one", () => {
+    // The same magnification, a smaller window: still inside the source.
+    expect(pastNativeSize(3.5, 400, 2048)).toBe(false);
+  });
+
+  it("smooths when the window has not been measured yet", () => {
+    // First paint, before the observer has reported: a section that flashed
+    // blocky and then resolved would read as a rendering fault.
+    expect(pastNativeSize(4, 0, 2048)).toBe(false);
   });
 });

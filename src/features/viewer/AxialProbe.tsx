@@ -68,20 +68,35 @@ export const AXIAL_PROBE = {
 };
 
 /**
- * Square, and larger than the panel shows.
+ * Square, and much larger than the panel shows.
  *
- * Measured: the cost of this pass is draw calls, not pixels — 363 calls at the
- * chest whatever the size — so resolution is very nearly free on the render
- * side, while a small target cannot be enlarged later without inventing
- * detail. The readback does scale with pixels, and at this size it is the
- * larger of the two halves; the panel behind M reports both, so the trade is
- * visible rather than assumed.
+ * # Why two thousand and forty-eight
  *
- * Shown at 144 in the panel and zoomable full size, which is what a thousand
- * and twenty-four is for: at the abdomen the slab reaches the arms, so the
- * frame is over a metre wide and the trunk inside it is worth magnifying.
+ * The frame follows the slab, and at the chest the slab reaches the arms: a
+ * picture about 116 cm across. At a thousand and twenty-four that is 1.1 mm
+ * per pixel — roughly a real CT — and the enlarged view went visibly blocky
+ * as soon as it passed native size, which on a laptop is a little over twice.
+ * Doubling puts it at 0.57 mm per pixel, finer than anything visible in the
+ * picture, and that is the point: the panel almost always draws the section
+ * *smaller* than the source, so the browser's downscale acts as supersampling
+ * and the outlines arrive smooth with no multisample buffer at all.
+ *
+ * Multisampling was the other candidate and was rejected on the weakest
+ * machine this has to run on. A four-sample colour and depth pair at this size
+ * is something like a hundred and thirty megabytes of renderbuffer, and the
+ * slowest machine here is a 2010 Pentium with integrated graphics. Resolution
+ * costs an ordinary texture and needs no extension.
+ *
+ * # What it costs, and where to look
+ *
+ * The render side barely notices: the cost of this pass is draw calls rather
+ * than pixels, and it is the same few hundred calls whatever the size. **The
+ * readback scales with pixels, so this quadruples it.** That is a one-off at
+ * the moment the light is let go rather than a per-frame cost, and the panel
+ * behind M reports the render and the readback separately — the trade stays
+ * visible instead of assumed.
  */
-export const SLICE_SIZE = 1024;
+export const SLICE_SIZE = 2048;
 const SIZE = SLICE_SIZE;
 
 export function AxialProbe({

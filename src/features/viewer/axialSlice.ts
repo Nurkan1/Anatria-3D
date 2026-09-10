@@ -115,6 +115,24 @@ export function sliceFraming(
 export const SLICE_UP = new THREE.Vector3(0, 0, -1);
 
 /**
+ * Whether magnifying this far draws source pixels bigger than screen pixels.
+ *
+ * The enlarged view smooths the picture right up until it runs out of source,
+ * and then stops smoothing. Past native size a smooth scale is an invention —
+ * a soft grey edge where the data has a hard one — while blocks at least tell
+ * the reader they have reached the end of what was actually measured.
+ *
+ * This was the constant `zoom > 2`, and a constant is wrong here twice over:
+ * the window is sized as a fraction of the viewport, so it is a different
+ * number of pixels on every machine, and the source has now changed size once.
+ * Comparing the two numbers is the same rule stated truthfully.
+ */
+export function pastNativeSize(zoom: number, frameWidthPx: number, sourcePx: number): boolean {
+  if (frameWidthPx <= 0 || sourcePx <= 0) return false;
+  return (zoom * frameWidthPx) / sourcePx > 1;
+}
+
+/**
  * Where the picture goes, once it has been read back.
  *
  * A module-level handle rather than a prop, because the two halves live on
