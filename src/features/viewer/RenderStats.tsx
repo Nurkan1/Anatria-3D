@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { fps, heapMb, noteFrame, sample } from "./renderSample";
 import { viewportKey } from "./viewportKeys";
 import { AXIAL_PROBE } from "./AxialProbe";
+import { readLocal, writeLocal } from "@/lib/localStore";
 
 /**
  * The frame counter, and the panel that shows it.
@@ -145,13 +146,52 @@ const ROWS: Row[] = [
  * state, for the reason in `renderSample`: a panel that re-rendered React sixty
  * times a second would be measuring itself.
  *
- * Positioned by whatever holds it rather than by itself, so the experiment's
- * controls can be stacked in one column instead of each finding its own corner
- * and landing on the production chrome already there.
+ * Positioned by whatever holds it — until somebody moves it.
+ *
+ * It sat in the stacked column with the rest of the overlay, which is right
+ * until the panel grows: five rows of axial instrumentation made it tall
+ * enough to run off the top of the viewport, where the first readings could
+ * not be read at all. Rather than shorten it or find it a better corner —
+ * there isn't one, the corners are taken — the header is a handle.
+ *
+ * It only leaves the column once it has been dragged, and it starts from
+ * exactly where it was sitting, so nothing moves for a reader who never
+ * touches it and nothing jumps for one who does. The place is remembered, and
+ * clamped back inside on the way in: a position saved on a large monitor must
+ * not hide the panel on a laptop.
  */
+const PLACE_KEY = "anatria3d.stats.place.v1";
+
+/** Kept on screen by this much, whatever was saved or dragged. */
+const KEEP_VISIBLE = 120;
+
+export function clampToWindow(place: { x: number; y: number }): { x: number; y: number } {
+  return {
+    x: Math.min(Math.max(place.x, 0), Math.max(0, window.innerWidth - KEEP_VISIBLE)),
+    y: Math.min(Math.max(place.y, 0), Math.max(0, window.innerHeight - KEEP_VISIBLE)),
+  };
+}
+
+export function storedPlace(): { x: number; y: number } | null {
+  const raw = readLocal(PLACE_KEY);
+  if (!raw) return null;
+  const [x, y] = raw.split(",").map(Number);
+  if (!Number.isFinite(x) || !Number.isFinite(y)) return null;
+  return clampToWindow({ x: x as number, y: y as number });
+}
+
 export function RenderStatsPanel() {
   const [open, setOpen] = useState(false);
   const cells = useRef<(HTMLSpanElement | null)[]>([]);
+  const [place, setPlace] = useState<{ x: number; y: number } | null>(storedPlace);
+  const grab = useRef<{ x: number; y: number } | null>(null);
+
+  useEffect(() => {
+    // A window that shrank while the panel was elsewhere must not strand it.
+    const onResize = () => setPlace((at) => (at ? clampToWindow(at) : at));
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
@@ -187,9 +227,42 @@ export function RenderStatsPanel() {
   }
 
   return (
-    <div className="pointer-events-none select-none rounded border border-slate-700/70 bg-slate-950/90 px-2.5 py-2 font-mono text-[10px] text-slate-300 shadow-lg">
-      <p className="mb-1.5 text-[9px] uppercase tracking-wider text-slate-500">
-        Renderer · M to hide
+    <div
+      className={`pointer-events-none select-none rounded border border-slate-700/70 bg-slate-950/90 px-2.5 py-2 font-mono text-[10px] text-slate-300 shadow-lg ${
+        place ? "fixed z-30" : ""
+      }`}
+      style={place ? { left: place.x, top: place.y } : undefined}
+    >
+      {/*
+        The header is the handle. Dragging lifts the panel out of the stacked
+        column and into place at exactly the spot it already occupied, so the
+        first movement is the reader's and not a jump.
+      */}
+      <p
+        className="pointer-events-auto mb-1.5 cursor-grab text-[9px] uppercase tracking-wider text-slate-500 active:cursor-grabbing"
+        onPointerDown={(event) => {
+          const box = event.currentTarget.parentElement?.getBoundingClientRect();
+          if (!box) return;
+          grab.current = { x: event.clientX - box.left, y: event.clientY - box.top };
+          setPlace(clampToWindow({ x: box.left, y: box.top }));
+          event.currentTarget.setPointerCapture(event.pointerId);
+        }}
+        onPointerMove={(event) => {
+          const from = grab.current;
+          if (!from) return;
+          setPlace(clampToWindow({ x: event.clientX - from.x, y: event.clientY - from.y }));
+        }}
+        onPointerUp={(event) => {
+          grab.current = null;
+          const box = event.currentTarget.parentElement?.getBoundingClientRect();
+          if (box) writeLocal(PLACE_KEY, `${Math.round(box.left)},${Math.round(box.top)}`);
+        }}
+        onPointerCancel={() => {
+          grab.current = null;
+        }}
+        title="Drag to move · M to hide"
+      >
+        Renderer · drag me · M to hide
       </p>
       <div className="grid grid-cols-[auto_auto] gap-x-3 gap-y-0.5 tabular-nums">
         {ROWS.map((row, index) => (
