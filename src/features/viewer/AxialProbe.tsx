@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 import { SHARED_SCAN } from "./scanBand";
-import { sliceFraming, slabPlanes, SLICE_UP } from "./axialSlice";
+import { sliceFraming, slabPlanes, SLAB_HALF_THICKNESS, SLICE_UP } from "./axialSlice";
 
 /**
  * Phase 0 for the axial slice: measure, and decide afterwards.
@@ -44,6 +44,8 @@ export const AXIAL_PROBE = {
   drawCalls: -1,
   /** How many times it has run, so a repeat measurement is distinguishable. */
   runs: 0,
+  /** Meshes the slab test kept. The rest were never submitted. */
+  drawn: -1,
 };
 
 /** Square, and small: a slice read at a glance does not need more. */
@@ -79,6 +81,9 @@ export function AxialProbe({
 
   const camera = useMemo(() => new THREE.OrthographicCamera(-1, 1, 1, -1, 0.01, 2), []);
   const pixels = useMemo(() => new Uint8Array(SIZE * SIZE * 4), []);
+  /** Reused, because allocating an array of meshes per measurement is silly. */
+  const hiddenMeshes = useRef<THREE.Mesh[]>([]);
+  const reach = useMemo(() => new THREE.Vector3(), []);
 
   useFrame(() => {
     if (request === done.current || !bounds || bounds.isEmpty()) return;
@@ -106,6 +111,47 @@ export function AxialProbe({
     const ringWasVisible = ring?.visible ?? false;
     if (ring) ring.visible = false;
 
+    /**
+     * Everything that cannot touch the slab is hidden before the pass.
+     *
+     * Measured first, which is the only reason this is here: the axial pass
+     * came to 3,362 draw calls at the chest against the main view's 3,014 —
+     * *more*, not fewer. Two things add up to that. Seen from directly above
+     * with a frame around the whole body, almost nothing falls outside the
+     * frustum, where the front view discards plenty. And **clipping planes do
+     * not save draw calls**: they discard fragments, so all 3,368 meshes are
+     * still submitted even though a five-millimetre slab can only contain a
+     * couple of hundred of them.
+     *
+     * A bounding-sphere test against the slab costs two comparisons per mesh
+     * and removes the rest from the pass entirely. Visibility is restored
+     * immediately afterwards — this must leave the scene exactly as it found
+     * it, because the very next frame is the reader's.
+     */
+    const hidden = hiddenMeshes.current;
+    hidden.length = 0;
+    // Counted rather than assumed: the number of meshes on screen depends on
+    // which systems are switched on and which body is loaded, so a constant
+    // here would be a figure that reads as measured and is not.
+    let considered = 0;
+    scene.traverse((object) => {
+      const mesh = object as THREE.Mesh;
+      if (!mesh.isMesh || !mesh.visible) return;
+      considered += 1;
+      const geometry = mesh.geometry;
+      if (!geometry.boundingSphere) geometry.computeBoundingSphere();
+      const sphere = geometry.boundingSphere;
+      if (!sphere) return;
+      // In world space, and conservatively: the mesh's own scale is folded in
+      // through `matrixWorld`, so a scaled structure is not culled early.
+      reach.copy(sphere.center).applyMatrix4(mesh.matrixWorld);
+      const radius = sphere.radius * mesh.matrixWorld.getMaxScaleOnAxis();
+      if (Math.abs(reach.y - at) > radius + SLAB_HALF_THICKNESS) {
+        mesh.visible = false;
+        hidden.push(mesh);
+      }
+    });
+
     const previousClipping = gl.clippingPlanes;
     const previousTarget = gl.getRenderTarget();
     gl.clippingPlanes = slabPlanes(at);
@@ -131,6 +177,9 @@ export function AxialProbe({
     gl.setRenderTarget(previousTarget);
     gl.clippingPlanes = previousClipping;
     if (ring) ring.visible = ringWasVisible;
+    for (const mesh of hidden) mesh.visible = true;
+    AXIAL_PROBE.drawn = considered - hidden.length;
+    hidden.length = 0;
     AXIAL_PROBE.runs += 1;
   });
 

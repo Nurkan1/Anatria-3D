@@ -131,6 +131,10 @@ const ROWS: Row[] = [
     label: "axial calls",
     read: () => (AXIAL_PROBE.drawCalls < 0 ? "—" : AXIAL_PROBE.drawCalls.toLocaleString()),
   },
+  {
+    label: "axial drawn",
+    read: () => (AXIAL_PROBE.drawn < 0 ? "—" : AXIAL_PROBE.drawn.toLocaleString()),
+  },
   { label: "axial runs", read: () => String(AXIAL_PROBE.runs) },
 ];
 
