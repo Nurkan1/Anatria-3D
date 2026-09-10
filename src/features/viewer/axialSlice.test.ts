@@ -6,14 +6,13 @@ import {
   forgetSlice,
   paintSlice,
   MIN_SECTION_HALF_M,
-  pastNativeSize,
-  residualTransform,
+  panWindow,
   SLICE_PIXELS_HIGH,
   SLICE_PIXELS_NORMAL,
   sliceSize,
   torchDirection,
   wheelSteps,
-  windowFromTransform,
+  zoomWindow,
   restoreSlice,
   SLAB_HALF_THICKNESS,
   SLICE_UP,
@@ -196,32 +195,6 @@ describe("the dissection cut", () => {
   });
 });
 
-describe("pastNativeSize", () => {
-  it("smooths while the source still has pixels to spare", () => {
-    // 2048 pixels of section drawn into a 586-pixel window: even at three
-    // times, the browser is still shrinking the picture.
-    expect(pastNativeSize(1, 586, 2048)).toBe(false);
-    expect(pastNativeSize(3, 586, 2048)).toBe(false);
-  });
-
-  it("gives up at the point the source runs out", () => {
-    // 586 * 3.5 is 2051, which is the first magnification past 2048.
-    expect(pastNativeSize(3.5, 586, 2048)).toBe(true);
-    expect(pastNativeSize(6, 586, 2048)).toBe(true);
-  });
-
-  it("moves with the window rather than assuming one", () => {
-    // The same magnification, a smaller window: still inside the source.
-    expect(pastNativeSize(3.5, 400, 2048)).toBe(false);
-  });
-
-  it("smooths when the window has not been measured yet", () => {
-    // First paint, before the observer has reported: a section that flashed
-    // blocky and then resolved would read as a rendering fault.
-    expect(pastNativeSize(4, 0, 2048)).toBe(false);
-  });
-});
-
 describe("wheelSteps", () => {
   it("turns one notch of a mouse wheel into exactly one step", () => {
     expect(wheelSteps(0, 100)).toEqual({ steps: 1, carry: 0 });
@@ -307,70 +280,63 @@ describe("sliceSize", () => {
 /** A 108 cm frame centred on the origin, as the chest gives. */
 const BASE = { x: 0, z: 0, half: 0.54 };
 
-describe("windowFromTransform", () => {
+describe("zoomWindow", () => {
   it("halves the width for twice the magnification", () => {
-    const shown = windowFromTransform(BASE, BASE, 2, 0, 0, 900);
+    const shown = zoomWindow(BASE, BASE, 2);
     expect(shown?.half).toBeCloseTo(0.27, 12);
     expect(shown?.x).toBeCloseTo(0, 12);
   });
 
   it("goes back to automatic when the reader zooms all the way out", () => {
-    // Null rather than the frame it happened to be at: "the whole thing" has
-    // to keep following the level as the plane moves.
-    expect(windowFromTransform(BASE, BASE, 1, 0, 0, 900)).toBeNull();
-    expect(windowFromTransform({ x: 0, z: 0, half: 0.27 }, BASE, 0.5, 0, 0, 900)).toBeNull();
+    // Null rather than a window that happens to be body-wide: the automatic
+    // frame follows the level, and zoomed out is a request to keep doing that.
+    expect(zoomWindow(BASE, BASE, 1)).toBeNull();
+    expect(zoomWindow({ x: 0, z: 0, half: 0.27 }, BASE, 0.5)).toBeNull();
   });
 
-  it("travels the opposite way to the hand", () => {
-    // Dragging the picture to the right shows what was off to the left.
-    const shown = windowFromTransform(BASE, BASE, 2, 100, 0, 900);
-    expect(shown!.x).toBeLessThan(0);
-  });
-
-  it("moves by the distance the drag actually covered", () => {
-    // Half the window dragged at twice the magnification: the window is 54 cm
-    // wide there, so a 225-pixel drag across a 900-pixel picture is a quarter
-    // of it, which is 13.5 cm.
-    const shown = windowFromTransform(BASE, BASE, 2, 225, 0, 900);
-    expect(shown!.x).toBeCloseTo(-0.135, 12);
-  });
-
-  it("keeps the window inside the section rather than out in the black", () => {
-    const shown = windowFromTransform(BASE, BASE, 2, 99999, 0, 900);
-    // The furthest it may go is the edge of the automatic frame.
-    expect(shown!.x).toBeCloseTo(-(BASE.half - shown!.half), 12);
+  it("keeps what is under the pointer under the pointer", () => {
+    // The whole reason zooming is anchored: a reader magnifying the aorta must
+    // still be looking at the aorta afterwards.
+    const frame = { x: 0, z: 0, half: 0.4 };
+    const u = 0.5;
+    const anchor = frame.x + u * frame.half;
+    const shown = zoomWindow(frame, BASE, 2, u, 0);
+    expect(shown!.x + u * shown!.half).toBeCloseTo(anchor, 12);
   });
 
   it("stops where there is nothing left to magnify", () => {
-    const shown = windowFromTransform(BASE, BASE, 500, 0, 0, 900);
-    expect(shown!.half).toBe(MIN_SECTION_HALF_M);
+    expect(zoomWindow(BASE, BASE, 500)!.half).toBe(MIN_SECTION_HALF_M);
+  });
+
+  it("keeps the window inside the section", () => {
+    // Anchored hard against one edge, the window still may not leave the body.
+    const shown = zoomWindow(BASE, BASE, 2, 1, 1)!;
+    expect(Math.abs(shown.x)).toBeLessThanOrEqual(BASE.half - shown.half + 1e-12);
+    expect(Math.abs(shown.z)).toBeLessThanOrEqual(BASE.half - shown.half + 1e-12);
   });
 });
 
-describe("residualTransform", () => {
-  it("is the identity when nothing moved while the section was made", () => {
-    const taken = { zoom: 2.5, panX: 40, panY: -12 };
-    expect(residualTransform(taken, { ...taken })).toEqual({ zoom: 1, panX: 0, panY: 0 });
+describe("panWindow", () => {
+  it("travels the opposite way to the hand", () => {
+    // Dragging the picture to the right shows what was off to the left.
+    const frame = { x: 0, z: 0, half: 0.27 };
+    expect(panWindow(frame, BASE, 100, 0, 900)!.x).toBeLessThan(0);
   });
 
-  it("keeps whatever the hand did in the meantime", () => {
-    // Rendered at 2x, but the reader is already at 3x by the time it lands.
-    const left = residualTransform(
-      { zoom: 2, panX: 0, panY: 0 },
-      { zoom: 3, panX: 0, panY: 0 },
-    );
-    expect(left.zoom).toBeCloseTo(1.5, 12);
+  it("moves by the distance the drag actually covered", () => {
+    // A 54 cm window drawn 900 pixels wide: a quarter of the picture is 13.5 cm.
+    const frame = { x: 0, z: 0, half: 0.27 };
+    expect(panWindow(frame, BASE, 225, 0, 900)!.x).toBeCloseTo(-0.135, 12);
   });
 
-  it("composes back to where the reader actually is", () => {
-    // The point of the arithmetic: the picture must not jump. Applying the
-    // remainder on top of the rendered window has to land on the same place
-    // the untouched transform would have.
-    const taken = { zoom: 2, panX: 60, panY: -30 };
-    const now = { zoom: 3.5, panX: 10, panY: 44 };
-    const left = residualTransform(taken, now);
-    expect(taken.zoom * left.zoom).toBeCloseTo(now.zoom, 12);
-    expect(taken.panX * left.zoom + left.panX).toBeCloseTo(now.panX, 12);
-    expect(taken.panY * left.zoom + left.panY).toBeCloseTo(now.panY, 12);
+  it("does not change the width", () => {
+    const frame = { x: 0, z: 0, half: 0.27 };
+    expect(panWindow(frame, BASE, 40, -80, 900)!.half).toBe(0.27);
+  });
+
+  it("stops at the edge rather than drifting into the black", () => {
+    const frame = { x: 0, z: 0, half: 0.27 };
+    const shown = panWindow(frame, BASE, 99999, 0, 900)!;
+    expect(shown.x).toBeCloseTo(-(BASE.half - frame.half), 12);
   });
 });

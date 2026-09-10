@@ -5,21 +5,20 @@ import { useScanStore } from "@/stores/scanStore";
 
 import {
   AXIAL_CANVAS,
-  MIN_SECTION_HALF_M,
-  pastNativeSize,
-  residualTransform,
+  panWindow,
+  RETAKE_INTERVAL_MS,
   restoreSlice,
   SECTION_VIEW,
   SECTION_WINDOW,
   SLICE_PIXELS,
   TORCH,
   torchDirection,
-  TORCH_INTERVAL_MS,
   wantSection,
   wheelSteps,
   WHEEL_SETTLE_MS,
-  windowFromTransform,
+  zoomWindow,
 } from "./axialSlice";
+import type { SliceWindow } from "./axialSlice";
 import { SECTION_STEP_CM, stepFraction } from "./scanBand";
 import { AXIAL_PROBE } from "./AxialProbe";
 import { CURRENT_CROSSING } from "./scanCrossing";
@@ -137,17 +136,19 @@ export function AxialView() {
   useScanStore((s) => s.detail);
   const [full, setFull] = useState(false);
   /**
-   * How much of the picture to fill the screen with, and where.
+   * The square of body the section is framed on, or null for the whole thing.
    *
-   * Reported from a laptop: at the abdomen the slab reaches the arms, so the
-   * frame is well over a metre wide and the trunk inside it is a third of the
-   * picture. Framing on the contents did not help, because the contents *are*
-   * spread across the whole span — a wider frame is the honest answer to what
-   * the plane actually cut, and the reader wanting a closer look is a separate
-   * need with a separate control.
+   * Kept in metres rather than as a magnification, because the plane moves: the
+   * automatic frame is 108 cm at the chest and a third of that at the neck, so
+   * a window remembered as a fraction of the picture would swing across the
+   * body as the reader stepped through it. In metres it stays over the same
+   * anatomy, which is the point of being able to step while magnified.
+   *
+   * Mirrored into React state as well as the module value, because the panel
+   * reads it while rendering and the render loop reads it while rendering.
    */
-  const [zoom, setZoom] = useState(1);
-  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [shown, setShown] = useState<SliceWindow | null>(null);
+  /** The last pointer position of a drag, so moves are deltas. */
   const dragging = useRef<{ x: number; y: number } | null>(null);
   /**
    * How wide the enlarged window actually is, in screen pixels.
@@ -171,47 +172,33 @@ export function AxialView() {
   const carried = useRef(0);
   /** The pending retake, cancelled by the next notch. See `WHEEL_SETTLE_MS`. */
   const settle = useRef<number | null>(null);
-  /**
-   * The magnification already rendered into the picture, and the one that is
-   * not yet.
-   *
-   * `zoom` and `pan` are a CSS transform, which is what makes a gesture feel
-   * immediate — nothing waits on a render. But CSS cannot add detail, so once
-   * the hand stops the same window is rendered *as a camera*, at the full
-   * resolution, and the transform is taken back out. This holds the gesture
-   * that was sent to be rendered until the picture that answers it arrives.
-   */
-  const takenBy = useRef<{ zoom: number; panX: number; panY: number } | null>(null);
-  /** The pending commit of a magnification. See `WHEEL_SETTLE_MS`. */
-  const settleView = useRef<number | null>(null);
-  /** When the torch last cost a section. See `TORCH_INTERVAL_MS`. */
-  const lastTorch = useRef(0);
-  /** The retake owed to a pointer that stopped between two intervals. */
-  const torchTrail = useRef<number | null>(null);
+  /** When a moving gesture last cost a section. See `RETAKE_INTERVAL_MS`. */
+  const lastRetake = useRef(0);
+  /** The retake owed to a hand that stopped between two intervals. */
+  const trailing = useRef<number | null>(null);
 
   /**
-   * Retake for the torch, at most so often, and always once at the end.
+   * Retake, at most so often, and always once at the end.
    *
    * Leading and trailing both matter and for different reasons. Without the
-   * leading one the light lags the hand by an interval and feels detached from
-   * it; without the trailing one the picture keeps whichever position the
-   * pointer happened to be in when the last interval elapsed, which is not
-   * where the reader left it.
+   * leading one the picture lags the hand by an interval and feels detached
+   * from it; without the trailing one it keeps whatever the gesture happened to
+   * be at when the last interval elapsed, which is not where it was left.
    */
-  const retakeForTorch = () => {
+  const retakeSoon = () => {
     const now = performance.now();
-    const since = now - lastTorch.current;
-    if (since >= TORCH_INTERVAL_MS) {
-      lastTorch.current = now;
+    const since = now - lastRetake.current;
+    if (trailing.current !== null) window.clearTimeout(trailing.current);
+    if (since >= RETAKE_INTERVAL_MS) {
+      lastRetake.current = now;
       wantSection();
       return;
     }
-    if (torchTrail.current !== null) window.clearTimeout(torchTrail.current);
-    torchTrail.current = window.setTimeout(() => {
-      torchTrail.current = null;
-      lastTorch.current = performance.now();
+    trailing.current = window.setTimeout(() => {
+      trailing.current = null;
+      lastRetake.current = performance.now();
       wantSection();
-    }, TORCH_INTERVAL_MS - since);
+    }, RETAKE_INTERVAL_MS - since);
   };
 
   /** Where the pointer is over the picture becomes where the light stands. */
@@ -220,57 +207,39 @@ export function AxialView() {
     const u = (x - box.left - box.width / 2) / (box.width / 2);
     const v = (y - box.top - box.height / 2) / (box.height / 2);
     TORCH.value = torchDirection(u, v);
-    retakeForTorch();
+    retakeSoon();
   };
 
   /**
-   * Send the window the reader is looking at to be rendered properly.
+   * Move the window, and let the picture follow.
    *
-   * Nothing is asked for when the gesture came to rest where it started, which
-   * is most pointer-ups: a section costs fifteen milliseconds and re-taking an
-   * identical one is fifteen milliseconds of nothing.
+   * The window is the only state there is. There was a CSS transform on top of
+   * it once, as a preview, and taking the preview back out when the render
+   * landed is what produced the jumps: **a section arriving is not the section
+   * you asked for**, because the counter goes up for every pass — a torch
+   * retake, a step of the plane, letting the light go. Two truths correlated by
+   * hope. One truth cannot disagree with itself.
    */
-  const commitMagnification = () => {
-    if (frameWidth <= 0 || AXIAL_PROBE.base.half <= 0) return;
-    const settled = pan.x === 0 && pan.y === 0 && zoom === 1;
-    if (settled) return;
-    const next = windowFromTransform(
-      AXIAL_PROBE.shown,
-      AXIAL_PROBE.base,
-      zoom,
-      pan.x,
-      pan.y,
-      frameWidth,
-    );
-    takenBy.current = { zoom, panX: pan.x, panY: pan.y };
+  const showWindow = (next: SliceWindow | null, now = false) => {
     SECTION_VIEW.value = next;
-    wantSection();
+    setShown(next);
+    if (now) {
+      if (trailing.current !== null) window.clearTimeout(trailing.current);
+      trailing.current = null;
+      lastRetake.current = performance.now();
+      wantSection();
+      return;
+    }
+    retakeSoon();
   };
 
-  const commitWhenStill = () => {
-    if (settleView.current !== null) window.clearTimeout(settleView.current);
-    settleView.current = window.setTimeout(() => {
-      settleView.current = null;
-      commitMagnification();
-    }, WHEEL_SETTLE_MS);
-  };
+  /** What is on screen: the reader's window, or the whole section. */
+  const looking = (): SliceWindow => shown ?? AXIAL_PROBE.base;
 
-  /**
-   * The rendered picture has caught up with the gesture; take the CSS back out.
-   *
-   * Whatever the hand did while the section was being made stays applied, so
-   * the swap is invisible: the picture on screen is the same picture, made of
-   * pixels that were measured rather than stretched.
-   */
-  useEffect(() => {
-    const taken = takenBy.current;
-    if (!taken) return;
-    takenBy.current = null;
-    const left = residualTransform(taken, { zoom, panX: pan.x, panY: pan.y });
-    setZoom(left.zoom);
-    setPan({ x: left.panX, y: left.panY });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sections]);
+  const magnify = (by: number, u = 0, v = 0) => {
+    if (AXIAL_PROBE.base.half <= 0) return;
+    showWindow(zoomWindow(looking(), AXIAL_PROBE.base, by, u, v));
+  };
 
   /**
    * Switched off, the light goes back to the one the mode chooses for itself.
@@ -312,8 +281,7 @@ export function AxialView() {
   useEffect(
     () => () => {
       if (settle.current !== null) window.clearTimeout(settle.current);
-      if (settleView.current !== null) window.clearTimeout(settleView.current);
-      if (torchTrail.current !== null) window.clearTimeout(torchTrail.current);
+      if (trailing.current !== null) window.clearTimeout(trailing.current);
     },
     [],
   );
@@ -369,14 +337,10 @@ export function AxialView() {
     // a thumbnail showing a nine-centimetre crop of somebody's last look is
     // not a thumbnail of the section, and a view that reopened at the
     // magnification left an hour ago is a view that looks broken.
-    setZoom(1);
-    setPan({ x: 0, y: 0 });
-    takenBy.current = null;
-    if (SECTION_VIEW.value !== null) {
-      SECTION_VIEW.value = null;
-      wantSection();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (SECTION_VIEW.value === null) return;
+    SECTION_VIEW.value = null;
+    setShown(null);
+    wantSection();
   }, [full]);
 
   if (!enabled || !axial) return null;
@@ -389,7 +353,7 @@ export function AxialView() {
    * replaces the magnification factor on the button: "9 cm" is a measurement a
    * reader can use, and "5.4x" is a number about the software.
    */
-  const across = AXIAL_PROBE.frameCm / zoom;
+  const across = AXIAL_PROBE.frameCm;
   /**
    * The level, when the plane is at one.
    *
@@ -415,24 +379,6 @@ export function AxialView() {
     " Drawn solid whatever the viewport shows. Not a radiograph.";
 
   if (full) {
-    /**
-     * Magnify, as far as there is anything left to magnify.
-     *
-     * The limit is a width of body rather than a factor: past six centimetres
-     * across a reader is magnifying the atlas's own triangles, and the ceiling
-     * has to hold whatever the frame at this level happens to be. Zooming out
-     * stops at the whole section, which `windowFromTransform` reads as a
-     * return to automatic framing.
-     */
-    const magnify = (by: number) =>
-      setZoom((z) => {
-        const wanted = z * by;
-        const half = AXIAL_PROBE.shown.half / wanted;
-        if (half < MIN_SECTION_HALF_M) return AXIAL_PROBE.shown.half / MIN_SECTION_HALF_M;
-        const widest = AXIAL_PROBE.base.half;
-        if (widest > 0 && half > widest) return AXIAL_PROBE.shown.half / widest;
-        return wanted;
-      });
     return (
       <div className="pointer-events-auto fixed inset-0 z-40 flex items-center justify-center gap-6 bg-slate-950/95 p-4">
         {/*
@@ -462,22 +408,40 @@ export function AxialView() {
           */
           onWheel={(event) => {
             if (event.ctrlKey || event.metaKey) {
-              magnify(event.deltaY < 0 ? 1.15 : 1 / 1.15);
-              // Rendered properly once the hand stops, not once per notch.
-              commitWhenStill();
+              // About the pointer, so the thing being looked at stays under it
+              // instead of sliding off the edge with every notch.
+              const box = event.currentTarget.getBoundingClientRect();
+              magnify(
+                event.deltaY < 0 ? 1.15 : 1 / 1.15,
+                (event.clientX - box.left - box.width / 2) / (box.width / 2),
+                (event.clientY - box.top - box.height / 2) / (box.height / 2),
+              );
               return;
             }
             wheelToSteps(event.deltaY);
           }}
           onPointerDown={(event) => {
-            if (zoom === 1) return;
-            dragging.current = { x: event.clientX - pan.x, y: event.clientY - pan.y };
+            if (!shown) return;
+            dragging.current = { x: event.clientX, y: event.clientY };
             event.currentTarget.setPointerCapture(event.pointerId);
           }}
           onPointerMove={(event) => {
             const from = dragging.current;
             if (from) {
-              setPan({ x: event.clientX - from.x, y: event.clientY - from.y });
+              // Deltas, not an offset from where the drag began: the window is
+              // the state and it has already absorbed everything so far.
+              dragging.current = { x: event.clientX, y: event.clientY };
+              if (frameWidth > 0) {
+                showWindow(
+                  panWindow(
+                    looking(),
+                    AXIAL_PROBE.base,
+                    event.clientX - from.x,
+                    event.clientY - from.y,
+                    frameWidth,
+                  ),
+                );
+              }
               return;
             }
             // Hover aims, a held button pans. They are different gestures, so
@@ -485,9 +449,7 @@ export function AxialView() {
             aimTorch(event.currentTarget.getBoundingClientRect(), event.clientX, event.clientY);
           }}
           onPointerUp={() => {
-            if (!dragging.current) return;
             dragging.current = null;
-            commitMagnification();
           }}
           onPointerCancel={() => {
             dragging.current = null;
@@ -499,9 +461,9 @@ export function AxialView() {
               ? "grabbing"
               : torch
                 ? "crosshair"
-                : zoom === 1
-                  ? "default"
-                  : "grab",
+                : shown
+                  ? "grab"
+                  : "default",
           }}
         >
           <canvas
@@ -509,14 +471,6 @@ export function AxialView() {
             width={SLICE_PIXELS.value}
             height={SLICE_PIXELS.value}
             className="absolute inset-0 h-full w-full"
-            style={{
-              transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
-              // Smooth while there is still source to smooth, and honest
-              // blocks once there is not. See `pastNativeSize`.
-              imageRendering: pastNativeSize(zoom, frameWidth, SLICE_PIXELS.value)
-                ? "pixelated"
-                : "auto",
-            }}
             aria-label="Cross-section at the height of the scanner"
           />
         </div>
@@ -530,10 +484,7 @@ export function AxialView() {
           <div className="flex items-center gap-1.5 text-xs">
             <button
               type="button"
-              onClick={() => {
-              magnify(1 / 1.4);
-              commitWhenStill();
-            }}
+              onClick={() => magnify(1 / 1.4)}
               className="rounded border border-slate-700 px-2 py-0.5 text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
             >
               −
@@ -542,12 +493,8 @@ export function AxialView() {
               type="button"
               title="Back to the whole section"
               onClick={() => {
-                setZoom(1);
-                setPan({ x: 0, y: 0 });
-                takenBy.current = null;
                 if (SECTION_VIEW.value === null) return;
-                SECTION_VIEW.value = null;
-                wantSection();
+                showWindow(null, true);
               }}
               className="w-20 rounded border border-slate-700 px-2 py-0.5 tabular-nums text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
             >
@@ -555,10 +502,7 @@ export function AxialView() {
             </button>
             <button
               type="button"
-              onClick={() => {
-              magnify(1.4);
-              commitWhenStill();
-            }}
+              onClick={() => magnify(1.4)}
               className="rounded border border-slate-700 px-2 py-0.5 text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
             >
               +

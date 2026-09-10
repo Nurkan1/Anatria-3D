@@ -216,69 +216,89 @@ export const SECTION_VIEW: { value: SliceWindow | null } = { value: null };
 export const MIN_SECTION_HALF_M = 0.03;
 
 /**
- * The window a CSS zoom and pan are currently showing, in metres.
+ * Magnify about a point, in metres.
  *
- * `frame` is what the last pass was framed on and `base` is what the automatic
- * framing would give at this level; `windowPx` is how wide the picture is drawn
- * on screen. Returns null when the reader has zoomed back out to the whole
- * section, because "the whole thing" has to keep tracking the level rather than
- * freezing at whatever the frame happened to be when they let go.
+ * # Why there is no CSS transform any more
  *
- * The pan is subtracted, and that is the half worth stating: dragging the
- * picture to the right shows what was off to the left, so the window travels
- * the opposite way to the hand.
+ * There was one, as a live preview, with the real render arriving behind it and
+ * the preview then taken back out. It produced jumps, and the reason is worth
+ * writing down: **a section arriving is not the section you asked for.** The
+ * counter goes up for every pass — a torch retake, a step of the plane, letting
+ * the light go — so a preview taken out when "a section" landed was routinely
+ * taken out against a picture rendered before the gesture even happened. Two
+ * sources of truth for the same magnification, correlated by hope.
+ *
+ * There is one now. The window is the only state, the picture is always drawn
+ * into it one-to-one, and a gesture changes the window. It updates a beat later
+ * than the hand rather than instantly, which is the price, and it cannot
+ * disagree with itself, which is the point.
+ *
+ * `u` and `v` are where to keep still, as an offset from the centre of the
+ * picture from -1 to 1 — the pointer under a wheel, or the middle for a button.
+ * Zooming about the pointer is what stops a reader losing the thing they were
+ * looking at every time they magnify.
+ *
+ * Null means the whole section, which is not the same as a window that happens
+ * to be as wide as the body: the automatic frame follows the level, and a
+ * reader who has zoomed all the way out wants it to keep doing that.
  */
-export function windowFromTransform(
+export function zoomWindow(
   frame: SliceWindow,
   base: SliceWindow,
-  zoom: number,
-  panX: number,
-  panY: number,
-  windowPx: number,
+  by: number,
+  u = 0,
+  v = 0,
 ): SliceWindow | null {
-  if (!(windowPx > 0) || !(zoom > 0)) return SECTION_VIEW.value;
-
-  const half = Math.max(MIN_SECTION_HALF_M, frame.half / zoom);
+  if (!(by > 0) || !(base.half > 0)) return SECTION_VIEW.value;
+  const half = clamp(frame.half / by, MIN_SECTION_HALF_M, base.half);
   if (half >= base.half) return null;
 
-  const reach = base.half - half;
-  const travel = (2 * frame.half) / (windowPx * zoom);
-  // Kept inside the automatic frame: panning into the black past the edge of
-  // the body is a way to lose the section with no way back but the reset.
-  const x = clamp(frame.x - panX * travel, base.x - reach, base.x + reach);
-  // Canvas rows run downwards and so does world +z here — the flip in
-  // `paintSlice` is what makes anterior the top, and this follows it.
-  const z = clamp(frame.z - panY * travel, base.z - reach, base.z + reach);
-  return { x, z, half };
+  // The world point under the pointer, kept where it is.
+  const anchorX = frame.x + u * frame.half;
+  const anchorZ = frame.z + v * frame.half;
+  return inside({ x: anchorX - u * half, z: anchorZ - v * half, half }, base);
+}
+
+/**
+ * Slide the window by a drag, in metres.
+ *
+ * The picture moves with the hand, so the window moves against it: dragging to
+ * the right brings into view what was off to the left. Canvas rows run
+ * downwards and so does world +z here — the flip in `paintSlice` is what makes
+ * anterior the top, and this follows it.
+ */
+export function panWindow(
+  frame: SliceWindow,
+  base: SliceWindow,
+  dxPx: number,
+  dyPx: number,
+  windowPx: number,
+): SliceWindow | null {
+  if (!(windowPx > 0)) return SECTION_VIEW.value;
+  const travel = (2 * frame.half) / windowPx;
+  return inside(
+    { x: frame.x - dxPx * travel, z: frame.z - dyPx * travel, half: frame.half },
+    base,
+  );
+}
+
+/**
+ * Keep a window within the section it is a window on.
+ *
+ * Panning off into the black past the edge of the body is a way to lose the
+ * picture with no way back except the reset, and nothing out there is anatomy.
+ */
+function inside(window: SliceWindow, base: SliceWindow): SliceWindow {
+  const reach = Math.max(0, base.half - window.half);
+  return {
+    x: clamp(window.x, base.x - reach, base.x + reach),
+    z: clamp(window.z, base.z - reach, base.z + reach),
+    half: window.half,
+  };
 }
 
 function clamp(value: number, low: number, high: number): number {
   return Math.max(low, Math.min(high, value));
-}
-
-/**
- * What is left of a gesture once the part already rendered is taken out.
- *
- * A section takes a few tens of milliseconds to arrive, and a reader may have
- * kept moving. Snapping the transform back to nothing on arrival would throw
- * that movement away and jump the picture; leaving it alone would apply it
- * twice, once in the new framing and again in CSS.
- *
- * Composing the two and solving for the remainder gives both in closed form,
- * and when nothing moved in between it returns exactly the identity — which is
- * the case that matters, because it is what makes the swap invisible.
- */
-export function residualTransform(
-  taken: { zoom: number; panX: number; panY: number },
-  now: { zoom: number; panX: number; panY: number },
-): { zoom: number; panX: number; panY: number } {
-  if (!(taken.zoom > 0)) return { zoom: 1, panX: 0, panY: 0 };
-  const zoom = now.zoom / taken.zoom;
-  return {
-    zoom,
-    panX: now.panX - taken.panX * zoom,
-    panY: now.panY - taken.panY * zoom,
-  };
 }
 
 /**
@@ -358,24 +378,6 @@ export function wheelSteps(
 export const WHEEL_SETTLE_MS = 130;
 
 /**
- * Whether magnifying this far draws source pixels bigger than screen pixels.
- *
- * The enlarged view smooths the picture right up until it runs out of source,
- * and then stops smoothing. Past native size a smooth scale is an invention —
- * a soft grey edge where the data has a hard one — while blocks at least tell
- * the reader they have reached the end of what was actually measured.
- *
- * This was the constant `zoom > 2`, and a constant is wrong here twice over:
- * the window is sized as a fraction of the viewport, so it is a different
- * number of pixels on every machine, and the source has now changed size once.
- * Comparing the two numbers is the same rule stated truthfully.
- */
-export function pastNativeSize(zoom: number, frameWidthPx: number, sourcePx: number): boolean {
-  if (frameWidthPx <= 0 || sourcePx <= 0) return false;
-  return (zoom * frameWidthPx) / sourcePx > 1;
-}
-
-/**
  * How low the torch can be brought, in radians above the horizon.
  *
  * Not zero. A light exactly in the plane of the section lights the walls it
@@ -429,7 +431,7 @@ export function torchDirection(u: number, v: number): THREE.Vector3 {
 export const TORCH: { value: THREE.Vector3 | null } = { value: null };
 
 /**
- * How often the section may be retaken while the torch is being moved.
+ * How often the section may be retaken while a gesture is still moving.
  *
  * Measured: a section is about 15 ms, and the viewport's own frame is about 24
  * on this machine. Retaking on every pointer move would put the two in the same
@@ -437,10 +439,11 @@ export const TORCH: { value: THREE.Vector3 | null } = { value: null };
  * roughly a quarter of the time and the light still follows the hand closely
  * enough to feel attached to it.
  *
- * A reader on a slow machine pays this only while the pointer is over the
- * picture, and only with the torch switched on, which is why it is a switch.
+ * It paces the torch, magnifying and panning alike: all three are a hand moving
+ * over the picture, and all three cost the same section. A reader on a slow
+ * machine pays it only while a hand is actually moving.
  */
-export const TORCH_INTERVAL_MS = 70;
+export const RETAKE_INTERVAL_MS = 70;
 
 /**
  * Where the picture goes, once it has been read back.
