@@ -35,6 +35,20 @@ const GHOST_KEY = "anatria3d.scan.ghost.v1";
 const SOUND_KEY = "anatria3d.scan.sound.v1";
 const AXIAL_KEY = "anatria3d.scan.axial.v1";
 const CUT_KEY = "anatria3d.scan.cut.v1";
+const TORCH_KEY = "anatria3d.scan.torch.v1";
+
+/**
+ * Whether the pointer aims the light on the section.
+ *
+ * Off by default, and this one has a running cost rather than a one-off: the
+ * section is retaken while the pointer moves over it, several times a second.
+ * It is worth having because raking a light across a surface is how anybody
+ * examines a specimen, and it is a switch because nobody should pay for it
+ * without having asked.
+ */
+function storedTorch(): boolean {
+  return readLocal(TORCH_KEY) === "on";
+}
 
 /**
  * Whether the section is a dissection cut rather than a thin slab.
@@ -209,6 +223,8 @@ interface ScanStore {
   axial: boolean;
   /** Cut the body open at the plane, rather than showing only that level. */
   cut: boolean;
+  /** Let the pointer aim the light while it is over the section. */
+  torch: boolean;
 
   toggle: () => void;
   /** Take hold of the sweep and put it at `at`. */
@@ -234,6 +250,7 @@ interface ScanStore {
   setSound: (on: boolean) => void;
   setAxial: (on: boolean) => void;
   setCut: (on: boolean) => void;
+  setTorch: (on: boolean) => void;
 }
 
 export const useScanStore = create<ScanStore>()((set, get) => ({
@@ -251,6 +268,7 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
   sound: storedSound(),
   axial: storedAxial(),
   cut: storedCut(),
+  torch: storedTorch(),
 
   // Letting go and unpinning on the way out, so switching the scanner off never
   // leaves the next session holding an invisible sweep at somebody's ankle.
@@ -319,6 +337,11 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
     if (on === get().cut) return;
     writeLocal(CUT_KEY, on ? "on" : "off");
     set({ cut: on });
+  },
+  setTorch: (on) => {
+    if (on === get().torch) return;
+    writeLocal(TORCH_KEY, on ? "on" : "off");
+    set({ torch: on });
   },
 }));
 

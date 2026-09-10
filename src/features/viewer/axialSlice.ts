@@ -217,6 +217,73 @@ export function pastNativeSize(zoom: number, frameWidthPx: number, sourcePx: num
 }
 
 /**
+ * How low the torch can be brought, in radians above the horizon.
+ *
+ * Not zero. A light exactly in the plane of the section lights the walls it
+ * faces and nothing else at all, and the reader who pushed it there sees a
+ * picture that has gone out rather than a picture raked hard.
+ */
+const TORCH_LOWEST = (8 * Math.PI) / 180;
+
+/**
+ * Where the torch stands, from where the pointer is over the picture.
+ *
+ * # The mapping, and why this one
+ *
+ * The centre is overhead and the rim is almost level with the section, so
+ * pushing the cursor away from the middle lowers the light and rakes it across
+ * the surfaces. That is the gesture somebody uses on a real specimen: they do
+ * not move a lamp in three numbers, they tilt the thing until the light catches
+ * the detail they are chasing.
+ *
+ * The light comes *from* the cursor's side, which is the half of this that has
+ * to be right. A light that receded as the cursor approached would be a mirror
+ * of the intended control and would read as broken without ever being wrong
+ * enough to name.
+ *
+ * `u` and `v` are the pointer's offset from the centre, each from -1 at one
+ * edge to 1 at the other, with `v` positive downwards as screen coordinates
+ * are. In the section's own frame that is world +x to the right and world +z
+ * downwards, with +y overhead — the frame `SLICE_UP` and `SLICE_FORWARD` set.
+ */
+export function torchDirection(u: number, v: number): THREE.Vector3 {
+  const reach = Math.min(1, Math.hypot(u, v));
+  const overhead = new THREE.Vector3(0, 1, 0);
+  if (reach < 1e-6) return overhead;
+
+  const towards = new THREE.Vector3(u, 0, v).normalize();
+  const above = TORCH_LOWEST + (1 - reach) * (Math.PI / 2 - TORCH_LOWEST);
+  return towards
+    .multiplyScalar(Math.cos(above))
+    .addScaledVector(overhead, Math.sin(above))
+    .normalize();
+}
+
+/**
+ * Where the torch is pointing now, or null when it is switched off.
+ *
+ * Module-level for the same reason the canvas is: the pointer is in the DOM
+ * overlay and the light is inside the render loop, and a re-render of the scene
+ * per mouse move to carry a vector across is precisely the cost this whole
+ * panel was built to avoid.
+ */
+export const TORCH: { value: THREE.Vector3 | null } = { value: null };
+
+/**
+ * How often the section may be retaken while the torch is being moved.
+ *
+ * Measured: a section is about 15 ms, and the viewport's own frame is about 24
+ * on this machine. Retaking on every pointer move would put the two in the same
+ * frame continuously and halve the rate; at this interval the extra work is
+ * roughly a quarter of the time and the light still follows the hand closely
+ * enough to feel attached to it.
+ *
+ * A reader on a slow machine pays this only while the pointer is over the
+ * picture, and only with the torch switched on, which is why it is a switch.
+ */
+export const TORCH_INTERVAL_MS = 70;
+
+/**
  * Where the picture goes, once it has been read back.
  *
  * A module-level handle rather than a prop, because the two halves live on

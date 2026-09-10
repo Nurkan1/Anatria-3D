@@ -61,6 +61,8 @@ export function ScanControls() {
   const setAxial = useScanStore((s) => s.setAxial);
   const cut = useScanStore((s) => s.cut);
   const setCut = useScanStore((s) => s.setCut);
+  const torch = useScanStore((s) => s.torch);
+  const setTorch = useScanStore((s) => s.setTorch);
   const panel = useScanStore((s) => s.panel);
   const togglePanel = useScanStore((s) => s.togglePanel);
   // There is nothing to reveal on a body that already has its colour: the
@@ -319,6 +321,24 @@ export function ScanControls() {
                 </button>
               ))}
             </div>
+          )}
+
+          {/*
+            The one control here with a cost that repeats. Everything else is
+            paid once when the light is let go; this retakes the section while
+            the pointer moves over it, which is why it says what it does and
+            sits behind the section it belongs to.
+          */}
+          {axial && (
+            <label className="mt-1 flex cursor-pointer items-start gap-1.5 text-[9px] leading-snug text-slate-400">
+              <input
+                type="checkbox"
+                checked={torch}
+                onChange={(event) => setTorch(event.target.checked)}
+                className="mt-[1px] accent-cyan-500"
+              />
+              Aim the light with the pointer
+            </label>
           )}
 
           <label className="mt-1 flex cursor-pointer items-start gap-1.5 text-[9px] leading-snug text-slate-400">

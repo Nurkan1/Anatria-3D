@@ -6,6 +6,7 @@ import {
   forgetSlice,
   paintSlice,
   pastNativeSize,
+  torchDirection,
   wheelSteps,
   restoreSlice,
   SLAB_HALF_THICKNESS,
@@ -244,5 +245,37 @@ describe("wheelSteps", () => {
 
   it("keeps counting in the same direction across events", () => {
     expect(wheelSteps(80, 100)).toEqual({ steps: 1, carry: 80 });
+  });
+});
+
+describe("torchDirection", () => {
+  it("stands overhead in the middle", () => {
+    const light = torchDirection(0, 0);
+    expect(light.y).toBeCloseTo(1, 12);
+  });
+
+  it("comes from the side the pointer is on, not the other one", () => {
+    // The half of this that has to be right: a light that receded as the
+    // cursor approached would read as broken without ever being nameable.
+    expect(torchDirection(1, 0).x).toBeGreaterThan(0);
+    expect(torchDirection(-1, 0).x).toBeLessThan(0);
+    // Screen coordinates run downwards, and so does world +z here.
+    expect(torchDirection(0, 1).z).toBeGreaterThan(0);
+    expect(torchDirection(0, -1).z).toBeLessThan(0);
+  });
+
+  it("lowers the light as the pointer leaves the middle", () => {
+    const near = torchDirection(0.3, 0);
+    const far = torchDirection(1, 0);
+    expect(far.y).toBeLessThan(near.y);
+    expect(near.y).toBeLessThan(1);
+  });
+
+  it("never lies flat in the plane, however far out the pointer goes", () => {
+    // A light exactly level with the section lights the walls facing it and
+    // nothing else: the reader sees a picture that has gone out.
+    const corner = torchDirection(3, 3);
+    expect(corner.y).toBeGreaterThan(0.1);
+    expect(corner.length()).toBeCloseTo(1, 12);
   });
 });

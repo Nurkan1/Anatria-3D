@@ -9,6 +9,9 @@ import {
   pastNativeSize,
   restoreSlice,
   SECTION_WINDOW,
+  TORCH,
+  torchDirection,
+  TORCH_INTERVAL_MS,
   wantSection,
   wheelSteps,
   WHEEL_SETTLE_MS,
@@ -123,6 +126,7 @@ export function AxialView() {
   const sections = useScanStore((s) => s.sections);
   const held = useScanStore((s) => s.held);
   const cut = useScanStore((s) => s.cut);
+  const torch = useScanStore((s) => s.torch);
   const [full, setFull] = useState(false);
   /**
    * How much of the picture to fill the screen with, and where.
@@ -159,6 +163,56 @@ export function AxialView() {
   const carried = useRef(0);
   /** The pending retake, cancelled by the next notch. See `WHEEL_SETTLE_MS`. */
   const settle = useRef<number | null>(null);
+  /** When the torch last cost a section. See `TORCH_INTERVAL_MS`. */
+  const lastTorch = useRef(0);
+  /** The retake owed to a pointer that stopped between two intervals. */
+  const torchTrail = useRef<number | null>(null);
+
+  /**
+   * Retake for the torch, at most so often, and always once at the end.
+   *
+   * Leading and trailing both matter and for different reasons. Without the
+   * leading one the light lags the hand by an interval and feels detached from
+   * it; without the trailing one the picture keeps whichever position the
+   * pointer happened to be in when the last interval elapsed, which is not
+   * where the reader left it.
+   */
+  const retakeForTorch = () => {
+    const now = performance.now();
+    const since = now - lastTorch.current;
+    if (since >= TORCH_INTERVAL_MS) {
+      lastTorch.current = now;
+      wantSection();
+      return;
+    }
+    if (torchTrail.current !== null) window.clearTimeout(torchTrail.current);
+    torchTrail.current = window.setTimeout(() => {
+      torchTrail.current = null;
+      lastTorch.current = performance.now();
+      wantSection();
+    }, TORCH_INTERVAL_MS - since);
+  };
+
+  /** Where the pointer is over the picture becomes where the light stands. */
+  const aimTorch = (box: DOMRect, x: number, y: number) => {
+    if (!torch || box.width <= 0 || box.height <= 0) return;
+    const u = (x - box.left - box.width / 2) / (box.width / 2);
+    const v = (y - box.top - box.height / 2) / (box.height / 2);
+    TORCH.value = torchDirection(u, v);
+    retakeForTorch();
+  };
+
+  /**
+   * Switched off, the light goes back to the one the mode chooses for itself.
+   *
+   * And the section is retaken once, because a switch that changes nothing
+   * until the reader does something else is a switch they conclude is broken.
+   */
+  useEffect(() => {
+    if (torch || TORCH.value === null) return;
+    TORCH.value = null;
+    wantSection();
+  }, [torch]);
 
   /**
    * Turn a wheel gesture into whole centimetres of travel.
@@ -188,6 +242,7 @@ export function AxialView() {
   useEffect(
     () => () => {
       if (settle.current !== null) window.clearTimeout(settle.current);
+      if (torchTrail.current !== null) window.clearTimeout(torchTrail.current);
     },
     [],
   );
@@ -317,8 +372,13 @@ export function AxialView() {
           }}
           onPointerMove={(event) => {
             const from = dragging.current;
-            if (!from) return;
-            setPan({ x: event.clientX - from.x, y: event.clientY - from.y });
+            if (from) {
+              setPan({ x: event.clientX - from.x, y: event.clientY - from.y });
+              return;
+            }
+            // Hover aims, a held button pans. They are different gestures, so
+            // neither has to be given up for the other.
+            aimTorch(event.currentTarget.getBoundingClientRect(), event.clientX, event.clientY);
           }}
           onPointerUp={() => {
             dragging.current = null;
@@ -329,7 +389,13 @@ export function AxialView() {
           style={{
             width: SECTION_WINDOW,
             height: SECTION_WINDOW,
-            cursor: zoom === 1 ? "default" : dragging.current ? "grabbing" : "grab",
+            cursor: dragging.current
+              ? "grabbing"
+              : torch
+                ? "crosshair"
+                : zoom === 1
+                  ? "default"
+                  : "grab",
           }}
         >
           <canvas
@@ -394,6 +460,10 @@ export function AxialView() {
           <p className="text-[11px] leading-snug text-slate-500">
             {caption} The wheel steps {SECTION_STEP_CM} cm through the body;
             Ctrl and the wheel, or −/+, magnify; drag to move.
+            {torch
+              ? " The pointer is the light: the middle is overhead, and the" +
+                " edges rake it flat across the section."
+              : ""}
           </p>
         </div>
       </div>

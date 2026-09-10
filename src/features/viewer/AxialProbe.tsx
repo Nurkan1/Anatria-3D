@@ -14,8 +14,9 @@ import {
   SLAB_HALF_THICKNESS,
   SLICE_FORWARD,
   SLICE_UP,
+  TORCH,
 } from "./axialSlice";
-import { aimStudioAt } from "./lighting";
+import { aimStudioAt, rakingKey } from "./lighting";
 
 /**
  * Phase 0 for the axial slice: measure, and decide afterwards.
@@ -275,15 +276,32 @@ export function AxialProbe({
     /**
      * The rig follows the camera, and this is a camera it never followed.
      *
-     * Aimed straight down for the pass and put back afterwards. The lights are
-     * moved rather than added on purpose — a light switched on for one picture
-     * is two shader recompiles per picture. See `aimStudioAt`.
+     * Aimed for the pass and put back afterwards. The lights are moved rather
+     * than added on purpose — a light switched on for one picture is two shader
+     * recompiles per picture. See `aimStudioAt`.
+     *
+     * Three lightings, and which one is right is decided by what the pass is
+     * about to draw rather than by taste:
+     *
+     * - the **cut** looks down onto the tops of things, so the studio's own
+     *   key, aimed at this camera, lands on them square;
+     * - the **slab** keeps a few millimetres, and what survives of a structure
+     *   in that band is its wall, standing vertical — an overhead light rakes
+     *   those at eighty degrees and returns almost nothing, which is what a
+     *   dark slab is;
+     * - the **torch** is neither: the reader is aiming it themselves, and the
+     *   fill and rim come down so that what they aim actually shows.
      */
-    const restoreLights = aimStudioAt(scene, SLICE_FORWARD, SLICE_UP);
+    const torch = TORCH.value;
+    const cutting = useScanStore.getState().cut;
+    const restoreLights = aimStudioAt(scene, SLICE_FORWARD, SLICE_UP, {
+      key: torch ?? (cutting ? undefined : rakingKey(SLICE_FORWARD, SLICE_UP)),
+      support: torch ? 0.35 : 1,
+    });
     try {
       // The cut keeps everything below the plane and reads as solid; the slab
       // keeps only that level and is the truthful section. See `cutPlanes`.
-      gl.clippingPlanes = useScanStore.getState().cut ? cutPlanes(at) : slabPlanes(at);
+      gl.clippingPlanes = cutting ? cutPlanes(at) : slabPlanes(at);
 
       // `renderer.info` accumulates over a frame, so it is reset immediately
       // before the pass and read immediately after: what it reports is then this

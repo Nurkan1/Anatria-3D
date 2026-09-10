@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   aimStudioAt,
+  rakingKey,
   SECTION_AMBIENT,
   STUDIO_AMBIENT,
   STUDIO_FILL,
@@ -149,5 +150,42 @@ describe("aimStudioAt", () => {
     // get a dark section, not a crash in the middle of a borrowed render.
     const scene = new THREE.Scene();
     expect(() => aimStudioAt(scene, LOOKING_DOWN, SLICE_UP)()).not.toThrow();
+  });
+});
+
+describe("rakingKey", () => {
+  it("puts the light near the plane, where a slab's walls can catch it", () => {
+    const key = rakingKey(LOOKING_DOWN, SLICE_UP);
+    // Twenty degrees above the horizon: sin(20 deg) is about 0.342.
+    expect(key.y).toBeCloseTo(Math.sin((20 * Math.PI) / 180), 6);
+    expect(key.length()).toBeCloseTo(1, 12);
+  });
+
+  it("keeps the studio's own side, so both pictures agree where the light is", () => {
+    const overhead = studioLightDirections(LOOKING_DOWN, SLICE_UP).key;
+    const raking = rakingKey(LOOKING_DOWN, SLICE_UP);
+    // Same azimuth, different elevation: the horizontal parts point the same
+    // way even though one light is overhead and the other is nearly level.
+    const flatten = (v: THREE.Vector3) => new THREE.Vector3(v.x, 0, v.z).normalize();
+    expect(flatten(raking).dot(flatten(overhead))).toBeCloseTo(1, 6);
+  });
+
+  it("turns the fill and rim down when a light is being aimed by hand", () => {
+    const { scene, fill, rim, key } = riggedScene();
+    const restore = aimStudioAt(scene, LOOKING_DOWN, SLICE_UP, { support: 0.35 });
+    expect(fill.intensity).toBeCloseTo(0.5 * 0.35, 12);
+    expect(rim.intensity).toBeCloseTo(0.75 * 0.35, 12);
+    // The one being aimed is not turned down with them.
+    expect(key.intensity).toBe(1.75);
+    restore();
+    expect(fill.intensity).toBe(0.5);
+    expect(rim.intensity).toBe(0.75);
+  });
+
+  it("stands the key where it is told to", () => {
+    const { scene, key } = riggedScene();
+    const aimed = new THREE.Vector3(0, 1, 0);
+    aimStudioAt(scene, LOOKING_DOWN, SLICE_UP, { key: aimed });
+    expect(key.position.clone().normalize().y).toBeCloseTo(1, 12);
   });
 });
