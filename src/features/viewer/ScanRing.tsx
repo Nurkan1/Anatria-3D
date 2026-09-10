@@ -128,7 +128,23 @@ const NAMEPLATE_REPEATS = 5;
  * Drawn on transparent black so it can be additive like the rest of the ring's
  * light — see the note on why additive is the safe blend in this scene.
  */
-function nameplateTexture(glow: string): THREE.CanvasTexture {
+/**
+ * What the plate says, and why it is not always the same.
+ *
+ * The ring is hardware the reader switched on, so it carries the instrument's
+ * name. When the assistant is the one that put it at a level, it says so —
+ * because at that moment the reader did not move it and is entitled to know
+ * that from the picture rather than from having been watching the transcript.
+ *
+ * It is also the only marking on screen that survives a screenshot, which is
+ * the real reason to spend it on this: a still of a section taken by the
+ * assistant and one taken by hand should not be the same image.
+ */
+function nameplateText(byAssistant: boolean): string {
+  return byAssistant ? "ANATRIA 3D AI" : "ANATRIA 3D";
+}
+
+function nameplateTexture(glow: string, label: string): THREE.CanvasTexture {
   const canvas = document.createElement("canvas");
   canvas.width = 512;
   canvas.height = 64;
@@ -142,7 +158,7 @@ function nameplateTexture(glow: string): THREE.CanvasTexture {
     context.shadowColor = glow;
     context.shadowBlur = 18;
     context.fillStyle = "#d6fbff";
-    context.fillText("ANATRIA 3D", canvas.width / 2, canvas.height / 2);
+    context.fillText(label, canvas.width / 2, canvas.height / 2);
   }
   const texture = new THREE.CanvasTexture(canvas);
   texture.wrapS = THREE.RepeatWrapping;
@@ -201,6 +217,13 @@ export function ScanRing({
    * a tree with 3,478 of them.
    */
   const tint = scanTint(useScanStore((s) => s.tint));
+  /**
+   * Who put the light where it is. Read here because it is what the plate says.
+   *
+   * Changing it rebuilds one 512x64 canvas texture, which happens when a person
+   * or an assistant moves the scanner and never per frame.
+   */
+  const byAssistant = useScanStore((s) => s.byAssistant);
   const lit = useMemo(() => new THREE.Color(tint.hex), [tint]);
   const edgeLit = useMemo(
     () => new THREE.Color(tint.hex).lerp(new THREE.Color("#ffffff"), EDGE_TOWARDS_WHITE),
@@ -299,8 +322,8 @@ export function ScanRing({
   // Only drawn when the hardware is. Built unconditionally it meant a canvas
   // and a texture upload for every question asked, to be disposed unused.
   const nameplate = useMemo(
-    () => (instrument ? nameplateTexture(tint.hex) : null),
-    [instrument, tint],
+    () => (instrument ? nameplateTexture(tint.hex, nameplateText(byAssistant)) : null),
+    [instrument, tint, byAssistant],
   );
 
   useEffect(

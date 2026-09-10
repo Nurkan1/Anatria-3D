@@ -192,6 +192,16 @@ interface ScanStore {
   /** Where it is held or pinned, 0 at the feet and 1 at the head. */
   at: number;
   /**
+   * The assistant put the light where it is, and the reader has not moved it.
+   *
+   * Not a mode and not a preference: it is a fact about who last touched the
+   * instrument, and it is what the ring's nameplate reads. Any deliberate act
+   * on the scanner by the reader takes it back -- dragging, stepping, pinning,
+   * switching it off -- because from that moment the light is theirs again and
+   * a plate still claiming otherwise would be a small lie on screen.
+   */
+  byAssistant: boolean;
+  /**
    * How many cross-sections have been taken this session.
    *
    * Transient, never written to disk, and bumped by the probe once the picture
@@ -285,6 +295,7 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
   held: false,
   pinned: false,
   at: 0.5,
+  byAssistant: false,
   sections: 0,
   sweepOnAnswer: storedSweepOnAnswer(),
   tint: storedTint(),
@@ -301,8 +312,14 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
   // Letting go and unpinning on the way out, so switching the scanner off never
   // leaves the next session holding an invisible sweep at somebody's ankle.
   toggle: () =>
-    set((state) => ({ enabled: !state.enabled, held: false, pinned: false })),
-  hold: (at) => set({ held: true, at: Math.max(0, Math.min(1, at)) }),
+    set((state) => ({
+      enabled: !state.enabled,
+      held: false,
+      pinned: false,
+      byAssistant: false,
+    })),
+  hold: (at) =>
+    set({ held: true, at: Math.max(0, Math.min(1, at)), byAssistant: false }),
   putAt: (at) =>
     set({
       enabled: true,
@@ -311,6 +328,7 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
       // believing it was being dragged for the rest of the session.
       held: false,
       at: Math.max(0, Math.min(1, at)),
+      byAssistant: true,
     }),
   step: (by) => {
     if (by === 0) return;
@@ -325,11 +343,12 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
        * pin is a visible control, so the reader also sees what happened.
        */
       pinned: true,
+      byAssistant: false,
     }));
   },
   sectionTaken: () => set((state) => ({ sections: state.sections + 1 })),
   release: () => set({ held: false }),
-  togglePin: () => set((state) => ({ pinned: !state.pinned })),
+  togglePin: () => set((state) => ({ pinned: !state.pinned, byAssistant: false })),
   setSweepOnAnswer: (on) => {
     if (on === get().sweepOnAnswer) return;
     writeLocal(SWEEP_ON_ANSWER_KEY, on ? "on" : "off");

@@ -18,6 +18,7 @@ beforeEach(() => {
     ghost: false,
     sound: false,
     sections: 0,
+    byAssistant: false,
   });
   localStorage.clear();
 });
@@ -273,5 +274,27 @@ describe("being taken to a level", () => {
     expect(store().at).toBe(1);
     store().putAt(-5);
     expect(store().at).toBe(0);
+  });
+});
+
+describe("whose light it is", () => {
+  it("marks the light as the assistant's when it puts it somewhere", () => {
+    store().putAt(0.4);
+    expect(store().byAssistant).toBe(true);
+  });
+
+  it("hands it back the moment the reader moves it", () => {
+    // Any deliberate act on the scanner takes it back. A plate still claiming
+    // the assistant put the light there would be a small lie on screen.
+    for (const act of [
+      () => store().hold(0.2),
+      () => store().step(0.05),
+      () => store().togglePin(),
+      () => store().toggle(),
+    ]) {
+      useScanStore.setState({ byAssistant: true });
+      act();
+      expect(store().byAssistant).toBe(false);
+    }
   });
 });
