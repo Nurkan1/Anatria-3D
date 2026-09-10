@@ -7,6 +7,7 @@ import { SLICE_SIZE } from "./AxialProbe";
 import { AXIAL_CANVAS, restoreSlice } from "./axialSlice";
 import { AXIAL_PROBE } from "./AxialProbe";
 import { CURRENT_CROSSING } from "./scanCrossing";
+import { CURRENT_LEVEL } from "./vertebralLevel";
 import { tissueColour } from "./palette";
 
 /**
@@ -165,6 +166,13 @@ export function AxialView() {
 
   const across = AXIAL_PROBE.frameCm;
   /**
+   * The level, when the plane is at one.
+   *
+   * Read here rather than passed in, on the render that follows a section
+   * being taken — the same moment the table is refreshed, for the same reason.
+   */
+  const level = CURRENT_LEVEL.value;
+  /**
    * The caption describes what is actually on screen, which means it changes.
    *
    * It said the cut surfaces were open in both modes — true of the slab, and
@@ -186,7 +194,7 @@ export function AxialView() {
     return (
       <div className="pointer-events-auto fixed inset-0 z-40 flex flex-col items-center justify-center gap-2 bg-slate-950/95 p-4">
         <p className="text-[10px] uppercase tracking-wider text-cyan-500/70">
-          Axial · where you let go
+          Axial{level ? ` · ${level}` : ""} · where you let go
         </p>
 
         {/*
@@ -277,7 +285,7 @@ export function AxialView() {
   return (
     <div className="pointer-events-none select-none rounded border border-cyan-900/60 bg-slate-950/85 p-1.5 shadow-lg">
       <p className="mb-1 text-[9px] uppercase tracking-wider text-cyan-500/70">
-        Axial · where you let go
+        Axial{level ? ` · ${level}` : ""} · where you let go
       </p>
       <button
         type="button"

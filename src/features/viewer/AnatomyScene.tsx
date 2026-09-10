@@ -20,6 +20,7 @@ import {
 import { ScanRing } from "./ScanRing";
 import { AxialProbe } from "./AxialProbe";
 import { scanTint } from "./scanTints";
+import { CURRENT_LEVEL, levelAt } from "./vertebralLevel";
 import { playScanPing } from "./scanSound";
 import {
   CROSSING_INTERVAL_S,
@@ -918,6 +919,9 @@ export function AnatomyScene({
         sinceCrossing.current = 0;
         const next = crossingAt(boxes.current, SHARED_SCAN.value, STANDING, CROSSING_LIMIT);
         if (!sameCrossing(next, CURRENT_CROSSING.value)) CURRENT_CROSSING.value = next;
+        // On the same slower tick, and for the same reason: the level changes
+        // when the plane has travelled a centimetre, not when a frame passed.
+        CURRENT_LEVEL.value = levelAt(boxes.current, SHARED_SCAN.value);
       }
     } else if (SWEEP_RUNNING.value || CURRENT_CROSSING.value !== NOTHING_CROSSED) {
       SWEEP_RUNNING.value = false;
