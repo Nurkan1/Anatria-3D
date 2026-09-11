@@ -7,6 +7,7 @@ import { viewportKey } from "./viewportKeys";
 import { AXIAL_PROBE } from "./AxialProbe";
 import { SLICE_PIXELS } from "./axialSlice";
 import { readLocal, writeLocal } from "@/lib/localStore";
+import { OVERLAY_CHIP } from "./overlayChrome";
 
 /**
  * The frame counter, and the panel that shows it.
@@ -245,7 +246,7 @@ export function RenderStatsPanel() {
 
   if (!open) {
     return (
-      <div className="pointer-events-none select-none rounded border border-slate-800/60 bg-slate-950/70 px-1.5 py-0.5 font-mono text-[9px] text-slate-600">
+      <div className={`pointer-events-none select-none ${OVERLAY_CHIP}`}>
         M · render stats
       </div>
     );

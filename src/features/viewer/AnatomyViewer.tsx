@@ -37,6 +37,7 @@ import { SelectionBar } from "./SelectionBar";
 import { StructureMenu, type MenuTarget } from "./StructureMenu";
 import { useCaseMarks } from "./useCaseMarks";
 import { ViewpointBar } from "./ViewpointBar";
+import { OVERLAY_CHIP, OVERLAY_CHIP_ACTION, OVERLAY_GROUND } from "./overlayChrome";
 
 /**
  * Label shown under the cursor. Terminologia Anatomica Latin over clinical
@@ -287,15 +288,15 @@ export function AnatomyViewer() {
         <RenderStatsPanel />
         {/* Hides itself when the sweep is off — see `ScanReadout`. */}
         <ScanReadout />
-        {/* Above the switch rather than below it, so the letters sit between
-            the mode and the panels they belong to instead of between the mode
-            and the controls hint underneath. Renders nothing unless a view is
-            actually closed. */}
-        {splitting && <ClosedViews />}
         {/* Beside the other switch that changes how the model is drawn. */}
         <ScanControls />
         {/* Under the controls, and only when asked for — see `AxialView`. */}
         <AxialView />
+        {/* Directly over the switch they belong to. They sat above the scanner
+            instead, so the letters that reopen a study panel were read as part
+            of the scanner's controls — two instruments' parts in one pile.
+            Renders nothing unless a view is actually closed. */}
+        {splitting && <ClosedViews />}
         <StudyViewsToggle />
         <ControlsHint />
       </div>
@@ -367,7 +368,10 @@ function ControlsHint() {
         seven lines of height, and that height is exactly what a short window
         needs for the panels above it.
       */}
-      <div hidden={!open} className="text-[10px] leading-tight text-slate-600">
+      <div
+        hidden={!open}
+        className={`rounded ${OVERLAY_GROUND} px-2 py-1 text-[10px] leading-tight`}
+      >
         <p>Drag to rotate · Scroll to zoom where you point · Lost? Use Fit, bottom right</p>
         <p>Right-drag to pan · Double-click an organ to open it with its parts</p>
         <p>Shift+double-click to build a study set · Esc to exit</p>
@@ -389,7 +393,7 @@ function ControlsHint() {
         onClick={show}
         aria-expanded={open}
         title="How to move around the body"
-        className="pointer-events-auto select-none rounded border border-slate-800/60 bg-slate-950/70 px-1.5 py-0.5 font-mono text-[9px] text-slate-600"
+        className={`pointer-events-auto select-none ${OVERLAY_CHIP} ${OVERLAY_CHIP_ACTION}`}
       >
         Controls
       </button>

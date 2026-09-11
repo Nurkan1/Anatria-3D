@@ -6,6 +6,7 @@ import { useScanStore } from "@/stores/scanStore";
 import { SWEEP_PROGRESS } from "./scanBand";
 import { SCAN_TINTS, scanTint } from "./scanTints";
 import { primeScanSound } from "./scanSound";
+import { OVERLAY_CHIP, OVERLAY_CHIP_ACTION, OVERLAY_GROUND, OVERLAY_SWITCH_OFF, OVERLAY_SWITCH_ON } from "./overlayChrome";
 
 /**
  * The scanner's switch, and the handle that puts its light where you want it.
@@ -110,9 +111,7 @@ export function ScanControls() {
             : "Sweep a plane of light through the body, lighting each structure it reaches"
         }
         className={`rounded border px-2 py-1 text-xs ${
-          enabled
-            ? "border-cyan-500 bg-cyan-500/10 text-cyan-300"
-            : "border-slate-700 bg-slate-950/70 text-slate-400"
+          enabled ? OVERLAY_SWITCH_ON.cyan : OVERLAY_SWITCH_OFF
         }`}
       >
         Scanner
@@ -133,7 +132,7 @@ export function ScanControls() {
           type="button"
           onClick={togglePanel}
           title="Show the scanner's controls again"
-          className="pointer-events-auto flex items-center gap-1.5 rounded border border-slate-800/60 bg-slate-950/70 px-1.5 py-0.5 font-mono text-[9px] text-slate-500 hover:border-cyan-800/60 hover:text-cyan-500/80"
+          className={`pointer-events-auto flex items-center gap-1.5 ${OVERLAY_CHIP} ${OVERLAY_CHIP_ACTION}`}
         >
           <span
             aria-hidden
@@ -432,7 +431,9 @@ export function ScanControls() {
         Remembered across launches: being asked to turn it off every morning is
         the application forgetting the only thing it was told.
       */}
-      <label className="flex max-w-[9.5rem] cursor-pointer items-start gap-1.5 rounded border border-slate-800/70 bg-slate-950/70 px-1.5 py-1 text-[9px] leading-snug text-slate-400">
+      <label
+        className={`flex max-w-[9.5rem] cursor-pointer items-start gap-1.5 rounded ${OVERLAY_GROUND} px-1.5 py-1 text-[9px] leading-snug`}
+      >
         <input
           type="checkbox"
           checked={sweepOnAnswer}

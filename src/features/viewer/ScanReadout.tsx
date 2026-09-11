@@ -5,6 +5,7 @@ import { useScanStore } from "@/stores/scanStore";
 
 import { CURRENT_CROSSING, SWEEP_RUNNING } from "./scanCrossing";
 import { CURRENT_LEVEL } from "./vertebralLevel";
+import { OVERLAY_CHIP, OVERLAY_CHIP_ACTION } from "./overlayChrome";
 
 /**
  * What the sweep is passing through, named as it passes it.
@@ -105,7 +106,7 @@ export function ScanReadout() {
         type="button"
         onClick={toggleReadout}
         title="Name what the plane is crossing again"
-        className="pointer-events-auto select-none rounded border border-slate-800/60 bg-slate-950/70 px-1.5 py-0.5 font-mono text-[9px] text-slate-500 hover:border-cyan-800/60 hover:text-cyan-500/80"
+        className={`pointer-events-auto select-none ${OVERLAY_CHIP} ${OVERLAY_CHIP_ACTION}`}
       >
         crossing · show
       </button>
