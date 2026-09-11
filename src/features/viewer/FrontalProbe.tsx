@@ -89,7 +89,8 @@ export function FrontalProbe({
   const camera = useMemo(() => new THREE.OrthographicCamera(-1, 1, 1, -1, 0.01, 2), []);
   /** Sixteen megabytes, so allocated on the first request rather than on mount. */
   const pixels = useRef<Uint8Array | null>(null);
-  const reach = useMemo(() => new THREE.Vector3(), []);
+  /** Each mesh's own box in world space, reused for every mesh of every pass. */
+  const worldBox = useMemo(() => new THREE.Box3(), []);
   const content = useMemo(() => new THREE.Box3(), []);
 
   useFrame(() => {
@@ -124,19 +125,27 @@ export function FrontalProbe({
       if (!mesh.isMesh || !mesh.visible) return;
       considered += 1;
       const geometry = mesh.geometry;
-      if (!geometry.boundingSphere) geometry.computeBoundingSphere();
-      const sphere = geometry.boundingSphere;
-      if (!sphere) return;
-      reach.copy(sphere.center).applyMatrix4(mesh.matrixWorld);
-      const radius = sphere.radius * mesh.matrixWorld.getMaxScaleOnAxis();
-      // The same conservative sphere test as the axial pass, along Z instead of Y.
-      if (Math.abs(reach.z - at) > radius + SLAB_HALF_THICKNESS) {
+      if (!geometry.boundingBox) geometry.computeBoundingBox();
+      if (!geometry.boundingBox) return;
+      /**
+       * A box, not the sphere the axial pass uses.
+       *
+       * A long structure's sphere is as wide as the structure is long, so a
+       * femur's reaches through the whole depth of the body and it survived
+       * every frontal slab — measured at 2,043 draw calls through the middle,
+       * more than the whole 3D view draws. Its box is only as deep as the femur.
+       * Eight corners through the matrix per mesh, once per pass.
+       */
+      worldBox.copy(geometry.boundingBox).applyMatrix4(mesh.matrixWorld);
+      if (
+        worldBox.max.z < at - SLAB_HALF_THICKNESS ||
+        worldBox.min.z > at + SLAB_HALF_THICKNESS
+      ) {
         mesh.visible = false;
         hidden.push(mesh);
         return;
       }
-      content.expandByPoint(reach.clone().addScalar(radius));
-      content.expandByPoint(reach.clone().addScalar(-radius));
+      content.union(worldBox);
       const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
       for (const material of materials) {
         if (!material) continue;
@@ -157,8 +166,8 @@ export function FrontalProbe({
     // most of a frontal frame is its height.
     const box = content.isEmpty() ? bounds : content;
     const centre = box.getCenter(new THREE.Vector3());
-    const extent = box.getSize(new THREE.Vector3());
-    const half = Math.max((Math.max(extent.x, extent.y) / 2) * 1.06, SLICE_MIN_HALF);
+    const spread = box.getSize(new THREE.Vector3());
+    const half = Math.max((Math.max(spread.x, spread.y) / 2) * 1.06, SLICE_MIN_HALF);
     camera.left = -half;
     camera.right = half;
     camera.top = half;
