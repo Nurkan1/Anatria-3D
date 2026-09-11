@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+/*
+ * A window too short for the overlay column at full size.
+ *
+ * Height rather than width, because height is what runs out: a 14-inch laptop
+ * at 1366x768 has plenty of room across and 767 pixels down, and the scanner's
+ * column stacks vertically. 820 is measured, not chosen — the column's content
+ * came to 665 pixels at rest and nearer 740 with the crossing readout up, so
+ * anything under about 820 has to give some of it back.
+ */
+@custom-variant short (@media (max-height: 820px));
+
 @theme {
   --color-brand-navy: #0f1b2d;
   --color-brand-cyan: #00a8e8;

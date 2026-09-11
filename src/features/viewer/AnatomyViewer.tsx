@@ -258,11 +258,17 @@ export function AnatomyViewer() {
       <LabelOverlay panel={splitting ? domRect(mainRect(activeViews)) : FULL_CANVAS} />
       {splitting && <StudyViewsFrame />}
       {/*
-        One column, high enough that the controls hint can open underneath it
-        without touching it. That clearance is the reason for the exact offset:
-        the hint expands upward from the bottom edge to about 123px, and
-        anything sharing this corner has to start above that with room to
-        spare, because those lines wrap on a narrow window.
+        One column, down to the bottom edge, with the controls hint as its last
+        item rather than a neighbour it has to keep clear of.
+
+        It used to stop 160 pixels short, to leave room for the hint to open
+        underneath without touching it. Measured on a 767-pixel laptop that was
+        the whole problem: the hint is closed nearly all the time, so those 129
+        pixels sat empty while the top of the stack was pushed 70 pixels out of
+        the window. Inside the column, the hint takes one chip of height when it
+        is closed and its seven lines only while it is open — and then it pushes
+        the stack up for the ten seconds somebody is reading it, which is the
+        moment the space is actually being used.
 
         **Bounded at the top as well as the bottom, and that is not decoration.**
         The column is anchored to the bottom and grows upward, so every panel
@@ -277,7 +283,7 @@ export function AnatomyViewer() {
         controls and the section, which cannot be recovered any other way, are
         at the bottom and stay.
       */}
-      <div className="pointer-events-none absolute top-3 bottom-40 left-3 z-20 flex flex-col items-start justify-end gap-1.5 overflow-hidden">
+      <div className="pointer-events-none absolute top-3 bottom-3 left-3 z-20 flex flex-col items-start justify-end gap-1.5 overflow-hidden">
         <RenderStatsPanel />
         {/* Hides itself when the sweep is off — see `ScanReadout`. */}
         <ScanReadout />
@@ -291,6 +297,7 @@ export function AnatomyViewer() {
         {/* Under the controls, and only when asked for — see `AxialView`. */}
         <AxialView />
         <StudyViewsToggle />
+        <ControlsHint />
       </div>
       <DepthProbe />
       <HoverLabel />
@@ -302,7 +309,6 @@ export function AnatomyViewer() {
       <ViewpointBar />
       <ExplodeBar />
       <StructureMenu target={menu} onClose={() => setMenu(null)} />
-      <ControlsHint />
     </div>
   );
 }
@@ -355,13 +361,13 @@ function ControlsHint() {
   }, []);
 
   return (
-    <div className="pointer-events-none absolute bottom-3 left-3 flex flex-col items-start gap-1">
-      <div
-        aria-hidden={!open}
-        className={`text-[10px] leading-tight text-slate-600 transition-opacity duration-200 motion-reduce:transition-none ${
-          open ? "opacity-100" : "opacity-0"
-        }`}
-      >
+    <div className="pointer-events-none flex flex-col items-start gap-1">
+      {/*
+        Absent rather than transparent when closed. Transparent still takes its
+        seven lines of height, and that height is exactly what a short window
+        needs for the panels above it.
+      */}
+      <div hidden={!open} className="text-[10px] leading-tight text-slate-600">
         <p>Drag to rotate · Scroll to zoom where you point · Lost? Use Fit, bottom right</p>
         <p>Right-drag to pan · Double-click an organ to open it with its parts</p>
         <p>Shift+double-click to build a study set · Esc to exit</p>

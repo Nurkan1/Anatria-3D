@@ -174,7 +174,9 @@ export function ScanControls() {
             horizontal in a 16px box, with no visible track and sixteen pixels
             of travel.
           */}
-          <div className="relative h-28 w-4">
+          {/* Shorter on a short window. The travel is the one thing in this
+              panel that can give height back without losing a control. */}
+          <div className="relative h-28 w-4 short:h-20">
           <input
             ref={slider}
             id="scan-position"
@@ -184,7 +186,7 @@ export function ScanControls() {
             max={1}
             step={0.001}
             defaultValue={SWEEP_PROGRESS.value}
-            className="scan-slider absolute top-1/2 left-1/2 h-4 w-28 -translate-x-1/2 -translate-y-1/2 -rotate-90 cursor-ns-resize"
+            className="scan-slider absolute top-1/2 left-1/2 h-4 w-28 -translate-x-1/2 -translate-y-1/2 -rotate-90 cursor-ns-resize short:w-20"
             onPointerDown={(event) => {
               // Here, and not where the tone is played: audio does not start
               // without a gesture, and the pulse fires a frame after the

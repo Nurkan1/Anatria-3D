@@ -732,7 +732,7 @@ export function AxialView() {
           ref={canvas}
           width={SLICE_PIXELS.value}
           height={SLICE_PIXELS.value}
-          className="block h-36 w-36 rounded-sm bg-black"
+          className="block h-36 w-36 rounded-sm bg-black short:h-28 short:w-28"
           aria-label="Cross-section at the height of the scanner. Click to enlarge."
         />
       </button>
@@ -743,7 +743,7 @@ export function AxialView() {
         picture is most of a laptop's spare column spent on a sentence somebody
         needs once.
       */}
-      <p className="mt-1 max-w-36 text-[9px] leading-snug text-slate-500">
+      <p className="mt-1 max-w-36 text-[9px] leading-snug text-slate-500 short:max-w-28">
         {across > 0 ? `${across.toFixed(0)} cm · ` : ""}
         {cut ? "cut" : "slab"} · {CURRENT_CROSSING.value.total} structures
         <span className="block text-cyan-500/70">
