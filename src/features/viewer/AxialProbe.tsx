@@ -3,13 +3,14 @@ import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 import { SHARED_SCAN } from "./scanBand";
-import type { SliceWindow } from "./axialSlice";
+import type { SliceBasis, SliceWindow } from "./axialSlice";
 import { useScanStore } from "@/stores/scanStore";
 
 import {
   AXIAL_CANVAS,
   cutPlanes,
   paintSlice,
+  sliceBasis,
   sliceFraming,
   slabPlanes,
   SLAB_HALF_THICKNESS,
@@ -82,6 +83,15 @@ export const AXIAL_PROBE = {
   base: { x: 0, z: 0, half: 0 } as SliceWindow,
   /** What the last pass was actually framed on. */
   shown: { x: 0, z: 0, half: 0 } as SliceWindow,
+  /**
+   * How the last picture was turned on its way to the screen.
+   *
+   * Stamped with the picture, like `shown`. The panel maps its pointer through
+   * this rather than through a basis of its own: mapped through the orientation
+   * the *next* picture will have, onto the one still on screen, a caliper would
+   * land on the other side of the body.
+   */
+  basis: sliceBasis(1) as SliceBasis,
 };
 
 /**
@@ -116,6 +126,7 @@ export function AxialProbe({
   bounds,
   request,
   high,
+  leftSign,
 }: {
   bounds: THREE.Box3 | null;
   /**
@@ -128,6 +139,11 @@ export function AxialProbe({
   request: number;
   /** Read at the larger size. The reader's choice; see `sliceSize`. */
   high: boolean;
+  /**
+   * Which side of X is the patient's left on this atlas, as `lateralSign`
+   * measured it. The picture puts it on the viewer's right.
+   */
+  leftSign: 1 | -1;
 }) {
   const gl = useThree((state) => state.gl);
   const scene = useThree((state) => state.scene);
@@ -385,7 +401,10 @@ export function AxialProbe({
     // canvas the render loop never touches again, which is the whole reason
     // this is affordable: one frame to make it, nothing per frame to keep it.
     const surface = AXIAL_CANVAS.value;
-    if (surface) paintSlice(surface, pixels, size);
+    // Stamped with the picture, like the window it was framed on.
+    const basis = sliceBasis(leftSign);
+    AXIAL_PROBE.basis = basis;
+    if (surface) paintSlice(surface, pixels, size, basis);
 
     // Last, and only now: the picture is on the canvas and the crossing list
     // was recomputed the frame the plane moved, so this is the one instant

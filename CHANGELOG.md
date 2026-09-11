@@ -13,6 +13,17 @@ There is **no auto-updater**, by design: the application never reaches the
 network on its own. A new version reaches you only when you download and install
 it, so this file is also the answer to "is it worth reinstalling".
 
+## [Unreleased]
+
+### Fixed
+
+**Cross-sections were drawn upside down.** In 0.2.8 the section put the spine at
+the top and the teeth at the bottom, under a caption saying the front was at the
+top. It is now the way every axial image is read: anterior at the top, and the
+patient's left on your right, as if looking up from the feet. Left and right were
+already right; only the vertical was reversed. The caliper, the drag, the zoom and
+the torch all turn with the picture.
+
 ## [0.2.8] — 2026-09-11
 
 ### Added

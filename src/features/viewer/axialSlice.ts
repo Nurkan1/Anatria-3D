@@ -105,14 +105,47 @@ export function sliceFraming(
 }
 
 /**
- * The up vector that puts the front of the body at the top of the image.
+ * The camera's up vector for the section pass. It points posterior, not anterior.
  *
- * Looking straight down, "up" in the picture is a direction in the horizontal
- * plane and has to be chosen. Anterior-up is the convention every axial image a
- * reader has seen uses, and −Z is anterior on this atlas — the same fact
- * `viewDirection` relies on for the anterior viewpoint.
+ * This said −Z was anterior, "the same fact `viewDirection` relies on" — and
+ * `viewDirection` says the opposite: the anterior view stands the camera at +Z.
+ * So every section up to 0.2.8 was drawn with the spine at the top and the teeth
+ * at the bottom, under a caption promising the front was at the top. Found by
+ * checking against the teeth, the one thing in a section nobody can mistake.
+ *
+ * The render is left exactly as it was — the camera, the cut and the lighting
+ * all work from above — and the picture is turned on its way to the screen
+ * instead, by `SliceBasis`. That is the one place orientation is decided.
  */
 export const SLICE_UP = new THREE.Vector3(0, 0, -1);
+
+/**
+ * Which way through the body each axis of the picture runs.
+ *
+ * `right` is the sign of world X that the picture's +x points along; `down` the
+ * sign of world Z that its +y — downwards, as screen rows run — points along.
+ * Everything that turns a pixel into a place in the body or back reads it from
+ * here: the painter, the caliper, the drag, the zoom and the torch. They were
+ * five separate assumptions before, which is how the picture could be upside
+ * down while every one of them was consistent with every other.
+ */
+export interface SliceBasis {
+  right: 1 | -1;
+  down: 1 | -1;
+}
+
+/**
+ * How a radiologist has it: anterior at the top, the patient's left on the
+ * viewer's right — an axial image looked at from the feet.
+ *
+ * Anterior is +Z on both atlases (the anterior viewpoint stands at +Z), so the
+ * picture runs towards −Z going down. Which side of X is the patient's left is
+ * not the same on both, which is why it is measured by `lateralSign` from the
+ * atlas's own paired structures and handed in here rather than assumed.
+ */
+export function sliceBasis(leftSign: 1 | -1): SliceBasis {
+  return { right: leftSign, down: -1 };
+}
 
 /**
  * The direction the section is looked at from: straight down.
@@ -246,6 +279,7 @@ export function zoomWindow(
   frame: SliceWindow,
   base: SliceWindow,
   by: number,
+  basis: SliceBasis,
   u = 0,
   v = 0,
 ): SliceWindow | null {
@@ -253,19 +287,22 @@ export function zoomWindow(
   const half = clamp(frame.half / by, MIN_SECTION_HALF_M, base.half);
   if (half >= base.half) return null;
 
-  // The world point under the pointer, kept where it is.
-  const anchorX = frame.x + u * frame.half;
-  const anchorZ = frame.z + v * frame.half;
-  return inside({ x: anchorX - u * half, z: anchorZ - v * half, half }, base);
+  // The world point under the pointer, kept where it is. Which way the pointer's
+  // offset runs through the body is the basis's to say.
+  const anchorX = frame.x + basis.right * u * frame.half;
+  const anchorZ = frame.z + basis.down * v * frame.half;
+  return inside(
+    { x: anchorX - basis.right * u * half, z: anchorZ - basis.down * v * half, half },
+    base,
+  );
 }
 
 /**
  * Slide the window by a drag, in metres.
  *
  * The picture moves with the hand, so the window moves against it: dragging to
- * the right brings into view what was off to the left. Canvas rows run
- * downwards and so does world +z here — the flip in `paintSlice` is what makes
- * anterior the top, and this follows it.
+ * the right brings into view what was off to the left. Which direction through
+ * the body "left" and "down" are is the basis's to say — see `SliceBasis`.
  */
 export function panWindow(
   frame: SliceWindow,
@@ -273,11 +310,16 @@ export function panWindow(
   dxPx: number,
   dyPx: number,
   windowPx: number,
+  basis: SliceBasis,
 ): SliceWindow | null {
   if (!(windowPx > 0)) return SECTION_VIEW.value;
   const travel = (2 * frame.half) / windowPx;
   return inside(
-    { x: frame.x - dxPx * travel, z: frame.z - dyPx * travel, half: frame.half },
+    {
+      x: frame.x - basis.right * dxPx * travel,
+      z: frame.z - basis.down * dyPx * travel,
+      half: frame.half,
+    },
     base,
   );
 }
@@ -331,13 +373,12 @@ export function pointInSection(
   offsetXPx: number,
   offsetYPx: number,
   windowPx: number,
+  basis: SliceBasis,
 ): { x: number; z: number } {
   const across = (2 * window.half) / windowPx;
   return {
-    x: window.x + (offsetXPx - windowPx / 2) * across,
-    // Canvas rows run downwards and so does world +z here, which is what the
-    // flip in `paintSlice` arranges.
-    z: window.z + (offsetYPx - windowPx / 2) * across,
+    x: window.x + basis.right * (offsetXPx - windowPx / 2) * across,
+    z: window.z + basis.down * (offsetYPx - windowPx / 2) * across,
   };
 }
 
@@ -347,12 +388,13 @@ export function pointOnScreen(
   x: number,
   z: number,
   windowPx: number,
+  basis: SliceBasis,
 ): { x: number; y: number } {
   if (!(window.half > 0)) return { x: 0, y: 0 };
   const perMetre = windowPx / (2 * window.half);
   return {
-    x: windowPx / 2 + (x - window.x) * perMetre,
-    y: windowPx / 2 + (z - window.z) * perMetre,
+    x: windowPx / 2 + basis.right * (x - window.x) * perMetre,
+    y: windowPx / 2 + basis.down * (z - window.z) * perMetre,
   };
 }
 
@@ -399,6 +441,7 @@ export function formatDistance(cm: number): string {
 export async function sectionImage(
   window: SliceWindow,
   line: SectionMeasure | null,
+  basis: SliceBasis,
 ): Promise<string | null> {
   const source = AXIAL_CANVAS.value;
   if (!source || source.width === 0) return null;
@@ -411,7 +454,7 @@ export async function sectionImage(
   if (!context) return null;
   context.drawImage(source, 0, 0);
 
-  if (line && window.half > 0) drawMeasure(context, line, window, size);
+  if (line && window.half > 0) drawMeasure(context, line, window, size, basis);
 
   const blob = await new Promise<Blob | null>((resolve) =>
     canvas.toBlob(resolve, "image/png"),
@@ -433,9 +476,10 @@ function drawMeasure(
   line: SectionMeasure,
   window: SliceWindow,
   size: number,
+  basis: SliceBasis,
 ): void {
-  const a = pointOnScreen(window, line.ax, line.az, size);
-  const b = pointOnScreen(window, line.bx, line.bz, size);
+  const a = pointOnScreen(window, line.ax, line.az, size, basis);
+  const b = pointOnScreen(window, line.bx, line.bz, size, basis);
 
   context.strokeStyle = "#22d3ee";
   context.lineWidth = Math.max(2, size / 512);
@@ -618,15 +662,15 @@ const TORCH_LOWEST = (8 * Math.PI) / 180;
  *
  * `u` and `v` are the pointer's offset from the centre, each from -1 at one
  * edge to 1 at the other, with `v` positive downwards as screen coordinates
- * are. In the section's own frame that is world +x to the right and world +z
- * downwards, with +y overhead — the frame `SLICE_UP` and `SLICE_FORWARD` set.
+ * are. Which way through the body those run is `basis`'s to say; +y is
+ * overhead either way.
  */
-export function torchDirection(u: number, v: number): THREE.Vector3 {
+export function torchDirection(u: number, v: number, basis: SliceBasis): THREE.Vector3 {
   const reach = Math.min(1, Math.hypot(u, v));
   const overhead = new THREE.Vector3(0, 1, 0);
   if (reach < 1e-6) return overhead;
 
-  const towards = new THREE.Vector3(u, 0, v).normalize();
+  const towards = new THREE.Vector3(basis.right * u, 0, basis.down * v).normalize();
   const above = TORCH_LOWEST + (1 - reach) * (Math.PI / 2 - TORCH_LOWEST);
   return towards
     .multiplyScalar(Math.cos(above))
@@ -674,19 +718,19 @@ export const RETAKE_INTERVAL_MS = 70;
 export const AXIAL_CANVAS: { value: HTMLCanvasElement | null } = { value: null };
 
 /**
- * Paint a slice that was read out of the GPU.
+ * Paint a slice that was read out of the GPU, the way round a reader expects.
  *
- * **The rows arrive upside down**, and that is not a quirk to work around
- * quietly: WebGL numbers its rows from the bottom and a canvas numbers them
- * from the top, so a picture copied straight across is a body lying the wrong
- * way up — which on an axial slice is a silent error, because anterior and
- * posterior look plausible either way. Flipping here is the correction, and
- * `SLICE_UP` is what makes the flipped result anterior-up.
+ * The orientation is `basis`'s and nobody else's. This used to flip the rows
+ * because WebGL numbers them from the bottom — true, and the flip was right for
+ * the camera, but the camera's up is posterior, so the result was a body with
+ * its spine at the top under a caption saying the front was there. On an axial
+ * slice that is a silent error: anterior and posterior both look plausible.
  */
 export function paintSlice(
   canvas: HTMLCanvasElement,
   pixels: Uint8Array,
   size: number,
+  basis: SliceBasis,
 ): void {
   // The canvas is resized to the picture rather than the picture to the canvas.
   // The size is a setting now, and a 2048 image put into a 4096 canvas would
@@ -697,9 +741,27 @@ export function paintSlice(
   if (!context) return;
   const image = context.createImageData(size, size);
   const row = size * 4;
+  // The framebuffer's top is `SLICE_UP`, posterior, and its rows come bottom
+  // first — so row 0 is the anterior edge, and taking the rows in the order
+  // they arrive puts the front at the top.
+  const flip = basis.down === 1;
+  // Its +x is world +X. Mirrored only where that is the patient's right: a row
+  // copied whole is free, a mirror touches every pixel, so only an atlas that
+  // needs it pays for it.
+  const mirror = basis.right === -1;
+  const from32 = mirror ? new Uint32Array(pixels.buffer, pixels.byteOffset, size * size) : null;
+  const to32 = mirror
+    ? new Uint32Array(image.data.buffer, image.data.byteOffset, size * size)
+    : null;
   for (let y = 0; y < size; y++) {
-    const from = (size - 1 - y) * row;
-    image.data.set(pixels.subarray(from, from + row), y * row);
+    const source = flip ? size - 1 - y : y;
+    if (!from32 || !to32) {
+      image.data.set(pixels.subarray(source * row, source * row + row), y * row);
+      continue;
+    }
+    const src = source * size;
+    const dst = y * size;
+    for (let x = 0; x < size; x++) to32[dst + x] = from32[src + size - 1 - x]!;
   }
   context.putImageData(image, 0, 0);
   markSlice(context, size);

@@ -1142,7 +1142,12 @@ export function AnatomyScene({
           the toggle — see the unmount discipline in `StudyViews`. */}
       {scanBandEnabled && <ScanRing bounds={bounds} instrument={manualScan} />}
       {scanBandEnabled && (
-        <AxialProbe bounds={bounds} request={axialRuns} high={axialDetail} />
+        <AxialProbe
+          bounds={bounds}
+          request={axialRuns}
+          high={axialDetail}
+          leftSign={leftSign}
+        />
       )}
 
       {pathway && (

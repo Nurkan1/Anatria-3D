@@ -229,7 +229,7 @@ export function AxialView() {
     if (!torch || box.width <= 0 || box.height <= 0) return;
     const u = (x - box.left - box.width / 2) / (box.width / 2);
     const v = (y - box.top - box.height / 2) / (box.height / 2);
-    TORCH.value = torchDirection(u, v);
+    TORCH.value = torchDirection(u, v, AXIAL_PROBE.basis);
     retakeSoon();
   };
 
@@ -261,7 +261,7 @@ export function AxialView() {
 
   const magnify = (by: number, u = 0, v = 0) => {
     if (AXIAL_PROBE.base.half <= 0) return;
-    showWindow(zoomWindow(looking(), AXIAL_PROBE.base, by, u, v));
+    showWindow(zoomWindow(looking(), AXIAL_PROBE.base, by, AXIAL_PROBE.basis, u, v));
   };
 
   /**
@@ -401,7 +401,7 @@ export function AxialView() {
    * teaches the reader to stop reading captions.
    */
   const caption =
-    `Anterior at the top${across > 0 ? ` · ${across.toFixed(0)} cm across` : ""}. ` +
+    `Anterior at the top, the patient's left on the right${across > 0 ? ` · ${across.toFixed(0)} cm across` : ""}. ` +
     (cut
       ? "The body opened at this plane: you are seeing the surfaces below the " +
         "cut, so there is depth behind what is at this level."
@@ -459,6 +459,7 @@ export function AxialView() {
                 event.clientX - box.left,
                 event.clientY - box.top,
                 box.width,
+                AXIAL_PROBE.basis,
               );
               drawing.current = true;
               setMeasure({ ax: at.x, az: at.z, bx: at.x, bz: at.z });
@@ -477,6 +478,7 @@ export function AxialView() {
                 event.clientX - box.left,
                 event.clientY - box.top,
                 box.width,
+                AXIAL_PROBE.basis,
               );
               // Only the far end moves. The near one was placed where the
               // reader put it and must not drift under them.
@@ -496,6 +498,7 @@ export function AxialView() {
                     event.clientX - from.x,
                     event.clientY - from.y,
                     frameWidth,
+                    AXIAL_PROBE.basis,
                   ),
                 );
               }
@@ -551,8 +554,8 @@ export function AxialView() {
               aria-hidden
             >
               {(() => {
-                const a = pointOnScreen(looking(), measure.ax, measure.az, frameWidth);
-                const b = pointOnScreen(looking(), measure.bx, measure.bz, frameWidth);
+                const a = pointOnScreen(looking(), measure.ax, measure.az, frameWidth, AXIAL_PROBE.basis);
+                const b = pointOnScreen(looking(), measure.bx, measure.bz, frameWidth, AXIAL_PROBE.basis);
                 const cm = measureCm(measure);
                 return (
                   <>
@@ -658,7 +661,7 @@ export function AxialView() {
                 setSaved(null);
                 // The window as it is right now, so a magnified section saves
                 // what is on screen rather than what it started as.
-                sectionImage(looking(), measure)
+                sectionImage(looking(), measure, AXIAL_PROBE.basis)
                   .then((png) =>
                     png
                       ? saveViewImage(png, sectionFileName(level, across, cut))

@@ -376,9 +376,9 @@ const SECTIONS: Section[] = [
       <>
         <p>
           With <Ui>Cross-section where I let go</Ui> ticked, letting the light go draws
-          the body as it is at that exact height, seen from above, in a panel beside the
-          scanner. Anterior is at the top, the way every axial image you have seen is
-          arranged.
+          the body as it is at that exact height, in a panel beside the scanner, the
+          way every axial image you have seen is arranged: anterior at the top, and
+          the patient’s left on your right, as if looking up from the feet.
         </p>
         <p>
           It is taken at the moment of release and not before, and that is a cost

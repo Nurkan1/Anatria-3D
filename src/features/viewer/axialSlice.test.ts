@@ -12,6 +12,7 @@ import {
   pointInSection,
   pointOnScreen,
   sectionFileName,
+  sliceBasis,
   SLICE_PIXELS_HIGH,
   SLICE_PIXELS_NORMAL,
   sliceSize,
@@ -25,6 +26,9 @@ import {
   sliceFraming,
   slabPlanes,
 } from "./axialSlice";
+
+/** The male atlas's orientation: its left is +X, as `lateralSign` measures it. */
+const MALE = sliceBasis(1);
 
 /**
  * Enough of a 2D context for the painter: the flip, and the mark drawn over it.
@@ -118,10 +122,27 @@ describe("the framing", () => {
     expect(framing.halfWidth).toBeCloseTo(0.4);
   });
 
-  it("puts the front of the body at the top of the image", () => {
-    // Anterior-up is the convention every axial image a reader has seen uses,
-    // and −Z is anterior on this atlas — the same fact the anterior viewpoint
-    // relies on.
+  it("puts the front of the body at the top, and the patient's left on the right", () => {
+    // This test used to assert that SLICE_UP pointed at −Z "because −Z is
+    // anterior" — which enshrined the bug: the anterior viewpoint stands at +Z,
+    // so every section showed the spine at the top and the teeth at the bottom.
+    // It now states the anatomy itself, on both possible atlases.
+    const window = { x: 0, z: 0, half: 0.2 };
+    for (const leftSign of [1, -1] as const) {
+      const basis = sliceBasis(leftSign);
+      const front = pointOnScreen(window, 0, 0.1, 400, basis);
+      const back = pointOnScreen(window, 0, -0.1, 400, basis);
+      expect(front.y).toBeLessThan(back.y);
+
+      const patientsLeft = pointOnScreen(window, leftSign * 0.1, 0, 400, basis);
+      const patientsRight = pointOnScreen(window, -leftSign * 0.1, 0, 400, basis);
+      expect(patientsLeft.x).toBeGreaterThan(patientsRight.x);
+    }
+  });
+
+  it("renders from above with posterior at the top of the framebuffer", () => {
+    // The camera is not what changed: it still looks down with SLICE_UP at the
+    // top, which is posterior. The painter turns the picture. See SliceBasis.
     expect(SLICE_UP.z).toBeLessThan(0);
     expect(SLICE_UP.y).toBe(0);
   });
@@ -140,23 +161,38 @@ describe("painting what came back from the GPU", () => {
     return px;
   }
 
-  it("turns the picture the right way up", () => {
-    // WebGL numbers rows from the bottom and a canvas from the top. A straight
-    // copy is a body lying the wrong way round — and on an axial slice that is
-    // a *silent* error, because anterior and posterior both look plausible.
+  it("puts the anterior edge at the top", () => {
+    // The framebuffer's top is SLICE_UP, which is posterior, and WebGL hands
+    // its rows over bottom first — so the red row, first in GPU order, is the
+    // anterior edge and must land in row 0. This test once asserted the
+    // opposite, and every section was upside down under it.
     const { canvas, read } = canvasStub();
-    paintSlice(canvas, twoByTwo(), 2);
+    paintSlice(canvas, twoByTwo(), 2, MALE);
 
     const out = read();
     expect(out).not.toBeNull();
-    // The blue row was the top in GPU order, so it must land in row 0.
-    expect(Array.from(out!.data.slice(0, 4))).toEqual([0, 0, 255, 255]);
-    expect(Array.from(out!.data.slice(8, 12))).toEqual([255, 0, 0, 255]);
+    expect(Array.from(out!.data.slice(0, 4))).toEqual([255, 0, 0, 255]);
+    expect(Array.from(out!.data.slice(8, 12))).toEqual([0, 0, 255, 255]);
+  });
+
+  it("mirrors left and right where the atlas's left is -X", () => {
+    // The patient's left goes on the viewer's right. The framebuffer's +x is
+    // world +X, so an atlas whose left lies at -X has to be mirrored.
+    const px = new Uint8Array(2 * 1 * 4 * 2);
+    // Row 0, as WebGL numbers it: green then white.
+    px.set([0, 255, 0, 255], 0);
+    px.set([255, 255, 255, 255], 4);
+    const { canvas, read } = canvasStub();
+    paintSlice(canvas, px, 2, sliceBasis(-1));
+
+    const out = read()!;
+    expect(Array.from(out.data.slice(0, 4))).toEqual([255, 255, 255, 255]);
+    expect(Array.from(out.data.slice(4, 8))).toEqual([0, 255, 0, 255]);
   });
 
   it("does nothing rather than throwing where there is no 2D context", () => {
     const canvas = { getContext: () => null } as unknown as HTMLCanvasElement;
-    expect(() => paintSlice(canvas, twoByTwo(), 2)).not.toThrow();
+    expect(() => paintSlice(canvas, twoByTwo(), 2, MALE)).not.toThrow();
   });
 });
 
@@ -168,7 +204,7 @@ describe("keeping the last section", () => {
     forgetSlice();
     const first = canvasStub();
     const pixels = new Uint8Array(2 * 2 * 4).fill(200);
-    paintSlice(first.canvas, pixels, 2);
+    paintSlice(first.canvas, pixels, 2, MALE);
 
     const enlarged = canvasStub();
     restoreSlice(enlarged.canvas);
@@ -235,23 +271,23 @@ describe("wheelSteps", () => {
 
 describe("torchDirection", () => {
   it("stands overhead in the middle", () => {
-    const light = torchDirection(0, 0);
+    const light = torchDirection(0, 0, MALE);
     expect(light.y).toBeCloseTo(1, 12);
   });
 
   it("comes from the side the pointer is on, not the other one", () => {
     // The half of this that has to be right: a light that receded as the
     // cursor approached would read as broken without ever being nameable.
-    expect(torchDirection(1, 0).x).toBeGreaterThan(0);
-    expect(torchDirection(-1, 0).x).toBeLessThan(0);
-    // Screen coordinates run downwards, and so does world +z here.
-    expect(torchDirection(0, 1).z).toBeGreaterThan(0);
-    expect(torchDirection(0, -1).z).toBeLessThan(0);
+    expect(torchDirection(1, 0, MALE).x).toBeGreaterThan(0);
+    expect(torchDirection(-1, 0, MALE).x).toBeLessThan(0);
+    // Down the picture is posterior, towards -Z; up it is anterior.
+    expect(torchDirection(0, 1, MALE).z).toBeLessThan(0);
+    expect(torchDirection(0, -1, MALE).z).toBeGreaterThan(0);
   });
 
   it("lowers the light as the pointer leaves the middle", () => {
-    const near = torchDirection(0.3, 0);
-    const far = torchDirection(1, 0);
+    const near = torchDirection(0.3, 0, MALE);
+    const far = torchDirection(1, 0, MALE);
     expect(far.y).toBeLessThan(near.y);
     expect(near.y).toBeLessThan(1);
   });
@@ -259,7 +295,7 @@ describe("torchDirection", () => {
   it("never lies flat in the plane, however far out the pointer goes", () => {
     // A light exactly level with the section lights the walls facing it and
     // nothing else: the reader sees a picture that has gone out.
-    const corner = torchDirection(3, 3);
+    const corner = torchDirection(3, 3, MALE);
     expect(corner.y).toBeGreaterThan(0.1);
     expect(corner.length()).toBeCloseTo(1, 12);
   });
@@ -288,7 +324,7 @@ const BASE = { x: 0, z: 0, half: 0.54 };
 
 describe("zoomWindow", () => {
   it("halves the width for twice the magnification", () => {
-    const shown = zoomWindow(BASE, BASE, 2);
+    const shown = zoomWindow(BASE, BASE, 2, MALE);
     expect(shown?.half).toBeCloseTo(0.27, 12);
     expect(shown?.x).toBeCloseTo(0, 12);
   });
@@ -296,8 +332,8 @@ describe("zoomWindow", () => {
   it("goes back to automatic when the reader zooms all the way out", () => {
     // Null rather than a window that happens to be body-wide: the automatic
     // frame follows the level, and zoomed out is a request to keep doing that.
-    expect(zoomWindow(BASE, BASE, 1)).toBeNull();
-    expect(zoomWindow({ x: 0, z: 0, half: 0.27 }, BASE, 0.5)).toBeNull();
+    expect(zoomWindow(BASE, BASE, 1, MALE)).toBeNull();
+    expect(zoomWindow({ x: 0, z: 0, half: 0.27 }, BASE, 0.5, MALE)).toBeNull();
   });
 
   it("keeps what is under the pointer under the pointer", () => {
@@ -306,17 +342,17 @@ describe("zoomWindow", () => {
     const frame = { x: 0, z: 0, half: 0.4 };
     const u = 0.5;
     const anchor = frame.x + u * frame.half;
-    const shown = zoomWindow(frame, BASE, 2, u, 0);
+    const shown = zoomWindow(frame, BASE, 2, MALE, u, 0);
     expect(shown!.x + u * shown!.half).toBeCloseTo(anchor, 12);
   });
 
   it("stops where there is nothing left to magnify", () => {
-    expect(zoomWindow(BASE, BASE, 500)!.half).toBe(MIN_SECTION_HALF_M);
+    expect(zoomWindow(BASE, BASE, 500, MALE)!.half).toBe(MIN_SECTION_HALF_M);
   });
 
   it("keeps the window inside the section", () => {
     // Anchored hard against one edge, the window still may not leave the body.
-    const shown = zoomWindow(BASE, BASE, 2, 1, 1)!;
+    const shown = zoomWindow(BASE, BASE, 2, MALE, 1, 1)!;
     expect(Math.abs(shown.x)).toBeLessThanOrEqual(BASE.half - shown.half + 1e-12);
     expect(Math.abs(shown.z)).toBeLessThanOrEqual(BASE.half - shown.half + 1e-12);
   });
@@ -326,23 +362,29 @@ describe("panWindow", () => {
   it("travels the opposite way to the hand", () => {
     // Dragging the picture to the right shows what was off to the left.
     const frame = { x: 0, z: 0, half: 0.27 };
-    expect(panWindow(frame, BASE, 100, 0, 900)!.x).toBeLessThan(0);
+    expect(panWindow(frame, BASE, 100, 0, 900, MALE)!.x).toBeLessThan(0);
   });
 
   it("moves by the distance the drag actually covered", () => {
     // A 54 cm window drawn 900 pixels wide: a quarter of the picture is 13.5 cm.
     const frame = { x: 0, z: 0, half: 0.27 };
-    expect(panWindow(frame, BASE, 225, 0, 900)!.x).toBeCloseTo(-0.135, 12);
+    expect(panWindow(frame, BASE, 225, 0, 900, MALE)!.x).toBeCloseTo(-0.135, 12);
+  });
+
+  it("brings the front into view when the picture is dragged down", () => {
+    // Dragging down shows what was above, and above is anterior: +Z.
+    const frame = { x: 0, z: 0, half: 0.27 };
+    expect(panWindow(frame, BASE, 0, 100, 900, MALE)!.z).toBeGreaterThan(0);
   });
 
   it("does not change the width", () => {
     const frame = { x: 0, z: 0, half: 0.27 };
-    expect(panWindow(frame, BASE, 40, -80, 900)!.half).toBe(0.27);
+    expect(panWindow(frame, BASE, 40, -80, 900, MALE)!.half).toBe(0.27);
   });
 
   it("stops at the edge rather than drifting into the black", () => {
     const frame = { x: 0, z: 0, half: 0.27 };
-    const shown = panWindow(frame, BASE, 99999, 0, 900)!;
+    const shown = panWindow(frame, BASE, 99999, 0, 900, MALE)!;
     expect(shown.x).toBeCloseTo(-(BASE.half - frame.half), 12);
   });
 });
@@ -351,33 +393,33 @@ describe("the caliper", () => {
   const WINDOW = { x: 0.1, z: -0.2, half: 0.27 };
 
   it("puts the middle of the picture at the middle of the window", () => {
-    const at = pointInSection(WINDOW, 450, 450, 900);
+    const at = pointInSection(WINDOW, 450, 450, 900, MALE);
     expect(at.x).toBeCloseTo(WINDOW.x, 12);
     expect(at.z).toBeCloseTo(WINDOW.z, 12);
   });
 
   it("puts the corners where the window ends", () => {
-    const at = pointInSection(WINDOW, 0, 900, 900);
+    const at = pointInSection(WINDOW, 0, 900, 900, MALE);
     expect(at.x).toBeCloseTo(WINDOW.x - WINDOW.half, 12);
-    // Canvas rows run downwards and so does world +z.
-    expect(at.z).toBeCloseTo(WINDOW.z + WINDOW.half, 12);
+    // The bottom of the picture is the posterior edge: -Z.
+    expect(at.z).toBeCloseTo(WINDOW.z - WINDOW.half, 12);
   });
 
   it("comes back to the same pixel it came from", () => {
     // The round trip is what keeps a line drawn at one magnification lying on
     // the same anatomy at the next one.
     const back = pointOnScreen(WINDOW, ...(() => {
-      const at = pointInSection(WINDOW, 137, 612, 900);
+      const at = pointInSection(WINDOW, 137, 612, 900, MALE);
       return [at.x, at.z] as const;
-    })(), 900);
+    })(), 900, MALE);
     expect(back.x).toBeCloseTo(137, 9);
     expect(back.y).toBeCloseTo(612, 9);
   });
 
   it("measures across the window, not across the screen", () => {
     // A 54 cm window drawn 900 pixels wide: half the picture is 27 cm.
-    const a = pointInSection(WINDOW, 225, 450, 900);
-    const b = pointInSection(WINDOW, 675, 450, 900);
+    const a = pointInSection(WINDOW, 225, 450, 900, MALE);
+    const b = pointInSection(WINDOW, 675, 450, 900, MALE);
     expect(measureCm({ ax: a.x, az: a.z, bx: b.x, bz: b.z })).toBeCloseTo(27, 9);
   });
 
@@ -387,12 +429,12 @@ describe("the caliper", () => {
     // same anatomy and report the same length, or a measurement is worth
     // nothing the moment somebody looks closer.
     const whole = { x: 0, z: 0, half: 0.27 };
-    const a = pointInSection(whole, 400, 430, 900);
-    const b = pointInSection(whole, 470, 500, 900);
+    const a = pointInSection(whole, 400, 430, 900, MALE);
+    const b = pointInSection(whole, 470, 500, 900, MALE);
     const line = { ax: a.x, az: a.z, bx: b.x, bz: b.z };
 
     const close = { x: a.x, z: a.z, half: 0.054 };
-    const onScreen = pointOnScreen(close, line.ax, line.az, 900);
+    const onScreen = pointOnScreen(close, line.ax, line.az, 900, MALE);
     // The near end is the centre of the magnified window, so it draws there.
     expect(onScreen.x).toBeCloseTo(450, 9);
     expect(onScreen.y).toBeCloseTo(450, 9);
