@@ -22,7 +22,7 @@ import {
 } from "./scanBand";
 import { ScanRing } from "./ScanRing";
 import { AxialProbe } from "./AxialProbe";
-import { depthLabel, SECTION_WANTED, slicePlane, wantSection } from "./axialSlice";
+import { depthLabel, SECTION_VIEW, SECTION_WANTED, slicePlane, wantSection } from "./axialSlice";
 import { scanTint } from "./scanTints";
 import { CURRENT_LEVEL, levelAt } from "./vertebralLevel";
 import { playScanPing } from "./scanSound";
@@ -1008,6 +1008,16 @@ export function AnatomyScene({
     if (!box) return;
     lastScanSeq.current = scanRequest.seq;
 
+    // The assistant may name the plane as well as the place -- "a frontal
+    // section of the heart". Switched first, so the travel below is measured
+    // along the plane it asked for and the picture starts from its whole frame.
+    if (scanRequest.plane) {
+      const wanted = scanRequest.plane === "coronal" ? "front" : "axial";
+      if (useScanStore.getState().plane !== wanted) {
+        useScanStore.getState().setPlane(wanted);
+        SECTION_VIEW.value = null;
+      }
+    }
     // Along whichever plane the reader has chosen: a structure has a height
     // and a depth, and "put the plane at the aorta" means the one on screen.
     const axis = sweepAxis(useScanStore.getState().plane);

@@ -142,7 +142,11 @@ reader cannot see on the model is half an answer.
     the reader means by an axial slice, a section, a level, or "cut at T8".
     It names a structure rather than a level, so `vertebra_t8` and
     `valva_aortae` are the same call, and the panel reports whichever
-    vertebral level the plane lands on.
+    vertebral level the plane lands on. Pass `plane="coronal"` when the
+    reader asks for a frontal or coronal section, a view from the front, or
+    a depth: the plane then stands upright through the structure and the
+    panel shows it seen from the front. Pass `plane="axial"` for a level or
+    an axial slice. Leave it out only when they asked for neither.
   - `set_cross_section` cuts the model itself and **leaves it cut** until
     `reset_view`. Use it only to keep something internal on screen while you
     talk about it -- never to answer a question about a level, because it

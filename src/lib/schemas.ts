@@ -101,6 +101,10 @@ export type AnatomicalSystem = z.infer<typeof AnatomicalSystemSchema>;
 export const SectionPlaneSchema = z.enum(["axial", "coronal", "sagittal"]);
 export type SectionPlane = z.infer<typeof SectionPlaneSchema>;
 
+/** Which way the scanner reads the body; "coronal" is the viewer's Front. */
+export const ScannerPlaneSchema = z.enum(["axial", "coronal"]);
+export type ScannerPlane = z.infer<typeof ScannerPlaneSchema>;
+
 // ---------------------------------------------------------------------------
 // Anatomy metadata
 // ---------------------------------------------------------------------------
@@ -300,6 +304,8 @@ export const SceneCommandSchema = z.discriminatedUnion("action", [
   z.object({
     action: z.literal("scan_at_structure"),
     organ_id: z.string().min(1),
+    /** Axial or coronal. Absent (or null off the wire) keeps the reader's own. */
+    plane: ScannerPlaneSchema.nullable().optional(),
   }),
   z.object({
     action: z.literal("reset_view"),

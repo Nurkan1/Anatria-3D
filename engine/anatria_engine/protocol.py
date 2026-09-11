@@ -33,6 +33,9 @@ UserProfile = Literal["layperson", "student", "clinician"]
 GenderModel = Literal["male", "female"]
 AiProvider = Literal["anthropic", "openai", "google"]
 SectionPlane = Literal["axial", "coronal", "sagittal"]
+#: Which way the scanner reads the body. "coronal" is the frontal plane, which
+#: the viewer's own control calls Front.
+ScannerPlane = Literal["axial", "coronal"]
 
 #: What the assistant is doing this turn.
 #:
@@ -393,6 +396,8 @@ class ScanAtStructure(Strict):
 
     action: Literal["scan_at_structure"] = "scan_at_structure"
     organ_id: str = Field(min_length=1)
+    #: Axial or coronal. Absent keeps whichever plane the reader has set.
+    plane: ScannerPlane | None = None
 
 
 class ResetView(Strict):
