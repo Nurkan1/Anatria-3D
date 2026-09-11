@@ -77,6 +77,21 @@ cache key from the source of `onBeforeCompile`, so handing every material the
 same module-level function is the whole trick, and the difference between a mode
 that opens instantly and one that freezes the window for several seconds.
 
+![The scanner taking a section at T8: the ring stops across the chest, the axial
+section opens full size with the anterior at the top, is magnified from 115 cm
+across to 20 cm, and a caliper measures 3.1 cm across the vertebral body before
+the ring moves up the body again.](docs/screenshots/scanner-sections.gif)
+
+**And it reads the body in section.** Let go of the light and the body is drawn
+at that height the way an axial image is read — anterior at the top, the
+patient's left on your right — with the vertebral level named and the structures
+it crosses listed beside it. The wheel steps a centimetre at a time; magnifying
+renders the section again at the narrower width, so it adds detail rather than
+pixels; a caliper measures in the body's own coordinates and keeps each line on
+the level it was drawn on; and the assistant can put the plane at any structure
+you name. A section is the atlas's geometry cut at a height, not a radiograph,
+and every picture it produces says so.
+
 ![Four views of the same head at once. The panel the reader drives sits
 top-left with the vessels and nerves of the head and neck; beside and below it,
 anterior, left lateral and superior views of the same structures, lettered at
