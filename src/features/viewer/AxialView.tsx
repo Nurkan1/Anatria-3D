@@ -7,6 +7,7 @@ import {
   AXIAL_CANVAS,
   formatDistance,
   measureCm,
+  onLevel,
   panWindow,
   pointInSection,
   pointOnScreen,
@@ -167,9 +168,21 @@ export function AxialView() {
    * unreachable on a machine driven by touch or one hand.
    */
   const [measuring, setMeasuring] = useState(false);
-  const [measure, setMeasure] = useState<SectionMeasure | null>(null);
-  /** True while an end is being dragged out, so a click alone leaves nothing. */
-  const drawing = useRef(false);
+  /**
+   * Every measurement drawn since the panel opened, each stamped with the level
+   * it was drawn on. Only those of the level on screen are shown; see `onLevel`.
+   */
+  const [measures, setMeasures] = useState<SectionMeasure[]>([]);
+  /** The line being dragged out now, not yet kept. */
+  const [draft, setDraft] = useState<SectionMeasure | null>(null);
+  /**
+   * The same line, for the pointer handlers.
+   *
+   * Letting go has to keep exactly the line the last move drew. Read from state
+   * it would be whatever the last render saw, which is not guaranteed to have
+   * caught up with the last move.
+   */
+  const drafting = useRef<SectionMeasure | null>(null);
   /** The save, and whatever it had to say afterwards. */
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState<string | null>(null);
@@ -345,17 +358,19 @@ export function AxialView() {
     // exit that does not require finding it first.
     const onKey = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
-      // The line first, then the panel: Escape should undo the smaller thing
-      // the reader is holding before it throws away the bigger one.
-      if (measure) {
-        setMeasure(null);
+      // The last line on this level first, then the panel: Escape should undo
+      // the smallest thing the reader did before it throws away the biggest.
+      const onThisLevel = measures.filter((line) => onLevel(line, AXIAL_PROBE.at));
+      const last = onThisLevel[onThisLevel.length - 1];
+      if (last) {
+        setMeasures((all) => all.filter((line) => line !== last));
         return;
       }
       setFull(false);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [full, measure]);
+  }, [full, measures]);
 
   useEffect(() => {
     // A section nobody can see should not be left open across a switch-off.
@@ -367,7 +382,9 @@ export function AxialView() {
     // a thumbnail showing a nine-centimetre crop of somebody's last look is
     // not a thumbnail of the section, and a view that reopened at the
     // magnification left an hour ago is a view that looks broken.
-    setMeasure(null);
+    setMeasures([]);
+    setDraft(null);
+    drafting.current = null;
     if (SECTION_VIEW.value === null) return;
     SECTION_VIEW.value = null;
     setShown(null);
@@ -385,6 +402,13 @@ export function AxialView() {
    * reader can use, and "5.4x" is a number about the software.
    */
   const across = AXIAL_PROBE.frameCm;
+  /**
+   * The measurements that belong to the picture on screen.
+   *
+   * Derived on every render rather than stored: the level changes when a new
+   * section arrives, which is also when this component renders.
+   */
+  const here = measures.filter((line) => onLevel(line, AXIAL_PROBE.at));
   /**
    * The level, when the plane is at one.
    *
@@ -461,8 +485,10 @@ export function AxialView() {
                 box.width,
                 AXIAL_PROBE.basis,
               );
-              drawing.current = true;
-              setMeasure({ ax: at.x, az: at.z, bx: at.x, bz: at.z });
+              // Stamped with the level of the picture it is drawn on.
+              const line = { ax: at.x, az: at.z, bx: at.x, bz: at.z, at: AXIAL_PROBE.at };
+              drafting.current = line;
+              setDraft(line);
               event.currentTarget.setPointerCapture(event.pointerId);
               return;
             }
@@ -471,7 +497,7 @@ export function AxialView() {
             event.currentTarget.setPointerCapture(event.pointerId);
           }}
           onPointerMove={(event) => {
-            if (drawing.current) {
+            if (drafting.current) {
               const box = event.currentTarget.getBoundingClientRect();
               const at = pointInSection(
                 looking(),
@@ -482,7 +508,9 @@ export function AxialView() {
               );
               // Only the far end moves. The near one was placed where the
               // reader put it and must not drift under them.
-              setMeasure((line) => (line ? { ...line, bx: at.x, bz: at.z } : line));
+              const line = { ...drafting.current, bx: at.x, bz: at.z };
+              drafting.current = line;
+              setDraft(line);
               return;
             }
             const from = dragging.current;
@@ -510,15 +538,19 @@ export function AxialView() {
           }}
           onPointerUp={() => {
             dragging.current = null;
-            if (!drawing.current) return;
-            drawing.current = false;
+            const line = drafting.current;
+            if (!line) return;
+            drafting.current = null;
+            setDraft(null);
             // A click that never moved is not a measurement; it is somebody
-            // finding out what the button does.
-            setMeasure((line) => (line && measureCm(line) > 0 ? line : null));
+            // finding out what the button does. Anything longer is kept, and
+            // the next drag starts another rather than replacing it.
+            if (measureCm(line) > 0) setMeasures((all) => [...all, line]);
           }}
           onPointerCancel={() => {
             dragging.current = null;
-            drawing.current = false;
+            drafting.current = null;
+            setDraft(null);
           }}
           style={{
             width: SECTION_WINDOW,
@@ -547,18 +579,19 @@ export function AxialView() {
             the one somebody photographs, and it would have to be repainted by
             the render loop every time the plane moved.
           */}
-          {measure && frameWidth > 0 && (
+          {(here.length > 0 || draft) && frameWidth > 0 && (
             <svg
               className="pointer-events-none absolute inset-0 h-full w-full"
               viewBox={`0 0 ${frameWidth} ${frameWidth}`}
               aria-hidden
             >
-              {(() => {
-                const a = pointOnScreen(looking(), measure.ax, measure.az, frameWidth, AXIAL_PROBE.basis);
-                const b = pointOnScreen(looking(), measure.bx, measure.bz, frameWidth, AXIAL_PROBE.basis);
-                const cm = measureCm(measure);
+              {[...here, ...(draft ? [draft] : [])].map((line) => {
+                const a = pointOnScreen(looking(), line.ax, line.az, frameWidth, AXIAL_PROBE.basis);
+                const b = pointOnScreen(looking(), line.bx, line.bz, frameWidth, AXIAL_PROBE.basis);
+                const cm = measureCm(line);
+                const kept = line !== draft;
                 return (
-                  <>
+                  <g key={`${line.ax}:${line.az}:${line.bx}:${line.bz}:${line.at}`}>
                     <line
                       x1={a.x}
                       y1={a.y}
@@ -578,13 +611,28 @@ export function AxialView() {
                         stroke="#020617"
                         strokeWidth={3}
                         paintOrder="stroke"
+                        /*
+                          The number is the handle for removing the line. It
+                          takes the pointer itself, and stops the press there, so
+                          removing one does not also start drawing the next.
+                        */
+                        style={kept ? { pointerEvents: "auto", cursor: "pointer" } : undefined}
+                        onPointerDown={
+                          kept
+                            ? (event) => {
+                                event.stopPropagation();
+                                setMeasures((all) => all.filter((item) => item !== line));
+                              }
+                            : undefined
+                        }
                       >
+                        {kept && <title>Remove this measurement</title>}
                         {formatDistance(cm)}
                       </text>
                     )}
-                  </>
+                  </g>
                 );
-              })()}
+              })}
             </svg>
           )}
         </div>
@@ -633,11 +681,9 @@ export function AxialView() {
           <div className="flex items-center gap-2 text-xs">
             <button
               type="button"
-              onClick={() => {
-                const next = !measuring;
-                setMeasuring(next);
-                if (!next) setMeasure(null);
-              }}
+              // Putting the tool away does not throw the measurements away. They
+              // are annotations on the section, and Clear is what removes them.
+              onClick={() => setMeasuring((on) => !on)}
               aria-pressed={measuring}
               title="Drag across the section to measure it"
               className={`rounded border px-2 py-0.5 ${
@@ -648,10 +694,26 @@ export function AxialView() {
             >
               Measure
             </button>
-            {measuring && (
+            {(measuring || here.length > 0) && (
               <span className="tabular-nums text-cyan-200">
-                {measure ? formatDistance(measureCm(measure)) : "drag across it"}
+                {draft
+                  ? formatDistance(measureCm(draft))
+                  : here.length > 0
+                    ? `${here.length} on this level`
+                    : "drag across it"}
               </span>
+            )}
+            {here.length > 0 && (
+              <button
+                type="button"
+                onClick={() =>
+                  setMeasures((all) => all.filter((line) => !onLevel(line, AXIAL_PROBE.at)))
+                }
+                title="Remove the measurements on this level"
+                className="rounded border border-slate-700 px-2 py-0.5 text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
+              >
+                Clear
+              </button>
             )}
             <button
               type="button"
@@ -661,7 +723,7 @@ export function AxialView() {
                 setSaved(null);
                 // The window as it is right now, so a magnified section saves
                 // what is on screen rather than what it started as.
-                sectionImage(looking(), measure, AXIAL_PROBE.basis)
+                sectionImage(looking(), here, AXIAL_PROBE.basis)
                   .then((png) =>
                     png
                       ? saveViewImage(png, sectionFileName(level, across, cut))
@@ -673,7 +735,7 @@ export function AxialView() {
                   )
                   .finally(() => setSaving(false));
               }}
-              title="Save this section as a PNG, with its measurement"
+              title="Save this section as a PNG, with its measurements"
               className="ml-auto rounded border border-slate-700 px-2 py-0.5 text-slate-300 hover:border-cyan-700 hover:text-cyan-300 disabled:opacity-40"
             >
               {saving ? "Saving…" : "Save"}
@@ -693,8 +755,9 @@ export function AxialView() {
 
           {measuring && (
             <p className="text-[11px] leading-snug text-slate-500">
-              Both ends lie in the plane, so this is the true distance between
-              those two points —{" "}
+              Drag again for another; click a number to remove it. Each stays on
+              the level it was drawn on. Both ends lie in the plane, so this is the
+              true distance between those two points —{" "}
               {cut
                 ? "but in Cut you are seeing surfaces below the plane, so the structures under the ends may not be at this level. Slab is the mode to measure a level in."
                 : "and in Slab everything shown is within four millimetres of it."}

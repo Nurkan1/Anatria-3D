@@ -92,6 +92,13 @@ export const AXIAL_PROBE = {
    * land on the other side of the body.
    */
   basis: sliceBasis(1) as SliceBasis,
+  /**
+   * The height the last picture was taken at, in metres along the sweep.
+   *
+   * Measurements are stamped with it when they are drawn, and a picture shows
+   * only the ones stamped with its own level.
+   */
+  at: 0,
 };
 
 /**
@@ -404,6 +411,7 @@ export function AxialProbe({
     // Stamped with the picture, like the window it was framed on.
     const basis = sliceBasis(leftSign);
     AXIAL_PROBE.basis = basis;
+    AXIAL_PROBE.at = at;
     if (surface) paintSlice(surface, pixels, size, basis);
 
     // Last, and only now: the picture is on the canvas and the crossing list

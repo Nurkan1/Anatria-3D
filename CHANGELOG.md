@@ -15,6 +15,15 @@ it, so this file is also the answer to "is it worth reinstalling".
 
 ## [Unreleased]
 
+### Added
+
+**Several measurements at once, each on its own level.** Every drag with
+*Measure* adds another line instead of replacing the last, and each belongs to
+the level it was drawn on: step to another level and it waits there, then comes
+back when you return — the way rulers behave on a scan. Click a number to remove
+that measurement; *Clear* removes the ones on this level, and *Save* puts all of
+them in the picture.
+
 ### Fixed
 
 **Cross-sections were drawn upside down.** In 0.2.8 the section put the spine at
@@ -23,6 +32,10 @@ top. It is now the way every axial image is read: anterior at the top, and the
 patient's left on your right, as if looking up from the feet. Left and right were
 already right; only the vertical was reversed. The caliper, the drag, the zoom and
 the torch all turn with the picture.
+
+**A measurement followed you to other levels.** Stepping with the wheel kept the
+line on screen at the new level, where it sat over different anatomy and measured
+nothing.
 
 ## [0.2.8] — 2026-09-11
 

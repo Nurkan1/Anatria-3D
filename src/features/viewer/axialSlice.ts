@@ -365,6 +365,29 @@ export interface SectionMeasure {
   az: number;
   bx: number;
   bz: number;
+  /**
+   * The height of the plane it was drawn on, in metres along the sweep.
+   *
+   * A line on a section is a statement about that level. Carried to another
+   * one it still sits at the same place in the plane, but over different
+   * anatomy, measuring nothing — which is exactly what the first caliper did
+   * when the wheel stepped under it. See `onLevel`.
+   */
+  at: number;
+}
+
+/**
+ * How far from its own level a measurement still belongs to the picture.
+ *
+ * Half of the wheel's centimetre, so a line drawn on one step is never shown on
+ * the next, and coming back to the same step — which lands a hair's breadth
+ * away, being the sum of a run of fractions — still finds it.
+ */
+export const MEASURE_LEVEL_TOLERANCE_M = 0.005;
+
+/** Whether a measurement belongs on the section taken at this height. */
+export function onLevel(line: Pick<SectionMeasure, "at">, at: number): boolean {
+  return Math.abs(line.at - at) <= MEASURE_LEVEL_TOLERANCE_M;
 }
 
 /** Where a point on screen falls in the body, in metres. */
@@ -399,7 +422,7 @@ export function pointOnScreen(
 }
 
 /** How long the line is, in centimetres of body. */
-export function measureCm(line: SectionMeasure): number {
+export function measureCm(line: Pick<SectionMeasure, "ax" | "az" | "bx" | "bz">): number {
   return Math.hypot(line.bx - line.ax, line.bz - line.az) * 100;
 }
 
@@ -440,7 +463,7 @@ export function formatDistance(cm: number): string {
  */
 export async function sectionImage(
   window: SliceWindow,
-  line: SectionMeasure | null,
+  lines: readonly SectionMeasure[],
   basis: SliceBasis,
 ): Promise<string | null> {
   const source = AXIAL_CANVAS.value;
@@ -454,7 +477,9 @@ export async function sectionImage(
   if (!context) return null;
   context.drawImage(source, 0, 0);
 
-  if (line && window.half > 0) drawMeasure(context, line, window, size, basis);
+  // The caller passes the lines of this level only: a picture of T8 carrying a
+  // ruler drawn at T11 would be a picture of something that was never measured.
+  if (window.half > 0) for (const line of lines) drawMeasure(context, line, window, size, basis);
 
   const blob = await new Promise<Blob | null>((resolve) =>
     canvas.toBlob(resolve, "image/png"),

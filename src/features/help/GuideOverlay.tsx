@@ -477,9 +477,11 @@ const SECTIONS: Section[] = [
           <Ui>Measure</Ui> puts a caliper on the picture: drag across it and the
           length appears on the line. Both ends lie in the plane of the section, so
           it is the true distance between those two points in space rather than a
-          projection of one, and it is held in the body’s own coordinates — magnify
-          or step, and the line stays on the anatomy it was drawn across with the
-          same length beside it.
+          projection of one, and it is held in the body’s own coordinates, so magnifying or moving the
+          picture leaves it on the anatomy it was drawn across. Draw as many as you
+          need — each drag adds another — and each belongs to the level it was
+          drawn on: step away and it waits there, coming back when you return. Click
+          a number to remove that one, or <Ui>Clear</Ui> for the ones on this level.
         </p>
         <Callout>
           <strong>Measure in <Ui>Slab</Ui>, not in <Ui>Cut</Ui>.</strong> The

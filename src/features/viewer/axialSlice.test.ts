@@ -8,6 +8,7 @@ import {
   formatDistance,
   measureCm,
   MIN_SECTION_HALF_M,
+  onLevel,
   panWindow,
   pointInSection,
   pointOnScreen,
@@ -491,5 +492,26 @@ describe("wheelPixels", () => {
 
   it("does nothing with an event that did not move", () => {
     expect(wheelPixels(0, 1)).toBe(0);
+  });
+});
+
+describe("onLevel", () => {
+  const line = { ax: 0, az: 0, bx: 0.02, bz: 0, at: 1.2 };
+
+  it("shows a measurement on the level it was drawn on", () => {
+    expect(onLevel(line, 1.2)).toBe(true);
+  });
+
+  it("hides it one step away, above or below", () => {
+    // Carried to the next level it would sit over different anatomy and
+    // measure nothing — the first caliper's mistake.
+    expect(onLevel(line, 1.21)).toBe(false);
+    expect(onLevel(line, 1.19)).toBe(false);
+  });
+
+  it("finds it again after stepping away and back", () => {
+    // Coming back is the sum of a run of fractions of the travel, and lands a
+    // hair's breadth from where it left.
+    expect(onLevel(line, 1.2 + 3e-9)).toBe(true);
   });
 });
