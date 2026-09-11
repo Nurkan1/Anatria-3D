@@ -55,6 +55,7 @@ ATLAS_REFERENCES: dict[str, tuple[str, Reference] | None] = {
     "highlight_pathway": ("organ_ids", "ids"),
     "illuminate_structures": ("organ_ids", "ids"),
     "isolate_group": ("group", "group"),
+    "scan_at_structure": ("organ_id", "id"),
     "set_layer_visibility": None,
     "set_layer_opacity": None,
     "add_supply": None,

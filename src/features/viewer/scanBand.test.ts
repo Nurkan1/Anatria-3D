@@ -9,8 +9,15 @@ import {
   resetScanEntry,
   SCAN_ENTRY,
   SCAN_ENTRY_S,
+  SCAN_DIRECTION,
+  SCAN_GHOST,
+  SCAN_PULSE,
+  SCAN_PULSE_S,
   SCAN_REVEAL,
   SCAN_TINT,
+  advanceScanPulse,
+  firePulse,
+  setScanGhost,
   setScanReveal,
   setScanTint,
   scanBandMaterialProps,
@@ -21,6 +28,10 @@ import {
   STANDING,
   SWEEP_CYCLE_S,
   SWEEP_PROGRESS,
+  SCAN_TRAVEL_M,
+  scanFractionFor,
+  SECTION_STEP_CM,
+  stepFraction,
   type ScanAxis,
 } from "./scanBand";
 
@@ -469,4 +480,180 @@ it("reads a structure's height from where it is, not from where it is drawn", ()
   // Which is why the span must come from the scene's own measurement: the two
   // answers are a whole body apart, and only one of them is where the light is.
   expect(Math.abs(inTheHead.from - asDrawn.from)).toBeGreaterThan(1.5);
+});
+
+// ---------------------------------------------------------------------------
+// What has already been read
+// ---------------------------------------------------------------------------
+
+it("takes the direction from the movement, not from the clock", () => {
+  // The clock version assumes `from` lies below `to`, which is true for one
+  // axis and one body position, and it says nothing at all while a reader is
+  // dragging the light — the moment the direction is most obviously real.
+  resetScanBand();
+  advanceScanEntry(SCAN_ENTRY_S);
+
+  advanceScanBand(0, STANDING, -1, 1);
+  advanceScanBand(SWEEP_CYCLE_S / 8, STANDING, -1, 1);
+  expect(SCAN_DIRECTION.value).toBe(-1); // opens at the crown, travels down
+
+  // In steps the size of a frame, deliberately. The direction is sampled from
+  // one position to the next, so a single huge step reports the chord rather
+  // than the travel — jump half a cycle and it can say "down" while the sweep
+  // is on its way back up. At sixteen milliseconds a frame the two agree.
+  for (let i = 0; i < 40; i++) advanceScanBand(0.25, STANDING, -1, 1);
+  expect(SCAN_DIRECTION.value).toBe(1); // past the feet and back up
+});
+
+it("follows a drag as readily as it follows the sweep", () => {
+  holdScanBand(0.2, STANDING, -1, 1);
+  holdScanBand(0.8, STANDING, -1, 1);
+  expect(SCAN_DIRECTION.value).toBe(1);
+  holdScanBand(0.1, STANDING, -1, 1);
+  expect(SCAN_DIRECTION.value).toBe(-1);
+});
+
+it("holds its last direction when nothing moves", () => {
+  // A light standing still still arrived from somewhere, and the body behind
+  // it must not un-fade because the reader stopped.
+  holdScanBand(0.8, STANDING, -1, 1);
+  const settled = SCAN_DIRECTION.value;
+  holdScanBand(0.8, STANDING, -1, 1);
+  expect(SCAN_DIRECTION.value).toBe(settled);
+});
+
+it("plays down what is behind the plane, and lets the reveal win", () => {
+  const compiled = shader();
+  scanBandOnBeforeCompile(compiled);
+  expect(compiled.fragmentShader).toContain("uniform float uScanGhost;");
+  expect(compiled.fragmentShader).toContain("(uScanAt - vScanAlong) * uScanDirection");
+
+  // Order is the whole of it: a structure the plane is inside is the one being
+  // read right now, and dimming it because most of it lies behind the plane
+  // would play down the only thing worth looking at.
+  const ghost = compiled.fragmentShader.indexOf("vec3(grey) * 0.32");
+  const reveal = compiled.fragmentShader.indexOf("revealTo, wake * uScanReveal");
+  expect(ghost).toBeGreaterThan(0);
+  expect(reveal).toBeGreaterThan(ghost);
+});
+
+it("switches with one float write into the shared object", () => {
+  const first = new MeshStandardMaterial(scanBandMaterialProps(true));
+  const a = shader();
+  first.onBeforeCompile(a, {} as WebGLRenderer);
+  expect(a.uniforms.uScanGhost).toBe(SCAN_GHOST);
+  expect(a.uniforms.uScanDirection).toBe(SCAN_DIRECTION);
+
+  setScanGhost(true);
+  expect(SCAN_GHOST.value).toBe(1);
+  setScanGhost(false);
+  expect(SCAN_GHOST.value).toBe(0);
+});
+
+// ---------------------------------------------------------------------------
+// The answer to letting go
+// ---------------------------------------------------------------------------
+
+it("is silent until the light is let go", () => {
+  advanceScanPulse(1);
+  expect(SCAN_PULSE.value).toBe(0);
+});
+
+it("answers once and is gone within its own duration", () => {
+  firePulse();
+  expect(SCAN_PULSE.value).toBe(1);
+
+  advanceScanPulse(SCAN_PULSE_S / 2);
+  const halfway = SCAN_PULSE.value;
+  expect(halfway).toBeGreaterThan(0);
+  expect(halfway).toBeLessThan(1);
+
+  advanceScanPulse(SCAN_PULSE_S);
+  expect(SCAN_PULSE.value).toBe(0);
+});
+
+it("leaves rather than switching off", () => {
+  // Squared on the way out: a linear fade ends on a visible edge, and an edge
+  // is what makes a transient read as a bug rather than as a reply.
+  firePulse();
+  advanceScanPulse(SCAN_PULSE_S * 0.5);
+  expect(SCAN_PULSE.value).toBeLessThan(0.5);
+});
+
+it("flashes the level even while the reveal has the glow stood down", () => {
+  // It is a reply to a hand, not the mode's way of showing what it found, so
+  // it is deliberately outside the reveal's suppression.
+  const compiled = shader();
+  scanBandOnBeforeCompile(compiled);
+  expect(compiled.fragmentShader).toContain("uniform float uScanPulse;");
+  expect(compiled.fragmentShader).toContain("wake * uScanPulse * 1.6 * uScanEntry;");
+
+  const suppressed = compiled.fragmentShader.indexOf("(1.0 - uScanReveal);");
+  const pulse = compiled.fragmentShader.indexOf("uScanPulse * 1.6");
+  expect(pulse).toBeGreaterThan(suppressed);
+});
+
+it("shares the one pulse with the ring, so both answer the same event", () => {
+  const material = new MeshStandardMaterial(scanBandMaterialProps(true));
+  const compiled = shader();
+  material.onBeforeCompile(compiled, {} as WebGLRenderer);
+  expect(compiled.uniforms.uScanPulse).toBe(SCAN_PULSE);
+});
+
+it("flashes in the tissue's own colour when that is what was asked for", () => {
+  // The switch already means "the tissue's own rather than the lamp's". The
+  // flash obeying the same one is what keeps that setting meaning a single
+  // thing instead of two.
+  const compiled = shader();
+  scanBandOnBeforeCompile(compiled);
+  expect(compiled.fragmentShader).toContain("uScanReveal > 0.5 && uRevealColour.r >= 0.0");
+  expect(compiled.fragmentShader).toContain("uRevealColour * 2.4");
+  expect(compiled.fragmentShader).toContain("pulseColour * wake * uScanPulse");
+});
+
+it("falls back to the lamp for a structure with no colour of its own", () => {
+  // Every material is in that state for one render after the mode is switched
+  // on, and a flash of black would be a hole in the body.
+  const compiled = shader();
+  scanBandOnBeforeCompile(compiled);
+  const guard = compiled.fragmentShader.indexOf("uRevealColour.r >= 0.0");
+  const fallback = compiled.fragmentShader.indexOf(": uScanTint;");
+  expect(guard).toBeGreaterThan(0);
+  expect(fallback).toBeGreaterThan(guard);
+});
+
+it("measures a step in centimetres of body, not in slider", () => {
+  // A 1.75 m atlas: one centimetre is 1/175th of the travel, not 1/100th.
+  SCAN_TRAVEL_M.value = 1.75;
+  expect(stepFraction(SECTION_STEP_CM)).toBeCloseTo(0.01 / 1.75, 12);
+  // And a shorter body gets a larger fraction for the same distance, which is
+  // the whole reason this is not a constant.
+  SCAN_TRAVEL_M.value = 1.6;
+  expect(stepFraction(SECTION_STEP_CM)).toBeCloseTo(0.01 / 1.6, 12);
+});
+
+it("refuses to step before the body has been measured", () => {
+  // Zero travel would otherwise divide into an infinity and send the plane
+  // to one end on the first notch.
+  SCAN_TRAVEL_M.value = 0;
+  expect(stepFraction()).toBe(0);
+  SCAN_TRAVEL_M.value = 1.75;
+});
+
+it("turns a height in the body into a place on the slider", () => {
+  // Feet at 0.1 and crown at 1.85, as a standing atlas gives.
+  expect(scanFractionFor(0.1, 0.1, 1.85)).toBeCloseTo(0, 12);
+  expect(scanFractionFor(1.85, 0.1, 1.85)).toBeCloseTo(1, 12);
+  expect(scanFractionFor(0.975, 0.1, 1.85)).toBeCloseTo(0.5, 12);
+});
+
+it("answers the nearest end rather than refusing a height outside the body", () => {
+  // A request from beyond the extent is a request for its end, not a reason to
+  // fail a whole answer.
+  expect(scanFractionFor(-4, 0.1, 1.85)).toBe(0);
+  expect(scanFractionFor(9, 0.1, 1.85)).toBe(1);
+});
+
+it("gives the middle when there is no body to measure against", () => {
+  expect(scanFractionFor(1, 0, 0)).toBe(0.5);
 });

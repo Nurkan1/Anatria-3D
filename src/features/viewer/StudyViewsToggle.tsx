@@ -1,5 +1,6 @@
 import { useSceneStore } from "@/stores/sceneStore";
 import { useStudyViewsStore } from "@/stores/studyViewsStore";
+import { OVERLAY_SWITCH_OFF, OVERLAY_SWITCH_ON } from "./overlayChrome";
 
 /**
  * The switch that splits the viewport into four panels.
@@ -44,10 +45,14 @@ export function StudyViewsToggle() {
           ? "Isolate a structure first — four views of the whole atlas will not hold a frame rate"
           : "See what is isolated from three fixed angles at once, beside the view you drive"
       }
-      className={`pointer-events-auto rounded border px-2 py-1 text-xs disabled:opacity-40 ${
-        studyViews
-          ? "border-sky-500 bg-sky-500/10 text-sky-300"
-          : "border-slate-700 bg-slate-950/70 text-slate-400"
+      /*
+        Unavailable is shown in the text, not by fading the whole button. Faded,
+        its ground went pale with it and the button disappeared into a light
+        background — the one moment it most needs to be found, since the title
+        explains how to make it available.
+      */
+      className={`pointer-events-auto rounded border px-2 py-1 text-xs disabled:cursor-not-allowed disabled:border-slate-800 disabled:text-slate-500 ${
+        studyViews ? OVERLAY_SWITCH_ON.sky : OVERLAY_SWITCH_OFF
       }`}
     >
       Study views

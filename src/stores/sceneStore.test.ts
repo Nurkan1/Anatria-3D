@@ -1459,3 +1459,34 @@ describe("focus_organ brings what it points at into view", () => {
     expect(useSceneStore.getState().hiddenOrganIds).toEqual([]);
   });
 });
+
+describe("scan_at_structure", () => {
+  it("asks for the plane to be moved, naming the structure", () => {
+    // The store cannot resolve a height: it knows nothing about where anything
+    // is. Only the viewer has measured the meshes.
+    const state = run({ action: "scan_at_structure", organ_id: "vertebra_t8" });
+    expect(state.scanRequest).toEqual({ organId: "vertebra_t8", seq: 1 });
+  });
+
+  it("counts, so asking twice for the same level is two answers", () => {
+    const state = run(
+      { action: "scan_at_structure", organ_id: "vertebra_t8" },
+      { action: "scan_at_structure", organ_id: "vertebra_t8" },
+    );
+    expect(state.scanRequest?.seq).toBe(2);
+  });
+
+  it("brings the structure into view first", () => {
+    // A plane at the height of something switched off passes through a gap and
+    // lights nothing, which reads as the command having failed.
+    const hidden = applySceneCommand(initialViewState, {
+      action: "isolate_structures",
+      organ_ids: ["cor"],
+    });
+    const state = applySceneCommand(hidden, {
+      action: "scan_at_structure",
+      organ_id: "vertebra_t8",
+    });
+    expect(state.isolatedOrganIds).toContain("vertebra_t8");
+  });
+});

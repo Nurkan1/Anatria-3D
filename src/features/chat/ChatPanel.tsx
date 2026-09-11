@@ -54,6 +54,7 @@ import { useCopy } from "./useCopy";
 /** Human-readable names for the scene tools, for the activity trail. */
 const TOOL_LABELS: Record<string, string> = {
   focus_organ: "focused a structure",
+  scan_at_structure: "moved the scanner",
   isolate_structures: "isolated structures",
   isolate_group: "isolated a region",
   show_all_structures: "restored the full view",
@@ -1144,7 +1145,16 @@ export function ChatPanel() {
         learned: aimHintLearned,
       }) && <AimHint onDismiss={retireAimHint} />}
 
-      <div className="border-t border-slate-800 p-3">
+      {/*
+        Never squeezed, because it is the one part that must not be.
+        
+        Flexbox shrinks every child that has not said otherwise, and in a short
+        window it was taking the height out of the composer — the box the
+        reader types into — while the message list above it, which has its own
+        scrollbar and can give up any amount of space harmlessly, kept its own.
+        Reported on a 766-pixel-high window: the input came out clipped.
+      */}
+      <div className="shrink-0 border-t border-slate-800 p-3">
         <div className="relative">
           <GrowingTextarea
             value={draft}

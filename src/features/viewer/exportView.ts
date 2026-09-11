@@ -53,7 +53,7 @@ const FOOTER_HEIGHT = 46;
  * tell a corrected plate from a stale one, or to know which of the two to
  * trust. It costs six characters in a line that already carries the name.
  */
-const DISCLAIMER = `Anatria3D ${APP_VERSION_LABEL} — educational use only. Not a medical device.`;
+export const DISCLAIMER = `Anatria3D ${APP_VERSION_LABEL} — educational use only. Not a medical device.`;
 
 /** `CC-BY-SA-4.0` is an SPDX id; `CC BY-SA 4.0` is what a reader knows. */
 function readableLicence(spdx: string): string {

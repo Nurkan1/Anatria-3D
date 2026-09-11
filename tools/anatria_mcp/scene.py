@@ -61,6 +61,7 @@ from anatria_engine.protocol import (
     IsolateStructures,
     ResetView,
     Say,
+    ScanAtStructure,
     SectionPlane,
     SetCrossSection,
     SetLayerOpacity,
@@ -447,8 +448,30 @@ def register_scene_tools(
         return "Cleared the pathway."
 
     @mcp.tool(annotations=CHANGES_THE_VIEW)
+    def scan_at_structure(organ_id: str) -> str:
+        """Put the scanner's plane at the height of a structure.
+
+        Use it when the reader asks to be taken to a level -- "show me T8",
+        "take me to where the renal arteries leave" -- or when a cross-section
+        is the clearest way to explain something.
+
+        The scanner is switched on if it is off, because a plane nobody can see
+        is not an answer. The panel names the vertebral level the plane lands
+        on, so asking for a vertebra and asking for an organ are one call.
+        """
+        send(build(ScanAtStructure, organ_id=organ_id))
+        return f"Put the scanner at {organ_id}."
+
+    @mcp.tool(annotations=CHANGES_THE_VIEW)
     def set_cross_section(plane: SectionPlane, position: float) -> str:
-        """Cut the model open along a plane to reveal internal structure.
+        """Cut the model itself open along a plane, and leave it cut.
+
+        A standing change to the body, until the reader resets the view.
+
+        **It is not the way to show a cross-section at a level.** For an axial
+        slice, a level, or "a section at" something, call `scan_at_structure`:
+        it puts the scanner there, draws the section in its own panel, and
+        leaves the body whole.
 
         `position` runs -1 to 1 across the model's extent on that axis; 0 cuts
         through the middle.

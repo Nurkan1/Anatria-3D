@@ -24,6 +24,7 @@ import { IlluminationBar } from "./IlluminationBar";
 import { IsolationBar } from "./IsolationBar";
 import { FULL_CANVAS, LabelOverlay } from "./LabelOverlay";
 import { RenderProbe, RenderStatsPanel } from "./RenderStats";
+import { AxialView } from "./AxialView";
 import { ScanControls } from "./ScanControls";
 import { ScanReadout } from "./ScanReadout";
 import { PointerRouting, StudyViews } from "./StudyViews";
@@ -36,6 +37,7 @@ import { SelectionBar } from "./SelectionBar";
 import { StructureMenu, type MenuTarget } from "./StructureMenu";
 import { useCaseMarks } from "./useCaseMarks";
 import { ViewpointBar } from "./ViewpointBar";
+import { OVERLAY_CHIP, OVERLAY_CHIP_ACTION, OVERLAY_GROUND } from "./overlayChrome";
 
 /**
  * Label shown under the cursor. Terminologia Anatomica Latin over clinical
@@ -256,23 +258,47 @@ export function AnatomyViewer() {
           so halving the extent is the whole correction. */}
       <LabelOverlay panel={splitting ? domRect(mainRect(activeViews)) : FULL_CANVAS} />
       {splitting && <StudyViewsFrame />}
-      {/* One column, high enough that the controls hint can open underneath it
-          without touching it. That clearance is the reason for the exact
-          offset: the hint expands upward from the bottom edge to about 123px,
-          and anything sharing this corner has to start above that with room to
-          spare, because those lines wrap on a narrow window. */}
-      <div className="pointer-events-none absolute bottom-40 left-3 z-20 flex flex-col items-start gap-1.5">
+      {/*
+        One column, down to the bottom edge, with the controls hint as its last
+        item rather than a neighbour it has to keep clear of.
+
+        It used to stop 160 pixels short, to leave room for the hint to open
+        underneath without touching it. Measured on a 767-pixel laptop that was
+        the whole problem: the hint is closed nearly all the time, so those 129
+        pixels sat empty while the top of the stack was pushed 70 pixels out of
+        the window. Inside the column, the hint takes one chip of height when it
+        is closed and its seven lines only while it is open — and then it pushes
+        the stack up for the ten seconds somebody is reading it, which is the
+        moment the space is actually being used.
+
+        **Bounded at the top as well as the bottom, and that is not decoration.**
+        The column is anchored to the bottom and grows upward, so every panel
+        added to it pushed the stack further up — and on a short laptop screen
+        the top of it left the window entirely, taking the scanner's own
+        controls with it. Reported from a 766-pixel-high window.
+
+        Given a top edge it cannot cross, the overflow now clips instead of
+        escaping, and it clips in the right order: what sits at the top of this
+        column is what can already be dismissed — the renderer panel, which
+        drags anywhere, and the crossing readout, which folds to a chip. The
+        controls and the section, which cannot be recovered any other way, are
+        at the bottom and stay.
+      */}
+      <div className="pointer-events-none absolute top-3 bottom-3 left-3 z-20 flex flex-col items-start justify-end gap-1.5 overflow-hidden">
         <RenderStatsPanel />
         {/* Hides itself when the sweep is off — see `ScanReadout`. */}
         <ScanReadout />
-        {/* Above the switch rather than below it, so the letters sit between
-            the mode and the panels they belong to instead of between the mode
-            and the controls hint underneath. Renders nothing unless a view is
-            actually closed. */}
-        {splitting && <ClosedViews />}
         {/* Beside the other switch that changes how the model is drawn. */}
         <ScanControls />
+        {/* Under the controls, and only when asked for — see `AxialView`. */}
+        <AxialView />
+        {/* Directly over the switch they belong to. They sat above the scanner
+            instead, so the letters that reopen a study panel were read as part
+            of the scanner's controls — two instruments' parts in one pile.
+            Renders nothing unless a view is actually closed. */}
+        {splitting && <ClosedViews />}
         <StudyViewsToggle />
+        <ControlsHint />
       </div>
       <DepthProbe />
       <HoverLabel />
@@ -284,7 +310,6 @@ export function AnatomyViewer() {
       <ViewpointBar />
       <ExplodeBar />
       <StructureMenu target={menu} onClose={() => setMenu(null)} />
-      <ControlsHint />
     </div>
   );
 }
@@ -337,12 +362,15 @@ function ControlsHint() {
   }, []);
 
   return (
-    <div className="pointer-events-none absolute bottom-3 left-3 flex flex-col items-start gap-1">
+    <div className="pointer-events-none flex flex-col items-start gap-1">
+      {/*
+        Absent rather than transparent when closed. Transparent still takes its
+        seven lines of height, and that height is exactly what a short window
+        needs for the panels above it.
+      */}
       <div
-        aria-hidden={!open}
-        className={`text-[10px] leading-tight text-slate-600 transition-opacity duration-200 motion-reduce:transition-none ${
-          open ? "opacity-100" : "opacity-0"
-        }`}
+        hidden={!open}
+        className={`rounded ${OVERLAY_GROUND} px-2 py-1 text-[10px] leading-tight`}
       >
         <p>Drag to rotate · Scroll to zoom where you point · Lost? Use Fit, bottom right</p>
         <p>Right-drag to pan · Double-click an organ to open it with its parts</p>
@@ -365,7 +393,7 @@ function ControlsHint() {
         onClick={show}
         aria-expanded={open}
         title="How to move around the body"
-        className="pointer-events-auto select-none rounded border border-slate-800/60 bg-slate-950/70 px-1.5 py-0.5 font-mono text-[9px] text-slate-600"
+        className={`pointer-events-auto select-none ${OVERLAY_CHIP} ${OVERLAY_CHIP_ACTION}`}
       >
         Controls
       </button>

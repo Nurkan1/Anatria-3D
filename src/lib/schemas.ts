@@ -287,6 +287,20 @@ export const SceneCommandSchema = z.discriminatedUnion("action", [
     // Normalised position along the plane's axis, -1 to 1, model-space.
     position: z.number().min(-1).max(1),
   }),
+  /**
+   * Put the scanner's plane at the height of a structure.
+   *
+   * A height rather than a named vertebral level, and that is the whole point:
+   * a level is one kind of answer to "take me there", and the reader asking to
+   * be taken to the aortic valve, the hilum of the left kidney or the arch of
+   * the atlas deserves the same instrument. The levels come out of it for free,
+   * because a vertebra is a structure like any other and the panel names the
+   * level it lands on.
+   */
+  z.object({
+    action: z.literal("scan_at_structure"),
+    organ_id: z.string().min(1),
+  }),
   z.object({
     action: z.literal("reset_view"),
   }),

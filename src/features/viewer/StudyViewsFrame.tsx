@@ -1,6 +1,7 @@
 import { VIEW_HINT } from "./cameraViews";
 import { domRect, MAIN, panelLayout, type AuxiliaryView } from "./studyLayout";
 import { useStudyViewsStore } from "@/stores/studyViewsStore";
+import { OVERLAY_CHIP_ACTION, OVERLAY_GROUND } from "./overlayChrome";
 
 /**
  * The lines between the panels, and the letter naming each one.
@@ -150,7 +151,7 @@ export function ClosedViews() {
           type="button"
           onClick={() => toggleView(view)}
           title={`${VIEW_HINT[view]} — click to open this panel again`}
-          className="rounded border border-slate-800/60 bg-slate-950/70 px-1.5 py-0.5 font-mono text-[10px] leading-none text-slate-600 transition hover:border-slate-600 hover:text-slate-300"
+          className={`rounded ${OVERLAY_GROUND} px-1.5 py-0.5 font-mono text-[10px] leading-none transition ${OVERLAY_CHIP_ACTION}`}
         >
           {LETTER[view]}
         </button>

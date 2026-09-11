@@ -4,6 +4,8 @@ import { organLabel, useSceneStore } from "@/stores/sceneStore";
 import { useScanStore } from "@/stores/scanStore";
 
 import { CURRENT_CROSSING, SWEEP_RUNNING } from "./scanCrossing";
+import { CURRENT_LEVEL } from "./vertebralLevel";
+import { OVERLAY_CHIP, OVERLAY_CHIP_ACTION } from "./overlayChrome";
 
 /**
  * What the sweep is passing through, named as it passes it.
@@ -48,6 +50,7 @@ export function ScanReadout() {
   const toggleReadout = useScanStore((s) => s.toggleReadout);
   const list = useRef<HTMLParagraphElement>(null);
   const rest = useRef<HTMLParagraphElement>(null);
+  const level = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     let frame = 0;
@@ -78,6 +81,12 @@ export function ScanReadout() {
           .join(" · ");
         list.current.textContent = named || "nothing at this height";
       }
+      if (level.current) {
+        // Written like the names, not through state: it changes as often as
+        // they do and for the same reason.
+        const at = CURRENT_LEVEL.value;
+        level.current.textContent = at ? ` · ${at}` : "";
+      }
       if (rest.current) {
         const hidden = Math.max(0, total - organIds.length);
         rest.current.textContent = hidden > 0 ? `and ${hidden} more` : "";
@@ -97,7 +106,7 @@ export function ScanReadout() {
         type="button"
         onClick={toggleReadout}
         title="Name what the plane is crossing again"
-        className="pointer-events-auto select-none rounded border border-slate-800/60 bg-slate-950/70 px-1.5 py-0.5 font-mono text-[9px] text-slate-500 hover:border-cyan-800/60 hover:text-cyan-500/80"
+        className={`pointer-events-auto select-none ${OVERLAY_CHIP} ${OVERLAY_CHIP_ACTION}`}
       >
         crossing · show
       </button>
@@ -118,7 +127,10 @@ export function ScanReadout() {
         title="Hide this, and look at what the plane has lit"
         className="pointer-events-auto flex w-full items-center justify-between gap-4 text-[9px] uppercase tracking-wider text-cyan-500/70 hover:text-cyan-300"
       >
-        <span>Crossing now</span>
+        <span>
+          Crossing now
+          <span ref={level} className="text-cyan-300" />
+        </span>
         <span className="text-slate-500">hide</span>
       </button>
       <p ref={list} className="max-w-md text-[11px] italic leading-snug text-cyan-100" />

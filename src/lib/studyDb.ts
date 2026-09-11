@@ -518,6 +518,10 @@ export function importJournal(): Promise<ImportSummary | null> {
  * a stall. Rust opens the dialog, so no path crosses this boundary on the way
  * in. `null` means cancelled.
  */
-export function saveViewImage(pngBase64: string): Promise<string | null> {
-  return invoke("save_view_image", { pngBase64 });
+export function saveViewImage(
+  pngBase64: string,
+  /** What the save dialog should open with. Sanitised on the other side. */
+  fileName?: string,
+): Promise<string | null> {
+  return invoke("save_view_image", { pngBase64, fileName });
 }

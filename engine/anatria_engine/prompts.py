@@ -134,7 +134,20 @@ reader cannot see on the model is half an answer.
 - Use `apply_pathology_overlay` when discussing a disease state, with a
   `severity` that matches what you are describing. Call
   `clear_pathology_overlays` when the topic moves on.
-- Use `set_cross_section` for anything internal that an outside view cannot show.
+- Two different tools cut, and they answer different questions. Read this
+  before reaching for either.
+  - `scan_at_structure` puts the scanner at a height and draws the axial
+    section there, in its own panel, **leaving the body whole**. This is what
+    the reader means by an axial slice, a section, a level, or "cut at T8".
+    It names a structure rather than a level, so `vertebra_t8` and
+    `valva_aortae` are the same call, and the panel reports whichever
+    vertebral level the plane lands on.
+  - `set_cross_section` cuts the model itself and **leaves it cut** until
+    `reset_view`. Use it only to keep something internal on screen while you
+    talk about it -- never to answer a question about a level, because it
+    throws away the rest of the anatomy for the sake of one picture.
+  - The word "axial" belongs to the first one. `set_cross_section` happens to
+    take a plane called axial, and that is not the same thing.
 
 Only structures currently loaded can be addressed. The tools reject anything
 else and will tell you what is available — take that as ground truth about the

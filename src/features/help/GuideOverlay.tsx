@@ -347,6 +347,199 @@ const SECTIONS: Section[] = [
           If your machine would rather not, the checkbox under the switch turns that
           half off and is remembered. Everything else about the scanner stays.
         </Callout>
+        <p>
+          The four swatches set the colour of the light, and it is not decoration: the
+          light is added to each tissue’s own colour, so the hue decides which
+          structures separate from their neighbours and which sink into them. Green
+          over muscle and amber over bone select different halves of the same body.{" "}
+          <Ui>Reveal colour, not light</Ui> inverts the idea — rather than throwing
+          light at what it passes, the plane gives each structure its own colour back.
+          That needs a body with the colour drained out of it, so it asks you to press{" "}
+          <Ui>Scan</Ui> or <Ui>Carbon</Ui> first; on a body already at full colour
+          there is nothing to reveal.
+        </p>
+        <p>
+          <Ui>Fade what it has passed</Ui> plays down everything behind the plane, so
+          the sweep reads as progress through a body rather than as a light moving over
+          one. <Ui>Sound when I let go</Ui> marks the moment of release with a short
+          tone; it is off by default, because a tool that makes a noise nobody chose is
+          a tool people close rather than configure.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: "section",
+    nav: "Cross-sections",
+    title: "Reading a section",
+    body: (
+      <>
+        <p>
+          With <Ui>Cross-section where I let go</Ui> ticked, letting the light go draws
+          the body as it is at that exact height, seen from above, in a panel beside the
+          scanner. Anterior is at the top, the way every axial image you have seen is
+          arranged.
+        </p>
+        <p>
+          It is taken at the moment of release and not before, and that is a cost
+          decision rather than a stylistic one: a section is a second pass over the
+          whole body, and paying for it sixty times a second — to produce a picture
+          that only has to be right while the plane is still — would take the viewport
+          from fifty frames a second to thirty. Once, when you stop, it costs a frame
+          and then nothing at all.
+        </p>
+
+        <Sub>Two cuts, and they answer different questions</Sub>
+        <Rows
+          rows={[
+            ["Cut", "The body opened at the plane — solid, and easier to read"],
+            ["Slab", "Only what lies at that exact level — a true section"],
+          ]}
+        />
+        <p>
+          Neither is the better one. <Ui>Cut</Ui> keeps everything below the plane, so
+          you are looking down at the top surfaces of what is left and the shapes read
+          as solid volumes — a dissection, with depth behind what is at this level.{" "}
+          <Ui>Slab</Ui> keeps four millimetres and nothing else, which is the truthful
+          section and the harder picture: what survives of a structure in that band is
+          its wall, so it arrives as an outline rather than a filled shape.
+        </p>
+        <Callout>
+          <strong>The cut surfaces are open, and always will be.</strong> Clipping
+          removes the parts of a surface that fall outside the plane; it does not close
+          the hole that leaves. A clipped liver is a liver-shaped shell with its inside
+          showing, not a filled cross-section. Capping it would need a second pass of
+          its own, costing more than the section does.
+        </Callout>
+
+        <Sub>What the panel tells you</Sub>
+        <p>
+          The line above the picture names the vertebral level — <em>T8</em>,{" "}
+          <em>L4–L5</em> — whenever the plane is at one. That is the body’s own
+          coordinate system and the same on every patient whatever their height, which
+          is why every axial image a doctor has ever discussed was placed that way.
+          Where there is no vertebra — out in the limbs, above the atlas, below the
+          coccyx — it says nothing at all rather than naming the nearest one: a plane
+          through the ankle is not “at L5, roughly”, and a confident label there
+          would be a falsehood in the one place you have no way to check it.
+        </p>
+        <p>
+          Beside it are the width of the picture in centimetres, how many structures the
+          plane crossed, and six of them named with a swatch of the colour they are
+          drawn in. Six rather than all of them, because a slab through the chest holds
+          nearly three hundred, and a list of three hundred is the same nothing the
+          picture already shows.
+        </p>
+
+        <Sub>Stepping, and magnifying</Sub>
+        <Rows
+          rows={[
+            ["Wheel over the picture", "Step one centimetre through the body"],
+            ["Ctrl and the wheel", "Magnify, about the pointer"],
+            ["Drag", "Move the window"],
+            ["The button under the picture", "Back to the whole section"],
+            ["Measure", "Drag across the section for a distance"],
+            ["Save", "Write this section out as a PNG"],
+          ]}
+        />
+        <p>
+          The step is a fixed centimetre rather than proportional to how hard the wheel
+          is turned, and that is the point of it: regular increments are what make{" "}
+          <em>three levels above T7</em> a sentence one person can say and another can
+          reproduce. A picture reached by dragging until it looked right is a picture
+          nobody can return to.
+        </p>
+        <p>
+          Magnifying does not enlarge the picture — it renders the section again,
+          framed on the window you are looking at. Scaling an image cannot add anything
+          to it, and the section is read at about half a millimetre per pixel across the
+          whole body, so magnifying past that would be asking for detail nobody
+          measured. Framed on a ninth of the body instead, the same pixels are nine
+          times finer, for the same work and not one byte more memory. It stops at six
+          centimetres across, past which you would be magnifying the atlas’s own
+          triangles.
+        </p>
+        <Callout>
+          <strong>The button reports a width, not a magnification.</strong>{" "}
+          <em>9 cm</em> is a measurement you can use — it tells you how big the thing
+          on screen actually is. <em>5.4×</em> is a number about the software.
+          Pressing it gives the whole section back.
+          <br />
+          <br />
+          Magnified, you can still step. The window is remembered in centimetres of body
+          rather than as a fraction of the picture, so it stays over the same anatomy as
+          you travel through it — which is the whole reason for being able to do both
+          at once: find the mediastinum, then read up and down through it.
+        </Callout>
+
+        <Sub>Measuring one</Sub>
+        <p>
+          <Ui>Measure</Ui> puts a caliper on the picture: drag across it and the
+          length appears on the line. Both ends lie in the plane of the section, so
+          it is the true distance between those two points in space rather than a
+          projection of one, and it is held in the body’s own coordinates — magnify
+          or step, and the line stays on the anatomy it was drawn across with the
+          same length beside it.
+        </p>
+        <Callout>
+          <strong>Measure in <Ui>Slab</Ui>, not in <Ui>Cut</Ui>.</strong> The
+          distance is always right about the two points; what changes is what is
+          under them. A slab holds four millimetres, so everything you can see is at
+          the level you are measuring. A cut shows the surfaces below the plane, so
+          the structure under an end may lie well beneath it and you would be
+          measuring across the level rather than across the thing.
+          <br />
+          <br />
+          And what is measured is the atlas, not a patient: one body, at one size,
+          modelled rather than imaged. It is a scale to learn proportions on, not a
+          number to put in a report.
+        </Callout>
+
+        <p>
+          <Ui>Save</Ui> writes the section out as a PNG — what is on screen, so a
+          magnified one saves the window you are looking at, with the caliper on it if
+          you drew one. The file is named after what it is: the level, the width and
+          which cut it was, so a folder of them can be read without opening any of
+          them. The disclaimer is part of the picture rather than part of the
+          interface, because a caption on screen does not travel with a screenshot.
+        </p>
+
+        <Sub>Asking to be taken somewhere</Sub>
+        <p>
+          The assistant can move the plane for you. Ask to be taken to T8, or to
+          the level where the renal arteries leave, and it puts the scanner there
+          — switching it on if it was off, because a plane nobody can see is not
+          an answer. It names a structure rather than a level, so asking for a
+          vertebra and asking for the aortic valve are the same request; the
+          panel then reports whichever level the plane landed on.
+        </p>
+
+        <Sub>Two switches with a cost, and what they buy</Sub>
+        <p>
+          <Ui>Aim the light with the pointer</Ui> makes the cursor the lamp while it is
+          over the enlarged section: the middle is overhead, and the edges lay the light
+          flat across the surfaces. It is the gesture anybody uses on a real specimen
+          — nobody moves a lamp in three numbers, they tilt the thing until the light
+          catches what they are chasing. It is the one control here whose cost repeats
+          rather than being paid once at release, which is why it is a switch and why it
+          is off until you ask.
+        </p>
+        <p>
+          <Ui>Quality</Ui> reads each section at four times the pixels. What it buys is
+          a finer picture of the whole section; what it costs is four times the readback
+          and about a quarter of a gigabyte held while it is on. On a modest machine,
+          leave it off and magnify instead — the two are different tools rather than
+          two settings of one.
+        </p>
+
+        <Callout>
+          <strong>This is not a radiograph, and does not pretend to be.</strong> A CT
+          slice is a map of densities. This is the atlas’s own geometry cut at a
+          height and drawn solid, so a structure that is see-through in the viewport
+          still arrives filled here, and nothing on it corresponds to a Hounsfield
+          number. It looks like a scan, which is exactly why it says what it is on every
+          picture it produces.
+        </Callout>
       </>
     ),
   },

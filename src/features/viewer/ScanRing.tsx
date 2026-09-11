@@ -4,7 +4,7 @@ import * as THREE from "three";
 
 import { useScanStore } from "@/stores/scanStore";
 
-import { SCAN_DROP, SCAN_ENTRY, SHARED_SCAN } from "./scanBand";
+import { SCAN_DROP, SCAN_ENTRY, SCAN_PULSE, SHARED_SCAN } from "./scanBand";
 import { scanTint } from "./scanTints";
 
 /**
@@ -102,6 +102,17 @@ const TURNS_PER_SECOND = 0.04;
  */
 const ENTRY_APERTURE = 0.34;
 
+/**
+ * How far the wash opens out at the moment the light is let go.
+ *
+ * The ring does not move — it is where the reader put it, and shifting it would
+ * undo the placing they just made. What travels is the light it throws: the
+ * disc widens and brightens and settles back, which reads as the instrument
+ * taking a reading rather than as the instrument being knocked.
+ */
+const PULSE_SPREAD = 0.35;
+const PULSE_GLOW = 1.8;
+
 /** How many times the name repeats around the band. */
 const NAMEPLATE_REPEATS = 5;
 
@@ -117,7 +128,23 @@ const NAMEPLATE_REPEATS = 5;
  * Drawn on transparent black so it can be additive like the rest of the ring's
  * light — see the note on why additive is the safe blend in this scene.
  */
-function nameplateTexture(glow: string): THREE.CanvasTexture {
+/**
+ * What the plate says, and why it is not always the same.
+ *
+ * The ring is hardware the reader switched on, so it carries the instrument's
+ * name. When the assistant is the one that put it at a level, it says so —
+ * because at that moment the reader did not move it and is entitled to know
+ * that from the picture rather than from having been watching the transcript.
+ *
+ * It is also the only marking on screen that survives a screenshot, which is
+ * the real reason to spend it on this: a still of a section taken by the
+ * assistant and one taken by hand should not be the same image.
+ */
+function nameplateText(byAssistant: boolean): string {
+  return byAssistant ? "ANATRIA 3D AI" : "ANATRIA 3D";
+}
+
+function nameplateTexture(glow: string, label: string): THREE.CanvasTexture {
   const canvas = document.createElement("canvas");
   canvas.width = 512;
   canvas.height = 64;
@@ -131,7 +158,7 @@ function nameplateTexture(glow: string): THREE.CanvasTexture {
     context.shadowColor = glow;
     context.shadowBlur = 18;
     context.fillStyle = "#d6fbff";
-    context.fillText("ANATRIA 3D", canvas.width / 2, canvas.height / 2);
+    context.fillText(label, canvas.width / 2, canvas.height / 2);
   }
   const texture = new THREE.CanvasTexture(canvas);
   texture.wrapS = THREE.RepeatWrapping;
@@ -190,6 +217,13 @@ export function ScanRing({
    * a tree with 3,478 of them.
    */
   const tint = scanTint(useScanStore((s) => s.tint));
+  /**
+   * Who put the light where it is. Read here because it is what the plate says.
+   *
+   * Changing it rebuilds one 512x64 canvas texture, which happens when a person
+   * or an assistant moves the scanner and never per frame.
+   */
+  const byAssistant = useScanStore((s) => s.byAssistant);
   const lit = useMemo(() => new THREE.Color(tint.hex), [tint]);
   const edgeLit = useMemo(
     () => new THREE.Color(tint.hex).lerp(new THREE.Color("#ffffff"), EDGE_TOWARDS_WHITE),
@@ -204,6 +238,8 @@ export function ScanRing({
   const nameplateMaterial = useRef<THREE.MeshBasicMaterial>(null);
   const edgeMaterial = useRef<THREE.MeshBasicMaterial>(null);
   const shellMaterial = useRef<THREE.MeshStandardMaterial>(null);
+  /** The two lit surfaces, grouped so the pulse widens both as one. */
+  const glowGroup = useRef<THREE.Group>(null);
   /**
    * Whether the hardware was blended on the previous frame.
    *
@@ -286,8 +322,8 @@ export function ScanRing({
   // Only drawn when the hardware is. Built unconditionally it meant a canvas
   // and a texture upload for every question asked, to be disposed unused.
   const nameplate = useMemo(
-    () => (instrument ? nameplateTexture(tint.hex) : null),
-    [instrument, tint],
+    () => (instrument ? nameplateTexture(tint.hex, nameplateText(byAssistant)) : null),
+    [instrument, tint, byAssistant],
   );
 
   useEffect(
@@ -317,7 +353,18 @@ export function ScanRing({
       mesh.setMatrixAt(i, matrix);
     }
     mesh.instanceMatrix.needsUpdate = true;
-  }, [shape]);
+    /**
+     * `instrument` is a dependency because the mesh only exists while it is true.
+     *
+     * The hardware appears and disappears under a ring that stays mounted: the
+     * assistant switching the scanner on mid-answer flips it without touching
+     * `shape`. Keyed on the shape alone, this ran while there was no mesh to
+     * write to, returned, and never ran again — leaving all twenty-four
+     * matrices at the zeros three.js allocates them with. A zero matrix is not
+     * an off-screen instance, it is a degenerate one, and the driver draws it
+     * as a speck at the ring's axis.
+     */
+  }, [shape, instrument]);
 
   useFrame((state, delta) => {
     const group = ring.current;
@@ -371,8 +418,25 @@ export function ScanRing({
     group.scale.x = aperture;
     group.scale.z = aperture;
 
-    if (discMaterial.current) discMaterial.current.opacity = DISC_OPACITY * breath * arrival;
-    if (lensMaterial.current) lensMaterial.current.opacity = LENS_OPACITY * breath * arrival;
+    /**
+     * The answer to letting go, on the light rather than on the hardware.
+     *
+     * Read from the same shared value the body's flash uses, so the widening
+     * wash and the level lighting up are one event seen twice instead of two
+     * animations that agree only while the frame rate is good.
+     */
+    const pulse = SCAN_PULSE.value;
+    if (glowGroup.current) {
+      const spread = 1 + PULSE_SPREAD * pulse;
+      glowGroup.current.scale.set(spread, 1, spread);
+    }
+
+    if (discMaterial.current) {
+      discMaterial.current.opacity = DISC_OPACITY * breath * arrival * (1 + PULSE_GLOW * pulse);
+    }
+    if (lensMaterial.current) {
+      lensMaterial.current.opacity = LENS_OPACITY * breath * arrival * (1 + PULSE_GLOW * pulse);
+    }
     if (nameplateMaterial.current) nameplateMaterial.current.opacity = arrival;
     if (edgeMaterial.current) edgeMaterial.current.color.copy(edgeLit).multiplyScalar(arrival);
     if (emitterMaterial.current) {
@@ -400,7 +464,10 @@ export function ScanRing({
   if (!shape) return null;
 
   return (
-    <group ref={ring} position={[shape.x, 0, shape.z]}>
+    // Named so the axial probe can hide it: the ring sits at exactly the height
+    // being sliced, and from above it would fill the frame with its own
+    // hardware — a photograph of the instrument rather than of the patient.
+    <group ref={ring} name="scan-ring" position={[shape.x, 0, shape.z]}>
       {/*
         The machine, or only its light.
         =============================
@@ -473,7 +540,7 @@ export function ScanRing({
           this shape is safe here where a blended plane was not. Both carry
           their fade in vertex colour, so neither needs alpha or a texture. */}
       {glow && (
-        <>
+        <group ref={glowGroup}>
           <mesh geometry={glow.disc} rotation={[-Math.PI / 2, 0, 0]}>
             <meshBasicMaterial
               ref={discMaterial}
@@ -502,7 +569,7 @@ export function ScanRing({
               toneMapped={false}
             />
           </mesh>
-        </>
+        </group>
       )}
     </group>
   );

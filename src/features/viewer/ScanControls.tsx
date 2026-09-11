@@ -4,7 +4,9 @@ import { useSceneStore } from "@/stores/sceneStore";
 import { useScanStore } from "@/stores/scanStore";
 
 import { SWEEP_PROGRESS } from "./scanBand";
-import { SCAN_TINTS } from "./scanTints";
+import { SCAN_TINTS, scanTint } from "./scanTints";
+import { primeScanSound } from "./scanSound";
+import { OVERLAY_CHIP, OVERLAY_CHIP_ACTION, OVERLAY_GROUND, OVERLAY_SWITCH_OFF, OVERLAY_SWITCH_ON } from "./overlayChrome";
 
 /**
  * The scanner's switch, and the handle that puts its light where you want it.
@@ -52,6 +54,20 @@ export function ScanControls() {
   const setTint = useScanStore((s) => s.setTint);
   const reveal = useScanStore((s) => s.reveal);
   const setReveal = useScanStore((s) => s.setReveal);
+  const ghost = useScanStore((s) => s.ghost);
+  const setGhost = useScanStore((s) => s.setGhost);
+  const sound = useScanStore((s) => s.sound);
+  const setSound = useScanStore((s) => s.setSound);
+  const axial = useScanStore((s) => s.axial);
+  const setAxial = useScanStore((s) => s.setAxial);
+  const cut = useScanStore((s) => s.cut);
+  const setCut = useScanStore((s) => s.setCut);
+  const torch = useScanStore((s) => s.torch);
+  const setTorch = useScanStore((s) => s.setTorch);
+  const detail = useScanStore((s) => s.detail);
+  const setDetail = useScanStore((s) => s.setDetail);
+  const panel = useScanStore((s) => s.panel);
+  const togglePanel = useScanStore((s) => s.togglePanel);
   // There is nothing to reveal on a body that already has its colour: the
   // control says so rather than sitting there apparently broken.
   const drained = useSceneStore((s) => s.bodyTone) !== "solid";
@@ -67,13 +83,13 @@ export function ScanControls() {
    */
   useLayoutEffect(() => {
     if (slider.current) show(slider.current, SWEEP_PROGRESS.value);
-  }, [enabled]);
+  }, [enabled, panel]);
 
   useEffect(() => {
     // Nothing to follow while the reader has it, and nothing to follow while it
     // is pinned either — the sweep is not moving, and writing the same value
     // sixty times a second would fight a thumb somebody is about to drag.
-    if (!enabled || held || pinned) return;
+    if (!enabled || !panel || held || pinned) return;
     let frame = 0;
     const tick = () => {
       if (slider.current) show(slider.current, SWEEP_PROGRESS.value);
@@ -81,7 +97,7 @@ export function ScanControls() {
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [enabled, held, pinned]);
+  }, [enabled, panel, held, pinned]);
 
   return (
     <div className="pointer-events-auto flex flex-col items-start gap-1.5">
@@ -95,22 +111,56 @@ export function ScanControls() {
             : "Sweep a plane of light through the body, lighting each structure it reaches"
         }
         className={`rounded border px-2 py-1 text-xs ${
-          enabled
-            ? "border-cyan-500 bg-cyan-500/10 text-cyan-300"
-            : "border-slate-700 bg-slate-950/70 text-slate-400"
+          enabled ? OVERLAY_SWITCH_ON.cyan : OVERLAY_SWITCH_OFF
         }`}
       >
         Scanner
       </button>
 
-      {enabled && (
-        <div className="rounded border border-cyan-900/60 bg-slate-950/80 px-2 py-1.5">
-          <label
-            htmlFor="scan-position"
-            className="mb-1 block text-[9px] uppercase tracking-wider text-cyan-500/70"
+      {/*
+        Folded away, the controls leave the one thing worth keeping on screen:
+        which colour the light is. A pill rather than nothing, for the same
+        reason the crossing panel leaves one — a control that can only be
+        recovered from memory is a control somebody loses.
+
+        And folding is not switching off. Clearing the view of the palette used
+        to mean stopping the instrument, which is the opposite of what somebody
+        wants when they are finally looking at something.
+      */}
+      {enabled && !panel && (
+        <button
+          type="button"
+          onClick={togglePanel}
+          title="Show the scanner's controls again"
+          className={`pointer-events-auto flex items-center gap-1.5 ${OVERLAY_CHIP} ${OVERLAY_CHIP_ACTION}`}
+        >
+          <span
+            aria-hidden
+            className="inline-block h-2 w-2 rounded-sm"
+            style={{ backgroundColor: scanTint(tint).hex }}
+          />
+          light · show
+        </button>
+      )}
+
+      {/*
+        Capped, because the panel sits over the body and a label is all it
+        takes to push it there. This is a hard stop rather than a layout:
+        the width is set by whatever line inside is longest, and the next
+        control somebody adds should wrap instead of reaching across the
+        viewport.
+      */}
+      {enabled && panel && (
+        <div className="max-w-52 rounded border border-cyan-900/60 bg-slate-950/80 px-2 py-1.5">
+          <button
+            type="button"
+            onClick={togglePanel}
+            title="Fold these away without stopping the scanner"
+            className="mb-1 flex w-full items-center justify-between gap-3 text-[9px] uppercase tracking-wider text-cyan-500/70 hover:text-cyan-300"
           >
-            Drag to hold the light
-          </label>
+            <span>Drag to hold the light</span>
+            <span className="text-slate-500 normal-case">hide</span>
+          </button>
           {/*
             Vertical, because the thing it moves is: a horizontal handle for a
             light that travels head to feet reads backwards in the hand.
@@ -121,30 +171,57 @@ export function ScanControls() {
             replaced `writing-mode: vertical-lr`, which WebView2 draws and the
             WebKitGTK on a Debian desktop did not — there the control stayed
             horizontal in a 16px box, with no visible track and sixteen pixels
-            of travel.
+            of travel. Measured again on Kali with WebKitGTK 2.52.5: it is drawn
+            vertical now, but without its rail, and it does not drag — 119 moves,
+            one input — so the turned control stays.
           */}
-          <div className="relative h-28 w-4">
+          {/* Shorter on a short window. The travel is the one thing in this
+              panel that can give height back without losing a control. */}
+          <div className="relative h-28 w-4 short:h-20">
           <input
             ref={slider}
             id="scan-position"
+            aria-label="Drag to hold the light"
             type="range"
             min={0}
             max={1}
             step={0.001}
             defaultValue={SWEEP_PROGRESS.value}
-            className="scan-slider absolute top-1/2 left-1/2 h-4 w-28 -translate-x-1/2 -translate-y-1/2 -rotate-90 cursor-ns-resize"
+            className="scan-slider absolute top-1/2 left-1/2 h-4 w-28 -translate-x-1/2 -translate-y-1/2 -rotate-90 cursor-ns-resize short:w-20"
             onPointerDown={(event) => {
+              // Here, and not where the tone is played: audio does not start
+              // without a gesture, and the pulse fires a frame after the
+              // pointer goes up — immediate to a reader, too late for the
+              // browser. Pointer *down* is unambiguous.
+              if (sound) primeScanSound();
               hold(Number(event.currentTarget.value));
-              // Keep receiving the drag even when the pointer leaves the
-              // handle, which on a 4px-wide control is most of the time.
-              event.currentTarget.setPointerCapture(event.pointerId);
+              /**
+               * The release is heard on the window; the pointer is not captured.
+               *
+               * It was captured, so that letting go outside a 4px control
+               * still reached `release`. On WebKitGTK that capture takes the
+               * drag away from the native range altogether. Measured on Kali
+               * with WebKitGTK 2.52.5, the same flat slider gave 0 `input`
+               * events in 173 moves with the capture and 98 in 115 without it,
+               * so the handle sat still under a moving pointer. Capture on a
+               * plain element is fine there; only the range control loses its
+               * drag.
+               *
+               * The window hears the release wherever the pointer ends up, on
+               * both engines, and the drag stays with the browser.
+               */
+              const letGo = () => {
+                window.removeEventListener("pointerup", letGo);
+                window.removeEventListener("pointercancel", letGo);
+                release();
+              };
+              window.addEventListener("pointerup", letGo);
+              window.addEventListener("pointercancel", letGo);
             }}
             onChange={(event) => {
               show(event.currentTarget, Number(event.currentTarget.value));
               hold(Number(event.currentTarget.value));
             }}
-            onPointerUp={release}
-            onPointerCancel={release}
             onKeyDown={(event) => {
               // Arrow keys move a range input, and a reader who nudges it and
               // then watches it snap back has been told the control is broken.
@@ -222,6 +299,131 @@ export function ScanControls() {
             Reveal colour, not light
           </label>
 
+          {/*
+            What has been read, played down.
+
+            Dimmed and desaturated rather than made see-through: transparency
+            is decided by the material, not by the fragment, so the see-through
+            version would mean putting the whole body in the sorted pass. This
+            reads the same at a glance and costs a mix.
+          */}
+          {/*
+            The one setting here that costs measurable time: a second pass over
+            the body, about ten milliseconds at the chest, at the moment of
+            release. Named for what it draws rather than for how it works.
+          */}
+          <label className="mt-1 flex cursor-pointer items-start gap-1.5 text-[9px] leading-snug text-slate-400">
+            <input
+              type="checkbox"
+              checked={axial}
+              onChange={(event) => setAxial(event.target.checked)}
+              className="mt-[1px] accent-cyan-500"
+            />
+            Cross-section where I let go
+          </label>
+
+          {/*
+            Two questions, one press apart. The cut keeps everything below the
+            plane and reads as solid volumes — the body opened at a level. The
+            slab keeps only what lies *at* the level and is the truthful
+            section. Neither is the better one in general.
+          */}
+          {axial && (
+            <div className="mt-1 flex gap-1" role="group" aria-label="Section style">
+              {[
+                { on: true, label: "Cut", hint: "Open the body at the plane — solid, and easier to read" },
+                { on: false, label: "Slab", hint: "Only what lies at that exact level — a true section" },
+              ].map((choice) => (
+                <button
+                  key={choice.label}
+                  type="button"
+                  onClick={() => setCut(choice.on)}
+                  aria-pressed={cut === choice.on}
+                  title={choice.hint}
+                  className={`flex-1 rounded border px-1 py-0.5 text-[9px] ${
+                    cut === choice.on
+                      ? "border-cyan-500 bg-cyan-500/15 text-cyan-200"
+                      : "border-slate-700 text-slate-400 hover:border-slate-600"
+                  }`}
+                >
+                  {choice.label}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/*
+            The one control here with a cost that repeats. Everything else is
+            paid once when the light is let go; this retakes the section while
+            the pointer moves over it, which is why it says what it does and
+            sits behind the section it belongs to.
+          */}
+          {axial && (
+            <label className="mt-1 flex cursor-pointer items-start gap-1.5 text-[9px] leading-snug text-slate-400">
+              <input
+                type="checkbox"
+                checked={torch}
+                onChange={(event) => setTorch(event.target.checked)}
+                className="mt-[1px] accent-cyan-500"
+              />
+              Aim the light with the pointer
+            </label>
+          )}
+
+          {/*
+            One word, and the sentence on hover.
+
+            It was the whole sentence, and a two-line label set the width of
+            the panel: the controls grew wide enough to reach across the
+            viewport for the sake of a caption read once. What it costs still
+            has to be said — it is the reader's own memory being spent — but
+            a title says it to whoever asks rather than to everybody, for ever.
+          */}
+          {axial && (
+            <label
+              title={
+                "Read each section at four times the pixels: magnify twice as " +
+                "far before the picture runs out. Four times the readback and " +
+                "about a quarter of a gigabyte held while it is on, so it is " +
+                "for a machine with the room to spare."
+              }
+              className="mt-1 flex cursor-pointer items-start gap-1.5 text-[9px] leading-snug text-slate-400"
+            >
+              <input
+                type="checkbox"
+                checked={detail}
+                onChange={(event) => setDetail(event.target.checked)}
+                className="mt-[1px] accent-cyan-500"
+              />
+              Quality
+            </label>
+          )}
+
+          <label className="mt-1 flex cursor-pointer items-start gap-1.5 text-[9px] leading-snug text-slate-400">
+            <input
+              type="checkbox"
+              checked={sound}
+              onChange={(event) => {
+                // Primed on the tick itself, which is also a gesture, so the
+                // very next release makes a sound rather than the one after.
+                if (event.target.checked) primeScanSound();
+                setSound(event.target.checked);
+              }}
+              className="mt-[1px] accent-cyan-500"
+            />
+            Sound when I let go
+          </label>
+
+          <label className="mt-1 flex cursor-pointer items-start gap-1.5 text-[9px] leading-snug text-slate-400">
+            <input
+              type="checkbox"
+              checked={ghost}
+              onChange={(event) => setGhost(event.target.checked)}
+              className="mt-[1px] accent-cyan-500"
+            />
+            Fade what it has passed
+          </label>
+
           <button
             type="button"
             onClick={togglePin}
@@ -248,7 +450,9 @@ export function ScanControls() {
         Remembered across launches: being asked to turn it off every morning is
         the application forgetting the only thing it was told.
       */}
-      <label className="flex max-w-[9.5rem] cursor-pointer items-start gap-1.5 rounded border border-slate-800/70 bg-slate-950/70 px-1.5 py-1 text-[9px] leading-snug text-slate-400">
+      <label
+        className={`flex max-w-[9.5rem] cursor-pointer items-start gap-1.5 rounded ${OVERLAY_GROUND} px-1.5 py-1 text-[9px] leading-snug`}
+      >
         <input
           type="checkbox"
           checked={sweepOnAnswer}

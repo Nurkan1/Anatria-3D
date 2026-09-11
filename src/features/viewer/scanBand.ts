@@ -101,6 +101,97 @@ const WAKE_OF_BAND = 0.29;
  */
 export const SCAN_REVEAL = { value: 0 };
 
+/**
+ * Which way the plane is travelling: +1 or -1 along the sweep axis.
+ *
+ * Derived from the movement itself rather than from the clock. The obvious
+ * version reads the half of the cycle `elapsed` is in — and it is wrong twice
+ * over: it assumes `from` is below `to`, which is only true for one axis and
+ * one body position, and it says nothing at all while a reader is dragging the
+ * light by hand, which is exactly when the direction is most obviously real.
+ * The sign of what actually changed is true in every one of those cases.
+ *
+ * It holds its last value when nothing moves, because a light standing still
+ * still arrived from somewhere.
+ */
+export const SCAN_DIRECTION = { value: -1 };
+
+/**
+ * How strongly the already-read part of the body is played down.
+ *
+ * # Why tonal and not transparent
+ *
+ * The obvious design is that what has been crossed turns see-through. It is
+ * not available from here: **transparency is not a fragment's decision.** It
+ * depends on `material.transparent`, a CPU-side flag that decides which pass a
+ * mesh is drawn in and whether blending happens at all, so an alpha written in
+ * an opaque material's shader is simply ignored. Making it work would mean
+ * putting all 3,478 structures in the sorted pass — which is `Glass body`, and
+ * carries its cost.
+ *
+ * Dimming and desaturating reads the same way at a glance and costs a mix.
+ */
+export const SCAN_GHOST = { value: 0 };
+
+/**
+ * The moment of letting go, decaying to nothing.
+ *
+ * One at the instant the reader releases the light, zero four hundred
+ * milliseconds later. It exists so the instrument answers the hand: you move
+ * the plane to a height, you let go, and the level you stopped at announces
+ * itself once before settling.
+ *
+ * # What flashes, and why it is the whole level
+ *
+ * Everything the plane is inside, not the largest two or three. The shader
+ * knows which structures contain the plane — that is the wake it already
+ * computes — and it does not know their volumes; ranking them is CPU knowledge,
+ * held in the crossing list. Flashing by rank would mean a registry of
+ * materials by structure, kept in step as they mount and unmount, for a
+ * four-hundred-millisecond effect. The level responding as one reads like a
+ * pulse through a slab, which is what was wanted, and costs a multiply.
+ */
+export const SCAN_PULSE = { value: 0 };
+
+/** How long the answer lasts. Long enough to see, short enough not to wait. */
+export const SCAN_PULSE_S = 0.4;
+
+/** Brightest at the instant of release, relative to the band itself. */
+const PULSE_GAIN = 1.6;
+
+/**
+ * How much a tissue's own colour is lifted when it is the one flashing.
+ *
+ * The light's colours are radiance and run past 1; a tissue colour is a
+ * surface and sits well below it — a red muscle is 0.26 in the renderer's
+ * working space, not 0.55. Added as emissive at the same gain it would barely
+ * show, so the natural flash is lifted to arrive with the same weight as the
+ * coloured one. It is a brightness correction, not a hue change: the colour
+ * that comes back is still the structure's own.
+ */
+const NATURAL_PULSE_GAIN = 2.4;
+
+export function firePulse(): void {
+  SCAN_PULSE.value = 1;
+}
+
+/** Fade the answer. Eased, so it leaves rather than switching off. */
+export function advanceScanPulse(delta: number): number {
+  const left = Math.max(0, SCAN_PULSE.value - delta / SCAN_PULSE_S);
+  SCAN_PULSE.value = left * left;
+  return SCAN_PULSE.value;
+}
+
+export function setScanGhost(on: boolean): void {
+  SCAN_GHOST.value = on ? 1 : 0;
+}
+
+/** Remember which way the light went, from the only thing that knows. */
+function rememberDirection(next: number): void {
+  const moved = next - SHARED_SCAN.value;
+  if (moved !== 0) SCAN_DIRECTION.value = Math.sign(moved);
+}
+
 export function setScanReveal(on: boolean): void {
   SCAN_REVEAL.value = on ? 1 : 0;
 }
@@ -179,6 +270,9 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
   shader.uniforms.uScanEntry = SCAN_ENTRY;
   shader.uniforms.uScanTint = SCAN_TINT;
   shader.uniforms.uScanReveal = SCAN_REVEAL;
+  shader.uniforms.uScanGhost = SCAN_GHOST;
+  shader.uniforms.uScanPulse = SCAN_PULSE;
+  shader.uniforms.uScanDirection = SCAN_DIRECTION;
 
   // This structure's own reach along the axis, and its own undrained colour,
   // both read off the material through `this`. Written once at compile and
@@ -212,6 +306,8 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
   shader.fragmentShader =
     "uniform float uScanAt;\nuniform float uScanEntry;\nuniform vec3 uScanTint;\n" +
     "uniform float uScanReveal;\nuniform vec3 uRevealColour;\n" +
+    "uniform float uScanGhost;\nuniform float uScanDirection;\n" +
+    "uniform float uScanPulse;\n" +
     "uniform vec2 uOrganSpan;\nvarying float vScanAlong;\n" +
     shader.fragmentShader.replace(
       fragmentChunk,
@@ -229,13 +325,41 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
     // like tissue rather than pasted on flat — which is the whole reason the
     // effect costs a mix and not a shader of its own. A material with no
     // colour to reveal mixes against its own diffuse and changes nothing.
+    // What the plane has already gone past, played down.
+    //
+    // Dimmed and desaturated rather than made see-through — see the note on
+    // SCAN_GHOST for why translucency is not a fragment's to give. The
+    // feather is wider than the band's own: this is a state the body is left
+    // in, not an edge, and a hard line across a thigh reads as a bug.
+    float behind = (uScanAt - vScanAlong) * uScanDirection;
+    float ghost = smoothstep(0.0, 0.06, behind) * uScanGhost * uScanEntry;
+    float grey = dot(diffuseColor.rgb, vec3(0.2126, 0.7152, 0.0722));
+    diffuseColor.rgb = mix(diffuseColor.rgb, vec3(grey) * 0.32, ghost);
+
+    // The reveal lands *after* the ghost and therefore wins where both apply.
+    // A structure the plane is inside is the one being read right now; leaving
+    // it dimmed because most of it lies behind the plane would play down the
+    // only thing on screen worth looking at.
     vec3 revealTo = uRevealColour.r < 0.0 ? diffuseColor.rgb : uRevealColour;
     diffuseColor.rgb = mix(diffuseColor.rgb, revealTo, wake * uScanReveal * uScanEntry);
     // Everything this mode adds is scaled by the arrival, so the light comes
     // up on the body instead of being there the frame the switch is thrown.
     // The glow stands aside when colour is doing the telling.
     totalEmissiveRadiance += uScanTint * (scanBand + ${WAKE_OF_BAND} * wake)
-                           * uScanEntry * (1.0 - uScanReveal);`,
+                           * uScanEntry * (1.0 - uScanReveal);
+    // The answer to letting go: the level the reader stopped at says so once.
+    // Outside the reveal's suppression on purpose — this is a transient reply
+    // to a hand, not the mode's way of showing what it found.
+    //
+    // In whichever colour the reader asked for. "Reveal colour, not light"
+    // already means "the tissue's own rather than the lamp's", and the flash
+    // obeying the same switch is what keeps that setting meaning one thing
+    // instead of two. A material with no colour of its own falls back to the
+    // lamp, which is also what it does everywhere else.
+    vec3 pulseColour = uScanReveal > 0.5 && uRevealColour.r >= 0.0
+      ? uRevealColour * ${NATURAL_PULSE_GAIN}
+      : uScanTint;
+    totalEmissiveRadiance += pulseColour * wake * uScanPulse * ${PULSE_GAIN} * uScanEntry;`,
     );
 }
 
@@ -340,7 +464,60 @@ export function holdScanBand(
 
   elapsed = clamped * (SWEEP_CYCLE_S / 2);
   SWEEP_PROGRESS.value = clamped;
-  SHARED_SCAN.value = from + (to - from) * clamped;
+  const held = from + (to - from) * clamped;
+  rememberDirection(held);
+  SHARED_SCAN.value = held;
+}
+
+/**
+ * How far the sweep travels end to end, in metres.
+ *
+ * Published because `at` is a fraction and a step is a distance. A reader
+ * asking for the next centimetre is asking about the body, not about the
+ * slider, and the two are only the same number on a body exactly a metre
+ * tall — this atlas is about 1.75, and the female one is not the same height
+ * as the male one.
+ *
+ * Written by the scene each frame, from the bounds it already computes.
+ */
+export const SCAN_TRAVEL_M = { value: 0 };
+
+/** One notch of the wheel, in centimetres of body. See `stepFraction`. */
+export const SECTION_STEP_CM = 1;
+
+/**
+ * One step, as a fraction of the sweep's travel.
+ *
+ * # Why the step is a fixed distance and not a fraction of the gesture
+ *
+ * A section is read in regular increments. That is what makes *three levels
+ * above T7* a sentence a person can say and another person can reproduce —
+ * a picture reached by dragging until it looked right is a picture nobody can
+ * return to. Proportional stepping would be smoother to use and would throw
+ * that away.
+ *
+ * Zero before the body has been measured, and the caller does nothing rather
+ * than stepping by an infinity.
+ */
+export function stepFraction(cm: number = SECTION_STEP_CM): number {
+  const travel = SCAN_TRAVEL_M.value;
+  if (!(travel > 0)) return 0;
+  return cm / 100 / travel;
+}
+
+/**
+ * Where a height falls along the sweep, from 0 at the feet to 1 at the head.
+ *
+ * The inverse of what `holdScanBand` does with the slider, and it exists so
+ * that something which knows *where a structure is* can ask for the light to be
+ * put there. Clamped rather than refused: a structure at the very crown lands
+ * at 1 and a request from outside the body's extent is a request for its end,
+ * not an error worth failing a whole answer over.
+ */
+export function scanFractionFor(along: number, from: number, to: number): number {
+  const travel = to - from;
+  if (!(travel > 0)) return 0.5;
+  return Math.max(0, Math.min(1, (along - from) / travel));
 }
 
 /**
@@ -393,7 +570,9 @@ export function advanceScanBand(
   const half = SWEEP_CYCLE_S / 2;
   const progress = elapsed <= half ? elapsed / half : (SWEEP_CYCLE_S - elapsed) / half;
   SWEEP_PROGRESS.value = progress;
-  SHARED_SCAN.value = from + (to - from) * progress;
+  const next = from + (to - from) * progress;
+  rememberDirection(next);
+  SHARED_SCAN.value = next;
 }
 
 /** A zero-length axis would put the whole body in the band; refuse it. */

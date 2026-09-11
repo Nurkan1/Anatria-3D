@@ -36,6 +36,7 @@ from anatria_engine.protocol import (
     Language,
     OrganMeta,
     ResetView,
+    ScanAtStructure,
     SectionPlane,
     SetCrossSection,
     SetLayerOpacity,
@@ -535,10 +536,38 @@ def register_scene_tools(agent: Agent[SceneContext, str]) -> None:
         return "Cleared the pathway."
 
     @agent.tool(sequential=True)
+    def scan_at_structure(ctx: RunContext[SceneContext], organ_id: str) -> str:
+        """Put the scanner's plane at the height of a structure.
+
+        Use it when the reader asks to be taken to a level -- "show me T8",
+        "take me to where the renal arteries leave" -- or for anything they
+        call an axial slice, a section, or a cut *at* a level. This is the
+        tool for all of those, and it leaves the body whole; `set_cross_section`
+        cuts the model itself and is a different request.
+
+        The scanner is switched on if it is off, because a plane nobody can see
+        is not an answer. The panel names the vertebral level the plane lands
+        on, so asking for a vertebra and asking for an organ are the same call.
+        """
+        organ = _resolve(ctx, organ_id)
+        ctx.deps.dispatch(ScanAtStructure(organ_id=organ.organ_id))
+        return f"Put the scanner at {organ.ta2_latin} ({organ.name_en})."
+
+    @agent.tool(sequential=True)
     def set_cross_section(
         ctx: RunContext[SceneContext], plane: SectionPlane, position: float
     ) -> str:
-        """Cut the model open along a plane to reveal internal structure.
+        """Cut the model itself open along a plane, and leave it cut.
+
+        This is a standing change to the body: it stays cut until `reset_view`.
+        Use it to keep something internal visible while you talk about it.
+
+        **It is not the way to show a cross-section at a level.** If the reader
+        asks for an axial slice, for a level, or for "a section at" something,
+        call `scan_at_structure` instead -- that puts the scanner there, draws
+        the section in its own panel, and leaves the body whole. Cutting the
+        model to answer that question throws away the rest of the anatomy for
+        the sake of one picture.
 
         `position` runs -1 to 1 across the model's extent on that axis; 0 cuts
         through the middle.

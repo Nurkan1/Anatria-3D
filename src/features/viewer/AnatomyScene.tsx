@@ -5,17 +5,26 @@ import * as THREE from "three";
 import {
   advanceScanBand,
   advanceScanEntry,
+  advanceScanPulse,
+  firePulse,
   holdScanBand,
   resetScanBand,
   resetScanEntry,
+  scanFractionFor,
   scanRangeAlong,
+  SCAN_TRAVEL_M,
+  setScanGhost,
   setScanReveal,
   setScanTint,
   SHARED_SCAN,
   STANDING,
 } from "./scanBand";
 import { ScanRing } from "./ScanRing";
+import { AxialProbe } from "./AxialProbe";
+import { SECTION_WANTED, wantSection } from "./axialSlice";
 import { scanTint } from "./scanTints";
+import { CURRENT_LEVEL, levelAt } from "./vertebralLevel";
+import { playScanPing } from "./scanSound";
 import {
   CROSSING_INTERVAL_S,
   CROSSING_LIMIT,
@@ -48,7 +57,13 @@ import { backgroundTheme } from "./background";
 import { framingDistance, lateralSign, scanStance, viewDirection } from "./cameraViews";
 import { busiestTouches } from "./coverage";
 import { explodeMembers, explodeOffsets } from "./explode";
-import { studioLightDirections } from "./lighting";
+import {
+  STUDIO_AMBIENT,
+  STUDIO_FILL,
+  STUDIO_KEY,
+  STUDIO_RIM,
+  studioLightDirections,
+} from "./lighting";
 import { keepsColour } from "./scan";
 import {
   collectSupply,
@@ -176,10 +191,13 @@ function StudioLights() {
       {/* Ambient is deliberately low. Filling the scene evenly flattens every
           surface, and on anatomy the shading *is* the information: the groove
           between two muscle bellies is a shadow, not a colour change. */}
-      <ambientLight intensity={backgroundTheme(background).ambient} />
-      <directionalLight ref={key} intensity={1.75} />
-      <directionalLight ref={fill} intensity={0.5} color="#a8cfe8" />
-      <directionalLight ref={rim} intensity={0.75} color="#8fd4ff" />
+      {/* Named so the axial pass can aim the same rig at its own camera for a
+          frame. Adding a light of its own would recompile every material; see
+          `aimStudioAt`. */}
+      <ambientLight name={STUDIO_AMBIENT} intensity={backgroundTheme(background).ambient} />
+      <directionalLight name={STUDIO_KEY} ref={key} intensity={1.75} />
+      <directionalLight name={STUDIO_FILL} ref={fill} intensity={0.5} color="#a8cfe8" />
+      <directionalLight name={STUDIO_RIM} ref={rim} intensity={0.75} color="#8fd4ff" />
       {/* The one light that stays put. A bounce from below is environmental —
           it belongs to the room, not to the viewer — and keeping it in world
           space leaves a cue that the body has an underside at all. */}
@@ -832,6 +850,7 @@ export function AnatomyScene({
     if (scanBandEnabled) resetScanEntry();
   }, [scanBandEnabled]);
 
+
   /**
    * The colour reaches the shader as three float writes.
    *
@@ -843,6 +862,20 @@ export function AnatomyScene({
 
   const reveal = useScanStore((s) => s.reveal);
   useEffect(() => setScanReveal(reveal), [reveal]);
+
+  const ghost = useScanStore((s) => s.ghost);
+  // Subscribed rather than read in the loop: changing it rebuilds the render
+  // target, which is a React concern and happens once when a person clicks.
+  const axialDetail = useScanStore((s) => s.detail);
+  useEffect(() => setScanGhost(ghost), [ghost]);
+
+  /** Whether the reader had hold of the light on the previous frame. */
+  const wasHeld = useRef(false);
+  /** Bumped when an axial measurement is wanted. See `AxialProbe`. */
+  const axialRequest = useRef(0);
+  const [axialRuns, setAxialRuns] = useState(0);
+  /** The last request seen from outside the loop. See `SECTION_WANTED`. */
+  const lastWanted = useRef(SECTION_WANTED.value);
 
   useFrame((_, delta) => {
     // PoC measurement only: M's rolling p95 can miss a single compile stall,
@@ -856,9 +889,60 @@ export function AnatomyScene({
         [bounds.max.x, bounds.max.y, bounds.max.z],
         STANDING,
       );
+      // How tall this body is, for anything that has to convert a fraction of
+      // the slider into a distance through a person. See `stepFraction`.
+      SCAN_TRAVEL_M.value = to - from;
       // Read rather than subscribed: this runs sixty times a second and must
       // not make the scene re-render when the reader touches the slider.
       const grip = useScanStore.getState();
+
+      /**
+       * The instrument answers the hand.
+       *
+       * Fired on the edge, not on the state: `held` is false for most of the
+       * session, and reacting to the value rather than to the moment it
+       * changed would pulse on every frame the reader is not touching
+       * anything. The comparison lives here rather than in the store because
+       * it is a rendering event — the store holds what is true, not what just
+       * happened.
+       */
+      if (wasHeld.current && !grip.held) {
+        firePulse();
+        // Only when it will be looked at. This is the one part of the mode
+        // that costs real time — about ten milliseconds at the chest, once —
+        // and paying it to produce a picture nobody asked for is exactly the
+        // sort of quiet cost this experiment was measured to avoid.
+        if (grip.axial) {
+          axialRequest.current += 1;
+          setAxialRuns(axialRequest.current);
+        }
+        // Read from the store rather than subscribed: this runs sixty times a
+        // second, and a preference nobody changes mid-frame is not worth a
+        // re-render of 3,478 meshes to observe.
+        if (grip.sound) playScanPing();
+      }
+      wasHeld.current = grip.held;
+      advanceScanPulse(delta);
+
+      /**
+       * The other way to ask for a section: the wheel, from the DOM.
+       *
+       * The plane has already moved by the time this is seen — the wheel wrote
+       * `at` on the store and this frame is reading it — so the only work here
+       * is to order the pass and to bring the crossing list forward. That list
+       * is on a six-times-a-second tick, and a section captioned with the
+       * level the plane has just left is worse than one captioned with
+       * nothing.
+       */
+      if (SECTION_WANTED.value !== lastWanted.current) {
+        lastWanted.current = SECTION_WANTED.value;
+        if (grip.axial) {
+          axialRequest.current += 1;
+          setAxialRuns(axialRequest.current);
+        }
+        sinceCrossing.current = CROSSING_INTERVAL_S;
+      }
+
       if (scanIsStill(grip)) holdScanBand(grip.at, STANDING, from, to);
       else advanceScanBand(delta, STANDING, from, to);
 
@@ -875,6 +959,9 @@ export function AnatomyScene({
         sinceCrossing.current = 0;
         const next = crossingAt(boxes.current, SHARED_SCAN.value, STANDING, CROSSING_LIMIT);
         if (!sameCrossing(next, CURRENT_CROSSING.value)) CURRENT_CROSSING.value = next;
+        // On the same slower tick, and for the same reason: the level changes
+        // when the plane has travelled a centimetre, not when a frame passed.
+        CURRENT_LEVEL.value = levelAt(boxes.current, SHARED_SCAN.value);
       }
     } else if (SWEEP_RUNNING.value || CURRENT_CROSSING.value !== NOTHING_CROSSED) {
       SWEEP_RUNNING.value = false;
@@ -888,6 +975,43 @@ export function AnatomyScene({
   // counter is the signal that it changed — a route built before the digestive
   // meshes finished loading would otherwise stay empty for ever.
   const [centresRevision, setCentresRevision] = useState(0);
+
+  /**
+   * The assistant taking the reader to a level.
+   *
+   * The store cannot do this on its own: it knows the light is at 0.62 of the
+   * body and nothing at all about where `vertebra_t8` is. Only the viewer has
+   * measured the meshes, so the request names a structure and is resolved here.
+   *
+   * The sequence number is left unconsumed when the structure has not been
+   * measured yet, so a request made while the body is still loading lands as
+   * soon as it arrives instead of being dropped -- which is why the revision
+   * counter is a dependency.
+   */
+  const scanRequest = useSceneStore((s) => s.scanRequest);
+  const lastScanSeq = useRef(0);
+  useEffect(() => {
+    if (!scanRequest || scanRequest.seq === lastScanSeq.current) return;
+    if (!bounds || bounds.isEmpty()) return;
+    const box = boxes.current.get(scanRequest.organId);
+    if (!box) return;
+    lastScanSeq.current = scanRequest.seq;
+
+    const { from, to } = scanRangeAlong(
+      [bounds.min.x, bounds.min.y, bounds.min.z],
+      [bounds.max.x, bounds.max.y, bounds.max.z],
+      STANDING,
+    );
+    // The middle of the structure along the sweep. For a vertebra that is the
+    // level; for something long it is the middle of it, which is the honest
+    // answer to "put the plane at the aorta" and the one the panel will then
+    // describe.
+    useScanStore
+      .getState()
+      .putAt(scanFractionFor((box.min.y + box.max.y) / 2, from, to));
+    // Only draws one if the reader has sections switched on; the scene checks.
+    wantSection();
+  }, [scanRequest, bounds, centresRevision]);
 
   const onMeasured = useCallback(
     (
@@ -1017,6 +1141,9 @@ export function AnatomyScene({
       {/* Mounted with the sweep and gone with it. Nothing of this mode outlives
           the toggle — see the unmount discipline in `StudyViews`. */}
       {scanBandEnabled && <ScanRing bounds={bounds} instrument={manualScan} />}
+      {scanBandEnabled && (
+        <AxialProbe bounds={bounds} request={axialRuns} high={axialDetail} />
+      )}
 
       {pathway && (
         <PathwayFlow
