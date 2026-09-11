@@ -123,6 +123,23 @@ class OrganContext(Strict):
         return f"{self.ta2_latin} ({self.name_en})"
 
 
+class ScannerContext(Strict):
+    """Where the scanner's plane is held, for a reader who has selected nothing.
+
+    Sent only when the reader put the light somewhere — pinned or held — on an
+    axial plane, in a tutoring turn, with no selection. A selection is the more
+    specific statement of what they mean, so the client leaves this out whenever
+    there is one, and `build_instructions` ignores it if both arrive.
+    """
+
+    #: The vertebral level the plane is at, when it is at one ("T8", "L4–L5").
+    level: str | None = Field(default=None, min_length=1, max_length=40)
+    #: The largest structures the plane crosses, largest first.
+    crossing: list[OrganContext] = Field(default_factory=list, max_length=12)
+    #: Everything the plane crosses, including the ones not named.
+    total: int = Field(default=0, ge=0)
+
+
 class CaseComplaint(Strict):
     """Something the reader marked on the body.
 
@@ -460,6 +477,9 @@ class AgentRequest(Strict):
     #: dropped. That rule was learned the expensive way when token accounting
     #: vanished for a release.
     case: VirtualPatient | None = None
+    #: Where the scanner is, when it stands in for a selection. Defaulted for the
+    #: same reason as `case`.
+    scanner: ScannerContext | None = None
     # Injected by Rust from the OS keyring — never present on the frontend side.
     api_key: str = Field(min_length=1, repr=False)
 

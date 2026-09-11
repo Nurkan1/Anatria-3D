@@ -20,6 +20,7 @@ import {
   OrganContextSchema,
   OrganMetaSchema,
   PROTOCOL_VERSION,
+  ScannerContextSchema,
   SceneCommandSchema,
   SectionPlaneSchema,
   SessionModeSchema,
@@ -102,6 +103,7 @@ function typescriptSurface(): ProtocolSurface {
       CaseComplaint: fieldsOf(CaseComplaintSchema),
       CaseVisitSummary: fieldsOf(CaseVisitSummarySchema),
       CaseRecordUpdate: fieldsOf(CaseRecordUpdateSchema),
+      ScannerContext: fieldsOf(ScannerContextSchema),
     },
     unions: {
       SceneCommand: variantsOf(SceneCommandSchema, "action"),

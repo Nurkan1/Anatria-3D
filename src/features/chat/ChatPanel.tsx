@@ -7,6 +7,8 @@ import {
   totalTokens,
 } from "@/features/usage/tokens";
 import { useSceneCommands } from "@/features/viewer/useSceneCommands";
+import { CURRENT_CROSSING } from "@/features/viewer/scanCrossing";
+import { CURRENT_LEVEL } from "@/features/viewer/vertebralLevel";
 import {
   askAgent,
   cancelRequest,
@@ -35,12 +37,14 @@ import {
 import { completeHistory, useChatStore, type ChatMessage } from "@/stores/chatStore";
 import { chatPreferences, patchChatPreferences } from "@/stores/chatPreferences";
 import { useModelStore } from "@/stores/modelStore";
+import { useScanStore } from "@/stores/scanStore";
 import { groupNames, organLabel, useSceneStore } from "@/stores/sceneStore";
 import { useStudyStore } from "@/stores/studyStore";
 import { useUsageStore } from "@/stores/usageStore";
 
 import { GrowingTextarea } from "@/components/GrowingTextarea";
 import { shouldShowAimHint, useAimHint } from "./aimHint";
+import { scannerAim } from "./scannerContext";
 import { AimHint, AskingGuide } from "./AskingGuide";
 import { CaseBar } from "./CaseBar";
 import { Markdown } from "./Markdown";
@@ -606,6 +610,11 @@ export function ChatPanel() {
   const isolatedOrganIds = useSceneStore((s) => s.isolatedOrganIds);
   const hiddenSystems = useSceneStore((s) => s.hiddenSystems);
   const genderModel = useSceneStore((s) => s.genderModel);
+  // Subscribed so the note above the composer appears and goes with the switch
+  // and the pin. The level and the crossing are read when it renders.
+  const scanEnabled = useScanStore((s) => s.enabled);
+  const scanPinned = useScanStore((s) => s.pinned);
+  const scanPlane = useScanStore((s) => s.plane);
   const { learned: aimHintLearned, retire: retireAimHint } = useAimHint();
 
   const messages = useChatStore((s) => s.messages);
@@ -928,6 +937,26 @@ export function ChatPanel() {
   const contextTrimmed = useMemo(() => completeHistory(messages).length > 100, [messages]);
   const canSend = engineReady && draft.trim().length > 0 && !pendingRequestId && !preparing;
 
+  /** What the assistant is told about the scanner right now. See `scannerAim`. */
+  const currentScannerAim = () =>
+    scannerAim({
+      enabled: scanEnabled,
+      still: scanPinned || useScanStore.getState().held,
+      plane: scanPlane,
+      mode,
+      selected: selectedOrganIds.length,
+      level: CURRENT_LEVEL.value,
+      organIds: CURRENT_CROSSING.value.organIds,
+      total: CURRENT_CROSSING.value.total,
+      organ: (id) => {
+        const organ = organs[id];
+        return organ
+          ? { organ_id: organ.organ_id, ta2_latin: organ.ta2_latin, name_en: organ.name_en, system: organ.system }
+          : null;
+      },
+    });
+  const scannerNow = currentScannerAim();
+
   async function send(text?: string) {
     const prompt = (text ?? draft).trim();
     if (!prompt || !engineReady || useChatStore.getState().pendingRequestId || preparingRef.current) return;
@@ -935,6 +964,9 @@ export function ChatPanel() {
     const chat = useChatStore.getState();
     const selection = selectedOrganIds.map((id) => organs[id]).filter((organ) => !!organ)
       .map(({ organ_id, ta2_latin, name_en, system }) => ({ organ_id, ta2_latin, name_en, system }));
+    // Read at the moment of sending, not from the last render: the wheel moves
+    // the plane without re-rendering this panel.
+    const scanner = currentScannerAim();
     if (prompt.length > 8000 || selection.length > 64) {
       setTransportError(prompt.length > 8000
         ? "Use at most 8,000 characters per question. Your draft has been kept."
@@ -963,6 +995,7 @@ export function ChatPanel() {
         profile, language, gender_model: genderModel, mode, selection,
         available_organs: structures.map(({ mesh_file: _f, node: _n, ...meta }) => meta),
         available_groups: groups, ...patient,
+        ...(scanner ? { scanner } : {}),
       });
       if (!turns.markSent(requestId)) return;
       startTurn(requestId, prompt);
@@ -1140,10 +1173,26 @@ export function ChatPanel() {
 
       {shouldShowAimHint({
         drafting: draft.trim().length > 0,
-        hasAim: selectedOrganIds.length > 0 || isolatedOrganIds !== null,
+        hasAim: selectedOrganIds.length > 0 || isolatedOrganIds !== null || scannerNow !== null,
         mode,
         learned: aimHintLearned,
       }) && <AimHint onDismiss={retireAimHint} />}
+
+      {/*
+        Said while typing, because it changes what the question means: with the
+        light held at a level, "here" is that level. Saying so is what lets the
+        reader rely on it — and notice when it is not what they meant.
+      */}
+      {scannerNow && draft.trim().length > 0 && (
+        <p
+          role="status"
+          title="Select a structure to ask about it instead: a selection comes before the scanner."
+          className="mx-3 mb-2 text-[11px] text-cyan-400/80"
+        >
+          The assistant knows the scanner is at {scannerNow.level ?? "this height"}: “here” and
+          “this part” mean this level.
+        </p>
+      )}
 
       {/*
         Never squeezed, because it is the one part that must not be.

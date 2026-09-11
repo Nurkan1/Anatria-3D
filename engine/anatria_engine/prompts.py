@@ -26,6 +26,7 @@ from anatria_engine.protocol import (
     Language,
     OrganContext,
     OrganMeta,
+    ScannerContext,
     SessionMode,
     UserProfile,
     VirtualPatient,
@@ -521,7 +522,41 @@ def _groups_rule(groups: list[str]) -> str:
     )
 
 
-def _scene_inventory(organs: list[OrganMeta], selection: list[OrganContext]) -> str:
+def _scanner_rule(scanner: ScannerContext) -> str:
+    """Where the reader has left the scanner, as the subject of "here".
+
+    It answers a question like "what hurts here?" typed while looking at a
+    section: the reader has said where, just not in words. It does not loosen
+    the safety block — a symptom is still not something the tutor assesses —
+    and it gives way to anything the reader actually names.
+    """
+    where = f"at the level of {scanner.level}" if scanner.level else "at the height it was left"
+    lines = [
+        "Nothing is selected, but the reader has the scanner on, with its plane "
+        f"held across the body {where}.",
+    ]
+    if scanner.crossing:
+        named = "; ".join(item.describe() for item in scanner.crossing)
+        rest = scanner.total - len(scanner.crossing)
+        more = f", and {rest} smaller structures" if rest > 0 else ""
+        lines.append(f"The largest structures it crosses: {named}{more}.")
+    lines += [
+        'When the reader says "here", "this part", "this area" or "at this level", '
+        "or asks about a region without naming one, they mean this level: answer "
+        "about it and its structures. If their words name or describe somewhere "
+        "else, follow their words, not the scanner.",
+        "A question about pain or any other symptom here is still bound by the "
+        "rules at the top: you cannot assess the reader, and the general anatomy "
+        "of this level is what you offer instead.",
+    ]
+    return "\n".join(lines)
+
+
+def _scene_inventory(
+    organs: list[OrganMeta],
+    selection: list[OrganContext],
+    scanner: ScannerContext | None = None,
+) -> str:
     lines: list[str] = []
 
     if len(organs) <= INLINE_INVENTORY_LIMIT:
@@ -567,6 +602,9 @@ def _scene_inventory(organs: list[OrganMeta], selection: list[OrganContext]) -> 
             "Several structures selected at once is usually a request to compare "
             "or relate them. Address the set, not just the first one.",
         ]
+    elif scanner is not None:
+        # Only without a selection: the selection is the more specific subject.
+        lines += ["", _scanner_rule(scanner)]
     return "\n".join(lines)
 
 
@@ -817,6 +855,8 @@ def build_instructions(
     #: every new field is: an older client sends none, and the tool then simply
     #: has nothing to offer.
     groups: list[str] | None = None,
+    #: Where the scanner is held, when it stands in for a selection.
+    scanner: ScannerContext | None = None,
     # Defaulted rather than required, for the same reason every new protocol
     # field is optional on the way in: a window and a sidecar do not always
     # ship together, and the male atlas is what every build before this one
@@ -853,5 +893,5 @@ def build_instructions(
     grouping = _groups_rule(groups or [])
     if grouping:
         layers.append(grouping)
-    layers.append(_scene_inventory(organs, selection))
+    layers.append(_scene_inventory(organs, selection, scanner))
     return "\n\n".join(layers)

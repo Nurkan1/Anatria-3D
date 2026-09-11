@@ -404,6 +404,19 @@ export const VirtualPatientSchema = z.object({
 });
 export type VirtualPatient = z.infer<typeof VirtualPatientSchema>;
 
+/**
+ * Where the scanner's plane is held, for a reader who has selected nothing.
+ *
+ * Sent only when it stands in for a selection — see `scannerAim` for exactly
+ * when. Everything is optional, as on the Pydantic side.
+ */
+export const ScannerContextSchema = z.object({
+  level: z.string().min(1).max(40).nullable().optional(),
+  crossing: z.array(OrganContextSchema).max(12).default([]),
+  total: z.number().int().min(0).default(0),
+});
+export type ScannerContext = z.infer<typeof ScannerContextSchema>;
+
 export const AgentRequestSchema = z.object({
   request_id: z.string().min(1),
   query: z.string().min(1).max(8000),
@@ -460,6 +473,12 @@ export const AgentRequestSchema = z.object({
    * from a build that predates it fails validation and is silently dropped.
    */
   case: VirtualPatientSchema.optional(),
+  /**
+   * Where the scanner is, when it stands in for a selection: "what hurts here?"
+   * typed while looking at a section at T8. Optional on the way in, like every
+   * field added to an existing event.
+   */
+  scanner: ScannerContextSchema.optional(),
 });
 export type AgentRequest = z.infer<typeof AgentRequestSchema>;
 
