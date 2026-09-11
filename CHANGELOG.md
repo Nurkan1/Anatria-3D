@@ -13,6 +13,116 @@ There is **no auto-updater**, by design: the application never reaches the
 network on its own. A new version reaches you only when you download and install
 it, so this file is also the answer to "is it worth reinstalling".
 
+## [0.2.8] — 2026-09-11
+
+### Added
+
+**The scanner reads the body in section.** Tick *Cross-section where I let go*
+and, when you let go of the light, the body is drawn at that height from above,
+in a panel beside the scanner: anterior at the top, the way every axial image is
+arranged. It is drawn once, at the moment of release, rather than sixty times a
+second — a section only has to be right while the plane is still, and paying for
+it on every frame would take the viewport from fifty frames a second to thirty.
+Click it to see it full size.
+
+**Two cuts, because they answer two questions.** *Cut* opens the body at the
+plane: you look down onto the surfaces below it, and the shapes read as solid
+volumes, with depth behind what is at this level. *Slab* keeps only the four
+millimetres at the plane — the truthful section, and the harder picture, since
+what survives of a structure in that band is its wall. The cut surfaces are open
+in both: clipping removes the part of a surface outside the plane and does not
+close the hole it leaves.
+
+**It says where it is.** The line above the picture names the vertebral level —
+*T8*, *L4–L5* — whenever the plane is at one, and says nothing out in the limbs
+or below the coccyx rather than naming the nearest vertebra. Beside the picture
+are its width in centimetres, how many structures the plane crossed, and six of
+them named with a swatch of the colour they are drawn in.
+
+**The wheel steps through the body, one centimetre at a time.** A fixed step
+rather than one proportional to the gesture, because regular increments are what
+make *three levels above T7* something one person can say and another can
+reproduce.
+
+**Magnifying adds detail instead of enlarging pixels.** Ctrl and the wheel, or
+the − and + buttons, render the section again framed on the window you are
+looking at, so the same pixels are spent on a ninth of the body and come out nine
+times finer. It zooms about the pointer, stops at six centimetres across, and the
+button between − and + gives a width — *9 cm* — rather than a factor. Drag to move
+the window. Magnified, you can still step: the window is held in centimetres of
+body, so it stays over the same anatomy as you travel through it.
+
+**A caliper.** *Measure*, then drag across the section, and the length appears on
+the line. Both ends lie in the plane, so it is the true distance between those
+two points; the line is held in the body's own coordinates and stays on the
+anatomy it was drawn across when you magnify or step. Measure a level in *Slab*:
+in *Cut* the structure under an end may lie below the plane.
+
+**Save a section as a picture.** *Save* writes what is on screen to a PNG, with
+the measurement on it if you drew one, and suggests a name made of what it is —
+`anatria3d-axial-T8-13cm-slab.png` — so a folder of them can be read without
+opening any. The line saying it is not a medical device is part of the picture,
+because a caption on screen does not travel with a screenshot.
+
+**The assistant can take you to a level.** Ask to be taken to T8, or to where the
+renal arteries leave, and it puts the scanner there, switching it on if it was
+off. It names a structure rather than a level, so a vertebra and the aortic root
+are the same request. When the assistant is the one that moved it, the ring reads
+*ANATRIA 3D AI*; move it yourself and it goes back to *ANATRIA 3D*.
+
+**A torch.** *Aim the light with the pointer* makes the cursor the lamp over the
+enlarged section: the middle is overhead and the edges lay the light flat across
+the surfaces, the way anyone examines a specimen. It is the one setting whose cost
+repeats while you use it, so it is off until you ask.
+
+**Quality.** Reads each section at four times the pixels, for a finer picture of
+the whole section. It costs four times the readback and about a quarter of a
+gigabyte while it is on, so it is a switch for a machine with room to spare —
+on a modest one, magnify instead. The explanation is on the label's tooltip.
+
+**The scanner answers the hand.** Letting go of the light gives a short pulse of
+light at that level, in the tissue's own colours when *Reveal colour, not light*
+is on; *Sound when I let go* adds a short tone, off by default. *Fade what it has
+passed* plays down everything behind the plane, so the sweep reads as progress
+through the body. *hide* folds the scanner's controls into a chip without
+stopping the scanner.
+
+**The guide explains cross-sections**, including what they are not.
+
+### Changed
+
+**The controls over the viewport read on a light background.** They stood on a
+wash tuned for the dark one; over a light viewport the Scanner and Study views
+switches and the folded chips were barely legible. They now carry their own dark
+ground.
+
+**A 14-inch laptop shows the whole scanner.** The column of controls over the
+viewport runs to the bottom edge, and the controls hint takes room only while it
+is open. On short windows the slider and the section thumbnail give a little
+height back.
+
+**The letters that reopen a closed study panel sit over the Study views switch**,
+rather than above the scanner where they read as part of it. The renderer panel
+(M) can be dragged out of the way.
+
+### Fixed
+
+**Linux: the scanner's slider could not be dragged.** Clicking a height worked,
+dragging did not. WebKitGTK loses the drag of a native slider when the page
+captures the pointer on it; the slider no longer does, and still lets go wherever
+the pointer is released.
+
+**The wheel counts a notch as a notch.** Engines that report the wheel in lines
+rather than pixels would have needed dozens of notches for one step.
+
+### Not a radiograph
+
+A CT slice is a map of densities. A section here is the atlas's own geometry cut
+at a height and drawn solid, so a structure that is see-through in the viewport
+still arrives filled, and nothing on it corresponds to a Hounsfield number. What
+the caliper measures is the atlas — one body, modelled rather than imaged. It is
+for learning anatomy, not for any clinical use.
+
 ## [0.2.7] — 2026-09-09
 
 ### Added
