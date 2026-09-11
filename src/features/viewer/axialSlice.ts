@@ -3,13 +3,14 @@ import * as THREE from "three";
 import { DISCLAIMER, encodeImageBytes } from "./exportView";
 
 /**
- * The geometry of an axial slice, worked out before anything is drawn.
+ * The geometry of a section — axial or frontal — worked out before anything
+ * is drawn.
  *
  * # Why this is a slab and not a plane
  *
  * A plane has no thickness and a renderer draws nothing at all where a surface
  * is exactly edge-on. What reads as a section is a *slab*: everything between
- * two parallel cuts a few millimetres apart, seen from directly above. That is
+ * two parallel cuts a few millimetres apart, seen square-on. That is
  * also what a CT slice is, and why one has a thickness printed on it.
  *
  * # What this will never be, and it is better to say so now
@@ -24,18 +25,100 @@ import { DISCLAIMER, encodeImageBytes } from "./exportView";
 /** Half the slab's thickness, in model units. Metres, on this atlas. */
 export const SLAB_HALF_THICKNESS = 0.004;
 
+/** Which section a picture is: across the body at a height, or through it at a depth. */
+export type SectionPlaneName = "axial" | "front";
+
+/**
+ * A section plane, described once.
+ *
+ * # Why this exists
+ *
+ * The section began as axial, and every part of it — the cuts, the framing, the
+ * camera, the painter, the caliper, the torch — assumed a horizontal plane seen
+ * from above. A frontal section needs every one of those parts at right angles,
+ * and writing them twice is how the two would drift apart: exactly how the axial
+ * picture came to be drawn upside down while every piece agreed with every other.
+ *
+ * So a plane is three facts, and everything reads them:
+ *
+ * - `normal`, the world axis the plane is perpendicular to. The sweep travels
+ *   along it, the slab is cut across it, and the camera stands on its positive
+ *   side: above the body for axial, in front of it for frontal.
+ * - `vertical`, the world axis the picture's up and down run along. Across is
+ *   world X for both planes, so it is not stated.
+ * - `cameraUp`, which way along `vertical` the camera's own up points. It is
+ *   what decides whether the rows read back from the GPU need turning.
+ *
+ * Picture coordinates `h` and `v` are world X and world `vertical`, in metres.
+ * Anterior is +Z and superior is +Y on both atlases.
+ */
+export interface SlicePlane {
+  readonly name: SectionPlaneName;
+  readonly normal: THREE.Vector3;
+  readonly vertical: THREE.Vector3;
+  readonly cameraUp: 1 | -1;
+}
+
+/**
+ * Across the body at a height, seen from above.
+ *
+ * The camera's up is posterior. It was once written as anterior, and every
+ * section of 0.2.8 came out upside down under a caption saying otherwise; the
+ * picture is turned on its way to the screen instead. See `SliceBasis`.
+ */
+export const AXIAL_PLANE: SlicePlane = {
+  name: "axial",
+  normal: new THREE.Vector3(0, 1, 0),
+  vertical: new THREE.Vector3(0, 0, 1),
+  cameraUp: -1,
+};
+
+/** Through the body at a depth, seen from the front, with superior at the top. */
+export const FRONT_PLANE: SlicePlane = {
+  name: "front",
+  normal: new THREE.Vector3(0, 0, 1),
+  vertical: new THREE.Vector3(0, 1, 0),
+  cameraUp: 1,
+};
+
+/** The plane with this name. */
+export function slicePlane(name: SectionPlaneName): SlicePlane {
+  return name === "front" ? FRONT_PLANE : AXIAL_PLANE;
+}
+
+/** The world point at picture coordinates `h`, `v` on the plane at `at`. */
+export function planePoint(plane: SlicePlane, h: number, v: number, at: number): THREE.Vector3 {
+  return new THREE.Vector3(h, 0, 0)
+    .addScaledVector(plane.vertical, v)
+    .addScaledVector(plane.normal, at);
+}
+
+/** The camera's up vector for a pass on this plane. */
+export function cameraUpOf(plane: SlicePlane): THREE.Vector3 {
+  return plane.vertical.clone().multiplyScalar(plane.cameraUp);
+}
+
+/** Where the camera looks: into the body, against the plane's normal. */
+export function cameraForwardOf(plane: SlicePlane): THREE.Vector3 {
+  return plane.normal.clone().negate();
+}
+
 /**
  * The two planes that keep only what lies within the slab.
  *
- * three keeps a fragment where `normal · p + constant > 0`, so the pair reads:
- * below the top cut, and above the bottom one. Getting the sign wrong here
- * shows nothing at all rather than showing the wrong thing, which is a
+ * three keeps a fragment where `normal · p + constant > 0`, so the pair reads,
+ * along the plane's normal: short of the far cut, and past the near one. Getting
+ * the sign wrong shows nothing at all rather than the wrong thing, which is a
  * mercifully loud failure.
  */
-export function slabPlanes(at: number, half = SLAB_HALF_THICKNESS): THREE.Plane[] {
+export function slabPlanes(
+  plane: SlicePlane,
+  at: number,
+  half = SLAB_HALF_THICKNESS,
+): THREE.Plane[] {
   return [
-    new THREE.Plane(new THREE.Vector3(0, -1, 0), at + half),
-    new THREE.Plane(new THREE.Vector3(0, 1, 0), half - at),
+    new THREE.Plane(plane.normal.clone().negate(), at + half),
+    new THREE.Plane(plane.normal.clone(), half - at),
   ];
 }
 
@@ -54,12 +137,14 @@ export function slabPlanes(at: number, half = SLAB_HALF_THICKNESS): THREE.Plane[
  * the honest section; this one is the legible dissection. Both are worth
  * having, which is why both are here.
  */
-export function cutPlanes(at: number): THREE.Plane[] {
-  return [new THREE.Plane(new THREE.Vector3(0, -1, 0), at)];
+export function cutPlanes(plane: SlicePlane, at: number): THREE.Plane[] {
+  // Keeps the side the camera is not on — below an axial plane, behind a
+  // frontal one — so what is left is seen opened at the plane.
+  return [new THREE.Plane(plane.normal.clone().negate(), at)];
 }
 
 /**
- * Where the camera stands to look down at the slab, and how wide it sees.
+ * What a section is framed on, and how wide it sees.
  *
  * Orthographic, because a perspective view of a section is a section plus a
  * lie: structures further from the lens would come out smaller, and comparing
@@ -84,24 +169,16 @@ export function cutPlanes(at: number): THREE.Plane[] {
  */
 export const SLICE_MIN_HALF = 0.05;
 
-export function sliceFraming(
-  bounds: THREE.Box3,
-  at: number,
-  margin = 1.06,
-): { position: THREE.Vector3; target: THREE.Vector3; halfWidth: number; halfDepth: number } {
-  const centre = bounds.getCenter(new THREE.Vector3());
-  const size = bounds.getSize(new THREE.Vector3());
-  // Square, from the larger of the two, so nothing is stretched and the image
-  // can be a square texture without letterboxing.
-  const half = Math.max((Math.max(size.x, size.z) / 2) * margin, SLICE_MIN_HALF);
-  return {
-    // Just above the slab rather than far away: an orthographic camera does not
-    // care about distance, and staying close keeps the depth range tight.
-    position: new THREE.Vector3(centre.x, at + 0.5, centre.z),
-    target: new THREE.Vector3(centre.x, at, centre.z),
-    halfWidth: half,
-    halfDepth: half,
-  };
+export function sliceWindowOf(box: THREE.Box3, plane: SlicePlane, margin = 1.06): SliceWindow {
+  const centre = box.getCenter(new THREE.Vector3());
+  const size = box.getSize(new THREE.Vector3());
+  // Square, from the larger of the picture's two extents, so nothing is
+  // stretched and the image can be a square texture without letterboxing.
+  const half = Math.max(
+    (Math.max(size.x, size.dot(plane.vertical)) / 2) * margin,
+    SLICE_MIN_HALF,
+  );
+  return { h: centre.x, v: centre.dot(plane.vertical), half };
 }
 
 /**
@@ -117,13 +194,14 @@ export function sliceFraming(
  * all work from above — and the picture is turned on its way to the screen
  * instead, by `SliceBasis`. That is the one place orientation is decided.
  */
-export const SLICE_UP = new THREE.Vector3(0, 0, -1);
+export const SLICE_UP = cameraUpOf(AXIAL_PLANE);
 
 /**
  * Which way through the body each axis of the picture runs.
  *
  * `right` is the sign of world X that the picture's +x points along; `down` the
- * sign of world Z that its +y — downwards, as screen rows run — points along.
+ * sign, along the plane's `vertical`, that its +y — downwards, as screen rows
+ * run — points along.
  * Everything that turns a pixel into a place in the body or back reads it from
  * here: the painter, the caliper, the drag, the zoom and the torch. They were
  * five separate assumptions before, which is how the picture could be upside
@@ -135,8 +213,9 @@ export interface SliceBasis {
 }
 
 /**
- * How a radiologist has it: anterior at the top, the patient's left on the
- * viewer's right — an axial image looked at from the feet.
+ * How a radiologist has it: the patient's left on the viewer's right, and the
+ * vertical axis's positive end at the top — anterior on an axial image looked at
+ * from the feet, superior on a frontal one. The same two signs serve both.
  *
  * Anterior is +Z on both atlases (the anterior viewpoint stands at +Z), so the
  * picture runs towards −Z going down. Which side of X is the patient's left is
@@ -153,7 +232,7 @@ export function sliceBasis(leftSign: 1 | -1): SliceBasis {
  * Named because the lighting needs it as well as the camera does, and two
  * places agreeing by coincidence is how a section ends up lit from behind.
  */
-export const SLICE_FORWARD = new THREE.Vector3(0, -1, 0);
+export const SLICE_FORWARD = cameraForwardOf(AXIAL_PLANE);
 
 /**
  * How many pixels a section is read at, and what the second setting buys.
@@ -202,12 +281,12 @@ export const SLICE_PIXELS = { value: SLICE_PIXELS_NORMAL };
 /**
  * A square of the body, in metres, that a section is framed on.
  *
- * `x` and `z` are its centre in world space and `half` is half its width. The
- * camera looks straight down, so those two axes are the picture's own.
+ * `h` and `v` are its centre in the plane's own coordinates — world X, and
+ * world `vertical` — and `half` is half its width. See `SlicePlane`.
  */
 export interface SliceWindow {
-  x: number;
-  z: number;
+  h: number;
+  v: number;
   half: number;
 }
 
@@ -289,10 +368,10 @@ export function zoomWindow(
 
   // The world point under the pointer, kept where it is. Which way the pointer's
   // offset runs through the body is the basis's to say.
-  const anchorX = frame.x + basis.right * u * frame.half;
-  const anchorZ = frame.z + basis.down * v * frame.half;
+  const anchorH = frame.h + basis.right * u * frame.half;
+  const anchorV = frame.v + basis.down * v * frame.half;
   return inside(
-    { x: anchorX - basis.right * u * half, z: anchorZ - basis.down * v * half, half },
+    { h: anchorH - basis.right * u * half, v: anchorV - basis.down * v * half, half },
     base,
   );
 }
@@ -316,8 +395,8 @@ export function panWindow(
   const travel = (2 * frame.half) / windowPx;
   return inside(
     {
-      x: frame.x - basis.right * dxPx * travel,
-      z: frame.z - basis.down * dyPx * travel,
+      h: frame.h - basis.right * dxPx * travel,
+      v: frame.v - basis.down * dyPx * travel,
       half: frame.half,
     },
     base,
@@ -333,8 +412,8 @@ export function panWindow(
 function inside(window: SliceWindow, base: SliceWindow): SliceWindow {
   const reach = Math.max(0, base.half - window.half);
   return {
-    x: clamp(window.x, base.x - reach, base.x + reach),
-    z: clamp(window.z, base.z - reach, base.z + reach),
+    h: clamp(window.h, base.h - reach, base.h + reach),
+    v: clamp(window.v, base.v - reach, base.v + reach),
     half: window.half,
   };
 }
@@ -361,12 +440,13 @@ function clamp(value: number, low: number, high: number): number {
  * and the caption is the place that answers it.
  */
 export interface SectionMeasure {
-  ax: number;
-  az: number;
-  bx: number;
-  bz: number;
+  ah: number;
+  av: number;
+  bh: number;
+  bv: number;
   /**
-   * The height of the plane it was drawn on, in metres along the sweep.
+   * Where the plane it was drawn on stood, in metres along the sweep: a height
+   * for an axial section, a depth for a frontal one.
    *
    * A line on a section is a statement about that level. Carried to another
    * one it still sits at the same place in the plane, but over different
@@ -374,6 +454,8 @@ export interface SectionMeasure {
    * when the wheel stepped under it. See `onLevel`.
    */
   at: number;
+  /** Which plane it was drawn on: a line on a frontal picture says nothing about an axial one. */
+  plane: SectionPlaneName;
 }
 
 /**
@@ -385,9 +467,13 @@ export interface SectionMeasure {
  */
 export const MEASURE_LEVEL_TOLERANCE_M = 0.005;
 
-/** Whether a measurement belongs on the section taken at this height. */
-export function onLevel(line: Pick<SectionMeasure, "at">, at: number): boolean {
-  return Math.abs(line.at - at) <= MEASURE_LEVEL_TOLERANCE_M;
+/** Whether a measurement belongs on the section taken here, on this plane. */
+export function onLevel(
+  line: Pick<SectionMeasure, "at" | "plane">,
+  at: number,
+  plane: SectionPlaneName,
+): boolean {
+  return line.plane === plane && Math.abs(line.at - at) <= MEASURE_LEVEL_TOLERANCE_M;
 }
 
 /** Where a point on screen falls in the body, in metres. */
@@ -397,33 +483,33 @@ export function pointInSection(
   offsetYPx: number,
   windowPx: number,
   basis: SliceBasis,
-): { x: number; z: number } {
+): { h: number; v: number } {
   const across = (2 * window.half) / windowPx;
   return {
-    x: window.x + basis.right * (offsetXPx - windowPx / 2) * across,
-    z: window.z + basis.down * (offsetYPx - windowPx / 2) * across,
+    h: window.h + basis.right * (offsetXPx - windowPx / 2) * across,
+    v: window.v + basis.down * (offsetYPx - windowPx / 2) * across,
   };
 }
 
 /** Where a point in the body falls on screen, in pixels from the corner. */
 export function pointOnScreen(
   window: SliceWindow,
-  x: number,
-  z: number,
+  h: number,
+  v: number,
   windowPx: number,
   basis: SliceBasis,
 ): { x: number; y: number } {
   if (!(window.half > 0)) return { x: 0, y: 0 };
   const perMetre = windowPx / (2 * window.half);
   return {
-    x: windowPx / 2 + basis.right * (x - window.x) * perMetre,
-    y: windowPx / 2 + basis.down * (z - window.z) * perMetre,
+    x: windowPx / 2 + basis.right * (h - window.h) * perMetre,
+    y: windowPx / 2 + basis.down * (v - window.v) * perMetre,
   };
 }
 
 /** How long the line is, in centimetres of body. */
-export function measureCm(line: Pick<SectionMeasure, "ax" | "az" | "bx" | "bz">): number {
-  return Math.hypot(line.bx - line.ax, line.bz - line.az) * 100;
+export function measureCm(line: Pick<SectionMeasure, "ah" | "av" | "bh" | "bv">): number {
+  return Math.hypot(line.bh - line.ah, line.bv - line.av) * 100;
 }
 
 /**
@@ -503,8 +589,8 @@ function drawMeasure(
   size: number,
   basis: SliceBasis,
 ): void {
-  const a = pointOnScreen(window, line.ax, line.az, size, basis);
-  const b = pointOnScreen(window, line.bx, line.bz, size, basis);
+  const a = pointOnScreen(window, line.ah, line.av, size, basis);
+  const b = pointOnScreen(window, line.bh, line.bv, size, basis);
 
   context.strokeStyle = "#22d3ee";
   context.lineWidth = Math.max(2, size / 512);
@@ -543,15 +629,21 @@ function drawMeasure(
  *
  * Somebody saving one section is saving several, and a folder of
  * `anatria3d-view.png` and `anatria3d-view (1).png` is a folder nobody can
- * read. The level and the width are what tell two of them apart.
+ * read. The plane, where it was — the level, or the depth — and the width
+ * are what tell them apart.
  *
  * ASCII only, and deliberately: the level of a disc is written with an en dash
  * on screen, and a file name is not the place to find out how somebody's file
  * system feels about that.
  */
-export function sectionFileName(level: string | null, acrossCm: number, cut: boolean): string {
-  const parts = ["anatria3d", "axial"];
-  const named = level?.replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "");
+export function sectionFileName(
+  plane: SectionPlaneName,
+  where: string | null,
+  acrossCm: number,
+  cut: boolean,
+): string {
+  const parts = ["anatria3d", plane];
+  const named = where?.replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "");
   if (named) parts.push(named);
   if (acrossCm > 0) parts.push(`${Math.round(acrossCm)}cm`);
   parts.push(cut ? "cut" : "slab");
@@ -687,15 +779,22 @@ const TORCH_LOWEST = (8 * Math.PI) / 180;
  *
  * `u` and `v` are the pointer's offset from the centre, each from -1 at one
  * edge to 1 at the other, with `v` positive downwards as screen coordinates
- * are. Which way through the body those run is `basis`'s to say; +y is
- * overhead either way.
+ * are. Which way through the body those run is the basis's and the plane's to
+ * say; "overhead" is the side the camera stands on, whichever plane it is.
  */
-export function torchDirection(u: number, v: number, basis: SliceBasis): THREE.Vector3 {
+export function torchDirection(
+  u: number,
+  v: number,
+  basis: SliceBasis,
+  plane: SlicePlane,
+): THREE.Vector3 {
   const reach = Math.min(1, Math.hypot(u, v));
-  const overhead = new THREE.Vector3(0, 1, 0);
+  const overhead = plane.normal.clone();
   if (reach < 1e-6) return overhead;
 
-  const towards = new THREE.Vector3(basis.right * u, 0, basis.down * v).normalize();
+  const towards = new THREE.Vector3(basis.right * u, 0, 0)
+    .addScaledVector(plane.vertical, basis.down * v)
+    .normalize();
   const above = TORCH_LOWEST + (1 - reach) * (Math.PI / 2 - TORCH_LOWEST);
   return towards
     .multiplyScalar(Math.cos(above))
@@ -756,6 +855,7 @@ export function paintSlice(
   pixels: Uint8Array,
   size: number,
   basis: SliceBasis,
+  plane: SlicePlane,
 ): void {
   // The canvas is resized to the picture rather than the picture to the canvas.
   // The size is a setting now, and a 2048 image put into a 4096 canvas would
@@ -766,10 +866,11 @@ export function paintSlice(
   if (!context) return;
   const image = context.createImageData(size, size);
   const row = size * 4;
-  // The framebuffer's top is `SLICE_UP`, posterior, and its rows come bottom
-  // first — so row 0 is the anterior edge, and taking the rows in the order
-  // they arrive puts the front at the top.
-  const flip = basis.down === 1;
+  // WebGL hands the rows over bottom first, so copied as they arrive the picture
+  // runs, downwards, towards the camera's up. The axial camera's up is posterior,
+  // which the picture wants at the bottom, so nothing turns; the frontal
+  // camera's up is superior, which the picture wants at the top, so it turns.
+  const flip = plane.cameraUp !== basis.down;
   // Its +x is world +X. Mirrored only where that is the patient's right: a row
   // copied whole is free, a mirror touches every pixel, so only an atlas that
   // needs it pays for it.

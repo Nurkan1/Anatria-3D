@@ -3,21 +3,22 @@ import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 import { SHARED_SCAN } from "./scanBand";
-import type { SliceBasis, SliceWindow } from "./axialSlice";
+import type { SectionPlaneName, SliceBasis, SlicePlane, SliceWindow } from "./axialSlice";
 import { useScanStore } from "@/stores/scanStore";
 
 import {
   AXIAL_CANVAS,
+  cameraForwardOf,
+  cameraUpOf,
   cutPlanes,
   paintSlice,
+  planePoint,
   sliceBasis,
-  sliceFraming,
+  sliceWindowOf,
   slabPlanes,
   SLAB_HALF_THICKNESS,
-  SLICE_FORWARD,
   SECTION_VIEW,
   SLICE_PIXELS,
-  SLICE_UP,
   sliceSize,
   TORCH,
 } from "./axialSlice";
@@ -80,9 +81,9 @@ export const AXIAL_PROBE = {
    * without knowing where the whole section is: it is what a magnified window
    * is kept inside, and what deciding "zoomed all the way out" means.
    */
-  base: { x: 0, z: 0, half: 0 } as SliceWindow,
+  base: { h: 0, v: 0, half: 0 } as SliceWindow,
   /** What the last pass was actually framed on. */
-  shown: { x: 0, z: 0, half: 0 } as SliceWindow,
+  shown: { h: 0, v: 0, half: 0 } as SliceWindow,
   /**
    * How the last picture was turned on its way to the screen.
    *
@@ -99,6 +100,8 @@ export const AXIAL_PROBE = {
    * only the ones stamped with its own level.
    */
   at: 0,
+  /** Which plane the last picture was taken on. See `SlicePlane`. */
+  plane: "axial" as SectionPlaneName,
 };
 
 /**
@@ -134,6 +137,7 @@ export function AxialProbe({
   request,
   high,
   leftSign,
+  plane,
 }: {
   bounds: THREE.Box3 | null;
   /**
@@ -151,6 +155,8 @@ export function AxialProbe({
    * measured it. The picture puts it on the viewer's right.
    */
   leftSign: 1 | -1;
+  /** Which section to take: across the body at a height, or through it at a depth. */
+  plane: SlicePlane;
 }) {
   const gl = useThree((state) => state.gl);
   const scene = useThree((state) => state.scene);
@@ -188,7 +194,8 @@ export function AxialProbe({
   const forcedSolid = useRef<
     { material: THREE.Material; transparent: boolean; opacity: number; depthWrite: boolean }[]
   >([]);
-  const reach = useMemo(() => new THREE.Vector3(), []);
+  /** Each mesh's own box in world space, reused for every mesh of every pass. */
+  const worldBox = useMemo(() => new THREE.Box3(), []);
   /** The extent of what the slab holds, rebuilt on every run. */
   const content = useMemo(() => new THREE.Box3(), []);
 
@@ -221,8 +228,12 @@ export function AxialProbe({
      * still submitted even though a five-millimetre slab can only contain a
      * couple of hundred of them.
      *
-     * A bounding-sphere test against the slab costs two comparisons per mesh
-     * and removes the rest from the pass entirely. Visibility is restored
+     * A box test against the slab costs a few comparisons per mesh and removes
+     * the rest from the pass entirely. It was a sphere test, and for a frontal
+     * slab that was most of the cost: a long structure's sphere is as wide as
+     * it is long, so a femur's reached through the whole depth of the body and
+     * survived every frontal slab — 2,043 draw calls through the middle, 1,201
+     * with the box. Visibility is restored
      * immediately afterwards — this must leave the scene exactly as it found
      * it, because the very next frame is the reader's.
      */
@@ -234,27 +245,29 @@ export function AxialProbe({
     // which systems are switched on and which body is loaded, so a constant
     // here would be a figure that reads as measured and is not.
     let considered = 0;
-    // What the slab actually contains, gathered on the same walk. Spheres
-    // rather than boxes, so it is slightly generous — which is the right way
-    // to be wrong about a frame.
+    // What the slab actually contains, gathered on the same walk from the same
+    // boxes the test used.
     content.makeEmpty();
-    scene.traverse((object) => {
+    // Only what would be drawn: a mesh under a hidden parent — a system switched
+    // off, the ring hidden just above — neither costs a draw call nor belongs in
+    // the frame.
+    scene.traverseVisible((object) => {
       const mesh = object as THREE.Mesh;
-      if (!mesh.isMesh || !mesh.visible) return;
+      if (!mesh.isMesh) return;
       considered += 1;
       const geometry = mesh.geometry;
-      if (!geometry.boundingSphere) geometry.computeBoundingSphere();
-      const sphere = geometry.boundingSphere;
-      if (!sphere) return;
-      // In world space, and conservatively: the mesh's own scale is folded in
-      // through `matrixWorld`, so a scaled structure is not culled early.
-      reach.copy(sphere.center).applyMatrix4(mesh.matrixWorld);
-      const radius = sphere.radius * mesh.matrixWorld.getMaxScaleOnAxis();
+      if (!geometry.boundingBox) geometry.computeBoundingBox();
+      if (!geometry.boundingBox) return;
+      // In world space: the node transform is folded in, so a scaled or moved
+      // structure is tested where it actually is.
+      worldBox.copy(geometry.boundingBox).applyMatrix4(mesh.matrixWorld);
       // Culled by the slab in both modes, even when the cut would keep more.
       // A dissection view framed on everything below the plane would frame the
       // legs from the neck; what is worth seeing is still what is *at* this
       // level, and anything lower only fills in behind it.
-      if (Math.abs(reach.y - at) > radius + SLAB_HALF_THICKNESS) {
+      const near = worldBox.min.dot(plane.normal);
+      const far = worldBox.max.dot(plane.normal);
+      if (far < at - SLAB_HALF_THICKNESS || near > at + SLAB_HALF_THICKNESS) {
         mesh.visible = false;
         hidden.push(mesh);
         return;
@@ -273,8 +286,7 @@ export function AxialProbe({
        * when the list is built, so changing it needs no recompile — the flag
        * is put back before the next frame, which belongs to the reader.
        */
-      content.expandByPoint(reach.clone().addScalar(radius));
-      content.expandByPoint(reach.clone().addScalar(-radius));
+      content.union(worldBox);
 
       const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
       for (const material of materials) {
@@ -300,12 +312,7 @@ export function AxialProbe({
      * it costs more legibility than it buys on a panel this size — so the
      * frame follows the contents and the scale is published instead.
      */
-    const framing = sliceFraming(content.isEmpty() ? bounds : content, at);
-    const base: SliceWindow = {
-      x: framing.position.x,
-      z: framing.position.z,
-      half: framing.halfWidth,
-    };
+    const base: SliceWindow = sliceWindowOf(content.isEmpty() ? bounds : content, plane);
     /**
      * The reader's own window, when they have magnified into one.
      *
@@ -319,9 +326,13 @@ export function AxialProbe({
     camera.right = shown.half;
     camera.top = shown.half;
     camera.bottom = -shown.half;
-    camera.position.set(shown.x, at + 0.5, shown.z);
-    camera.up.copy(SLICE_UP);
-    camera.lookAt(shown.x, at, shown.z);
+    // Just off the plane on the camera's side rather than far away: an
+    // orthographic camera does not care about distance, and staying close keeps
+    // the depth range tight.
+    const middle = planePoint(plane, shown.h, shown.v, at);
+    camera.position.copy(middle).addScaledVector(plane.normal, 0.5);
+    camera.up.copy(cameraUpOf(plane));
+    camera.lookAt(middle);
     camera.updateProjectionMatrix();
     AXIAL_PROBE.frameCm = shown.half * 200;
     AXIAL_PROBE.base = base;
@@ -360,14 +371,16 @@ export function AxialProbe({
      */
     const torch = TORCH.value;
     const cutting = useScanStore.getState().cut;
-    const restoreLights = aimStudioAt(scene, SLICE_FORWARD, SLICE_UP, {
-      key: torch ?? (cutting ? undefined : rakingKey(SLICE_FORWARD, SLICE_UP)),
+    const forward = cameraForwardOf(plane);
+    const up = cameraUpOf(plane);
+    const restoreLights = aimStudioAt(scene, forward, up, {
+      key: torch ?? (cutting ? undefined : rakingKey(forward, up)),
       support: torch ? 0.35 : 1,
     });
     try {
       // The cut keeps everything below the plane and reads as solid; the slab
       // keeps only that level and is the truthful section. See `cutPlanes`.
-      gl.clippingPlanes = cutting ? cutPlanes(at) : slabPlanes(at);
+      gl.clippingPlanes = cutting ? cutPlanes(plane, at) : slabPlanes(plane, at);
 
       // `renderer.info` accumulates over a frame, so it is reset immediately
       // before the pass and read immediately after: what it reports is then this
@@ -412,7 +425,8 @@ export function AxialProbe({
     const basis = sliceBasis(leftSign);
     AXIAL_PROBE.basis = basis;
     AXIAL_PROBE.at = at;
-    if (surface) paintSlice(surface, pixels, size, basis);
+    AXIAL_PROBE.plane = plane.name;
+    if (surface) paintSlice(surface, pixels, size, basis, plane);
 
     // Last, and only now: the picture is on the canvas and the crossing list
     // was recomputed the frame the plane moved, so this is the one instant

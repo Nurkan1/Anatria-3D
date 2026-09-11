@@ -17,6 +17,7 @@ import {
   restoreSlice,
   SECTION_VIEW,
   SECTION_WINDOW,
+  slicePlane,
   SLICE_PIXELS,
   TORCH,
   torchDirection,
@@ -242,7 +243,7 @@ export function AxialView() {
     if (!torch || box.width <= 0 || box.height <= 0) return;
     const u = (x - box.left - box.width / 2) / (box.width / 2);
     const v = (y - box.top - box.height / 2) / (box.height / 2);
-    TORCH.value = torchDirection(u, v, AXIAL_PROBE.basis);
+    TORCH.value = torchDirection(u, v, AXIAL_PROBE.basis, slicePlane(AXIAL_PROBE.plane));
     retakeSoon();
   };
 
@@ -360,7 +361,7 @@ export function AxialView() {
       if (event.key !== "Escape") return;
       // The last line on this level first, then the panel: Escape should undo
       // the smallest thing the reader did before it throws away the biggest.
-      const onThisLevel = measures.filter((line) => onLevel(line, AXIAL_PROBE.at));
+      const onThisLevel = measures.filter((line) => onLevel(line, AXIAL_PROBE.at, AXIAL_PROBE.plane));
       const last = onThisLevel[onThisLevel.length - 1];
       if (last) {
         setMeasures((all) => all.filter((line) => line !== last));
@@ -408,7 +409,7 @@ export function AxialView() {
    * Derived on every render rather than stored: the level changes when a new
    * section arrives, which is also when this component renders.
    */
-  const here = measures.filter((line) => onLevel(line, AXIAL_PROBE.at));
+  const here = measures.filter((line) => onLevel(line, AXIAL_PROBE.at, AXIAL_PROBE.plane));
   /**
    * The level, when the plane is at one.
    *
@@ -486,7 +487,14 @@ export function AxialView() {
                 AXIAL_PROBE.basis,
               );
               // Stamped with the level of the picture it is drawn on.
-              const line = { ax: at.x, az: at.z, bx: at.x, bz: at.z, at: AXIAL_PROBE.at };
+              const line = {
+                ah: at.h,
+                av: at.v,
+                bh: at.h,
+                bv: at.v,
+                at: AXIAL_PROBE.at,
+                plane: AXIAL_PROBE.plane,
+              };
               drafting.current = line;
               setDraft(line);
               event.currentTarget.setPointerCapture(event.pointerId);
@@ -508,7 +516,7 @@ export function AxialView() {
               );
               // Only the far end moves. The near one was placed where the
               // reader put it and must not drift under them.
-              const line = { ...drafting.current, bx: at.x, bz: at.z };
+              const line = { ...drafting.current, bh: at.h, bv: at.v };
               drafting.current = line;
               setDraft(line);
               return;
@@ -586,12 +594,12 @@ export function AxialView() {
               aria-hidden
             >
               {[...here, ...(draft ? [draft] : [])].map((line) => {
-                const a = pointOnScreen(looking(), line.ax, line.az, frameWidth, AXIAL_PROBE.basis);
-                const b = pointOnScreen(looking(), line.bx, line.bz, frameWidth, AXIAL_PROBE.basis);
+                const a = pointOnScreen(looking(), line.ah, line.av, frameWidth, AXIAL_PROBE.basis);
+                const b = pointOnScreen(looking(), line.bh, line.bv, frameWidth, AXIAL_PROBE.basis);
                 const cm = measureCm(line);
                 const kept = line !== draft;
                 return (
-                  <g key={`${line.ax}:${line.az}:${line.bx}:${line.bz}:${line.at}`}>
+                  <g key={`${line.plane}:${line.ah}:${line.av}:${line.bh}:${line.bv}:${line.at}`}>
                     <line
                       x1={a.x}
                       y1={a.y}
@@ -707,7 +715,9 @@ export function AxialView() {
               <button
                 type="button"
                 onClick={() =>
-                  setMeasures((all) => all.filter((line) => !onLevel(line, AXIAL_PROBE.at)))
+                  setMeasures((all) =>
+                    all.filter((line) => !onLevel(line, AXIAL_PROBE.at, AXIAL_PROBE.plane)),
+                  )
                 }
                 title="Remove the measurements on this level"
                 className="rounded border border-slate-700 px-2 py-0.5 text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
@@ -726,7 +736,7 @@ export function AxialView() {
                 sectionImage(looking(), here, AXIAL_PROBE.basis)
                   .then((png) =>
                     png
-                      ? saveViewImage(png, sectionFileName(level, across, cut))
+                      ? saveViewImage(png, sectionFileName(AXIAL_PROBE.plane, level, across, cut))
                       : Promise.reject(new Error("There is no section to save yet.")),
                   )
                   .then((path) => setSaved(path ? `Saved to ${path}` : null))

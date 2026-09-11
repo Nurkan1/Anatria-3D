@@ -2,30 +2,36 @@ import { describe, expect, it } from "vitest";
 import * as THREE from "three";
 
 import {
+  AXIAL_PLANE,
+  cameraForwardOf,
+  cameraUpOf,
   cutPlanes,
   forgetSlice,
-  paintSlice,
   formatDistance,
+  FRONT_PLANE,
   measureCm,
   MIN_SECTION_HALF_M,
   onLevel,
+  paintSlice,
   panWindow,
+  planePoint,
   pointInSection,
   pointOnScreen,
+  restoreSlice,
   sectionFileName,
+  SLAB_HALF_THICKNESS,
+  slabPlanes,
   sliceBasis,
+  SLICE_MIN_HALF,
   SLICE_PIXELS_HIGH,
   SLICE_PIXELS_NORMAL,
   sliceSize,
+  SLICE_UP,
+  sliceWindowOf,
   torchDirection,
   wheelPixels,
   wheelSteps,
   zoomWindow,
-  restoreSlice,
-  SLAB_HALF_THICKNESS,
-  SLICE_UP,
-  sliceFraming,
-  slabPlanes,
 } from "./axialSlice";
 
 /** The male atlas's orientation: its left is +X, as `lateralSign` measures it. */
@@ -62,34 +68,70 @@ function canvasStub() {
   };
 }
 
+describe("the planes", () => {
+  it("puts a point where the plane says, on both", () => {
+    // Axial: across is X, up the picture is Z, and the plane stands at a height.
+    const axial = planePoint(AXIAL_PLANE, 0.1, 0.2, 1.3);
+    expect([axial.x, axial.y, axial.z]).toEqual([0.1, 1.3, 0.2]);
+    // Frontal: across is X, up the picture is Y, and the plane stands at a depth.
+    const front = planePoint(FRONT_PLANE, 0.1, 1.2, 0.05);
+    expect([front.x, front.y, front.z]).toEqual([0.1, 1.2, 0.05]);
+  });
+
+  it("looks down on an axial section and into the front of a frontal one", () => {
+    expect(cameraForwardOf(AXIAL_PLANE).y).toBe(-1);
+    expect(cameraForwardOf(FRONT_PLANE).z).toBe(-1);
+  });
+
+  it("renders the axial pass with posterior at the top of the framebuffer", () => {
+    // The camera is not what changed when the orientation was fixed: it still
+    // looks down with posterior at the top. The painter turns the picture.
+    expect(SLICE_UP.z).toBeLessThan(0);
+    expect(cameraUpOf(AXIAL_PLANE).z).toBeLessThan(0);
+  });
+
+  it("renders the frontal pass with the head at the top of the framebuffer", () => {
+    expect(cameraUpOf(FRONT_PLANE).y).toBeGreaterThan(0);
+  });
+});
+
 describe("the slab", () => {
   it("keeps what is inside it and nothing else", () => {
     // three keeps a fragment where `normal · p + constant > 0`. Getting the
     // sign wrong renders nothing at all, which is a mercifully loud failure —
     // but it is worth failing here instead of on screen.
-    const [top, bottom] = slabPlanes(1.2, 0.01);
+    const [far, near] = slabPlanes(AXIAL_PLANE, 1.2, 0.01);
     const inside = new THREE.Vector3(0, 1.2, 0);
     const above = new THREE.Vector3(0, 1.3, 0);
     const below = new THREE.Vector3(0, 1.1, 0);
 
-    expect(top!.distanceToPoint(inside)).toBeGreaterThan(0);
-    expect(bottom!.distanceToPoint(inside)).toBeGreaterThan(0);
-    expect(top!.distanceToPoint(above)).toBeLessThan(0);
-    expect(bottom!.distanceToPoint(below)).toBeLessThan(0);
+    expect(far!.distanceToPoint(inside)).toBeGreaterThan(0);
+    expect(near!.distanceToPoint(inside)).toBeGreaterThan(0);
+    expect(far!.distanceToPoint(above)).toBeLessThan(0);
+    expect(near!.distanceToPoint(below)).toBeLessThan(0);
   });
 
   it("is a slab and not a plane, because a plane draws nothing", () => {
     // A surface exactly edge-on covers no pixels. What reads as a section is
     // everything between two cuts a few millimetres apart.
     expect(SLAB_HALF_THICKNESS).toBeGreaterThan(0);
-    const [top, bottom] = slabPlanes(0, SLAB_HALF_THICKNESS);
-    expect(top!.constant + bottom!.constant).toBeCloseTo(2 * SLAB_HALF_THICKNESS);
+    const [far, near] = slabPlanes(AXIAL_PLANE, 0, SLAB_HALF_THICKNESS);
+    expect(far!.constant + near!.constant).toBeCloseTo(2 * SLAB_HALF_THICKNESS);
   });
 
   it("follows the plane up the body", () => {
-    const low = slabPlanes(0.4, 0.01);
-    const high = slabPlanes(1.4, 0.01);
+    const low = slabPlanes(AXIAL_PLANE, 0.4, 0.01);
+    const high = slabPlanes(AXIAL_PLANE, 1.4, 0.01);
     expect(high[0]!.constant - low[0]!.constant).toBeCloseTo(1);
+  });
+
+  it("cuts a frontal slab across the depth of the body", () => {
+    const planes = slabPlanes(FRONT_PLANE, 0.02, 0.004);
+    const kept = (z: number) =>
+      planes.every((plane) => plane.distanceToPoint(new THREE.Vector3(0, 1, z)) > 0);
+    expect(kept(0.02)).toBe(true);
+    expect(kept(0.03)).toBe(false);
+    expect(kept(0.01)).toBe(false);
   });
 });
 
@@ -99,36 +141,31 @@ describe("the framing", () => {
     new THREE.Vector3(0.4, 1.8, 0.2),
   );
 
-  it("looks straight down at the height being cut", () => {
-    const framing = sliceFraming(bounds, 1.2);
-    expect(framing.target.y).toBeCloseTo(1.2);
-    expect(framing.position.y).toBeGreaterThan(framing.target.y);
-    expect(framing.position.x).toBeCloseTo(framing.target.x);
-    expect(framing.position.z).toBeCloseTo(framing.target.z);
-  });
-
-  it("frames the same square at every height", () => {
-    // A slice that rescaled itself as the plane travelled would be unreadable
-    // as a sequence: the reader could not tell a growing structure from a
-    // shrinking frame.
-    const ankle = sliceFraming(bounds, 0.1);
-    const chest = sliceFraming(bounds, 1.3);
-    expect(ankle.halfWidth).toBeCloseTo(chest.halfWidth);
-    expect(ankle.halfWidth).toBeCloseTo(ankle.halfDepth);
-  });
-
-  it("takes its square from the wider of the two extents", () => {
+  it("takes an axial square from the wider of width and depth", () => {
     // Sized from the depth alone, an outstretched arm would be cropped off.
-    const framing = sliceFraming(bounds, 1, 1);
-    expect(framing.halfWidth).toBeCloseTo(0.4);
+    const window = sliceWindowOf(bounds, AXIAL_PLANE, 1);
+    expect(window.half).toBeCloseTo(0.4);
+    expect(window.h).toBeCloseTo(0);
+    expect(window.v).toBeCloseTo(0);
+  });
+
+  it("takes a frontal square from the wider of width and height", () => {
+    // A standing body is far taller than it is wide, so the height decides.
+    const window = sliceWindowOf(bounds, FRONT_PLANE, 1);
+    expect(window.half).toBeCloseTo(0.9);
+    expect(window.v).toBeCloseTo(0.9);
+  });
+
+  it("never frames a sliver", () => {
+    const tiny = new THREE.Box3(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.01, 0.01, 0.01));
+    expect(sliceWindowOf(tiny, AXIAL_PLANE).half).toBe(SLICE_MIN_HALF);
   });
 
   it("puts the front of the body at the top, and the patient's left on the right", () => {
-    // This test used to assert that SLICE_UP pointed at −Z "because −Z is
-    // anterior" — which enshrined the bug: the anterior viewpoint stands at +Z,
-    // so every section showed the spine at the top and the teeth at the bottom.
-    // It now states the anatomy itself, on both possible atlases.
-    const window = { x: 0, z: 0, half: 0.2 };
+    // This once asserted that the camera's up was anterior — which enshrined
+    // the bug that drew every 0.2.8 section upside down. It states the anatomy
+    // itself, on both possible atlases.
+    const window = { h: 0, v: 0, half: 0.2 };
     for (const leftSign of [1, -1] as const) {
       const basis = sliceBasis(leftSign);
       const front = pointOnScreen(window, 0, 0.1, 400, basis);
@@ -141,11 +178,12 @@ describe("the framing", () => {
     }
   });
 
-  it("renders from above with posterior at the top of the framebuffer", () => {
-    // The camera is not what changed: it still looks down with SLICE_UP at the
-    // top, which is posterior. The painter turns the picture. See SliceBasis.
-    expect(SLICE_UP.z).toBeLessThan(0);
-    expect(SLICE_UP.y).toBe(0);
+  it("puts the head at the top of a frontal picture", () => {
+    // On a frontal plane `v` is height: superior must land above inferior.
+    const window = { h: 0, v: 1, half: 0.5 };
+    const head = pointOnScreen(window, 0, 1.4, 400, MALE);
+    const feet = pointOnScreen(window, 0, 0.6, 400, MALE);
+    expect(head.y).toBeLessThan(feet.y);
   });
 });
 
@@ -162,18 +200,29 @@ describe("painting what came back from the GPU", () => {
     return px;
   }
 
-  it("puts the anterior edge at the top", () => {
-    // The framebuffer's top is SLICE_UP, which is posterior, and WebGL hands
-    // its rows over bottom first — so the red row, first in GPU order, is the
-    // anterior edge and must land in row 0. This test once asserted the
-    // opposite, and every section was upside down under it.
+  it("puts the anterior edge at the top of an axial picture", () => {
+    // The axial framebuffer's top is posterior, and WebGL hands its rows over
+    // bottom first — so the red row, first in GPU order, is the anterior edge
+    // and must land in row 0. This test once asserted the opposite, and every
+    // section was upside down under it.
     const { canvas, read } = canvasStub();
-    paintSlice(canvas, twoByTwo(), 2, MALE);
+    paintSlice(canvas, twoByTwo(), 2, MALE, AXIAL_PLANE);
 
     const out = read();
     expect(out).not.toBeNull();
     expect(Array.from(out!.data.slice(0, 4))).toEqual([255, 0, 0, 255]);
     expect(Array.from(out!.data.slice(8, 12))).toEqual([0, 0, 255, 255]);
+  });
+
+  it("puts the head at the top of a frontal picture", () => {
+    // The frontal framebuffer's top is superior, so here the rows do turn: the
+    // blue row, last in GPU order, is the head and must land in row 0.
+    const { canvas, read } = canvasStub();
+    paintSlice(canvas, twoByTwo(), 2, MALE, FRONT_PLANE);
+
+    const out = read()!;
+    expect(Array.from(out.data.slice(0, 4))).toEqual([0, 0, 255, 255]);
+    expect(Array.from(out.data.slice(8, 12))).toEqual([255, 0, 0, 255]);
   });
 
   it("mirrors left and right where the atlas's left is -X", () => {
@@ -184,7 +233,7 @@ describe("painting what came back from the GPU", () => {
     px.set([0, 255, 0, 255], 0);
     px.set([255, 255, 255, 255], 4);
     const { canvas, read } = canvasStub();
-    paintSlice(canvas, px, 2, sliceBasis(-1));
+    paintSlice(canvas, px, 2, sliceBasis(-1), AXIAL_PLANE);
 
     const out = read()!;
     expect(Array.from(out.data.slice(0, 4))).toEqual([255, 255, 255, 255]);
@@ -193,7 +242,7 @@ describe("painting what came back from the GPU", () => {
 
   it("does nothing rather than throwing where there is no 2D context", () => {
     const canvas = { getContext: () => null } as unknown as HTMLCanvasElement;
-    expect(() => paintSlice(canvas, twoByTwo(), 2, MALE)).not.toThrow();
+    expect(() => paintSlice(canvas, twoByTwo(), 2, MALE, AXIAL_PLANE)).not.toThrow();
   });
 });
 
@@ -205,7 +254,7 @@ describe("keeping the last section", () => {
     forgetSlice();
     const first = canvasStub();
     const pixels = new Uint8Array(2 * 2 * 4).fill(200);
-    paintSlice(first.canvas, pixels, 2, MALE);
+    paintSlice(first.canvas, pixels, 2, MALE, AXIAL_PLANE);
 
     const enlarged = canvasStub();
     restoreSlice(enlarged.canvas);
@@ -222,19 +271,25 @@ describe("keeping the last section", () => {
 });
 
 describe("the dissection cut", () => {
-  it("keeps everything below the plane and nothing above it", () => {
+  it("keeps everything below an axial plane and nothing above it", () => {
     // The whole difference from the slab: seen from above, what is left has
     // top surfaces, and top surfaces read as solid volumes where a thin slab
     // gives open rings.
-    const [plane] = cutPlanes(1.2);
+    const [plane] = cutPlanes(AXIAL_PLANE, 1.2);
     expect(plane!.distanceToPoint(new THREE.Vector3(0, 1.1, 0))).toBeGreaterThan(0);
     expect(plane!.distanceToPoint(new THREE.Vector3(0, 0.2, 0))).toBeGreaterThan(0);
     expect(plane!.distanceToPoint(new THREE.Vector3(0, 1.3, 0))).toBeLessThan(0);
   });
 
+  it("keeps everything behind a frontal plane, where the camera looks", () => {
+    const [plane] = cutPlanes(FRONT_PLANE, 0.02);
+    expect(plane!.distanceToPoint(new THREE.Vector3(0, 1, -0.1))).toBeGreaterThan(0);
+    expect(plane!.distanceToPoint(new THREE.Vector3(0, 1, 0.1))).toBeLessThan(0);
+  });
+
   it("costs one plane where the slab costs two", () => {
-    expect(cutPlanes(1).length).toBe(1);
-    expect(slabPlanes(1).length).toBe(2);
+    expect(cutPlanes(AXIAL_PLANE, 1).length).toBe(1);
+    expect(slabPlanes(AXIAL_PLANE, 1).length).toBe(2);
   });
 });
 
@@ -272,23 +327,31 @@ describe("wheelSteps", () => {
 
 describe("torchDirection", () => {
   it("stands overhead in the middle", () => {
-    const light = torchDirection(0, 0, MALE);
+    const light = torchDirection(0, 0, MALE, AXIAL_PLANE);
     expect(light.y).toBeCloseTo(1, 12);
   });
 
   it("comes from the side the pointer is on, not the other one", () => {
     // The half of this that has to be right: a light that receded as the
     // cursor approached would read as broken without ever being nameable.
-    expect(torchDirection(1, 0, MALE).x).toBeGreaterThan(0);
-    expect(torchDirection(-1, 0, MALE).x).toBeLessThan(0);
+    expect(torchDirection(1, 0, MALE, AXIAL_PLANE).x).toBeGreaterThan(0);
+    expect(torchDirection(-1, 0, MALE, AXIAL_PLANE).x).toBeLessThan(0);
     // Down the picture is posterior, towards -Z; up it is anterior.
-    expect(torchDirection(0, 1, MALE).z).toBeLessThan(0);
-    expect(torchDirection(0, -1, MALE).z).toBeGreaterThan(0);
+    expect(torchDirection(0, 1, MALE, AXIAL_PLANE).z).toBeLessThan(0);
+    expect(torchDirection(0, -1, MALE, AXIAL_PLANE).z).toBeGreaterThan(0);
+  });
+
+  it("stands in front of a frontal section, and lowers towards the feet", () => {
+    // "Overhead" is the camera's side, which for a frontal section is in front.
+    expect(torchDirection(0, 0, MALE, FRONT_PLANE).z).toBeCloseTo(1, 12);
+    // Down the picture is inferior.
+    expect(torchDirection(0, 1, MALE, FRONT_PLANE).y).toBeLessThan(0);
+    expect(torchDirection(1, 0, MALE, FRONT_PLANE).x).toBeGreaterThan(0);
   });
 
   it("lowers the light as the pointer leaves the middle", () => {
-    const near = torchDirection(0.3, 0, MALE);
-    const far = torchDirection(1, 0, MALE);
+    const near = torchDirection(0.3, 0, MALE, AXIAL_PLANE);
+    const far = torchDirection(1, 0, MALE, AXIAL_PLANE);
     expect(far.y).toBeLessThan(near.y);
     expect(near.y).toBeLessThan(1);
   });
@@ -296,7 +359,7 @@ describe("torchDirection", () => {
   it("never lies flat in the plane, however far out the pointer goes", () => {
     // A light exactly level with the section lights the walls facing it and
     // nothing else: the reader sees a picture that has gone out.
-    const corner = torchDirection(3, 3, MALE);
+    const corner = torchDirection(3, 3, MALE, AXIAL_PLANE);
     expect(corner.y).toBeGreaterThan(0.1);
     expect(corner.length()).toBeCloseTo(1, 12);
   });
@@ -321,30 +384,30 @@ describe("sliceSize", () => {
 });
 
 /** A 108 cm frame centred on the origin, as the chest gives. */
-const BASE = { x: 0, z: 0, half: 0.54 };
+const BASE = { h: 0, v: 0, half: 0.54 };
 
 describe("zoomWindow", () => {
   it("halves the width for twice the magnification", () => {
     const shown = zoomWindow(BASE, BASE, 2, MALE);
     expect(shown?.half).toBeCloseTo(0.27, 12);
-    expect(shown?.x).toBeCloseTo(0, 12);
+    expect(shown?.h).toBeCloseTo(0, 12);
   });
 
   it("goes back to automatic when the reader zooms all the way out", () => {
     // Null rather than a window that happens to be body-wide: the automatic
     // frame follows the level, and zoomed out is a request to keep doing that.
     expect(zoomWindow(BASE, BASE, 1, MALE)).toBeNull();
-    expect(zoomWindow({ x: 0, z: 0, half: 0.27 }, BASE, 0.5, MALE)).toBeNull();
+    expect(zoomWindow({ h: 0, v: 0, half: 0.27 }, BASE, 0.5, MALE)).toBeNull();
   });
 
   it("keeps what is under the pointer under the pointer", () => {
     // The whole reason zooming is anchored: a reader magnifying the aorta must
     // still be looking at the aorta afterwards.
-    const frame = { x: 0, z: 0, half: 0.4 };
+    const frame = { h: 0, v: 0, half: 0.4 };
     const u = 0.5;
-    const anchor = frame.x + u * frame.half;
+    const anchor = frame.h + u * frame.half;
     const shown = zoomWindow(frame, BASE, 2, MALE, u, 0);
-    expect(shown!.x + u * shown!.half).toBeCloseTo(anchor, 12);
+    expect(shown!.h + u * shown!.half).toBeCloseTo(anchor, 12);
   });
 
   it("stops where there is nothing left to magnify", () => {
@@ -354,65 +417,64 @@ describe("zoomWindow", () => {
   it("keeps the window inside the section", () => {
     // Anchored hard against one edge, the window still may not leave the body.
     const shown = zoomWindow(BASE, BASE, 2, MALE, 1, 1)!;
-    expect(Math.abs(shown.x)).toBeLessThanOrEqual(BASE.half - shown.half + 1e-12);
-    expect(Math.abs(shown.z)).toBeLessThanOrEqual(BASE.half - shown.half + 1e-12);
+    expect(Math.abs(shown.h)).toBeLessThanOrEqual(BASE.half - shown.half + 1e-12);
+    expect(Math.abs(shown.v)).toBeLessThanOrEqual(BASE.half - shown.half + 1e-12);
   });
 });
 
 describe("panWindow", () => {
   it("travels the opposite way to the hand", () => {
     // Dragging the picture to the right shows what was off to the left.
-    const frame = { x: 0, z: 0, half: 0.27 };
-    expect(panWindow(frame, BASE, 100, 0, 900, MALE)!.x).toBeLessThan(0);
+    const frame = { h: 0, v: 0, half: 0.27 };
+    expect(panWindow(frame, BASE, 100, 0, 900, MALE)!.h).toBeLessThan(0);
   });
 
   it("moves by the distance the drag actually covered", () => {
     // A 54 cm window drawn 900 pixels wide: a quarter of the picture is 13.5 cm.
-    const frame = { x: 0, z: 0, half: 0.27 };
-    expect(panWindow(frame, BASE, 225, 0, 900, MALE)!.x).toBeCloseTo(-0.135, 12);
+    const frame = { h: 0, v: 0, half: 0.27 };
+    expect(panWindow(frame, BASE, 225, 0, 900, MALE)!.h).toBeCloseTo(-0.135, 12);
   });
 
-  it("brings the front into view when the picture is dragged down", () => {
-    // Dragging down shows what was above, and above is anterior: +Z.
-    const frame = { x: 0, z: 0, half: 0.27 };
-    expect(panWindow(frame, BASE, 0, 100, 900, MALE)!.z).toBeGreaterThan(0);
+  it("brings the top of the picture into view when it is dragged down", () => {
+    // Dragging down shows what was above: anterior on an axial picture, the
+    // head on a frontal one — the positive end of the plane's vertical either way.
+    const frame = { h: 0, v: 0, half: 0.27 };
+    expect(panWindow(frame, BASE, 0, 100, 900, MALE)!.v).toBeGreaterThan(0);
   });
 
   it("does not change the width", () => {
-    const frame = { x: 0, z: 0, half: 0.27 };
+    const frame = { h: 0, v: 0, half: 0.27 };
     expect(panWindow(frame, BASE, 40, -80, 900, MALE)!.half).toBe(0.27);
   });
 
   it("stops at the edge rather than drifting into the black", () => {
-    const frame = { x: 0, z: 0, half: 0.27 };
+    const frame = { h: 0, v: 0, half: 0.27 };
     const shown = panWindow(frame, BASE, 99999, 0, 900, MALE)!;
-    expect(shown.x).toBeCloseTo(-(BASE.half - frame.half), 12);
+    expect(shown.h).toBeCloseTo(-(BASE.half - frame.half), 12);
   });
 });
 
 describe("the caliper", () => {
-  const WINDOW = { x: 0.1, z: -0.2, half: 0.27 };
+  const WINDOW = { h: 0.1, v: -0.2, half: 0.27 };
 
   it("puts the middle of the picture at the middle of the window", () => {
     const at = pointInSection(WINDOW, 450, 450, 900, MALE);
-    expect(at.x).toBeCloseTo(WINDOW.x, 12);
-    expect(at.z).toBeCloseTo(WINDOW.z, 12);
+    expect(at.h).toBeCloseTo(WINDOW.h, 12);
+    expect(at.v).toBeCloseTo(WINDOW.v, 12);
   });
 
   it("puts the corners where the window ends", () => {
     const at = pointInSection(WINDOW, 0, 900, 900, MALE);
-    expect(at.x).toBeCloseTo(WINDOW.x - WINDOW.half, 12);
-    // The bottom of the picture is the posterior edge: -Z.
-    expect(at.z).toBeCloseTo(WINDOW.z - WINDOW.half, 12);
+    expect(at.h).toBeCloseTo(WINDOW.h - WINDOW.half, 12);
+    // The bottom of the picture is the negative end of the plane's vertical.
+    expect(at.v).toBeCloseTo(WINDOW.v - WINDOW.half, 12);
   });
 
   it("comes back to the same pixel it came from", () => {
     // The round trip is what keeps a line drawn at one magnification lying on
     // the same anatomy at the next one.
-    const back = pointOnScreen(WINDOW, ...(() => {
-      const at = pointInSection(WINDOW, 137, 612, 900, MALE);
-      return [at.x, at.z] as const;
-    })(), 900, MALE);
+    const at = pointInSection(WINDOW, 137, 612, 900, MALE);
+    const back = pointOnScreen(WINDOW, at.h, at.v, 900, MALE);
     expect(back.x).toBeCloseTo(137, 9);
     expect(back.y).toBeCloseTo(612, 9);
   });
@@ -421,7 +483,7 @@ describe("the caliper", () => {
     // A 54 cm window drawn 900 pixels wide: half the picture is 27 cm.
     const a = pointInSection(WINDOW, 225, 450, 900, MALE);
     const b = pointInSection(WINDOW, 675, 450, 900, MALE);
-    expect(measureCm({ ax: a.x, az: a.z, bx: b.x, bz: b.z })).toBeCloseTo(27, 9);
+    expect(measureCm({ ah: a.h, av: a.v, bh: b.h, bv: b.v })).toBeCloseTo(27, 9);
   });
 
   it("survives the picture being magnified under it", () => {
@@ -429,13 +491,13 @@ describe("the caliper", () => {
     // body, then read through a window a fifth as wide: it has to land on the
     // same anatomy and report the same length, or a measurement is worth
     // nothing the moment somebody looks closer.
-    const whole = { x: 0, z: 0, half: 0.27 };
+    const whole = { h: 0, v: 0, half: 0.27 };
     const a = pointInSection(whole, 400, 430, 900, MALE);
     const b = pointInSection(whole, 470, 500, 900, MALE);
-    const line = { ax: a.x, az: a.z, bx: b.x, bz: b.z };
+    const line = { ah: a.h, av: a.v, bh: b.h, bv: b.v };
 
-    const close = { x: a.x, z: a.z, half: 0.054 };
-    const onScreen = pointOnScreen(close, line.ax, line.az, 900, MALE);
+    const close = { h: a.h, v: a.v, half: 0.054 };
+    const onScreen = pointOnScreen(close, line.ah, line.av, 900, MALE);
     // The near end is the centre of the magnified window, so it draws there.
     expect(onScreen.x).toBeCloseTo(450, 9);
     expect(onScreen.y).toBeCloseTo(450, 9);
@@ -453,23 +515,33 @@ describe("the caliper", () => {
 
 describe("sectionFileName", () => {
   it("names the file after what the picture is", () => {
-    expect(sectionFileName("T8", 13, true)).toBe("anatria3d-axial-T8-13cm-cut.png");
-    expect(sectionFileName("T8", 108, false)).toBe("anatria3d-axial-T8-108cm-slab.png");
+    expect(sectionFileName("axial", "T8", 13, true)).toBe("anatria3d-axial-T8-13cm-cut.png");
+    expect(sectionFileName("axial", "T8", 108, false)).toBe(
+      "anatria3d-axial-T8-108cm-slab.png",
+    );
+  });
+
+  it("names a frontal one after its depth", () => {
+    expect(sectionFileName("front", "12cm-deep", 60, true)).toBe(
+      "anatria3d-front-12cm-deep-60cm-cut.png",
+    );
   });
 
   it("keeps a disc level readable without its en dash", () => {
     // A file name is not the place to find out how a file system feels about
     // punctuation the interface uses freely.
-    expect(sectionFileName("L4–L5", 9, false)).toBe("anatria3d-axial-L4-L5-9cm-slab.png");
+    expect(sectionFileName("axial", "L4–L5", 9, false)).toBe(
+      "anatria3d-axial-L4-L5-9cm-slab.png",
+    );
   });
 
   it("says nothing about a level where there is none", () => {
-    expect(sectionFileName(null, 40, true)).toBe("anatria3d-axial-40cm-cut.png");
+    expect(sectionFileName("axial", null, 40, true)).toBe("anatria3d-axial-40cm-cut.png");
   });
 
   it("leaves the width out rather than writing a nonsense one", () => {
     // Before the first section has been taken there is no width to report.
-    expect(sectionFileName("T8", -1, true)).toBe("anatria3d-axial-T8-cut.png");
+    expect(sectionFileName("axial", "T8", -1, true)).toBe("anatria3d-axial-T8-cut.png");
   });
 });
 
@@ -496,22 +568,27 @@ describe("wheelPixels", () => {
 });
 
 describe("onLevel", () => {
-  const line = { ax: 0, az: 0, bx: 0.02, bz: 0, at: 1.2 };
+  const line = { at: 1.2, plane: "axial" as const };
 
   it("shows a measurement on the level it was drawn on", () => {
-    expect(onLevel(line, 1.2)).toBe(true);
+    expect(onLevel(line, 1.2, "axial")).toBe(true);
   });
 
   it("hides it one step away, above or below", () => {
     // Carried to the next level it would sit over different anatomy and
     // measure nothing — the first caliper's mistake.
-    expect(onLevel(line, 1.21)).toBe(false);
-    expect(onLevel(line, 1.19)).toBe(false);
+    expect(onLevel(line, 1.21, "axial")).toBe(false);
+    expect(onLevel(line, 1.19, "axial")).toBe(false);
   });
 
   it("finds it again after stepping away and back", () => {
     // Coming back is the sum of a run of fractions of the travel, and lands a
     // hair's breadth from where it left.
-    expect(onLevel(line, 1.2 + 3e-9)).toBe(true);
+    expect(onLevel(line, 1.2 + 3e-9, "axial")).toBe(true);
+  });
+
+  it("never shows a line from one plane on the other", () => {
+    // A depth and a height can be the same number and mean nothing alike.
+    expect(onLevel(line, 1.2, "front")).toBe(false);
   });
 });

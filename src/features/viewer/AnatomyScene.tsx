@@ -21,8 +21,7 @@ import {
 } from "./scanBand";
 import { ScanRing } from "./ScanRing";
 import { AxialProbe } from "./AxialProbe";
-import { FrontalProbe } from "./FrontalProbe";
-import { SECTION_WANTED, wantSection } from "./axialSlice";
+import { AXIAL_PLANE, SECTION_WANTED, wantSection } from "./axialSlice";
 import { scanTint } from "./scanTints";
 import { CURRENT_LEVEL, levelAt } from "./vertebralLevel";
 import { playScanPing } from "./scanSound";
@@ -1148,10 +1147,9 @@ export function AnatomyScene({
           request={axialRuns}
           high={axialDetail}
           leftSign={leftSign}
+          plane={AXIAL_PLANE}
         />
       )}
-      {/* Phase 0: measures a frontal section when asked from the renderer panel. */}
-      <FrontalProbe bounds={bounds} leftSign={leftSign} />
 
       {pathway && (
         <PathwayFlow
