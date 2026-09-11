@@ -13,6 +13,34 @@ There is **no auto-updater**, by design: the application never reaches the
 network on its own. A new version reaches you only when you download and install
 it, so this file is also the answer to "is it worth reinstalling".
 
+## [Unreleased]
+
+### Added
+
+**The scanner reads the body from the front, too.** An *Axial | Front* choice
+sits above the scanner's handle. In *Front* the plane stands upright and travels
+from the front of the body to the back, and the section is drawn the way a
+coronal image is read: the head at the top, the patient's left on your right.
+The line above the picture says how deep the plane is, measured from the most
+anterior point of the body, and the wheel steps a centimetre at a time. *Cut*,
+*Slab*, the torch, magnifying, the caliper and *Save* all work as they do across
+the body. The same ring serves both: in *Front* it stays at the chest and reads
+*ANATRIA 3D FRONT*, and the light on the body marks the plane. Each plane keeps
+its own place, and a measurement stays on the section it was drawn on.
+
+**The assistant knows where the scanner is.** With nothing selected and the
+light held at a level, a question like *"what is in this part?"* is answered
+about that level; a note above the box says so while you type. A selection
+always comes first, and your own words win over the scanner. It is not sent
+while the light is travelling, for a frontal plane, or in a case. A question
+about pain there is answered with the anatomy of the level, never with an
+assessment of you.
+
+**The assistant can ask for a frontal section.** *"A frontal section of the
+heart"* switches the scanner to *Front* and puts the plane through it; asking for
+a level goes back to *Axial*. The same choice is open to an agent driving the
+atlas over MCP.
+
 ## [0.2.9] — 2026-09-11
 
 ### Added

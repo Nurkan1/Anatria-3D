@@ -431,6 +431,53 @@ const SECTIONS: Section[] = [
           picture already shows.
         </p>
 
+        <Sub>From the front, at a depth</Sub>
+        <Rows
+          rows={[
+            ["Axial", "Sweep head to feet, and section the body at a height"],
+            ["Front", "Sweep front to back, and section it at a depth, seen from the front"],
+          ]}
+        />
+        <p>
+          The choice sits above the handle, because it changes what the handle means.
+          In <Ui>Front</Ui> the plane stands upright and travels from the front of the
+          body to the back, and the section is arranged the way a coronal image is
+          read: the head at the top, and the patient’s left on your right. The line
+          above the picture says how deep the plane is — <em>12 cm deep</em> —
+          measured from the most anterior point of the body, and the wheel steps a
+          centimetre deeper or back towards you.
+        </p>
+        <p>
+          Everything else is the same instrument: <Ui>Cut</Ui> opens the body at the
+          plane and shows the surfaces behind it, <Ui>Slab</Ui> keeps the four
+          millimetres at it, and the torch, magnifying, the caliper and{" "}
+          <Ui>Save</Ui> all work as they do across the body. The ring stays where it
+          is, at the chest, and says <em>FRONT</em>; the light on the body is what marks
+          the plane, and what flashes when you let go.
+        </p>
+        <p>
+          Each plane keeps its own place. Go to <Ui>Front</Ui> and back, and the axial
+          plane is at the height you left it; a measurement stays on the section it
+          was drawn on and never appears on the other.
+        </p>
+
+        <Sub>Asking about what the scanner is on</Sub>
+        <p>
+          With nothing selected and the light held at a level — pinned, or stepped
+          there with the wheel — the assistant is told where the axial plane is and
+          what it crosses. <em>“What is in this part?”</em> is then a question about
+          that level, and a note above the box says so while you type. Select a
+          structure and the selection comes first; name somewhere else and your words
+          do. It is not sent while the light is travelling, for a frontal plane, or in
+          a case.
+        </p>
+        <p>
+          Ask for <em>a frontal section of the heart</em> and the assistant switches
+          the scanner to <Ui>Front</Ui> and puts the plane through it; ask for a level
+          and it goes back to <Ui>Axial</Ui>. A question about pain there is answered
+          with the anatomy of that level, never with an assessment of you.
+        </p>
+
         <Sub>Stepping, and magnifying</Sub>
         <Rows
           rows={[
