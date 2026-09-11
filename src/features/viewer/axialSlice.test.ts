@@ -16,6 +16,7 @@ import {
   SLICE_PIXELS_NORMAL,
   sliceSize,
   torchDirection,
+  wheelPixels,
   wheelSteps,
   zoomWindow,
   restoreSlice,
@@ -426,5 +427,27 @@ describe("sectionFileName", () => {
   it("leaves the width out rather than writing a nonsense one", () => {
     // Before the first section has been taken there is no width to report.
     expect(sectionFileName("T8", -1, true)).toBe("anatria3d-axial-T8-cut.png");
+  });
+});
+
+describe("wheelPixels", () => {
+  it("leaves pixels alone, which is what WebView2 sends", () => {
+    expect(wheelPixels(100, 0)).toBe(100);
+    expect(wheelPixels(-37.5, 0)).toBe(-37.5);
+  });
+
+  it("turns a notch reported in lines into one step", () => {
+    // Three lines is a notch. Compared as if it were three pixels, it would
+    // take thirty-four notches to move a centimetre.
+    expect(wheelSteps(0, wheelPixels(3, 1))).toEqual({ steps: 1, carry: 0 });
+    expect(wheelSteps(0, wheelPixels(-3, 1))).toEqual({ steps: -1, carry: 0 });
+  });
+
+  it("does the same for a page", () => {
+    expect(wheelPixels(1, 2)).toBe(100);
+  });
+
+  it("does nothing with an event that did not move", () => {
+    expect(wheelPixels(0, 1)).toBe(0);
   });
 });

@@ -20,6 +20,7 @@ import {
   TORCH,
   torchDirection,
   wantSection,
+  wheelPixels,
   wheelSteps,
   WHEEL_SETTLE_MS,
   zoomWindow,
@@ -448,7 +449,7 @@ export function AxialView() {
               );
               return;
             }
-            wheelToSteps(event.deltaY);
+            wheelToSteps(wheelPixels(event.deltaY, event.deltaMode));
           }}
           onPointerDown={(event) => {
             if (measuring) {
@@ -724,7 +725,7 @@ export function AxialView() {
       <button
         type="button"
         onClick={() => setFull(true)}
-        onWheel={(event) => wheelToSteps(event.deltaY)}
+        onWheel={(event) => wheelToSteps(wheelPixels(event.deltaY, event.deltaMode))}
         title={`See it full size. The wheel steps ${SECTION_STEP_CM} cm through the body.`}
         className="pointer-events-auto block cursor-zoom-in rounded-sm"
       >

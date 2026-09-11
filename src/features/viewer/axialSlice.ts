@@ -520,14 +520,40 @@ export function wantSection(): void {
 }
 
 /**
- * How far a wheel has to turn before the plane moves one step.
+ * How far a wheel has to turn before the plane moves one step, in pixels.
  *
- * A notch of a mouse wheel reports a hundred on every browser this runs in, so
+ * A notch of a mouse wheel reports a hundred pixels in WebView2, so on Windows
  * a notch is a step and a step is a centimetre. A trackpad reports small
  * amounts continuously instead, which is why this accumulates rather than
  * counting events: otherwise one flick of two fingers would cross the thorax.
+ *
+ * Pixels specifically. Other engines may report the same notch in lines or
+ * pages — see `wheelPixels`, which converts before anything is counted.
  */
 export const WHEEL_PER_STEP = 100;
+
+/**
+ * A wheel event's travel in pixels, whatever unit it arrived in.
+ *
+ * # Why this exists
+ *
+ * `deltaY` is a number without a unit; `deltaMode` is the unit. WebView2 always
+ * reports pixels, which is the only engine this was first measured on, and the
+ * step was written as if that were universal. It is not: an engine reporting
+ * lines hands over about 3 for the notch WebView2 calls 100, and compared
+ * against a threshold of 100 that is thirty-four notches for a centimetre — a
+ * control that looks broken. The Linux build runs on WebKitGTK, which had not
+ * been checked, so the conversion is made rather than assumed.
+ *
+ * A line or a page is taken as one notch. Neither unit carries a size in
+ * pixels this could honestly multiply by, and a notch is what the reader
+ * turned.
+ */
+export function wheelPixels(deltaY: number, deltaMode: number): number {
+  // DOM_DELTA_LINE and DOM_DELTA_PAGE.
+  if (deltaMode === 1 || deltaMode === 2) return Math.sign(deltaY) * WHEEL_PER_STEP;
+  return deltaY;
+}
 
 /**
  * How many whole steps a wheel gesture has earned, and what to carry forward.
