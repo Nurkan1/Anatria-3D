@@ -81,6 +81,17 @@ export const FRONT_PLANE: SlicePlane = {
   cameraUp: 1,
 };
 
+/**
+ * Where a frontal plane stands, in words: how far in from the front of the body.
+ *
+ * Measured from the most anterior point of the atlas, which is what the caption
+ * says it is. A depth from the skin under the plane would read better and would
+ * be a different number at every point of the picture.
+ */
+export function depthLabel(metresIn: number): string {
+  return `${Math.max(0, Math.round(metresIn * 100))} cm deep`;
+}
+
 /** The plane with this name. */
 export function slicePlane(name: SectionPlaneName): SlicePlane {
   return name === "front" ? FRONT_PLANE : AXIAL_PLANE;

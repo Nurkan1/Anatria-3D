@@ -22,6 +22,10 @@ import {
   setScanTint,
   scanBandMaterialProps,
   scanBandOnBeforeCompile,
+  FACING,
+  SCAN_PLANE,
+  setScanPlane,
+  sweepAxis,
   scanRangeAlong,
   SHARED_AXIS,
   SHARED_SCAN,
@@ -233,8 +237,8 @@ it("lights the whole structure as well as the slice", () => {
   scanBandOnBeforeCompile(compiled);
   expect(compiled.fragmentShader).toContain("uniform vec2 uOrganSpan");
   // Feathered at both ends: a structure arrives and leaves rather than blinks.
-  expect(compiled.fragmentShader).toContain("smoothstep(uOrganSpan.x - 0.02");
-  expect(compiled.fragmentShader).toContain("1.0 - smoothstep(uOrganSpan.y - 0.02");
+  expect(compiled.fragmentShader).toContain("smoothstep(organSpan.x - 0.02");
+  expect(compiled.fragmentShader).toContain("1.0 - smoothstep(organSpan.y - 0.02");
 });
 
 // ---------------------------------------------------------------------------
@@ -656,4 +660,53 @@ it("answers the nearest end rather than refusing a height outside the body", () 
 
 it("gives the middle when there is no body to measure against", () => {
   expect(scanFractionFor(1, 0, 0)).toBe(0.5);
+});
+
+it("sweeps head to feet for an axial plane and front to back for a frontal one", () => {
+  expect(sweepAxis("axial")).toBe(STANDING);
+  expect(sweepAxis("front")).toBe(FACING);
+  // Anterior is +Z: the frontal sweep's far end is the front of the body.
+  const depth = scanRangeAlong([-0.3, 0, -0.15], [0.3, 1.8, 0.12], FACING);
+  expect(depth.from).toBeCloseTo(-0.15, 12);
+  expect(depth.to).toBeCloseTo(0.12, 12);
+});
+
+it("gives each material its depth as well as its height", () => {
+  const material = new MeshStandardMaterial(
+    scanBandMaterialProps(true, [0.2, 0.5], undefined, [-0.04, 0.03]),
+  );
+  const compiled = shader();
+  material.onBeforeCompile(compiled, {} as WebGLRenderer);
+  expect(compiled.uniforms.uOrganSpan?.value).toEqual([0.2, 0.5]);
+  expect(compiled.uniforms.uOrganSpanFront?.value).toEqual([-0.04, 0.03]);
+});
+
+it("keeps one cache key with a depth on every material", () => {
+  const first = new MeshStandardMaterial(scanBandMaterialProps(true, [0.2, 0.5], undefined, [0, 0.1]));
+  const second = new MeshStandardMaterial(scanBandMaterialProps(true, [1.1, 1.4], undefined, [0.2, 0.3]));
+  expect(first.customProgramCacheKey()).toBe(second.customProgramCacheKey());
+});
+
+it("changes plane with one shared write, not a recompile", () => {
+  // Every material holds this object, so the switch reaches 3,478 of them by
+  // writing one float.
+  const a = shader();
+  const b = shader();
+  scanBandOnBeforeCompile(a);
+  scanBandOnBeforeCompile(b);
+  expect(a.uniforms.uScanPlane).toBe(SCAN_PLANE);
+  expect(b.uniforms.uScanPlane).toBe(SCAN_PLANE);
+  setScanPlane("front");
+  expect(SCAN_PLANE.value).toBe(1);
+  setScanPlane("axial");
+  expect(SCAN_PLANE.value).toBe(0);
+  expect(a.fragmentShader).toContain("mix(uOrganSpan, uOrganSpanFront, uScanPlane)");
+});
+
+it("gives a material with no depth one the frontal sweep can never be inside", () => {
+  const material = new MeshStandardMaterial(scanBandMaterialProps(true, [0.2, 0.5]));
+  const compiled = shader();
+  material.onBeforeCompile(compiled, {} as WebGLRenderer);
+  const [from, to] = compiled.uniforms.uOrganSpanFront?.value as [number, number];
+  expect(from).toBeGreaterThan(to);
 });

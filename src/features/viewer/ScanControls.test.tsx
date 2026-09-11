@@ -8,7 +8,15 @@ import { ScanControls } from "./ScanControls";
 import { SWEEP_PROGRESS } from "./scanBand";
 
 beforeEach(() => {
-  useScanStore.setState({ enabled: true, held: false, pinned: false, at: 0.5, panel: true });
+  useScanStore.setState({
+    enabled: true,
+    held: false,
+    pinned: false,
+    at: 0.5,
+    panel: true,
+    plane: "axial",
+    elsewhere: 0.5,
+  });
   useSceneStore.setState({ bodyTone: "carbon" });
   SWEEP_PROGRESS.value = 0.25;
 });
@@ -86,4 +94,18 @@ it("leaves the drag to the engine, and still lets go outside the handle", () => 
   } finally {
     proto.setPointerCapture = original;
   }
+});
+
+it("switches to a frontal sweep, and asks for a section of it", async () => {
+  const { SECTION_WANTED, SECTION_VIEW } = await import("./axialSlice");
+  SECTION_VIEW.value = { h: 0, v: 0, half: 0.1 };
+  const before = SECTION_WANTED.value;
+  render(<ScanControls />);
+  fireEvent.click(screen.getByRole("button", { name: "Front" }));
+
+  expect(useScanStore.getState().plane).toBe("front");
+  expect(screen.getByRole("button", { name: "Front" }).getAttribute("aria-pressed")).toBe("true");
+  // A window framed on a height means nothing at a depth.
+  expect(SECTION_VIEW.value).toBeNull();
+  expect(SECTION_WANTED.value).toBe(before + 1);
 });

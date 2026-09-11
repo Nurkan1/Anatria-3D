@@ -3,6 +3,7 @@ import { create } from "zustand";
 import { readLocal, writeLocal } from "@/lib/localStore";
 
 import { scanTint, type ScanTintId } from "@/features/viewer/scanTints";
+import type { SectionPlaneName } from "@/features/viewer/axialSlice";
 
 /**
  * The scanner, as the reader controls it.
@@ -37,6 +38,19 @@ const AXIAL_KEY = "anatria3d.scan.axial.v1";
 const CUT_KEY = "anatria3d.scan.cut.v1";
 const TORCH_KEY = "anatria3d.scan.torch.v1";
 const DETAIL_KEY = "anatria3d.scan.detail.v1";
+const PLANE_KEY = "anatria3d.scan.plane.v1";
+
+/**
+ * Which way the scanner reads the body: across it at a height, or through it
+ * at a depth.
+ *
+ * Axial unless frontal was chosen, and validated on the way in like the tint:
+ * an unknown word in a file a person can edit must give the scanner everybody
+ * already knows, not one that sweeps along no axis at all.
+ */
+function storedPlane(): SectionPlaneName {
+  return readLocal(PLANE_KEY) === "front" ? "front" : "axial";
+}
 
 /**
  * Whether sections are read at the larger size.
@@ -251,6 +265,21 @@ interface ScanStore {
   torch: boolean;
   /** Read sections at the larger size. Costs memory and readback time. */
   detail: boolean;
+  /**
+   * Which plane the scanner sweeps and sections: axial, head to feet, or
+   * frontal, front to back. The same ring and the same light either way.
+   */
+  plane: SectionPlaneName;
+  /**
+   * Where the light was left on the other plane.
+   *
+   * A height and a depth are both a fraction of their travel, and the same
+   * number means nothing alike on the two: 0.72 is the chest going down and a
+   * plane just behind the sternum going in. So switching plane swaps the two
+   * rather than carrying one across, and a reader who compares a level with a
+   * depth and comes back finds both where they left them.
+   */
+  elsewhere: number;
 
   toggle: () => void;
   /** Take hold of the sweep and put it at `at`. */
@@ -288,6 +317,7 @@ interface ScanStore {
   setCut: (on: boolean) => void;
   setTorch: (on: boolean) => void;
   setDetail: (on: boolean) => void;
+  setPlane: (plane: SectionPlaneName) => void;
 }
 
 export const useScanStore = create<ScanStore>()((set, get) => ({
@@ -308,6 +338,8 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
   cut: storedCut(),
   torch: storedTorch(),
   detail: storedDetail(),
+  plane: storedPlane(),
+  elsewhere: 0.5,
 
   // Letting go and unpinning on the way out, so switching the scanner off never
   // leaves the next session holding an invisible sweep at somebody's ankle.
@@ -403,6 +435,19 @@ export const useScanStore = create<ScanStore>()((set, get) => ({
     if (on === get().detail) return;
     writeLocal(DETAIL_KEY, on ? "on" : "off");
     set({ detail: on });
+  },
+  setPlane: (plane) => {
+    const state = get();
+    if (plane === state.plane) return;
+    writeLocal(PLANE_KEY, plane);
+    set({
+      plane,
+      at: state.elsewhere,
+      elsewhere: state.at,
+      // Choosing the plane is the reader acting on the instrument, so the light
+      // is theirs again whoever put it where it was.
+      byAssistant: false,
+    });
   },
 }));
 

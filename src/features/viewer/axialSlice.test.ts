@@ -6,6 +6,7 @@ import {
   cameraForwardOf,
   cameraUpOf,
   cutPlanes,
+  depthLabel,
   forgetSlice,
   formatDistance,
   FRONT_PLANE,
@@ -522,8 +523,8 @@ describe("sectionFileName", () => {
   });
 
   it("names a frontal one after its depth", () => {
-    expect(sectionFileName("front", "12cm-deep", 60, true)).toBe(
-      "anatria3d-front-12cm-deep-60cm-cut.png",
+    expect(sectionFileName("front", depthLabel(0.12), 60, true)).toBe(
+      "anatria3d-front-12-cm-deep-60cm-cut.png",
     );
   });
 
@@ -590,5 +591,16 @@ describe("onLevel", () => {
   it("never shows a line from one plane on the other", () => {
     // A depth and a height can be the same number and mean nothing alike.
     expect(onLevel(line, 1.2, "front")).toBe(false);
+  });
+});
+
+describe("depthLabel", () => {
+  it("says how far in from the front, in whole centimetres", () => {
+    expect(depthLabel(0.123)).toBe("12 cm deep");
+  });
+
+  it("never says a negative depth", () => {
+    // The plane at the very front of the body is at no depth, not at minus one.
+    expect(depthLabel(-0.004)).toBe("0 cm deep");
   });
 });

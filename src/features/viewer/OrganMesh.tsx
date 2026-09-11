@@ -9,7 +9,7 @@ import { pressTravelled } from "./dragGuard";
 import { shouldSuppressClick } from "./areaSelect";
 import { coverageColour } from "./coverage";
 import { scanColour, type BodyTone } from "./scan";
-import { scanBandMaterialProps, scanRangeAlong, STANDING } from "./scanBand";
+import { FACING, scanBandMaterialProps, scanRangeAlong, STANDING } from "./scanBand";
 import { probeGlow, reportDepthStack, stackFromCrossings } from "./depthStack";
 import type { ManifestOrgan } from "@/lib/schemas";
 
@@ -477,6 +477,16 @@ export const OrganMesh = memo(function OrganMesh({
     );
     return [from, to];
   }, [scanBandEnabled, worldBox]);
+  /** The same reach, front to back, for when the scanner sweeps a frontal plane. */
+  const scanSpanFront = useMemo((): readonly [number, number] | undefined => {
+    if (!scanBandEnabled || !worldBox) return undefined;
+    const { from, to } = scanRangeAlong(
+      [worldBox.min.x, worldBox.min.y, worldBox.min.z],
+      [worldBox.max.x, worldBox.max.y, worldBox.max.z],
+      FACING,
+    );
+    return [from, to];
+  }, [scanBandEnabled, worldBox]);
 
   /**
    * The colour this structure has when nothing is draining it.
@@ -613,7 +623,7 @@ export const OrganMesh = memo(function OrganMesh({
         <meshStandardMaterial
           ref={scanMaterial}
           {...surface}
-          {...scanBandMaterialProps(true, scanSpan, revealColour)}
+          {...scanBandMaterialProps(true, scanSpan, revealColour, scanSpanFront)}
         />
       )}
 

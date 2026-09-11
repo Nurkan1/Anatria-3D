@@ -79,7 +79,11 @@ export function ScanReadout() {
             return organ ? organLabel(organ) : organId;
           })
           .join(" · ");
-        list.current.textContent = named || "nothing at this height";
+        list.current.textContent =
+          named ||
+          (useScanStore.getState().plane === "front"
+            ? "nothing at this depth"
+            : "nothing at this height");
       }
       if (level.current) {
         // Written like the names, not through state: it changes as often as
