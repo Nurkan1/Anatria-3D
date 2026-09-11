@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { beforeEach, expect, it } from "vitest";
+import { beforeEach, expect, it, vi } from "vitest";
 
 import { useScanStore } from "@/stores/scanStore";
 import { useSceneStore } from "@/stores/sceneStore";
@@ -58,4 +58,32 @@ it("keeps the active colour visible while folded", () => {
   const { container } = render(<ScanControls />);
   const dot = container.querySelector('[aria-hidden][style*="background"]');
   expect(dot).not.toBeNull();
+});
+
+it("leaves the drag to the engine, and still lets go outside the handle", () => {
+  // Reported from Kali, WebKitGTK 2.52.5: capturing the pointer on a native
+  // range takes the drag away from it — 0 input events in 173 moves with the
+  // capture, 98 in 115 without. So the slider must not capture, and letting go
+  // has to reach the store from anywhere, because a 4px control is almost
+  // always released somewhere other than on itself.
+  const proto = Element.prototype as unknown as {
+    setPointerCapture?: ((pointerId: number) => void) | undefined;
+  };
+  const original = proto.setPointerCapture;
+  const capture = vi.fn();
+  proto.setPointerCapture = capture;
+  try {
+    render(<ScanControls />);
+    const slider = screen.getByLabelText(/drag to hold the light/i);
+
+    fireEvent.pointerDown(slider, { pointerId: 1 });
+    expect(useScanStore.getState().held).toBe(true);
+    expect(capture).not.toHaveBeenCalled();
+
+    // Let go over the body, nowhere near the slider.
+    fireEvent.pointerUp(window, { pointerId: 1 });
+    expect(useScanStore.getState().held).toBe(false);
+  } finally {
+    proto.setPointerCapture = original;
+  }
 });

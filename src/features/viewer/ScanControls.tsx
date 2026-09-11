@@ -171,7 +171,9 @@ export function ScanControls() {
             replaced `writing-mode: vertical-lr`, which WebView2 draws and the
             WebKitGTK on a Debian desktop did not — there the control stayed
             horizontal in a 16px box, with no visible track and sixteen pixels
-            of travel.
+            of travel. Measured again on Kali with WebKitGTK 2.52.5: it is drawn
+            vertical now, but without its rail, and it does not drag — 119 moves,
+            one input — so the turned control stays.
           */}
           {/* Shorter on a short window. The travel is the one thing in this
               panel that can give height back without losing a control. */}
@@ -193,16 +195,33 @@ export function ScanControls() {
               // browser. Pointer *down* is unambiguous.
               if (sound) primeScanSound();
               hold(Number(event.currentTarget.value));
-              // Keep receiving the drag even when the pointer leaves the
-              // handle, which on a 4px-wide control is most of the time.
-              event.currentTarget.setPointerCapture(event.pointerId);
+              /**
+               * The release is heard on the window; the pointer is not captured.
+               *
+               * It was captured, so that letting go outside a 4px control
+               * still reached `release`. On WebKitGTK that capture takes the
+               * drag away from the native range altogether. Measured on Kali
+               * with WebKitGTK 2.52.5, the same flat slider gave 0 `input`
+               * events in 173 moves with the capture and 98 in 115 without it,
+               * so the handle sat still under a moving pointer. Capture on a
+               * plain element is fine there; only the range control loses its
+               * drag.
+               *
+               * The window hears the release wherever the pointer ends up, on
+               * both engines, and the drag stays with the browser.
+               */
+              const letGo = () => {
+                window.removeEventListener("pointerup", letGo);
+                window.removeEventListener("pointercancel", letGo);
+                release();
+              };
+              window.addEventListener("pointerup", letGo);
+              window.addEventListener("pointercancel", letGo);
             }}
             onChange={(event) => {
               show(event.currentTarget, Number(event.currentTarget.value));
               hold(Number(event.currentTarget.value));
             }}
-            onPointerUp={release}
-            onPointerCancel={release}
             onKeyDown={(event) => {
               // Arrow keys move a range input, and a reader who nudges it and
               // then watches it snap back has been told the control is broken.
