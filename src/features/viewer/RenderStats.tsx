@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { fps, heapMb, noteFrame, sample } from "./renderSample";
 import { viewportKey } from "./viewportKeys";
 import { AXIAL_PROBE } from "./AxialProbe";
+import { FRONTAL_PROBE, wantFrontalProbe } from "./FrontalProbe";
 import { SLICE_PIXELS } from "./axialSlice";
 import { readLocal, writeLocal } from "@/lib/localStore";
 import { OVERLAY_CHIP } from "./overlayChrome";
@@ -142,6 +143,26 @@ const ROWS: Row[] = [
   // What it actually read at, which is not always what was asked for: the card
   // has the last word on the size of a render target.
   { label: "axial pixels", read: () => `${SLICE_PIXELS.value}²` },
+  /*
+   * Phase 0 for a frontal section. Front, middle and back of the body, each as
+   * render + readback and the draw calls the pass cost — the number that
+   * decides whether a frontal section is affordable at all.
+   */
+  {
+    label: "frontal cut",
+    read: () => (FRONTAL_PROBE.passes.length === 0 ? "—" : FRONTAL_PROBE.cut ? "cut" : "slab"),
+  },
+  ...["front", "middle", "back"].map(
+    (name, index): Row => ({
+      label: `frontal ${name}`,
+      read: () => {
+        const pass = FRONTAL_PROBE.passes[index];
+        return pass
+          ? `${pass.renderMs.toFixed(1)}+${pass.readbackMs.toFixed(1)} ms · ${pass.drawCalls.toLocaleString()}`
+          : "—";
+      },
+    }),
+  ),
 ];
 
 /**
@@ -308,6 +329,18 @@ export function RenderStatsPanel() {
           </Fragment>
         ))}
       </div>
+      {/*
+        Phase 0: asks the frontal probe for one measurement. The panel is
+        instrumentation already, which is why the question lives here and not
+        among the scanner's own controls.
+      */}
+      <button
+        type="button"
+        onClick={wantFrontalProbe}
+        className="pointer-events-auto mt-2 w-full rounded border border-slate-700 px-2 py-0.5 text-[10px] text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
+      >
+        Measure frontal
+      </button>
     </div>
   );
 }
