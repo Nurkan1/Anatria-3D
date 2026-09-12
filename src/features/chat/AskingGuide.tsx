@@ -34,6 +34,16 @@ const POINTS: { title: string; body: string }[] = [
       "question is understood to be about that, not about the whole body.",
   },
   {
+    title: "The scanner says where",
+    body:
+      "Leave the light held at a level — pin it, or step it with the wheel — " +
+      "and with nothing selected the assistant is told where the plane is and " +
+      "the largest structures it crosses, so “what is in this part?” is a " +
+      "question about that level. A selection still comes first, and naming " +
+      "somewhere else wins over both. Ask for a frontal section of something " +
+      "and it moves the scanner there itself.",
+  },
+  {
     title: "Specific beats broad",
     body:
       "“What does this do?” with something selected gets a better answer than " +
