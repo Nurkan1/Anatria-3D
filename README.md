@@ -95,6 +95,12 @@ at a level and nothing selected, the assistant knows where it is, so *"what is
 in this part?"* needs no other words. A section is the atlas's geometry cut at a
 height or a depth, not a radiograph, and every picture it produces says so.
 
+![The frontal scanner, put there by the assistant: the ring stands around the
+chest reading ANATRIA 3D AI FRONT, the body is opened at a plane 14 cm in from
+the front with the great vessels and the spine showing through it, the frontal
+section sits in its own panel, and the answer beside it says the plane is
+centred on the left atrium.](docs/screenshots/scanner-front.png)
+
 ![Four views of the same head at once. The panel the reader drives sits
 top-left with the vessels and nerves of the head and neck; beside and below it,
 anterior, left lateral and superior views of the same structures, lettered at
