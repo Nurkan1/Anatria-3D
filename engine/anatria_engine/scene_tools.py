@@ -37,6 +37,7 @@ from anatria_engine.protocol import (
     OrganMeta,
     ResetView,
     ScanAtStructure,
+    ScannerPlane,
     SectionPlane,
     SetCrossSection,
     SetLayerOpacity,
@@ -536,7 +537,11 @@ def register_scene_tools(agent: Agent[SceneContext, str]) -> None:
         return "Cleared the pathway."
 
     @agent.tool(sequential=True)
-    def scan_at_structure(ctx: RunContext[SceneContext], organ_id: str) -> str:
+    def scan_at_structure(
+        ctx: RunContext[SceneContext],
+        organ_id: str,
+        plane: ScannerPlane | None = None,
+    ) -> str:
         """Put the scanner's plane at the height of a structure.
 
         Use it when the reader asks to be taken to a level -- "show me T8",
@@ -548,10 +553,17 @@ def register_scene_tools(agent: Agent[SceneContext, str]) -> None:
         The scanner is switched on if it is off, because a plane nobody can see
         is not an answer. The panel names the vertebral level the plane lands
         on, so asking for a vertebra and asking for an organ are the same call.
+
+        `plane` is "axial" for a level or an axial slice, and "coronal" for a
+        frontal or coronal section -- the plane then stands upright through the
+        middle of the structure's depth and the panel shows it from the front.
+        Leave it out only when the reader asked for neither; their own plane is
+        kept.
         """
         organ = _resolve(ctx, organ_id)
-        ctx.deps.dispatch(ScanAtStructure(organ_id=organ.organ_id))
-        return f"Put the scanner at {organ.ta2_latin} ({organ.name_en})."
+        ctx.deps.dispatch(ScanAtStructure(organ_id=organ.organ_id, plane=plane))
+        frontal = " on a frontal plane" if plane == "coronal" else ""
+        return f"Put the scanner at {organ.ta2_latin} ({organ.name_en}){frontal}."
 
     @agent.tool(sequential=True)
     def set_cross_section(

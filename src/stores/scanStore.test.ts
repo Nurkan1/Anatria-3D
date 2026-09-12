@@ -19,6 +19,8 @@ beforeEach(() => {
     sound: false,
     sections: 0,
     byAssistant: false,
+    plane: "axial",
+    elsewhere: 0.5,
   });
   localStorage.clear();
 });
@@ -296,5 +298,43 @@ describe("whose light it is", () => {
       act();
       expect(store().byAssistant).toBe(false);
     }
+  });
+});
+
+describe("the plane it reads", () => {
+  it("is axial unless frontal was chosen", () => {
+    expect(store().plane).toBe("axial");
+  });
+
+  it("remembers frontal, because it is a way of reading the body", () => {
+    store().setPlane("front");
+    expect(store().plane).toBe("front");
+    expect(localStorage.getItem("anatria3d.scan.plane.v1")).toBe("front");
+  });
+
+  it("keeps a height and a depth apart", () => {
+    // 0.72 is the chest going down and a plane behind the sternum going in;
+    // carrying one across as the other would put the light somewhere nobody
+    // chose.
+    store().putAt(0.72);
+    store().setPlane("front");
+    expect(store().at).toBe(0.5);
+    store().step(0.1);
+    store().setPlane("axial");
+    expect(store().at).toBeCloseTo(0.72, 12);
+    store().setPlane("front");
+    expect(store().at).toBeCloseTo(0.6, 12);
+  });
+
+  it("hands the light back to the reader", () => {
+    store().putAt(0.4);
+    store().setPlane("front");
+    expect(store().byAssistant).toBe(false);
+  });
+
+  it("writes nothing when the plane has not changed", () => {
+    localStorage.clear();
+    store().setPlane("axial");
+    expect(localStorage.getItem("anatria3d.scan.plane.v1")).toBeNull();
   });
 });

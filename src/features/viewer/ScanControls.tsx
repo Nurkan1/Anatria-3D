@@ -4,6 +4,7 @@ import { useSceneStore } from "@/stores/sceneStore";
 import { useScanStore } from "@/stores/scanStore";
 
 import { SWEEP_PROGRESS } from "./scanBand";
+import { SECTION_VIEW, wantSection } from "./axialSlice";
 import { SCAN_TINTS, scanTint } from "./scanTints";
 import { primeScanSound } from "./scanSound";
 import { OVERLAY_CHIP, OVERLAY_CHIP_ACTION, OVERLAY_GROUND, OVERLAY_SWITCH_OFF, OVERLAY_SWITCH_ON } from "./overlayChrome";
@@ -68,6 +69,8 @@ export function ScanControls() {
   const setDetail = useScanStore((s) => s.setDetail);
   const panel = useScanStore((s) => s.panel);
   const togglePanel = useScanStore((s) => s.togglePanel);
+  const plane = useScanStore((s) => s.plane);
+  const setPlane = useScanStore((s) => s.setPlane);
   // There is nothing to reveal on a body that already has its colour: the
   // control says so rather than sitting there apparently broken.
   const drained = useSceneStore((s) => s.bodyTone) !== "solid";
@@ -161,6 +164,49 @@ export function ScanControls() {
             <span>Drag to hold the light</span>
             <span className="text-slate-500 normal-case">hide</span>
           </button>
+          {/*
+            Which way the light reads the body. Above the handle, because it
+            changes what the handle means: head to feet, or front to back.
+
+            A new plane starts from its whole picture and takes a section at
+            once, if sections are on: a window framed on a height means nothing
+            at a depth, and a switch that changed nothing until the next drag
+            would read as broken.
+          */}
+          <div className="mb-1.5 flex gap-1" role="group" aria-label="Scanner plane">
+            {[
+              {
+                value: "axial" as const,
+                label: "Axial",
+                hint: "Sweep head to feet and section the body at a height",
+              },
+              {
+                value: "front" as const,
+                label: "Front",
+                hint: "Sweep front to back and section the body at a depth, seen from the front",
+              },
+            ].map((choice) => (
+              <button
+                key={choice.value}
+                type="button"
+                onClick={() => {
+                  if (choice.value === plane) return;
+                  setPlane(choice.value);
+                  SECTION_VIEW.value = null;
+                  wantSection();
+                }}
+                aria-pressed={plane === choice.value}
+                title={choice.hint}
+                className={`flex-1 rounded border px-1 py-0.5 text-[9px] ${
+                  plane === choice.value
+                    ? "border-cyan-500 bg-cyan-500/15 text-cyan-200"
+                    : "border-slate-700 text-slate-400 hover:border-slate-600"
+                }`}
+              >
+                {choice.label}
+              </button>
+            ))}
+          </div>
           {/*
             Vertical, because the thing it moves is: a horizontal handle for a
             light that travels head to feet reads backwards in the hand.

@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { useScanStore } from "@/stores/scanStore";
 
 import { SCAN_DROP, SCAN_ENTRY, SCAN_PULSE, SHARED_SCAN } from "./scanBand";
+import type { SectionPlaneName } from "./axialSlice";
 import { scanTint } from "./scanTints";
 
 /**
@@ -140,9 +141,17 @@ const NAMEPLATE_REPEATS = 5;
  * the real reason to spend it on this: a still of a section taken by the
  * assistant and one taken by hand should not be the same image.
  */
-function nameplateText(byAssistant: boolean): string {
-  return byAssistant ? "ANATRIA 3D AI" : "ANATRIA 3D";
+export function nameplateText(byAssistant: boolean, plane: SectionPlaneName = "axial"): string {
+  // And which way it is reading, because the same ring serves both planes and
+  // the picture beside it is a different kind of picture.
+  return ["ANATRIA 3D", byAssistant ? "AI" : null, plane === "front" ? "FRONT" : null]
+    .filter(Boolean)
+    .join(" ");
 }
+
+/** The largest the name is drawn, and the smallest it may shrink to fit. */
+const NAMEPLATE_FONT_PX = 34;
+const NAMEPLATE_MIN_FONT_PX = 18;
 
 function nameplateTexture(glow: string, label: string): THREE.CanvasTexture {
   const canvas = document.createElement("canvas");
@@ -151,10 +160,18 @@ function nameplateTexture(glow: string, label: string): THREE.CanvasTexture {
   const context = canvas.getContext("2d");
   if (context) {
     context.clearRect(0, 0, canvas.width, canvas.height);
-    context.font = "600 34px ui-sans-serif, system-ui, sans-serif";
     context.textAlign = "center";
     context.textBaseline = "middle";
-    context.letterSpacing = "10px";
+    // Shrunk until it fits rather than clipped: "ANATRIA 3D AI FRONT" is half
+    // as long again as the name the plate was sized for, and a name cut off at
+    // both ends reads as a fault in the instrument. The spacing shrinks with
+    // the letters so the plate keeps its look.
+    const room = canvas.width - 24;
+    for (let size = NAMEPLATE_FONT_PX; size >= NAMEPLATE_MIN_FONT_PX; size -= 2) {
+      context.font = `600 ${size}px ui-sans-serif, system-ui, sans-serif`;
+      context.letterSpacing = `${Math.round(size * 0.3)}px`;
+      if (context.measureText(label).width <= room) break;
+    }
     context.shadowColor = glow;
     context.shadowBlur = 18;
     context.fillStyle = "#d6fbff";
@@ -224,6 +241,15 @@ export function ScanRing({
    * or an assistant moves the scanner and never per frame.
    */
   const byAssistant = useScanStore((s) => s.byAssistant);
+  /**
+   * Which plane it is reading.
+   *
+   * The ring is the same hardware for both. On a frontal sweep it cannot ride
+   * the plane — the plane stands upright through the whole body, and a hoop
+   * travelling front to back would pass through the patient — so it parks at
+   * the chest and says FRONT, and the light it throws is the one on the body.
+   */
+  const plane = useScanStore((s) => s.plane);
   const lit = useMemo(() => new THREE.Color(tint.hex), [tint]);
   const edgeLit = useMemo(
     () => new THREE.Color(tint.hex).lerp(new THREE.Color("#ffffff"), EDGE_TOWARDS_WHITE),
@@ -274,6 +300,9 @@ export function ScanRing({
       // height, and a drop that reads as an approach on one would be a twitch
       // on the other.
       drop: size.y * SCAN_DROP,
+      // Where it waits during a frontal sweep: about the height of the sternum,
+      // the middle of what a frontal section is usually read for.
+      park: bounds.min.y + size.y * 0.72,
     };
   }, [bounds]);
 
@@ -322,8 +351,8 @@ export function ScanRing({
   // Only drawn when the hardware is. Built unconditionally it meant a canvas
   // and a texture upload for every question asked, to be disposed unused.
   const nameplate = useMemo(
-    () => (instrument ? nameplateTexture(tint.hex, nameplateText(byAssistant)) : null),
-    [instrument, tint, byAssistant],
+    () => (instrument ? nameplateTexture(tint.hex, nameplateText(byAssistant, plane)) : null),
+    [instrument, tint, byAssistant, plane],
   );
 
   useEffect(
@@ -409,7 +438,8 @@ export function ScanRing({
      * sweep opens at the crown and travels down, the arrival and the first
      * stroke are one continuous movement instead of two.
      */
-    group.position.y = SHARED_SCAN.value + (1 - arrival) * shape.drop;
+    const front = plane === "front";
+    group.position.y = (front ? shape.park : SHARED_SCAN.value) + (1 - arrival) * shape.drop;
 
     const aperture = 1 + ENTRY_APERTURE * (1 - arrival);
     // Radial only. Scaling Y as well would squash the lens of light through the
@@ -427,6 +457,10 @@ export function ScanRing({
      */
     const pulse = SCAN_PULSE.value;
     if (glowGroup.current) {
+      // The disc lies in the ring's own plane, which is horizontal: on a
+      // frontal sweep it would be a second, wrong plane of light. The body's
+      // own light shows where the frontal plane is, and flashes on release.
+      glowGroup.current.visible = !front;
       const spread = 1 + PULSE_SPREAD * pulse;
       glowGroup.current.scale.set(spread, 1, spread);
     }

@@ -17,6 +17,7 @@ import {
   restoreSlice,
   SECTION_VIEW,
   SECTION_WINDOW,
+  slicePlane,
   SLICE_PIXELS,
   TORCH,
   torchDirection,
@@ -143,6 +144,8 @@ export function AxialView() {
   // is resized by the painter, but the point past which magnifying invents
   // detail moves the moment the setting does.
   useScanStore((s) => s.detail);
+  /** Which plane the scanner is set to. What is on screen is `AXIAL_PROBE.plane`. */
+  const plane = useScanStore((s) => s.plane);
   const [full, setFull] = useState(false);
   /**
    * The square of body the section is framed on, or null for the whole thing.
@@ -242,7 +245,7 @@ export function AxialView() {
     if (!torch || box.width <= 0 || box.height <= 0) return;
     const u = (x - box.left - box.width / 2) / (box.width / 2);
     const v = (y - box.top - box.height / 2) / (box.height / 2);
-    TORCH.value = torchDirection(u, v, AXIAL_PROBE.basis);
+    TORCH.value = torchDirection(u, v, AXIAL_PROBE.basis, slicePlane(AXIAL_PROBE.plane));
     retakeSoon();
   };
 
@@ -328,6 +331,14 @@ export function AxialView() {
     if (held) setStepped(false);
   }, [held]);
 
+  // A new plane is a new picture: its whole frame, and not yet stepped. The
+  // module window was cleared by the control that switched it, before it asked
+  // for the section; this is the panel's copy catching up.
+  useEffect(() => {
+    setShown(null);
+    setStepped(false);
+  }, [plane]);
+
   useEffect(() => {
     const element = frame.current;
     if (!element) return;
@@ -360,7 +371,7 @@ export function AxialView() {
       if (event.key !== "Escape") return;
       // The last line on this level first, then the panel: Escape should undo
       // the smallest thing the reader did before it throws away the biggest.
-      const onThisLevel = measures.filter((line) => onLevel(line, AXIAL_PROBE.at));
+      const onThisLevel = measures.filter((line) => onLevel(line, AXIAL_PROBE.at, AXIAL_PROBE.plane));
       const last = onThisLevel[onThisLevel.length - 1];
       if (last) {
         setMeasures((all) => all.filter((line) => line !== last));
@@ -408,7 +419,7 @@ export function AxialView() {
    * Derived on every render rather than stored: the level changes when a new
    * section arrives, which is also when this component renders.
    */
-  const here = measures.filter((line) => onLevel(line, AXIAL_PROBE.at));
+  const here = measures.filter((line) => onLevel(line, AXIAL_PROBE.at, AXIAL_PROBE.plane));
   /**
    * The level, when the plane is at one.
    *
@@ -416,6 +427,11 @@ export function AxialView() {
    * being taken — the same moment the table is refreshed, for the same reason.
    */
   const level = CURRENT_LEVEL.value;
+  /** Whether the picture on screen is a frontal one. Not the setting: the picture. */
+  const front = AXIAL_PROBE.plane === "front";
+  const name = front ? "Front" : "Axial";
+  /** What a place on this plane is called, for the sentences below. */
+  const place = front ? "depth" : "level";
   /**
    * The caption describes what is actually on screen, which means it changes.
    *
@@ -425,12 +441,13 @@ export function AxialView() {
    * teaches the reader to stop reading captions.
    */
   const caption =
-    `Anterior at the top, the patient's left on the right${across > 0 ? ` · ${across.toFixed(0)} cm across` : ""}. ` +
+    `${front ? "Superior" : "Anterior"} at the top, the patient's left on the right${across > 0 ? ` · ${across.toFixed(0)} cm across` : ""}. ` +
     (cut
-      ? "The body opened at this plane: you are seeing the surfaces below the " +
-        "cut, so there is depth behind what is at this level."
-      : "Only what lies at this level, and the cut surfaces are open — an " +
+      ? `The body opened at this plane: you are seeing the surfaces ${front ? "behind" : "below"} the ` +
+        `cut, so there is depth behind what is at this ${place}.`
+      : `Only what lies at this ${place}, and the cut surfaces are open — an ` +
         "outline rather than a filled section.") +
+    (front ? " Depth is measured from the most anterior point of the body." : "") +
     " Drawn solid whatever the viewport shows. Not a radiograph.";
 
   if (full) {
@@ -486,7 +503,14 @@ export function AxialView() {
                 AXIAL_PROBE.basis,
               );
               // Stamped with the level of the picture it is drawn on.
-              const line = { ax: at.x, az: at.z, bx: at.x, bz: at.z, at: AXIAL_PROBE.at };
+              const line = {
+                ah: at.h,
+                av: at.v,
+                bh: at.h,
+                bv: at.v,
+                at: AXIAL_PROBE.at,
+                plane: AXIAL_PROBE.plane,
+              };
               drafting.current = line;
               setDraft(line);
               event.currentTarget.setPointerCapture(event.pointerId);
@@ -508,7 +532,7 @@ export function AxialView() {
               );
               // Only the far end moves. The near one was placed where the
               // reader put it and must not drift under them.
-              const line = { ...drafting.current, bx: at.x, bz: at.z };
+              const line = { ...drafting.current, bh: at.h, bv: at.v };
               drafting.current = line;
               setDraft(line);
               return;
@@ -571,7 +595,11 @@ export function AxialView() {
             width={SLICE_PIXELS.value}
             height={SLICE_PIXELS.value}
             className="absolute inset-0 h-full w-full"
-            aria-label="Cross-section at the height of the scanner"
+            aria-label={
+              front
+                ? "Frontal section at the depth of the scanner"
+                : "Cross-section at the height of the scanner"
+            }
           />
           {/*
             Drawn over the picture rather than into it. A caliper baked into the
@@ -586,12 +614,12 @@ export function AxialView() {
               aria-hidden
             >
               {[...here, ...(draft ? [draft] : [])].map((line) => {
-                const a = pointOnScreen(looking(), line.ax, line.az, frameWidth, AXIAL_PROBE.basis);
-                const b = pointOnScreen(looking(), line.bx, line.bz, frameWidth, AXIAL_PROBE.basis);
+                const a = pointOnScreen(looking(), line.ah, line.av, frameWidth, AXIAL_PROBE.basis);
+                const b = pointOnScreen(looking(), line.bh, line.bv, frameWidth, AXIAL_PROBE.basis);
                 const cm = measureCm(line);
                 const kept = line !== draft;
                 return (
-                  <g key={`${line.ax}:${line.az}:${line.bx}:${line.bz}:${line.at}`}>
+                  <g key={`${line.plane}:${line.ah}:${line.av}:${line.bh}:${line.bv}:${line.at}`}>
                     <line
                       x1={a.x}
                       y1={a.y}
@@ -639,7 +667,7 @@ export function AxialView() {
 
         <div className="flex w-72 flex-col gap-3 self-center">
           <p className="text-[10px] uppercase tracking-wider text-cyan-500/70">
-            Axial{level ? ` · ${level}` : ""} ·{" "}
+            {name}{level ? ` · ${level}` : ""} ·{" "}
             {stepped ? `${SECTION_STEP_CM} cm steps` : "where you let go"}
           </p>
 
@@ -699,7 +727,7 @@ export function AxialView() {
                 {draft
                   ? formatDistance(measureCm(draft))
                   : here.length > 0
-                    ? `${here.length} on this level`
+                    ? `${here.length} at this ${place}`
                     : "drag across it"}
               </span>
             )}
@@ -707,9 +735,11 @@ export function AxialView() {
               <button
                 type="button"
                 onClick={() =>
-                  setMeasures((all) => all.filter((line) => !onLevel(line, AXIAL_PROBE.at)))
+                  setMeasures((all) =>
+                    all.filter((line) => !onLevel(line, AXIAL_PROBE.at, AXIAL_PROBE.plane)),
+                  )
                 }
-                title="Remove the measurements on this level"
+                title={`Remove the measurements at this ${place}`}
                 className="rounded border border-slate-700 px-2 py-0.5 text-slate-300 hover:border-cyan-700 hover:text-cyan-300"
               >
                 Clear
@@ -726,7 +756,7 @@ export function AxialView() {
                 sectionImage(looking(), here, AXIAL_PROBE.basis)
                   .then((png) =>
                     png
-                      ? saveViewImage(png, sectionFileName(level, across, cut))
+                      ? saveViewImage(png, sectionFileName(AXIAL_PROBE.plane, level, across, cut))
                       : Promise.reject(new Error("There is no section to save yet.")),
                   )
                   .then((path) => setSaved(path ? `Saved to ${path}` : null))
@@ -756,10 +786,10 @@ export function AxialView() {
           {measuring && (
             <p className="text-[11px] leading-snug text-slate-500">
               Drag again for another; click a number to remove it. Each stays on
-              the level it was drawn on. Both ends lie in the plane, so this is the
+              the {place} it was drawn on. Both ends lie in the plane, so this is the
               true distance between those two points —{" "}
               {cut
-                ? "but in Cut you are seeing surfaces below the plane, so the structures under the ends may not be at this level. Slab is the mode to measure a level in."
+                ? `but in Cut you are seeing surfaces ${front ? "behind" : "below"} the plane, so the structures under the ends may not be at this ${place}. Slab is the mode to measure a ${place} in.`
                 : "and in Slab everything shown is within four millimetres of it."}
             </p>
           )}
@@ -773,7 +803,7 @@ export function AxialView() {
             so it adds detail instead of pixels. Drag to move; the button gives
             the whole section back.
             {torch
-              ? " The pointer is the light: the middle is overhead, and the" +
+              ? ` The pointer is the light: the middle is ${front ? "straight on" : "overhead"}, and the` +
                 " edges rake it flat across the section."
               : ""}
           </p>
@@ -785,7 +815,7 @@ export function AxialView() {
   return (
     <div className="pointer-events-none select-none rounded border border-cyan-900/60 bg-slate-950/85 p-1.5 shadow-lg">
       <p className="mb-1 text-[9px] uppercase tracking-wider text-cyan-500/70">
-        Axial{level ? ` · ${level}` : ""} ·{" "}
+        {name}{level ? ` · ${level}` : ""} ·{" "}
         {stepped ? `${SECTION_STEP_CM} cm steps` : "where you let go"}
       </p>
       <button
@@ -800,7 +830,11 @@ export function AxialView() {
           width={SLICE_PIXELS.value}
           height={SLICE_PIXELS.value}
           className="block h-36 w-36 rounded-sm bg-black short:h-28 short:w-28"
-          aria-label="Cross-section at the height of the scanner. Click to enlarge."
+          aria-label={`${
+            front
+              ? "Frontal section at the depth of the scanner"
+              : "Cross-section at the height of the scanner"
+          }. Click to enlarge.`}
         />
       </button>
       {/*

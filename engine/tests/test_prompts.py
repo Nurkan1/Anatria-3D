@@ -24,6 +24,7 @@ from anatria_engine.protocol import (
     Language,
     OrganContext,
     OrganMeta,
+    ScannerContext,
     SessionMode,
     UserProfile,
     VirtualPatient,
@@ -828,3 +829,51 @@ def test_the_body_rule_sits_below_safety() -> None:
         gender="female",
     )
     assert text.index("THE BODY ON SCREEN") > text.index("Anatria3D")
+
+
+HEART = OrganContext(
+    organ_id="heart", ta2_latin="Cor", name_en="Heart", system="cardiovascular"
+)
+AT_T8 = ScannerContext(level="T8", crossing=[HEART], total=180)
+
+
+def with_scanner(selection: list[OrganContext] | None = None) -> str:
+    return build_instructions(
+        profile="layperson",
+        language="es",
+        organs=ORGANS,
+        selection=selection or [],
+        mode="tutor",
+        scanner=AT_T8,
+    )
+
+
+def test_the_scanner_is_the_subject_of_here_when_nothing_is_selected() -> None:
+    text = with_scanner()
+    assert "at the level of T8" in text
+    assert "Cor (Heart)" in text
+    assert "179 smaller structures" in text
+    assert '"this part"' in text
+
+
+def test_the_readers_own_words_still_win_over_the_scanner() -> None:
+    assert "follow their words, not the scanner" in with_scanner()
+
+
+def test_a_selection_comes_before_the_scanner() -> None:
+    # Two subjects in one prompt is how an answer ends up about the wrong one.
+    text = with_scanner(selection=[HEART])
+    assert "selected" in text
+    assert "at the level of T8" not in text
+
+
+def test_the_scanner_does_not_loosen_the_safety_block() -> None:
+    # "What hurts here?" is the question this exists for, and it is still a
+    # symptom: the tutor explains the level's anatomy, never the reader.
+    text = with_scanner()
+    assert text.index(SAFETY) < text.index("at the level of T8")
+    assert "you cannot assess the reader" in text
+
+
+def test_no_scanner_says_nothing_about_one() -> None:
+    assert "has the scanner on" not in instructions("layperson", "es")

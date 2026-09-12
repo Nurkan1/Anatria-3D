@@ -89,6 +89,8 @@ export interface FocusRequest {
 export interface ScanRequest {
   organId: string;
   seq: number;
+  /** The plane the assistant asked for, when it named one. */
+  plane?: "axial" | "coronal";
 }
 
 /**
@@ -433,6 +435,7 @@ export function applySceneCommand(
         scanRequest: {
           organId: command.organ_id,
           seq: (state.scanRequest?.seq ?? 0) + 1,
+          ...(command.plane ? { plane: command.plane } : {}),
         },
       };
 

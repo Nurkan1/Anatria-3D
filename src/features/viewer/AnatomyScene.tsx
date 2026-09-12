@@ -17,11 +17,12 @@ import {
   setScanReveal,
   setScanTint,
   SHARED_SCAN,
-  STANDING,
+  setScanPlane,
+  sweepAxis,
 } from "./scanBand";
 import { ScanRing } from "./ScanRing";
 import { AxialProbe } from "./AxialProbe";
-import { SECTION_WANTED, wantSection } from "./axialSlice";
+import { depthLabel, SECTION_VIEW, SECTION_WANTED, slicePlane, wantSection } from "./axialSlice";
 import { scanTint } from "./scanTints";
 import { CURRENT_LEVEL, levelAt } from "./vertebralLevel";
 import { playScanPing } from "./scanSound";
@@ -867,6 +868,9 @@ export function AnatomyScene({
   // Subscribed rather than read in the loop: changing it rebuilds the render
   // target, which is a React concern and happens once when a person clicks.
   const axialDetail = useScanStore((s) => s.detail);
+  // Subscribed for the same reason: the probe is handed the plane as a prop,
+  // and it changes when a person clicks, never per frame.
+  const scanPlane = useScanStore((s) => s.plane);
   useEffect(() => setScanGhost(ghost), [ghost]);
 
   /** Whether the reader had hold of the light on the previous frame. */
@@ -880,21 +884,24 @@ export function AnatomyScene({
   useFrame((_, delta) => {
     // PoC measurement only: M's rolling p95 can miss a single compile stall,
     if (scanBandEnabled && bounds && !bounds.isEmpty()) {
-      // The axis is named here rather than assumed inside the band. The body
-      // stands today and world Y is feet-to-head; the moment it is laid on a
-      // gurney this call is the one line that has to change, and it will not
-      // compile until somebody answers the question.
-      const { from, to } = scanRangeAlong(
-        [bounds.min.x, bounds.min.y, bounds.min.z],
-        [bounds.max.x, bounds.max.y, bounds.max.z],
-        STANDING,
-      );
-      // How tall this body is, for anything that has to convert a fraction of
-      // the slider into a distance through a person. See `stepFraction`.
-      SCAN_TRAVEL_M.value = to - from;
       // Read rather than subscribed: this runs sixty times a second and must
       // not make the scene re-render when the reader touches the slider.
       const grip = useScanStore.getState();
+      // The axis is named here rather than assumed inside the band: feet to
+      // head for an axial plane, back to front for a frontal one. The band,
+      // the ghost and the crossing list all follow it; the wake is told which
+      // of its two spans to read.
+      const axis = sweepAxis(grip.plane);
+      setScanPlane(grip.plane);
+      const { from, to } = scanRangeAlong(
+        [bounds.min.x, bounds.min.y, bounds.min.z],
+        [bounds.max.x, bounds.max.y, bounds.max.z],
+        axis,
+      );
+      // How far the plane travels through this body — its height, or its
+      // depth — for anything that has to convert a fraction of the slider into
+      // a distance through a person. See `stepFraction`.
+      SCAN_TRAVEL_M.value = to - from;
 
       /**
        * The instrument answers the hand.
@@ -943,8 +950,8 @@ export function AnatomyScene({
         sinceCrossing.current = CROSSING_INTERVAL_S;
       }
 
-      if (scanIsStill(grip)) holdScanBand(grip.at, STANDING, from, to);
-      else advanceScanBand(delta, STANDING, from, to);
+      if (scanIsStill(grip)) holdScanBand(grip.at, axis, from, to);
+      else advanceScanBand(delta, axis, from, to);
 
       // Outside the hold branch on purpose: the mode still has to finish
       // arriving for a reader who pins the light before it is fully up.
@@ -957,11 +964,15 @@ export function AnatomyScene({
       sinceCrossing.current += delta;
       if (sinceCrossing.current >= CROSSING_INTERVAL_S) {
         sinceCrossing.current = 0;
-        const next = crossingAt(boxes.current, SHARED_SCAN.value, STANDING, CROSSING_LIMIT);
+        const next = crossingAt(boxes.current, SHARED_SCAN.value, axis, CROSSING_LIMIT);
         if (!sameCrossing(next, CURRENT_CROSSING.value)) CURRENT_CROSSING.value = next;
         // On the same slower tick, and for the same reason: the level changes
         // when the plane has travelled a centimetre, not when a frame passed.
-        CURRENT_LEVEL.value = levelAt(boxes.current, SHARED_SCAN.value);
+        // A frontal plane has no vertebral level; it has a depth.
+        CURRENT_LEVEL.value =
+          grip.plane === "front"
+            ? depthLabel(to - SHARED_SCAN.value)
+            : levelAt(boxes.current, SHARED_SCAN.value);
       }
     } else if (SWEEP_RUNNING.value || CURRENT_CROSSING.value !== NOTHING_CROSSED) {
       SWEEP_RUNNING.value = false;
@@ -997,18 +1008,36 @@ export function AnatomyScene({
     if (!box) return;
     lastScanSeq.current = scanRequest.seq;
 
+    // The assistant may name the plane as well as the place -- "a frontal
+    // section of the heart". Switched first, so the travel below is measured
+    // along the plane it asked for and the picture starts from its whole frame.
+    if (scanRequest.plane) {
+      const wanted = scanRequest.plane === "coronal" ? "front" : "axial";
+      if (useScanStore.getState().plane !== wanted) {
+        useScanStore.getState().setPlane(wanted);
+        SECTION_VIEW.value = null;
+      }
+    }
+    // Along whichever plane the reader has chosen: a structure has a height
+    // and a depth, and "put the plane at the aorta" means the one on screen.
+    const axis = sweepAxis(useScanStore.getState().plane);
     const { from, to } = scanRangeAlong(
       [bounds.min.x, bounds.min.y, bounds.min.z],
       [bounds.max.x, bounds.max.y, bounds.max.z],
-      STANDING,
+      axis,
     );
     // The middle of the structure along the sweep. For a vertebra that is the
     // level; for something long it is the middle of it, which is the honest
     // answer to "put the plane at the aorta" and the one the panel will then
     // describe.
+    const middle = scanRangeAlong(
+      [box.min.x, box.min.y, box.min.z],
+      [box.max.x, box.max.y, box.max.z],
+      axis,
+    );
     useScanStore
       .getState()
-      .putAt(scanFractionFor((box.min.y + box.max.y) / 2, from, to));
+      .putAt(scanFractionFor((middle.from + middle.to) / 2, from, to));
     // Only draws one if the reader has sections switched on; the scene checks.
     wantSection();
   }, [scanRequest, bounds, centresRevision]);
@@ -1147,6 +1176,7 @@ export function AnatomyScene({
           request={axialRuns}
           high={axialDetail}
           leftSign={leftSign}
+          plane={slicePlane(scanPlane)}
         />
       )}
 

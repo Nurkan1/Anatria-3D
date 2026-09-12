@@ -1468,6 +1468,16 @@ describe("scan_at_structure", () => {
     expect(state.scanRequest).toEqual({ organId: "vertebra_t8", seq: 1 });
   });
 
+  it("passes on the plane when the assistant names one", () => {
+    const state = run({ action: "scan_at_structure", organ_id: "cor", plane: "coronal" });
+    expect(state.scanRequest).toEqual({ organId: "cor", seq: 1, plane: "coronal" });
+  });
+
+  it("leaves the plane to the reader when none is named, even as null", () => {
+    const state = run({ action: "scan_at_structure", organ_id: "cor", plane: null });
+    expect(state.scanRequest).toEqual({ organId: "cor", seq: 1 });
+  });
+
   it("counts, so asking twice for the same level is two answers", () => {
     const state = run(
       { action: "scan_at_structure", organ_id: "vertebra_t8" },

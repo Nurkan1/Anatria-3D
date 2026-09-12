@@ -5,7 +5,7 @@ from os.path import commonprefix
 import pytest
 
 from anatria_engine.prompts import SAFETY, _groups_rule, build_instructions
-from anatria_engine.protocol import OrganContext, OrganMeta
+from anatria_engine.protocol import OrganContext, OrganMeta, ScannerContext
 
 
 def organ(organ_id: str) -> OrganMeta:
@@ -39,3 +39,13 @@ def test_changing_selection_does_not_invalidate_the_static_group_catalogue():
     assert a.describe() in first
     assert b.describe() in second
     assert len(first) == len(second)
+
+
+def test_moving_the_scanner_does_not_invalidate_the_static_group_catalogue():
+    kwargs = dict(
+        profile="student", language="en", mode="tutor", selection=[],
+        organs=[organ("a"), organ("b")], groups=["A", "B"],
+    )
+    first = build_instructions(scanner=ScannerContext(level="T4"), **kwargs)
+    second = build_instructions(scanner=ScannerContext(level="L2"), **kwargs)
+    assert _groups_rule(["A", "B"]) in commonprefix([first, second])

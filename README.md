@@ -89,8 +89,11 @@ it crosses listed beside it. The wheel steps a centimetre at a time; magnifying
 renders the section again at the narrower width, so it adds detail rather than
 pixels; a caliper measures in the body's own coordinates and keeps each line on
 the level it was drawn on; and the assistant can put the plane at any structure
-you name. A section is the atlas's geometry cut at a height, not a radiograph,
-and every picture it produces says so.
+you name. Switched to *Front*, the same instrument sections the body at a depth
+instead, seen from the front with the head at the top; and with the light held
+at a level and nothing selected, the assistant knows where it is, so *"what is
+in this part?"* needs no other words. A section is the atlas's geometry cut at a
+height or a depth, not a radiograph, and every picture it produces says so.
 
 ![Four views of the same head at once. The panel the reader drives sits
 top-left with the vessels and nerves of the head and neck; beside and below it,

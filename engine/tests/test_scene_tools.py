@@ -21,6 +21,7 @@ from anatria_engine.protocol import (
     IlluminateStructures,
     IsolateStructures,
     OrganMeta,
+    ScanAtStructure,
     SetCrossSection,
     SetLayerOpacity,
     SetLayerVisibility,
@@ -755,3 +756,26 @@ def test_isolate_group_is_inert_without_groups() -> None:
     agent.run_sync("show me the heart", deps=scene)
 
     assert scene.emitted == []
+
+
+async def test_the_scanner_can_be_asked_for_a_frontal_section() -> None:
+    scene = make_scene()
+    organ_id = next(iter(scene.organs))
+    call = {"organ_id": organ_id, "plane": "coronal"}
+    agent = build(scene, scripted([ToolCallPart("scan_at_structure", call)]))
+
+    await agent.run("Show me a frontal section of it.", deps=scene)
+
+    assert scene.emitted == [ScanAtStructure(organ_id=organ_id, plane="coronal")]
+
+
+async def test_the_scanner_keeps_the_readers_plane_when_none_is_named() -> None:
+    scene = make_scene()
+    organ_id = next(iter(scene.organs))
+    call = {"organ_id": organ_id}
+    agent = build(scene, scripted([ToolCallPart("scan_at_structure", call)]))
+
+    await agent.run("Take me there.", deps=scene)
+
+    assert scene.emitted == [ScanAtStructure(organ_id=organ_id)]
+    assert scene.emitted[0].plane is None

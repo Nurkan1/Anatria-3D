@@ -76,7 +76,8 @@ export function levelAt(boxes: Map<string, THREE.Box3>, at: number): string | nu
 }
 
 /**
- * The level the sweep is at now.
+ * Where the sweep is now, in words: the vertebral level of an axial plane, or
+ * the depth of a frontal one (see `depthLabel`).
  *
  * Published the same way the crossing list is, and recomputed on the same
  * slower tick: it changes when the plane has travelled a centimetre, not when

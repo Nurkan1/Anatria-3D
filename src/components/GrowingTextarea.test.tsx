@@ -100,3 +100,66 @@ describe("a field that grows with what is in it", () => {
     expect(box().className).toMatch(/resize-none/);
   });
 });
+
+describe("a field in a panel that is switched off", () => {
+  /** `display: none` answers every measurement with zero. */
+  function measuringNothing(): () => void {
+    const stubbed = Object.getOwnPropertyDescriptor(
+      HTMLTextAreaElement.prototype,
+      "scrollHeight",
+    );
+    Object.defineProperty(HTMLTextAreaElement.prototype, "scrollHeight", {
+      configurable: true,
+      get: () => 0,
+    });
+    return () => {
+      if (stubbed) {
+        Object.defineProperty(HTMLTextAreaElement.prototype, "scrollHeight", stubbed);
+      }
+    };
+  }
+
+  it("does not pin itself shut while it cannot be measured", () => {
+    // The bug the reader saw: mounted inside the folded assistant panel, the
+    // field wrote `height: 0px` and kept it, so unfolding gave a squashed strip
+    // instead of a composer. Nothing re-measures it until the text changes.
+    const show = measuringNothing();
+    try {
+      render(<Field start={"a\nb\nc"} />);
+      expect(box().style.height).toBe("");
+    } finally {
+      show();
+    }
+  });
+
+  it("measures itself the moment it is on screen again", () => {
+    const callbacks: ResizeObserverCallback[] = [];
+    const previous = globalThis.ResizeObserver;
+    globalThis.ResizeObserver = class {
+      constructor(callback: ResizeObserverCallback) {
+        callbacks.push(callback);
+      }
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    } as unknown as typeof ResizeObserver;
+
+    const show = measuringNothing();
+    try {
+      render(<Field start={"a\nb\nc"} />);
+      expect(box().style.height).toBe("");
+
+      // The panel is brought back: the box goes from nothing to its real size,
+      // which is what the observer is watching for.
+      show();
+      for (const callback of callbacks) {
+        callback([], {} as ResizeObserver);
+      }
+
+      expect(box().style.height).toBe(`${3 * LINE}px`);
+    } finally {
+      show();
+      globalThis.ResizeObserver = previous;
+    }
+  });
+});

@@ -66,6 +66,7 @@ def build_surface() -> dict[str, Any]:
             "GenderModel": sorted(get_args(p.GenderModel)),
             "AiProvider": sorted(get_args(p.AiProvider)),
             "SectionPlane": sorted(get_args(p.SectionPlane)),
+            "ScannerPlane": sorted(get_args(p.ScannerPlane)),
             "SessionMode": sorted(get_args(p.SessionMode)),
             "AnatomicalSystem": sorted(get_args(p.AnatomicalSystem)),
             "EngineErrorCode": sorted(get_args(p.EngineErrorCode)),
@@ -82,6 +83,7 @@ def build_surface() -> dict[str, Any]:
             "CaseComplaint": fields_of(p.CaseComplaint),
             "CaseVisitSummary": fields_of(p.CaseVisitSummary),
             "CaseRecordUpdate": fields_of(p.CaseRecordUpdate),
+            "ScannerContext": fields_of(p.ScannerContext),
         },
         "unions": {
             "SceneCommand": variants_of(p.SceneCommand, "action"),

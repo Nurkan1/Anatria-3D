@@ -62,6 +62,7 @@ from anatria_engine.protocol import (
     ResetView,
     Say,
     ScanAtStructure,
+    ScannerPlane,
     SectionPlane,
     SetCrossSection,
     SetLayerOpacity,
@@ -448,7 +449,7 @@ def register_scene_tools(
         return "Cleared the pathway."
 
     @mcp.tool(annotations=CHANGES_THE_VIEW)
-    def scan_at_structure(organ_id: str) -> str:
+    def scan_at_structure(organ_id: str, plane: ScannerPlane | None = None) -> str:
         """Put the scanner's plane at the height of a structure.
 
         Use it when the reader asks to be taken to a level -- "show me T8",
@@ -458,9 +459,14 @@ def register_scene_tools(
         The scanner is switched on if it is off, because a plane nobody can see
         is not an answer. The panel names the vertebral level the plane lands
         on, so asking for a vertebra and asking for an organ are one call.
+
+        `plane` is "axial" for a level or an axial slice, "coronal" for a
+        frontal section seen from the front. Left out, the reader's own plane
+        is kept.
         """
-        send(build(ScanAtStructure, organ_id=organ_id))
-        return f"Put the scanner at {organ_id}."
+        send(build(ScanAtStructure, organ_id=organ_id, plane=plane))
+        frontal = " on a frontal plane" if plane == "coronal" else ""
+        return f"Put the scanner at {organ_id}{frontal}."
 
     @mcp.tool(annotations=CHANGES_THE_VIEW)
     def set_cross_section(plane: SectionPlane, position: float) -> str:

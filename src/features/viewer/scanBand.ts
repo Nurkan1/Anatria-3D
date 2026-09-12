@@ -1,4 +1,5 @@
 import type { Material } from "three";
+import type { SectionPlaneName } from "./axialSlice";
 
 /**
  * The sweep band, and the one detail the whole design rests on.
@@ -37,6 +38,27 @@ export type ScanAxis = readonly [number, number, number];
 
 /** Feet to head, for a body standing up. */
 export const STANDING: ScanAxis = [0, 1, 0];
+
+/** Back to front, for a frontal section: anterior is +Z on both atlases. */
+export const FACING: ScanAxis = [0, 0, 1];
+
+/** The axis the sweep travels along for a section plane. */
+export function sweepAxis(plane: SectionPlaneName): ScanAxis {
+  return plane === "front" ? FACING : STANDING;
+}
+
+/**
+ * Which of a structure's two spans the wake reads: 0 its height, 1 its depth.
+ *
+ * Both are baked into every material at compile, and this shared value picks
+ * between them, so changing plane is one float write rather than a recompile of
+ * 3,478 materials. See the note on `uOrganSpan` in the shader.
+ */
+export const SCAN_PLANE = { value: 0 };
+
+export function setScanPlane(plane: SectionPlaneName): void {
+  SCAN_PLANE.value = plane === "front" ? 1 : 0;
+}
 
 export const SHARED_SCAN = { value: 0 };
 export const SHARED_AXIS: { value: number[] } = { value: [...STANDING] };
@@ -273,6 +295,7 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
   shader.uniforms.uScanGhost = SCAN_GHOST;
   shader.uniforms.uScanPulse = SCAN_PULSE;
   shader.uniforms.uScanDirection = SCAN_DIRECTION;
+  shader.uniforms.uScanPlane = SCAN_PLANE;
 
   // This structure's own reach along the axis, and its own undrained colour,
   // both read off the material through `this`. Written once at compile and
@@ -285,12 +308,18 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
     | {
         userData?: {
           scanSpan?: readonly [number, number];
+          scanSpanFront?: readonly [number, number];
           revealColour?: readonly [number, number, number];
         };
       }
     | undefined;
   const span = owner?.userData?.scanSpan ?? NEVER;
   shader.uniforms.uOrganSpan = { value: [span[0], span[1]] };
+  // The same reach along the frontal sweep. Carried beside the height rather
+  // than swapped in when the plane changes: a swap would be a walk of every
+  // material, and a new value per material is free only at compile.
+  const spanFront = owner?.userData?.scanSpanFront ?? NEVER;
+  shader.uniforms.uOrganSpanFront = { value: [spanFront[0], spanFront[1]] };
   const reveal = owner?.userData?.revealColour ?? KEEPS_ITS_OWN;
   shader.uniforms.uRevealColour = { value: [reveal[0], reveal[1], reveal[2]] };
 
@@ -308,7 +337,8 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
     "uniform float uScanReveal;\nuniform vec3 uRevealColour;\n" +
     "uniform float uScanGhost;\nuniform float uScanDirection;\n" +
     "uniform float uScanPulse;\n" +
-    "uniform vec2 uOrganSpan;\nvarying float vScanAlong;\n" +
+    "uniform vec2 uOrganSpan;\nuniform vec2 uOrganSpanFront;\nuniform float uScanPlane;\n" +
+    "varying float vScanAlong;\n" +
     shader.fragmentShader.replace(
       fragmentChunk,
       `${fragmentChunk}
@@ -317,8 +347,11 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
     // both ends so a structure arrives and leaves rather than blinking, which
     // is the difference between a scanner finding something and a bulb
     // switching on.
-    float wake = smoothstep(uOrganSpan.x - 0.02, uOrganSpan.x + 0.02, uScanAt)
-               * (1.0 - smoothstep(uOrganSpan.y - 0.02, uOrganSpan.y + 0.02, uScanAt));
+    // Along whichever axis the plane is sweeping: the height for an axial
+    // section, the depth for a frontal one.
+    vec2 organSpan = mix(uOrganSpan, uOrganSpanFront, uScanPlane);
+    float wake = smoothstep(organSpan.x - 0.02, organSpan.x + 0.02, uScanAt)
+               * (1.0 - smoothstep(organSpan.y - 0.02, organSpan.y + 0.02, uScanAt));
     // Give the structure its colour back while the plane is inside it.
     //
     // This lands *before* the lighting model runs, so what comes back is lit
@@ -369,18 +402,20 @@ const OFF = Object.freeze({});
 /**
  * Off means no callback prop at all, not an identity shader callback.
  *
- * `span` is this structure's own reach along the sweep axis. It travels on
- * `userData` because that is where the shared `onBeforeCompile` can reach it —
- * see the note about `this` there.
+ * `span` is this structure's own reach along the standing sweep and `spanFront`
+ * its reach along the frontal one. They travel on `userData` because that is
+ * where the shared `onBeforeCompile` can reach them — see the note about `this`
+ * there.
  */
 export function scanBandMaterialProps(
   enabled: boolean,
   span?: readonly [number, number],
   revealColour?: readonly [number, number, number],
+  spanFront?: readonly [number, number],
 ) {
   if (!enabled) return OFF;
-  if (!span && !revealColour) return ON;
-  return { ...ON, userData: { scanSpan: span, revealColour } };
+  if (!span && !revealColour && !spanFront) return ON;
+  return { ...ON, userData: { scanSpan: span, revealColour, scanSpanFront: spanFront } };
 }
 
 /**
