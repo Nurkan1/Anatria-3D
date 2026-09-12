@@ -41,6 +41,15 @@ heart"* switches the scanner to *Front* and puts the plane through it; asking fo
 a level goes back to *Axial*. The same choice is open to an agent driving the
 atlas over MCP.
 
+### Fixed
+
+**The box you type in opened as a squashed strip.** A field measures itself to
+decide how tall to be, and a field inside a panel that is switched off measures
+zero — so the assistant's composer kept that zero, on first launch and every
+time the panel was folded away and brought back. Typing in it put it right,
+which is how it survived this long. It now keeps its proper height, and is
+measured again when the panel comes back or is dragged narrower.
+
 ## [0.2.9] — 2026-09-11
 
 ### Added
