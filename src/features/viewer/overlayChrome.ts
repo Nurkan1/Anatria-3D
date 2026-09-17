@@ -44,4 +44,5 @@ export const OVERLAY_SWITCH_OFF =
 export const OVERLAY_SWITCH_ON = {
   cyan: "border-cyan-500 bg-cyan-950/90 text-cyan-200",
   sky: "border-sky-500 bg-sky-950/90 text-sky-200",
+  rose: "border-rose-500 bg-rose-950/90 text-rose-200",
 } as const;

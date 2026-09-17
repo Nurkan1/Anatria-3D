@@ -6,6 +6,7 @@ import { fps, heapMb, noteFrame, sample } from "./renderSample";
 import { viewportKey } from "./viewportKeys";
 import { AXIAL_PROBE } from "./AxialProbe";
 import { SLICE_PIXELS } from "./axialSlice";
+import { BEATING } from "./heartbeat";
 import { readLocal, writeLocal } from "@/lib/localStore";
 import { OVERLAY_CHIP } from "./overlayChrome";
 
@@ -142,6 +143,8 @@ const ROWS: Row[] = [
   // What it actually read at, which is not always what was asked for: the card
   // has the last word on the size of a render target.
   { label: "axial pixels", read: () => `${SLICE_PIXELS.value}²` },
+  // Phase 0 of the heartbeat: how many structures it is moving right now.
+  { label: "heart meshes", read: () => (BEATING.size === 0 ? "—" : String(BEATING.size)) },
 ];
 
 /**

@@ -22,6 +22,7 @@ import {
 } from "./scanBand";
 import { ScanRing } from "./ScanRing";
 import { AxialProbe } from "./AxialProbe";
+import { HeartbeatDriver } from "./HeartbeatDriver";
 import { depthLabel, SECTION_VIEW, SECTION_WANTED, slicePlane, wantSection } from "./axialSlice";
 import { scanTint } from "./scanTints";
 import { CURRENT_LEVEL, levelAt } from "./vertebralLevel";
@@ -1179,6 +1180,8 @@ export function AnatomyScene({
           plane={slicePlane(scanPlane)}
         />
       )}
+      {/* Idle until the heartbeat is switched on. */}
+      <HeartbeatDriver boxes={boxes.current} organs={manifest.organs} revision={centresRevision} />
 
       {pathway && (
         <PathwayFlow

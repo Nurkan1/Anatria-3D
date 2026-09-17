@@ -10,6 +10,8 @@ import { shouldSuppressClick } from "./areaSelect";
 import { coverageColour } from "./coverage";
 import { scanColour, type BodyTone } from "./scan";
 import { FACING, scanBandMaterialProps, scanRangeAlong, STANDING } from "./scanBand";
+import { beatChamber, heartbeatOnBeforeCompile, isAtrium, registerBeating } from "./heartbeat";
+import { useHeartStore } from "@/stores/heartStore";
 import { probeGlow, reportDepthStack, stackFromCrossings } from "./depthStack";
 import type { ManifestOrgan } from "@/lib/schemas";
 
@@ -290,8 +292,13 @@ export const OrganMesh = memo(function OrganMesh({
   // Memoised so React does not detach and reattach the ref on every render —
   // with thousands of meshes on screen, an inline callback would churn the
   // registry each time anything was hovered.
+  /** The live mesh, for the heartbeat's registry. See `registerBeating`. */
+  const meshRef = useRef<THREE.Mesh | null>(null);
   const register = useCallback(
-    (mesh: THREE.Mesh | null) => onRegister?.(organ.organ_id, mesh, matrix),
+    (mesh: THREE.Mesh | null) => {
+      meshRef.current = mesh;
+      onRegister?.(organ.organ_id, mesh, matrix);
+    },
     [onRegister, organ.organ_id, matrix],
   );
   const userData = useMemo(() => ({ organId: organ.organ_id }), [organ.organ_id]);
@@ -343,10 +350,40 @@ export const OrganMesh = memo(function OrganMesh({
    */
   const material = useRef<THREE.MeshStandardMaterial>(null);
   const scanMaterial = useRef<THREE.MeshStandardMaterial>(null);
+  const beatMaterial = useRef<THREE.MeshStandardMaterial>(null);
   useEffect(() => {
     if (material.current) material.current.needsUpdate = true;
     if (scanMaterial.current) scanMaterial.current.needsUpdate = true;
+    if (beatMaterial.current) beatMaterial.current.needsUpdate = true;
   }, [ghosted]);
+
+  /**
+   * The heartbeat — see `heartbeat.ts`.
+   *
+   * The selector answers false for everything that is not part of the heart,
+   * whatever the switch says, so switching the heartbeat re-renders the two
+   * dozen structures it moves and not the three and a half thousand it does
+   * not.
+   */
+  const chamber = useMemo(() => beatChamber(organ), [organ]);
+  const beating = useHeartStore((s) => chamber !== null && s.enabled);
+  const beatUserData = useMemo(() => {
+    if (chamber === null) return null;
+    // Until the driver has placed it, the centre is the structure's own — so a
+    // first frame drawn before that is still a structure drawing into itself.
+    if (!geometry.boundingBox) geometry.computeBoundingBox();
+    const centre = geometry.boundingBox?.getCenter(new THREE.Vector3()) ?? new THREE.Vector3();
+    return {
+      organId: organ.organ_id,
+      beatAtrium: isAtrium(chamber) ? 1 : 0,
+      beatCentre: { value: centre },
+    };
+  }, [chamber, geometry, organ.organ_id]);
+  useEffect(() => {
+    const mesh = meshRef.current;
+    if (!beating || !mesh || chamber === null || !beatUserData) return;
+    return registerBeating(organ.organ_id, { mesh, chamber, centre: beatUserData.beatCentre });
+  }, [beating, chamber, beatUserData, organ.organ_id]);
   const { color, emissive, emissiveIntensity } = useMemo(() => {
     // The revision map replaces the tissue colour outright rather than tinting
     // it. Mixing the two would make "muscle I have studied" and "bone I have
@@ -624,6 +661,21 @@ export const OrganMesh = memo(function OrganMesh({
           ref={scanMaterial}
           {...surface}
           {...scanBandMaterialProps(true, scanSpan, revealColour, scanSpanFront)}
+        />
+      )}
+      {/*
+        The heartbeat's material, last so it is the one drawn while the heart
+        beats. Keyed on the scanner, so that when the scanner's material comes
+        or goes this one is attached again after it rather than being replaced
+        by whatever the scanner's unmount hands back.
+      */}
+      {beating && beatUserData && (
+        <meshStandardMaterial
+          key={scanBandEnabled ? "beat-over-scan" : "beat"}
+          ref={beatMaterial}
+          {...surface}
+          onBeforeCompile={heartbeatOnBeforeCompile}
+          userData={beatUserData}
         />
       )}
 

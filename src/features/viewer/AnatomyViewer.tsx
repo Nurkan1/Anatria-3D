@@ -26,6 +26,7 @@ import { FULL_CANVAS, LabelOverlay } from "./LabelOverlay";
 import { RenderProbe, RenderStatsPanel } from "./RenderStats";
 import { AxialView } from "./AxialView";
 import { ScanControls } from "./ScanControls";
+import { HeartControls } from "./HeartControls";
 import { ScanReadout } from "./ScanReadout";
 import { PointerRouting, StudyViews } from "./StudyViews";
 import { ClosedViews, StudyViewsFrame } from "./StudyViewsFrame";
@@ -290,6 +291,7 @@ export function AnatomyViewer() {
         <ScanReadout />
         {/* Beside the other switch that changes how the model is drawn. */}
         <ScanControls />
+        <HeartControls />
         {/* Under the controls, and only when asked for — see `AxialView`. */}
         <AxialView />
         {/* Directly over the switch they belong to. They sat above the scanner
