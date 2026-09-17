@@ -21,6 +21,7 @@ from anatria_engine.protocol import (
     CaseComplaint,
     CaseRecordUpdate,
     CaseVisitSummary,
+    HeartContext,
     Language,
     OrganContext,
     OrganMeta,
@@ -877,3 +878,50 @@ def test_the_scanner_does_not_loosen_the_safety_block() -> None:
 
 def test_no_scanner_says_nothing_about_one() -> None:
     assert "has the scanner on" not in instructions("layperson", "es")
+
+
+AF = HeartContext(
+    rhythm="Atrial fibrillation",
+    rate="Ventricles about 110 bpm, irregular",
+    pattern="The atria quiver instead of contracting.",
+    sound=True,
+)
+
+
+def with_heart(mode: SessionMode = "tutor") -> str:
+    return build_instructions(
+        profile="student",
+        language="es",
+        organs=ORGANS,
+        selection=[],
+        mode=mode,
+        heart=AF,
+    )
+
+
+def test_the_rhythm_on_screen_is_the_subject_of_explain_this() -> None:
+    text = with_heart()
+    assert "**Atrial fibrillation**" in text
+    assert "The atria quiver instead of contracting." in text
+    assert "with its heart sounds playing" in text
+    assert "ECG pattern" in text
+
+
+def test_the_heartbeat_does_not_loosen_the_safety_block() -> None:
+    text = with_heart()
+    assert text.index(SAFETY) < text.index("THE HEARTBEAT ON SCREEN")
+    assert "not anybody's heart" in text
+
+
+def test_the_heartbeat_comes_last_so_the_cached_prefix_survives_a_new_rhythm() -> None:
+    text = with_heart()
+    assert text.rstrip().endswith("keep to the general explanation.")
+
+
+@pytest.mark.parametrize("mode", ["case", "review"])
+def test_a_drill_or_review_is_not_told_about_the_heartbeat(mode: SessionMode) -> None:
+    assert "THE HEARTBEAT ON SCREEN" not in with_heart(mode)
+
+
+def test_no_heartbeat_says_nothing_about_one() -> None:
+    assert "THE HEARTBEAT ON SCREEN" not in instructions("layperson", "es")

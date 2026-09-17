@@ -84,6 +84,7 @@ def build_surface() -> dict[str, Any]:
             "CaseVisitSummary": fields_of(p.CaseVisitSummary),
             "CaseRecordUpdate": fields_of(p.CaseRecordUpdate),
             "ScannerContext": fields_of(p.ScannerContext),
+            "HeartContext": fields_of(p.HeartContext),
         },
         "unions": {
             "SceneCommand": variants_of(p.SceneCommand, "action"),

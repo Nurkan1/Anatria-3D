@@ -37,6 +37,7 @@ import {
 import { completeHistory, useChatStore, type ChatMessage } from "@/stores/chatStore";
 import { chatPreferences, patchChatPreferences } from "@/stores/chatPreferences";
 import { useModelStore } from "@/stores/modelStore";
+import { useHeartStore } from "@/stores/heartStore";
 import { useScanStore } from "@/stores/scanStore";
 import { groupNames, organLabel, useSceneStore } from "@/stores/sceneStore";
 import { useStudyStore } from "@/stores/studyStore";
@@ -44,6 +45,7 @@ import { useUsageStore } from "@/stores/usageStore";
 
 import { GrowingTextarea } from "@/components/GrowingTextarea";
 import { shouldShowAimHint, useAimHint } from "./aimHint";
+import { heartAim } from "./heartContext";
 import { scannerAim } from "./scannerContext";
 import { AimHint, AskingGuide } from "./AskingGuide";
 import { CaseBar } from "./CaseBar";
@@ -615,6 +617,9 @@ export function ChatPanel() {
   const scanEnabled = useScanStore((s) => s.enabled);
   const scanPinned = useScanStore((s) => s.pinned);
   const scanPlane = useScanStore((s) => s.plane);
+  const heartEnabled = useHeartStore((s) => s.enabled);
+  const heartRhythm = useHeartStore((s) => s.rhythm);
+  const heartSound = useHeartStore((s) => s.sound);
   const { learned: aimHintLearned, retire: retireAimHint } = useAimHint();
 
   const messages = useChatStore((s) => s.messages);
@@ -956,6 +961,8 @@ export function ChatPanel() {
       },
     });
   const scannerNow = currentScannerAim();
+  /** What the assistant is told about the heartbeat. See `heartAim`. */
+  const heartNow = heartAim({ enabled: heartEnabled, mode, rhythm: heartRhythm, sound: heartSound });
 
   async function send(text?: string) {
     const prompt = (text ?? draft).trim();
@@ -996,6 +1003,7 @@ export function ChatPanel() {
         available_organs: structures.map(({ mesh_file: _f, node: _n, ...meta }) => meta),
         available_groups: groups, ...patient,
         ...(scanner ? { scanner } : {}),
+        ...(heartNow ? { heart: heartNow } : {}),
       });
       if (!turns.markSent(requestId)) return;
       startTurn(requestId, prompt);
@@ -1191,6 +1199,12 @@ export function ChatPanel() {
         >
           The assistant knows the scanner is at {scannerNow.level ?? "this height"}: “here” and
           “this part” mean this level.
+        </p>
+      )}
+      {heartNow && draft.trim().length > 0 && (
+        <p role="status" className="mx-3 mb-2 text-[11px] text-rose-300/80">
+          The assistant knows the heart is showing {heartNow.rhythm}: ask what it is and how it
+          happens.
         </p>
       )}
 

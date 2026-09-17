@@ -423,6 +423,23 @@ export const ScannerContextSchema = z.object({
 });
 export type ScannerContext = z.infer<typeof ScannerContextSchema>;
 
+/**
+ * The textbook rhythm the heartbeat is showing, while it is beating.
+ *
+ * Strings from the app's own catalogue rather than an id, so the engine does
+ * not keep a second copy of thirteen captions that would drift from the panel.
+ * See `heartAim` for when it is sent.
+ */
+export const HeartContextSchema = z.object({
+  rhythm: z.string().min(1).max(60),
+  rate: z.string().min(1).max(40),
+  /** What the animation shows, as the panel says it. */
+  pattern: z.string().min(1).max(400),
+  /** Whether the heart sounds are playing with it. */
+  sound: z.boolean().default(false),
+});
+export type HeartContext = z.infer<typeof HeartContextSchema>;
+
 export const AgentRequestSchema = z.object({
   request_id: z.string().min(1),
   query: z.string().min(1).max(8000),
@@ -485,6 +502,11 @@ export const AgentRequestSchema = z.object({
    * field added to an existing event.
    */
   scanner: ScannerContextSchema.optional(),
+  /**
+   * The rhythm the heart is beating in, so "explain this" means that rhythm.
+   * Optional on the way in, like every field added to an existing event.
+   */
+  heart: HeartContextSchema.optional(),
 });
 export type AgentRequest = z.infer<typeof AgentRequestSchema>;
 

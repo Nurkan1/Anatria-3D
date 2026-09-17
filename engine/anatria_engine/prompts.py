@@ -23,6 +23,7 @@ from __future__ import annotations
 
 from anatria_engine.protocol import (
     GenderModel,
+    HeartContext,
     Language,
     OrganContext,
     OrganMeta,
@@ -556,6 +557,51 @@ def _scanner_rule(scanner: ScannerContext) -> str:
     return "\n".join(lines)
 
 
+def _heart_rule(heart: HeartContext) -> str:
+    """The rhythm the heartbeat is showing, as the subject of "this rhythm".
+
+    A reader who picked atrial fibrillation and asks "what is happening?" has
+    said which rhythm, just not in words. The animation is the atlas's static
+    heart drawn in and out on a schedule, so the tutor is told to explain the
+    rhythm itself and say where the picture simplifies, never to read it as
+    anybody's heart.
+    """
+    heard = " with its heart sounds playing" if heart.sound else ", without sound"
+    return "\n".join(
+        [
+            "## THE HEARTBEAT ON SCREEN",
+            "",
+            f"The reader has the heartbeat simulation running{heard}, showing the "
+            f"textbook rhythm **{heart.rhythm}** ({heart.rate}). What the animation "
+            f"shows, as the panel describes it: {heart.pattern}",
+            "",
+            'When they ask "what is this?", "explain it", "why does it do that?", '
+            '"what is happening to the heart?" or anything else about the rhythm '
+            "without naming one, they mean this rhythm. Explain, at their level:",
+            "",
+            "- what the rhythm is, and where in the conduction system or the "
+            "myocardium it arises;",
+            "- how it comes about: the mechanism, and the usual causes as study "
+            "material;",
+            "- what it does to the pumping heart: filling, output, why it matters;",
+            "- how that shows in what they are watching and hearing — the order and "
+            "timing of atria and ventricles, the sounds, and the ECG pattern it "
+            "corresponds to.",
+            "",
+            "The simulation is illustrative: every rhythm plays at one representative "
+            "rate, and the motion is the atlas's heart drawn in towards each chamber, "
+            "not a model of cardiac mechanics. Say so when it matters to the "
+            "explanation. If their words name another rhythm or another subject, "
+            "follow their words.",
+            "",
+            "This does not loosen the rules at the top. It is a textbook pattern, not "
+            "anybody's heart: if the reader asks whether they or someone they know "
+            "has it, or what to do about it, do not assess; point them to a qualified "
+            "healthcare professional and keep to the general explanation.",
+        ]
+    )
+
+
 def _scene_inventory(
     organs: list[OrganMeta],
     selection: list[OrganContext],
@@ -861,6 +907,8 @@ def build_instructions(
     groups: list[str] | None = None,
     #: Where the scanner is held, when it stands in for a selection.
     scanner: ScannerContext | None = None,
+    #: The rhythm the heartbeat is showing, while it is on.
+    heart: HeartContext | None = None,
     # Defaulted rather than required, for the same reason every new protocol
     # field is optional on the way in: a window and a sidecar do not always
     # ship together, and the male atlas is what every build before this one
@@ -898,4 +946,9 @@ def build_instructions(
     if grouping:
         layers.append(grouping)
     layers.append(_scene_inventory(organs, selection, scanner))
+    # Last, because it changes whenever a rhythm is picked. Tutoring only: in a
+    # drill or a review the subject is the patient, and a rhythm left playing
+    # in the viewport is not part of their case.
+    if heart is not None and mode == "tutor":
+        layers.append(_heart_rule(heart))
     return "\n\n".join(layers)

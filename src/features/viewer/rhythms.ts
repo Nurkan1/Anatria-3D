@@ -364,7 +364,9 @@ export const RHYTHMS: readonly RhythmDefinition[] = [
     label: "Asystole",
     group: "Ventricular",
     rate: "No beat",
-    what: "No electrical activity and no contraction at all.",
+    what:
+      "No electrical activity, so nothing contracts and nothing is heard: the flat line " +
+      "on an ECG. The heart standing still is the rhythm, not the animation stopping.",
     quiver: NO_QUIVER,
     plan: () => {},
   },

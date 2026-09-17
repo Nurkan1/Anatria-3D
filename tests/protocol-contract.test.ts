@@ -16,6 +16,7 @@ import {
   EngineErrorCodeSchema,
   EngineEventSchema,
   GenderModelSchema,
+  HeartContextSchema,
   LanguageSchema,
   OrganContextSchema,
   OrganMetaSchema,
@@ -106,6 +107,7 @@ function typescriptSurface(): ProtocolSurface {
       CaseVisitSummary: fieldsOf(CaseVisitSummarySchema),
       CaseRecordUpdate: fieldsOf(CaseRecordUpdateSchema),
       ScannerContext: fieldsOf(ScannerContextSchema),
+      HeartContext: fieldsOf(HeartContextSchema),
     },
     unions: {
       SceneCommand: variantsOf(SceneCommandSchema, "action"),

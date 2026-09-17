@@ -143,6 +143,21 @@ class ScannerContext(Strict):
     total: int = Field(default=0, ge=0)
 
 
+class HeartContext(Strict):
+    """The textbook rhythm the heartbeat is showing, while it is beating.
+
+    Sent in tutoring turns only. The strings are the app's own catalogue, so the
+    engine keeps no second copy of the captions to drift from the panel.
+    """
+
+    rhythm: str = Field(min_length=1, max_length=60)
+    rate: str = Field(min_length=1, max_length=40)
+    #: What the animation shows, as the panel says it.
+    pattern: str = Field(min_length=1, max_length=400)
+    #: Whether the heart sounds are playing with it.
+    sound: bool = False
+
+
 class CaseComplaint(Strict):
     """Something the reader marked on the body.
 
@@ -485,6 +500,9 @@ class AgentRequest(Strict):
     #: Where the scanner is, when it stands in for a selection. Defaulted for the
     #: same reason as `case`.
     scanner: ScannerContext | None = None
+    #: The rhythm the heart is beating in, when the heartbeat is on. Defaulted
+    #: for the same reason as `case`.
+    heart: HeartContext | None = None
     # Injected by Rust from the OS keyring — never present on the frontend side.
     api_key: str = Field(min_length=1, repr=False)
 
