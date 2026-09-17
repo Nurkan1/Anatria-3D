@@ -4,11 +4,13 @@ import * as THREE from "three";
 
 import type { ManifestOrgan } from "@/lib/schemas";
 import { useHeartStore } from "@/stores/heartStore";
+import { useSceneStore } from "@/stores/sceneStore";
 
 import {
   BEAT_ATRIA,
   BEAT_BASE_ATRIA,
   BEAT_BASE_VENTRICLES,
+  BEAT_GLOW,
   BEAT_REACH_ATRIA,
   BEAT_REACH_VENTRICLES,
   BEAT_VENTRICLES,
@@ -125,6 +127,7 @@ export function HeartbeatDriver({
     player.current = null;
     BEAT_ATRIA.value = 0;
     BEAT_VENTRICLES.value = 0;
+    BEAT_GLOW.value = 0;
     pulses.reset();
     FLOW_UNIFORMS.uPulseStrength.value.fill(0);
     FLOW_UNIFORMS.uVenous.value = 0;
@@ -152,6 +155,9 @@ export function HeartbeatDriver({
       if (!centre) continue;
       entry.centre.value.copy(centre).applyMatrix4(inverse.copy(entry.mesh.matrixWorld).invert());
     }
+
+    // The chambers light only when the blood's light is showing too.
+    BEAT_GLOW.value = (useSceneStore.getState().systemOpacity.cardiovascular ?? 1) < 1 ? 1 : 0;
 
     // The blood follows the contractions, heard or not.
     for (const level of beat.lub) pulses.launch(after, level);

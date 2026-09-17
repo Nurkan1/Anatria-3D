@@ -383,6 +383,7 @@ export const OrganMesh = memo(function OrganMesh({
     return {
       organId: organ.organ_id,
       beatAtrium: isAtrium(chamber) ? 1 : 0,
+      beatLeft: chamber.startsWith("left") ? 1 : 0,
       beatCentre: { value: centre },
     };
   }, [chamber, geometry, organ.organ_id]);

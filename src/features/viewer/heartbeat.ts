@@ -191,6 +191,25 @@ export const BEAT_ATRIA = { value: 0 };
 export const BEAT_VENTRICLES = { value: 0 };
 
 /**
+ * Whether the chambers light with the blood they hold: 1 while the vessels are
+ * see-through, so the heart glows with the same light the blood carries out of
+ * it, and 0 in a solid body, where the heart is left looking like itself.
+ */
+export const BEAT_GLOW = { value: 0 };
+
+/**
+ * The blood in each side of the heart, the same red and blue the vessels carry
+ * — see `bloodFlow.ts`. The right heart holds the blood coming back without
+ * oxygen, the left the blood going out with it.
+ */
+export const BLOOD_HEX = { right: "#3563c9", left: "#e0392c" } as const;
+export const BLOOD_RIGHT = new THREE.Color(BLOOD_HEX.right);
+export const BLOOD_LEFT = new THREE.Color(BLOOD_HEX.left);
+
+/** How brightly a chamber lights: a floor at rest, and the rest as it contracts. */
+export const CHAMBER_GLOW = { rest: 0.06, contracted: 0.22 } as const;
+
+/**
  * Where each group of chambers is held: the height of the top of its walls in
  * world space, and how far below that the hold has faded out. A reach of zero
  * holds nothing, which is what a material compiled before the heart has been
@@ -231,7 +250,13 @@ export function heartbeatOnBeforeCompile(this: unknown, shader: Shader): void {
     throw new Error("Heartbeat: the expected three.js vertex chunk is missing.");
   }
   const owner = this as
-    | { userData?: { beatAtrium?: number; beatCentre?: { value: THREE.Vector3 } } }
+    | {
+        userData?: {
+          beatAtrium?: number;
+          beatLeft?: number;
+          beatCentre?: { value: THREE.Vector3 };
+        };
+      }
     | undefined;
   shader.uniforms.uBeatAtria = BEAT_ATRIA;
   shader.uniforms.uBeatVentricles = BEAT_VENTRICLES;
@@ -240,6 +265,8 @@ export function heartbeatOnBeforeCompile(this: unknown, shader: Shader): void {
   shader.uniforms.uBeatReachAtria = BEAT_REACH_ATRIA;
   shader.uniforms.uBeatReachVentricles = BEAT_REACH_VENTRICLES;
   shader.uniforms.uBeatIsAtrium = { value: owner?.userData?.beatAtrium ?? 0 };
+  shader.uniforms.uBeatGlow = BEAT_GLOW;
+  shader.uniforms.uBeatBlood = { value: owner?.userData?.beatLeft ? BLOOD_LEFT : BLOOD_RIGHT };
   // The object itself, not a copy: the driver moves the centre as the mesh
   // moves, and the uniform has to see that without a recompile.
   shader.uniforms.uBeatCentre = owner?.userData?.beatCentre ?? { value: new THREE.Vector3() };
@@ -263,6 +290,24 @@ float beatFree = beatReach > 0.0 ? smoothstep(0.0, beatReach, beatBelow) : 1.0;
 transformed = mix(transformed, uBeatCentre, beatSqueeze * beatFree * ${SEAM_ATTRIBUTE});
 ${chunk}`,
     );
+
+  // The glow: the chamber's own blood colour, brighter as it contracts. Mixed
+  // into the light and lifting the alpha with it, because in a glass body the
+  // wall is a tenth opaque and light added to it alone would barely show.
+  const opaque = "#include <opaque_fragment>";
+  if (shader.fragmentShader.includes(opaque)) {
+    shader.fragmentShader =
+      "uniform float uBeatAtria;\nuniform float uBeatVentricles;\nuniform float uBeatIsAtrium;\n" +
+      "uniform float uBeatGlow;\nuniform vec3 uBeatBlood;\n" +
+      shader.fragmentShader.replace(
+        opaque,
+        `float beatContraction = clamp(mix(uBeatVentricles, uBeatAtria, uBeatIsAtrium) / ${SQUEEZE.ventricles.toFixed(3)}, 0.0, 1.0);
+float beatGlow = uBeatGlow * (${CHAMBER_GLOW.rest.toFixed(3)} + ${CHAMBER_GLOW.contracted.toFixed(3)} * beatContraction);
+outgoingLight = mix(outgoingLight, uBeatBlood, beatGlow);
+diffuseColor.a = max(diffuseColor.a, beatGlow);
+${opaque}`,
+      );
+  }
 }
 
 /** A heart mesh while it beats: what the driver needs to keep it right. */

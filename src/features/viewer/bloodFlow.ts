@@ -2,7 +2,7 @@ import * as THREE from "three";
 
 import type { ManifestOrgan } from "@/lib/schemas";
 
-import { beatChamber, type Chamber } from "./heartbeat";
+import { beatChamber, BLOOD_HEX, type Chamber } from "./heartbeat";
 
 /**
  * The blood the heartbeat pushes, drawn as light moving through the vessels.
@@ -173,13 +173,26 @@ export const FLOW_SOURCES: Readonly<Record<FlowKind, { value: THREE.Vector3 }>> 
 /**
  * The colours, by the blood rather than by the vessel's name: the pulmonary
  * arteries carry blue blood and the pulmonary veins red, which is exactly the
- * thing students get wrong and the reason it is worth drawing.
+ * thing students get wrong and the reason it is worth drawing. The same two
+ * colours light the chambers, so the blood is one colour from heart to vessel.
  */
 const FLOW_COLOUR: Readonly<Record<FlowKind, string>> = {
-  artery: "#ff3b2f",
-  pulmonary_vein: "#ff5a45",
-  vein: "#3d7bff",
-  pulmonary_artery: "#4f8dff",
+  artery: BLOOD_HEX.left,
+  pulmonary_vein: BLOOD_HEX.left,
+  vein: BLOOD_HEX.right,
+  pulmonary_artery: BLOOD_HEX.right,
+};
+
+/**
+ * How bright each kind is allowed to get. Noticed, never the loudest thing on
+ * screen: at full strength the first version burned the lungs' arterial tree
+ * white, because dozens of branches overlap and added light adds up.
+ */
+const FLOW_GAIN: Readonly<Record<FlowKind, number>> = {
+  artery: 0.4,
+  pulmonary_artery: 0.22,
+  vein: 0.5,
+  pulmonary_vein: 0.35,
 };
 
 /** 0 for a pulse travelling out, 1 for a steady drift home. */
@@ -204,6 +217,7 @@ uniform float uFlowTime;
 uniform vec3 uFlowSource;
 uniform float uFlowMode;
 uniform float uFlowSpeed;
+uniform float uFlowGain;
 varying vec3 vFlowWorld;
 
 float flowGlow() {
@@ -216,21 +230,27 @@ float flowGlow() {
       float x = (d - front) / ${FLOW_SHAPE.width.toFixed(3)};
       glow += uPulseStrength[i] * exp(-x * x) * exp(-front / ${FLOW_SHAPE.reach.toFixed(3)});
     }
-    return clamp(glow, 0.0, 1.0);
+    return uFlowGain * clamp(glow, 0.0, 1.0);
   }
   // Stripes that drift towards the heart: a pattern in (d + vt) moves to smaller d.
   float stripe = 0.5 + 0.5 * sin((d + uFlowTime * ${FLOW_SHAPE.venousSpeed.toFixed(3)}) * 6.2831853 / ${FLOW_SHAPE.venousWave.toFixed(3)});
-  return uVenous * (0.18 + 0.22 * stripe);
+  return uFlowGain * uVenous * (0.18 + 0.22 * stripe);
 }
 `;
 
 /** One function object for every flow material, so all four share a program. */
 function flowOnBeforeCompile(this: THREE.Material, shader: Shader): void {
-  const data = this.userData as { flowSource: { value: THREE.Vector3 }; flowMode: number; flowSpeed: number };
+  const data = this.userData as {
+    flowSource: { value: THREE.Vector3 };
+    flowMode: number;
+    flowSpeed: number;
+    flowGain: number;
+  };
   Object.assign(shader.uniforms, FLOW_UNIFORMS, {
     uFlowSource: data.flowSource,
     uFlowMode: { value: data.flowMode },
     uFlowSpeed: { value: data.flowSpeed },
+    uFlowGain: { value: data.flowGain },
   });
   shader.vertexShader = shader.vertexShader
     .replace("#include <common>", `#include <common>\n${FLOW_VERTEX}`)
@@ -259,6 +279,7 @@ export function flowMaterial(kind: FlowKind): THREE.MeshBasicMaterial {
     material.userData = {
       flowSource: FLOW_SOURCES[kind],
       flowMode: FLOW_MODE[kind],
+      flowGain: FLOW_GAIN[kind],
       flowSpeed: kind === "pulmonary_artery" ? FLOW_SHAPE.pulmonarySpeed : FLOW_SHAPE.arterySpeed,
     };
     material.onBeforeCompile = flowOnBeforeCompile;

@@ -15,6 +15,8 @@ import type { ManifestOrgan } from "@/lib/schemas";
 
 import {
   BEAT_ATRIA,
+  BEAT_GLOW,
+  BLOOD_LEFT,
   BEAT_VENTRICLES,
   BEATING,
   BEATING_VERSION,
@@ -222,6 +224,19 @@ describe("the shader", () => {
     heartbeatOnBeforeCompile(compiled);
     expect(compiled.vertexShader).toContain(`attribute float ${SEAM_ATTRIBUTE};`);
     expect(compiled.vertexShader).toContain(`beatSqueeze * beatFree * ${SEAM_ATTRIBUTE}`);
+  });
+
+  it("lights each chamber with its own blood as it contracts, only when asked", () => {
+    const material = new MeshStandardMaterial();
+    material.onBeforeCompile = heartbeatOnBeforeCompile;
+    material.userData = { beatAtrium: 0, beatLeft: 1, beatCentre: { value: new Vector3() } };
+    const compiled = shader();
+    material.onBeforeCompile(compiled, {} as WebGLRenderer);
+    expect(compiled.uniforms.uBeatGlow).toBe(BEAT_GLOW);
+    expect(compiled.uniforms.uBeatBlood?.value).toBe(BLOOD_LEFT);
+    expect(compiled.fragmentShader).toContain("outgoingLight = mix(outgoingLight, uBeatBlood, beatGlow);");
+    const glow = compiled.fragmentShader.indexOf("float beatGlow");
+    expect(glow).toBeLessThan(compiled.fragmentShader.indexOf("#include <opaque_fragment>"));
   });
 
   it("draws the vertex in before it is projected", () => {
