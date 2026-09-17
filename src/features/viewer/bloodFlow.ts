@@ -160,6 +160,12 @@ export const FLOW_UNIFORMS = {
   uPulseStrength: { value: new Float32Array(PULSE_SLOTS) },
   uVenous: { value: 0 },
   uFlowTime: { value: 0 },
+  /**
+   * 1 when the arteries hold a steady glow instead of pulses: the beat is too
+   * fast for its light to pulse safely, or the reader asked for less motion.
+   * See `lightGuard.ts`.
+   */
+  uFlowSteady: { value: 0 },
 };
 
 /** Where each kind's blood leaves from or returns to, in world space. */
@@ -260,6 +266,7 @@ uniform float uPulseAge[${PULSE_SLOTS}];
 uniform float uPulseStrength[${PULSE_SLOTS}];
 uniform float uVenous;
 uniform float uFlowTime;
+uniform float uFlowSteady;
 uniform vec3 uFlowSource;
 uniform float uFlowMode;
 uniform float uFlowSpeed;
@@ -270,7 +277,7 @@ varying float vFlowPath;
 float flowGlow() {
   // Along the vessel where it has been measured; zero means it has not.
   float d = vFlowPath > 0.5 ? vFlowPath - 1.0 : distance(vFlowWorld, uFlowSource);
-  if (uFlowMode < 0.5) {
+  if (uFlowMode < 0.5 && uFlowSteady < 0.5) {
     float glow = 0.0;
     for (int i = 0; i < ${PULSE_SLOTS}; i++) {
       if (uPulseAge[i] < 0.0 || uPulseStrength[i] <= 0.0) continue;
@@ -280,8 +287,10 @@ float flowGlow() {
     }
     return uFlowGain * clamp(glow, 0.0, 1.0);
   }
-  // Stripes that drift towards the heart: a pattern in (d + vt) moves to smaller d.
-  float stripe = 0.5 + 0.5 * sin((d + uFlowTime * ${FLOW_SHAPE.venousSpeed.toFixed(3)}) * 6.2831853 / ${FLOW_SHAPE.venousWave.toFixed(3)});
+  // Stripes that drift: a pattern in (d + vt) moves to smaller d, towards the
+  // heart, which is what veins do; arteries held steady drift the other way.
+  float away = uFlowMode < 0.5 ? -1.0 : 1.0;
+  float stripe = 0.5 + 0.5 * sin((d + away * uFlowTime * ${FLOW_SHAPE.venousSpeed.toFixed(3)}) * 6.2831853 / ${FLOW_SHAPE.venousWave.toFixed(3)});
   return uFlowGain * uVenous * (0.18 + 0.22 * stripe);
 }
 `;

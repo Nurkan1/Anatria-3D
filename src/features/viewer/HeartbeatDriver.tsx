@@ -11,6 +11,8 @@ import {
   BEAT_BASE_ATRIA,
   BEAT_BASE_VENTRICLES,
   BEAT_GLOW,
+  BEAT_LIGHT_ATRIA,
+  BEAT_LIGHT_VENTRICLES,
   BEAT_REACH_ATRIA,
   BEAT_REACH_VENTRICLES,
   BEAT_VENTRICLES,
@@ -20,6 +22,7 @@ import {
   chamberHolds,
   HEART_PROBE,
   SEAM_ATTRIBUTE,
+  SQUEEZE,
   seamFreedom,
   seamGrid,
   type BeatingMesh,
@@ -37,6 +40,7 @@ import {
   type FlowKind,
 } from "./bloodFlow";
 import { flowPaths, type PathMesh } from "./flowPaths";
+import { LightGuard, prefersReducedMotion } from "./lightGuard";
 import { playDub, playLub } from "./heartSound";
 import { rhythm, RhythmPlayer } from "./rhythms";
 
@@ -161,6 +165,8 @@ export function HeartbeatDriver({
   const player = useRef<RhythmPlayer | null>(null);
   /** The blood the contractions push. See `bloodFlow.ts`. */
   const pulses = useMemo(() => new PulseTrain(), []);
+  /** One guard per group of chambers, so a fast atrium does not calm a slow ventricle. */
+  const guards = useMemo(() => ({ atria: new LightGuard(), ventricles: new LightGuard() }), []);
 
   // A new rhythm starts from the top, from a heart at rest.
   useEffect(() => {
@@ -180,10 +186,14 @@ export function HeartbeatDriver({
     BEAT_ATRIA.value = 0;
     BEAT_VENTRICLES.value = 0;
     BEAT_GLOW.value = 0;
+    BEAT_LIGHT_ATRIA.value = 0;
+    BEAT_LIGHT_VENTRICLES.value = 0;
+    guards.atria.reset();
+    guards.ventricles.reset();
     pulses.reset();
     FLOW_UNIFORMS.uPulseStrength.value.fill(0);
     FLOW_UNIFORMS.uVenous.value = 0;
-  }, [enabled, pulses]);
+  }, [enabled, pulses, guards]);
 
   useFrame((_, delta) => {
     if (!enabled || !centres) return;
@@ -222,6 +232,12 @@ export function HeartbeatDriver({
 
     // The chambers light only when the blood's light is showing too.
     BEAT_GLOW.value = (useSceneStore.getState().systemOpacity.cardiovascular ?? 1) < 1 ? 1 : 0;
+    // The light follows the beat only while that is safe to watch.
+    const calm = prefersReducedMotion();
+    const step = after - before;
+    BEAT_LIGHT_ATRIA.value = guards.atria.next(after, step, beat.atria / SQUEEZE.atria, calm);
+    BEAT_LIGHT_VENTRICLES.value = guards.ventricles.next(after, step, beat.ventricles / SQUEEZE.ventricles, calm);
+    FLOW_UNIFORMS.uFlowSteady.value = guards.ventricles.steady ? 1 : 0;
 
     // The blood follows the contractions, heard or not.
     for (const level of beat.lub) pulses.launch(after, level);

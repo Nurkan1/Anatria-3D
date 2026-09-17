@@ -198,6 +198,13 @@ export const BEAT_VENTRICLES = { value: 0 };
 export const BEAT_GLOW = { value: 0 };
 
 /**
+ * How lit each group of chambers is, 0 to 1 — its contraction, unless that
+ * would flash too fast to be safe, when it is held steady. See `lightGuard.ts`.
+ */
+export const BEAT_LIGHT_ATRIA = { value: 0 };
+export const BEAT_LIGHT_VENTRICLES = { value: 0 };
+
+/**
  * The blood in each side of the heart, the same red and blue the vessels carry
  * — see `bloodFlow.ts`. The right heart holds the blood coming back without
  * oxygen, the left the blood going out with it.
@@ -266,6 +273,8 @@ export function heartbeatOnBeforeCompile(this: unknown, shader: Shader): void {
   shader.uniforms.uBeatReachVentricles = BEAT_REACH_VENTRICLES;
   shader.uniforms.uBeatIsAtrium = { value: owner?.userData?.beatAtrium ?? 0 };
   shader.uniforms.uBeatGlow = BEAT_GLOW;
+  shader.uniforms.uBeatLightAtria = BEAT_LIGHT_ATRIA;
+  shader.uniforms.uBeatLightVentricles = BEAT_LIGHT_VENTRICLES;
   shader.uniforms.uBeatBlood = { value: owner?.userData?.beatLeft ? BLOOD_LEFT : BLOOD_RIGHT };
   // The object itself, not a copy: the driver moves the centre as the mesh
   // moves, and the uniform has to see that without a recompile.
@@ -297,11 +306,11 @@ ${chunk}`,
   const opaque = "#include <opaque_fragment>";
   if (shader.fragmentShader.includes(opaque)) {
     shader.fragmentShader =
-      "uniform float uBeatAtria;\nuniform float uBeatVentricles;\nuniform float uBeatIsAtrium;\n" +
+      "uniform float uBeatLightAtria;\nuniform float uBeatLightVentricles;\nuniform float uBeatIsAtrium;\n" +
       "uniform float uBeatGlow;\nuniform vec3 uBeatBlood;\n" +
       shader.fragmentShader.replace(
         opaque,
-        `float beatContraction = clamp(mix(uBeatVentricles, uBeatAtria, uBeatIsAtrium) / ${SQUEEZE.ventricles.toFixed(3)}, 0.0, 1.0);
+        `float beatContraction = clamp(mix(uBeatLightVentricles, uBeatLightAtria, uBeatIsAtrium), 0.0, 1.0);
 float beatGlow = uBeatGlow * (${CHAMBER_GLOW.rest.toFixed(3)} + ${CHAMBER_GLOW.contracted.toFixed(3)} * beatContraction);
 outgoingLight = mix(outgoingLight, uBeatBlood, beatGlow);
 diffuseColor.a = max(diffuseColor.a, beatGlow);
