@@ -36,6 +36,8 @@ export function HeartControls() {
   const setRhythm = useHeartStore((s) => s.setRhythm);
   const organs = useSceneStore((s) => s.organs);
   const cardiovascularHidden = useSceneStore((s) => s.hiddenSystems.includes("cardiovascular"));
+  // The blood is drawn only through see-through vessels. See `bloodFlow.ts`.
+  const vesselsSeeThrough = useSceneStore((s) => (s.systemOpacity.cardiovascular ?? 1) < 1);
   const [rhythmsOpen, setRhythmsOpen] = useState(false);
 
   // Not every body has one: the female atlas carries no cardiovascular system.
@@ -83,6 +85,11 @@ export function HeartControls() {
               Switch the cardiovascular system on to see it.
             </p>
           )}
+          <p className="mt-0.5 text-slate-500">
+            {vesselsSeeThrough
+              ? "Blood: red carries oxygen, blue returns without it. Each pulse leaves with a contraction, slowed to be seen."
+              : "Turn on Glass body to watch each beat push the blood."}
+          </p>
           <label className="mt-1 flex cursor-pointer items-start gap-1.5">
             <input
               type="checkbox"

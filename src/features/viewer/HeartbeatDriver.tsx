@@ -23,6 +23,7 @@ import {
   type BeatingMesh,
   type ChamberPoints,
 } from "./heartbeat";
+import { FLOW_CHAMBER, FLOW_SOURCES, FLOW_UNIFORMS, PulseTrain, type FlowKind } from "./bloodFlow";
 import { playDub, playLub } from "./heartSound";
 import { rhythm, RhythmPlayer } from "./rhythms";
 
@@ -105,12 +106,15 @@ export function HeartbeatDriver({
   const measured = useRef(-1);
   /** The rhythm being played, made on the first frame after it was chosen. */
   const player = useRef<RhythmPlayer | null>(null);
+  /** The blood the contractions push. See `bloodFlow.ts`. */
+  const pulses = useMemo(() => new PulseTrain(), []);
 
   // A new rhythm starts from the top, from a heart at rest.
   useEffect(() => {
     player.current = null;
     clock.current = 0;
-  }, [rhythmId]);
+    pulses.reset();
+  }, [rhythmId, pulses]);
   const inverse = useMemo(() => new THREE.Matrix4(), []);
 
   useEffect(() => {
@@ -121,7 +125,10 @@ export function HeartbeatDriver({
     player.current = null;
     BEAT_ATRIA.value = 0;
     BEAT_VENTRICLES.value = 0;
-  }, [enabled]);
+    pulses.reset();
+    FLOW_UNIFORMS.uPulseStrength.value.fill(0);
+    FLOW_UNIFORMS.uVenous.value = 0;
+  }, [enabled, pulses]);
 
   useFrame((_, delta) => {
     if (!enabled || !centres) return;
@@ -144,6 +151,16 @@ export function HeartbeatDriver({
       const centre = centres.get(entry.chamber);
       if (!centre) continue;
       entry.centre.value.copy(centre).applyMatrix4(inverse.copy(entry.mesh.matrixWorld).invert());
+    }
+
+    // The blood follows the contractions, heard or not.
+    for (const level of beat.lub) pulses.launch(after, level);
+    pulses.advance(after, after - before, FLOW_UNIFORMS.uPulseAge.value, FLOW_UNIFORMS.uPulseStrength.value);
+    FLOW_UNIFORMS.uVenous.value = pulses.venous;
+    FLOW_UNIFORMS.uFlowTime.value = after;
+    for (const kind of Object.keys(FLOW_CHAMBER) as FlowKind[]) {
+      const centre = centres.get(FLOW_CHAMBER[kind]);
+      if (centre) FLOW_SOURCES[kind].value.copy(centre);
     }
 
     // Read rather than subscribed: a preference nobody changes mid-frame.

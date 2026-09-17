@@ -17,6 +17,7 @@ import {
   isChamberWall,
   registerBeating,
 } from "./heartbeat";
+import { flowMaterial, vesselFlow } from "./bloodFlow";
 import { useHeartStore } from "@/stores/heartStore";
 import { probeGlow, reportDepthStack, stackFromCrossings } from "./depthStack";
 import type { ManifestOrgan } from "@/lib/schemas";
@@ -395,6 +396,19 @@ export const OrganMesh = memo(function OrganMesh({
       centre: beatUserData.beatCentre,
     });
   }, [beating, chamber, beatUserData, organ]);
+  /**
+   * The blood's light — see `bloodFlow.ts`. Only while the heart beats and the
+   * vessels are see-through: in a solid body the light would be drawn over the
+   * skin that hides them.
+   */
+  const flowKind = useMemo(() => vesselFlow(organ), [organ]);
+  const flowBeating = useHeartStore((s) => flowKind !== null && s.enabled);
+  const flowing = flowBeating && visible && layerOpacity < 1;
+  const flow = flowing && flowKind ? flowMaterial(flowKind) : null;
+  useEffect(() => {
+    // Shared by every vessel of a kind, and the planes are the scene's one array.
+    if (flow) flow.clippingPlanes = clippingPlanes;
+  }, [flow, clippingPlanes]);
   const { color, emissive, emissiveIntensity } = useMemo(() => {
     // The revision map replaces the tissue colour outright rather than tinting
     // it. Mixing the two would make "muscle I have studied" and "bone I have
@@ -687,6 +701,17 @@ export const OrganMesh = memo(function OrganMesh({
           {...surface}
           onBeforeCompile={heartbeatOnBeforeCompile}
           userData={beatUserData}
+        />
+      )}
+
+      {flow && (
+        <mesh
+          geometry={geometry}
+          material={flow}
+          // Never a pointer target, like the lit ghost below.
+          raycast={NO_RAYCAST}
+          // After the glass it lights, which is drawn in the transparent pass.
+          renderOrder={3}
         />
       )}
 
