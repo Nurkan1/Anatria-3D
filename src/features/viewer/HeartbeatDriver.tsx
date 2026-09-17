@@ -7,10 +7,15 @@ import { useHeartStore } from "@/stores/heartStore";
 
 import {
   BEAT_ATRIA,
+  BEAT_BASE_ATRIA,
+  BEAT_BASE_VENTRICLES,
+  BEAT_REACH_ATRIA,
+  BEAT_REACH_VENTRICLES,
   BEAT_VENTRICLES,
   BEATING,
   beatAt,
   chamberCentres,
+  chamberHolds,
   CYCLE,
   passed,
 } from "./heartbeat";
@@ -50,6 +55,16 @@ export function HeartbeatDriver({
     () => (enabled ? chamberCentres(boxes, organs) : null),
     [enabled, boxes, organs, revision],
   );
+
+  // Where the base is held. Written when the heart is measured, not per frame.
+  useEffect(() => {
+    if (!enabled) return;
+    const holds = chamberHolds(boxes, organs);
+    BEAT_BASE_ATRIA.value = holds.atria?.base ?? 0;
+    BEAT_REACH_ATRIA.value = holds.atria?.reach ?? 0;
+    BEAT_BASE_VENTRICLES.value = holds.ventricles?.base ?? 0;
+    BEAT_REACH_VENTRICLES.value = holds.ventricles?.reach ?? 0;
+  }, [enabled, boxes, organs, revision]);
   /** Seconds of heartbeat so far. Restarts at the top of a cycle each time. */
   const clock = useRef(0);
   const inverse = useMemo(() => new THREE.Matrix4(), []);

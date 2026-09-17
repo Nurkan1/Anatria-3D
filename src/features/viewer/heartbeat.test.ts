@@ -18,6 +18,8 @@ import {
   beatAt,
   beatChamber,
   chamberCentres,
+  chamberHolds,
+  HOLD_FRACTION,
   CYCLE,
   heartbeatOnBeforeCompile,
   passed,
@@ -192,6 +194,15 @@ describe("the shader", () => {
     expect(compiled.uniforms.uBeatIsAtrium?.value).toBe(1);
   });
 
+  it("holds the base still where the great vessels join", () => {
+    // The fault he saw: an even squeeze pulled the top of the heart away from
+    // the superior vena cava and the pulmonary trunk at every beat.
+    const compiled = shader();
+    heartbeatOnBeforeCompile(compiled);
+    expect(compiled.vertexShader).toContain("smoothstep(0.0, beatReach, beatBelow)");
+    expect(compiled.vertexShader).toContain("beatSqueeze * beatFree");
+  });
+
   it("draws the vertex in before it is projected", () => {
     const compiled = shader();
     heartbeatOnBeforeCompile(compiled);
@@ -228,6 +239,34 @@ describe("where each chamber's centre is", () => {
       ["p2", box(4)],
     ]);
     expect(chamberCentres(boxes, organs).get("right_ventricle")?.x).toBeCloseTo(2, 12);
+  });
+});
+
+describe("where the base is held", () => {
+  it("holds each group at the top of its own walls", () => {
+    const organs = [
+      inHeart("Atrium dextrum", ["Heart"], "ra"),
+      inHeart("Ventriculus sinister", ["Heart"], "lv"),
+      inHeart("Musculus papillaris inferior ventriculi sinistri", ["Heart"], "papillary"),
+    ];
+    const boxes = new Map([
+      ["ra", new Box3(new Vector3(0, 1.3, 0), new Vector3(1, 1.4, 1))],
+      ["lv", new Box3(new Vector3(0, 1.1, 0), new Vector3(1, 1.3, 1))],
+      // Inside the ventricle and taller than it on purpose: not a wall, so it
+      // must not move where the ventricle is held.
+      ["papillary", new Box3(new Vector3(0, 0, 0), new Vector3(1, 9, 1))],
+    ]);
+    const holds = chamberHolds(boxes, organs);
+    expect(holds.atria?.base).toBeCloseTo(1.4, 12);
+    expect(holds.atria?.reach).toBeCloseTo(HOLD_FRACTION * 0.1, 12);
+    expect(holds.ventricles?.base).toBeCloseTo(1.3, 12);
+    expect(holds.ventricles?.reach).toBeCloseTo(HOLD_FRACTION * 0.2, 12);
+  });
+
+  it("holds nothing for a group the atlas has no walls for", () => {
+    const organs = [inHeart("Musculus papillaris anterior ventriculi dextri", ["Heart"], "p")];
+    const boxes = new Map([["p", new Box3(new Vector3(0, 0, 0), new Vector3(1, 1, 1))]]);
+    expect(chamberHolds(boxes, organs)).toEqual({ atria: null, ventricles: null });
   });
 });
 

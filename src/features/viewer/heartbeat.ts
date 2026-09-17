@@ -25,6 +25,19 @@ import type { ManifestOrgan } from "@/lib/schemas";
  * about where the point is, costs one uniform write a frame for all of them,
  * and leaves the geometry the pointer is tested against untouched.
  *
+ * # Why the base stays where it is
+ *
+ * The great vessels do not move: the venae cavae, the pulmonary trunk and the
+ * aorta are drawn where the atlas put them. A chamber drawn in evenly towards
+ * its centre pulled its own top away from them, and a gap opened at every beat
+ * exactly where the superior vena cava and the pulmonary trunk meet the heart.
+ *
+ * So each vertex is held in proportion to how near it is to the top of its
+ * group of chambers — where those vessels join — and moves fully only once it
+ * is a third of the way down. That is also closer to the truth than the even
+ * squeeze was: the base of the heart is tethered by those vessels, and it is
+ * the body of the chambers, and the apex, that visibly move.
+ *
  * # Why the valves and the coronaries go with a chamber
  *
  * A papillary muscle that stayed still while its ventricle drew in would come
@@ -149,6 +162,20 @@ export function passed(before: number, after: number, mark: number, bpm = RESTIN
 export const BEAT_ATRIA = { value: 0 };
 export const BEAT_VENTRICLES = { value: 0 };
 
+/**
+ * Where each group of chambers is held: the height of the top of its walls in
+ * world space, and how far below that the hold has faded out. A reach of zero
+ * holds nothing, which is what a material compiled before the heart has been
+ * measured must do. See "Why the base stays where it is".
+ */
+export const BEAT_BASE_ATRIA = { value: 0 };
+export const BEAT_BASE_VENTRICLES = { value: 0 };
+export const BEAT_REACH_ATRIA = { value: 0 };
+export const BEAT_REACH_VENTRICLES = { value: 0 };
+
+/** How far down a group's own height the hold fades out. */
+export const HOLD_FRACTION = 0.35;
+
 type Shader = Parameters<Material["onBeforeCompile"]>[0];
 
 /**
@@ -168,6 +195,10 @@ export function heartbeatOnBeforeCompile(this: unknown, shader: Shader): void {
     | undefined;
   shader.uniforms.uBeatAtria = BEAT_ATRIA;
   shader.uniforms.uBeatVentricles = BEAT_VENTRICLES;
+  shader.uniforms.uBeatBaseAtria = BEAT_BASE_ATRIA;
+  shader.uniforms.uBeatBaseVentricles = BEAT_BASE_VENTRICLES;
+  shader.uniforms.uBeatReachAtria = BEAT_REACH_ATRIA;
+  shader.uniforms.uBeatReachVentricles = BEAT_REACH_VENTRICLES;
   shader.uniforms.uBeatIsAtrium = { value: owner?.userData?.beatAtrium ?? 0 };
   // The object itself, not a copy: the driver moves the centre as the mesh
   // moves, and the uniform has to see that without a recompile.
@@ -175,11 +206,20 @@ export function heartbeatOnBeforeCompile(this: unknown, shader: Shader): void {
 
   shader.vertexShader =
     "uniform float uBeatAtria;\nuniform float uBeatVentricles;\n" +
+    "uniform float uBeatBaseAtria;\nuniform float uBeatBaseVentricles;\n" +
+    "uniform float uBeatReachAtria;\nuniform float uBeatReachVentricles;\n" +
     "uniform float uBeatIsAtrium;\nuniform vec3 uBeatCentre;\n" +
     shader.vertexShader.replace(
       chunk,
-      "transformed = mix(transformed, uBeatCentre, " +
-        `mix(uBeatVentricles, uBeatAtria, uBeatIsAtrium));\n${chunk}`,
+      `float beatSqueeze = mix(uBeatVentricles, uBeatAtria, uBeatIsAtrium);
+float beatBase = mix(uBeatBaseVentricles, uBeatBaseAtria, uBeatIsAtrium);
+float beatReach = mix(uBeatReachVentricles, uBeatReachAtria, uBeatIsAtrium);
+// How far below the top of its chambers this vertex lies, in world space: held
+// still where the great vessels join, free to move a third of the way down.
+float beatBelow = beatBase - (modelMatrix * vec4(transformed, 1.0)).y;
+float beatFree = beatReach > 0.0 ? smoothstep(0.0, beatReach, beatBelow) : 1.0;
+transformed = mix(transformed, uBeatCentre, beatSqueeze * beatFree);
+${chunk}`,
     );
 }
 
@@ -209,6 +249,45 @@ export function registerBeating(organId: string, entry: BeatingMesh): () => void
 
 type Placed = Pick<ManifestOrgan, "organ_id" | "system" | "ta2_latin" | "path">;
 
+/** Whether a structure is a chamber's own wall rather than something in or on it. */
+function isWall(organ: Placed): boolean {
+  return /^(atrium|ventriculus)\b/i.test(organ.ta2_latin);
+}
+
+export interface Hold {
+  /** The height of the top of the group's walls, in world space. */
+  base: number;
+  /** How far below that the hold has faded out. */
+  reach: number;
+}
+
+/**
+ * Where the atria and the ventricles are each held still.
+ *
+ * From the walls only, like the centres. A group the atlas has no walls for is
+ * null, and its structures are then free along their whole height — a heart
+ * that separates slightly from its vessels is a smaller fault than one that
+ * does not beat.
+ */
+export function chamberHolds(
+  boxes: ReadonlyMap<string, THREE.Box3>,
+  organs: readonly Placed[],
+): { atria: Hold | null; ventricles: Hold | null } {
+  const atria = new THREE.Box3();
+  const ventricles = new THREE.Box3();
+  for (const organ of organs) {
+    const chamber = beatChamber(organ);
+    const box = boxes.get(organ.organ_id);
+    if (!chamber || !box || box.isEmpty() || !isWall(organ)) continue;
+    (isAtrium(chamber) ? atria : ventricles).union(box);
+  }
+  const hold = (box: THREE.Box3): Hold | null =>
+    box.isEmpty()
+      ? null
+      : { base: box.max.y, reach: HOLD_FRACTION * (box.max.y - box.min.y) };
+  return { atria: hold(atria), ventricles: hold(ventricles) };
+}
+
 /**
  * Where each chamber's centre is, in world space.
  *
@@ -229,7 +308,7 @@ export function chamberCentres(
     if (!chamber || !box || box.isEmpty()) continue;
     const all = everything.get(chamber) ?? new THREE.Box3();
     everything.set(chamber, all.union(box));
-    if (/^(atrium|ventriculus)\b/i.test(organ.ta2_latin)) {
+    if (isWall(organ)) {
       const wall = walls.get(chamber) ?? new THREE.Box3();
       walls.set(chamber, wall.union(box));
     }
