@@ -27,6 +27,15 @@ import { CYCLE, RESTING_BPM, SQUEEZE } from "./heartbeat";
  * ones where the atria and ventricles each keep their own time. A rhythm that
  * has no organised contraction at all — fibrillation — quivers instead: a small
  * continuous movement with no events and, in the ventricles, no sounds.
+ *
+ * # The ECG comes from the same schedule
+ *
+ * `ecgAt` draws a lead-II-like trace from the very contractions the animation
+ * plays: a P wave before each atrial contraction, a QRS before each ventricular
+ * one and a T wave inside it. So the PR interval on the trace is the pause the
+ * reader watches, a dropped beat is a P with nothing after it, and the trace
+ * cannot disagree with the heart. It is a schematic trace for learning the
+ * patterns, not a recording, and the panel says so.
  */
 
 export type RhythmId =
@@ -54,7 +63,22 @@ export interface Contraction {
   end: number;
   /** 1 is a normal beat; less is a weaker one. */
   strength: number;
+  /**
+   * A ventricular beat that starts in the ventricles rather than coming down
+   * the conduction system: slow to spread, so its QRS is wide and its T wave
+   * points the other way.
+   */
+  wide?: boolean;
 }
+
+/**
+ * What the trace shows between and instead of organised beats.
+ *
+ * - `p`: a P wave with each atrial contraction.
+ * - `flutter`: sawtooth F waves, one with each fast atrial contraction.
+ * - `fibrillation`: no P waves, a fine irregular baseline.
+ */
+export type AtrialTrace = "p" | "flutter" | "fibrillation";
 
 /** One heart sound, and how loud relative to normal. */
 export interface HeartSound {
@@ -86,6 +110,8 @@ export interface RhythmDefinition {
   what: string;
   /** Continuous quiver, as a fraction of a full contraction. Zero for organised rhythms. */
   quiver: { atria: number; ventricles: number };
+  /** How the atria show on the ECG. `p` unless said otherwise. */
+  atrialTrace?: AtrialTrace;
   plan: Planner;
 }
 
@@ -121,9 +147,10 @@ function ventricle(
   strength = 1,
   firstSound = 1,
   secondSound = 1,
+  wide = false,
 ): void {
   const length = systoleFor(interval);
-  out.ventricles.push({ at, peak: at + length * SYSTOLE_PEAK, end: at + length, strength });
+  out.ventricles.push({ at, peak: at + length * SYSTOLE_PEAK, end: at + length, strength, wide });
   if (firstSound > 0) out.lub.push({ at, level: firstSound });
   if (secondSound > 0) out.dub.push({ at: at + length * S2_WITHIN_SYSTOLE, level: secondSound });
 }
@@ -247,7 +274,8 @@ export const RHYTHMS: readonly RhythmDefinition[] = [
         clocks.atria += NORMAL_RR;
       }
       while (clocks.ventricles < to) {
-        ventricle(out, clocks.ventricles, ventricular, 1, 0.5 + 0.5 * random(), 1);
+        // An escape rhythm from the ventricles themselves: wide.
+        ventricle(out, clocks.ventricles, ventricular, 1, 0.5 + 0.5 * random(), 1, true);
         clocks.ventricles += ventricular;
       }
     },
@@ -262,6 +290,7 @@ export const RHYTHMS: readonly RhythmDefinition[] = [
       "intervals — irregularly irregular. A beat after a short interval has had less time " +
       "to fill, and is weaker and quieter.",
     quiver: { atria: 0.35, ventricles: 0 },
+    atrialTrace: "fibrillation",
     plan: (to, clocks, random, out) => {
       clocks.ventricles ??= 0.2;
       clocks.filled ??= 0.7;
@@ -284,6 +313,7 @@ export const RHYTHMS: readonly RhythmDefinition[] = [
       "The atria contract very fast and regularly, about 300 times a minute. The AV node " +
       "lets every second one through, so the ventricles beat about 150.",
     quiver: NO_QUIVER,
+    atrialTrace: "flutter",
     plan: (to, clocks, _random, out) => {
       const atrial = 0.2;
       clocks.atria ??= 0;
@@ -316,7 +346,7 @@ export const RHYTHMS: readonly RhythmDefinition[] = [
           // Everything after the previous normal beat adds up to two full cycles:
           // the compensatory pause.
           const previous = clocks.atria - NORMAL_RR + NORMAL_PR;
-          ventricle(out, previous + 0.46, NORMAL_RR * 0.6, 0.8, 0.9, 0.7);
+          ventricle(out, previous + 0.46, NORMAL_RR * 0.6, 0.8, 0.9, 0.7, true);
         } else {
           ventricle(out, clocks.atria + NORMAL_PR, NORMAL_RR);
         }
@@ -343,7 +373,7 @@ export const RHYTHMS: readonly RhythmDefinition[] = [
         clocks.atria += NORMAL_RR;
       }
       while (clocks.ventricles < to) {
-        ventricle(out, clocks.ventricles, ventricular, 0.65, 0.5 + 0.4 * random(), 0.6);
+        ventricle(out, clocks.ventricles, ventricular, 0.65, 0.5 + 0.4 * random(), 0.6, true);
         clocks.ventricles += ventricular;
       }
     },
@@ -357,6 +387,7 @@ export const RHYTHMS: readonly RhythmDefinition[] = [
       "No coordinated contraction: the ventricles quiver and pump nothing, so there are " +
       "no heart sounds and no pulse. This is cardiac arrest.",
     quiver: { atria: 0.25, ventricles: 0.5 },
+    atrialTrace: "fibrillation",
     plan: () => {},
   },
   {
@@ -387,6 +418,15 @@ function seeded(seed: number): () => number {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
+
+/** A smooth bump of height `a` centred on `c`, `w` seconds wide. */
+function wave(t: number, c: number, w: number, a: number): number {
+  const x = (t - c) / w;
+  return x * x > 16 ? 0 : a * Math.exp(-x * x);
+}
+
+/** How far back contractions are kept, so the trace can still draw their T waves. */
+const TRACE_MEMORY_S = 0.8;
 
 function bump(t: number, contraction: Contraction): number {
   if (t <= contraction.at || t >= contraction.end) return 0;
@@ -436,7 +476,7 @@ export class RhythmPlayer {
       this.horizon = after + LOOKAHEAD_S;
       this.definition.plan(this.horizon, this.clocks, this.random, this.planned);
       // What has finished is no longer needed.
-      const keep = before - 0.05;
+      const keep = before - TRACE_MEMORY_S;
       this.planned.atria = this.planned.atria.filter((c) => c.end >= keep);
       this.planned.ventricles = this.planned.ventricles.filter((c) => c.end >= keep);
       this.planned.lub = this.planned.lub.filter((s) => s.at >= keep);
@@ -457,6 +497,49 @@ export class RhythmPlayer {
       lub: this.planned.lub.filter(within).map((sound) => sound.level),
       dub: this.planned.dub.filter(within).map((sound) => sound.level),
     };
+  }
+
+  /**
+   * The ECG at time `t`, in units where a normal R wave is 1.
+   *
+   * Read for a time the player has already reached: the schedule behind it is
+   * only kept for `TRACE_MEMORY_S`.
+   */
+  ecgAt(t: number): number {
+    let v = 0;
+    const trace = this.definition.atrialTrace ?? "p";
+    for (const a of this.planned.atria) {
+      if (t < a.at - 0.2 || t > a.end + 0.2) continue;
+      if (trace === "p") v += wave(t, a.at - 0.03, 0.03, 0.14);
+      else if (trace === "flutter") v += wave(t, a.at + 0.03, 0.05, -0.18) + wave(t, a.at + 0.13, 0.025, 0.07);
+    }
+    if (trace === "fibrillation") {
+      v +=
+        0.035 * Math.sin(2 * Math.PI * 6.1 * t + this.phases[0]!) +
+        0.02 * Math.sin(2 * Math.PI * 8.7 * t + this.phases[1]!) +
+        0.015 * Math.sin(2 * Math.PI * 4.3 * t + this.phases[2]!);
+    }
+    for (const c of this.planned.ventricles) {
+      if (t < c.at - 0.2 || t > c.end + 0.3) continue;
+      const length = c.end - c.at;
+      // Electrical activity leads the contraction it causes.
+      const q = c.at - 0.04;
+      if (c.wide) {
+        v += wave(t, q + 0.01, 0.03, 0.85) + wave(t, q + 0.07, 0.03, -0.45);
+        v += wave(t, c.at + 0.62 * length, 0.06, -0.35);
+      } else {
+        v += wave(t, q - 0.025, 0.008, -0.12) + wave(t, q, 0.011, 1) + wave(t, q + 0.022, 0.01, -0.28);
+        v += wave(t, c.at + 0.62 * length, 0.045, 0.28);
+      }
+    }
+    if (this.definition.quiver.ventricles > 0) {
+      // Fibrillating ventricles: large, chaotic, no complexes at all.
+      const swell = 0.7 + 0.3 * Math.sin(2 * Math.PI * 0.4 * t + this.phases[5]!);
+      v +=
+        0.45 * swell * Math.sin(2 * Math.PI * 5.1 * t + this.phases[3]!) +
+        0.18 * Math.sin(2 * Math.PI * 7.3 * t + this.phases[4]!);
+    }
+    return v;
   }
 
   /** A small, fast, irregular movement: three waves that never line up. */

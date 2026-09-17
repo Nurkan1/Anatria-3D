@@ -196,3 +196,71 @@ describe("replaying a rhythm", () => {
     expect(second).toEqual(first);
   });
 });
+
+/** Play a rhythm and sample its ECG every 4 ms, as the strip would. */
+function trace(id: RhythmId, seconds = 10) {
+  const player = new RhythmPlayer(rhythm(id));
+  const samples: { t: number; v: number }[] = [];
+  let t = 0;
+  for (let step = 0; step < seconds * 250; step++) {
+    const next = t + 0.004;
+    player.advance(t, next);
+    samples.push({ t: next, v: player.ecgAt(next) });
+    t = next;
+  }
+  return samples;
+}
+
+/** The times of R peaks: local maxima above `threshold`. */
+function rPeaks(samples: { t: number; v: number }[], threshold = 0.7): number[] {
+  const peaks: number[] = [];
+  for (let i = 1; i < samples.length - 1; i++) {
+    const { v } = samples[i]!;
+    if (v > threshold && v >= samples[i - 1]!.v && v > samples[i + 1]!.v) peaks.push(samples[i]!.t);
+  }
+  return peaks;
+}
+
+/** How long the trace stays above half of the peak around `at`, in seconds. */
+function widthAround(samples: { t: number; v: number }[], at: number): number {
+  const peak = samples.find((s) => s.t === at)!.v;
+  return samples.filter((s) => Math.abs(s.t - at) < 0.1 && s.v > peak / 2).length * 0.004;
+}
+
+describe("the ECG", () => {
+  it("draws one QRS for every ventricular beat of a normal rhythm", () => {
+    expect(rPeaks(trace("normal"))).toHaveLength(12);
+  });
+
+  it("is flat in asystole", () => {
+    expect(Math.max(...trace("asystole", 3).map((s) => Math.abs(s.v)))).toBeLessThan(0.01);
+  });
+
+  it("shows the long PR interval of first-degree block", () => {
+    const samples = trace("av_block_1", 3);
+    const r = rPeaks(samples)[0]!;
+    // The P wave's peak: the highest point in the half second before the QRS, away from it.
+    const p = samples
+      .filter((s) => s.t > r - 0.5 && s.t < r - 0.1)
+      .reduce((best, s) => (s.v > best.v ? s : best));
+    expect(r - p.t).toBeGreaterThan(0.25);
+  });
+
+  it("widens the QRS of beats that start in the ventricles", () => {
+    const normal = trace("normal", 3);
+    const vt = trace("ventricular_tachycardia", 3);
+    expect(widthAround(vt, rPeaks(vt)[1]!)).toBeGreaterThan(2 * widthAround(normal, rPeaks(normal)[1]!));
+  });
+
+  it("has no complexes in ventricular fibrillation, and never goes flat", () => {
+    const samples = trace("ventricular_fibrillation", 5);
+    expect(rPeaks(samples)).toHaveLength(0);
+    const window = samples.slice(0, 125).map((s) => s.v);
+    expect(Math.max(...window) - Math.min(...window)).toBeGreaterThan(0.3);
+  });
+
+  it("puts R waves at irregular intervals in atrial fibrillation", () => {
+    const gaps = intervals(rPeaks(trace("atrial_fibrillation")));
+    expect(Math.max(...gaps) - Math.min(...gaps)).toBeGreaterThan(0.25);
+  });
+});

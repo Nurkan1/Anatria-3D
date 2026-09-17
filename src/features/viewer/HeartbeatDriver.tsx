@@ -39,6 +39,7 @@ import {
   PulseTrain,
   type FlowKind,
 } from "./bloodFlow";
+import { HEART_TRACE } from "./EcgStrip";
 import { flowPaths, type PathMesh } from "./flowPaths";
 import { LightGuard, prefersReducedMotion } from "./lightGuard";
 import { playDub, playLub } from "./heartSound";
@@ -186,6 +187,7 @@ export function HeartbeatDriver({
     BEAT_ATRIA.value = 0;
     BEAT_VENTRICLES.value = 0;
     BEAT_GLOW.value = 0;
+    HEART_TRACE.player = null;
     BEAT_LIGHT_ATRIA.value = 0;
     BEAT_LIGHT_VENTRICLES.value = 0;
     guards.atria.reset();
@@ -221,6 +223,8 @@ export function HeartbeatDriver({
 
     player.current ??= new RhythmPlayer(rhythm(rhythmId));
     const beat = player.current.advance(before, after);
+    HEART_TRACE.player = player.current;
+    HEART_TRACE.now = after;
     BEAT_ATRIA.value = beat.atria;
     BEAT_VENTRICLES.value = beat.ventricles;
 

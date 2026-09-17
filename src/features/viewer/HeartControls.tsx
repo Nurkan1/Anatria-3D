@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { useHeartStore } from "@/stores/heartStore";
 import { useSceneStore } from "@/stores/sceneStore";
 
+import { EcgStrip } from "./EcgStrip";
 import { beatChamber } from "./heartbeat";
 import { primeHeartSound } from "./heartSound";
 import { OVERLAY_SWITCH_OFF, OVERLAY_SWITCH_ON } from "./overlayChrome";
@@ -80,6 +81,7 @@ export function HeartControls() {
           </p>
           <p className="mt-0.5 font-medium text-slate-200">{current.label}</p>
           <p className="mt-0.5">{current.what}</p>
+          <EcgStrip />
           {cardiovascularHidden && (
             <p className="mt-0.5 text-amber-300/80">
               Switch the cardiovascular system on to see it.
