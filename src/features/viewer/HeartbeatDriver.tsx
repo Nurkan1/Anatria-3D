@@ -13,11 +13,18 @@ import {
   BEAT_REACH_VENTRICLES,
   BEAT_VENTRICLES,
   BEATING,
+  BEATING_VERSION,
   beatAt,
   chamberCentres,
   chamberHolds,
   CYCLE,
+  HEART_PROBE,
   passed,
+  SEAM_ATTRIBUTE,
+  seamFreedom,
+  seamGrid,
+  type BeatingMesh,
+  type ChamberPoints,
 } from "./heartbeat";
 import { playDub, playLub } from "./heartSound";
 
@@ -30,6 +37,32 @@ import { playDub, playLub } from "./heartSound";
  * moment, which nobody can see.
  */
 const LONGEST_STEP_S = 0.1;
+
+function pointsOf(entry: BeatingMesh): ChamberPoints {
+  return {
+    chamber: entry.chamber,
+    vertices: entry.mesh.geometry.getAttribute("position"),
+    matrixWorld: entry.mesh.matrixWorld,
+  };
+}
+
+/**
+ * Give every beating geometry its seam attribute. See `seamFreedom`.
+ *
+ * Run when what is beating changes, not per frame: it reads every vertex of the
+ * heart, and the answer does not change while the heart stays where it is.
+ */
+function measureSeams(): void {
+  const started = performance.now();
+  const walls: ChamberPoints[] = [];
+  for (const entry of BEATING.values()) if (entry.wall) walls.push(pointsOf(entry));
+  const grid = seamGrid(walls);
+  for (const entry of BEATING.values()) {
+    const free = seamFreedom(grid, pointsOf(entry));
+    entry.mesh.geometry.setAttribute(SEAM_ATTRIBUTE, new THREE.BufferAttribute(free, 1));
+  }
+  HEART_PROBE.seamMs = performance.now() - started;
+}
 
 /**
  * The clock the heart beats to, run once per frame for the whole heart.
@@ -65,20 +98,30 @@ export function HeartbeatDriver({
     BEAT_BASE_VENTRICLES.value = holds.ventricles?.base ?? 0;
     BEAT_REACH_VENTRICLES.value = holds.ventricles?.reach ?? 0;
   }, [enabled, boxes, organs, revision]);
+
   /** Seconds of heartbeat so far. Restarts at the top of a cycle each time. */
   const clock = useRef(0);
+  /** The registry version the seams were last measured for. */
+  const measured = useRef(-1);
   const inverse = useMemo(() => new THREE.Matrix4(), []);
 
   useEffect(() => {
     if (enabled) return;
     // Back to rest, so the next time it starts it starts from a heart at rest.
     clock.current = 0;
+    measured.current = -1;
     BEAT_ATRIA.value = 0;
     BEAT_VENTRICLES.value = 0;
   }, [enabled]);
 
   useFrame((_, delta) => {
     if (!enabled || !centres) return;
+
+    if (measured.current !== BEATING_VERSION.value) {
+      measured.current = BEATING_VERSION.value;
+      measureSeams();
+    }
+
     const before = clock.current;
     const after = before + Math.min(delta, LONGEST_STEP_S);
     clock.current = after;

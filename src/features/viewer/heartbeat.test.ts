@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
   Box3,
+  BufferAttribute,
   Material,
+  Matrix4,
   MeshStandardMaterial,
   ShaderLib,
   UniformsUtils,
@@ -15,16 +17,23 @@ import {
   BEAT_ATRIA,
   BEAT_VENTRICLES,
   BEATING,
+  BEATING_VERSION,
   beatAt,
   beatChamber,
   chamberCentres,
   chamberHolds,
-  HOLD_FRACTION,
   CYCLE,
   heartbeatOnBeforeCompile,
+  HOLD_FRACTION,
+  isChamberWall,
   passed,
   registerBeating,
   RESTING_BPM,
+  SEAM_ATTRIBUTE,
+  SEAM_FAR,
+  SEAM_NEAR,
+  seamFreedom,
+  seamGrid,
   SQUEEZE,
   type BeatingMesh,
 } from "./heartbeat";
@@ -90,9 +99,13 @@ describe("which chamber a structure moves with", () => {
 
   it("leaves everything outside the heart alone", () => {
     expect(beatChamber(inHeart("Arteria femoralis dextra", ["Arteries of lower limb"]))).toBeNull();
-    expect(
-      beatChamber({ system: "nervous", ta2_latin: "Nervus vagus", path: ["Heart"] }),
-    ).toBeNull();
+    expect(beatChamber({ system: "nervous", ta2_latin: "Nervus vagus", path: ["Heart"] })).toBeNull();
+  });
+
+  it("tells a chamber's own wall from what lies in or on it", () => {
+    expect(isChamberWall({ ta2_latin: "Ventriculus dexter" })).toBe(true);
+    expect(isChamberWall({ ta2_latin: "Atrium sinistrum" })).toBe(true);
+    expect(isChamberWall({ ta2_latin: "Musculus papillaris anterior ventriculi dextri" })).toBe(false);
   });
 });
 
@@ -195,12 +208,20 @@ describe("the shader", () => {
   });
 
   it("holds the base still where the great vessels join", () => {
-    // The fault he saw: an even squeeze pulled the top of the heart away from
-    // the superior vena cava and the pulmonary trunk at every beat.
+    // The first fault he saw: an even squeeze pulled the top of the heart away
+    // from the superior vena cava and the pulmonary trunk at every beat.
     const compiled = shader();
     heartbeatOnBeforeCompile(compiled);
     expect(compiled.vertexShader).toContain("smoothstep(0.0, beatReach, beatBelow)");
-    expect(compiled.vertexShader).toContain("beatSqueeze * beatFree");
+  });
+
+  it("holds each vertex by its own seam attribute", () => {
+    // The second: the right atrium and right ventricle opened a gap along the
+    // atrioventricular groove.
+    const compiled = shader();
+    heartbeatOnBeforeCompile(compiled);
+    expect(compiled.vertexShader).toContain(`attribute float ${SEAM_ATTRIBUTE};`);
+    expect(compiled.vertexShader).toContain(`beatSqueeze * beatFree * ${SEAM_ATTRIBUTE}`);
   });
 
   it("draws the vertex in before it is projected", () => {
@@ -270,14 +291,79 @@ describe("where the base is held", () => {
   });
 });
 
+describe("where one chamber meets another", () => {
+  /** Points along x in world space, as a position attribute under an identity matrix. */
+  const at = (...xs: number[]) =>
+    new BufferAttribute(new Float32Array(xs.flatMap((x) => [x, 0, 0])), 3);
+  const identity = new Matrix4();
+
+  // The right atrium's wall at the origin, the right ventricle's five centimetres along.
+  const grid = seamGrid([
+    { chamber: "right_atrium", vertices: at(0), matrixWorld: identity },
+    { chamber: "right_ventricle", vertices: at(0.05), matrixWorld: identity },
+  ]);
+
+  it("holds a vertex lying against another chamber's wall", () => {
+    const free = seamFreedom(grid, { chamber: "right_ventricle", vertices: at(0.002), matrixWorld: identity });
+    expect(free[0]).toBe(0);
+  });
+
+  it("leaves a vertex free once it is clear of every other chamber", () => {
+    const free = seamFreedom(grid, { chamber: "right_ventricle", vertices: at(0.035), matrixWorld: identity });
+    expect(free[0]).toBe(1);
+  });
+
+  it("is not held by being near its own chamber's wall", () => {
+    // A ventricle's surface lies against itself everywhere. Only another
+    // chamber's wall makes a seam.
+    const free = seamFreedom(grid, { chamber: "right_atrium", vertices: at(0.001), matrixWorld: identity });
+    expect(free[0]).toBe(1);
+  });
+
+  it("eases between held and free", () => {
+    const halfway = (SEAM_NEAR + SEAM_FAR) / 2;
+    const free = seamFreedom(grid, { chamber: "right_ventricle", vertices: at(halfway), matrixWorld: identity });
+    expect(free[0]).toBeGreaterThan(0.1);
+    expect(free[0]).toBeLessThan(0.9);
+  });
+
+  it("measures where the mesh actually is in the world", () => {
+    // A vertex at the local origin of a mesh moved two millimetres from the
+    // atrium's wall is against that wall.
+    const moved = new Matrix4().makeTranslation(0.002, 0, 0);
+    const free = seamFreedom(grid, { chamber: "right_ventricle", vertices: at(0), matrixWorld: moved });
+    expect(free[0]).toBe(0);
+  });
+});
+
 describe("the registry of beating meshes", () => {
   it("does not remove a mesh that has replaced the one being cleaned up", () => {
-    const first = { chamber: "left_atrium", centre: { value: new Vector3() }, mesh: {} } as unknown as BeatingMesh;
+    const first = {
+      chamber: "left_atrium",
+      wall: true,
+      centre: { value: new Vector3() },
+      mesh: {},
+    } as unknown as BeatingMesh;
     const second = { ...first };
     const dropFirst = registerBeating("left_atrium", first);
     registerBeating("left_atrium", second);
     dropFirst();
     expect(BEATING.get("left_atrium")).toBe(second);
+    BEATING.clear();
+  });
+
+  it("says when what is beating has changed, so the seams are measured again", () => {
+    const before = BEATING_VERSION.value;
+    const drop = registerBeating("right_atrium", {
+      chamber: "right_atrium",
+      wall: true,
+      centre: { value: new Vector3() },
+      mesh: {},
+    } as unknown as BeatingMesh);
+    expect(BEATING_VERSION.value).toBeGreaterThan(before);
+    const joined = BEATING_VERSION.value;
+    drop();
+    expect(BEATING_VERSION.value).toBeGreaterThan(joined);
     BEATING.clear();
   });
 });

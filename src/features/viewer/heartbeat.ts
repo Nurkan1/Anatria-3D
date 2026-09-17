@@ -38,6 +38,27 @@ import type { ManifestOrgan } from "@/lib/schemas";
  * squeeze was: the base of the heart is tethered by those vessels, and it is
  * the body of the chambers, and the apex, that visibly move.
  *
+ * # Why the chambers stay joined to each other
+ *
+ * Holding the top was not enough. Each chamber draws in towards its own centre
+ * and at its own moment — the atrium, then the ventricle — so where two
+ * chambers' walls lie against each other they moved apart, and the right atrium
+ * and the right ventricle opened a visible gap along the atrioventricular
+ * groove.
+ *
+ * A plane across the heart's axis was tried first, and measured against the
+ * real atlas before it was ever drawn: this heart is tilted so far that its
+ * atria and its ventricles occupy almost the same heights, and a plane placed
+ * from their bounding boxes ran through the middle of all four chambers. It
+ * would have held the whole heart still.
+ *
+ * So each vertex is held by how close it actually is to another chamber's wall,
+ * measured on the meshes themselves once, when the heartbeat starts: still
+ * within four millimetres of one, fully free from a centimetre and a half. Only
+ * the strips where chambers meet — the atrioventricular grooves, the septum —
+ * stay put, and the coronary arteries that run in those grooves stay in them.
+ * See `seamFreedom`.
+ *
  * # Why the valves and the coronaries go with a chamber
  *
  * A papillary muscle that stayed still while its ventricle drew in would come
@@ -93,6 +114,11 @@ export function isAtrium(chamber: Chamber): boolean {
   return chamber === "right_atrium" || chamber === "left_atrium";
 }
 
+/** Whether a structure is a chamber's own wall rather than something in or on it. */
+export function isChamberWall(organ: Pick<ManifestOrgan, "ta2_latin">): boolean {
+  return /^(atrium|ventriculus)\b/i.test(organ.ta2_latin);
+}
+
 /** A resting adult rate. Phase 0 has no control for it. */
 export const RESTING_BPM = 72;
 
@@ -119,9 +145,11 @@ export const CYCLE = {
  *
  * Small on purpose. The walls of neighbouring chambers lie against each other,
  * and a larger squeeze opens gaps between them that read as the model coming
- * apart rather than as a heart contracting.
+ * apart rather than as a heart contracting. The atria's is raised to match the
+ * ventricles': held at their top and where they meet the ventricles, they have
+ * less of themselves left free to show it.
  */
-export const SQUEEZE = { atria: 0.06, ventricles: 0.08 } as const;
+export const SQUEEZE = { atria: 0.08, ventricles: 0.08 } as const;
 
 function smooth(x: number): number {
   const t = Math.min(1, Math.max(0, x));
@@ -176,6 +204,18 @@ export const BEAT_REACH_VENTRICLES = { value: 0 };
 /** How far down a group's own height the hold fades out. */
 export const HOLD_FRACTION = 0.35;
 
+/** Within this distance of another chamber's wall, in metres, a vertex does not move. */
+export const SEAM_NEAR = 0.004;
+/** From this distance on it moves fully. */
+export const SEAM_FAR = 0.015;
+/** Wall points closer together than this are measured as one. */
+export const SEAM_SPACING = 0.004;
+/** The attribute every beating geometry carries: 0 held at a seam, 1 free. */
+export const SEAM_ATTRIBUTE = "beatSeamFree";
+
+/** Published for the render panel: what measuring the seams last cost. */
+export const HEART_PROBE = { seamMs: -1 };
+
 type Shader = Parameters<Material["onBeforeCompile"]>[0];
 
 /**
@@ -205,6 +245,7 @@ export function heartbeatOnBeforeCompile(this: unknown, shader: Shader): void {
   shader.uniforms.uBeatCentre = owner?.userData?.beatCentre ?? { value: new THREE.Vector3() };
 
   shader.vertexShader =
+    `attribute float ${SEAM_ATTRIBUTE};\n` +
     "uniform float uBeatAtria;\nuniform float uBeatVentricles;\n" +
     "uniform float uBeatBaseAtria;\nuniform float uBeatBaseVentricles;\n" +
     "uniform float uBeatReachAtria;\nuniform float uBeatReachVentricles;\n" +
@@ -218,15 +259,18 @@ float beatReach = mix(uBeatReachVentricles, uBeatReachAtria, uBeatIsAtrium);
 // still where the great vessels join, free to move a third of the way down.
 float beatBelow = beatBase - (modelMatrix * vec4(transformed, 1.0)).y;
 float beatFree = beatReach > 0.0 ? smoothstep(0.0, beatReach, beatBelow) : 1.0;
-transformed = mix(transformed, uBeatCentre, beatSqueeze * beatFree);
+// And held where it lies against another chamber's wall — see seamFreedom.
+transformed = mix(transformed, uBeatCentre, beatSqueeze * beatFree * ${SEAM_ATTRIBUTE});
 ${chunk}`,
     );
 }
 
-/** A heart mesh while it beats: what the driver needs to keep its centre right. */
+/** A heart mesh while it beats: what the driver needs to keep it right. */
 export interface BeatingMesh {
   mesh: THREE.Mesh;
   chamber: Chamber;
+  /** A chamber's own wall, which is what the seams are measured against. */
+  wall: boolean;
   /** The uniform the shader reads, in the mesh's own coordinates. */
   centre: { value: THREE.Vector3 };
 }
@@ -239,19 +283,36 @@ export interface BeatingMesh {
  */
 export const BEATING = new Map<string, BeatingMesh>();
 
+/** Bumped whenever a mesh joins or leaves, so the seams are measured again. */
+export const BEATING_VERSION = { value: 0 };
+
 /** Add one, and get back what removes it — but only if it is still this one. */
 export function registerBeating(organId: string, entry: BeatingMesh): () => void {
   BEATING.set(organId, entry);
+  BEATING_VERSION.value += 1;
   return () => {
-    if (BEATING.get(organId) === entry) BEATING.delete(organId);
+    if (BEATING.get(organId) !== entry) return;
+    BEATING.delete(organId);
+    BEATING_VERSION.value += 1;
   };
 }
 
 type Placed = Pick<ManifestOrgan, "organ_id" | "system" | "ta2_latin" | "path">;
 
-/** Whether a structure is a chamber's own wall rather than something in or on it. */
-function isWall(organ: Placed): boolean {
-  return /^(atrium|ventriculus)\b/i.test(organ.ta2_latin);
+/** The atria's walls and the ventricles' walls, each as one box. */
+function wallGroups(
+  boxes: ReadonlyMap<string, THREE.Box3>,
+  organs: readonly Placed[],
+): { atria: THREE.Box3; ventricles: THREE.Box3 } {
+  const atria = new THREE.Box3();
+  const ventricles = new THREE.Box3();
+  for (const organ of organs) {
+    const chamber = beatChamber(organ);
+    const box = boxes.get(organ.organ_id);
+    if (!chamber || !box || box.isEmpty() || !isChamberWall(organ)) continue;
+    (isAtrium(chamber) ? atria : ventricles).union(box);
+  }
+  return { atria, ventricles };
 }
 
 export interface Hold {
@@ -273,14 +334,7 @@ export function chamberHolds(
   boxes: ReadonlyMap<string, THREE.Box3>,
   organs: readonly Placed[],
 ): { atria: Hold | null; ventricles: Hold | null } {
-  const atria = new THREE.Box3();
-  const ventricles = new THREE.Box3();
-  for (const organ of organs) {
-    const chamber = beatChamber(organ);
-    const box = boxes.get(organ.organ_id);
-    if (!chamber || !box || box.isEmpty() || !isWall(organ)) continue;
-    (isAtrium(chamber) ? atria : ventricles).union(box);
-  }
+  const { atria, ventricles } = wallGroups(boxes, organs);
   const hold = (box: THREE.Box3): Hold | null =>
     box.isEmpty()
       ? null
@@ -308,7 +362,7 @@ export function chamberCentres(
     if (!chamber || !box || box.isEmpty()) continue;
     const all = everything.get(chamber) ?? new THREE.Box3();
     everything.set(chamber, all.union(box));
-    if (isWall(organ)) {
+    if (isChamberWall(organ)) {
       const wall = walls.get(chamber) ?? new THREE.Box3();
       walls.set(chamber, wall.union(box));
     }
@@ -318,4 +372,126 @@ export function chamberCentres(
     centres.set(chamber, (walls.get(chamber) ?? box).getCenter(new THREE.Vector3()));
   }
   return centres;
+}
+
+/** What measuring a seam needs of a geometry: its vertices, one axis at a time. */
+export interface Vertices {
+  count: number;
+  getX(index: number): number;
+  getY(index: number): number;
+  getZ(index: number): number;
+}
+
+/** A mesh's vertices, the chamber it moves with, and where it is in the world. */
+export interface ChamberPoints {
+  chamber: Chamber;
+  vertices: Vertices;
+  matrixWorld: THREE.Matrix4;
+}
+
+const CHAMBER_INDEX: Readonly<Record<Chamber, number>> = {
+  right_atrium: 0,
+  left_atrium: 1,
+  right_ventricle: 2,
+  left_ventricle: 3,
+};
+
+/** The walls' points, bucketed by cells a seam's width across. */
+export interface SeamGrid {
+  cells: Map<number, number[]>;
+}
+
+/**
+ * A number for a cell. Two cells whose numbers collide share a bucket and cost a
+ * few extra distance checks; the distances themselves stay exact.
+ */
+function cellKey(i: number, j: number, k: number): number {
+  return (i * 73856093) ^ (j * 19349663) ^ (k * 83492791);
+}
+
+/**
+ * Every chamber wall's vertices in world space, thinned to one per few
+ * millimetres and bucketed so a nearby point is found without looking at all of
+ * them. The heart's walls are about thirty-seven thousand vertices; measuring
+ * every vertex of the heart against all of them would be billions of distances.
+ */
+export function seamGrid(walls: readonly ChamberPoints[]): SeamGrid {
+  const cells = new Map<number, number[]>();
+  const taken = new Set<string>();
+  for (const wall of walls) {
+    const e = wall.matrixWorld.elements;
+    const owner = CHAMBER_INDEX[wall.chamber];
+    const { vertices } = wall;
+    for (let v = 0; v < vertices.count; v++) {
+      const x = vertices.getX(v);
+      const y = vertices.getY(v);
+      const z = vertices.getZ(v);
+      const wx = e[0]! * x + e[4]! * y + e[8]! * z + e[12]!;
+      const wy = e[1]! * x + e[5]! * y + e[9]! * z + e[13]!;
+      const wz = e[2]! * x + e[6]! * y + e[10]! * z + e[14]!;
+      const voxel = `${Math.floor(wx / SEAM_SPACING)},${Math.floor(wy / SEAM_SPACING)},${Math.floor(wz / SEAM_SPACING)},${owner}`;
+      if (taken.has(voxel)) continue;
+      taken.add(voxel);
+      const key = cellKey(Math.floor(wx / SEAM_FAR), Math.floor(wy / SEAM_FAR), Math.floor(wz / SEAM_FAR));
+      let bucket = cells.get(key);
+      if (!bucket) {
+        bucket = [];
+        cells.set(key, bucket);
+      }
+      bucket.push(wx, wy, wz, owner);
+    }
+  }
+  return { cells };
+}
+
+/**
+ * How free each vertex of a mesh is to move: 0 against another chamber's wall,
+ * 1 from `SEAM_FAR` away, eased between.
+ *
+ * Its own chamber's wall is ignored — a ventricle's surface is not held by being
+ * near itself — so what is measured is exactly where one chamber meets another.
+ * The cells are `SEAM_FAR` across, so the twenty-seven around a vertex hold
+ * every point near enough to matter.
+ */
+export function seamFreedom(grid: SeamGrid, target: ChamberPoints): Float32Array {
+  const e = target.matrixWorld.elements;
+  const own = CHAMBER_INDEX[target.chamber];
+  const { vertices } = target;
+  const free = new Float32Array(vertices.count);
+  const nearSq = SEAM_NEAR * SEAM_NEAR;
+  const span = SEAM_FAR - SEAM_NEAR;
+  for (let v = 0; v < vertices.count; v++) {
+    const x = vertices.getX(v);
+    const y = vertices.getY(v);
+    const z = vertices.getZ(v);
+    const wx = e[0]! * x + e[4]! * y + e[8]! * z + e[12]!;
+    const wy = e[1]! * x + e[5]! * y + e[9]! * z + e[13]!;
+    const wz = e[2]! * x + e[6]! * y + e[10]! * z + e[14]!;
+    const ci = Math.floor(wx / SEAM_FAR);
+    const cj = Math.floor(wy / SEAM_FAR);
+    const ck = Math.floor(wz / SEAM_FAR);
+    let nearest = Infinity;
+    search: for (let di = -1; di <= 1; di++) {
+      for (let dj = -1; dj <= 1; dj++) {
+        for (let dk = -1; dk <= 1; dk++) {
+          const bucket = grid.cells.get(cellKey(ci + di, cj + dj, ck + dk));
+          if (!bucket) continue;
+          for (let b = 0; b < bucket.length; b += 4) {
+            if (bucket[b + 3] === own) continue;
+            const dx = bucket[b]! - wx;
+            const dy = bucket[b + 1]! - wy;
+            const dz = bucket[b + 2]! - wz;
+            const distanceSq = dx * dx + dy * dy + dz * dz;
+            if (distanceSq < nearest) {
+              nearest = distanceSq;
+              // Already as held as a vertex gets; nothing nearer changes that.
+              if (distanceSq <= nearSq) break search;
+            }
+          }
+        }
+      }
+    }
+    free[v] = smooth((Math.sqrt(nearest) - SEAM_NEAR) / span);
+  }
+  return free;
 }

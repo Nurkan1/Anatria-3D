@@ -10,7 +10,13 @@ import { shouldSuppressClick } from "./areaSelect";
 import { coverageColour } from "./coverage";
 import { scanColour, type BodyTone } from "./scan";
 import { FACING, scanBandMaterialProps, scanRangeAlong, STANDING } from "./scanBand";
-import { beatChamber, heartbeatOnBeforeCompile, isAtrium, registerBeating } from "./heartbeat";
+import {
+  beatChamber,
+  heartbeatOnBeforeCompile,
+  isAtrium,
+  isChamberWall,
+  registerBeating,
+} from "./heartbeat";
 import { useHeartStore } from "@/stores/heartStore";
 import { probeGlow, reportDepthStack, stackFromCrossings } from "./depthStack";
 import type { ManifestOrgan } from "@/lib/schemas";
@@ -382,8 +388,13 @@ export const OrganMesh = memo(function OrganMesh({
   useEffect(() => {
     const mesh = meshRef.current;
     if (!beating || !mesh || chamber === null || !beatUserData) return;
-    return registerBeating(organ.organ_id, { mesh, chamber, centre: beatUserData.beatCentre });
-  }, [beating, chamber, beatUserData, organ.organ_id]);
+    return registerBeating(organ.organ_id, {
+      mesh,
+      chamber,
+      wall: isChamberWall(organ),
+      centre: beatUserData.beatCentre,
+    });
+  }, [beating, chamber, beatUserData, organ]);
   const { color, emissive, emissiveIntensity } = useMemo(() => {
     // The revision map replaces the tissue colour outright rather than tinting
     // it. Mixing the two would make "muscle I have studied" and "bone I have

@@ -6,7 +6,7 @@ import { fps, heapMb, noteFrame, sample } from "./renderSample";
 import { viewportKey } from "./viewportKeys";
 import { AXIAL_PROBE } from "./AxialProbe";
 import { SLICE_PIXELS } from "./axialSlice";
-import { BEATING } from "./heartbeat";
+import { BEATING, HEART_PROBE } from "./heartbeat";
 import { readLocal, writeLocal } from "@/lib/localStore";
 import { OVERLAY_CHIP } from "./overlayChrome";
 
@@ -145,6 +145,11 @@ const ROWS: Row[] = [
   { label: "axial pixels", read: () => `${SLICE_PIXELS.value}²` },
   // Phase 0 of the heartbeat: how many structures it is moving right now.
   { label: "heart meshes", read: () => (BEATING.size === 0 ? "—" : String(BEATING.size)) },
+  // What measuring where the chambers meet cost, once, when the heart started.
+  {
+    label: "heart seams",
+    read: () => (HEART_PROBE.seamMs < 0 ? "—" : `${HEART_PROBE.seamMs.toFixed(0)} ms`),
+  },
 ];
 
 /**

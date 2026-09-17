@@ -8,24 +8,31 @@
  * The first sound, *lub*, is the atrioventricular valves closing as the
  * ventricles begin to contract: longer and lower. The second, *dub*, is the
  * aortic and pulmonary valves closing as ejection ends: shorter and a little
- * higher. Each is a thump — a low tone falling in pitch under a fast decay —
- * with a short knock at its start.
+ * higher. Each is a thump — a low tone falling in pitch under a decay — with a
+ * soft knock at its start.
  *
- * # Why it is built for a laptop speaker, not for headphones
+ * # Why it is built for a laptop speaker
  *
- * The first version was a pure low thump near fifty hertz behind a filter at
- * 380, and at full volume on a laptop it was almost inaudible: those speakers
- * reproduce next to nothing below about 150 hertz, and the filter was removing
- * the little that could have come through. The ear hears a low sound by its
- * harmonics, so this one carries them on purpose — partials up to about 250
- * hertz and a brief band of noise around 200, the knock that makes a heart
- * sound read as a valve closing rather than as a hum. On headphones the
- * fundamental is still there underneath.
+ * The first version was a pure thump near fifty hertz behind a filter at 380,
+ * and at full volume on a laptop it was almost inaudible: those speakers
+ * reproduce next to nothing below about a hundred hertz. The ear hears a low
+ * sound through its harmonics, so this one carries them — partials an octave
+ * and a twelfth above the fundamental, and a lift around 110 hertz where a
+ * laptop still has some body. On headphones the fundamental is there beneath.
+ *
+ * # Why it no longer sounds like tapping plastic
+ *
+ * The second version was loud enough and sounded like a knuckle on a plastic
+ * case. That was brightness: a triangle wave's odd harmonics, a noise knock
+ * centred at 200 hertz with a three-millisecond attack, and a filter that let
+ * a kilohertz through. A heart sound is dull. So every partial is a sine, the
+ * knock sits lower and arrives more slowly, the filter closes at 600 hertz,
+ * and the tail is longer — which is what gives a thump its weight.
  *
  * # Why a compressor
  *
  * Several partials peaking together at a level loud enough to hear would clip.
- * A compressor at the end holds the peak down, so the sound can be made loud
+ * A compressor at the end holds the peak down, so the sound can be loud
  * without being distorted.
  *
  * # Priming
@@ -39,7 +46,7 @@
 type Ctor = typeof AudioContext;
 
 let context: AudioContext | null = null;
-/** The end of the chain every sound goes through, built once with the context. */
+/** The start of the chain every sound goes into, built once with the context. */
 let output: AudioNode | null = null;
 
 interface Thump {
@@ -54,18 +61,18 @@ interface Thump {
   knock: number;
 }
 
-export const LUB: Thump = { from: 72, to: 50, seconds: 0.17, gain: 0.9, knock: 0.7 };
-export const DUB: Thump = { from: 96, to: 70, seconds: 0.12, gain: 0.8, knock: 0.8 };
+export const LUB: Thump = { from: 58, to: 40, seconds: 0.22, gain: 0.95, knock: 0.35 };
+export const DUB: Thump = { from: 76, to: 54, seconds: 0.15, gain: 0.85, knock: 0.4 };
 
-/** The tone's partials: waveform, multiple of the fundamental, relative level. */
-const PARTIALS: readonly [OscillatorType, number, number][] = [
-  ["sine", 1, 1],
-  ["triangle", 2, 0.9],
-  ["sine", 3, 0.55],
+/** The tone's partials: multiple of the fundamental, and relative level. All sines. */
+const PARTIALS: readonly [number, number][] = [
+  [1, 1],
+  [2, 0.75],
+  [3, 0.25],
 ];
 
-/** How long the knock lasts, and where in the spectrum it sits. */
-const KNOCK = { seconds: 0.045, centre: 200, q: 1.1 };
+/** The knock: how long it lasts, where in the spectrum it sits, how it is shaped. */
+const KNOCK = { seconds: 0.06, centre: 120, q: 0.8, attack: 0.008 };
 
 /** Safe to call repeatedly, and silent on a machine with no audio device. */
 export function primeHeartSound(): void {
@@ -76,17 +83,29 @@ export function primeHeartSound(): void {
     if (!Ctx) return;
     if (!context) {
       context = new Ctx();
+
+      // Body where a laptop can still play it, then everything bright removed.
+      const body = context.createBiquadFilter();
+      body.type = "peaking";
+      body.frequency.value = 110;
+      body.Q.value = 0.9;
+      body.gain.value = 6;
+      const dull = context.createBiquadFilter();
+      dull.type = "lowpass";
+      dull.frequency.value = 600;
+
       const compressor = context.createDynamicsCompressor();
       compressor.threshold.value = -18;
       compressor.knee.value = 12;
       compressor.ratio.value = 6;
-      compressor.attack.value = 0.002;
-      compressor.release.value = 0.12;
+      compressor.attack.value = 0.004;
+      compressor.release.value = 0.15;
       // Make-up gain after the compressor, so the held-down peak is still loud.
       const makeUp = context.createGain();
       makeUp.gain.value = 1.8;
-      compressor.connect(makeUp).connect(context.destination);
-      output = compressor;
+
+      body.connect(dull).connect(compressor).connect(makeUp).connect(context.destination);
+      output = body;
     }
     if (context.state === "suspended") void context.resume();
   } catch {
@@ -102,23 +121,17 @@ function thump(sound: Thump): void {
     const now = ctx.currentTime;
     const end = now + sound.seconds;
 
-    // Above about a kilohertz a heart sound is only click.
-    const soften = ctx.createBiquadFilter();
-    soften.type = "lowpass";
-    soften.frequency.value = 1000;
-    soften.connect(out);
-
     const envelope = ctx.createGain();
-    // A few milliseconds of attack: a sound starting at full level on its
-    // first sample is a click, which is a fault rather than a sound.
+    // Ten milliseconds of attack: a thump that starts at full level on its first
+    // sample is a click, and a click is the plastic.
     envelope.gain.setValueAtTime(0.0001, now);
-    envelope.gain.exponentialRampToValueAtTime(sound.gain, now + 0.006);
+    envelope.gain.exponentialRampToValueAtTime(sound.gain, now + 0.01);
     envelope.gain.exponentialRampToValueAtTime(0.0001, end);
-    envelope.connect(soften);
+    envelope.connect(out);
 
-    for (const [type, multiple, level] of PARTIALS) {
+    for (const [multiple, level] of PARTIALS) {
       const osc = ctx.createOscillator();
-      osc.type = type;
+      osc.type = "sine";
       osc.frequency.setValueAtTime(sound.from * multiple, now);
       osc.frequency.exponentialRampToValueAtTime(sound.to * multiple, end);
       const mix = ctx.createGain();
@@ -129,7 +142,7 @@ function thump(sound: Thump): void {
       osc.stop(end + 0.02);
     }
 
-    // The knock: a moment of noise, band-limited to where a laptop can play it.
+    // The knock: a moment of noise, kept low and soft.
     const samples = Math.ceil(ctx.sampleRate * KNOCK.seconds);
     const buffer = ctx.createBuffer(1, samples, ctx.sampleRate);
     const data = buffer.getChannelData(0);
@@ -142,9 +155,9 @@ function thump(sound: Thump): void {
     band.Q.value = KNOCK.q;
     const knock = ctx.createGain();
     knock.gain.setValueAtTime(0.0001, now);
-    knock.gain.exponentialRampToValueAtTime(sound.knock, now + 0.003);
+    knock.gain.exponentialRampToValueAtTime(sound.knock, now + KNOCK.attack);
     knock.gain.exponentialRampToValueAtTime(0.0001, now + KNOCK.seconds);
-    noise.connect(band).connect(knock).connect(soften);
+    noise.connect(band).connect(knock).connect(out);
     noise.start(now);
     noise.stop(now + KNOCK.seconds + 0.01);
   } catch {
