@@ -101,6 +101,34 @@ export type AnatomicalSystem = z.infer<typeof AnatomicalSystemSchema>;
 export const SectionPlaneSchema = z.enum(["axial", "coronal", "sagittal"]);
 export type SectionPlane = z.infer<typeof SectionPlaneSchema>;
 
+/**
+ * The textbook rhythms and heart sounds the heartbeat can play. The catalogue
+ * itself — labels, captions, timing — lives in the viewer's `rhythms.ts`; this
+ * is only the list of names both sides of the protocol agree on.
+ */
+export const HeartRhythmIdSchema = z.enum([
+  "normal",
+  "sinus_tachycardia",
+  "sinus_bradycardia",
+  "av_block_1",
+  "mobitz_1",
+  "mobitz_2",
+  "av_block_3",
+  "atrial_fibrillation",
+  "atrial_flutter",
+  "premature_ventricular",
+  "ventricular_tachycardia",
+  "ventricular_fibrillation",
+  "asystole",
+  "aortic_stenosis",
+  "mitral_regurgitation",
+  "aortic_regurgitation",
+  "mitral_stenosis",
+  "third_heart_sound",
+  "fourth_heart_sound",
+]);
+export type HeartRhythmId = z.infer<typeof HeartRhythmIdSchema>;
+
 /** Which way the scanner reads the body; "coronal" is the viewer's Front. */
 export const ScannerPlaneSchema = z.enum(["axial", "coronal"]);
 export type ScannerPlane = z.infer<typeof ScannerPlaneSchema>;
@@ -306,6 +334,16 @@ export const SceneCommandSchema = z.discriminatedUnion("action", [
     organ_id: z.string().min(1),
     /** Axial or coronal. Absent (or null off the wire) keeps the reader's own. */
     plane: ScannerPlaneSchema.nullable().optional(),
+  }),
+  /**
+   * Start the heartbeat on a textbook rhythm or heart sound, so an explanation
+   * can be seen and heard while it is given.
+   */
+  z.object({
+    action: z.literal("set_heart_rhythm"),
+    rhythm: HeartRhythmIdSchema,
+    /** Turn the heart sounds on or off. Absent keeps the reader's setting. */
+    sound: z.boolean().nullable().optional(),
   }),
   z.object({
     action: z.literal("reset_view"),

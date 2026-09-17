@@ -67,6 +67,7 @@ def build_surface() -> dict[str, Any]:
             "AiProvider": sorted(get_args(p.AiProvider)),
             "SectionPlane": sorted(get_args(p.SectionPlane)),
             "ScannerPlane": sorted(get_args(p.ScannerPlane)),
+            "HeartRhythmId": sorted(get_args(p.HeartRhythmId)),
             "SessionMode": sorted(get_args(p.SessionMode)),
             "AnatomicalSystem": sorted(get_args(p.AnatomicalSystem)),
             "EngineErrorCode": sorted(get_args(p.EngineErrorCode)),

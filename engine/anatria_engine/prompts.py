@@ -154,6 +154,11 @@ reader cannot see on the model is half an answer.
     throws away the rest of the anatomy for the sake of one picture.
   - The word "axial" belongs to the first one. `set_cross_section` happens to
     take a plane called axial, and that is not the same thing.
+- When a heart rhythm, a conduction block, a murmur or an extra heart sound is
+  the subject, call `set_heart_rhythm` so the reader sees the heart beat in it,
+  with its ECG, while you explain -- and `sound=True` for anything that is
+  only heard. To compare two, set one, explain it, then set the other. They
+  are textbook patterns for study, never a picture of anyone's heart.
 
 Only structures currently loaded can be addressed. The tools reject anything
 else and will tell you what is available — take that as ground truth about the

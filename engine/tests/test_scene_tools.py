@@ -23,6 +23,7 @@ from anatria_engine.protocol import (
     OrganMeta,
     ScanAtStructure,
     SetCrossSection,
+    SetHeartRhythm,
     SetLayerOpacity,
     SetLayerVisibility,
 )
@@ -779,3 +780,24 @@ async def test_the_scanner_keeps_the_readers_plane_when_none_is_named() -> None:
 
     assert scene.emitted == [ScanAtStructure(organ_id=organ_id)]
     assert scene.emitted[0].plane is None
+
+
+async def test_the_heart_can_be_set_to_a_rhythm_to_explain_it() -> None:
+    scene = make_scene()
+    call = {"rhythm": "mobitz_1"}
+    agent = build(scene, scripted([ToolCallPart("set_heart_rhythm", call)]))
+
+    await agent.run("Explain Wenckebach.", deps=scene)
+
+    assert scene.emitted == [SetHeartRhythm(rhythm="mobitz_1")]
+    assert scene.emitted[0].sound is None
+
+
+async def test_a_murmur_is_set_with_its_sound_on() -> None:
+    scene = make_scene()
+    call = {"rhythm": "aortic_stenosis", "sound": True}
+    agent = build(scene, scripted([ToolCallPart("set_heart_rhythm", call)]))
+
+    await agent.run("What does aortic stenosis sound like?", deps=scene)
+
+    assert scene.emitted == [SetHeartRhythm(rhythm="aortic_stenosis", sound=True)]

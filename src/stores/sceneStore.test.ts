@@ -2,6 +2,8 @@ import { beforeEach, describe, expect, it } from "vitest";
 
 import type { ManifestOrgan } from "@/lib/schemas";
 
+import { useHeartStore } from "./heartStore";
+
 import {
   applySceneCommand,
   GHOST_CLICK_THROUGH,
@@ -1498,5 +1500,29 @@ describe("scan_at_structure", () => {
       organ_id: "vertebra_t8",
     });
     expect(state.isolatedOrganIds).toContain("vertebra_t8");
+  });
+});
+
+describe("set_heart_rhythm", () => {
+  beforeEach(() => {
+    useHeartStore.setState({ enabled: false, sound: false, rhythm: "normal" });
+  });
+
+  it("starts the heart on the rhythm the assistant names", () => {
+    useSceneStore.getState().applyCommand({ action: "set_heart_rhythm", rhythm: "mobitz_2" });
+    expect(useHeartStore.getState()).toMatchObject({ enabled: true, rhythm: "mobitz_2", sound: false });
+  });
+
+  it("turns the sound on when asked, and keeps the reader's setting when not", () => {
+    useSceneStore.getState().applyCommand({ action: "set_heart_rhythm", rhythm: "aortic_stenosis", sound: true });
+    expect(useHeartStore.getState().sound).toBe(true);
+    useSceneStore.getState().applyCommand({ action: "set_heart_rhythm", rhythm: "normal", sound: null });
+    expect(useHeartStore.getState().sound).toBe(true);
+  });
+
+  it("shows the cardiovascular system if the reader had switched it off", () => {
+    useSceneStore.setState({ hiddenSystems: ["cardiovascular", "muscular"] });
+    useSceneStore.getState().applyCommand({ action: "set_heart_rhythm", rhythm: "normal" });
+    expect(useSceneStore.getState().hiddenSystems).toEqual(["muscular"]);
   });
 });

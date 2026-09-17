@@ -125,11 +125,12 @@ class TestSurface:
             "clear_pathway",
             "set_cross_section",
             "scan_at_structure",
+            "set_heart_rhythm",
         }
 
     async def test_it_adds_only_say_beyond_the_existing_surface(self, driving):
         names = {tool.name for tool in (await driving.list_tools()).tools}
-        assert len(names) == 22
+        assert len(names) == 23
         assert "say" in names
 
     async def test_the_control_tools_do_not_claim_to_be_read_only(self, driving):

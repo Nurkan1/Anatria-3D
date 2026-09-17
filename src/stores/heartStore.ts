@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 import { readLocal, writeLocal } from "@/lib/localStore";
+import { primeHeartSound } from "@/features/viewer/heartSound";
 import type { RhythmId } from "@/features/viewer/rhythms";
 
 /**
@@ -49,3 +50,18 @@ export const useHeartStore = create<HeartStore>()((set, get) => ({
   },
   setRhythm: (rhythm) => set({ rhythm }),
 }));
+
+/**
+ * Start the heart on a rhythm, as the assistant asks for it.
+ *
+ * `sound` null keeps the reader's own setting. Turning it on primes the audio:
+ * the reader's click on Send is recent enough to count as the gesture a
+ * browser wants before it will play anything.
+ */
+export function startHeartRhythm(rhythm: RhythmId, sound: boolean | null): void {
+  const heart = useHeartStore.getState();
+  if (sound !== null) heart.setSound(sound);
+  if (useHeartStore.getState().sound) primeHeartSound();
+  heart.setRhythm(rhythm);
+  if (!heart.enabled) heart.toggle();
+}

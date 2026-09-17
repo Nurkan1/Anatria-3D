@@ -1,3 +1,5 @@
+import type { HeartRhythmId } from "@/lib/schemas";
+
 import { CYCLE, RESTING_BPM, SQUEEZE } from "./heartbeat";
 
 /**
@@ -42,26 +44,8 @@ import { CYCLE, RESTING_BPM, SQUEEZE } from "./heartbeat";
  * patterns, not a recording, and the panel says so.
  */
 
-export type RhythmId =
-  | "normal"
-  | "sinus_tachycardia"
-  | "sinus_bradycardia"
-  | "av_block_1"
-  | "mobitz_1"
-  | "mobitz_2"
-  | "av_block_3"
-  | "atrial_fibrillation"
-  | "atrial_flutter"
-  | "premature_ventricular"
-  | "ventricular_tachycardia"
-  | "ventricular_fibrillation"
-  | "asystole"
-  | "aortic_stenosis"
-  | "mitral_regurgitation"
-  | "aortic_regurgitation"
-  | "mitral_stenosis"
-  | "third_heart_sound"
-  | "fourth_heart_sound";
+/** One of the catalogue's rhythms. The names are the protocol's, so the assistant can ask for one. */
+export type RhythmId = HeartRhythmId;
 
 export const RHYTHM_GROUPS = [
   "Sinus",

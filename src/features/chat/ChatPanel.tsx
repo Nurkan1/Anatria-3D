@@ -61,6 +61,7 @@ import { useCopy } from "./useCopy";
 const TOOL_LABELS: Record<string, string> = {
   focus_organ: "focused a structure",
   scan_at_structure: "moved the scanner",
+  set_heart_rhythm: "set the heart rhythm",
   isolate_structures: "isolated structures",
   isolate_group: "isolated a region",
   show_all_structures: "restored the full view",

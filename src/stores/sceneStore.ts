@@ -15,6 +15,7 @@ import { tissueFamily } from "@/features/viewer/palette";
 import { MAX_EXPLODE, nextExplodeStop } from "@/features/viewer/explode";
 import { nextBodyTone, type BodyTone } from "@/features/viewer/scan";
 import { SUPPLY_SYSTEM, type SupplyKind } from "@/features/viewer/supply";
+import { startHeartRhythm } from "./heartStore";
 import type { ViewPreferences } from "./viewPreferences";
 
 /**
@@ -420,6 +421,11 @@ export function applySceneCommand(
         ...state,
         crossSection: { plane: command.plane, position: command.position },
       };
+
+    case "set_heart_rhythm":
+      // Not a view of the anatomy; `applyCommand` hands it to the heart's store
+      // and this reducer has nothing of its own to change.
+      return state;
 
     case "scan_at_structure":
       return {
@@ -879,6 +885,14 @@ export const useSceneStore = create<SceneStore>()((set, get) => ({
       // whose body this is, reached from the engine rather than the study bar.
       if (command.action === "add_supply") {
         return supplyRequestIn(state, command.kind);
+      }
+      // The heart has its own store. The heartbeat is started there, and the
+      // cardiovascular system shown if the reader had switched it off, or the
+      // rhythm would play in a heart nobody can see.
+      if (command.action === "set_heart_rhythm") {
+        startHeartRhythm(command.rhythm, command.sound ?? null);
+        const hiddenSystems = state.hiddenSystems.filter((system) => system !== "cardiovascular");
+        return hiddenSystems.length === state.hiddenSystems.length ? state : { hiddenSystems };
       }
       return applySceneCommand(state, command);
     }),

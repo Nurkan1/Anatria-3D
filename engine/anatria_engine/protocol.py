@@ -37,6 +37,30 @@ SectionPlane = Literal["axial", "coronal", "sagittal"]
 #: the viewer's own control calls Front.
 ScannerPlane = Literal["axial", "coronal"]
 
+#: The textbook rhythms and heart sounds the heartbeat can play. The catalogue —
+#: labels, captions, timing — lives in the viewer; this is the list of names.
+HeartRhythmId = Literal[
+    "normal",
+    "sinus_tachycardia",
+    "sinus_bradycardia",
+    "av_block_1",
+    "mobitz_1",
+    "mobitz_2",
+    "av_block_3",
+    "atrial_fibrillation",
+    "atrial_flutter",
+    "premature_ventricular",
+    "ventricular_tachycardia",
+    "ventricular_fibrillation",
+    "asystole",
+    "aortic_stenosis",
+    "mitral_regurgitation",
+    "aortic_regurgitation",
+    "mitral_stenosis",
+    "third_heart_sound",
+    "fourth_heart_sound",
+]
+
 #: What the assistant is doing this turn.
 #:
 #: "tutor" answers the question asked. "case" runs a clinical drill: present a
@@ -415,6 +439,15 @@ class ScanAtStructure(Strict):
     plane: ScannerPlane | None = None
 
 
+class SetHeartRhythm(Strict):
+    """Start the heartbeat on a textbook rhythm or heart sound."""
+
+    action: Literal["set_heart_rhythm"] = "set_heart_rhythm"
+    rhythm: HeartRhythmId
+    #: Turn the heart sounds on or off. Absent keeps the reader's setting.
+    sound: bool | None = None
+
+
 class ResetView(Strict):
     action: Literal["reset_view"] = "reset_view"
 
@@ -444,6 +477,7 @@ SceneCommand = Annotated[
     | IlluminateStructures
     | SetCrossSection
     | ScanAtStructure
+    | SetHeartRhythm
     | ResetView
     | Say,
     Field(discriminator="action"),

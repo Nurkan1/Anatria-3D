@@ -28,6 +28,7 @@ from anatria_engine.protocol import (
     ClearPathologyOverlays,
     ClearPathway,
     FocusOrgan,
+    HeartRhythmId,
     HighlightPathway,
     IlluminateStructures,
     IsolateGroup,
@@ -40,6 +41,7 @@ from anatria_engine.protocol import (
     ScannerPlane,
     SectionPlane,
     SetCrossSection,
+    SetHeartRhythm,
     SetLayerOpacity,
     SetLayerVisibility,
     UserProfile,
@@ -564,6 +566,37 @@ def register_scene_tools(agent: Agent[SceneContext, str]) -> None:
         ctx.deps.dispatch(ScanAtStructure(organ_id=organ.organ_id, plane=plane))
         frontal = " on a frontal plane" if plane == "coronal" else ""
         return f"Put the scanner at {organ.ta2_latin} ({organ.name_en}){frontal}."
+
+    @agent.tool(sequential=True)
+    def set_heart_rhythm(
+        ctx: RunContext[SceneContext],
+        rhythm: HeartRhythmId,
+        sound: bool | None = None,
+    ) -> str:
+        """Start the heartbeat on a textbook rhythm or heart sound.
+
+        Use it whenever showing and hearing would help the explanation: the
+        reader asks about a rhythm, a block, a murmur or an extra heart sound,
+        asks to see or hear one, or asks you to compare two -- set the first,
+        explain it, then set the second. The heart beats in the viewport with
+        a schematic ECG under it, and the reader's glass body shows the blood.
+
+        `rhythm` is one of: normal; sinus_tachycardia; sinus_bradycardia;
+        av_block_1 (first-degree); mobitz_1 (Wenckebach); mobitz_2;
+        av_block_3 (complete); atrial_fibrillation; atrial_flutter (2:1);
+        premature_ventricular; ventricular_tachycardia;
+        ventricular_fibrillation; asystole; aortic_stenosis;
+        mitral_regurgitation; aortic_regurgitation; mitral_stenosis;
+        third_heart_sound; fourth_heart_sound.
+
+        `sound=True` turns the heart sounds on -- pass it for a murmur or an
+        extra sound, which is only heard. Leave it out otherwise; the reader's
+        own setting is kept. Each is a textbook pattern at one representative
+        rate, for study: never present it as anybody's heart.
+        """
+        ctx.deps.dispatch(SetHeartRhythm(rhythm=rhythm, sound=sound))
+        heard = " with its sounds on" if sound else ""
+        return f"The heart is beating in {rhythm.replace('_', ' ')}{heard}."
 
     @agent.tool(sequential=True)
     def set_cross_section(
