@@ -17,7 +17,7 @@ import {
   isChamberWall,
   registerBeating,
 } from "./heartbeat";
-import { flowMaterial, vesselFlow } from "./bloodFlow";
+import { flowMaterial, isFlowSeed, registerFlowing, vesselFlow } from "./bloodFlow";
 import { useHeartStore } from "@/stores/heartStore";
 import { probeGlow, reportDepthStack, stackFromCrossings } from "./depthStack";
 import type { ManifestOrgan } from "@/lib/schemas";
@@ -410,6 +410,11 @@ export const OrganMesh = memo(function OrganMesh({
     // Shared by every vessel of a kind, and the planes are the scene's one array.
     if (flow) flow.clippingPlanes = clippingPlanes;
   }, [flow, clippingPlanes]);
+  useEffect(() => {
+    const mesh = meshRef.current;
+    if (!flowing || !mesh || flowKind === null) return;
+    return registerFlowing(organ.organ_id, { mesh, kind: flowKind, seed: isFlowSeed(flowKind, organ) });
+  }, [flowing, flowKind, organ]);
   const { color, emissive, emissiveIntensity } = useMemo(() => {
     // The revision map replaces the tissue colour outright rather than tinting
     // it. Mixing the two would make "muscle I have studied" and "bone I have

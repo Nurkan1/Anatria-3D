@@ -12,9 +12,9 @@ import { beatChamber, BLOOD_HEX, type Chamber } from "./heartbeat";
  * Each ventricular contraction launches a pulse of light from the heart that
  * travels out through the arteries, fading as it goes, and the veins carry a
  * slow, steady glow back. It is not a simulation of flow. The distance a pulse
- * has travelled is measured **in a straight line from the heart**, not along
- * the vessel — so it reaches the head, the hands and the feet in the right
- * order, and can be a little early in a vessel that doubles back on itself.
+ * has travelled is measured **along the vessels** from the heart — see
+ * `flowPaths.ts` — and in a straight line only for the rare piece the path
+ * could not reach, or until the path has been measured.
  *
  * # Slowed to be seen
  *
@@ -205,8 +205,54 @@ const FLOW_MODE: Readonly<Record<FlowKind, number>> = {
 
 type Shader = Parameters<THREE.Material["onBeforeCompile"]>[0];
 
+/** The attribute each vessel carries: its distance along the vessels, plus one. */
+export const FLOW_PATH_ATTRIBUTE = "flowPath";
+
+/**
+ * The vessels that join the chamber itself, where a path starts. See
+ * `flowPaths.ts`: with these the pulse leaves through the ascending aorta,
+ * not through whichever piece of aorta happens to pass nearest the ventricle.
+ */
+const SEED: Readonly<Record<FlowKind, RegExp>> = {
+  artery: /^Aorta ascendens\b/i,
+  pulmonary_artery: /^Truncus pulmonalis\b/i,
+  vein: /^Vena cava (superior|inferior)\b/i,
+  pulmonary_vein: /^Vena pulmonalis\b/i,
+};
+
+export function isFlowSeed(kind: FlowKind, organ: Pick<ManifestOrgan, "ta2_latin">): boolean {
+  return SEED[kind].test(organ.ta2_latin);
+}
+
+/** A vessel mesh while its light is shown: what the driver measures paths on. */
+export interface FlowingMesh {
+  mesh: THREE.Mesh;
+  kind: FlowKind;
+  seed: boolean;
+}
+
+/** The vessels currently lit, by structure. */
+export const FLOWING = new Map<string, FlowingMesh>();
+/** Bumped whenever one joins or leaves, so the paths are measured again. */
+export const FLOWING_VERSION = { value: 0 };
+
+export function registerFlowing(organId: string, entry: FlowingMesh): () => void {
+  FLOWING.set(organId, entry);
+  FLOWING_VERSION.value += 1;
+  return () => {
+    if (FLOWING.get(organId) !== entry) return;
+    FLOWING.delete(organId);
+    FLOWING_VERSION.value += 1;
+  };
+}
+
+/** Published for the render panel: what measuring the paths last cost. */
+export const FLOW_PROBE = { pathMs: -1, vertices: 0 };
+
 export const FLOW_VERTEX = /* glsl */ `
+attribute float ${FLOW_PATH_ATTRIBUTE};
 varying vec3 vFlowWorld;
+varying float vFlowPath;
 `;
 
 export const FLOW_FRAGMENT = /* glsl */ `
@@ -219,9 +265,11 @@ uniform float uFlowMode;
 uniform float uFlowSpeed;
 uniform float uFlowGain;
 varying vec3 vFlowWorld;
+varying float vFlowPath;
 
 float flowGlow() {
-  float d = distance(vFlowWorld, uFlowSource);
+  // Along the vessel where it has been measured; zero means it has not.
+  float d = vFlowPath > 0.5 ? vFlowPath - 1.0 : distance(vFlowWorld, uFlowSource);
   if (uFlowMode < 0.5) {
     float glow = 0.0;
     for (int i = 0; i < ${PULSE_SLOTS}; i++) {
@@ -256,7 +304,7 @@ function flowOnBeforeCompile(this: THREE.Material, shader: Shader): void {
     .replace("#include <common>", `#include <common>\n${FLOW_VERTEX}`)
     .replace(
       "#include <project_vertex>",
-      "#include <project_vertex>\n  vFlowWorld = (modelMatrix * vec4(transformed, 1.0)).xyz;",
+      `#include <project_vertex>\n  vFlowWorld = (modelMatrix * vec4(transformed, 1.0)).xyz;\n  vFlowPath = ${FLOW_PATH_ATTRIBUTE};`,
     );
   shader.fragmentShader = shader.fragmentShader
     .replace("#include <common>", `#include <common>\n${FLOW_FRAGMENT}`)

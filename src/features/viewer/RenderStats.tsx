@@ -6,6 +6,7 @@ import { fps, heapMb, noteFrame, sample } from "./renderSample";
 import { viewportKey } from "./viewportKeys";
 import { AXIAL_PROBE } from "./AxialProbe";
 import { SLICE_PIXELS } from "./axialSlice";
+import { FLOW_PROBE } from "./bloodFlow";
 import { BEATING, HEART_PROBE } from "./heartbeat";
 import { readLocal, writeLocal } from "@/lib/localStore";
 import { OVERLAY_CHIP } from "./overlayChrome";
@@ -149,6 +150,14 @@ const ROWS: Row[] = [
   {
     label: "heart seams",
     read: () => (HEART_PROBE.seamMs < 0 ? "—" : `${HEART_PROBE.seamMs.toFixed(0)} ms`),
+  },
+  // What measuring the blood's paths along the vessels cost, and over how much.
+  {
+    label: "blood paths",
+    read: () =>
+      FLOW_PROBE.pathMs < 0
+        ? "—"
+        : `${FLOW_PROBE.pathMs.toFixed(0)} ms · ${(FLOW_PROBE.vertices / 1000).toFixed(0)}k verts`,
   },
 ];
 
