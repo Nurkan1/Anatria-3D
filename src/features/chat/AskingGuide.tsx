@@ -46,10 +46,11 @@ const POINTS: { title: string; body: string }[] = [
   {
     title: "The heartbeat says which rhythm",
     body:
-      "While the heart is beating, the assistant is told the rhythm chosen under " +
-      "Rhythms, so “what is this and how does it happen?” is a question about " +
+      "While the heart is beating, the assistant is told the pattern chosen under " +
+      "Rhythms and murmurs, so “what is this and how does it happen?” is about " +
       "that rhythm: where it starts, why, and how it shows in what you see and " +
-      "hear. It is a textbook pattern, never a reading of anyone's heart.",
+      "hear. Ask it to explain or compare rhythms and murmurs and it plays each " +
+      "one itself. They are textbook patterns, never a reading of anyone's heart.",
   },
   {
     title: "Specific beats broad",

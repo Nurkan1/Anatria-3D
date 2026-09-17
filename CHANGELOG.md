@@ -13,6 +13,41 @@ There is **no auto-updater**, by design: the application never reaches the
 network on its own. A new version reaches you only when you download and install
 it, so this file is also the answer to "is it worth reinstalling".
 
+## [Unreleased]
+
+### Added
+
+**The heart beats.** *Heartbeat*, under the scanner, draws the atria and then the
+ventricles in, in the order of the cardiac cycle, with a schematic ECG sweeping
+under the panel in time with them. *Heart sounds* adds the first and second
+sounds; it is off until you tick it. It is an illustration of the cycle at one
+representative rate, and says so.
+
+**Nineteen textbook patterns to study.** *Rhythms and murmurs* holds sinus
+tachycardia and bradycardia, first-degree, Mobitz I, Mobitz II and complete AV
+block, atrial fibrillation and flutter, premature ventricular beats, ventricular
+tachycardia and fibrillation, asystole, and — as sound — aortic stenosis, mitral
+regurgitation, aortic regurgitation, mitral stenosis, S3 and S4. Movement, trace
+and sounds change together. They are patterns for study, never a reading of
+anyone's heart.
+
+**The blood, in a glass body.** With the heart beating and the body turned to
+glass, the chambers glow with the blood they hold and each contraction sends a
+pulse of light along the arteries, following the vessels; the veins glow on the
+way back. The pulse is slowed to be seen, and stops when the rhythm pumps
+nothing.
+
+**The assistant knows the rhythm, and can play one.** While the heart beats, a
+question like *"what is this and how does it happen?"* is answered about the
+pattern playing. Ask it to explain or compare rhythms or murmurs and it sets each
+one while it explains. The control bridge offers the same tool.
+
+### Safety
+
+Whenever a rhythm would make the light flash more than two and a half times a
+second, or your system asks for reduced motion, the light holds steady and only
+the heart keeps moving — fast flashing light can trigger seizures.
+
 ## [0.3.0] — 2026-09-12
 
 ### Added

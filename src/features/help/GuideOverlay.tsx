@@ -593,6 +593,68 @@ const SECTIONS: Section[] = [
     ),
   },
   {
+    id: "heart",
+    nav: "The heart, beating",
+    title: "Watching and hearing the heart",
+    body: (
+      <>
+        <p>
+          <Ui>Heartbeat</Ui>, under the scanner, sets the atlas’s heart beating: the
+          atria draw in first, then after the pause at the AV node the ventricles, with
+          a schematic ECG sweeping under the panel in time with them. Tick{" "}
+          <Ui>Heart sounds</Ui> to hear the first and second sounds as each valve
+          closes; it stays off until you ask, and is remembered.
+        </p>
+        <Callout>
+          <strong>It is an illustration of the cycle, not a model of a heart.</strong>{" "}
+          The static surfaces of the atlas are drawn in towards each chamber on a
+          textbook schedule, at one representative rate. The trace is drawn from that
+          same schedule, not recorded. Nothing here reads, or stands in for, anyone’s
+          heart.
+        </Callout>
+
+        <Sub>Rhythms and murmurs</Sub>
+        <p>
+          The <Ui>Rhythms and murmurs</Ui> button opens nineteen textbook patterns, in
+          five groups: sinus rates; the conduction blocks, from first degree to
+          complete; atrial fibrillation and flutter; ventricular rhythms, down to
+          fibrillation and asystole; and the valve murmurs and extra heart sounds. Each
+          changes the movement, the ECG and the sounds together, so a Wenckebach
+          sequence can be watched lengthening on the trace and in the heart at once.
+          The murmurs are sound first — aortic stenosis swelling between S1 and S2,
+          the rumble of mitral stenosis — and are clearest with headphones.
+        </p>
+
+        <Sub>The blood, in a glass body</Sub>
+        <p>
+          With the heart beating and the body turned to glass, the chambers glow with
+          the blood they hold — blue on the right, red on the left — and each
+          contraction sends a pulse of light out along the arteries, measured along
+          the vessels rather than across the body. The veins carry a slow glow back.
+          The pulmonary arteries are blue and the pulmonary veins red, because that is
+          the blood in them. The pulse is slowed to be seen: a real one crosses the
+          body in about a fifth of a second. When a rhythm pumps nothing, there is no
+          pulse and the veins go dark.
+        </p>
+        <p>
+          Light that pulses fast can trigger seizures in people with photosensitive
+          epilepsy, so whenever a rhythm would make it flash more than two and a half
+          times a second — flutter, ventricular tachycardia, fibrillation — the light
+          holds steady and only the heart keeps moving. It is always steady if your
+          system asks for reduced motion.
+        </p>
+
+        <Sub>Asking about it</Sub>
+        <p>
+          While the heart beats, the assistant is told which pattern is playing, so{" "}
+          <em>“what is this, and how does it happen?”</em> is a question about it. It
+          can also set a rhythm itself: ask it to explain or compare Mobitz I and II,
+          or what aortic stenosis sounds like, and it plays each while it explains.
+        </p>
+      </>
+    ),
+  },
+  {
     id: "choosing",
     nav: "Choosing structures",
     title: "Selecting, isolating, dissecting",

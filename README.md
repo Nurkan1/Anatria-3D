@@ -101,6 +101,14 @@ the front with the great vessels and the spine showing through it, the frontal
 section sits in its own panel, and the answer beside it says the plane is
 centred on the left atrium.](docs/screenshots/scanner-front.png)
 
+**The heart, beating.** Switch on *Heartbeat* and the atlas's heart contracts
+in the order of the cardiac cycle, with its heart sounds and a schematic ECG in
+time with it. Nineteen textbook patterns — conduction blocks, atrial and
+ventricular rhythms, valve murmurs, S3 and S4 — change the movement, the trace
+and the sound together; in a glass body each beat sends light along the arteries.
+The assistant can play the one it is explaining. They are illustrations for study
+and teaching at one representative rate, not a model of anyone's heart.
+
 ![Four views of the same head at once. The panel the reader drives sits
 top-left with the vessels and nerves of the head and neck; beside and below it,
 anterior, left lateral and superior views of the same structures, lettered at
