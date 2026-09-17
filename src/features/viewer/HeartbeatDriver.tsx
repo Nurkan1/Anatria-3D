@@ -14,12 +14,9 @@ import {
   BEAT_VENTRICLES,
   BEATING,
   BEATING_VERSION,
-  beatAt,
   chamberCentres,
   chamberHolds,
-  CYCLE,
   HEART_PROBE,
-  passed,
   SEAM_ATTRIBUTE,
   seamFreedom,
   seamGrid,
@@ -27,6 +24,7 @@ import {
   type ChamberPoints,
 } from "./heartbeat";
 import { playDub, playLub } from "./heartSound";
+import { rhythm, RhythmPlayer } from "./rhythms";
 
 /**
  * The longest a single frame may advance the heart, in seconds.
@@ -68,9 +66,10 @@ function measureSeams(): void {
  * The clock the heart beats to, run once per frame for the whole heart.
  *
  * Mounted always and idle unless the heartbeat is on. Each frame it writes the
- * two shared contraction values, keeps every beating mesh's chamber centre in
- * that mesh's own coordinates — so an exploded or moved heart still contracts
- * towards the right point — and plays a heart sound when the cycle passes one.
+ * two shared contraction values from the chosen rhythm, keeps every beating
+ * mesh's chamber centre in that mesh's own coordinates — so an exploded or
+ * moved heart still contracts towards the right point — and plays the heart
+ * sounds the rhythm laid down for that frame.
  */
 export function HeartbeatDriver({
   boxes,
@@ -84,6 +83,7 @@ export function HeartbeatDriver({
   revision: number;
 }) {
   const enabled = useHeartStore((s) => s.enabled);
+  const rhythmId = useHeartStore((s) => s.rhythm);
   const centres = useMemo(
     () => (enabled ? chamberCentres(boxes, organs) : null),
     [enabled, boxes, organs, revision],
@@ -103,6 +103,14 @@ export function HeartbeatDriver({
   const clock = useRef(0);
   /** The registry version the seams were last measured for. */
   const measured = useRef(-1);
+  /** The rhythm being played, made on the first frame after it was chosen. */
+  const player = useRef<RhythmPlayer | null>(null);
+
+  // A new rhythm starts from the top, from a heart at rest.
+  useEffect(() => {
+    player.current = null;
+    clock.current = 0;
+  }, [rhythmId]);
   const inverse = useMemo(() => new THREE.Matrix4(), []);
 
   useEffect(() => {
@@ -110,6 +118,7 @@ export function HeartbeatDriver({
     // Back to rest, so the next time it starts it starts from a heart at rest.
     clock.current = 0;
     measured.current = -1;
+    player.current = null;
     BEAT_ATRIA.value = 0;
     BEAT_VENTRICLES.value = 0;
   }, [enabled]);
@@ -126,7 +135,8 @@ export function HeartbeatDriver({
     const after = before + Math.min(delta, LONGEST_STEP_S);
     clock.current = after;
 
-    const beat = beatAt(after);
+    player.current ??= new RhythmPlayer(rhythm(rhythmId));
+    const beat = player.current.advance(before, after);
     BEAT_ATRIA.value = beat.atria;
     BEAT_VENTRICLES.value = beat.ventricles;
 
@@ -138,8 +148,8 @@ export function HeartbeatDriver({
 
     // Read rather than subscribed: a preference nobody changes mid-frame.
     if (useHeartStore.getState().sound) {
-      if (passed(before, after, CYCLE.s1)) playLub();
-      if (passed(before, after, CYCLE.s2)) playDub();
+      for (const level of beat.lub) playLub(level);
+      for (const level of beat.dub) playDub(level);
     }
   });
 

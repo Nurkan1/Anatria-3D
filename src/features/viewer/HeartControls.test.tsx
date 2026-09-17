@@ -18,7 +18,7 @@ const LEFT_VENTRICLE = {
 } as unknown as ManifestOrgan;
 
 beforeEach(() => {
-  useHeartStore.setState({ enabled: false, sound: false });
+  useHeartStore.setState({ enabled: false, sound: false, rhythm: "normal" });
   useSceneStore.setState({ organs: { left_ventricle: LEFT_VENTRICLE }, hiddenSystems: [] });
 });
 
@@ -53,4 +53,37 @@ it("cannot be started on a body with no heart", () => {
   render(<HeartControls />);
   const button = screen.getByRole("button", { name: "Heartbeat" }) as HTMLButtonElement;
   expect(button.disabled).toBe(true);
+});
+
+it("keeps the rhythms folded until they are asked for", () => {
+  // Thirteen of them open would push the viewport's other controls off a
+  // laptop for somebody who only wanted to watch a heart beat.
+  useHeartStore.setState({ enabled: true });
+  render(<HeartControls />);
+  expect(screen.queryByRole("radiogroup", { name: "Heart rhythm" })).toBeNull();
+
+  fireEvent.click(screen.getByRole("button", { name: /rhythms/i }));
+
+  expect(screen.getByRole("radiogroup", { name: "Heart rhythm" })).toBeTruthy();
+  expect(screen.getByRole("radio", { name: "Normal sinus rhythm" }).getAttribute("aria-checked")).toBe(
+    "true",
+  );
+});
+
+it("shows the rhythm chosen, and explains it", () => {
+  useHeartStore.setState({ enabled: true });
+  render(<HeartControls />);
+  fireEvent.click(screen.getByRole("button", { name: /rhythms/i }));
+
+  fireEvent.click(screen.getByRole("radio", { name: "Atrial fibrillation" }));
+
+  expect(useHeartStore.getState().rhythm).toBe("atrial_fibrillation");
+  expect(screen.getByText(/irregularly irregular/i)).toBeTruthy();
+});
+
+it("says what the rhythms are where they are chosen", () => {
+  useHeartStore.setState({ enabled: true });
+  render(<HeartControls />);
+  fireEvent.click(screen.getByRole("button", { name: /rhythms/i }));
+  expect(screen.getByText(/not a way to assess anyone/i)).toBeTruthy();
 });

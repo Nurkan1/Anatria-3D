@@ -113,10 +113,12 @@ export function primeHeartSound(): void {
   }
 }
 
-function thump(sound: Thump): void {
+function thump(sound: Thump, level: number): void {
   const ctx = context;
   const out = output;
-  if (!ctx || !out || ctx.state !== "running") return;
+  // A rhythm can make a sound quieter than normal, never louder; zero is silence.
+  const scale = Math.min(1, level);
+  if (!ctx || !out || ctx.state !== "running" || !(scale > 0)) return;
   try {
     const now = ctx.currentTime;
     const end = now + sound.seconds;
@@ -125,7 +127,7 @@ function thump(sound: Thump): void {
     // Ten milliseconds of attack: a thump that starts at full level on its first
     // sample is a click, and a click is the plastic.
     envelope.gain.setValueAtTime(0.0001, now);
-    envelope.gain.exponentialRampToValueAtTime(sound.gain, now + 0.01);
+    envelope.gain.exponentialRampToValueAtTime(sound.gain * scale, now + 0.01);
     envelope.gain.exponentialRampToValueAtTime(0.0001, end);
     envelope.connect(out);
 
@@ -155,7 +157,7 @@ function thump(sound: Thump): void {
     band.Q.value = KNOCK.q;
     const knock = ctx.createGain();
     knock.gain.setValueAtTime(0.0001, now);
-    knock.gain.exponentialRampToValueAtTime(sound.knock, now + KNOCK.attack);
+    knock.gain.exponentialRampToValueAtTime(sound.knock * scale, now + KNOCK.attack);
     knock.gain.exponentialRampToValueAtTime(0.0001, now + KNOCK.seconds);
     noise.connect(band).connect(knock).connect(out);
     noise.start(now);
@@ -165,14 +167,14 @@ function thump(sound: Thump): void {
   }
 }
 
-/** The first heart sound. */
-export function playLub(): void {
-  thump(LUB);
+/** The first heart sound, at a loudness relative to normal. */
+export function playLub(level = 1): void {
+  thump(LUB, level);
 }
 
-/** The second heart sound. */
-export function playDub(): void {
-  thump(DUB);
+/** The second heart sound, at a loudness relative to normal. */
+export function playDub(level = 1): void {
+  thump(DUB, level);
 }
 
 /** For tests, which must not carry a live audio context between them. */

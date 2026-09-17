@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 import { readLocal, writeLocal } from "@/lib/localStore";
+import type { RhythmId } from "@/features/viewer/rhythms";
 
 /**
  * The heartbeat, as the reader controls it.
@@ -12,6 +13,10 @@ import { readLocal, writeLocal } from "@/lib/localStore";
  * `sound` is remembered, and off until it is asked for. Sound is the one thing
  * here that can embarrass somebody — a lecture theatre, a library, a consulting
  * room — and a tool that makes a noise nobody chose is a tool people close.
+ *
+ * `rhythm` is not remembered either. Whoever opens the atlas next — a student,
+ * or somebody being shown how a heart works — should meet a normal heart, not
+ * the ventricular fibrillation the last person was looking at.
  */
 
 const SOUND_KEY = "anatria3d.heart.sound.v1";
@@ -25,17 +30,22 @@ interface HeartStore {
   enabled: boolean;
   /** The heart sounds play with each beat. */
   sound: boolean;
+  /** Which textbook rhythm the heart is showing. See `rhythms.ts`. */
+  rhythm: RhythmId;
   toggle: () => void;
   setSound: (on: boolean) => void;
+  setRhythm: (rhythm: RhythmId) => void;
 }
 
 export const useHeartStore = create<HeartStore>()((set, get) => ({
   enabled: false,
   sound: storedSound(),
+  rhythm: "normal",
   toggle: () => set((state) => ({ enabled: !state.enabled })),
   setSound: (on) => {
     if (on === get().sound) return;
     writeLocal(SOUND_KEY, on ? "on" : "off");
     set({ sound: on });
   },
+  setRhythm: (rhythm) => set({ rhythm }),
 }));
