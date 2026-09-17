@@ -43,6 +43,8 @@
  * only scheduling after that. See `scanSound` for the same split.
  */
 
+import type { ExtraSoundKind, Murmur, MurmurShape } from "./rhythms";
+
 type Ctor = typeof AudioContext;
 
 let context: AudioContext | null = null;
@@ -176,6 +178,86 @@ export function playLub(level = 1): void {
 export function playDub(level = 1): void {
   thump(DUB, level);
 }
+
+/**
+ * The extra sounds: the same thump, lower and shorter for S3 and S4, which are
+ * felt as much as heard, and short and high for the opening snap.
+ */
+export const EXTRA: Readonly<Record<ExtraSoundKind, Thump>> = {
+  s3: { from: 46, to: 36, seconds: 0.11, gain: 0.75, knock: 0.12 },
+  s4: { from: 50, to: 40, seconds: 0.09, gain: 0.65, knock: 0.1 },
+  snap: { from: 140, to: 110, seconds: 0.05, gain: 0.55, knock: 0.6 },
+};
+
+export function playExtra(kind: ExtraSoundKind): void {
+  thump(EXTRA[kind], 1);
+}
+
+/**
+ * The loudness of a murmur through its length, sampled for `setValueCurveAtTime`.
+ * Starts and ends at silence, so a murmur never clicks on or off.
+ */
+export function murmurEnvelope(shape: MurmurShape, points = 32): Float32Array {
+  const curve = new Float32Array(points);
+  for (let i = 0; i < points; i++) {
+    const x = i / (points - 1);
+    const edge = Math.min(1, x / 0.08, (1 - x) / 0.08);
+    let level: number;
+    if (shape === "diamond") level = 1 - Math.abs(2 * x - 1);
+    else if (shape === "plateau") level = 1;
+    else if (shape === "decrescendo") level = Math.pow(1 - x, 1.6);
+    // Diastolic rumble: quiet in mid-diastole, then presystolic accentuation.
+    else level = 0.55 + 0.45 * Math.pow(x, 3);
+    curve[i] = Math.max(0.0001, level * Math.max(0, edge));
+  }
+  return curve;
+}
+
+/**
+ * A murmur: noise, filtered to its pitch, shaped over its length.
+ *
+ * Noise because that is what turbulence sounds like; a band rather than a tone
+ * because a murmur has no pitch you could sing, only a register — the low rumble
+ * of mitral stenosis, the high blowing of aortic regurgitation.
+ */
+export function playMurmur(murmur: Murmur): void {
+  const ctx = context;
+  const out = output;
+  if (!ctx || !out || ctx.state !== "running" || !(murmur.length > 0) || !(murmur.level > 0)) return;
+  try {
+    const now = ctx.currentTime;
+    const samples = Math.ceil(ctx.sampleRate * murmur.length);
+    const buffer = ctx.createBuffer(1, samples, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < samples; i++) data[i] = Math.random() * 2 - 1;
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+
+    const band = ctx.createBiquadFilter();
+    band.type = "bandpass";
+    band.frequency.value = murmur.pitch;
+    band.Q.value = murmur.q;
+
+    const envelope = ctx.createGain();
+    // Not `setValueAtTime(now)`: an event at the curve's own start counts as
+    // overlapping it, and the curve would throw — a silent murmur.
+    envelope.gain.value = 0.0001;
+    const curve = murmurEnvelope(murmur.shape).map((value) => value * murmur.level * MURMUR_GAIN);
+    envelope.gain.setValueCurveAtTime(curve, now, murmur.length);
+
+    noise.connect(band).connect(envelope).connect(out);
+    noise.start(now);
+    noise.stop(now + murmur.length + 0.01);
+  } catch {
+    // A murmur missed is not worth an error path.
+  }
+}
+
+/**
+ * How loud a murmur is before its own level. Noise through a band carries far
+ * less energy than a tone at the same gain, so it needs more to sit beside S1.
+ */
+const MURMUR_GAIN = 2.2;
 
 /** For tests, which must not carry a live audio context between them. */
 export function forgetHeartSound(): void {

@@ -111,7 +111,7 @@ export function HeartControls() {
             aria-expanded={rhythmsOpen}
             className="mt-1.5 flex w-full items-center justify-between rounded border border-slate-700 px-1.5 py-0.5 text-[9px] text-slate-300 hover:border-rose-700 hover:text-rose-200"
           >
-            <span>Rhythms</span>
+            <span>Rhythms and murmurs</span>
             <span aria-hidden>{rhythmsOpen ? "▴" : "▾"}</span>
           </button>
 
@@ -146,7 +146,7 @@ export function HeartControls() {
               ))}
               <p className="pt-1 text-[8px] leading-snug text-slate-500">
                 Textbook patterns for study, each at one representative rate — not a way to
-                assess anyone&apos;s heart.
+                assess anyone&apos;s heart. Murmurs are best heard with headphones.
               </p>
             </div>
           )}

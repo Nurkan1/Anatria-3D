@@ -42,7 +42,7 @@ import {
 import { HEART_TRACE } from "./EcgStrip";
 import { flowPaths, type PathMesh } from "./flowPaths";
 import { LightGuard, prefersReducedMotion } from "./lightGuard";
-import { playDub, playLub } from "./heartSound";
+import { playDub, playExtra, playLub, playMurmur } from "./heartSound";
 import { rhythm, RhythmPlayer } from "./rhythms";
 
 /**
@@ -257,6 +257,8 @@ export function HeartbeatDriver({
     if (useHeartStore.getState().sound) {
       for (const level of beat.lub) playLub(level);
       for (const level of beat.dub) playDub(level);
+      for (const murmur of beat.murmurs) playMurmur(murmur);
+      for (const kind of beat.extras) playExtra(kind);
     }
   });
 

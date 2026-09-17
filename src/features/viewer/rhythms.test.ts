@@ -264,3 +264,78 @@ describe("the ECG", () => {
     expect(Math.max(...gaps) - Math.min(...gaps)).toBeGreaterThan(0.25);
   });
 });
+
+/** Play a rhythm and collect when each sound, murmur and extra sound started. */
+function heard(id: RhythmId, seconds = 4) {
+  const player = new RhythmPlayer(rhythm(id));
+  const events = { lub: [] as number[], dub: [] as number[], murmurs: [] as { t: number; end: number; shape: string }[], extras: [] as { t: number; kind: string }[] };
+  let t = 0;
+  for (let frame = 0; frame < seconds * 240; frame++) {
+    const next = t + 1 / 240;
+    const frameEvents = player.advance(t, next);
+    if (frameEvents.lub.length) events.lub.push(next);
+    if (frameEvents.dub.length) events.dub.push(next);
+    for (const m of frameEvents.murmurs) events.murmurs.push({ t: m.at, end: m.at + m.length, shape: m.shape });
+    for (const kind of frameEvents.extras) events.extras.push({ t: next, kind });
+    t = next;
+  }
+  return events;
+}
+
+/** The last event at or before `t`. */
+const lastBefore = (times: number[], t: number) => Math.max(...times.filter((x) => x <= t + 1e-6));
+
+describe("murmurs and extra sounds", () => {
+  it("puts a diamond-shaped murmur between S1 and S2 in aortic stenosis", () => {
+    const { lub, dub, murmurs } = heard("aortic_stenosis");
+    expect(murmurs.length).toBeGreaterThan(2);
+    for (const m of murmurs.slice(0, 3)) {
+      expect(m.shape).toBe("diamond");
+      const s1 = lastBefore(lub, m.t);
+      const s2 = dub.find((x) => x > s1)!;
+      expect(m.t).toBeGreaterThan(s1);
+      expect(m.end).toBeLessThan(s2);
+    }
+  });
+
+  it("fills all of systole in mitral regurgitation", () => {
+    const { lub, dub, murmurs } = heard("mitral_regurgitation");
+    const m = murmurs[0]!;
+    const s1 = lastBefore(lub, m.t);
+    const s2 = dub.find((x) => x > s1)!;
+    expect(m.shape).toBe("plateau");
+    expect(m.t - s1).toBeLessThan(0.03);
+    expect(Math.abs(m.end - s2)).toBeLessThan(0.03);
+  });
+
+  it("starts at S2 and fades in aortic regurgitation", () => {
+    const { lub, dub, murmurs } = heard("aortic_regurgitation");
+    const m = murmurs[0]!;
+    expect(m.shape).toBe("decrescendo");
+    expect(m.t - lastBefore(dub, m.t)).toBeLessThan(0.03);
+    expect(m.end).toBeLessThan(lub.find((x) => x > m.t)!);
+  });
+
+  it("snaps after S2, then rumbles until the next S1, in mitral stenosis", () => {
+    const { lub, dub, murmurs, extras } = heard("mitral_stenosis");
+    const snap = extras.find((e) => e.kind === "snap")!;
+    expect(snap.t - lastBefore(dub, snap.t)).toBeGreaterThan(0.05);
+    const rumble = murmurs.find((m) => m.t > snap.t)!;
+    expect(rumble.shape).toBe("rumble");
+    const nextS1 = lub.find((x) => x > rumble.t)!;
+    expect(nextS1 - rumble.end).toBeLessThan(0.04);
+    expect(nextS1 - rumble.end).toBeGreaterThan(0);
+  });
+
+  it("adds S3 after S2 and S4 before S1", () => {
+    const three = heard("third_heart_sound");
+    const s3 = three.extras.find((e) => e.kind === "s3")!;
+    expect(s3.t - lastBefore(three.dub, s3.t)).toBeGreaterThan(0.1);
+
+    const four = heard("fourth_heart_sound");
+    const s4 = four.extras.find((e) => e.kind === "s4")!;
+    const nextS1 = four.lub.find((x) => x > s4.t)!;
+    expect(nextS1 - s4.t).toBeGreaterThan(0.04);
+    expect(nextS1 - s4.t).toBeLessThan(0.1);
+  });
+});

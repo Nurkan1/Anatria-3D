@@ -10,8 +10,12 @@ import { CYCLE, RESTING_BPM, SQUEEZE } from "./heartbeat";
  * is exactly what a disorder of rhythm or conduction *is* — the relationship
  * between the atria and the ventricles — so a first-degree block, a Wenckebach
  * sequence or atrial fibrillation can be seen here in a way no still picture
- * shows. Valve disease and failing muscle are about sound and force rather than
- * timing, and are a different set.
+ * shows.
+ *
+ * Valve disease and a stiff or failing ventricle are about sound more than
+ * timing, and they are here as sound: each is a normal sinus beat with the
+ * murmur or the extra heart sound the textbook describes, in its place in the
+ * cycle — which is what a stethoscope teaches, and what a picture cannot.
  *
  * # What these are not
  *
@@ -51,9 +55,21 @@ export type RhythmId =
   | "premature_ventricular"
   | "ventricular_tachycardia"
   | "ventricular_fibrillation"
-  | "asystole";
+  | "asystole"
+  | "aortic_stenosis"
+  | "mitral_regurgitation"
+  | "aortic_regurgitation"
+  | "mitral_stenosis"
+  | "third_heart_sound"
+  | "fourth_heart_sound";
 
-export const RHYTHM_GROUPS = ["Sinus", "Conduction blocks", "Atrial", "Ventricular"] as const;
+export const RHYTHM_GROUPS = [
+  "Sinus",
+  "Conduction blocks",
+  "Atrial",
+  "Ventricular",
+  "Murmurs and extra sounds",
+] as const;
 export type RhythmGroup = (typeof RHYTHM_GROUPS)[number];
 
 /** One contraction: when it starts, peaks and ends, and how strong it is. */
@@ -86,12 +102,50 @@ export interface HeartSound {
   level: number;
 }
 
+/**
+ * How a murmur's loudness moves over its length.
+ *
+ * - `diamond`: rises to the middle and falls — crescendo-decrescendo.
+ * - `plateau`: the same loudness throughout — holosystolic.
+ * - `decrescendo`: loudest at its start and fading.
+ * - `rumble`: low, and louder again at its end, as the atria contract.
+ */
+export type MurmurShape = "diamond" | "plateau" | "decrescendo" | "rumble";
+
+/** A murmur: turbulent flow heard as filtered noise over part of the cycle. */
+export interface Murmur {
+  at: number;
+  length: number;
+  shape: MurmurShape;
+  /** Where its pitch sits, in hertz, and how narrow the band is. */
+  pitch: number;
+  q: number;
+  /** Peak loudness relative to a normal first heart sound. */
+  level: number;
+}
+
+/**
+ * A short sound that is not S1 or S2.
+ *
+ * - `s3`: a low thud in early diastole, as blood rushes into a ventricle.
+ * - `s4`: a low thud just before S1, as the atria push into a stiff ventricle.
+ * - `snap`: the opening snap of a stiff mitral valve, short and high.
+ */
+export type ExtraSoundKind = "s3" | "s4" | "snap";
+
+export interface ExtraSound {
+  at: number;
+  kind: ExtraSoundKind;
+}
+
 /** What a planner lays down. */
 export interface Planned {
   atria: Contraction[];
   ventricles: Contraction[];
   lub: HeartSound[];
   dub: HeartSound[];
+  murmurs: Murmur[];
+  extras: ExtraSound[];
 }
 
 /**
@@ -169,6 +223,45 @@ function sinus(bpm: number, pr: number): Planner {
 }
 
 const NO_QUIVER = { atria: 0, ventricles: 0 };
+
+/** Where one normal beat's events fall, for adding a sound to it. */
+interface Beat {
+  /** Atrial contraction. */
+  atrium: number;
+  /** Ventricular contraction, and the first heart sound. */
+  s1: number;
+  /** The second heart sound. */
+  s2: number;
+  /** The next beat's first heart sound. */
+  nextS1: number;
+}
+
+/**
+ * A normal sinus rhythm at rest with something heard on every beat.
+ *
+ * `sounds` sets the loudness of S1 and S2 and the ventricle's strength — a
+ * stenosed aortic valve softens S2 and the pulse — and `add` lays down the
+ * murmur or extra sound in its place in that beat.
+ */
+function sinusWith(
+  sounds: { s1?: number; s2?: number; strength?: number },
+  add: (beat: Beat, out: Planned) => void,
+): Planner {
+  const length = systoleFor(NORMAL_RR);
+  return (to, clocks, _random, out) => {
+    clocks.atria ??= 0;
+    while (clocks.atria < to) {
+      const s1 = clocks.atria + NORMAL_PR;
+      atrium(out, clocks.atria);
+      ventricle(out, s1, NORMAL_RR, sounds.strength ?? 1, sounds.s1 ?? 1, sounds.s2 ?? 1);
+      add(
+        { atrium: clocks.atria, s1, s2: s1 + length * S2_WITHIN_SYSTOLE, nextS1: s1 + NORMAL_RR },
+        out,
+      );
+      clocks.atria += NORMAL_RR;
+    }
+  };
+}
 
 export const RHYTHMS: readonly RhythmDefinition[] = [
   {
@@ -401,6 +494,96 @@ export const RHYTHMS: readonly RhythmDefinition[] = [
     quiver: NO_QUIVER,
     plan: () => {},
   },
+  {
+    id: "aortic_stenosis",
+    label: "Aortic stenosis",
+    group: "Murmurs and extra sounds",
+    rate: `${RESTING_BPM} bpm`,
+    what:
+      "A narrowed aortic valve: blood forced through it in systole makes a harsh murmur " +
+      "that swells and fades between S1 and S2. The second sound is softer, and the pulse " +
+      "weaker.",
+    quiver: NO_QUIVER,
+    plan: sinusWith({ s2: 0.55, strength: 0.8 }, (beat, out) => {
+      const at = beat.s1 + 0.04;
+      out.murmurs.push({ at, length: beat.s2 - 0.03 - at, shape: "diamond", pitch: 220, q: 0.9, level: 0.6 });
+    }),
+  },
+  {
+    id: "mitral_regurgitation",
+    label: "Mitral regurgitation",
+    group: "Murmurs and extra sounds",
+    rate: `${RESTING_BPM} bpm`,
+    what:
+      "A mitral valve that does not close: some blood leaks back into the left atrium for " +
+      "all of systole, heard as an even, blowing murmur from S1 right up to S2. S1 is soft.",
+    quiver: NO_QUIVER,
+    plan: sinusWith({ s1: 0.55, strength: 0.85 }, (beat, out) => {
+      out.murmurs.push({
+        at: beat.s1 + 0.01,
+        length: beat.s2 - beat.s1,
+        shape: "plateau",
+        pitch: 380,
+        q: 1.2,
+        level: 0.45,
+      });
+    }),
+  },
+  {
+    id: "aortic_regurgitation",
+    label: "Aortic regurgitation",
+    group: "Murmurs and extra sounds",
+    rate: `${RESTING_BPM} bpm`,
+    what:
+      "An aortic valve that does not close: blood falls back into the left ventricle in " +
+      "diastole, heard as a high, blowing murmur that starts at S2 and fades.",
+    quiver: NO_QUIVER,
+    plan: sinusWith({}, (beat, out) => {
+      out.murmurs.push({ at: beat.s2 + 0.01, length: 0.34, shape: "decrescendo", pitch: 520, q: 1.5, level: 0.4 });
+    }),
+  },
+  {
+    id: "mitral_stenosis",
+    label: "Mitral stenosis",
+    group: "Murmurs and extra sounds",
+    rate: `${RESTING_BPM} bpm`,
+    what:
+      "A narrowed mitral valve: a loud S1, a short opening snap after S2 as the stiff valve " +
+      "opens, then a low rumble through diastole that grows as the atria contract.",
+    quiver: NO_QUIVER,
+    plan: sinusWith({ s1: 1 }, (beat, out) => {
+      out.extras.push({ at: beat.s2 + 0.08, kind: "snap" });
+      const at = beat.s2 + 0.13;
+      out.murmurs.push({ at, length: beat.nextS1 - 0.02 - at, shape: "rumble", pitch: 110, q: 1, level: 0.65 });
+    }),
+  },
+  {
+    id: "third_heart_sound",
+    label: "Third heart sound (S3)",
+    group: "Murmurs and extra sounds",
+    rate: `${RESTING_BPM} bpm`,
+    what:
+      "A low thud just after S2, as blood rushes into a ventricle that is overfilled: " +
+      "lub-dub-ta, like the word Kentucky. Normal in children and athletes, a sign of " +
+      "heart failure in older adults.",
+    quiver: NO_QUIVER,
+    plan: sinusWith({}, (beat, out) => {
+      out.extras.push({ at: beat.s2 + 0.15, kind: "s3" });
+    }),
+  },
+  {
+    id: "fourth_heart_sound",
+    label: "Fourth heart sound (S4)",
+    group: "Murmurs and extra sounds",
+    rate: `${RESTING_BPM} bpm`,
+    what:
+      "A low thud just before S1, as the atria push blood into a stiff ventricle: " +
+      "ta-lub-dub, like the word Tennessee.",
+    quiver: NO_QUIVER,
+    plan: sinusWith({}, (beat, out) => {
+      out.extras.push({ at: beat.s1 - 0.07, kind: "s4" });
+    }),
+  },
 ];
 
 export function rhythm(id: RhythmId): RhythmDefinition {
@@ -445,6 +628,9 @@ export interface RhythmFrame {
   /** The heart sounds that fell in this frame, each by its loudness. */
   lub: number[];
   dub: number[];
+  /** Murmurs and extra sounds that start in this frame. */
+  murmurs: Murmur[];
+  extras: ExtraSoundKind[];
 }
 
 /** How far ahead of the clock contractions are laid down, in seconds. */
@@ -457,7 +643,7 @@ const LOOKAHEAD_S = 2;
  * same rhythm looks the same each time it is chosen.
  */
 export class RhythmPlayer {
-  private readonly planned: Planned = { atria: [], ventricles: [], lub: [], dub: [] };
+  private readonly planned: Planned = { atria: [], ventricles: [], lub: [], dub: [], murmurs: [], extras: [] };
   private readonly clocks: Record<string, number> = {};
   private readonly random: () => number;
   private readonly phases: number[];
@@ -481,6 +667,8 @@ export class RhythmPlayer {
       this.planned.ventricles = this.planned.ventricles.filter((c) => c.end >= keep);
       this.planned.lub = this.planned.lub.filter((s) => s.at >= keep);
       this.planned.dub = this.planned.dub.filter((s) => s.at >= keep);
+      this.planned.murmurs = this.planned.murmurs.filter((m) => m.at >= keep);
+      this.planned.extras = this.planned.extras.filter((e) => e.at >= keep);
     }
 
     let atria = this.quiver(after, this.definition.quiver.atria, 0);
@@ -490,12 +678,14 @@ export class RhythmPlayer {
       ventricles = Math.max(ventricles, bump(after, contraction));
     }
 
-    const within = (sound: HeartSound) => sound.at > before && sound.at <= after;
+    const within = (sound: { at: number }) => sound.at > before && sound.at <= after;
     return {
       atria: SQUEEZE.atria * atria,
       ventricles: SQUEEZE.ventricles * ventricles,
       lub: this.planned.lub.filter(within).map((sound) => sound.level),
       dub: this.planned.dub.filter(within).map((sound) => sound.level),
+      murmurs: this.planned.murmurs.filter(within),
+      extras: this.planned.extras.filter(within).map((extra) => extra.kind),
     };
   }
 
