@@ -198,6 +198,9 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
     }
   };
   const onUp = (event: PointerEvent) => {
+    // Only a press that began on the hologram. The panels sit over the same
+    // window, and a click on one of their buttons must not also deselect.
+    if (!pressed) return;
     const wasDrag = dragged;
     pressed = null;
     dragged = false;
