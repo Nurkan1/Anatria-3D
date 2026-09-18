@@ -1,0 +1,149 @@
+/*
+ * The Memory Lab's look. Every class is prefixed `ml-` and everything hangs off
+ * `.ml-root`, so nothing here can restyle the rest of the application.
+ */
+.ml-root {
+  --ml-cyan: #56e1ff;
+  --ml-cyan-dim: rgba(86, 225, 255, 0.5);
+  --ml-cyan-faint: rgba(86, 225, 255, 0.14);
+  --ml-amber: #ffb347;
+  --ml-violet: #c29bff;
+  --ml-ink: #d8f6ff;
+  --ml-mono: "Cascadia Mono", "Consolas", "SF Mono", ui-monospace, monospace;
+  --ml-sans: "Bahnschrift", "Segoe UI", system-ui, sans-serif;
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  overflow: hidden;
+  background: #010408;
+  color: var(--ml-ink);
+  font-family: var(--ml-mono);
+  animation: ml-in 0.5s ease-out;
+}
+.ml-stage { position: absolute; inset: 0; }
+.ml-stage canvas.ml-gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+.ml-hud { position: absolute; inset: 0; pointer-events: none; perspective: 1400px; text-shadow: 0 0 8px rgba(86, 225, 255, 0.5); }
+.ml-hud button, .ml-panel { pointer-events: auto; }
+
+.ml-head { position: absolute; top: 3.2vh; left: 3vw; letter-spacing: 0.32em; }
+.ml-title { font-family: var(--ml-sans); font-weight: 300; font-size: clamp(14px, 1.35vw, 26px); color: var(--ml-cyan); }
+.ml-sub { margin-top: 0.6em; font-size: clamp(9px, 0.62vw, 12px); color: var(--ml-cyan-dim); letter-spacing: 0.22em; }
+.ml-exit {
+  position: absolute; top: 3vh; right: 3vw;
+  font: inherit; font-size: clamp(9px, 0.65vw, 12px); letter-spacing: 0.3em;
+  color: var(--ml-cyan); background: rgba(10, 40, 60, 0.3);
+  border: 1px solid var(--ml-cyan-faint); padding: 0.7em 1.2em; cursor: pointer;
+}
+.ml-exit:hover, .ml-exit:focus-visible { border-color: var(--ml-cyan); outline: none; }
+
+.ml-panel {
+  position: absolute; top: 15vh;
+  width: clamp(240px, 21vw, 420px);
+  padding: 1.2vh 1vw 1.4vh;
+  border: 1px solid var(--ml-cyan-faint);
+  background: linear-gradient(180deg, rgba(20, 80, 120, 0.18), rgba(4, 16, 28, 0.08));
+  box-shadow: inset 0 0 24px rgba(86, 225, 255, 0.06);
+  transition: clip-path 0.7s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.5s;
+  clip-path: inset(0 0 0 0);
+}
+.ml-panel.ml-hidden { clip-path: inset(50% 0 50% 0); opacity: 0; pointer-events: none; }
+.ml-panel::before, .ml-panel::after { content: ""; position: absolute; width: 14px; height: 14px; border: 1px solid var(--ml-cyan); }
+.ml-panel::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+.ml-panel::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+.ml-left { left: 3vw; transform: rotateY(14deg); transform-origin: left center; }
+.ml-right { right: 3vw; transform: rotateY(-10deg); transform-origin: right center; bottom: 17vh; display: flex; flex-direction: column; }
+.ml-panel h3 {
+  margin: 0 0 1vh; display: flex; justify-content: space-between; gap: 1em;
+  font-size: clamp(9px, 0.6vw, 12px); font-weight: 400; letter-spacing: 0.3em; color: var(--ml-cyan);
+}
+.ml-panel h3 span { color: var(--ml-cyan-dim); letter-spacing: 0.12em; }
+.ml-gap { margin-top: 2vh !important; }
+
+.ml-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; flex: none; }
+.ml-dot.ml-session { background: var(--ml-cyan); box-shadow: 0 0 8px var(--ml-cyan); }
+.ml-dot.ml-case { background: var(--ml-amber); box-shadow: 0 0 8px var(--ml-amber); }
+.ml-dot.ml-note { background: var(--ml-violet); box-shadow: 0 0 8px var(--ml-violet); }
+.ml-count { display: grid; grid-template-columns: 1.4em 1fr auto; align-items: center; font-size: clamp(9px, 0.6vw, 12px); letter-spacing: 0.14em; color: var(--ml-cyan-dim); line-height: 2.1; }
+.ml-count b { font-weight: 400; color: var(--ml-ink); font-variant-numeric: tabular-nums; }
+
+.ml-months { display: flex; align-items: flex-end; gap: 2px; height: 7vh; border-bottom: 1px solid var(--ml-cyan-faint); }
+.ml-month { flex: 1; height: 100%; display: flex; align-items: flex-end; }
+.ml-month i { width: 100%; min-height: 1px; background: linear-gradient(0deg, rgba(86, 225, 255, 0.25), var(--ml-cyan)); box-shadow: 0 0 6px rgba(86, 225, 255, 0.5); }
+.ml-months-scale { display: flex; justify-content: space-between; margin-top: 0.4vh; font-size: clamp(7px, 0.48vw, 10px); color: rgba(86, 225, 255, 0.35); letter-spacing: 0.1em; }
+
+.ml-recent { list-style: none; margin: 0; padding: 0; }
+.ml-recent button {
+  display: grid; grid-template-columns: 1.4em 1fr; align-items: center; width: 100%;
+  font: inherit; font-size: clamp(8px, 0.56vw, 11px); letter-spacing: 0.06em; line-height: 2.1; text-align: left;
+  color: var(--ml-cyan-dim); background: none; border: 0; padding: 0; cursor: pointer;
+}
+.ml-recent button:hover, .ml-recent button.ml-on, .ml-recent button:focus-visible { color: var(--ml-ink); outline: none; }
+.ml-recent em { font-style: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.ml-reading-title { font-family: var(--ml-sans); font-size: clamp(13px, 1vw, 19px); letter-spacing: 0.06em; color: var(--ml-ink); margin-bottom: 1.2vh; }
+.ml-reading {
+  flex: 1; min-height: 0; overflow-y: auto; padding-right: 0.6em;
+  font-family: var(--ml-sans); font-size: clamp(11px, 0.72vw, 14px); line-height: 1.55; color: rgba(216, 246, 255, 0.86);
+  text-shadow: none; scrollbar-width: thin; scrollbar-color: var(--ml-cyan-faint) transparent;
+  animation: ml-recall 0.6s ease-out;
+}
+.ml-reading p { margin: 0 0 0.8em; white-space: pre-wrap; }
+.ml-faint { color: var(--ml-cyan-dim); letter-spacing: 0.2em; font-family: var(--ml-mono); }
+.ml-score { font-family: var(--ml-mono); letter-spacing: 0.2em; color: var(--ml-amber); }
+.ml-message { margin-bottom: 1.4vh; }
+.ml-message > span { display: block; font-family: var(--ml-mono); font-size: 0.72em; letter-spacing: 0.3em; margin-bottom: 0.3em; color: var(--ml-cyan-dim); }
+.ml-message.ml-user > p { color: var(--ml-ink); border-left: 2px solid var(--ml-cyan); padding-left: 0.7em; }
+.ml-note { border-left: 2px solid var(--ml-violet); padding-left: 0.7em; }
+
+.ml-actions { display: flex; justify-content: space-between; gap: 1em; margin-top: 1.4vh; }
+.ml-actions button {
+  font: inherit; font-size: clamp(8px, 0.58vw, 11px); letter-spacing: 0.25em; padding: 0.8em 1.1em;
+  background: rgba(10, 40, 60, 0.3); cursor: pointer; position: relative; overflow: hidden;
+}
+.ml-close-reading { color: var(--ml-cyan); border: 1px solid var(--ml-cyan-faint); }
+.ml-erase { color: var(--ml-amber); border: 1px solid rgba(255, 179, 71, 0.4); touch-action: none; }
+.ml-erase i { position: absolute; inset: 0 auto 0 0; width: 0; background: rgba(255, 120, 60, 0.35); }
+.ml-erase.ml-holding i { animation: ml-hold var(--ml-hold) linear forwards; }
+.ml-actions button:focus-visible { outline: 1px solid var(--ml-cyan); }
+
+.ml-bottom { position: absolute; left: 50%; bottom: 4.5vh; width: min(60vw, 1100px); transform: translateX(-50%); pointer-events: auto; }
+.ml-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1vh; }
+.ml-status { font-size: clamp(9px, 0.65vw, 13px); letter-spacing: 0.24em; color: var(--ml-cyan); max-width: 70%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ml-percent { font-family: var(--ml-sans); font-weight: 200; font-size: clamp(24px, 2.6vw, 54px); font-variant-numeric: tabular-nums; line-height: 1; }
+.ml-percent small { font-size: 0.32em; letter-spacing: 0.3em; color: var(--ml-cyan-dim); margin-left: 0.6em; }
+.ml-bar { height: 5px; border: 1px solid var(--ml-cyan-faint); position: relative; }
+.ml-bar i { position: absolute; inset: 0 auto 0 0; background: linear-gradient(90deg, rgba(86, 225, 255, 0.4), var(--ml-cyan) 70%, #fff); box-shadow: 0 0 14px var(--ml-cyan); transition: width 0.2s; }
+.ml-skip { margin-top: 0.8vh; text-align: center; font-size: clamp(7px, 0.48vw, 10px); letter-spacing: 0.4em; color: rgba(86, 225, 255, 0.35); }
+
+.ml-timeline { display: flex; align-items: flex-end; gap: 3px; height: 4.2vh; padding-top: 1vh; border-bottom: 1px solid var(--ml-cyan-faint); animation: ml-recall 0.6s ease-out; }
+.ml-tick { flex: 1 1 0; max-width: 14px; min-width: 2px; height: 55%; border: 0; padding: 0; cursor: pointer; background: var(--ml-cyan); opacity: 0.45; transition: height 0.2s, opacity 0.2s; }
+.ml-tick.ml-case { background: var(--ml-amber); }
+.ml-tick.ml-note { background: var(--ml-violet); }
+.ml-tick:hover, .ml-tick:focus-visible, .ml-tick.ml-on { height: 100%; opacity: 1; outline: none; box-shadow: 0 0 10px currentColor; }
+.ml-tick.ml-gone { opacity: 0.08; cursor: default; }
+
+.ml-callout { position: absolute; left: 0; top: 0; opacity: 0; transition: opacity 0.2s; will-change: transform; }
+.ml-callout svg { position: absolute; left: 0; top: 0; overflow: visible; }
+.ml-callout circle, .ml-callout polyline { fill: none; stroke: var(--ml-amber); stroke-width: 1.1; filter: drop-shadow(0 0 4px var(--ml-amber)); }
+.ml-tag { position: absolute; left: 44px; top: -30px; transform: translateY(-100%); padding: 0.3em 0.7em 0.4em; border-left: 2px solid var(--ml-amber); background: rgba(40, 20, 0, 0.3); white-space: nowrap; max-width: 30vw; }
+.ml-tag b { display: block; font-family: var(--ml-sans); font-weight: 400; font-size: clamp(11px, 0.85vw, 17px); letter-spacing: 0.08em; color: var(--ml-amber); overflow: hidden; text-overflow: ellipsis; }
+.ml-tag span { font-size: clamp(8px, 0.55vw, 11px); letter-spacing: 0.16em; color: rgba(255, 210, 150, 0.75); }
+
+.ml-toast {
+  position: absolute; left: 50%; top: 9vh; transform: translateX(-50%); pointer-events: auto;
+  display: flex; align-items: center; gap: 1.4em; padding: 0.8em 1.4em;
+  border: 1px solid rgba(255, 179, 71, 0.4); background: rgba(40, 20, 0, 0.45);
+  font-size: clamp(9px, 0.62vw, 12px); letter-spacing: 0.3em; color: var(--ml-amber);
+}
+.ml-toast button { font: inherit; letter-spacing: 0.25em; color: var(--ml-ink); background: none; border: 1px solid var(--ml-cyan); padding: 0.5em 1em; cursor: pointer; }
+.ml-empty { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); max-width: 420px; text-align: center; font-family: var(--ml-sans); line-height: 1.6; color: var(--ml-cyan-dim); }
+.ml-empty b { display: block; margin-bottom: 1em; font-family: var(--ml-mono); font-weight: 400; letter-spacing: 0.4em; color: var(--ml-cyan); }
+.ml-error { position: absolute; left: 50%; bottom: 13vh; transform: translateX(-50%); color: var(--ml-amber); font-size: 12px; letter-spacing: 0.1em; }
+
+@keyframes ml-in { from { opacity: 0; } }
+@keyframes ml-recall { from { opacity: 0; filter: blur(3px); } }
+@keyframes ml-hold { to { width: 100%; } }
+@media (prefers-reduced-motion: reduce) {
+  .ml-root, .ml-reading, .ml-timeline { animation: none; }
+  .ml-panel { transition: none; }
+}
