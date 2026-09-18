@@ -4,6 +4,7 @@ import { placeOnCortex, type MemoryKind } from "../memories";
 import { loadBrain, type Brain, type BrainStructure } from "./brainLoader";
 import { floorGrid, orbitRings, projector } from "./environment";
 import { brainMaterial, brainPoints, LOOK, RegionLight } from "./hologram";
+import { floatName, nameplate } from "./nameplate";
 import { createPost } from "./post";
 
 /**
@@ -108,7 +109,8 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
   const base = projector();
   const rings = orbitRings();
   const holder = new THREE.Group();
-  scene.add(grid, base, rings, holder);
+  const name = nameplate();
+  scene.add(grid, base, rings, holder, name);
 
   // Memory nodes, thread and erase burst: made once the brain is in.
   let brain: Brain | null = null;
@@ -309,6 +311,8 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
     const gridFade = smooth(t / INTRO.boot);
     const assemble = smooth((t - INTRO.boot) / INTRO.deploy);
     const reveal = smooth((t - INTRO.boot - INTRO.deploy) / INTRO.materialize);
+    // The name sweeps in as the projection deploys, before the brain is solid.
+    floatName(name, camera, now, smooth((t - INTRO.boot - 0.4) / 1.6));
 
     // A slow orbit, and the brain turning unless someone is reading it.
     const calm = reducedMotion ? 0.35 : 1;
@@ -428,7 +432,7 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
 }
 
 /** Brain radius in unit space, with room for the thread and labels around it. */
-const FRAME_RADIUS = 1.25;
+const FRAME_RADIUS = 1.4;
 
 /** Points on the cerebral cortex, one per memory, in the order of the path. */
 function cortexPlaces(brain: Brain, count: number): THREE.Vector3[] {
