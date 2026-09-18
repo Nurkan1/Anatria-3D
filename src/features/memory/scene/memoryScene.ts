@@ -39,6 +39,13 @@ export interface MemorySceneOptions {
   onError?: (error: unknown) => void;
 }
 
+export interface FocusMargins {
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
+}
+
 export interface MemoryScene {
   select(key: string | null): void;
   /** Dissolve a memory. It can still come back with `restore` until `forget`. */
@@ -48,6 +55,12 @@ export interface MemoryScene {
   screenPosition(key: string): { x: number; y: number } | null;
   /** Jump straight to the live brain. */
   skipIntro(): void;
+  /**
+   * The space the panels leave free, as margins in CSS pixels from each edge.
+   * The brain glides to the middle of it and shrinks to fit, so it is never
+   * behind a panel on a small screen.
+   */
+  setFocus(margins: FocusMargins): void;
   dispose(): void;
 }
 
@@ -114,6 +127,9 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
   let hovered = -1;
   let selected = -1;
   let spin = 0;
+  let focus: FocusMargins = { left: 0, right: 0, top: 0, bottom: 0 };
+  /** Where the framing is now: screen offset of the brain and its zoom, eased. */
+  const framing = { x: 0, y: 0, zoom: 1 };
   let lastPhase: LabPhase | null = null;
   let lastMapped = -1;
   let disposed = false;
@@ -239,6 +255,33 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
     return i < mappedCount(elapsed());
   }
 
+  /**
+   * Put the brain in the middle of the free space and fit it there.
+   *
+   * A view offset slides the picture without moving the camera, so the
+   * perspective stays the one the scene was designed for; the zoom then fits
+   * the brain to the smaller of the free width and height. Both ease towards
+   * their target, so opening a panel reads as the hologram making room.
+   */
+  function frame_(width: number, height: number) {
+    const freeW = Math.max(120, width - focus.left - focus.right);
+    const freeH = Math.max(120, height - focus.top - focus.bottom);
+    const centreX = focus.left + freeW / 2;
+    const centreY = focus.top + freeH / 2;
+    // How big the brain is on screen at zoom 1, from the camera's own geometry.
+    const distance = camera.position.length();
+    const pixelsPerUnit = height / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2) * distance);
+    const needed = FRAME_RADIUS * 2 * pixelsPerUnit;
+    const zoom = Math.min(1, Math.max(0.45, Math.min(freeW, freeH) / needed));
+    const ease = 0.08;
+    framing.x += (width / 2 - centreX - framing.x) * ease;
+    framing.y += (height / 2 - centreY - framing.y) * ease;
+    framing.zoom += (zoom - framing.zoom) * ease;
+    camera.zoom = framing.zoom;
+    camera.setViewOffset(width, height, framing.x, framing.y, width, height);
+    camera.updateProjectionMatrix();
+  }
+
   // --- the frame -----------------------------------------------------------
   const render = () => {
     if (disposed) return;
@@ -272,6 +315,7 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
     const orbit = now * 0.03 * calm;
     camera.position.set(Math.sin(orbit) * 0.8, 0.45 + Math.sin(now * 0.1) * 0.12, 5.6);
     camera.lookAt(0, 0.02, 0);
+    frame_(container.clientWidth, container.clientHeight);
     if (!pressed && hovered < 0 && selected < 0) spin += 0.0012 * calm;
     holder.rotation.y = spin;
     holder.updateMatrixWorld();
@@ -355,6 +399,9 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
       const i = indexOf.get(key);
       return i === undefined || presence[i]! < 0.3 ? null : project(i);
     },
+    setFocus(margins) {
+      focus = margins;
+    },
     skipIntro() {
       if (started !== null && elapsed() < sequenceEnd) offset += sequenceEnd - elapsed();
     },
@@ -379,6 +426,9 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
     },
   };
 }
+
+/** Brain radius in unit space, with room for the thread and labels around it. */
+const FRAME_RADIUS = 1.25;
 
 /** Points on the cerebral cortex, one per memory, in the order of the path. */
 function cortexPlaces(brain: Brain, count: number): THREE.Vector3[] {

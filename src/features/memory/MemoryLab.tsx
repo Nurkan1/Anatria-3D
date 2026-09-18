@@ -7,6 +7,7 @@ import { useStudyStore } from "@/stores/studyStore";
 
 import "./memoryLab.css";
 import { EraseQueue, RESTORE_WINDOW_S } from "./eraseQueue";
+import { freeMargins, type Box } from "./layout";
 import { byMonth, memoriesFrom, tally, type Memory, type MemoryKind } from "./memories";
 import type { BrainStructure } from "./scene/brainLoader";
 import { createMemoryScene, type LabPhase, type MemoryScene } from "./scene/memoryScene";
@@ -29,6 +30,19 @@ const KIND_LABEL: Record<MemoryKind, string> = {
   note: "NOTE",
 };
 
+/**
+ * Three ways to lay the lab out, chosen from the real size of the window —
+ * never from the device. `wide` tilts the panels in 3D, `medium` flattens and
+ * narrows them, `compact` folds the index into a rail and raises the reader
+ * from the bottom as a sheet.
+ */
+type Size = "wide" | "medium" | "compact";
+function sizeFor(width: number, height: number): Size {
+  if (width < 960 || height < 600) return "compact";
+  if (width < 1320 || height < 780) return "medium";
+  return "wide";
+}
+
 /** How long Erase must be held down, in milliseconds. */
 const HOLD_MS = 1400;
 
@@ -41,8 +55,21 @@ type Reading =
 const when = (ms: number) =>
   new Date(ms).toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
 
+/** A failure to load, said as what could not be reached rather than as a stack. */
+function unreachable(reason: unknown): string {
+  const text = reason instanceof Error ? reason.message : String(reason);
+  return /fetch|network|load/i.test(text)
+    ? "The brain hologram could not be loaded. Your memories are safe — try again."
+    : `The hologram stopped: ${text}`;
+}
+
 export function MemoryLab({ onClose }: { onClose: () => void }) {
+  const root = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
+  const head = useRef<HTMLElement>(null);
+  const left = useRef<HTMLElement>(null);
+  const right = useRef<HTMLElement>(null);
+  const footer = useRef<HTMLElement>(null);
   const callout = useRef<HTMLDivElement>(null);
   const scene = useRef<MemoryScene | null>(null);
   const queue = useRef(new EraseQueue());
@@ -58,6 +85,11 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
   const [erased, setErased] = useState<Set<string>>(new Set());
   const [pending, setPending] = useState<{ key: string; left: number } | null>(null);
   const [holding, setHolding] = useState(false);
+  const [size, setSize] = useState<Size>(() => sizeFor(window.innerWidth, window.innerHeight));
+  const [railOpen, setRailOpen] = useState(false);
+  const [wide, setWide] = useState(false);
+  /** Bumped by Retry, to load the hologram again after a failure. */
+  const [attempt, setAttempt] = useState(0);
 
   const byKey = useMemo(() => new Map((memories ?? []).map((m) => [m.key, m])), [memories]);
   const live = useMemo(() => (memories ?? []).filter((m) => !erased.has(m.key)), [memories, erased]);
@@ -106,16 +138,43 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
             setPhase(next);
             setMapped(count);
           },
-          onError: (reason) => setError(String(reason)),
+          onError: (reason) => setError(unreachable(reason)),
         });
       })
-      .catch((reason: unknown) => setError(String(reason)));
+      .catch((reason: unknown) => !disposed && setError(unreachable(reason)));
     return () => {
       disposed = true;
       scene.current?.dispose();
       scene.current = null;
     };
-  }, [memories]);
+  }, [memories, attempt]);
+
+  // --- making room: the size class, and where the hologram may go ------------
+  useEffect(() => {
+    const element = root.current;
+    if (!element) return;
+    const measure = () => {
+      setSize(sizeFor(element.clientWidth, element.clientHeight));
+      const frame = element.getBoundingClientRect();
+      const boxes: Box[] = [];
+      // The title is a corner, not a panel: it would push the brain aside for nothing.
+      for (const ref of [left, right, footer]) {
+        const panel = ref.current;
+        if (!panel || panel.classList.contains("ml-hidden") || panel.classList.contains("ml-wide")) continue;
+        const r = panel.getBoundingClientRect();
+        boxes.push({ left: r.left - frame.left, top: r.top - frame.top, right: r.right - frame.left, bottom: r.bottom - frame.top });
+      }
+      scene.current?.setFocus(freeMargins(boxes, element.clientWidth, element.clientHeight));
+    };
+    // A class change moves a panel on the next frame, so measure just after it.
+    const timer = window.setTimeout(measure, 40);
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    return () => {
+      window.clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, [selected, railOpen, wide, size, phase, memories]);
 
   // --- erasing -------------------------------------------------------------
   const commit = useCallback(async (keys: string[]) => {
@@ -198,10 +257,14 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
   const choose = (key: string | null) => {
     setSelected(key);
     scene.current?.select(key);
+    if (key === null) setWide(false);
+    // On a small screen the rail folds away once something is picked from it.
+    if (key !== null && size === "compact") setRailOpen(false);
   };
 
   // --- the label that follows the pointed memory -----------------------------
-  const labelled = hovered ?? selected;
+  // Reading large covers the brain, and a label pointing into it would float over the page.
+  const labelled = wide ? null : (hovered ?? selected);
   useEffect(() => {
     let frame = 0;
     const place = () => {
@@ -224,7 +287,9 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        if (selected) choose(null);
+        if (wide) setWide(false);
+        else if (selected) choose(null);
+        else if (railOpen) setRailOpen(false);
         else close();
       }
     };
@@ -242,11 +307,18 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
   const recent = [...live].reverse().slice(0, 12);
 
   return (
-    <div className="ml-root" role="dialog" aria-label="Study memory" onClick={() => intro && scene.current?.skipIntro()}>
+    <div
+      ref={root}
+      className="ml-root"
+      data-size={size}
+      role="dialog"
+      aria-label="Study memory"
+      onClick={() => intro && scene.current?.skipIntro()}
+    >
       <div ref={stage} className="ml-stage" />
 
       <div className="ml-hud">
-        <header className="ml-head">
+        <header ref={head} className="ml-head">
           <div className="ml-title">STUDY MEMORY</div>
           <div className="ml-sub">YOUR JOURNAL · {live.length} MEMORIES · STORED ON THIS COMPUTER</div>
         </header>
@@ -263,7 +335,22 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
 
         {total > 0 && (
           <>
-            <section className={`ml-panel ml-left ${intro && phase !== "mapping" ? "ml-hidden" : ""}`}>
+            {size === "compact" && !intro && (
+              <button
+                type="button"
+                className={`ml-rail ${railOpen ? "ml-on" : ""}`}
+                onClick={() => setRailOpen((open) => !open)}
+                aria-expanded={railOpen}
+              >
+                INDEX · {live.length}
+              </button>
+            )}
+            <section
+              ref={left}
+              className={`ml-panel ml-left ${
+                (intro && phase !== "mapping") || (size === "compact" && !railOpen) ? "ml-hidden" : ""
+              }`}
+            >
               <h3>
                 MEMORY INDEX <span>{String(live.length).padStart(3, "0")}</span>
               </h3>
@@ -299,11 +386,24 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
               </ol>
             </section>
 
-            <section className={`ml-panel ml-right ${selectedMemory ? "" : "ml-hidden"}`} aria-live="polite">
+            <section
+              ref={right}
+              className={`ml-panel ml-right ${selectedMemory ? "" : "ml-hidden"} ${wide ? "ml-wide" : ""}`}
+              aria-live="polite"
+            >
               {selectedMemory && (
                 <>
                   <h3>
                     {KIND_LABEL[selectedMemory.kind]} <span>{when(selectedMemory.at)}</span>
+                    <button
+                      type="button"
+                      className="ml-expand"
+                      onClick={() => setWide((w) => !w)}
+                      title={wide ? "Back to the side" : "Read it large"}
+                      aria-pressed={wide}
+                    >
+                      {wide ? "⤡" : "⤢"}
+                    </button>
                   </h3>
                   <div className="ml-reading-title">{selectedMemory.title}</div>
                   <div className="ml-reading">
@@ -356,7 +456,7 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
               )}
             </section>
 
-            <footer className="ml-bottom">
+            <footer ref={footer} className="ml-bottom">
               {intro ? (
                 <>
                   <div className="ml-row">
@@ -420,7 +520,16 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
         )}
         {error && (
           <div className="ml-error" role="alert">
-            {error}
+            <span>{error}</span>
+            <button
+              type="button"
+              onClick={() => {
+                setError(null);
+                setAttempt((n) => n + 1);
+              }}
+            >
+              RETRY
+            </button>
           </div>
         )}
       </div>

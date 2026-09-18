@@ -140,6 +140,56 @@
 .ml-empty b { display: block; margin-bottom: 1em; font-family: var(--ml-mono); font-weight: 400; letter-spacing: 0.4em; color: var(--ml-cyan); }
 .ml-error { position: absolute; left: 50%; bottom: 13vh; transform: translateX(-50%); color: var(--ml-amber); font-size: 12px; letter-spacing: 0.1em; }
 
+/* ---- reading large, and the index rail ------------------------------------ */
+.ml-expand {
+  margin-left: auto; font: inherit; font-size: 1.3em; line-height: 1; letter-spacing: 0;
+  color: var(--ml-cyan); background: none; border: 1px solid var(--ml-cyan-faint); padding: 0.1em 0.45em; cursor: pointer;
+}
+.ml-expand:hover, .ml-expand:focus-visible { border-color: var(--ml-cyan); outline: none; }
+/* Scoped under the root so it outranks the per-size panel rules below. */
+.ml-root .ml-panel.ml-right.ml-wide {
+  left: 50%; right: auto; top: 9vh; bottom: 12vh;
+  width: min(980px, 94vw);
+  transform: translateX(-50%);
+  background: rgba(2, 10, 18, 0.9);
+  backdrop-filter: blur(6px);
+  z-index: 3;
+}
+.ml-wide .ml-reading { font-size: clamp(13px, 0.95vw, 17px); }
+.ml-rail {
+  position: absolute; left: 0; top: 50%; transform: translateY(-50%) rotate(180deg);
+  writing-mode: vertical-rl; font: inherit; font-size: 10px; letter-spacing: 0.35em;
+  color: var(--ml-cyan); background: rgba(10, 40, 60, 0.45);
+  border: 1px solid var(--ml-cyan-faint); border-left: 0; padding: 1.4em 0.55em; cursor: pointer; z-index: 4;
+}
+.ml-rail.ml-on, .ml-rail:hover, .ml-rail:focus-visible { border-color: var(--ml-cyan); outline: none; }
+.ml-error { pointer-events: auto; display: flex; align-items: center; gap: 1.2em; }
+.ml-error button { font: inherit; letter-spacing: 0.25em; color: var(--ml-ink); background: none; border: 1px solid var(--ml-cyan); padding: 0.4em 0.9em; cursor: pointer; }
+
+/* ---- medium: flat, narrower panels ---------------------------------------- */
+.ml-root[data-size="medium"] .ml-panel { transform: none; width: clamp(210px, 25vw, 330px); top: 11vh; }
+.ml-root[data-size="medium"] .ml-right { bottom: 16vh; }
+.ml-root[data-size="medium"] .ml-bottom { width: min(76vw, 900px); }
+
+/* ---- compact: rail on the left, the reader as a sheet from the bottom ----- */
+.ml-root[data-size="compact"] .ml-head { top: 12px; left: 14px; }
+.ml-root[data-size="compact"] .ml-sub { display: none; }
+.ml-root[data-size="compact"] .ml-exit { top: 10px; right: 12px; }
+/* The rail sits high, clear of the reading sheet that rises from the bottom. */
+.ml-root[data-size="compact"] .ml-rail { top: 52px; transform: rotate(180deg); }
+.ml-root[data-size="compact"] .ml-left {
+  transform: none; left: 30px; top: 52px; width: min(300px, 78vw);
+  max-height: calc(100% - 150px); overflow-y: auto; z-index: 4; background: rgba(2, 10, 18, 0.92);
+}
+.ml-root[data-size="compact"] .ml-right:not(.ml-wide) {
+  transform: none; left: 12px; right: 12px; width: auto;
+  top: auto; bottom: 64px; height: min(56%, 460px);
+  background: rgba(2, 10, 18, 0.9); z-index: 3;
+}
+.ml-root[data-size="compact"] .ml-right.ml-wide { top: 48px; bottom: 64px; width: calc(100% - 24px); }
+.ml-root[data-size="compact"] .ml-bottom { width: calc(100% - 28px); bottom: 14px; }
+.ml-root[data-size="compact"] .ml-percent { font-size: 26px; }
+
 @keyframes ml-in { from { opacity: 0; } }
 @keyframes ml-recall { from { opacity: 0; filter: blur(3px); } }
 @keyframes ml-hold { to { width: 100%; } }
