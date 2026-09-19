@@ -1,3 +1,4 @@
+import { collectOrganRefs } from "@/features/chat/organRefs";
 import type { ManifestOrgan } from "@/lib/schemas";
 
 /** One structure a memory was about, and where in the atlas to find its mesh. */
@@ -18,7 +19,21 @@ export const FIGURE_FILE = "regional_male.glb";
  * Most structures lit at once. A long session can touch dozens, and forty
  * organs glowing together say nothing about any one of them.
  */
-export const STUDIED_LIMIT = 12;
+export const STUDIED_LIMIT = 16;
+
+/**
+ * Every structure a memory was about, in the order it came up.
+ *
+ * The journal files only what was *selected* in the viewer when a question was
+ * asked, which for most conversations is nothing. The answers themselves pin
+ * each structure they discuss as `[[organ_id]]`, so those are read too: a
+ * conversation about the heart lights the heart even if nothing was selected.
+ */
+export function studiedIds(selected: readonly string[], texts: readonly string[], isKnown: (id: string) => boolean): string[] {
+  const ids = [...selected];
+  for (const text of texts) for (const ref of collectOrganRefs(text, isKnown)) ids.push(ref.organId);
+  return ids;
+}
 
 /**
  * The structures a memory was about, as the figure can show them.

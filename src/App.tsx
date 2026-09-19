@@ -117,7 +117,7 @@ export default function App() {
         </>
 
       <main className="relative min-h-0 min-w-0 flex-1">
-        <AnatomyViewer />
+        <AnatomyViewer paused={memoryOpen} />
         <TopBar
           treeCollapsed={layout.treeCollapsed}
           chatCollapsed={layout.chatCollapsed}

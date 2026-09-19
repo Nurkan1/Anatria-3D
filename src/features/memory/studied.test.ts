@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { ManifestOrgan } from "@/lib/schemas";
 
-import { FIGURE_FILE, studiedOrgans } from "./studied";
+import { FIGURE_FILE, studiedIds, studiedOrgans } from "./studied";
 
 const organ = (organ_id: string, mesh_file = "cardiovascular_male.glb"): ManifestOrgan =>
   ({
@@ -16,6 +16,20 @@ const organ = (organ_id: string, mesh_file = "cardiovascular_male.glb"): Manifes
   }) as unknown as ManifestOrgan;
 
 const ATLAS = [organ("left_ventricle"), organ("right_atrium"), organ("femur", "skeletal_male.glb"), organ("palm", FIGURE_FILE)];
+
+describe("studiedIds", () => {
+  const known = (id: string) => ATLAS.some((o) => o.organ_id === id);
+
+  it("adds the structures the answers pinned to the ones that were selected", () => {
+    expect(
+      studiedIds(["femur"], ["The [[left_ventricle]] pumps; the [[right_atrium]] receives.", "Again the [[left_ventricle]]."], known),
+    ).toEqual(["femur", "left_ventricle", "right_atrium", "left_ventricle"]);
+  });
+
+  it("ignores pins the atlas does not know", () => {
+    expect(studiedIds([], ["The [[spleen_of_omelas]] is not real."], known)).toEqual([]);
+  });
+});
 
 describe("studiedOrgans", () => {
   it("finds each structure's mesh, in the order it was studied", () => {

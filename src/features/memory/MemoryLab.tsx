@@ -13,7 +13,7 @@ import { calloutPlacement, freeMargins, type Box } from "./layout";
 import { byMonth, memoriesFrom, tally, type Memory, type MemoryKind } from "./memories";
 import { createBodyHologram, type BodyHologram } from "./scene/bodyHologram";
 import type { BrainStructure } from "./scene/brainLoader";
-import { studiedOrgans, type StudiedOrgan } from "./studied";
+import { studiedIds, studiedOrgans, type StudiedOrgan } from "./studied";
 import { createMemoryScene, type LabPhase, type MemoryScene } from "./scene/memoryScene";
 
 /**
@@ -156,7 +156,8 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
           onError: (reason) => setError(unreachable(reason)),
         });
         const figure = bodyBox.current;
-        if (!figure) return;
+        const frame = root.current;
+        if (!figure || !frame || !scene.current) return;
         const surface: BrainStructure[] = manifest.organs
           .filter((organ) => organ.mesh_file === "regional_male.glb" && !NOT_SURFACE.test(organ.name_en))
           .map((organ) => ({
@@ -171,6 +172,8 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
           meshUrl: meshUrl("regional_male.glb"),
           structures: surface,
           dracoPath: "/draco/",
+          host: scene.current,
+          frame,
           fileUrl: meshUrl,
           onError: () => {
             body.current?.dispose();
@@ -215,11 +218,16 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
 
   // What the open memory was about, lit inside the figure.
   useEffect(() => {
+    const known = new Set(atlas.map((organ) => organ.organ_id));
     const ids =
       reading?.state === "session"
-        ? reading.detail.structures
-        : reading?.state === "note" && reading.note.organ_id
-          ? [reading.note.organ_id]
+        ? studiedIds(
+            reading.detail.structures,
+            reading.detail.messages.filter((m) => m.role === "assistant").map((m) => m.content),
+            (id) => known.has(id),
+          )
+        : reading?.state === "note"
+          ? studiedIds(reading.note.organ_id ? [reading.note.organ_id] : [], [reading.note.body], (id) => known.has(id))
           : [];
     const organs = studiedOrgans(ids, atlas);
     const figure = body.current;
@@ -230,7 +238,12 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
     }
     let cancelled = false;
     setStudied(null);
-    void figure.show(organs).then(() => !cancelled && setStudied(organs));
+    // Named under the figure only once found: a name with nothing lit above it would mislead.
+    void figure.show(organs).then((found) => {
+      if (cancelled) return;
+      const lit = new Set(found);
+      setStudied(organs.filter((organ) => lit.has(organ.id)));
+    });
     return () => {
       cancelled = true;
     };

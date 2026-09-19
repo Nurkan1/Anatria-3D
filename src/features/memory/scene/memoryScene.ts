@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { Pass } from "three/examples/jsm/postprocessing/Pass.js";
 
 import { placeOnCortex, type MemoryKind } from "../memories";
 import { loadBrain, type Brain, type BrainStructure } from "./brainLoader";
@@ -47,6 +48,23 @@ export interface FocusMargins {
   bottom: number;
 }
 
+/**
+ * Another scene drawn into part of the screen by this one's renderer, before
+ * the bloom and film, so it is lit exactly like the brain.
+ *
+ * One renderer rather than a second canvas: a second WebGL canvas has to be
+ * blended over this one by the page compositor, and on some GPUs that showed
+ * as a black box and as the whole window blinking.
+ */
+export interface SceneLayer {
+  scene: THREE.Scene;
+  camera: THREE.PerspectiveCamera;
+  /** Where to draw, in CSS pixels from the lab's top-left; null to skip a frame. */
+  rect(): { left: number; top: number; width: number; height: number } | null;
+  /** Called each frame just before drawing, with the drawing's aspect and pixel ratio. */
+  update(now: number, aspect: number, pixelRatio: number): void;
+}
+
 export interface MemoryScene {
   select(key: string | null): void;
   /** Dissolve a memory. It can still come back with `restore` until `forget`. */
@@ -62,6 +80,8 @@ export interface MemoryScene {
    * behind a panel on a small screen.
    */
   setFocus(margins: FocusMargins): void;
+  /** Draw another scene into part of the screen. Returns what takes it away again. */
+  addLayer(layer: SceneLayer): () => void;
   dispose(): void;
 }
 
@@ -105,6 +125,10 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(30, 1, 0.05, 80);
   const post = createPost(renderer, scene, camera);
+  const layers = new Set<SceneLayer>();
+  const layerPass = new LayerPass(layers, container, () => performance.now() / 1000);
+  // Straight after the brain is drawn, so bloom and film treat both the same.
+  post.composer.insertPass(layerPass, 1);
   const grid = floorGrid();
   const base = projector();
   const rings = orbitRings();
@@ -406,6 +430,10 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
     setFocus(margins) {
       focus = margins;
     },
+    addLayer(layer) {
+      layers.add(layer);
+      return () => layers.delete(layer);
+    },
     skipIntro() {
       if (started !== null && elapsed() < sequenceEnd) offset += sequenceEnd - elapsed();
     },
@@ -417,6 +445,7 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerup", onUp);
       light.dispose();
+      layers.clear();
       scene.traverse((object) => {
         const mesh = object as THREE.Mesh;
         mesh.geometry?.dispose();
@@ -429,6 +458,49 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
       canvas.remove();
     },
   };
+}
+
+/** Draws each layer into its own rectangle of the frame the brain was drawn into. */
+class LayerPass extends Pass {
+  constructor(
+    private readonly layers: ReadonlySet<SceneLayer>,
+    private readonly container: HTMLElement,
+    private readonly clock: () => number,
+  ) {
+    super();
+    this.needsSwap = false;
+    this.clear = false;
+  }
+
+  override render(renderer: THREE.WebGLRenderer, _write: THREE.WebGLRenderTarget, read: THREE.WebGLRenderTarget): void {
+    if (this.layers.size === 0) return;
+    const cssWidth = Math.max(1, this.container.clientWidth);
+    const cssHeight = Math.max(1, this.container.clientHeight);
+    const ratio = read.width / cssWidth;
+    const autoClear = renderer.autoClear;
+    renderer.autoClear = false;
+    for (const layer of this.layers) {
+      const r = layer.rect();
+      if (!r || r.width < 2 || r.height < 2) continue;
+      layer.update(this.clock(), r.width / r.height, ratio);
+      // Render targets count from the bottom, in device pixels.
+      const x = Math.round(r.left * ratio);
+      const y = Math.round((cssHeight - r.top - r.height) * ratio);
+      const w = Math.round(r.width * ratio);
+      const h = Math.round(r.height * ratio);
+      read.viewport.set(x, y, w, h);
+      read.scissor.set(x, y, w, h);
+      read.scissorTest = true;
+      renderer.setRenderTarget(this.renderToScreen ? null : read);
+      renderer.clearDepth();
+      renderer.render(layer.scene, layer.camera);
+    }
+    read.viewport.set(0, 0, read.width, read.height);
+    read.scissor.set(0, 0, read.width, read.height);
+    read.scissorTest = false;
+    renderer.setRenderTarget(this.renderToScreen ? null : read);
+    renderer.autoClear = autoClear;
+  }
 }
 
 /** Brain radius in unit space, with room for the thread and labels around it. */
