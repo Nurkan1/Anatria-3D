@@ -1147,6 +1147,73 @@ const SECTIONS: Section[] = [
     ),
   },
   {
+    id: "memory",
+    nav: "Study memory",
+    title: "Your journal, as a map of memories",
+    body: (
+      <>
+        <p>
+          <Ui>MEMORY</Ui>, at the top of the window, opens your journal as a
+          hologram: a brain with every study session, case visit and note laid on it
+          as a point of light — cyan, amber and violet — joined by a thread in the
+          order you made them, from the back of the brain forwards. It is the same
+          journal as the <Ui>Study</Ui> tab, seen as one sequence instead of a list.
+        </p>
+        <p>
+          Point at a memory to see what it is; click it to read it on the right, and{" "}
+          <Ui>⤢</Ui> to read it large. Drag to turn the brain. The strip along the
+          bottom is every memory in order, and <Ui>Memory index</Ui> opens the counts,
+          the months and the most recent. <Ui>Esc</Ui> steps back one thing at a time,
+          and then leaves.
+        </p>
+
+        <Sub>The figure beside it</Sub>
+        <p>
+          The body standing on its own projector lights, in amber, the structures the
+          open memory was about — the ones that were selected, and the ones the
+          assistant pointed to in its answers — and names them underneath. It is a
+          figure to look at: nothing you do here changes the atlas, and the atlas
+          waits, paused, until you leave.
+        </p>
+
+        <Sub>Erasing a memory</Sub>
+        <p>
+          Hold <Ui>Hold to erase</Ui> until the bar fills. The memory dissolves, and
+          for eight seconds <Ui>Restore</Ui> brings it back. After that it is deleted
+          from your journal for good — the same delete as in the <Ui>Study</Ui> tab.
+          Leaving the screen while one is counting down completes it.
+        </p>
+
+        <Sub>Reading comfortably</Sub>
+        <p>
+          <Ui>Focus</Ui> takes away the film texture that moves over the picture,
+          sets the panels flat and the text sharp, and leaves the hologram and all
+          its movement as they are. <Ui>Sound</Ui> turns off the tones that answer
+          what you do. Both are remembered.
+        </p>
+        <Callout>
+          <strong>It only reads what is already on this computer.</strong> Nothing
+          is sent anywhere. If the graphics card is slow to start it, has no
+          acceleration, or resets, the screen says so; on a machine that cannot keep
+          up it eases its own effects rather than stutter, and tells you. With no 3D
+          at all, the index and the reader still work.
+        </Callout>
+
+        <Sub>If the screen blinks</Sub>
+        <p>
+          Some monitors with a variable refresh rate (FreeSync, G-SYNC, “variable
+          refresh rate” in Windows) blink for an instant when a window’s frame rate
+          dips, and a dark screen with a bright hologram shows it most. Turning off
+          variable refresh for windowed apps — in Windows’ graphics settings or the
+          monitor’s own menu — cures it. <Ui>Stable display</Ui> in Settings is a
+          second remedy for other combinations of card and driver: it draws the
+          window by a slower, steadier route from the next launch, so leave it off
+          unless you see the blink.
+        </p>
+      </>
+    ),
+  },
+  {
     id: "usage",
     nav: "What it costs",
     title: "Tokens, and where they went",
