@@ -148,6 +148,24 @@ export function stopBridge(): Promise<BridgeStatus> {
   return invoke("stop_bridge");
 }
 
+/** The stable-display switch: what is stored, and what this window started with. */
+export interface DisplayStatus {
+  /** Windows and Linux have a remedy; elsewhere the switch is not offered. */
+  supported: boolean;
+  /** The stored choice, which applies from the next launch. */
+  stableDisplay: boolean;
+  /** Whether this running window was started with it. */
+  active: boolean;
+}
+
+export function displayStatus(): Promise<DisplayStatus> {
+  return invoke("display_status");
+}
+
+export function setStableDisplay(on: boolean): Promise<DisplayStatus> {
+  return invoke("set_stable_display", { on });
+}
+
 // ---------------------------------------------------------------------------
 // Events
 // ---------------------------------------------------------------------------
