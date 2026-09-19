@@ -33,6 +33,12 @@ export interface Brain {
   /** Brain-space height of the lowest and highest vertex. */
   bottom: number;
   top: number;
+  /**
+   * How the atlas's own space was moved into this one: subtract `centre`, then
+   * multiply by `scale`. Anything else from the same atlas lands in the right
+   * place by going through the same two steps.
+   */
+  normalise: { centre: THREE.Vector3; scale: number };
 }
 
 export interface BrainSource {
@@ -86,7 +92,7 @@ export function buildBrain(
     object.traverse((child) => {
       const mesh = child as THREE.Mesh;
       if (!mesh.isMesh || !mesh.geometry) return;
-      parts.push(prepare(mesh, index!));
+      parts.push(worldGeometry(mesh, index!));
     });
   }
   if (parts.length === 0) throw new Error("No brain structures were found in the mesh file.");
@@ -100,6 +106,7 @@ export function buildBrain(
   merged.computeBoundingSphere();
   const sphere = merged.boundingSphere!;
   const scale = 1 / sphere.radius;
+  const centre = sphere.center.clone();
   merged.translate(-sphere.center.x, -sphere.center.y, -sphere.center.z);
   merged.scale(scale, scale, scale);
   merged.computeBoundingBox();
@@ -135,11 +142,12 @@ export function buildBrain(
     })),
     bottom: merged.boundingBox!.min.y,
     top: merged.boundingBox!.max.y,
+    normalise: { centre, scale },
   };
 }
 
 /** A world-space copy of a mesh with only what the hologram needs, tagged with its region. */
-function prepare(mesh: THREE.Mesh, region: number): THREE.BufferGeometry {
+export function worldGeometry(mesh: THREE.Mesh, region: number): THREE.BufferGeometry {
   mesh.updateWorldMatrix(true, false);
   const source = mesh.geometry;
   const geometry = new THREE.BufferGeometry();

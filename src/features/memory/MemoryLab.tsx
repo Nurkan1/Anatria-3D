@@ -2,14 +2,18 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { Markdown } from "@/features/chat/Markdown";
 import { loadManifest, meshUrl } from "@/lib/manifest";
+import type { ManifestOrgan } from "@/lib/schemas";
 import { getStudySession, listNotes, listStudySessions, type SessionDetail, type StudyNote } from "@/lib/studyDb";
 import { useStudyStore } from "@/stores/studyStore";
 
 import "./memoryLab.css";
 import { EraseQueue, RESTORE_WINDOW_S } from "./eraseQueue";
-import { freeMargins, type Box } from "./layout";
+import { createLabSound, storedLabSound, storeLabSound, type LabSound } from "./labSound";
+import { calloutPlacement, freeMargins, type Box } from "./layout";
 import { byMonth, memoriesFrom, tally, type Memory, type MemoryKind } from "./memories";
+import { createBodyHologram, type BodyHologram } from "./scene/bodyHologram";
 import type { BrainStructure } from "./scene/brainLoader";
+import { studiedOrgans, type StudiedOrgan } from "./studied";
 import { createMemoryScene, type LabPhase, type MemoryScene } from "./scene/memoryScene";
 
 /**
@@ -43,6 +47,9 @@ function sizeFor(width: number, height: number): Size {
   return "wide";
 }
 
+/** Hair is drawn as strands, which the hologram turns into noise; the figure is better bare. */
+const NOT_SURFACE = /^(Hairs of|Eyelashes|Pubic hairs)/;
+
 /** How long Erase must be held down, in milliseconds. */
 const HOLD_MS = 1400;
 
@@ -66,6 +73,9 @@ function unreachable(reason: unknown): string {
 export function MemoryLab({ onClose }: { onClose: () => void }) {
   const root = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
+  const bodyBox = useRef<HTMLDivElement>(null);
+  const body = useRef<BodyHologram | null>(null);
+  const sound = useRef<LabSound | null>(null);
   const head = useRef<HTMLElement>(null);
   const left = useRef<HTMLElement>(null);
   const right = useRef<HTMLElement>(null);
@@ -88,6 +98,10 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
   const [size, setSize] = useState<Size>(() => sizeFor(window.innerWidth, window.innerHeight));
   const [railOpen, setRailOpen] = useState(false);
   const [wide, setWide] = useState(false);
+  const [soundOn, setSoundOn] = useState(storedLabSound);
+  const [atlas, setAtlas] = useState<readonly ManifestOrgan[]>([]);
+  /** What the open memory was about, as lit in the figure; null while it is being found. */
+  const [studied, setStudied] = useState<StudiedOrgan[] | null>([]);
   /** Bumped by Retry, to load the hologram again after a failure. */
   const [attempt, setAttempt] = useState(0);
 
@@ -118,6 +132,7 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
     loadManifest("male")
       .then((manifest) => {
         if (disposed) return;
+        setAtlas(manifest.organs);
         const structures: BrainStructure[] = manifest.organs
           .filter((organ) => organ.path?.includes("Brain") && organ.mesh_file === "nervous_male.glb")
           .map((organ) => ({
@@ -140,14 +155,89 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
           },
           onError: (reason) => setError(unreachable(reason)),
         });
+        const figure = bodyBox.current;
+        if (!figure) return;
+        const surface: BrainStructure[] = manifest.organs
+          .filter((organ) => organ.mesh_file === "regional_male.glb" && !NOT_SURFACE.test(organ.name_en))
+          .map((organ) => ({
+            node: organ.node,
+            name: organ.name_en,
+            latin: organ.ta2_latin,
+            region: "Body",
+            side: "midline",
+          }));
+        // The figure is decoration: if it cannot load, the lab goes on without it.
+        body.current = createBodyHologram(figure, {
+          meshUrl: meshUrl("regional_male.glb"),
+          structures: surface,
+          dracoPath: "/draco/",
+          fileUrl: meshUrl,
+          onError: () => {
+            body.current?.dispose();
+            body.current = null;
+          },
+        });
       })
       .catch((reason: unknown) => !disposed && setError(unreachable(reason)));
     return () => {
       disposed = true;
       scene.current?.dispose();
       scene.current = null;
+      body.current?.dispose();
+      body.current = null;
     };
   }, [memories, attempt]);
+
+  // --- sound -------------------------------------------------------------------
+  useEffect(() => {
+    sound.current = createLabSound(storedLabSound());
+    return () => {
+      sound.current?.close();
+      sound.current = null;
+    };
+  }, []);
+  useEffect(() => {
+    sound.current?.setEnabled(soundOn);
+    storeLabSound(soundOn);
+  }, [soundOn]);
+  useEffect(() => sound.current?.phase(phase), [phase]);
+  useEffect(() => {
+    if (phase === "mapping" && mapped > 0) sound.current?.mapped(mapped - 1, memories?.length ?? 1);
+  }, [phase, mapped, memories]);
+  useEffect(() => {
+    const kind = hovered ? memories?.find((m) => m.key === hovered)?.kind : undefined;
+    if (kind) sound.current?.hover(kind);
+  }, [hovered, memories]);
+  useEffect(() => {
+    const kind = selected ? memories?.find((m) => m.key === selected)?.kind : undefined;
+    sound.current?.select(kind ?? null);
+  }, [selected, memories]);
+
+  // What the open memory was about, lit inside the figure.
+  useEffect(() => {
+    const ids =
+      reading?.state === "session"
+        ? reading.detail.structures
+        : reading?.state === "note" && reading.note.organ_id
+          ? [reading.note.organ_id]
+          : [];
+    const organs = studiedOrgans(ids, atlas);
+    const figure = body.current;
+    if (!figure || organs.length === 0) {
+      void figure?.show([]);
+      setStudied([]);
+      return;
+    }
+    let cancelled = false;
+    setStudied(null);
+    void figure.show(organs).then(() => !cancelled && setStudied(organs));
+    return () => {
+      cancelled = true;
+    };
+  }, [reading, atlas]);
+
+  // The index is laid over the figure; the figure steps back while it is open.
+  useEffect(() => body.current?.setPresence(railOpen ? 0.15 : 1), [railOpen]);
 
   // --- making room: the size class, and where the hologram may go ------------
   useEffect(() => {
@@ -158,9 +248,10 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
       const frame = element.getBoundingClientRect();
       const boxes: Box[] = [];
       // The title is a corner, not a panel: it would push the brain aside for nothing.
-      for (const ref of [left, right, footer]) {
+      for (const ref of [bodyBox, left, right, footer]) {
         const panel = ref.current;
         if (!panel || panel.classList.contains("ml-hidden") || panel.classList.contains("ml-wide")) continue;
+        if (panel.offsetParent === null) continue;
         const r = panel.getBoundingClientRect();
         boxes.push({ left: r.left - frame.left, top: r.top - frame.top, right: r.right - frame.left, bottom: r.bottom - frame.top });
       }
@@ -212,6 +303,7 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
     (key: string) => {
       queue.current.erase(key, Date.now());
       scene.current?.erase(key);
+      sound.current?.erase();
       setErased((current) => new Set(current).add(key));
       setPending({ key, left: RESTORE_WINDOW_S });
       setSelected(null);
@@ -223,6 +315,7 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
   const restore = useCallback((key: string) => {
     if (!queue.current.restore(key)) return;
     scene.current?.restore(key);
+    sound.current?.restore();
     setErased((current) => {
       const next = new Set(current);
       next.delete(key);
@@ -278,6 +371,29 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
       }
       element.style.opacity = "1";
       element.style.transform = `translate(${at.x}px, ${at.y}px)`;
+      const tag = element.querySelector<HTMLElement>(".ml-tag");
+      const frame_ = root.current?.getBoundingClientRect();
+      if (!tag || !frame_) return;
+      // The clear stretch between whatever stands on the left and the reader on the right.
+      // Only panels standing at a side count: the sheet a small screen reads in
+      // lies across the bottom, and the label is never beside it.
+      const standing = (panel: HTMLElement | null): DOMRect | null => {
+        if (!panel || panel.offsetParent === null) return null;
+        if (panel.classList.contains("ml-hidden") || panel.classList.contains("ml-wide")) return null;
+        const r = panel.getBoundingClientRect();
+        return r.width < frame_.width * 0.55 ? r : null;
+      };
+      let from = 0;
+      for (const panel of [bodyBox.current, left.current]) {
+        const r = standing(panel);
+        if (r) from = Math.max(from, r.right - frame_.left);
+      }
+      const reader = standing(right.current);
+      const to = reader ? reader.left - frame_.left : frame_.width;
+      const natural = Math.max(...[...tag.children].map((child) => child.scrollWidth)) + 32;
+      const placed = calloutPlacement(at.x, natural, from, to);
+      element.classList.toggle("ml-flip", placed.side === "left");
+      tag.style.maxWidth = `${placed.maxWidth}px`;
     };
     frame = requestAnimationFrame(place);
     return () => cancelAnimationFrame(frame);
@@ -313,18 +429,56 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
       data-size={size}
       role="dialog"
       aria-label="Study memory"
-      onClick={() => intro && scene.current?.skipIntro()}
+      onPointerDown={() => sound.current?.resume()}
+      onClick={() => {
+        if (!intro) return;
+        scene.current?.skipIntro();
+        body.current?.skipIntro();
+      }}
     >
       <div ref={stage} className="ml-stage" />
+      <div ref={bodyBox} className={`ml-body ${total > 0 ? "" : "ml-hidden"}`}>
+        {selectedMemory && studied !== null && studied.length > 0 && (
+          <div className="ml-studied" aria-live="polite">
+            <span>STUDIED IN THIS MEMORY</span>
+            {studied.slice(0, 4).map((organ) => (
+              <b key={organ.id}>{organ.name}</b>
+            ))}
+            {studied.length > 4 && <em>+{studied.length - 4} MORE</em>}
+          </div>
+        )}
+        {selectedMemory && studied === null && (
+          <div className="ml-studied">
+            <span>LOCATING…</span>
+          </div>
+        )}
+      </div>
 
       <div className="ml-hud">
         <header ref={head} className="ml-head">
           <div className="ml-title">STUDY MEMORY</div>
           <div className="ml-sub">YOUR JOURNAL · {live.length} MEMORIES · STORED ON THIS COMPUTER</div>
         </header>
-        <button type="button" className="ml-exit" onClick={close}>
-          EXIT <span aria-hidden>✕</span>
-        </button>
+        <div className="ml-corner">
+          <button
+            type="button"
+            className={`ml-sound ${soundOn ? "ml-on" : ""}`}
+            onClick={() => setSoundOn((on) => !on)}
+            aria-pressed={soundOn}
+            title={soundOn ? "Turn the lab's sound off" : "Turn the lab's sound on"}
+          >
+            <i aria-hidden>
+              <b />
+              <b />
+              <b />
+              <b />
+            </i>
+            SOUND {soundOn ? "ON" : "OFF"}
+          </button>
+          <button type="button" className="ml-exit" onClick={close}>
+            EXIT <span aria-hidden>✕</span>
+          </button>
+        </div>
 
         {memories && memories.length === 0 && (
           <div className="ml-empty">
@@ -335,20 +489,20 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
 
         {total > 0 && (
           <>
-            {size === "compact" && !intro && (
+            {!intro && (
               <button
                 type="button"
                 className={`ml-rail ${railOpen ? "ml-on" : ""}`}
                 onClick={() => setRailOpen((open) => !open)}
                 aria-expanded={railOpen}
               >
-                INDEX · {live.length}
+                <span aria-hidden>{railOpen ? "▴" : "▾"}</span> MEMORY INDEX · {live.length}
               </button>
             )}
             <section
               ref={left}
               className={`ml-panel ml-left ${
-                (intro && phase !== "mapping") || (size === "compact" && !railOpen) ? "ml-hidden" : ""
+                intro || !railOpen ? "ml-hidden" : ""
               }`}
             >
               <h3>
@@ -439,11 +593,21 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
                       type="button"
                       className={`ml-erase ${holding ? "ml-holding" : ""}`}
                       style={{ ["--ml-hold" as string]: `${HOLD_MS}ms` }}
-                      onPointerDown={() => setHolding(true)}
-                      onPointerUp={() => setHolding(false)}
-                      onPointerLeave={() => setHolding(false)}
+                      onPointerDown={() => {
+                        setHolding(true);
+                        sound.current?.holdStart();
+                      }}
+                      onPointerUp={() => {
+                        setHolding(false);
+                        sound.current?.holdEnd();
+                      }}
+                      onPointerLeave={() => {
+                        setHolding(false);
+                        sound.current?.holdEnd();
+                      }}
                       onAnimationEnd={() => {
                         setHolding(false);
+                        sound.current?.holdEnd();
                         erase(selectedMemory.key);
                       }}
                       title="Hold to erase this memory from your journal"

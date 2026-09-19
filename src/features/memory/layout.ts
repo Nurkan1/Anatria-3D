@@ -45,3 +45,27 @@ export function freeMargins(panels: readonly Box[], width: number, height: numbe
   [margins.top, margins.bottom] = shrink(margins.top, margins.bottom, height);
   return margins;
 }
+
+/** Gap between the pointed memory and the start of its label, in pixels. */
+export const CALLOUT_REACH = 44;
+
+export interface CalloutPlacement {
+  side: "right" | "left";
+  /** Widest the label may be before it would run into something. */
+  maxWidth: number;
+}
+
+/**
+ * Which side of a memory its label goes, and how wide it may be.
+ *
+ * `from` and `to` are the clear stretch of screen between whatever stands on
+ * the left and whatever stands on the right. The label goes right when it fits
+ * there, otherwise to whichever side has more room, and is cut to that room —
+ * a long title is shortened with an ellipsis rather than laid over the reader.
+ */
+export function calloutPlacement(x: number, natural: number, from: number, to: number, margin = 12): CalloutPlacement {
+  const right = to - margin - (x + CALLOUT_REACH);
+  const left = x - CALLOUT_REACH - (from + margin);
+  const side = right >= natural || right >= left ? "right" : "left";
+  return { side, maxWidth: Math.max(0, Math.floor(side === "right" ? right : left)) };
+}
