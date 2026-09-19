@@ -165,6 +165,10 @@ export function AnatomyViewer({ paused = false }: { paused?: boolean } = {}) {
     <div
       ref={container}
       className="relative h-full w-full"
+      // Hidden as well as paused: a covered WebGL canvas is still a layer the
+      // compositor has to account for every frame. Visibility keeps its size
+      // and contents, so it comes back exactly as it was.
+      style={paused ? { visibility: "hidden" } : undefined}
       onPointerDown={(event) => {
         if (event.button === 2) pressAt.current = { x: event.clientX, y: event.clientY };
         beginPress(event.clientX, event.clientY);
