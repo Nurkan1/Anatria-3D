@@ -50,6 +50,8 @@ export interface Post {
   bloom: UnrealBloomPass;
   film: ShaderPass;
   setSize(width: number, height: number): void;
+  /** The glow's resolution as a share of the screen's; takes effect on the next setSize. */
+  setBloomScale(scale: number): void;
   dispose(): void;
 }
 
@@ -65,13 +67,17 @@ export function createPost(renderer: THREE.WebGLRenderer, scene: THREE.Scene, ca
   const film = new ShaderPass(FilmShader);
   composer.addPass(film);
   composer.addPass(new OutputPass());
+  let bloomScale = 1;
   return {
     composer,
     bloom,
     film,
     setSize(width, height) {
       composer.setSize(width, height);
-      bloom.setSize(width, height);
+      bloom.setSize(Math.max(1, Math.round(width * bloomScale)), Math.max(1, Math.round(height * bloomScale)));
+    },
+    setBloomScale(scale) {
+      bloomScale = scale;
     },
     dispose() {
       composer.dispose();

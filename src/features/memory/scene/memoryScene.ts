@@ -7,6 +7,7 @@ import { floorGrid, orbitRings, projector } from "./environment";
 import { brainMaterial, brainPoints, LOOK, RegionLight } from "./hologram";
 import { floatName, nameplate } from "./nameplate";
 import { createPost } from "./post";
+import { classifyAdapter, FrameGovernor, LEVELS, startingLevel, type Adapter } from "./quality";
 
 /**
  * The Memory Lab's hologram: a brain with the study journal laid on it.
@@ -22,6 +23,17 @@ import { createPost } from "./post";
  */
 
 export type LabPhase = "boot" | "deploy" | "materialize" | "mapping" | "live";
+
+/** What the page should know about how the hologram is running. */
+export interface GraphicsStatus {
+  adapter: Adapter;
+  /** Index into LEVELS: the last is the full lab. */
+  level: number;
+  /** True while the machine could not hold the starting level and it stepped down. */
+  eased: boolean;
+  /** The graphics card dropped the hologram and it has not come back yet. */
+  lost: boolean;
+}
 
 export interface SceneMemory {
   key: string;
@@ -39,6 +51,7 @@ export interface MemorySceneOptions {
   /** The opening sequence: which phase, and how many memories are mapped so far. */
   onPhase?: (phase: LabPhase, mapped: number) => void;
   onError?: (error: unknown) => void;
+  onGraphics?: (status: GraphicsStatus) => void;
 }
 
 export interface FocusMargins {
@@ -61,8 +74,11 @@ export interface SceneLayer {
   camera: THREE.PerspectiveCamera;
   /** Where to draw, in CSS pixels from the lab's top-left; null to skip a frame. */
   rect(): { left: number; top: number; width: number; height: number } | null;
-  /** Called each frame just before drawing, with the drawing's aspect and pixel ratio. */
-  update(now: number, aspect: number, pixelRatio: number): void;
+  /**
+   * Called each frame just before drawing, with the drawing's aspect, its pixel
+   * ratio and the share of particles the current quality level draws.
+   */
+  update(now: number, aspect: number, pixelRatio: number, particles: number): void;
 }
 
 export interface MemoryScene {
@@ -115,8 +131,12 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
   const introEnd = INTRO.boot + INTRO.deploy + INTRO.materialize;
   const sequenceEnd = introEnd + mappingSeconds;
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+  // Throws where there is no WebGL at all; the page catches it and keeps the
+  // lab readable without the hologram.
+  //
+  // No antialias: everything is drawn into the composer's own buffers, which do
+  // not use the canvas's multisampling, so it only cost memory and bandwidth.
+  const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "high-performance" });
   renderer.setClearColor(0x010408, 1);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.domElement.className = "ml-gl";
@@ -125,8 +145,50 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(30, 1, 0.05, 80);
   const post = createPost(renderer, scene, camera);
+
+  // --- a safety net, not a setting: the full lab unless the machine cannot keep up.
+  // The lab is built to cost little (under a millisecond a frame on a mid-range
+  // card, measured), so on almost every machine this never moves. It exists so a
+  // machine that genuinely cannot keep up stutters for two seconds, not forever.
+  const adapter = classifyAdapter(rendererName(renderer));
+  const ceiling = startingLevel(adapter);
+  const governor = new FrameGovernor(ceiling);
+  let level = -1;
+  let lost = false;
+  const report = () => options.onGraphics?.({ adapter, level, eased: level < ceiling, lost });
+  const applyLevel = (next: number) => {
+    if (next === level) return;
+    level = next;
+    const settings = LEVELS[level]!;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, settings.pixelRatio));
+    post.composer.setPixelRatio(renderer.getPixelRatio());
+    post.setBloomScale(settings.bloom);
+    resize();
+    if (dust) dust.geometry.setDrawRange(0, Math.round(dustCount * settings.particles));
+    report();
+  };
+
+  // A graphics card can drop the context (a driver reset, a sleeping laptop).
+  // Asking to keep it lets the renderer rebuild everything when it comes back.
+  const onLost = (event: Event) => {
+    event.preventDefault();
+    lost = true;
+    report();
+  };
+  const onRestored = () => {
+    lost = false;
+    report();
+  };
+  renderer.domElement.addEventListener("webglcontextlost", onLost);
+  renderer.domElement.addEventListener("webglcontextrestored", onRestored);
+
   const layers = new Set<SceneLayer>();
-  const layerPass = new LayerPass(layers, container, () => performance.now() / 1000);
+  const layerPass = new LayerPass(
+    layers,
+    container,
+    () => performance.now() / 1000,
+    () => LEVELS[Math.max(0, level)]!.particles,
+  );
   // Straight after the brain is drawn, so bloom and film treat both the same.
   post.composer.insertPass(layerPass, 1);
   const grid = floorGrid();
@@ -160,6 +222,8 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
   let lastMapped = -1;
   let disposed = false;
   let frame = 0;
+  let lastFrame = 0;
+  const dustCount = reducedMotion ? 10000 : 20000;
 
   const resize = () => {
     const width = Math.max(1, container.clientWidth);
@@ -172,7 +236,7 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
   };
   const observer = new ResizeObserver(resize);
   observer.observe(container);
-  resize();
+  applyLevel(governor.level);
 
   (async () => {
     try {
@@ -183,7 +247,8 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
       }
       brain = loaded;
       surface = new THREE.Mesh(brain.geometry, brainMaterial(light));
-      dust = brainPoints(brain.geometry, reducedMotion ? 10000 : 20000);
+      dust = brainPoints(brain.geometry, dustCount);
+      dust.geometry.setDrawRange(0, Math.round(dustCount * LEVELS[level]!.particles));
       dust.material.uniforms.uRegions!.value = light.texture;
       holder.add(surface, dust);
       positions = cortexPlaces(brain, count);
@@ -315,6 +380,14 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
     const now = performance.now() / 1000;
     const t = elapsed();
 
+    // Judge speed only once the brain is in: loading stalls are not slowness.
+    const dt = (now - lastFrame) * 1000;
+    lastFrame = now;
+    if (started !== null && t > INTRO.boot && !lost) {
+      const next = governor.sample(dt);
+      if (next !== null) applyLevel(next);
+    }
+
     const phase: LabPhase =
       started === null || t < INTRO.boot
         ? "boot"
@@ -434,6 +507,7 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
       layers.add(layer);
       return () => layers.delete(layer);
     },
+
     skipIntro() {
       if (started !== null && elapsed() < sequenceEnd) offset += sequenceEnd - elapsed();
     },
@@ -442,6 +516,8 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
       cancelAnimationFrame(frame);
       observer.disconnect();
       canvas.removeEventListener("pointerdown", onDown);
+      renderer.domElement.removeEventListener("webglcontextlost", onLost);
+      renderer.domElement.removeEventListener("webglcontextrestored", onRestored);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerup", onUp);
       light.dispose();
@@ -460,12 +536,24 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
   };
 }
 
+/** The graphics adapter's own name, where the browser will say it. */
+function rendererName(renderer: THREE.WebGLRenderer): string | null {
+  try {
+    const gl = renderer.getContext();
+    const info = gl.getExtension("WEBGL_debug_renderer_info");
+    return String(gl.getParameter(info ? info.UNMASKED_RENDERER_WEBGL : gl.RENDERER));
+  } catch {
+    return null;
+  }
+}
+
 /** Draws each layer into its own rectangle of the frame the brain was drawn into. */
 class LayerPass extends Pass {
   constructor(
     private readonly layers: ReadonlySet<SceneLayer>,
     private readonly container: HTMLElement,
     private readonly clock: () => number,
+    private readonly particles: () => number,
   ) {
     super();
     this.needsSwap = false;
@@ -482,7 +570,7 @@ class LayerPass extends Pass {
     for (const layer of this.layers) {
       const r = layer.rect();
       if (!r || r.width < 2 || r.height < 2) continue;
-      layer.update(this.clock(), r.width / r.height, ratio);
+      layer.update(this.clock(), r.width / r.height, ratio, this.particles());
       // Render targets count from the bottom, in device pixels.
       const x = Math.round(r.left * ratio);
       const y = Math.round((cssHeight - r.top - r.height) * ratio);

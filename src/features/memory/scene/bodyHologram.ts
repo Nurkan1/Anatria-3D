@@ -1,9 +1,8 @@
 import * as THREE from "three";
-import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
-import { loadBrain, worldGeometry, type Brain, type BrainStructure } from "./brainLoader";
+import { acquireDraco, loadBrain, releaseDraco, worldGeometry, type Brain, type BrainStructure } from "./brainLoader";
 import { projector } from "./environment";
 import { brainMaterial, brainPoints, RegionLight } from "./hologram";
 import type { SceneLayer } from "./memoryScene";
@@ -98,6 +97,7 @@ export function createBodyHologram(container: HTMLElement, options: BodyHologram
   let scanStarted = -100;
   let spin = 0;
   let disposed = false;
+  const dustTotal = reducedMotion ? 4000 : 9000;
   let lit: THREE.Mesh<THREE.BufferGeometry, THREE.ShaderMaterial> | null = null;
   let litAt = 0;
   /** Bumped by every `show`, so a slow load cannot land over a newer one. */
@@ -105,8 +105,7 @@ export function createBodyHologram(container: HTMLElement, options: BodyHologram
   let loaded: Promise<void> = Promise.resolve();
 
   // The atlas's files, each loaded once and only when a structure in it is asked for.
-  const draco = new DRACOLoader().setDecoderPath(options.dracoPath);
-  const gltf = new GLTFLoader().setDRACOLoader(draco);
+  const gltf = new GLTFLoader().setDRACOLoader(acquireDraco(options.dracoPath));
   const files = new Map<string, Promise<Map<string, THREE.Object3D>>>();
   const nodesIn = (file: string) => {
     let nodes = files.get(file);
@@ -139,7 +138,7 @@ export function createBodyHologram(container: HTMLElement, options: BodyHologram
       size.bottom = body.bottom;
       light = new RegionLight(body.regions.length);
       surface = new THREE.Mesh(body.geometry, brainMaterial(light));
-      dust = brainPoints(body.geometry, reducedMotion ? 4000 : 9000, 11);
+      dust = brainPoints(body.geometry, dustTotal, 11);
       dust.material.uniforms.uRegions!.value = light.texture;
       dust.material.uniforms.uRegionCount!.value = light.size;
       holder.add(surface, dust);
@@ -182,7 +181,7 @@ export function createBodyHologram(container: HTMLElement, options: BodyHologram
 
   const elapsed = () => (started === null ? 0 : performance.now() / 1000 - started + offset);
 
-  const update = (now: number, aspect: number, pixelRatio: number) => {
+  const update = (now: number, aspect: number, pixelRatio: number, particles: number) => {
     camera.aspect = aspect;
     camera.updateProjectionMatrix();
     const t = elapsed();
@@ -228,6 +227,7 @@ export function createBodyHologram(container: HTMLElement, options: BodyHologram
       d.uAssemble!.value = assemble;
       d.uDust!.value = (1 - reveal * 0.85) * shown;
       d.uPixel!.value = pixelRatio * (container.clientHeight / 700);
+      dust.geometry.setDrawRange(0, Math.round(dustTotal * particles));
     }
   };
 
@@ -306,7 +306,7 @@ export function createBodyHologram(container: HTMLElement, options: BodyHologram
       container.removeEventListener("pointerup", onUp);
       container.removeEventListener("pointercancel", onUp);
       putOut();
-      draco.dispose();
+      releaseDraco(options.dracoPath);
       files.clear();
       light?.dispose();
       scene.traverse((object) => {

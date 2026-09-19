@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { Markdown } from "@/features/chat/Markdown";
+import { stripOrganRefs } from "@/features/chat/organRefs";
 import { loadManifest, meshUrl } from "@/lib/manifest";
 import type { ManifestOrgan } from "@/lib/schemas";
 import { getStudySession, listNotes, listStudySessions, type SessionDetail, type StudyNote } from "@/lib/studyDb";
+import { useSceneStore } from "@/stores/sceneStore";
 import { useStudyStore } from "@/stores/studyStore";
 
 import "./memoryLab.css";
@@ -14,7 +16,7 @@ import { byMonth, memoriesFrom, tally, type Memory, type MemoryKind } from "./me
 import { createBodyHologram, type BodyHologram } from "./scene/bodyHologram";
 import type { BrainStructure } from "./scene/brainLoader";
 import { studiedIds, studiedOrgans, type StudiedOrgan } from "./studied";
-import { createMemoryScene, type LabPhase, type MemoryScene } from "./scene/memoryScene";
+import { createMemoryScene, type GraphicsStatus, type LabPhase, type MemoryScene } from "./scene/memoryScene";
 
 /**
  * The Memory Lab: the study journal as a map of memories on a holographic brain.
@@ -49,6 +51,24 @@ function sizeFor(width: number, height: number): Size {
 
 /** Hair is drawn as strands, which the hologram turns into noise; the figure is better bare. */
 const NOT_SURFACE = /^(Hairs of|Eyelashes|Pubic hairs)/;
+
+/** How long the hologram may take to appear before the page says it is slow. */
+const SLOW_LOAD_MS = 15000;
+/** How long a graphics reset may last before the page offers to start again. */
+const RESET_GRACE_MS = 6000;
+
+/**
+ * One line under the title saying how the hologram is running, only when that
+ * is worth knowing. Worst news first; nothing at all when all is well.
+ */
+function graphicsNotice(noGraphics: boolean, status: GraphicsStatus | null): string | null {
+  if (noGraphics) return "THIS COMPUTER CANNOT DRAW THE HOLOGRAM · EVERY MEMORY IS STILL HERE TO READ";
+  if (!status) return null;
+  if (status.lost) return "THE GRAPHICS CARD RESET · RESTORING THE HOLOGRAM…";
+  if (status.adapter === "software") return "NO GRAPHICS ACCELERATION ON THIS COMPUTER · RUNNING LIGHT";
+  if (status.eased) return "EFFECTS EASED TO KEEP THE HOLOGRAM SMOOTH ON THIS COMPUTER";
+  return null;
+}
 
 /** How long Erase must be held down, in milliseconds. */
 const HOLD_MS = 1400;
@@ -99,6 +119,10 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
   const [railOpen, setRailOpen] = useState(false);
   const [wide, setWide] = useState(false);
   const [soundOn, setSoundOn] = useState(storedLabSound);
+  const [graphics, setGraphics] = useState<GraphicsStatus | null>(null);
+  /** No WebGL at all: the lab carries on as an index and a reader. */
+  const [noGraphics, setNoGraphics] = useState(false);
+  const [slowLoad, setSlowLoad] = useState(false);
   const [atlas, setAtlas] = useState<readonly ManifestOrgan[]>([]);
   /** What the open memory was about, as lit in the figure; null while it is being found. */
   const [studied, setStudied] = useState<StudiedOrgan[] | null>([]);
@@ -129,7 +153,12 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
     if (!element || !memories || memories.length === 0) return;
     let disposed = false;
     // The male atlas always: the brain lives there, whichever body is on screen.
-    loadManifest("male")
+    // Read, never changed: when the atlas already holds the male index it is
+    // reused, instead of fetching and validating 1.3 MB again while the
+    // hologram is trying to start.
+    const atlas = useSceneStore.getState();
+    const known = atlas.genderModel === "male" ? atlas.manifest : null;
+    (known ? Promise.resolve(known) : loadManifest("male"))
       .then((manifest) => {
         if (disposed) return;
         setAtlas(manifest.organs);
@@ -142,19 +171,28 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
             region: organ.path![organ.path!.indexOf("Brain") + 1] ?? "Brain",
             side: /\(left\)$/.test(organ.name_en) ? "left" : /\(right\)$/.test(organ.name_en) ? "right" : "midline",
           }));
-        scene.current = createMemoryScene(element, {
-          meshUrl: meshUrl("nervous_male.glb"),
-          structures,
-          dracoPath: "/draco/",
-          memories: memories.map(({ key, kind }) => ({ key, kind })),
-          onHover: setHovered,
-          onSelect: setSelected,
-          onPhase: (next, count) => {
-            setPhase(next);
-            setMapped(count);
-          },
-          onError: (reason) => setError(unreachable(reason)),
-        });
+        try {
+          scene.current = createMemoryScene(element, {
+            meshUrl: meshUrl("nervous_male.glb"),
+            structures,
+            dracoPath: "/draco/",
+            memories: memories.map(({ key, kind }) => ({ key, kind })),
+            onGraphics: setGraphics,
+            onHover: setHovered,
+            onSelect: setSelected,
+            onPhase: (next, count) => {
+              setPhase(next);
+              setMapped(count);
+            },
+            onError: (reason) => setError(unreachable(reason)),
+          });
+        } catch {
+          // No WebGL on this machine. Everything except the hologram still works,
+          // so open the index and let the memories be read.
+          setNoGraphics(true);
+          setRailOpen(true);
+          return;
+        }
         const figure = bodyBox.current;
         const frame = root.current;
         if (!figure || !frame || !scene.current) return;
@@ -190,6 +228,22 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
       body.current = null;
     };
   }, [memories, attempt]);
+
+  // --- saying so when loading is slow or the graphics card resets -------------
+  useEffect(() => {
+    setSlowLoad(false);
+    if (!memories || memories.length === 0 || phase !== "boot" || noGraphics) return;
+    const timer = window.setTimeout(() => setSlowLoad(true), SLOW_LOAD_MS);
+    return () => window.clearTimeout(timer);
+  }, [memories, phase, noGraphics, attempt]);
+  useEffect(() => {
+    if (!graphics?.lost) return;
+    const timer = window.setTimeout(
+      () => setError("The graphics card reset and the hologram did not come back. Your memories are safe — try again."),
+      RESET_GRACE_MS,
+    );
+    return () => window.clearTimeout(timer);
+  }, [graphics?.lost]);
 
   // --- sound -------------------------------------------------------------------
   useEffect(() => {
@@ -430,7 +484,9 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
   const months = useMemo(() => byMonth(live), [live]);
   const busiest = Math.max(1, ...months.map((m) => m.count));
   const total = memories?.length ?? 0;
-  const intro = phase !== "live";
+  // Without a hologram there is no opening sequence to wait for.
+  const intro = phase !== "live" && !noGraphics;
+  const notice = graphicsNotice(noGraphics, graphics);
   const labelMemory = labelled ? byKey.get(labelled) : undefined;
   const selectedMemory = selected ? byKey.get(selected) : undefined;
   const recent = [...live].reverse().slice(0, 12);
@@ -450,7 +506,7 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
       }}
     >
       <div ref={stage} className="ml-stage" />
-      <div ref={bodyBox} className={`ml-body ${total > 0 ? "" : "ml-hidden"}`}>
+      <div ref={bodyBox} className={`ml-body ${total > 0 && !noGraphics ? "" : "ml-hidden"}`}>
         {selectedMemory && studied !== null && studied.length > 0 && (
           <div className="ml-studied" aria-live="polite">
             <span>STUDIED IN THIS MEMORY</span>
@@ -471,6 +527,7 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
         <header ref={head} className="ml-head">
           <div className="ml-title">STUDY MEMORY</div>
           <div className="ml-sub">YOUR JOURNAL · {live.length} MEMORIES · STORED ON THIS COMPUTER</div>
+
         </header>
         <div className="ml-corner">
           <button
@@ -576,7 +633,7 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
                   <div className="ml-reading">
                     {reading?.state === "loading" && <p className="ml-faint">RECALLING…</p>}
                     {reading?.state === "missing" && <p className="ml-faint">This memory is no longer in the journal.</p>}
-                    {reading?.state === "note" && <p className="ml-note">{reading.note.body}</p>}
+                    {reading?.state === "note" && <p className="ml-note">{stripOrganRefs(reading.note.body)}</p>}
                     {reading?.state === "session" && (
                       <>
                         {reading.detail.session.score !== null && (
@@ -589,7 +646,9 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
                           <div key={i} className={`ml-message ml-${message.role}`}>
                             <span>{message.role === "user" ? "YOU" : "ASSISTANT"}</span>
                             {message.role === "assistant" ? (
-                              <Markdown structurePins={false}>{message.content}</Markdown>
+                              // The lab does not link into the atlas, so the answer's
+                              // structure markers are taken out rather than shown raw.
+                              <Markdown structurePins={false}>{stripOrganRefs(message.content)}</Markdown>
                             ) : (
                               <p>{message.content}</p>
                             )}
@@ -638,7 +697,8 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
                 <>
                   <div className="ml-row">
                     <div className="ml-status">
-                      {phase === "boot" && "ACCESSING STUDY MEMORY"}
+                      {phase === "boot" &&
+                        (slowLoad ? "STILL LOADING · THIS COMPUTER IS TAKING LONGER THAN USUAL" : "ACCESSING STUDY MEMORY")}
                       {phase === "deploy" && "DEPLOYING HOLOGRAPHIC PROJECTION"}
                       {phase === "materialize" && "RECONSTRUCTING NEURAL SURFACE"}
                       {phase === "mapping" && `MAPPING STUDY MEMORY · ${byKey.get(memories![Math.max(0, mapped - 1)]!.key)?.title.toUpperCase() ?? ""}`}
@@ -693,6 +753,11 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
             <button type="button" onClick={() => restore(pending.key)}>
               RESTORE ({pending.left})
             </button>
+          </div>
+        )}
+        {notice && !error && (
+          <div className="ml-notice" role="status">
+            {notice}
           </div>
         )}
         {error && (

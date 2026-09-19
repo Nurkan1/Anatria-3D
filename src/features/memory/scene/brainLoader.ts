@@ -51,6 +51,35 @@ export interface BrainSource {
 }
 
 /**
+ * One Draco decoder for everything the lab loads, however many loads overlap.
+ *
+ * Each DRACOLoader fetches and compiles the decoder and starts its own pool of
+ * worker threads. The brain, the figure and the studied organs each had one,
+ * so opening the lab set the decoder up three times over. Now the first user
+ * makes it and the last one to let go frees it.
+ */
+const decoders = new Map<string, { loader: DRACOLoader; users: number }>();
+
+export function acquireDraco(path: string): DRACOLoader {
+  let entry = decoders.get(path);
+  if (!entry) {
+    entry = { loader: new DRACOLoader().setDecoderPath(path), users: 0 };
+    decoders.set(path, entry);
+  }
+  entry.users += 1;
+  return entry.loader;
+}
+
+export function releaseDraco(path: string): void {
+  const entry = decoders.get(path);
+  if (!entry) return;
+  entry.users -= 1;
+  if (entry.users > 0) return;
+  entry.loader.dispose();
+  decoders.delete(path);
+}
+
+/**
  * Load the brain out of the atlas's nervous-system file.
  *
  * GLTFLoader passes every node name through `sanitizeNodeName`, so a node is
@@ -58,8 +87,7 @@ export interface BrainSource {
  * Anatria3D's own viewer does.
  */
 export async function loadBrain(source: BrainSource): Promise<Brain> {
-  const draco = new DRACOLoader().setDecoderPath(source.dracoPath);
-  const loader = new GLTFLoader().setDRACOLoader(draco);
+  const loader = new GLTFLoader().setDRACOLoader(acquireDraco(source.dracoPath));
   try {
     const gltf = await loader.loadAsync(source.meshUrl);
     gltf.scene.updateMatrixWorld(true);
@@ -67,7 +95,7 @@ export async function loadBrain(source: BrainSource): Promise<Brain> {
     gltf.scene.traverse((object) => nodes.set(object.name, object));
     return buildBrain(source.structures, (node) => nodes.get(node) ?? nodes.get(THREE.PropertyBinding.sanitizeNodeName(node)));
   } finally {
-    draco.dispose();
+    releaseDraco(source.dracoPath);
   }
 }
 
