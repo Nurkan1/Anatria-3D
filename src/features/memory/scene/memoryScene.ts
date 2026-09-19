@@ -98,6 +98,8 @@ export interface MemoryScene {
   setFocus(margins: FocusMargins): void;
   /** Draw another scene into part of the screen. Returns what takes it away again. */
   addLayer(layer: SceneLayer): () => void;
+  /** Focus: the film grain and fringing off, for reading. Every animation stays. */
+  setFilm(on: boolean): void;
   dispose(): void;
 }
 
@@ -502,6 +504,9 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
     },
     setFocus(margins) {
       focus = margins;
+    },
+    setFilm(on) {
+      post.setFilm(on);
     },
     addLayer(layer) {
       layers.add(layer);

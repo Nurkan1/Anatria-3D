@@ -52,6 +52,25 @@ function sizeFor(width: number, height: number): Size {
 /** Hair is drawn as strands, which the hologram turns into noise; the figure is better bare. */
 const NOT_SURFACE = /^(Hairs of|Eyelashes|Pubic hairs)/;
 
+const FOCUS_KEY = "anatria3d.memory.focus.v1";
+
+/** Focus is remembered: someone who reads with it on will want it on next time. */
+function storedFocus(): boolean {
+  try {
+    return window.localStorage.getItem(FOCUS_KEY) === "on";
+  } catch {
+    return false;
+  }
+}
+
+function storeFocus(on: boolean): void {
+  try {
+    window.localStorage.setItem(FOCUS_KEY, on ? "on" : "off");
+  } catch {
+    // Blocked storage: the choice lasts until the lab closes.
+  }
+}
+
 /** How long the hologram may take to appear before the page says it is slow. */
 const SLOW_LOAD_MS = 15000;
 /** How long a graphics reset may last before the page offers to start again. */
@@ -119,6 +138,12 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
   const [railOpen, setRailOpen] = useState(false);
   const [wide, setWide] = useState(false);
   const [soundOn, setSoundOn] = useState(storedLabSound);
+  /**
+   * Focus mode, for reading: the film grain over the whole screen goes, and the
+   * panels lie flat with plain crisp text. The hologram and all its motion stay.
+   */
+  const [focus, setFocusMode] = useState(storedFocus);
+  const focusNow = useRef(focus);
   const [graphics, setGraphics] = useState<GraphicsStatus | null>(null);
   /** No WebGL at all: the lab carries on as an index and a reader. */
   const [noGraphics, setNoGraphics] = useState(false);
@@ -186,6 +211,7 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
             },
             onError: (reason) => setError(unreachable(reason)),
           });
+          scene.current.setFilm(!focusNow.current);
         } catch {
           // No WebGL on this machine. Everything except the hologram still works,
           // so open the index and let the memories be read.
@@ -228,6 +254,12 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
       body.current = null;
     };
   }, [memories, attempt]);
+
+  useEffect(() => {
+    focusNow.current = focus;
+    storeFocus(focus);
+    scene.current?.setFilm(!focus);
+  }, [focus]);
 
   // --- saying so when loading is slow or the graphics card resets -------------
   useEffect(() => {
@@ -494,7 +526,7 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
   return (
     <div
       ref={root}
-      className="ml-root"
+      className={`ml-root ${focus ? "ml-focus" : ""}`}
       data-size={size}
       role="dialog"
       aria-label="Study memory"
@@ -530,6 +562,16 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
 
         </header>
         <div className="ml-corner">
+          <button
+            type="button"
+            className={`ml-focus-toggle ${focus ? "ml-on" : ""}`}
+            onClick={() => setFocusMode((on) => !on)}
+            aria-pressed={focus}
+            title={focus ? "Bring the film texture back" : "Clear the film texture and sharpen the text for reading"}
+          >
+            <i aria-hidden>◎</i>
+            FOCUS {focus ? "ON" : "OFF"}
+          </button>
           <button
             type="button"
             className={`ml-sound ${soundOn ? "ml-on" : ""}`}

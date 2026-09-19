@@ -52,6 +52,12 @@ export interface Post {
   setSize(width: number, height: number): void;
   /** The glow's resolution as a share of the screen's; takes effect on the next setSize. */
   setBloomScale(scale: number): void;
+  /**
+   * The film texture on or off: the moving grain over the whole picture and
+   * the colour fringing at its edges. Off, the hologram is exactly as vivid —
+   * the vignette, the glow and every animation stay — just without the veil.
+   */
+  setFilm(on: boolean): void;
   dispose(): void;
 }
 
@@ -78,6 +84,10 @@ export function createPost(renderer: THREE.WebGLRenderer, scene: THREE.Scene, ca
     },
     setBloomScale(scale) {
       bloomScale = scale;
+    },
+    setFilm(on) {
+      film.uniforms.uGrain!.value = on ? FilmShader.uniforms.uGrain.value : 0;
+      film.uniforms.uAberration!.value = on ? FilmShader.uniforms.uAberration.value : 0;
     },
     dispose() {
       composer.dispose();

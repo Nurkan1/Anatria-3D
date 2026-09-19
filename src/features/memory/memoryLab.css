@@ -40,12 +40,16 @@
 .ml-title { font-family: var(--ml-sans); font-weight: 300; font-size: clamp(14px, 1.35vw, 26px); color: var(--ml-cyan); }
 .ml-sub { margin-top: 0.6em; font-size: clamp(9px, 0.62vw, 12px); color: var(--ml-cyan-dim); letter-spacing: 0.22em; }
 .ml-corner { position: absolute; top: 3vh; right: 3vw; display: flex; gap: 0.8em; }
-.ml-exit, .ml-sound {
+.ml-exit, .ml-sound, .ml-focus-toggle {
   font: inherit; font-size: clamp(9px, 0.65vw, 12px); letter-spacing: 0.3em;
   color: var(--ml-cyan); background: rgba(10, 40, 60, 0.3);
   border: 1px solid var(--ml-cyan-faint); padding: 0.7em 1.2em; cursor: pointer;
 }
-.ml-exit:hover, .ml-exit:focus-visible, .ml-sound:hover, .ml-sound:focus-visible { border-color: var(--ml-cyan); outline: none; }
+.ml-exit:hover, .ml-exit:focus-visible, .ml-sound:hover, .ml-sound:focus-visible,
+.ml-focus-toggle:hover, .ml-focus-toggle:focus-visible { border-color: var(--ml-cyan); outline: none; }
+.ml-focus-toggle { display: flex; align-items: center; gap: 0.7em; color: var(--ml-cyan-dim); }
+.ml-focus-toggle.ml-on { color: var(--ml-cyan); border-color: var(--ml-cyan-dim); }
+.ml-focus-toggle i { font-style: normal; letter-spacing: 0; }
 /* Centred above the timeline, where the error line also appears; never both at once. */
 .ml-notice {
   position: absolute; left: 50%; bottom: 13vh; transform: translateX(-50%); max-width: 90vw; text-align: center;
@@ -248,6 +252,17 @@
 .ml-root[data-size="compact"] .ml-right.ml-wide { top: 48px; bottom: 64px; width: calc(100% - 24px); }
 .ml-root[data-size="compact"] .ml-bottom { width: calc(100% - 28px); bottom: 14px; }
 .ml-root[data-size="compact"] .ml-percent { font-size: 26px; }
+
+/* ---- focus: for reading. The hologram and its motion are untouched. -------
+ * Panels lie flat, because text on a panel turned in 3D is rasterised at an
+ * angle and goes soft; the glow around letters goes, because at small sizes it
+ * smears them; the reader gets a darker ground so the text stands off it.
+ */
+.ml-root.ml-focus .ml-hud { text-shadow: none; }
+.ml-root.ml-focus .ml-panel { transform: none; }
+.ml-root.ml-focus .ml-panel.ml-right { background: rgba(2, 10, 18, 0.9); }
+.ml-root.ml-focus .ml-reading { color: #e6f8ff; }
+.ml-root.ml-focus .ml-studied, .ml-root.ml-focus .ml-notice { text-shadow: none; }
 
 @keyframes ml-in { from { opacity: 0; } }
 @keyframes ml-recall { from { opacity: 0; } }
