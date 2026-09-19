@@ -2,18 +2,21 @@ import type { MemoryKind } from "./memories";
 import type { LabPhase } from "./scene/memoryScene";
 
 /**
- * The Memory Lab's sound: a slow pad of soft chords under the room, and small
- * tones for what happens in it — a memory being mapped, pointed at, opened,
- * erased, restored.
+ * The Memory Lab's sound: tones for what happens, and nothing in between.
+ *
+ * The opening has its own — a breath as the projection deploys, a chord as the
+ * brain materialises, a scale climbing as the memories are mapped — and after
+ * that there is only what the reader does: pointing at a memory, opening one,
+ * holding to erase, erasing, restoring. Each in the chord of its kind.
+ *
+ * There was a pad under it all, a slow progression of soft chords for as long
+ * as the lab was open. It read as a siren, not a room, and it went: a sound
+ * that never stops is one the reader can only endure, whereas a sound that
+ * answers them is one they can use.
  *
  * Synthesised like the heart and the scanner, so there is no file to ship or
- * license. Dynamic rather than looped: the pad walks a four-chord progression
- * on its own, settles on a chord of its own for the kind of memory being read,
- * and the mapping run climbs a scale as the thread is laid.
- *
- * Everything sits low. It plays for as long as the lab is open, and a sound
- * that long has to stay under the room rather than in it. It never throws:
- * a machine without an audio device just gets a silent lab.
+ * license. It never throws: a machine without an audio device just gets a
+ * silent lab.
  */
 
 /** MIDI note to hertz. */
@@ -38,7 +41,7 @@ export function mappingNote(i: number, count: number): number {
   return scaleNote(Math.round(along * MAPPING_STEPS));
 }
 
-/** Four voices each, as MIDI notes: open voicings so the pad never gets muddy. */
+/** Four voices each, as MIDI notes: open voicings, so a chord of bells never gets muddy. */
 export const PROGRESSION: readonly (readonly number[])[] = [
   [45, 52, 60, 71], // A minor 9
   [41, 48, 57, 64], // F major 9
@@ -46,16 +49,13 @@ export const PROGRESSION: readonly (readonly number[])[] = [
   [40, 47, 55, 66], // E minor 9
 ];
 
-/** The chord the pad settles on while a memory of each kind is being read. */
+/** The chord a memory of each kind opens with. */
 export const KIND_CHORD: Record<MemoryKind, readonly number[]> = {
   session: PROGRESSION[2]!,
   case: PROGRESSION[1]!,
   note: PROGRESSION[3]!,
 };
 
-/** Seconds on each chord of the progression, and how long the glide between. */
-const CHORD_S = 8;
-const GLIDE_S = 2.4;
 /** Overall level with sound on. The compressor after it only catches peaks. */
 const MASTER = 0.55;
 const SOUND_KEY = "anatria3d.memory.sound.v1";
@@ -159,59 +159,6 @@ function build(ctx: AudioContext, enabled: boolean): LabSound {
   tones.connect(echo);
   tones.connect(reverb);
 
-  // --- the pad ---------------------------------------------------------------
-  const padFilter = ctx.createBiquadFilter();
-  padFilter.type = "lowpass";
-  padFilter.frequency.value = 260;
-  padFilter.Q.value = 0.6;
-  const padGain = ctx.createGain();
-  padGain.gain.value = 0;
-  padFilter.connect(padGain);
-  padGain.connect(master);
-  padGain.connect(reverb);
-  // A slow breath on the filter, so the chord is never quite still.
-  const lfo = ctx.createOscillator();
-  lfo.frequency.value = 0.07;
-  const lfoDepth = ctx.createGain();
-  lfoDepth.gain.value = 140;
-  lfo.connect(lfoDepth).connect(padFilter.frequency);
-  lfo.start();
-
-  const voices = PROGRESSION[0]!.map((midi) => {
-    const gain = ctx.createGain();
-    gain.gain.value = 0.05;
-    gain.connect(padFilter);
-    const pair = [-7, 7].map((cents) => {
-      const osc = ctx.createOscillator();
-      osc.type = "sawtooth";
-      osc.frequency.value = hz(midi);
-      osc.detune.value = cents;
-      osc.connect(gain);
-      osc.start();
-      return osc;
-    });
-    return { gain, pair };
-  });
-
-  const glideTo = (chord: readonly number[]) => {
-    const now = ctx.currentTime;
-    chord.forEach((midi, v) => {
-      for (const osc of voices[v]!.pair) osc.frequency.setTargetAtTime(hz(midi), now, GLIDE_S / 3);
-    });
-  };
-  let step = 0;
-  let held: MemoryKind | null = null;
-  const walker = window.setInterval(() => {
-    if (held) return;
-    step = (step + 1) % PROGRESSION.length;
-    glideTo(PROGRESSION[step]!);
-  }, CHORD_S * 1000);
-
-  /** Open or close the pad's filter towards a cutoff, over some seconds. */
-  const openPad = (cutoff: number, seconds: number) => {
-    padFilter.frequency.setTargetAtTime(cutoff, ctx.currentTime, seconds / 3);
-  };
-
   // --- small tones -----------------------------------------------------------
   /** A soft bell: a sine with a faint partial just off the octave, dying away. */
   const bell = (midi: number, at: number, level: number, decay = 1.2) => {
@@ -283,16 +230,12 @@ function build(ctx: AudioContext, enabled: boolean): LabSound {
     phase: guard((phase: LabPhase) => {
       const now = ctx.currentTime;
       if (phase === "boot") {
-        padGain.gain.setTargetAtTime(0.7, now, 1.2);
-        openPad(320, 1);
+        // Powering up: one low note, felt more than heard.
+        bell(45, now, 0.03, 2.2);
       } else if (phase === "deploy") {
         wash(180, 2600, 2.4, 0.05);
-        openPad(560, 2.4);
       } else if (phase === "materialize") {
         PROGRESSION[0]!.forEach((midi, i) => bell(midi + 24, now + i * 0.09, 0.035, 2.4));
-        openPad(760, 1.4);
-      } else if (phase === "live") {
-        openPad(680, 3);
       }
     }),
     mapped: guard((i: number, count: number) => {
@@ -310,17 +253,9 @@ function build(ctx: AudioContext, enabled: boolean): LabSound {
       bell(top + 12, now, 0.012, 0.25);
     }),
     select: guard((kind: MemoryKind | null) => {
+      if (!kind) return;
       const now = ctx.currentTime;
-      held = kind;
-      if (kind) {
-        const chord = KIND_CHORD[kind];
-        glideTo(chord);
-        openPad(980, 1.2);
-        chord.slice(1).forEach((midi, i) => bell(midi + 12, now + i * 0.07, 0.03, 1.6));
-      } else {
-        glideTo(PROGRESSION[step]!);
-        openPad(680, 1.5);
-      }
+      KIND_CHORD[kind].slice(1).forEach((midi, i) => bell(midi + 12, now + i * 0.07, 0.03, 1.6));
     }),
     holdStart: guard(() => {
       if (charge) return;
@@ -348,8 +283,6 @@ function build(ctx: AudioContext, enabled: boolean): LabSound {
       const now = ctx.currentTime;
       wash(2400, 160, 1.5, 0.06);
       [33, 40].forEach((midi) => bell(midi + 12, now, 0.04, 2.6));
-      openPad(360, 0.6);
-      window.setTimeout(() => !closed && openPad(held ? 980 : 680, 3), 1600);
     }),
     restore: guard(() => {
       const now = ctx.currentTime;
@@ -358,7 +291,6 @@ function build(ctx: AudioContext, enabled: boolean): LabSound {
     }),
     close: guard(() => {
       closed = true;
-      window.clearInterval(walker);
       const now = ctx.currentTime;
       master.gain.cancelScheduledValues(now);
       master.gain.setTargetAtTime(0, now, 0.12);
