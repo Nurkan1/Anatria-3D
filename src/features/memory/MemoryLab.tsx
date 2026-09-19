@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { Markdown } from "@/features/chat/Markdown";
 import { stripOrganRefs } from "@/features/chat/organRefs";
@@ -98,8 +98,13 @@ type Reading =
   | { state: "note"; note: StudyNote }
   | { state: "missing" };
 
-const when = (ms: number) =>
-  new Date(ms).toLocaleString("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+/**
+ * One formatter, made once. `toLocaleString` with options builds a new one on
+ * every call, and the timeline formats a date per memory on every render —
+ * with two hundred memories that was most of the time a hover took.
+ */
+const DATE = new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+const when = (ms: number) => DATE.format(ms);
 
 /** A failure to load, said as what could not be reached rather than as a stack. */
 function unreachable(reason: unknown): string {
@@ -446,13 +451,34 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
     };
   }, [selected, byKey, notes]);
 
-  const choose = (key: string | null) => {
+  const sizeNow = useRef(size);
+  sizeNow.current = size;
+  // Stable, so the index, the reader and the timeline below are not redrawn
+  // just because the lab around them was.
+  const choose = useCallback((key: string | null) => {
     setSelected(key);
     scene.current?.select(key);
     if (key === null) setWide(false);
     // On a small screen the rail folds away once something is picked from it.
-    if (key !== null && size === "compact") setRailOpen(false);
-  };
+    if (key !== null && sizeNow.current === "compact") setRailOpen(false);
+  }, []);
+  const toggleWide = useCallback(() => setWide((w) => !w), []);
+  const holdStart = useCallback(() => {
+    setHolding(true);
+    sound.current?.holdStart();
+  }, []);
+  const holdEnd = useCallback(() => {
+    setHolding(false);
+    sound.current?.holdEnd();
+  }, []);
+  const holdDone = useCallback(
+    (key: string) => {
+      setHolding(false);
+      sound.current?.holdEnd();
+      erase(key);
+    },
+    [erase],
+  );
 
   // --- the label that follows the pointed memory -----------------------------
   // Reading large covers the brain, and a label pointing into it would float over the page.
@@ -512,16 +538,12 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
     return () => window.removeEventListener("keydown", onKey);
   });
 
-  const counts = tally(live);
-  const months = useMemo(() => byMonth(live), [live]);
-  const busiest = Math.max(1, ...months.map((m) => m.count));
   const total = memories?.length ?? 0;
   // Without a hologram there is no opening sequence to wait for.
   const intro = phase !== "live" && !noGraphics;
   const notice = graphicsNotice(noGraphics, graphics);
   const labelMemory = labelled ? byKey.get(labelled) : undefined;
   const selectedMemory = selected ? byKey.get(selected) : undefined;
-  const recent = [...live].reverse().slice(0, 12);
 
   return (
     <div
@@ -617,39 +639,7 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
                 intro || !railOpen ? "ml-hidden" : ""
               }`}
             >
-              <h3>
-                MEMORY INDEX <span>{String(live.length).padStart(3, "0")}</span>
-              </h3>
-              {(["session", "case", "note"] as const).map((kind) => (
-                <div key={kind} className="ml-count">
-                  <i className={`ml-dot ml-${kind}`} />
-                  <span>{KIND_LABEL[kind]}S</span>
-                  <b>{counts[kind]}</b>
-                </div>
-              ))}
-              <h3 className="ml-gap">BY MONTH</h3>
-              <div className="ml-months">
-                {months.map((m) => (
-                  <div key={m.month} className="ml-month" title={`${m.month}: ${m.count}`}>
-                    <i style={{ height: `${(m.count / busiest) * 100}%` }} />
-                  </div>
-                ))}
-              </div>
-              <div className="ml-months-scale">
-                <span>{months[0]?.month}</span>
-                <span>{months[months.length - 1]?.month}</span>
-              </div>
-              <h3 className="ml-gap">RECENT</h3>
-              <ol className="ml-recent">
-                {recent.map((m) => (
-                  <li key={m.key}>
-                    <button type="button" onClick={() => choose(m.key)} className={m.key === selected ? "ml-on" : ""}>
-                      <i className={`ml-dot ml-${m.kind}`} />
-                      <em>{m.title}</em>
-                    </button>
-                  </li>
-                ))}
-              </ol>
+              <MemoryIndex live={live} selected={selected} onChoose={choose} />
             </section>
 
             <section
@@ -658,79 +648,17 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
               aria-live="polite"
             >
               {selectedMemory && (
-                <>
-                  <h3>
-                    {KIND_LABEL[selectedMemory.kind]} <span>{when(selectedMemory.at)}</span>
-                    <button
-                      type="button"
-                      className="ml-expand"
-                      onClick={() => setWide((w) => !w)}
-                      title={wide ? "Back to the side" : "Read it large"}
-                      aria-pressed={wide}
-                    >
-                      {wide ? "⤡" : "⤢"}
-                    </button>
-                  </h3>
-                  <div className="ml-reading-title">{selectedMemory.title}</div>
-                  <div className="ml-reading">
-                    {reading?.state === "loading" && <p className="ml-faint">RECALLING…</p>}
-                    {reading?.state === "missing" && <p className="ml-faint">This memory is no longer in the journal.</p>}
-                    {reading?.state === "note" && <p className="ml-note">{stripOrganRefs(reading.note.body)}</p>}
-                    {reading?.state === "session" && (
-                      <>
-                        {reading.detail.session.score !== null && (
-                          <p className="ml-score">
-                            SCORE {reading.detail.session.score}
-                            {reading.detail.session.verdict ? ` · ${reading.detail.session.verdict}` : ""}
-                          </p>
-                        )}
-                        {reading.detail.messages.map((message, i) => (
-                          <div key={i} className={`ml-message ml-${message.role}`}>
-                            <span>{message.role === "user" ? "YOU" : "ASSISTANT"}</span>
-                            {message.role === "assistant" ? (
-                              // The lab does not link into the atlas, so the answer's
-                              // structure markers are taken out rather than shown raw.
-                              <Markdown structurePins={false}>{stripOrganRefs(message.content)}</Markdown>
-                            ) : (
-                              <p>{message.content}</p>
-                            )}
-                          </div>
-                        ))}
-                      </>
-                    )}
-                  </div>
-                  <div className="ml-actions">
-                    <button type="button" className="ml-close-reading" onClick={() => choose(null)}>
-                      CLOSE
-                    </button>
-                    <button
-                      type="button"
-                      className={`ml-erase ${holding ? "ml-holding" : ""}`}
-                      style={{ ["--ml-hold" as string]: `${HOLD_MS}ms` }}
-                      onPointerDown={() => {
-                        setHolding(true);
-                        sound.current?.holdStart();
-                      }}
-                      onPointerUp={() => {
-                        setHolding(false);
-                        sound.current?.holdEnd();
-                      }}
-                      onPointerLeave={() => {
-                        setHolding(false);
-                        sound.current?.holdEnd();
-                      }}
-                      onAnimationEnd={() => {
-                        setHolding(false);
-                        sound.current?.holdEnd();
-                        erase(selectedMemory.key);
-                      }}
-                      title="Hold to erase this memory from your journal"
-                    >
-                      <i />
-                      HOLD TO ERASE
-                    </button>
-                  </div>
-                </>
+                <MemoryReader
+                  memory={selectedMemory}
+                  reading={reading}
+                  wide={wide}
+                  holding={holding}
+                  onToggleWide={toggleWide}
+                  onClose={choose}
+                  onHoldStart={holdStart}
+                  onHoldEnd={holdEnd}
+                  onHoldDone={holdDone}
+                />
               )}
             </section>
 
@@ -756,19 +684,7 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
                   <div className="ml-skip">CLICK TO SKIP</div>
                 </>
               ) : (
-                <div className="ml-timeline" aria-label="Memories in the order they were made">
-                  {memories!.map((m) => (
-                    <button
-                      type="button"
-                      key={m.key}
-                      className={`ml-tick ml-${m.kind} ${erased.has(m.key) ? "ml-gone" : ""} ${m.key === selected ? "ml-on" : ""}`}
-                      onClick={() => !erased.has(m.key) && choose(m.key)}
-                      onMouseEnter={() => !erased.has(m.key) && setHovered(m.key)}
-                      onMouseLeave={() => setHovered(null)}
-                      aria-label={`${m.title}, ${when(m.at)}`}
-                    />
-                  ))}
-                </div>
+                <Timeline memories={memories!} erased={erased} selected={selected} onChoose={choose} onHover={setHovered} />
               )}
             </footer>
           </>
@@ -820,5 +736,196 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
     </div>
   );
 }
+
+/**
+ * The pieces below are drawn only when what they show changes.
+ *
+ * Pointing at a memory changes one thing — the label that follows it — and it
+ * used to redraw everything: the index, the reader with its Markdown, and a
+ * button per memory along the timeline. That took long enough to drop frames,
+ * and on a variable-refresh monitor a dropped frame is a visible blink.
+ */
+
+const MemoryIndex = memo(function MemoryIndex({
+  live,
+  selected,
+  onChoose,
+}: {
+  live: Memory[];
+  selected: string | null;
+  onChoose: (key: string | null) => void;
+}) {
+  const counts = useMemo(() => tally(live), [live]);
+  const months = useMemo(() => byMonth(live), [live]);
+  const busiest = Math.max(1, ...months.map((m) => m.count));
+  const recent = useMemo(() => [...live].reverse().slice(0, 12), [live]);
+  return (
+    <>
+      <h3>
+        MEMORY INDEX <span>{String(live.length).padStart(3, "0")}</span>
+      </h3>
+      {(["session", "case", "note"] as const).map((kind) => (
+        <div key={kind} className="ml-count">
+          <i className={`ml-dot ml-${kind}`} />
+          <span>{KIND_LABEL[kind]}S</span>
+          <b>{counts[kind]}</b>
+        </div>
+      ))}
+      <h3 className="ml-gap">BY MONTH</h3>
+      <div className="ml-months">
+        {months.map((m) => (
+          <div key={m.month} className="ml-month" title={`${m.month}: ${m.count}`}>
+            <i style={{ height: `${(m.count / busiest) * 100}%` }} />
+          </div>
+        ))}
+      </div>
+      <div className="ml-months-scale">
+        <span>{months[0]?.month}</span>
+        <span>{months[months.length - 1]?.month}</span>
+      </div>
+      <h3 className="ml-gap">RECENT</h3>
+      <ol className="ml-recent">
+        {recent.map((m) => (
+          <li key={m.key}>
+            <button type="button" onClick={() => onChoose(m.key)} className={m.key === selected ? "ml-on" : ""}>
+              <i className={`ml-dot ml-${m.kind}`} />
+              <em>{m.title}</em>
+            </button>
+          </li>
+        ))}
+      </ol>
+    </>
+  );
+});
+
+const MemoryReader = memo(function MemoryReader({
+  memory,
+  reading,
+  wide,
+  holding,
+  onToggleWide,
+  onClose,
+  onHoldStart,
+  onHoldEnd,
+  onHoldDone,
+}: {
+  memory: Memory;
+  reading: Reading | null;
+  wide: boolean;
+  holding: boolean;
+  onToggleWide: () => void;
+  onClose: (key: null) => void;
+  onHoldStart: () => void;
+  onHoldEnd: () => void;
+  onHoldDone: (key: string) => void;
+}) {
+  return (
+    <>
+      <h3>
+        {KIND_LABEL[memory.kind]} <span>{when(memory.at)}</span>
+        <button
+          type="button"
+          className="ml-expand"
+          onClick={onToggleWide}
+          title={wide ? "Back to the side" : "Read it large"}
+          aria-pressed={wide}
+        >
+          {wide ? "⤡" : "⤢"}
+        </button>
+      </h3>
+      <div className="ml-reading-title">{memory.title}</div>
+      <div className="ml-reading">
+        {reading?.state === "loading" && <p className="ml-faint">RECALLING…</p>}
+        {reading?.state === "missing" && <p className="ml-faint">This memory is no longer in the journal.</p>}
+        {reading?.state === "note" && <p className="ml-note">{stripOrganRefs(reading.note.body)}</p>}
+        {reading?.state === "session" && (
+          <>
+            {reading.detail.session.score !== null && (
+              <p className="ml-score">
+                SCORE {reading.detail.session.score}
+                {reading.detail.session.verdict ? ` · ${reading.detail.session.verdict}` : ""}
+              </p>
+            )}
+            {reading.detail.messages.map((message, i) => (
+              <div key={i} className={`ml-message ml-${message.role}`}>
+                <span>{message.role === "user" ? "YOU" : "ASSISTANT"}</span>
+                {message.role === "assistant" ? (
+                  // The lab does not link into the atlas, so the answer's
+                  // structure markers are taken out rather than shown raw.
+                  <Markdown structurePins={false}>{stripOrganRefs(message.content)}</Markdown>
+                ) : (
+                  <p>{message.content}</p>
+                )}
+              </div>
+            ))}
+          </>
+        )}
+      </div>
+      <div className="ml-actions">
+        <button type="button" className="ml-close-reading" onClick={() => onClose(null)}>
+          CLOSE
+        </button>
+        <button
+          type="button"
+          className={`ml-erase ${holding ? "ml-holding" : ""}`}
+          style={{ ["--ml-hold" as string]: `${HOLD_MS}ms` }}
+          onPointerDown={onHoldStart}
+          onPointerUp={onHoldEnd}
+          onPointerLeave={onHoldEnd}
+          onAnimationEnd={() => onHoldDone(memory.key)}
+          title="Hold to erase this memory from your journal"
+        >
+          <i />
+          HOLD TO ERASE
+        </button>
+      </div>
+    </>
+  );
+});
+
+/**
+ * One button per memory, in the order they were made. The pointer is read once
+ * on the strip rather than by a pair of handlers per button.
+ */
+const Timeline = memo(function Timeline({
+  memories,
+  erased,
+  selected,
+  onChoose,
+  onHover,
+}: {
+  memories: Memory[];
+  erased: Set<string>;
+  selected: string | null;
+  onChoose: (key: string | null) => void;
+  onHover: (key: string | null) => void;
+}) {
+  const keyOf = (target: EventTarget | null) => {
+    const key = (target as HTMLElement | null)?.closest<HTMLElement>(".ml-tick")?.dataset.key;
+    return key && !erased.has(key) ? key : null;
+  };
+  return (
+    <div
+      className="ml-timeline"
+      aria-label="Memories in the order they were made"
+      onClick={(event) => {
+        const key = keyOf(event.target);
+        if (key) onChoose(key);
+      }}
+      onMouseOver={(event) => onHover(keyOf(event.target))}
+      onMouseLeave={() => onHover(null)}
+    >
+      {memories.map((m) => (
+        <button
+          type="button"
+          key={m.key}
+          data-key={m.key}
+          className={`ml-tick ml-${m.kind} ${erased.has(m.key) ? "ml-gone" : ""} ${m.key === selected ? "ml-on" : ""}`}
+          aria-label={`${m.title}, ${when(m.at)}`}
+        />
+      ))}
+    </div>
+  );
+});
 
 export default MemoryLab;
