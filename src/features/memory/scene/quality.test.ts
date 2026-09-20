@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { classifyAdapter, FrameGovernor, FULL, LEVELS, startingLevel } from "./quality";
+import { classifyAdapter, FrameGovernor, FULL, LEVELS, pixelRatioFor, startingLevel } from "./quality";
 
 describe("classifyAdapter", () => {
   it.each([
@@ -23,6 +23,25 @@ describe("classifyAdapter", () => {
     expect(startingLevel("integrated")).toBe(FULL - 1);
     expect(startingLevel("dedicated")).toBe(FULL);
     expect(startingLevel("unknown")).toBe(FULL);
+  });
+});
+
+describe("pixelRatioFor", () => {
+  it("draws at the screen's own density at the full level", () => {
+    expect(pixelRatioFor(LEVELS[FULL]!, 1)).toBe(1);
+    expect(pixelRatioFor(LEVELS[FULL]!, 1.25)).toBe(1.25);
+  });
+
+  it("eases by the same share whatever the screen's density", () => {
+    const share = (dpr: number) => pixelRatioFor(LEVELS[0]!, dpr) / dpr;
+    expect(share(1)).toBeCloseTo(share(1.25));
+    expect(share(1)).toBeCloseTo(share(2));
+  });
+
+  it("never draws below half a pixel, nor beyond what is worth drawing", () => {
+    expect(pixelRatioFor(LEVELS[0]!, 0.5)).toBe(0.5);
+    expect(pixelRatioFor(LEVELS[FULL]!, 4)).toBe(1.75);
+    expect(pixelRatioFor(LEVELS[FULL]!, Number.NaN || 0)).toBe(1);
   });
 });
 

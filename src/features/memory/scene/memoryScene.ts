@@ -7,7 +7,7 @@ import { floorGrid, orbitRings, projector } from "./environment";
 import { brainMaterial, brainPoints, LOOK, RegionLight } from "./hologram";
 import { floatName, nameplate } from "./nameplate";
 import { createPost } from "./post";
-import { classifyAdapter, FrameGovernor, LEVELS, startingLevel, type Adapter } from "./quality";
+import { classifyAdapter, FrameGovernor, LEVELS, pixelRatioFor, startingLevel, type Adapter } from "./quality";
 
 /**
  * The Memory Lab's hologram: a brain with the study journal laid on it.
@@ -162,7 +162,7 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
     if (next === level) return;
     level = next;
     const settings = LEVELS[level]!;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, settings.pixelRatio));
+    renderer.setPixelRatio(pixelRatioFor(settings, window.devicePixelRatio));
     post.composer.setPixelRatio(renderer.getPixelRatio());
     post.setBloomScale(settings.bloom);
     resize();

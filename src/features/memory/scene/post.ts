@@ -50,7 +50,11 @@ const FilmShader = {
       float vignette = 1.0 - dot(fromCentre, fromCentre) * uVignette;
       // Grain changes every frame but never as a whole-screen change in
       // brightness: it is per pixel, averaging out, so it cannot flicker.
-      float grain = (rand(vUv * 1000.0 + fract(uTime)) - 0.5) * uGrain;
+      // One grain per pixel actually drawn, not per pixel of the screen.
+      // Counted across the screen, a machine drawing at three quarters size
+      // samples the pattern below its own rate and it beats into blotches —
+      // which is what "the film texture got bigger" was.
+      float grain = (rand(gl_FragCoord.xy + fract(uTime)) - 0.5) * uGrain;
       gl_FragColor = vec4(c * vignette + grain, 1.0);
     }
   `,

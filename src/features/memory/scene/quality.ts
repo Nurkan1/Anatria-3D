@@ -13,8 +13,15 @@
  */
 
 export interface Level {
-  /** Most device pixels per CSS pixel. */
-  pixelRatio: number;
+  /**
+   * Share of the screen's own pixel density to draw at.
+   *
+   * A share rather than a number of pixels: a fixed 0.75 is three quarters of
+   * the pixels on one screen and three fifths on a screen scaled to 125%, so
+   * the same level stretched by different amounts on different machines and
+   * the picture coarsened unevenly.
+   */
+  scale: number;
   /** The glow's resolution, as a share of the screen's. */
   bloom: number;
   /** Share of the drifting particles drawn. */
@@ -22,12 +29,25 @@ export interface Level {
 }
 
 /** Lightest first. Index 3 is the full lab. */
+/**
+ * Resolution is the last thing given up, and never by much.
+ *
+ * Everything drawn small is stretched back over the screen, so a cut there
+ * softens the whole picture — the film grain most visibly, since it is drawn
+ * a pixel at a time. The glow's resolution and the particle count cost real
+ * time and are nearly invisible, so they go first and further.
+ */
 export const LEVELS: readonly Level[] = [
-  { pixelRatio: 0.75, bloom: 0.4, particles: 0.35 },
-  { pixelRatio: 1, bloom: 0.5, particles: 0.6 },
-  { pixelRatio: 1.25, bloom: 0.75, particles: 0.85 },
-  { pixelRatio: 1.75, bloom: 1, particles: 1 },
+  { scale: 0.8, bloom: 0.3, particles: 0.3 },
+  { scale: 0.85, bloom: 0.45, particles: 0.55 },
+  { scale: 0.92, bloom: 0.7, particles: 0.8 },
+  { scale: 1, bloom: 1, particles: 1 },
 ];
+
+/** Device pixels per CSS pixel at a level, never below half nor above this. */
+export function pixelRatioFor(level: Level, devicePixelRatio: number): number {
+  return Math.min(1.75, Math.max(0.5, (devicePixelRatio || 1) * level.scale));
+}
 export const FULL = LEVELS.length - 1;
 
 export type Adapter = "software" | "integrated" | "dedicated" | "unknown";
