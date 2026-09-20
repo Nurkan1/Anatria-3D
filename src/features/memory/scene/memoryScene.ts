@@ -669,7 +669,7 @@ function memoryNodes(positions: THREE.Vector3[], memories: readonly SceneMemory[
         float breathe = 0.85 + 0.15 * sin(uTime * 1.3 + order * 0.7);
         vAlpha = shown * presence * uFade * breathe * (0.75 + 0.25 * focus);
         vec4 mv = modelViewMatrix * vec4(position, 1.0);
-        gl_PointSize = uPixel * (13.0 + arriving * 12.0 + focus * 10.0 + vRing * 12.0) * (5.6 / -mv.z);
+        gl_PointSize = uPixel * (10.0 + arriving * 10.0 + focus * 9.0 + vRing * 11.0) * (5.6 / -mv.z);
         gl_Position = projectionMatrix * mv;
       }
     `,
@@ -682,11 +682,11 @@ function memoryNodes(positions: THREE.Vector3[], memories: readonly SceneMemory[
         float r = length(c) * 2.0;
         if (r > 1.0) discard;
         float core = exp(-r * r * 9.0);
-        float halo = exp(-r * 3.0) * 0.35;
+        float halo = exp(-r * 3.4) * 0.22;
         float ring = vRing * smoothstep(0.08, 0.0, abs(r - 0.82));
-        // A little above the surface they sit on: the memories are the subject,
-        // and the compression that tamed the folds took a step off them too.
-        gl_FragColor = vec4(vColour * (core + halo + ring) * vAlpha * 1.3, 1.0);
+        // Points of light on the cortex, not lamps over it: bright enough to
+        // find and to point at, never enough to wash out the folds they sit on.
+        gl_FragColor = vec4(vColour * (core + halo + ring) * vAlpha * 0.72, 1.0);
       }
     `,
   });
