@@ -13,6 +13,14 @@ const FilmShader = {
     uAberration: { value: 0.0016 },
     uGrain: { value: 0.045 },
     uVignette: { value: 1.15 },
+    /**
+     * Where added light stops getting brighter and starts only getting wider.
+     *
+     * Without it the sum of many glowing shells clips flat at white and takes
+     * the memory points with it. This rolls the top off instead: below it
+     * nothing changes, above it everything keeps its colour and its order.
+     */
+    uWhite: { value: 1.45 },
   },
   vertexShader: /* glsl */ `
     varying vec2 vUv;
@@ -27,6 +35,7 @@ const FilmShader = {
     uniform float uAberration;
     uniform float uGrain;
     uniform float uVignette;
+    uniform float uWhite;
     varying vec2 vUv;
     float rand(vec2 co) { return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453); }
     void main() {
@@ -36,6 +45,8 @@ const FilmShader = {
       c.r = texture2D(tDiffuse, vUv + shift).r;
       c.g = texture2D(tDiffuse, vUv).g;
       c.b = texture2D(tDiffuse, vUv - shift).b;
+      // Extended Reinhard: linear in the dark half, gently compressed at the top.
+      c = c * (1.0 + c / (uWhite * uWhite)) / (1.0 + c);
       float vignette = 1.0 - dot(fromCentre, fromCentre) * uVignette;
       // Grain changes every frame but never as a whole-screen change in
       // brightness: it is per pixel, averaging out, so it cannot flicker.

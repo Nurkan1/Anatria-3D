@@ -32,6 +32,18 @@ export const LOOK = {
   contourStrength: 1.4,
   /** The bright edge of the dissolve as the surface materialises. */
   edgeStrength: 0.12,
+  /**
+   * How fast a shell's light falls off with distance behind the front of the
+   * brain, per unit of depth.
+   *
+   * Added light has no idea how much of it is already there. Turned to a
+   * certain angle, dozens of folds line up edge-on, their contours land on the
+   * same pixels and the middle of the brain goes to white — burying the memory
+   * points, which are the thing being looked at. Fading the far side, the way
+   * anything seen through haze fades, keeps every line visible while removing
+   * most of what piles up: it is depth the eye reads, not dimness.
+   */
+  depthFade: 0.85,
 } as const;
 
 /** Per-region light, one texel each, written by the scene every frame. */
@@ -98,6 +110,8 @@ export function brainMaterial(regions: RegionLight): THREE.ShaderMaterial {
       uCyan: { value: LOOK.cyan },
       uDeep: { value: LOOK.deep },
       uAmber: { value: LOOK.amber },
+      /** Distance from the camera to the middle of the hologram. */
+      uCentre: { value: 1000 },
     },
     vertexShader: /* glsl */ `
       attribute float region;
@@ -105,10 +119,12 @@ export function brainMaterial(regions: RegionLight): THREE.ShaderMaterial {
       varying vec3 vView;
       varying vec3 vPos;
       varying float vRegion;
+      varying float vDepth;
       void main() {
         vPos = position;
         vRegion = region;
         vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        vDepth = -mv.z;
         vNormal = normalize(normalMatrix * normal);
         vView = normalize(-mv.xyz);
         gl_Position = projectionMatrix * mv;
@@ -125,10 +141,12 @@ export function brainMaterial(regions: RegionLight): THREE.ShaderMaterial {
       uniform vec3 uCyan;
       uniform vec3 uDeep;
       uniform vec3 uAmber;
+      uniform float uCentre;
       varying vec3 vNormal;
       varying vec3 vView;
       varying vec3 vPos;
       varying float vRegion;
+      varying float vDepth;
       ${NOISE}
       void main() {
         // Materialising: a noisy threshold sweeps up through the surface.
@@ -157,7 +175,10 @@ export function brainMaterial(regions: RegionLight): THREE.ShaderMaterial {
         // colour: a glow paid on every one of a hundred layers is a white brain.
         float glow = level * ${LOOK.regionGlow.toFixed(2)} * (0.4 + rim) * mix(0.25, 2.0, current);
         float contour = pow(1.0 - facing, ${LOOK.contourSharpness.toFixed(1)});
-        float alpha = ${LOOK.opacity.toFixed(3)} * (rim * (2.4 + scanned) * lines + glow + contour * ${LOOK.contourStrength.toFixed(2)});
+        // Haze: everything past the middle of the hologram gives less light,
+        // so a hundred far shells cannot add up to the front one.
+        float haze = exp(-max(0.0, vDepth - uCentre) * ${LOOK.depthFade.toFixed(2)});
+        float alpha = ${LOOK.opacity.toFixed(3)} * (rim * (2.4 + scanned) * lines + glow + contour * ${LOOK.contourStrength.toFixed(2)}) * haze;
         vec3 outColour = colour * alpha
           + uCyan * scan * ${LOOK.scanStrength.toFixed(2)} * (0.25 + rim)
           + uCyan * edge * ${LOOK.edgeStrength.toFixed(2)} * rim;

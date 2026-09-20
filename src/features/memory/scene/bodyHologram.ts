@@ -217,6 +217,7 @@ export function createBodyHologram(container: HTMLElement, options: BodyHologram
       const u = surface.material.uniforms;
       u.uTime!.value = now;
       u.uReveal!.value = reveal;
+      u.uCentre!.value = camera.position.length();
       // The skin steps back a little while something inside it is lit.
       u.uFade!.value = BODY_GAIN * shown * (lit ? 0.7 : 1);
       const k = (now - scanStarted) / SCAN_S;

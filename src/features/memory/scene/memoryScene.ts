@@ -439,6 +439,8 @@ export function createMemoryScene(container: HTMLElement, options: MemorySceneOp
       u.uTime!.value = now;
       u.uReveal!.value = reveal;
       u.uScanOn!.value = phase === "mapping" ? 1 : 0;
+      // Where the haze starts: the middle of the brain, wherever the camera is.
+      u.uCentre!.value = camera.position.length();
       u.uScanY!.value = brain.bottom + (brain.top - brain.bottom) * ((t - introEnd) / mappingSeconds);
 
       const d = dust.material.uniforms;
@@ -682,7 +684,9 @@ function memoryNodes(positions: THREE.Vector3[], memories: readonly SceneMemory[
         float core = exp(-r * r * 9.0);
         float halo = exp(-r * 3.0) * 0.35;
         float ring = vRing * smoothstep(0.08, 0.0, abs(r - 0.82));
-        gl_FragColor = vec4(vColour * (core + halo + ring) * vAlpha, 1.0);
+        // A little above the surface they sit on: the memories are the subject,
+        // and the compression that tamed the folds took a step off them too.
+        gl_FragColor = vec4(vColour * (core + halo + ring) * vAlpha * 1.3, 1.0);
       }
     `,
   });
