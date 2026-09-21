@@ -19,7 +19,9 @@ const PROVIDERS: { id: AiProvider; label: string }[] = [
 const PROFILES: { id: UserProfile; label: string }[] = [
   { id: "layperson", label: "General" },
   { id: "student", label: "Student" },
-  { id: "clinician", label: "Clinician" },
+  // The id stays `clinician` for stored preferences; the label names a depth of
+  // explanation, not an audience in clinical practice (see README, Regulatory positioning).
+  { id: "clinician", label: "Professional" },
 ];
 
 function KeyStatusBadge({ status }: { status: string }) {
