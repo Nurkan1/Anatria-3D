@@ -142,6 +142,8 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
   const [size, setSize] = useState<Size>(() => sizeFor(window.innerWidth, window.innerHeight));
   const [railOpen, setRailOpen] = useState(false);
   const [wide, setWide] = useState(false);
+  /** The lab's own short guide to its controls. */
+  const [help, setHelp] = useState(false);
   const [soundOn, setSoundOn] = useState(storedLabSound);
   /**
    * Focus mode, for reading: the film grain over the whole screen goes, and the
@@ -556,6 +558,15 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.ctrlKey || event.altKey || event.metaKey) return;
+      // While the guide is open it has the keys: Escape closes it, nothing else moves behind it.
+      if (help) {
+        if (event.key === "Escape" || event.key === "?") setHelp(false);
+        return;
+      }
+      if (event.key === "?") {
+        setHelp(true);
+        return;
+      }
       const target = event.target as HTMLElement | null;
       const typing = target?.closest?.("input, textarea, select, [contenteditable='true']");
       if ((event.key === "ArrowLeft" || event.key === "ArrowRight") && !typing && !intro && !event.repeat) {
@@ -667,6 +678,16 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
 
         </header>
         <div className="ml-corner">
+          <button
+            type="button"
+            className={`ml-help-toggle ${help ? "ml-on" : ""}`}
+            onClick={() => setHelp((open) => !open)}
+            aria-expanded={help}
+            aria-label="How this screen works"
+            title="How this screen works (?)"
+          >
+            ?
+          </button>
           <button
             type="button"
             className={`ml-focus-toggle ${focus ? "ml-on" : ""}`}
@@ -788,6 +809,8 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
           )}
         </div>
 
+        {help && <LabHelp onClose={() => setHelp(false)} />}
+
         {pending && (
           <div className="ml-toast" role="status">
             <span>MEMORY ERASED</span>
@@ -828,6 +851,84 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
  * button per memory along the timeline. That took long enough to drop frames,
  * and on a variable-refresh monitor a dropped frame is a visible blink.
  */
+
+/** One control and what it does. */
+const HELP: readonly { title: string; items: readonly (readonly [string, string])[] }[] = [
+  {
+    title: "THE BRAIN",
+    items: [
+      ["Point at a light", "Every light is a memory: cyan a study session, amber a case visit, violet a note. Pointing names it."],
+      ["Click a light", "Opens that memory in the reader on the right."],
+      ["Drag", "Turns the brain."],
+      ["The strip at the bottom", "Every memory in the order you made it. Point or click, the same as on the brain."],
+    ],
+  },
+  {
+    title: "THE KEYS",
+    items: [
+      ["← →", "The previous or next memory, in the order you made them."],
+      ["Enter", "Reads the open memory large, or back at the side."],
+      ["Esc", "Steps back one thing at a time — the large reader, the memory, the index — and then leaves."],
+      ["?", "Opens and closes this guide."],
+    ],
+  },
+  {
+    title: "THE READER",
+    items: [
+      ["⤢ / ⤡", "Reads the memory large, or back at the side."],
+      ["Close", "Puts the memory away."],
+      ["Hold to erase", "Hold until the bar fills. The memory dissolves and Restore brings it back for eight seconds; after that it is deleted from your journal for good."],
+    ],
+  },
+  {
+    title: "THE FIGURE",
+    items: [
+      ["Amber inside the body", "The structures the open memory was about, named underneath."],
+      ["Point at a name", "Shows that structure alone, the others dimmed. Click it to keep it so; click again to see them all."],
+      ["+ More / Show fewer", "Unfolds the rest of the list when there are more than the screen has room for."],
+      ["⊕ Zoom in / ⊖ Whole body", "Moves in on the chosen structure — or on all of them — and holds the figure still; drag to turn it. Whole body steps back."],
+      ["Drag", "Turns the figure."],
+    ],
+  },
+  {
+    title: "AT THE TOP",
+    items: [
+      ["Memory index", "The counts, the months and your most recent memories."],
+      ["Focus", "Clears the film texture and sharpens the text for reading; the hologram keeps moving."],
+      ["Sound", "Turns the tones that answer what you do on or off."],
+      ["Exit", "Back to the atlas."],
+    ],
+  },
+];
+
+const LabHelp = memo(function LabHelp({ onClose }: { onClose: () => void }) {
+  return (
+    <section className="ml-panel ml-help" role="dialog" aria-label="How this screen works">
+      <h3>
+        HOW THIS SCREEN WORKS
+        <button type="button" className="ml-expand" onClick={onClose} aria-label="Close the guide" title="Close (Esc)">
+          ✕
+        </button>
+      </h3>
+      <div className="ml-help-body">
+        {HELP.map((group) => (
+          <div key={group.title} className="ml-help-group">
+            <h4>{group.title}</h4>
+            <dl>
+              {group.items.map(([control, what]) => (
+                <div key={control}>
+                  <dt>{control}</dt>
+                  <dd>{what}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        ))}
+        <p className="ml-help-foot">Everything here is read from this computer; nothing is sent anywhere.</p>
+      </div>
+    </section>
+  );
+});
 
 const MemoryIndex = memo(function MemoryIndex({
   live,

@@ -1165,7 +1165,8 @@ const SECTIONS: Section[] = [
           bottom is every memory in order, and <Ui>Memory index</Ui> opens the counts,
           the months and the most recent. <Ui>←</Ui> and <Ui>→</Ui> walk from one
           memory to the next, <Ui>Enter</Ui> reads the open one large, and{" "}
-          <Ui>Esc</Ui> steps back one thing at a time, and then leaves.
+          <Ui>Esc</Ui> steps back one thing at a time, and then leaves. <Ui>?</Ui>, in
+          the top corner or on the keyboard, lists every control on the screen itself.
         </p>
 
         <Sub>The figure beside it</Sub>

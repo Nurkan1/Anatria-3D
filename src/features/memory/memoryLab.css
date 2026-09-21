@@ -61,6 +61,35 @@
 }
 .ml-exit:hover, .ml-exit:focus-visible, .ml-sound:hover, .ml-sound:focus-visible,
 .ml-focus-toggle:hover, .ml-focus-toggle:focus-visible { border-color: var(--ml-cyan); outline: none; }
+/* The guide's key: square, the same frame as its neighbours. */
+.ml-help-toggle {
+  font: inherit; font-size: clamp(10px, 0.75vw, 14px); line-height: 1; color: var(--ml-cyan);
+  background: rgba(10, 40, 60, 0.3); border: 1px solid var(--ml-cyan-faint);
+  width: 2.6em; cursor: pointer;
+}
+.ml-help-toggle:hover, .ml-help-toggle:focus-visible, .ml-help-toggle.ml-on { border-color: var(--ml-cyan); outline: none; }
+/* Over everything, flat and dark, because it is only ever read. Scoped deep enough to outrank the per-size and focus panel rules. */
+.ml-root .ml-hud .ml-panel.ml-help {
+  left: 50%; top: max(9vh, var(--ml-under-head)); bottom: 12vh; width: min(760px, 92vw);
+  transform: translateX(-50%); z-index: 6; background: rgba(2, 10, 18, 0.94);
+  display: flex; flex-direction: column; text-shadow: none;
+}
+.ml-help-body {
+  flex: 1; min-height: 0; overflow-y: auto; padding-right: 0.6em;
+  scrollbar-width: thin; scrollbar-color: var(--ml-cyan-faint) transparent;
+}
+.ml-help-group { margin-bottom: 1.8vh; }
+.ml-help-group h4 {
+  margin: 0 0 0.8vh; font-weight: 400; font-size: clamp(9px, 0.6vw, 12px); letter-spacing: 0.3em; color: var(--ml-cyan-dim);
+  border-bottom: 1px solid var(--ml-cyan-faint); padding-bottom: 0.4em;
+}
+.ml-help-group dl { margin: 0; display: grid; gap: 0.6em; }
+.ml-help-group dl > div { display: grid; grid-template-columns: minmax(8em, 30%) 1fr; gap: 1.2em; align-items: baseline; }
+.ml-help-group dt { font-size: clamp(9px, 0.62vw, 12px); letter-spacing: 0.12em; color: var(--ml-cyan); }
+.ml-help-group dd { margin: 0; font-family: var(--ml-sans); font-size: clamp(11px, 0.72vw, 14px); line-height: 1.5; color: rgba(216, 246, 255, 0.86); }
+.ml-help-foot { margin: 0.5vh 0 0; font-size: clamp(8px, 0.55vw, 11px); letter-spacing: 0.16em; color: var(--ml-cyan-dim); }
+.ml-root[data-size="compact"] .ml-hud .ml-panel.ml-help { top: 48px; bottom: 14px; width: calc(100% - 24px); }
+.ml-root[data-size="compact"] .ml-help-group dl > div { grid-template-columns: 1fr; gap: 0.2em; }
 .ml-focus-toggle { display: flex; align-items: center; gap: 0.7em; color: var(--ml-cyan-dim); }
 .ml-focus-toggle.ml-on { color: var(--ml-cyan); border-color: var(--ml-cyan-dim); }
 .ml-focus-toggle i { font-style: normal; letter-spacing: 0; }
