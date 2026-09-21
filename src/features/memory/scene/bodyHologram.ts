@@ -55,6 +55,11 @@ export interface BodyHologram {
    * empty list puts them out. Resolves with the ids that were found and drawn.
    */
   show(organs: readonly OrganRef[]): Promise<string[]>;
+  /**
+   * Single out one of the lit structures — the others step back — or none. An
+   * id that is not lit is ignored.
+   */
+  pick(id: string | null): void;
   skipIntro(): void;
   dispose(): void;
 }
@@ -70,6 +75,8 @@ const BODY_GAIN = 2.6;
 const PAD_SCALE = 0.4;
 /** Seconds for a structure to come up to full light. */
 const ORGAN_IN_S = 0.9;
+/** How fast a picked structure comes forward, per frame. */
+const PICK_RATE = 0.15;
 
 const smooth = (x: number) => {
   const t = Math.min(1, Math.max(0, x));
@@ -100,6 +107,12 @@ export function createBodyHologram(container: HTMLElement, options: BodyHologram
   const dustTotal = reducedMotion ? 4000 : 9000;
   let lit: THREE.Mesh<THREE.BufferGeometry, THREE.ShaderMaterial> | null = null;
   let litAt = 0;
+  /** The lit structures in the order their geometry was merged; the index is their `region`. */
+  let litIds: string[] = [];
+  let picked = -1;
+  /** Kept while the pick fades out, so the one that was picked goes back last. */
+  let lastPicked = -1;
+  let pickShown = 0;
   /** Bumped by every `show`, so a slow load cannot land over a newer one. */
   let request = 0;
   let loaded: Promise<void> = Promise.resolve();
@@ -157,12 +170,18 @@ export function createBodyHologram(container: HTMLElement, options: BodyHologram
     lit.geometry.dispose();
     lit.material.dispose();
     lit = null;
+    litIds = [];
+    picked = -1;
+    lastPicked = -1;
+    pickShown = 0;
   };
 
   // Drag to turn it. Nothing else happens in its column.
   let pressed: { x: number; spin: number } | null = null;
   container.style.cursor = "grab";
   const onDown = (event: PointerEvent) => {
+    // The names under the figure are buttons; capturing their press would swallow the click.
+    if ((event.target as Element | null)?.closest?.("button")) return;
     pressed = { x: event.clientX, spin };
     container.setPointerCapture(event.pointerId);
     container.style.cursor = "grabbing";
@@ -212,6 +231,9 @@ export function createBodyHologram(container: HTMLElement, options: BodyHologram
       const u = lit.material.uniforms;
       u.uTime!.value = now;
       u.uIn!.value = smooth((now - litAt) / ORGAN_IN_S) * shown;
+      pickShown += ((picked >= 0 ? 1 : 0) - pickShown) * PICK_RATE;
+      u.uPicked!.value = picked >= 0 ? picked : lastPicked;
+      u.uPick!.value = pickShown;
     }
     if (surface && dust && body) {
       const u = surface.material.uniforms;
@@ -272,10 +294,10 @@ export function createBodyHologram(container: HTMLElement, options: BodyHologram
         for (const ref of refs) {
           const object = names.get(ref.node) ?? names.get(THREE.PropertyBinding.sanitizeNodeName(ref.node));
           if (!object) continue;
-          found.push(ref.id);
+          const index = found.push(ref.id) - 1;
           object.traverse((child) => {
             const mesh = child as THREE.Mesh;
-            if (mesh.isMesh && mesh.geometry) parts.push(worldGeometry(mesh, 0));
+            if (mesh.isMesh && mesh.geometry) parts.push(worldGeometry(mesh, index));
           });
         }
       }
@@ -291,9 +313,15 @@ export function createBodyHologram(container: HTMLElement, options: BodyHologram
       lit = new THREE.Mesh(merged, organMaterial());
       lit.renderOrder = 2;
       holder.add(lit);
+      litIds = found;
       litAt = performance.now() / 1000;
       scanStarted = litAt;
       return found;
+    },
+    pick(id) {
+      const index = id === null ? -1 : litIds.indexOf(id);
+      if (index >= 0) lastPicked = index;
+      picked = index;
     },
     skipIntro() {
       const end = INTRO.boot + INTRO.deploy + INTRO.materialize;
@@ -324,6 +352,10 @@ export function createBodyHologram(container: HTMLElement, options: BodyHologram
 /**
  * A studied structure: amber, lit mostly at its edges so the shape reads, with
  * a slow pulse so it is plainly the thing being pointed at.
+ *
+ * All of a memory's structures are one mesh; `region` says which structure a
+ * vertex belongs to, so one of them can be brought forward and the rest dimmed
+ * without drawing anything twice.
  */
 function organMaterial(): THREE.ShaderMaterial {
   return new THREE.ShaderMaterial({
@@ -334,13 +366,18 @@ function organMaterial(): THREE.ShaderMaterial {
       uTime: { value: 0 },
       uIn: { value: 0 },
       uAmber: { value: new THREE.Color("#ffb347") },
+      uPicked: { value: -1 },
+      uPick: { value: 0 },
     },
     vertexShader: /* glsl */ `
+      attribute float region;
       varying vec3 vNormal;
       varying vec3 vView;
       varying float vY;
+      varying float vOrgan;
       void main() {
         vY = position.y;
+        vOrgan = region;
         vec4 mv = modelViewMatrix * vec4(position, 1.0);
         vNormal = normalize(normalMatrix * normal);
         vView = normalize(-mv.xyz);
@@ -351,15 +388,21 @@ function organMaterial(): THREE.ShaderMaterial {
       uniform float uTime;
       uniform float uIn;
       uniform vec3 uAmber;
+      uniform float uPicked;
+      uniform float uPick;
       varying vec3 vNormal;
       varying vec3 vView;
       varying float vY;
+      varying float vOrgan;
       void main() {
         float facing = abs(dot(normalize(vNormal), normalize(vView)));
         float rim = pow(1.0 - facing, 2.2);
         float pulse = 0.8 + 0.2 * sin(uTime * 2.4);
         float lines = 0.85 + 0.15 * sin(vY * 220.0 - uTime * 2.0);
         float a = (0.05 + rim * 0.5) * pulse * lines * uIn;
+        // The picked one brighter, the others down to a trace of themselves.
+        float isPicked = 1.0 - step(0.5, abs(vOrgan - uPicked));
+        a *= mix(1.0, mix(0.22, 2.0, isPicked), uPick);
         gl_FragColor = vec4(uAmber * a, 1.0);
       }
     `,

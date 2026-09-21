@@ -1163,15 +1163,18 @@ const SECTIONS: Section[] = [
           Point at a memory to see what it is; click it to read it on the right, and{" "}
           <Ui>⤢</Ui> to read it large. Drag to turn the brain. The strip along the
           bottom is every memory in order, and <Ui>Memory index</Ui> opens the counts,
-          the months and the most recent. <Ui>Esc</Ui> steps back one thing at a time,
-          and then leaves.
+          the months and the most recent. <Ui>←</Ui> and <Ui>→</Ui> walk from one
+          memory to the next, <Ui>Enter</Ui> reads the open one large, and{" "}
+          <Ui>Esc</Ui> steps back one thing at a time, and then leaves.
         </p>
 
         <Sub>The figure beside it</Sub>
         <p>
           The body standing on its own projector lights, in amber, the structures the
           open memory was about — the ones that were selected, and the ones the
-          assistant pointed to in its answers — and names them underneath. It is a
+          assistant pointed to in its answers — and names them underneath. Point at a
+          name to see that structure alone, the others dimmed; click it to keep it
+          that way, and click it again to see them all. It is a
           figure to look at: nothing you do here changes the atlas, and the atlas
           waits, paused, until you leave.
         </p>

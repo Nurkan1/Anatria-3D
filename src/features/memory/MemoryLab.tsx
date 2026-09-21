@@ -12,7 +12,7 @@ import "./memoryLab.css";
 import { EraseQueue, RESTORE_WINDOW_S } from "./eraseQueue";
 import { createLabSound, storedLabSound, storeLabSound, type LabSound } from "./labSound";
 import { calloutPlacement, freeMargins, type Box } from "./layout";
-import { byMonth, memoriesFrom, tally, type Memory, type MemoryKind } from "./memories";
+import { byMonth, memoriesFrom, stepMemory, tally, type Memory, type MemoryKind } from "./memories";
 import { createBodyHologram, type BodyHologram } from "./scene/bodyHologram";
 import type { BrainStructure } from "./scene/brainLoader";
 import { studiedIds, studiedOrgans, type StudiedOrgan } from "./studied";
@@ -156,6 +156,9 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
   const [atlas, setAtlas] = useState<readonly ManifestOrgan[]>([]);
   /** What the open memory was about, as lit in the figure; null while it is being found. */
   const [studied, setStudied] = useState<StudiedOrgan[] | null>([]);
+  /** A studied structure singled out in the figure: pinned by a click, or pointed at for a moment. */
+  const [pinnedOrgan, setPinnedOrgan] = useState<string | null>(null);
+  const [pointedOrgan, setPointedOrgan] = useState<string | null>(null);
   /** Bumped by Retry, to load the hologram again after a failure. */
   const [attempt, setAttempt] = useState(0);
 
@@ -339,6 +342,18 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
       cancelled = true;
     };
   }, [reading, atlas]);
+
+  // A new memory starts with none of its structures singled out.
+  useEffect(() => {
+    setPinnedOrgan(null);
+    setPointedOrgan(null);
+  }, [studied]);
+  const pickedOrgan = pointedOrgan ?? pinnedOrgan;
+  useEffect(() => body.current?.pick(pickedOrgan), [pickedOrgan]);
+  const pointOrgan = useCallback((id: string | null) => {
+    setPointedOrgan(id);
+    if (id) sound.current?.hover("case");
+  }, []);
 
   // The index is laid over the figure; the figure steps back while it is open.
   useEffect(() => body.current?.setPresence(railOpen ? 0.15 : 1), [railOpen]);
@@ -525,8 +540,26 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
   }, [labelled]);
 
   // --- keys --------------------------------------------------------------
+  // Left and right walk the memories in the order they were made; Enter reads
+  // the open one large; Escape steps back one thing at a time.
+  const liveKeys = useMemo(() => live.map((m) => m.key), [live]);
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
+      if (event.ctrlKey || event.altKey || event.metaKey) return;
+      const target = event.target as HTMLElement | null;
+      const typing = target?.closest?.("input, textarea, select, [contenteditable='true']");
+      if ((event.key === "ArrowLeft" || event.key === "ArrowRight") && !typing && !intro && !event.repeat) {
+        const next = stepMemory(liveKeys, selected, event.key === "ArrowLeft" ? -1 : 1);
+        if (next && next !== selected) choose(next);
+        event.preventDefault();
+        return;
+      }
+      // A focused button answers Enter itself.
+      if (event.key === "Enter" && selected && !typing && !target?.closest?.("button, a")) {
+        setWide((w) => !w);
+        event.preventDefault();
+        return;
+      }
       if (event.key === "Escape") {
         if (wide) setWide(false);
         else if (selected) choose(null);
@@ -565,7 +598,20 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
           <div className="ml-studied" aria-live="polite">
             <span>STUDIED IN THIS MEMORY</span>
             {studied.slice(0, 4).map((organ) => (
-              <b key={organ.id}>{organ.name}</b>
+              <button
+                type="button"
+                key={organ.id}
+                className={organ.id === pickedOrgan ? "ml-on" : ""}
+                aria-pressed={organ.id === pinnedOrgan}
+                title={organ.id === pinnedOrgan ? "Show them all again" : "Show it alone in the figure"}
+                onPointerEnter={() => pointOrgan(organ.id)}
+                onPointerLeave={() => setPointedOrgan(null)}
+                onFocus={() => pointOrgan(organ.id)}
+                onBlur={() => setPointedOrgan(null)}
+                onClick={() => setPinnedOrgan((id) => (id === organ.id ? null : organ.id))}
+              >
+                {organ.name}
+              </button>
             ))}
             {studied.length > 4 && <em>+{studied.length - 4} MORE</em>}
           </div>

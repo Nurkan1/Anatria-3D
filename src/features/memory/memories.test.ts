@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import type { SessionSummary, StudyNote } from "@/lib/studyDb";
 
 import { EraseQueue, RESTORE_WINDOW_S } from "./eraseQueue";
-import { byMonth, memoriesFrom, placeOnCortex, tally } from "./memories";
+import { byMonth, memoriesFrom, placeOnCortex, stepMemory, tally } from "./memories";
 
 const session = (id: string, at: number, extra: Partial<SessionSummary> = {}): SessionSummary =>
   ({
@@ -115,5 +115,32 @@ describe("erasing with a way back", () => {
     queue.erase("b", 0);
     expect(queue.flush().sort()).toEqual(["a", "b"]);
     expect(queue.flush()).toEqual([]);
+  });
+});
+
+describe("stepMemory", () => {
+  const keys = ["a", "b", "c"];
+
+  it("moves one memory either way", () => {
+    expect(stepMemory(keys, "b", 1)).toBe("c");
+    expect(stepMemory(keys, "b", -1)).toBe("a");
+  });
+
+  it("starts from the end the key points away from", () => {
+    expect(stepMemory(keys, null, -1)).toBe("c");
+    expect(stepMemory(keys, null, 1)).toBe("a");
+  });
+
+  it("stays at either end instead of wrapping", () => {
+    expect(stepMemory(keys, "c", 1)).toBe("c");
+    expect(stepMemory(keys, "a", -1)).toBe("a");
+  });
+
+  it("starts over when the open memory is no longer among them", () => {
+    expect(stepMemory(keys, "gone", 1)).toBe("a");
+  });
+
+  it("has nowhere to go without memories", () => {
+    expect(stepMemory([], null, 1)).toBeNull();
   });
 });

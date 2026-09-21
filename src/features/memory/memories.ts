@@ -139,3 +139,17 @@ export function placeOnCortex(count: number, surface: ArrayLike<number>): number
   }
   return out;
 }
+
+/**
+ * The memory beside `current` in the order they were made, for the arrow keys.
+ *
+ * With nothing open, left starts from the newest and right from the oldest —
+ * each from the end it points away from. At either end it stays put rather than
+ * wrapping: jumping from the last memory back to the first reads as a mistake.
+ */
+export function stepMemory(keys: readonly string[], current: string | null, direction: -1 | 1): string | null {
+  if (keys.length === 0) return null;
+  const at = current === null ? -1 : keys.indexOf(current);
+  if (at === -1) return direction === -1 ? keys[keys.length - 1]! : keys[0]!;
+  return keys[Math.min(keys.length - 1, Math.max(0, at + direction))]!;
+}
