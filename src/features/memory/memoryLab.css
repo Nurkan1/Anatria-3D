@@ -19,6 +19,17 @@
   color: var(--ml-ink);
   font-family: var(--ml-mono);
   animation: ml-in 0.5s ease-out;
+  /*
+   * The layout is laid in vh on purpose, but the title is laid in type, and on a
+   * short laptop screen 13vh is not enough room under it: the index tab rose
+   * into the subtitle. So the column starts at whichever is lower — 13vh, or
+   * the bottom of the title block (its two lines at their set line-heights)
+   * plus the tab's own height.
+   */
+  --ml-under-head: calc(3.2vh + 1.2 * clamp(14px, 1.35vw, 26px) + 1.8 * clamp(9px, 0.62vw, 12px) + 10px);
+  --ml-top: max(13vh, calc(var(--ml-under-head) + 40px));
+  /* The figure's column; the large reader keeps to the right of it. */
+  --ml-column: clamp(220px, 19vw, 380px);
 }
 .ml-stage { position: absolute; inset: 0; }
 /*
@@ -37,8 +48,8 @@
 .ml-hud button, .ml-panel { pointer-events: auto; }
 
 .ml-head { position: absolute; top: 3.2vh; left: 3vw; letter-spacing: 0.32em; }
-.ml-title { font-family: var(--ml-sans); font-weight: 300; font-size: clamp(14px, 1.35vw, 26px); color: var(--ml-cyan); }
-.ml-sub { margin-top: 0.6em; font-size: clamp(9px, 0.62vw, 12px); color: var(--ml-cyan-dim); letter-spacing: 0.22em; }
+.ml-title { font-family: var(--ml-sans); font-weight: 300; line-height: 1.2; font-size: clamp(14px, 1.35vw, 26px); color: var(--ml-cyan); }
+.ml-sub { margin-top: 0.6em; line-height: 1.2; font-size: clamp(9px, 0.62vw, 12px); color: var(--ml-cyan-dim); letter-spacing: 0.22em; }
 .ml-corner { position: absolute; top: 3vh; right: 3vw; display: flex; gap: 0.8em; }
 .ml-exit, .ml-sound, .ml-focus-toggle {
   font: inherit; font-size: clamp(9px, 0.65vw, 12px); letter-spacing: 0.3em;
@@ -69,8 +80,8 @@
 
 /* The figure's column, where the index used to stand; the index now opens over it. */
 .ml-body {
-  position: absolute; left: 3vw; top: 13vh; bottom: 13vh;
-  width: clamp(220px, 19vw, 380px);
+  position: absolute; left: 3vw; top: var(--ml-top); bottom: 13vh;
+  width: var(--ml-column);
   transition: opacity 0.6s;
 }
 .ml-body.ml-hidden { opacity: 0; pointer-events: none; }
@@ -198,11 +209,17 @@
   color: var(--ml-cyan); background: none; border: 1px solid var(--ml-cyan-faint); padding: 0.1em 0.45em; cursor: pointer;
 }
 .ml-expand:hover, .ml-expand:focus-visible { border-color: var(--ml-cyan); outline: none; }
-/* Scoped under the root so it outranks the per-size panel rules below. */
+/*
+ * Scoped under the root so it outranks the per-size panel rules below.
+ * Centred where the screen is wide enough; on a narrower one it gives way to
+ * the right of the figure's column rather than laying itself over the list of
+ * what was studied, and below the title rather than over the index tab.
+ */
 .ml-root .ml-panel.ml-right.ml-wide {
-  left: 50%; right: auto; top: 9vh; bottom: 12vh;
-  width: min(980px, 94vw);
-  transform: translateX(-50%);
+  --ml-wide-left: max(calc(50% - 490px), calc(3vw + var(--ml-column) + 24px));
+  left: var(--ml-wide-left); right: auto; top: max(9vh, var(--ml-under-head)); bottom: 12vh;
+  width: min(980px, calc(100% - var(--ml-wide-left) - 3vw));
+  transform: none;
   background: rgba(2, 10, 18, 0.9);
   z-index: 3;
 }
@@ -218,17 +235,20 @@
 .ml-error button { font: inherit; letter-spacing: 0.25em; color: var(--ml-ink); background: none; border: 1px solid var(--ml-cyan); padding: 0.4em 0.9em; cursor: pointer; }
 
 .ml-root:not([data-size="compact"]) .ml-rail {
-  left: 3vw; top: calc(13vh - 40px); transform: none; writing-mode: horizontal-tb;
+  left: 3vw; top: calc(var(--ml-top) - 40px); transform: none; writing-mode: horizontal-tb;
   border-left: 1px solid var(--ml-cyan-faint); padding: 0.7em 1.1em;
 }
 .ml-root:not([data-size="compact"]) .ml-rail.ml-on,
 .ml-root:not([data-size="compact"]) .ml-rail:hover,
 .ml-root:not([data-size="compact"]) .ml-rail:focus-visible { border-color: var(--ml-cyan); }
-.ml-root:not([data-size="compact"]) .ml-left { left: 3vw; top: 13vh; }
+.ml-root:not([data-size="compact"]) .ml-left { left: 3vw; top: var(--ml-top); }
 
 /* ---- medium: flat, narrower panels ---------------------------------------- */
 .ml-root[data-size="medium"] .ml-panel { transform: none; width: clamp(210px, 25vw, 330px); top: 11vh; }
-.ml-root[data-size="medium"] .ml-body { top: 13vh; bottom: 15vh; width: clamp(180px, 20vw, 280px); }
+.ml-root[data-size="medium"] { --ml-column: clamp(180px, 20vw, 280px); }
+/* The index opens under its tab, like the figure it lies over. */
+.ml-root[data-size="medium"] .ml-left { top: var(--ml-top); }
+.ml-root[data-size="medium"] .ml-body { bottom: 15vh; }
 .ml-root[data-size="medium"] .ml-right { bottom: 16vh; }
 .ml-root[data-size="medium"] .ml-bottom { width: min(76vw, 900px); }
 
@@ -249,7 +269,7 @@
   top: auto; bottom: 64px; height: min(56%, 460px);
   background: rgba(2, 10, 18, 0.9); z-index: 3;
 }
-.ml-root[data-size="compact"] .ml-right.ml-wide { top: 48px; bottom: 64px; width: calc(100% - 24px); }
+.ml-root[data-size="compact"] .ml-right.ml-wide { left: 12px; top: 48px; bottom: 64px; width: calc(100% - 24px); }
 .ml-root[data-size="compact"] .ml-bottom { width: calc(100% - 28px); bottom: 14px; }
 .ml-root[data-size="compact"] .ml-percent { font-size: 26px; }
 
