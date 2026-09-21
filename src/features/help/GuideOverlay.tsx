@@ -1174,7 +1174,12 @@ const SECTIONS: Section[] = [
           open memory was about — the ones that were selected, and the ones the
           assistant pointed to in its answers — and names them underneath. Point at a
           name to see that structure alone, the others dimmed; click it to keep it
-          that way, and click it again to see them all. It is a
+          that way, and click it again to see them all. <Ui>More</Ui> unfolds the
+          rest of the list when it is longer than the screen has room for, and{" "}
+          <Ui>Zoom in</Ui> moves the figure in on the chosen structure — or on all of
+          them, if none is chosen — for the small ones. Up close the figure stops
+          turning by itself, so it holds still while you look; drag it to turn it,
+          and <Ui>Whole body</Ui> steps back. It is a
           figure to look at: nothing you do here changes the atlas, and the atlas
           waits, paused, until you leave.
         </p>

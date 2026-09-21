@@ -11,7 +11,7 @@ import { useStudyStore } from "@/stores/studyStore";
 import "./memoryLab.css";
 import { EraseQueue, RESTORE_WINDOW_S } from "./eraseQueue";
 import { createLabSound, storedLabSound, storeLabSound, type LabSound } from "./labSound";
-import { calloutPlacement, freeMargins, type Box } from "./layout";
+import { calloutPlacement, freeMargins, studiedRowsFor, type Box } from "./layout";
 import { byMonth, memoriesFrom, stepMemory, tally, type Memory, type MemoryKind } from "./memories";
 import { createBodyHologram, type BodyHologram } from "./scene/bodyHologram";
 import type { BrainStructure } from "./scene/brainLoader";
@@ -159,6 +159,11 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
   /** A studied structure singled out in the figure: pinned by a click, or pointed at for a moment. */
   const [pinnedOrgan, setPinnedOrgan] = useState<string | null>(null);
   const [pointedOrgan, setPointedOrgan] = useState<string | null>(null);
+  /** The whole list of studied structures unfolded, and the figure moved in on them. */
+  const [allStudied, setAllStudied] = useState(false);
+  const [zoomed, setZoomed] = useState(false);
+  /** How many names fit under the figure folded, from the height of its column. */
+  const [studiedRows, setStudiedRows] = useState(4);
   /** Bumped by Retry, to load the hologram again after a failure. */
   const [attempt, setAttempt] = useState(0);
 
@@ -347,7 +352,11 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
   useEffect(() => {
     setPinnedOrgan(null);
     setPointedOrgan(null);
+    setAllStudied(false);
+    setZoomed(false);
   }, [studied]);
+  // Zoom follows the pinned structure only: sweeping the pointer down the list must not swing the camera.
+  useEffect(() => body.current?.zoom(zoomed, pinnedOrgan), [zoomed, pinnedOrgan]);
   const pickedOrgan = pointedOrgan ?? pinnedOrgan;
   useEffect(() => body.current?.pick(pickedOrgan), [pickedOrgan]);
   const pointOrgan = useCallback((id: string | null) => {
@@ -364,6 +373,7 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
     if (!element) return;
     const measure = () => {
       setSize(sizeFor(element.clientWidth, element.clientHeight));
+      setStudiedRows(studiedRowsFor(bodyBox.current?.clientHeight ?? 0));
       const frame = element.getBoundingClientRect();
       const boxes: Box[] = [];
       // The title is a corner, not a panel: it would push the brain aside for nothing.
@@ -597,7 +607,8 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
         {selectedMemory && studied !== null && studied.length > 0 && (
           <div className="ml-studied" aria-live="polite">
             <span>STUDIED IN THIS MEMORY</span>
-            {studied.slice(0, 4).map((organ) => (
+            <div className={`ml-studied-list ${allStudied ? "ml-all" : ""}`}>
+            {(allStudied ? studied : studied.slice(0, studiedRows)).map((organ) => (
               <button
                 type="button"
                 key={organ.id}
@@ -613,7 +624,33 @@ export function MemoryLab({ onClose }: { onClose: () => void }) {
                 {organ.name}
               </button>
             ))}
-            {studied.length > 4 && <em>+{studied.length - 4} MORE</em>}
+            </div>
+            <div className="ml-studied-tools">
+              {studied.length > studiedRows && (
+                <button type="button" className="ml-tool" aria-expanded={allStudied} onClick={() => setAllStudied((all) => !all)}>
+                  {allStudied ? "SHOW FEWER" : `+${studied.length - studiedRows} MORE`}
+                </button>
+              )}
+              <button
+                type="button"
+                className="ml-tool"
+                aria-pressed={zoomed}
+                title={
+                  zoomed
+                    ? "Back to the whole figure"
+                    : pinnedOrgan
+                      ? "Move in on the chosen structure"
+                      : "Move in on what was studied — click a name first to go to that one"
+                }
+                onClick={() => {
+                  // Moving in folds the list away, so the names do not stand over what is being looked at.
+                  if (!zoomed) setAllStudied(false);
+                  setZoomed(!zoomed);
+                }}
+              >
+                {zoomed ? "⊖ WHOLE BODY" : "⊕ ZOOM IN"}
+              </button>
+            </div>
           </div>
         )}
         {selectedMemory && studied === null && (

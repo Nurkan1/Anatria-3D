@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { calloutPlacement, freeMargins } from "./layout";
+import { calloutPlacement, freeMargins, studiedRowsFor } from "./layout";
 
 const W = 1600;
 const H = 900;
@@ -64,5 +64,17 @@ describe("calloutPlacement", () => {
 
   it("is cut to the room it has, never less than nothing", () => {
     expect(calloutPlacement(20, 500, 0, 60).maxWidth).toBe(0);
+  });
+});
+
+describe("studiedRowsFor", () => {
+  it("fits one name per 110 px of the figure's column", () => {
+    expect(studiedRowsFor(514)).toBe(4);
+    expect(studiedRowsFor(769)).toBe(6);
+  });
+
+  it("keeps between three and six", () => {
+    expect(studiedRowsFor(0)).toBe(3);
+    expect(studiedRowsFor(2000)).toBe(6);
   });
 });

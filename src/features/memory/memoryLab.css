@@ -19,6 +19,9 @@
   color: var(--ml-ink);
   font-family: var(--ml-mono);
   animation: ml-in 0.5s ease-out;
+  /* A screen that is dragged and clicked: only what is read can be selected and copied. */
+  user-select: none;
+  -webkit-user-select: none;
   /*
    * The layout is laid in vh on purpose, but the title is laid in type, and on a
    * short laptop screen 13vh is not enough room under it: the index tab rose
@@ -99,7 +102,19 @@
 }
 .ml-studied button:hover, .ml-studied button:focus-visible, .ml-studied button.ml-on { opacity: 1; border-bottom-color: var(--ml-amber); outline: none; }
 .ml-studied button[aria-pressed="true"] { color: #ffd9a0; }
-.ml-studied em { font-style: normal; color: rgba(255, 210, 150, 0.6); }
+/* Folded, the names simply stack; unfolded they scroll, so a long list never climbs over the whole figure. */
+.ml-studied-list { display: flex; flex-direction: column; align-items: center; gap: 0.35em; max-width: 100%; }
+.ml-studied-list.ml-all {
+  max-height: 34vh; overflow-y: auto; pointer-events: auto; padding: 0.3em 0.4em;
+  background: rgba(2, 10, 18, 0.7); border: 1px solid rgba(255, 179, 71, 0.18);
+  scrollbar-width: thin; scrollbar-color: rgba(255, 179, 71, 0.3) transparent;
+}
+.ml-studied-tools { display: flex; gap: 0.6em; margin-top: 0.3em; }
+.ml-studied .ml-tool {
+  font-family: var(--ml-mono); font-size: 0.9em; letter-spacing: 0.25em; padding: 0.45em 0.8em;
+  color: rgba(255, 210, 150, 0.8); border: 1px solid rgba(255, 179, 71, 0.3); background: rgba(40, 20, 0, 0.3);
+}
+.ml-studied .ml-tool:hover, .ml-studied .ml-tool:focus-visible, .ml-studied .ml-tool[aria-pressed="true"] { border-color: var(--ml-amber); color: var(--ml-amber); }
 /* The figure is drawn by the brain's own renderer into this box; the box only takes the drag. */
 .ml-body { touch-action: none; }
 
@@ -153,6 +168,8 @@
   font-family: var(--ml-sans); font-size: clamp(11px, 0.72vw, 14px); line-height: 1.55; color: rgba(216, 246, 255, 0.86);
   text-shadow: none; scrollbar-width: thin; scrollbar-color: var(--ml-cyan-faint) transparent;
   animation: ml-recall 0.6s ease-out;
+  user-select: text;
+  -webkit-user-select: text;
 }
 .ml-reading p { margin: 0 0 0.8em; white-space: pre-wrap; }
 .ml-faint { color: var(--ml-cyan-dim); letter-spacing: 0.2em; font-family: var(--ml-mono); }

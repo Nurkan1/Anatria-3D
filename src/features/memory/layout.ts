@@ -69,3 +69,12 @@ export function calloutPlacement(x: number, natural: number, from: number, to: n
   const side = right >= natural || right >= left ? "right" : "left";
   return { side, maxWidth: Math.max(0, Math.floor(side === "right" ? right : left)) };
 }
+
+/**
+ * How many studied names fit folded under the figure: the column's height, one
+ * name per 110 px, never fewer than three nor more than six. The rest are one
+ * click away, so a short screen keeps the figure clear.
+ */
+export function studiedRowsFor(columnHeight: number): number {
+  return Math.min(6, Math.max(3, Math.floor(columnHeight / 110)));
+}

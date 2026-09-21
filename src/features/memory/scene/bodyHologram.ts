@@ -60,6 +60,11 @@ export interface BodyHologram {
    * id that is not lit is ignored.
    */
   pick(id: string | null): void;
+  /**
+   * Move in on what is lit — on `id` when it is one of them, otherwise on all
+   * of them together — or, off, back out to the whole figure. The move glides.
+   */
+  zoom(on: boolean, id?: string | null): void;
   skipIntro(): void;
   dispose(): void;
 }
@@ -77,6 +82,19 @@ const PAD_SCALE = 0.4;
 const ORGAN_IN_S = 0.9;
 /** How fast a picked structure comes forward, per frame. */
 const PICK_RATE = 0.15;
+/** How fast the camera glides between the whole figure and a structure, per frame. */
+const VIEW_RATE = 0.07;
+/** How much of the view a zoomed structure fills, as its radius against the half-view: more is farther. */
+const ZOOM_ROOM = 2.4;
+/** A structure's smallest radius when zoomed, in figure units: a nerve twig is framed with some of its surroundings. */
+const ZOOM_MIN_RADIUS = 0.035;
+const UP = new THREE.Vector3(0, 1, 0);
+/**
+ * Where a zoomed structure sits, as a share of the view's height above its
+ * middle: the names are listed across the bottom of the column, and the
+ * structure should be seen clear of them.
+ */
+const ZOOM_LIFT = 0.16;
 
 const smooth = (x: number) => {
   const t = Math.min(1, Math.max(0, x));
@@ -113,6 +131,15 @@ export function createBodyHologram(container: HTMLElement, options: BodyHologram
   /** Kept while the pick fades out, so the one that was picked goes back last. */
   let lastPicked = -1;
   let pickShown = 0;
+  /** Each lit structure's box in the figure's space, by index; and all of them together. */
+  let bounds: THREE.Box3[] = [];
+  let boundsAll: THREE.Box3 | null = null;
+  /** -2: whole figure; -1: every lit structure; otherwise the one at that index. */
+  let zoomIndex = -2;
+  /** Where the camera is looking and from how far, eased toward where it should. */
+  const view = { target: new THREE.Vector3(), distance: 1, ready: false };
+  const aim = new THREE.Vector3();
+  const size3 = new THREE.Vector3();
   /** Bumped by every `show`, so a slow load cannot land over a newer one. */
   let request = 0;
   let loaded: Promise<void> = Promise.resolve();
@@ -174,6 +201,9 @@ export function createBodyHologram(container: HTMLElement, options: BodyHologram
     picked = -1;
     lastPicked = -1;
     pickShown = 0;
+    bounds = [];
+    boundsAll = null;
+    zoomIndex = -2;
   };
 
   // Drag to turn it. Nothing else happens in its column.
@@ -182,6 +212,8 @@ export function createBodyHologram(container: HTMLElement, options: BodyHologram
   const onDown = (event: PointerEvent) => {
     // The names under the figure are buttons; capturing their press would swallow the click.
     if ((event.target as Element | null)?.closest?.("button")) return;
+    // A drag turns the figure; it must not also start selecting the text around it.
+    event.preventDefault();
     pressed = { x: event.clientX, spin };
     container.setPointerCapture(event.pointerId);
     container.style.cursor = "grabbing";
@@ -209,18 +241,36 @@ export function createBodyHologram(container: HTMLElement, options: BodyHologram
     const reveal = smooth((t - INTRO.boot - INTRO.deploy) / INTRO.materialize);
     shown += (presence - shown) * 0.08;
 
+    const calm = reducedMotion ? 0.35 : 1;
+    // Looking closely at a structure holds the figure still; a drag still turns it.
+    if (!pressed && zoomIndex === -2) spin += 0.0025 * calm;
+    holder.rotation.y = spin;
+
     // Frame the whole figure and its pad, whatever the column's proportions.
     const halfFov = THREE.MathUtils.degToRad(camera.fov) / 2;
     const tall = (size.height + 0.55) / 2;
     const wide = (1.8 * PAD_SCALE) / Math.max(0.2, camera.aspect);
-    const distance = Math.max(tall, wide) / Math.tan(halfFov);
-    const centreY = holder.position.y + size.bottom + size.height / 2 - 0.12;
-    camera.position.set(0, centreY + distance * 0.08, distance);
-    camera.lookAt(0, centreY, 0);
-
-    const calm = reducedMotion ? 0.35 : 1;
-    if (!pressed) spin += 0.0025 * calm;
-    holder.rotation.y = spin;
+    const whole = Math.max(tall, wide) / Math.tan(halfFov);
+    let distance = whole;
+    aim.set(0, holder.position.y + size.bottom + size.height / 2 - 0.12, 0);
+    // Or move in on a structure: its centre turns with the figure, and the camera follows it round.
+    const box = zoomIndex >= 0 ? bounds[zoomIndex] : zoomIndex === -1 ? boundsAll : null;
+    if (box) {
+      const radius = Math.max(ZOOM_MIN_RADIUS, box.getSize(size3).length() / 2);
+      box.getCenter(aim).applyAxisAngle(UP, spin).add(holder.position);
+      const across = Math.tan(halfFov) * Math.min(1, camera.aspect);
+      distance = Math.min(distance, (radius * ZOOM_ROOM) / across);
+    }
+    const ease = view.ready && !reducedMotion ? VIEW_RATE : 1;
+    view.target.lerp(aim, ease);
+    view.distance += (distance - view.distance) * ease;
+    view.ready = true;
+    camera.position.set(view.target.x, view.target.y + view.distance * 0.08, view.target.z + view.distance);
+    // Up close, look a little below the structure, so it stands in the upper part of the column.
+    const closeness = Math.min(1, Math.max(0, 1 - view.distance / whole));
+    const lift = ZOOM_LIFT * 2 * Math.tan(halfFov) * view.distance * Math.min(1, closeness * 2);
+    camera.position.y -= lift;
+    camera.lookAt(view.target.x, view.target.y - lift, view.target.z);
 
     for (const child of pad.children) {
       const u = ((child as THREE.Mesh).material as THREE.ShaderMaterial).uniforms;
@@ -248,7 +298,8 @@ export function createBodyHologram(container: HTMLElement, options: BodyHologram
       const d = dust.material.uniforms;
       d.uTime!.value = now;
       d.uAssemble!.value = assemble;
-      d.uDust!.value = (1 - reveal * 0.85) * shown;
+      // Dust is sized by distance, so up close each grain would swell to a blot: it thins out instead.
+      d.uDust!.value = (1 - reveal * 0.85) * shown * (1 - closeness);
       d.uPixel!.value = pixelRatio * (container.clientHeight / 700);
       dust.geometry.setDrawRange(0, Math.round(dustTotal * particles));
     }
@@ -314,9 +365,25 @@ export function createBodyHologram(container: HTMLElement, options: BodyHologram
       lit.renderOrder = 2;
       holder.add(lit);
       litIds = found;
+      // Each structure's box, read off the merged mesh by the index every vertex carries.
+      const position = merged.getAttribute("position");
+      const region = merged.getAttribute("region");
+      bounds = found.map(() => new THREE.Box3());
+      const point = new THREE.Vector3();
+      for (let v = 0; v < position.count; v++) bounds[region.getX(v)]?.expandByPoint(point.fromBufferAttribute(position, v));
+      boundsAll = new THREE.Box3();
+      for (const b of bounds) if (!b.isEmpty()) boundsAll.union(b);
       litAt = performance.now() / 1000;
       scanStarted = litAt;
       return found;
+    },
+    zoom(on, id = null) {
+      if (!on || !lit) {
+        zoomIndex = -2;
+        return;
+      }
+      const index = id === null ? -1 : litIds.indexOf(id);
+      zoomIndex = index >= 0 && !bounds[index]!.isEmpty() ? index : -1;
     },
     pick(id) {
       const index = id === null ? -1 : litIds.indexOf(id);
