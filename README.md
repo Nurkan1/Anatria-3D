@@ -27,6 +27,20 @@ actually loaded.
 
 ---
 
+![Study memory: a holographic brain over a projector, every study session, case
+visit and note on it as a point of light, with a body standing beside it and the
+thyroid gland lit inside it in amber. The memory being read is open on the right,
+a case drill about a patient with fatigue, weight gain and an enlarged
+thyroid.](docs/screenshots/study-memory.jpg)
+
+**Your journal, as a map of memories.** Everything you have studied is kept on
+this computer, and *Study memory* shows it as one sequence: a point of light per
+study session, case visit and note, laid on a brain in the order you made them.
+Open one and it is read beside the hologram, while the body on the left lights
+the structures that memory was about — here the thyroid gland, from a case drill
+about a patient who was invented for teaching. Nothing is fetched to draw any of
+it, and nothing leaves the machine.
+
 ![The scanner running on a carbon body: a lit ring descends onto the head and
 a plane of light travels down through the figure, giving each structure its own
 colour as it reaches it while a panel names what is being
