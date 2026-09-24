@@ -42,7 +42,10 @@
       "../tools/anatria_mcp/scene.py": "anatria-mcp/scene.py",
       "../tools/anatria_mcp/bridge.py": "anatria-mcp/bridge.py",
       "../tools/anatria_mcp/pipe_server.py": "anatria-mcp/pipe_server.py",
-      "../tools/anatria_mcp/INSTALLED.md": "anatria-mcp/INSTALLED.md"
+      "../tools/anatria_mcp/INSTALLED.md": "anatria-mcp/INSTALLED.md",
+      "../LICENSE": "LICENSE",
+      "../LICENSES/Apache-2.0.txt": "LICENSES/Apache-2.0.txt",
+      "../NOTICE": "NOTICE"
     },
     "category": "Education",
     "publisher": "Nurdzhan Kerimov (Digital Rose)",
