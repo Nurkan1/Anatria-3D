@@ -55,3 +55,18 @@ describe("GuideOverlay, contact", () => {
     expect(await screen.findByRole("button", { name: "Copied" })).toBeTruthy();
   });
 });
+
+describe("GuideOverlay, licensing", () => {
+  it("states the licence, what is free, and when it converts", () => {
+    render(<GuideOverlay onClose={() => {}} />);
+    expect(text()).toContain("Business Source License 1.1");
+    expect(text()).toContain("1 October 2030");
+    expect(text()).toMatch(/commercial agreement/i);
+  });
+
+  it("never claims the application's licence covers the anatomy", () => {
+    render(<GuideOverlay onClose={() => {}} />);
+    expect(text()).toContain("does not reach the anatomy");
+    expect(text()).not.toMatch(/source code is released under the Apache/i);
+  });
+});

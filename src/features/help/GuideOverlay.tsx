@@ -1589,18 +1589,23 @@ const SECTIONS: Section[] = [
           for anatomy — the atlas, the assistant and the study journal alike.
         </Credit>
 
-        <Credit role="Copyright" name="Digital Rose" badge="digitalrose.org">
-          Digital Rose holds the copyright in the Anatria3D application and its
-          name. The <strong>source code is released under the Apache&nbsp;2.0
-          licence</strong>, which grants you the right to use, study, modify and
-          redistribute it, including commercially. The name and marks are not part
-          of that grant: a fork is welcome, a fork called Anatria3D is not.
+        <Credit role="Copyright & licence" name="Nurdzhan Kerimov (Digital Rose)" badge="digitalrose.org">
+          Anatria3D is developed by Nurdzhan Kerimov (Digital Rose) and distributed
+          under the <strong>Business Source License&nbsp;1.1</strong>.{" "}
+          <strong>Free</strong> for personal study, teaching, academic research and
+          non-commercial evaluation by healthcare professionals — you may read,
+          modify and redistribute the source on those terms. Deployment in a clinic,
+          a private practice or any other revenue-generating setting, and
+          redistribution inside a paid product, need a commercial agreement. Each
+          version converts automatically to the Apache&nbsp;2.0 licence on its
+          change date, 1 October 2030 for this one. The name and marks are separate
+          from any of that: a fork is welcome, a fork called Anatria3D is not.
         </Credit>
 
         <ContactCard />
 
         <p>
-          It is given to students and to universities. That is not a slogan about
+          It is free for students and for universities. That is not a slogan about
           the licence — it <em>is</em> the licence, and it is why this page reads
           the way it does rather than reserving all rights.
         </p>
@@ -1630,9 +1635,10 @@ const SECTIONS: Section[] = [
           rights over them.
           <br />
           <br />
-          The two licences do not merge. The code is Apache&nbsp;2.0 and the anatomy
-          is CC BY-SA 4.0, whichever way you redistribute either. The full text of
-          both ships in the application folder, with the attribution in{" "}
+          The licences do not merge, and the application's licence does not reach the
+          anatomy: the meshes and labels stay CC BY-SA 4.0 whatever the code is under,
+          and their own licence allows commercial use by anyone. The full text of each
+          ships in the application folder, with the attribution in{" "}
           <Ui>anatomy/NOTICE</Ui>.
         </Callout>
 
@@ -1646,9 +1652,10 @@ const SECTIONS: Section[] = [
           own licence; none of them is ours.
         </p>
         <p className="pt-2 text-[11px] text-slate-500">
-          Anatria3D {APP_VERSION_LABEL}. © 2026 Digital Rose. Anatria3D is a trademark of
-          Digital Rose. Application code under Apache-2.0; anatomical assets under CC
-          BY-SA 4.0.
+          Anatria3D {APP_VERSION_LABEL}. © 2026 Nurdzhan Kerimov (Digital Rose).
+          Anatria3D is a trademark of Digital Rose. Application code under the
+          Business Source License 1.1, converting to Apache-2.0 on 2030-10-01;
+          anatomical assets under CC BY-SA 4.0 and CC BY 4.0.
         </p>
       </>
     ),
