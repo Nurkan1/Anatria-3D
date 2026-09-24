@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 
 import { ChatPanel } from "@/features/chat/ChatPanel";
 import { GuideOverlay } from "@/features/help/GuideOverlay";
@@ -17,6 +17,12 @@ import { useChatStore } from "@/stores/chatStore";
 import { checkStorage, confirmStoragePersists } from "@/lib/localStore";
 import { useStudyStore } from "@/stores/studyStore";
 import { startViewPersistence } from "@/stores/persistView";
+
+/**
+ * Loaded only when opened: the Memory Lab brings its own renderer and brain, and
+ * nobody who never opens it should pay for them at startup.
+ */
+const MemoryLab = lazy(() => import("@/features/memory/MemoryLab"));
 import { useSceneStore } from "@/stores/sceneStore";
 
 /**
@@ -36,6 +42,7 @@ export default function App() {
   // Opened for a first-time reader, because the two things they cannot discover
   // by poking at the model are the right-click menu and what the app is not for.
   const [guideOpen, setGuideOpen] = useState(firstRun);
+  const [memoryOpen, setMemoryOpen] = useState(false);
 
   // Ready when the atlas is, not when React is: the panels render instantly
   // and would otherwise appear as empty furniture around a blank viewport.
@@ -66,7 +73,7 @@ export default function App() {
    * mid-answer comes back to the answer.
    */
   const answering = useChatStore((s) => s.pendingRequestId !== null);
-  const idle = useIdleScreen({ armed: atlasReady && !splash.visible && !answering });
+  const idle = useIdleScreen({ armed: atlasReady && !splash.visible && !answering && !memoryOpen });
 
   const closeGuide = () => {
     setGuideOpen(false);
@@ -77,6 +84,11 @@ export default function App() {
     <div className="flex h-full bg-slate-950 text-slate-200">
       {splash.visible && <SplashScreen leaving={splash.leaving} />}
       {idle.showing && <IdleScreen onDismiss={idle.dismiss} />}
+      {memoryOpen && (
+        <Suspense fallback={<div className="fixed inset-0 z-[60] bg-[#010408]" />}>
+          <MemoryLab onClose={() => setMemoryOpen(false)} />
+        </Suspense>
+      )}
       {/* Renders through a portal into `<body>`, outside this tree: the print
           stylesheet hides `#root` so the sheet is the whole page. */}
       <PrintSheet />
@@ -105,13 +117,14 @@ export default function App() {
         </>
 
       <main className="relative min-h-0 min-w-0 flex-1">
-        <AnatomyViewer />
+        <AnatomyViewer paused={memoryOpen} />
         <TopBar
           treeCollapsed={layout.treeCollapsed}
           chatCollapsed={layout.chatCollapsed}
           onToggleTree={toggleTree}
           onToggleChat={toggleChat}
           onOpenGuide={() => setGuideOpen(true)}
+          onOpenMemory={() => setMemoryOpen(true)}
         />
         {/* Scoped to the viewport rather than the window: the panels stay
             reachable, so the guide can be read next to the thing it describes. */}
@@ -155,12 +168,14 @@ function TopBar({
   onToggleTree,
   onToggleChat,
   onOpenGuide,
+  onOpenMemory,
 }: {
   treeCollapsed: boolean;
   chatCollapsed: boolean;
   onToggleTree: () => void;
   onToggleChat: () => void;
   onOpenGuide: () => void;
+  onOpenMemory: () => void;
 }) {
   return (
     <div className="absolute inset-x-0 top-0 flex items-center gap-2 bg-slate-900/80 px-2 py-1.5 backdrop-blur">
@@ -175,6 +190,15 @@ function TopBar({
       <p className="flex-1 text-center text-[11px] text-slate-400">
         Educational use only — not a medical device, and not for diagnosis or treatment.
       </p>
+
+      <button
+        type="button"
+        onClick={onOpenMemory}
+        title="Your study journal, as a map of memories"
+        className="rounded border border-slate-700 px-1.5 text-[10px] leading-[17px] tracking-[0.2em] text-slate-500 transition hover:border-cyan-600 hover:text-cyan-300"
+      >
+        MEMORY
+      </button>
 
       <button
         type="button"

@@ -11,6 +11,7 @@ use tauri::{Manager, State};
 
 use crate::app_log::{AppLog, LogEntry};
 use crate::control_bridge::{BridgeError, BridgeStatus, ControlBridge};
+use crate::display::{self, DisplaySettings, DisplayStatus};
 use crate::keyring_store::{self, KeyringError, Provider};
 use crate::sidecar::{EngineError, EngineHandle, EngineStatus};
 use crate::study_db::{
@@ -623,6 +624,38 @@ pub async fn save_log_copy(
 #[tauri::command]
 pub fn log_event(log: State<'_, AppLog>, level: String, source: String, message: String) {
     log.append(&level, &source, &message);
+}
+
+/// The stable-display choice, and whether this window is running with it.
+#[tauri::command]
+pub fn display_status(app: tauri::AppHandle) -> DisplayStatus {
+    let stored = app
+        .path()
+        .app_data_dir()
+        .map(|dir| display::read(&dir))
+        .unwrap_or_default();
+    DisplayStatus {
+        supported: display::SUPPORTED,
+        stable_display: stored.stable_display,
+        active: display::active(),
+    }
+}
+
+/// Store the stable-display choice for the next launch.
+///
+/// It cannot take effect now: the webview's arguments are fixed when it is
+/// created. The panel says so, and the log records the change — the choice
+/// only, nothing the reader wrote.
+#[tauri::command]
+pub fn set_stable_display(app: tauri::AppHandle, log: State<'_, AppLog>, on: bool) -> CommandResult<DisplayStatus> {
+    let dir = app
+        .path()
+        .app_data_dir()
+        .map_err(|err| CommandError::Invalid(format!("no data folder to keep the setting in: {err}")))?;
+    display::write(&dir, DisplaySettings { stable_display: on })
+        .map_err(|err| CommandError::Invalid(format!("could not save the display setting: {err}")))?;
+    log.append("info", "display", if on { "stable display on, from next launch" } else { "stable display off, from next launch" });
+    Ok(display_status(app))
 }
 
 #[cfg(test)]

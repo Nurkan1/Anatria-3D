@@ -647,6 +647,16 @@ function CaseComposer({
         </button>
       </div>
 
+      {/*
+        At the point of writing, not only in the guide: this form has the shape
+        of a patient record, and it is the one place a real person's health
+        details could be typed in and sent to the AI provider with every turn.
+      */}
+      <p className="leading-snug text-amber-300/80">
+        Invented for teaching — never a real person. The case is sent to your AI
+        provider with every turn of the drill.
+      </p>
+
       <input
         value={title}
         onChange={(event) => setTitle(event.target.value)}

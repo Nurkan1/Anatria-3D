@@ -80,7 +80,14 @@ function ViewerFallback({ message }: { message: string }) {
  */
 const FIRST_ATLAS = "male";
 
-export function AnatomyViewer() {
+/**
+ * `paused` stops drawing frames while something covers the whole viewport.
+ * Nothing about the scene changes — selection, camera and layers stay as they
+ * are — it only stops rendering what nobody can see. Two full WebGL renders at
+ * once (the atlas under the Memory Lab's hologram) made the whole window blink
+ * on some GPUs.
+ */
+export function AnatomyViewer({ paused = false }: { paused?: boolean } = {}) {
   const setManifest = useSceneStore((s) => s.setManifest);
   const genderModel = useSceneStore((s) => s.genderModel);
   const background = useSceneStore((s) => s.background);
@@ -158,6 +165,10 @@ export function AnatomyViewer() {
     <div
       ref={container}
       className="relative h-full w-full"
+      // Hidden as well as paused: a covered WebGL canvas is still a layer the
+      // compositor has to account for every frame. Visibility keeps its size
+      // and contents, so it comes back exactly as it was.
+      style={paused ? { visibility: "hidden" } : undefined}
       onPointerDown={(event) => {
         if (event.button === 2) pressAt.current = { x: event.clientX, y: event.clientY };
         beginPress(event.clientX, event.clientY);
@@ -209,6 +220,7 @@ export function AnatomyViewer() {
         // The range `AdaptiveDpr` below is allowed to work within. Without a
         // floor there is nothing to give back when the frame rate drops.
         performance={{ min: 0.5 }}
+        frameloop={paused ? "never" : "always"}
       >
         <color attach="background" args={[backgroundTheme(background).canvas]} />
         {/*

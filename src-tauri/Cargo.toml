@@ -5,7 +5,7 @@ description = "Interactive anatomy and AI insights"
 authors = ["PYSBG"]
 edition = "2021"
 rust-version = "1.82"
-license = "Apache-2.0"
+license = "BUSL-1.1"
 
 [lib]
 name = "anatria3d_lib"

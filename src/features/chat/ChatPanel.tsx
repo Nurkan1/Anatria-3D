@@ -58,6 +58,12 @@ import { SpeakAnswerButton } from "./SpeakAnswerButton";
 import { useCopy } from "./useCopy";
 
 /** Human-readable names for the scene tools, for the activity trail. */
+/**
+ * Said where the conversation starts, before the first question: the answers
+ * come from an AI model (EU AI Act Art. 50(1)), and a model can be wrong.
+ */
+const AI_NOTICE = "You are talking to an AI model. It can be wrong — check anything that matters.";
+
 const TOOL_LABELS: Record<string, string> = {
   focus_organ: "focused a structure",
   scan_at_structure: "moved the scanner",
@@ -1100,6 +1106,7 @@ export function ChatPanel() {
             <p className="text-slate-600">
               The assistant moves the camera as it explains.
             </p>
+            <p className="text-[10px] text-slate-600">{AI_NOTICE}</p>
             <p className="text-[10px] text-slate-700">
               {structures.length} structures loaded — switch on more systems in the
               left panel
@@ -1111,9 +1118,11 @@ export function ChatPanel() {
           <div className="space-y-3 pt-6 text-center text-xs text-slate-500">
             <p>Pick a scenario, or describe one yourself.</p>
             <p className="text-slate-600">
-              You will get a patient, the anatomy marked on the model, and a question
-              to answer. Your answer is graded and kept.
+              You will get an invented patient, the anatomy marked on the model, and a
+              question to answer. Your answer gets a score for your own study — not a
+              formal assessment — and is kept.
             </p>
+            <p className="text-[10px] text-slate-600">{AI_NOTICE}</p>
             <div className="flex flex-wrap justify-center gap-1.5 pt-1">
               {CASE_STARTERS.filter((starter) => loadedSystems.has(starter.system)).map(
                 (starter) => (

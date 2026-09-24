@@ -7,6 +7,7 @@ import { askToConfirm } from "@/stores/confirmStore";
 import { useModelStore } from "@/stores/modelStore";
 
 import { BridgeSettings } from "./BridgeSettings";
+import { DisplaySettings } from "./DisplaySettings";
 import { VoiceSettings } from "./VoiceSettings";
 
 const PROVIDERS: { id: AiProvider; label: string }[] = [
@@ -18,7 +19,9 @@ const PROVIDERS: { id: AiProvider; label: string }[] = [
 const PROFILES: { id: UserProfile; label: string }[] = [
   { id: "layperson", label: "General" },
   { id: "student", label: "Student" },
-  { id: "clinician", label: "Clinician" },
+  // The id stays `clinician` for stored preferences; the label names a depth of
+  // explanation, not an audience in clinical practice (see README, Regulatory positioning).
+  { id: "clinician", label: "Professional" },
 ];
 
 function KeyStatusBadge({ status }: { status: string }) {
@@ -422,6 +425,9 @@ export function SettingsDrawer({
               </p>
             )}
           </div>
+
+          {/* How the window is drawn: a preference, so above the bridge. */}
+          <DisplaySettings />
 
           {/* Last, and on purpose. Everything above changes how this window
               answers you; this one lets something outside the window act on

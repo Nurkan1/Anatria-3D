@@ -158,7 +158,7 @@ const KIND_LABEL: Record<FiledMode, string> = {
 const PROFILE_LABEL: Record<UserProfile, string> = {
   layperson: "Layperson",
   student: "Student",
-  clinician: "Clinician",
+  clinician: "Professional",
 };
 
 const LANGUAGE_LABEL: Record<Language, string> = {

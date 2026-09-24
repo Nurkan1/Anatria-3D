@@ -1,0 +1,345 @@
+/*
+ * The Memory Lab's look. Every class is prefixed `ml-` and everything hangs off
+ * `.ml-root`, so nothing here can restyle the rest of the application.
+ */
+.ml-root {
+  --ml-cyan: #56e1ff;
+  --ml-cyan-dim: rgba(86, 225, 255, 0.5);
+  --ml-cyan-faint: rgba(86, 225, 255, 0.14);
+  --ml-amber: #ffb347;
+  --ml-violet: #c29bff;
+  --ml-ink: #d8f6ff;
+  --ml-mono: "Cascadia Mono", "Consolas", "SF Mono", ui-monospace, monospace;
+  --ml-sans: "Bahnschrift", "Segoe UI", system-ui, sans-serif;
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  overflow: hidden;
+  background: #010408;
+  color: var(--ml-ink);
+  font-family: var(--ml-mono);
+  animation: ml-in 0.5s ease-out;
+  /* A screen that is dragged and clicked: only what is read can be selected and copied. */
+  user-select: none;
+  -webkit-user-select: none;
+  /*
+   * The layout is laid in vh on purpose, but the title is laid in type, and on a
+   * short laptop screen 13vh is not enough room under it: the index tab rose
+   * into the subtitle. So the column starts at whichever is lower — 13vh, or
+   * the bottom of the title block (its two lines at their set line-heights)
+   * plus the tab's own height.
+   */
+  --ml-under-head: calc(3.2vh + 1.2 * clamp(14px, 1.35vw, 26px) + 1.8 * clamp(9px, 0.62vw, 12px) + 10px);
+  --ml-top: max(13vh, calc(var(--ml-under-head) + 40px));
+  /* The figure's column; the large reader keeps to the right of it. */
+  --ml-column: clamp(220px, 19vw, 380px);
+}
+.ml-stage { position: absolute; inset: 0; }
+/*
+ * Never quite opaque, on purpose. A canvas covering the whole window is handed
+ * to the screen as a hardware overlay, and every time a panel or label changes
+ * above it the compositor switches it in or out of that mode — on Windows with
+ * an NVIDIA card each switch blinked the whole window black. At 0.999 it is
+ * always composited normally; the difference cannot be seen.
+ *
+ * The same measurement is why nothing in this file uses backdrop-filter, a CSS
+ * filter or an endless animation: each of those is recomposited over the
+ * hologram every frame, and the blinking fell as they were taken out.
+ */
+.ml-stage canvas.ml-gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; opacity: 0.999; }
+.ml-hud { position: absolute; inset: 0; pointer-events: none; perspective: 1400px; text-shadow: 0 0 8px rgba(86, 225, 255, 0.5); }
+.ml-hud button, .ml-panel { pointer-events: auto; }
+
+.ml-head { position: absolute; top: 3.2vh; left: 3vw; letter-spacing: 0.32em; }
+.ml-title { font-family: var(--ml-sans); font-weight: 300; line-height: 1.2; font-size: clamp(14px, 1.35vw, 26px); color: var(--ml-cyan); }
+.ml-sub { margin-top: 0.6em; line-height: 1.2; font-size: clamp(9px, 0.62vw, 12px); color: var(--ml-cyan-dim); letter-spacing: 0.22em; }
+.ml-corner { position: absolute; top: 3vh; right: 3vw; display: flex; gap: 0.8em; }
+.ml-exit, .ml-sound, .ml-focus-toggle {
+  font: inherit; font-size: clamp(9px, 0.65vw, 12px); letter-spacing: 0.3em;
+  color: var(--ml-cyan); background: rgba(10, 40, 60, 0.3);
+  border: 1px solid var(--ml-cyan-faint); padding: 0.7em 1.2em; cursor: pointer;
+}
+.ml-exit:hover, .ml-exit:focus-visible, .ml-sound:hover, .ml-sound:focus-visible,
+.ml-focus-toggle:hover, .ml-focus-toggle:focus-visible { border-color: var(--ml-cyan); outline: none; }
+/* The guide's key: square, the same frame as its neighbours. */
+.ml-help-toggle {
+  font: inherit; font-size: clamp(10px, 0.75vw, 14px); line-height: 1; color: var(--ml-cyan);
+  background: rgba(10, 40, 60, 0.3); border: 1px solid var(--ml-cyan-faint);
+  width: 2.6em; cursor: pointer;
+}
+.ml-help-toggle:hover, .ml-help-toggle:focus-visible, .ml-help-toggle.ml-on { border-color: var(--ml-cyan); outline: none; }
+/* Over everything, flat and dark, because it is only ever read. Scoped deep enough to outrank the per-size and focus panel rules. */
+.ml-root .ml-hud .ml-panel.ml-help {
+  left: 50%; top: max(9vh, var(--ml-under-head)); bottom: 12vh; width: min(760px, 92vw);
+  transform: translateX(-50%); z-index: 6; background: rgba(2, 10, 18, 0.94);
+  display: flex; flex-direction: column; text-shadow: none;
+}
+.ml-help-body {
+  flex: 1; min-height: 0; overflow-y: auto; padding-right: 0.6em;
+  scrollbar-width: thin; scrollbar-color: var(--ml-cyan-faint) transparent;
+}
+.ml-help-group { margin-bottom: 1.8vh; }
+.ml-help-group h4 {
+  margin: 0 0 0.8vh; font-weight: 400; font-size: clamp(9px, 0.6vw, 12px); letter-spacing: 0.3em; color: var(--ml-cyan-dim);
+  border-bottom: 1px solid var(--ml-cyan-faint); padding-bottom: 0.4em;
+}
+.ml-help-group dl { margin: 0; display: grid; gap: 0.6em; }
+.ml-help-group dl > div { display: grid; grid-template-columns: minmax(8em, 30%) 1fr; gap: 1.2em; align-items: baseline; }
+.ml-help-group dt { font-size: clamp(9px, 0.62vw, 12px); letter-spacing: 0.12em; color: var(--ml-cyan); }
+.ml-help-group dd { margin: 0; font-family: var(--ml-sans); font-size: clamp(11px, 0.72vw, 14px); line-height: 1.5; color: rgba(216, 246, 255, 0.86); }
+.ml-help-foot { margin: 0.5vh 0 0; font-size: clamp(8px, 0.55vw, 11px); letter-spacing: 0.16em; color: var(--ml-cyan-dim); }
+.ml-root[data-size="compact"] .ml-hud .ml-panel.ml-help { top: 48px; bottom: 14px; width: calc(100% - 24px); }
+.ml-root[data-size="compact"] .ml-help-group dl > div { grid-template-columns: 1fr; gap: 0.2em; }
+.ml-focus-toggle { display: flex; align-items: center; gap: 0.7em; color: var(--ml-cyan-dim); }
+.ml-focus-toggle.ml-on { color: var(--ml-cyan); border-color: var(--ml-cyan-dim); }
+.ml-focus-toggle i { font-style: normal; letter-spacing: 0; }
+/* Centred above the timeline, where the error line also appears; never both at once. */
+.ml-notice {
+  position: absolute; left: 50%; bottom: 13vh; transform: translateX(-50%); max-width: 90vw; text-align: center;
+  font-size: clamp(9px, 0.62vw, 12px); letter-spacing: 0.22em; color: var(--ml-amber);
+  text-shadow: 0 0 8px rgba(255, 179, 71, 0.45); animation: ml-recall 0.6s ease-out;
+}
+.ml-sound { display: flex; align-items: center; gap: 0.8em; color: var(--ml-cyan-dim); }
+.ml-sound.ml-on { color: var(--ml-cyan); }
+/* A small level meter: moving while the sound is on, flat while it is off. */
+.ml-sound i { display: flex; align-items: flex-end; gap: 2px; height: 10px; }
+.ml-sound b { width: 2px; height: 2px; background: currentColor; }
+/* A still level meter: tall bars while on, flat while off. */
+.ml-sound.ml-on b { height: 6px; }
+.ml-sound.ml-on b:nth-child(2) { height: 10px; }
+.ml-sound.ml-on b:nth-child(3) { height: 4px; }
+.ml-sound.ml-on b:nth-child(4) { height: 8px; }
+
+/* The figure's column, where the index used to stand; the index now opens over it. */
+.ml-body {
+  position: absolute; left: 3vw; top: var(--ml-top); bottom: 13vh;
+  width: var(--ml-column);
+  transition: opacity 0.6s;
+}
+.ml-body.ml-hidden { opacity: 0; pointer-events: none; }
+.ml-studied {
+  position: absolute; left: 0; right: 0; bottom: -0.5vh; z-index: 1; pointer-events: none;
+  display: flex; flex-direction: column; align-items: center; gap: 0.35em; text-align: center;
+  font-size: clamp(8px, 0.55vw, 11px); letter-spacing: 0.2em; color: var(--ml-amber);
+  text-shadow: 0 0 8px rgba(255, 179, 71, 0.5); animation: ml-recall 0.6s ease-out;
+}
+.ml-studied span { color: rgba(255, 210, 150, 0.6); letter-spacing: 0.3em; }
+.ml-studied button {
+  pointer-events: auto; cursor: pointer; font-family: var(--ml-sans); font-weight: 400; font-size: 1.25em; letter-spacing: 0.08em;
+  color: inherit; text-shadow: inherit; background: none; border: 0; border-bottom: 1px solid transparent; padding: 0.1em 0.3em;
+  opacity: 0.85; transition: opacity 0.2s, border-color 0.2s;
+}
+.ml-studied button:hover, .ml-studied button:focus-visible, .ml-studied button.ml-on { opacity: 1; border-bottom-color: var(--ml-amber); outline: none; }
+.ml-studied button[aria-pressed="true"] { color: #ffd9a0; }
+/* Folded, the names simply stack; unfolded they scroll, so a long list never climbs over the whole figure. */
+.ml-studied-list { display: flex; flex-direction: column; align-items: center; gap: 0.35em; max-width: 100%; }
+.ml-studied-list.ml-all {
+  max-height: 34vh; overflow-y: auto; pointer-events: auto; padding: 0.3em 0.4em;
+  background: rgba(2, 10, 18, 0.7); border: 1px solid rgba(255, 179, 71, 0.18);
+  scrollbar-width: thin; scrollbar-color: rgba(255, 179, 71, 0.3) transparent;
+}
+.ml-studied-tools { display: flex; gap: 0.6em; margin-top: 0.3em; }
+.ml-studied .ml-tool {
+  font-family: var(--ml-mono); font-size: 0.9em; letter-spacing: 0.25em; padding: 0.45em 0.8em;
+  color: rgba(255, 210, 150, 0.8); border: 1px solid rgba(255, 179, 71, 0.3); background: rgba(40, 20, 0, 0.3);
+}
+.ml-studied .ml-tool:hover, .ml-studied .ml-tool:focus-visible, .ml-studied .ml-tool[aria-pressed="true"] { border-color: var(--ml-amber); color: var(--ml-amber); }
+/* The figure is drawn by the brain's own renderer into this box; the box only takes the drag. */
+.ml-body { touch-action: none; }
+
+.ml-panel {
+  position: absolute; top: 15vh;
+  width: clamp(240px, 21vw, 420px);
+  padding: 1.2vh 1vw 1.4vh;
+  border: 1px solid var(--ml-cyan-faint);
+  background: linear-gradient(180deg, rgba(20, 80, 120, 0.18), rgba(4, 16, 28, 0.08));
+  box-shadow: inset 0 0 24px rgba(86, 225, 255, 0.06);
+  transition: clip-path 0.7s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.5s;
+  clip-path: inset(0 0 0 0);
+}
+.ml-panel.ml-hidden { clip-path: inset(50% 0 50% 0); opacity: 0; pointer-events: none; }
+.ml-panel::before, .ml-panel::after { content: ""; position: absolute; width: 14px; height: 14px; border: 1px solid var(--ml-cyan); }
+.ml-panel::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+.ml-panel::after { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+.ml-left { left: calc(3vw + 18px); transform: rotateY(14deg); transform-origin: left center; z-index: 4; background: rgba(2, 10, 18, 0.82); max-height: 72vh; overflow-y: auto; }
+.ml-right { right: 3vw; transform: rotateY(-10deg); transform-origin: right center; bottom: 17vh; display: flex; flex-direction: column; }
+.ml-panel h3 {
+  margin: 0 0 1vh; display: flex; justify-content: space-between; gap: 1em;
+  font-size: clamp(9px, 0.6vw, 12px); font-weight: 400; letter-spacing: 0.3em; color: var(--ml-cyan);
+}
+.ml-panel h3 span { color: var(--ml-cyan-dim); letter-spacing: 0.12em; }
+.ml-gap { margin-top: 2vh !important; }
+
+.ml-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; flex: none; }
+.ml-dot.ml-session { background: var(--ml-cyan); box-shadow: 0 0 8px var(--ml-cyan); }
+.ml-dot.ml-case { background: var(--ml-amber); box-shadow: 0 0 8px var(--ml-amber); }
+.ml-dot.ml-note { background: var(--ml-violet); box-shadow: 0 0 8px var(--ml-violet); }
+.ml-count { display: grid; grid-template-columns: 1.4em 1fr auto; align-items: center; font-size: clamp(9px, 0.6vw, 12px); letter-spacing: 0.14em; color: var(--ml-cyan-dim); line-height: 2.1; }
+.ml-count b { font-weight: 400; color: var(--ml-ink); font-variant-numeric: tabular-nums; }
+
+.ml-months { display: flex; align-items: flex-end; gap: 2px; height: 7vh; border-bottom: 1px solid var(--ml-cyan-faint); }
+.ml-month { flex: 1; height: 100%; display: flex; align-items: flex-end; }
+.ml-month i { width: 100%; min-height: 1px; background: linear-gradient(0deg, rgba(86, 225, 255, 0.25), var(--ml-cyan)); box-shadow: 0 0 6px rgba(86, 225, 255, 0.5); }
+.ml-months-scale { display: flex; justify-content: space-between; margin-top: 0.4vh; font-size: clamp(7px, 0.48vw, 10px); color: rgba(86, 225, 255, 0.35); letter-spacing: 0.1em; }
+
+.ml-recent { list-style: none; margin: 0; padding: 0; }
+.ml-recent button {
+  display: grid; grid-template-columns: 1.4em 1fr; align-items: center; width: 100%;
+  font: inherit; font-size: clamp(8px, 0.56vw, 11px); letter-spacing: 0.06em; line-height: 2.1; text-align: left;
+  color: var(--ml-cyan-dim); background: none; border: 0; padding: 0; cursor: pointer;
+}
+.ml-recent button:hover, .ml-recent button.ml-on, .ml-recent button:focus-visible { color: var(--ml-ink); outline: none; }
+.ml-recent em { font-style: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.ml-reading-title { font-family: var(--ml-sans); font-size: clamp(13px, 1vw, 19px); letter-spacing: 0.06em; color: var(--ml-ink); margin-bottom: 1.2vh; }
+.ml-reading {
+  flex: 1; min-height: 0; overflow-y: auto; padding-right: 0.6em;
+  font-family: var(--ml-sans); font-size: clamp(11px, 0.72vw, 14px); line-height: 1.55; color: rgba(216, 246, 255, 0.86);
+  text-shadow: none; scrollbar-width: thin; scrollbar-color: var(--ml-cyan-faint) transparent;
+  animation: ml-recall 0.6s ease-out;
+  user-select: text;
+  -webkit-user-select: text;
+}
+.ml-reading p { margin: 0 0 0.8em; white-space: pre-wrap; }
+.ml-faint { color: var(--ml-cyan-dim); letter-spacing: 0.2em; font-family: var(--ml-mono); }
+.ml-score { font-family: var(--ml-mono); letter-spacing: 0.2em; color: var(--ml-amber); }
+.ml-message { margin-bottom: 1.4vh; }
+.ml-message > span { display: block; font-family: var(--ml-mono); font-size: 0.72em; letter-spacing: 0.3em; margin-bottom: 0.3em; color: var(--ml-cyan-dim); }
+.ml-message.ml-user > p { color: var(--ml-ink); border-left: 2px solid var(--ml-cyan); padding-left: 0.7em; }
+.ml-note { border-left: 2px solid var(--ml-violet); padding-left: 0.7em; }
+
+.ml-actions { display: flex; justify-content: space-between; gap: 1em; margin-top: 1.4vh; }
+.ml-actions button {
+  font: inherit; font-size: clamp(8px, 0.58vw, 11px); letter-spacing: 0.25em; padding: 0.8em 1.1em;
+  background: rgba(10, 40, 60, 0.3); cursor: pointer; position: relative; overflow: hidden;
+}
+.ml-close-reading { color: var(--ml-cyan); border: 1px solid var(--ml-cyan-faint); }
+.ml-erase { color: var(--ml-amber); border: 1px solid rgba(255, 179, 71, 0.4); touch-action: none; }
+.ml-erase i { position: absolute; inset: 0 auto 0 0; width: 0; background: rgba(255, 120, 60, 0.35); }
+.ml-erase.ml-holding i { animation: ml-hold var(--ml-hold) linear forwards; }
+.ml-actions button:focus-visible { outline: 1px solid var(--ml-cyan); }
+
+.ml-bottom { position: absolute; left: 50%; bottom: 4.5vh; width: min(60vw, 1100px); transform: translateX(-50%); pointer-events: auto; }
+.ml-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1vh; }
+.ml-status { font-size: clamp(9px, 0.65vw, 13px); letter-spacing: 0.24em; color: var(--ml-cyan); max-width: 70%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ml-percent { font-family: var(--ml-sans); font-weight: 200; font-size: clamp(24px, 2.6vw, 54px); font-variant-numeric: tabular-nums; line-height: 1; }
+.ml-percent small { font-size: 0.32em; letter-spacing: 0.3em; color: var(--ml-cyan-dim); margin-left: 0.6em; }
+.ml-bar { height: 5px; border: 1px solid var(--ml-cyan-faint); position: relative; }
+.ml-bar i { position: absolute; inset: 0 auto 0 0; background: linear-gradient(90deg, rgba(86, 225, 255, 0.4), var(--ml-cyan) 70%, #fff); box-shadow: 0 0 14px var(--ml-cyan); transition: width 0.2s; }
+.ml-skip { margin-top: 0.8vh; text-align: center; font-size: clamp(7px, 0.48vw, 10px); letter-spacing: 0.4em; color: rgba(86, 225, 255, 0.35); }
+
+.ml-timeline { display: flex; align-items: flex-end; gap: 3px; height: 4.2vh; padding-top: 1vh; border-bottom: 1px solid var(--ml-cyan-faint); animation: ml-recall 0.6s ease-out; }
+.ml-tick { flex: 1 1 0; max-width: 14px; min-width: 2px; height: 55%; border: 0; padding: 0; cursor: pointer; background: var(--ml-cyan); opacity: 0.45; transition: height 0.2s, opacity 0.2s; }
+.ml-tick.ml-case { background: var(--ml-amber); }
+.ml-tick.ml-note { background: var(--ml-violet); }
+.ml-tick:hover, .ml-tick:focus-visible, .ml-tick.ml-on { height: 100%; opacity: 1; outline: none; box-shadow: 0 0 10px currentColor; }
+.ml-tick.ml-gone { opacity: 0.08; cursor: default; }
+
+.ml-callout { position: absolute; left: 0; top: 0; opacity: 0; transition: opacity 0.2s; }
+.ml-callout svg { position: absolute; left: 0; top: 0; overflow: visible; }
+.ml-callout circle, .ml-callout polyline { fill: none; stroke: var(--ml-amber); stroke-width: 1.3; }
+.ml-tag { position: absolute; left: 44px; top: -30px; transform: translateY(-100%); padding: 0.3em 0.7em 0.4em; border-left: 2px solid var(--ml-amber); background: rgba(40, 20, 0, 0.3); white-space: nowrap; max-width: 30vw; box-sizing: border-box; }
+.ml-callout.ml-flip svg { transform: scaleX(-1); transform-origin: 0 0; }
+.ml-callout.ml-flip .ml-tag { left: auto; right: 44px; border-left: 0; border-right: 2px solid var(--ml-amber); text-align: right; }
+.ml-tag b { display: block; font-family: var(--ml-sans); font-weight: 400; font-size: clamp(11px, 0.85vw, 17px); letter-spacing: 0.08em; color: var(--ml-amber); overflow: hidden; text-overflow: ellipsis; }
+.ml-tag span { display: block; overflow: hidden; text-overflow: ellipsis; font-size: clamp(8px, 0.55vw, 11px); letter-spacing: 0.16em; color: rgba(255, 210, 150, 0.75); }
+
+.ml-toast {
+  position: absolute; left: 50%; top: 9vh; transform: translateX(-50%); pointer-events: auto;
+  display: flex; align-items: center; gap: 1.4em; padding: 0.8em 1.4em;
+  border: 1px solid rgba(255, 179, 71, 0.4); background: rgba(40, 20, 0, 0.45);
+  font-size: clamp(9px, 0.62vw, 12px); letter-spacing: 0.3em; color: var(--ml-amber);
+}
+.ml-toast button { font: inherit; letter-spacing: 0.25em; color: var(--ml-ink); background: none; border: 1px solid var(--ml-cyan); padding: 0.5em 1em; cursor: pointer; }
+.ml-empty { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); max-width: 420px; text-align: center; font-family: var(--ml-sans); line-height: 1.6; color: var(--ml-cyan-dim); }
+.ml-empty b { display: block; margin-bottom: 1em; font-family: var(--ml-mono); font-weight: 400; letter-spacing: 0.4em; color: var(--ml-cyan); }
+.ml-error { position: absolute; left: 50%; bottom: 13vh; transform: translateX(-50%); color: var(--ml-amber); font-size: 12px; letter-spacing: 0.1em; }
+
+/* ---- reading large, and the index rail ------------------------------------ */
+.ml-expand {
+  margin-left: auto; font: inherit; font-size: 1.3em; line-height: 1; letter-spacing: 0;
+  color: var(--ml-cyan); background: none; border: 1px solid var(--ml-cyan-faint); padding: 0.1em 0.45em; cursor: pointer;
+}
+.ml-expand:hover, .ml-expand:focus-visible { border-color: var(--ml-cyan); outline: none; }
+/*
+ * Scoped under the root so it outranks the per-size panel rules below.
+ * Centred where the screen is wide enough; on a narrower one it gives way to
+ * the right of the figure's column rather than laying itself over the list of
+ * what was studied, and below the title rather than over the index tab.
+ */
+.ml-root .ml-panel.ml-right.ml-wide {
+  --ml-wide-left: max(calc(50% - 490px), calc(3vw + var(--ml-column) + 24px));
+  left: var(--ml-wide-left); right: auto; top: max(9vh, var(--ml-under-head)); bottom: 12vh;
+  width: min(980px, calc(100% - var(--ml-wide-left) - 3vw));
+  transform: none;
+  background: rgba(2, 10, 18, 0.9);
+  z-index: 3;
+}
+.ml-wide .ml-reading { font-size: clamp(13px, 0.95vw, 17px); }
+.ml-rail {
+  position: absolute; left: 0; top: 50%; transform: translateY(-50%) rotate(180deg);
+  writing-mode: vertical-rl; font: inherit; font-size: 10px; letter-spacing: 0.35em;
+  color: var(--ml-cyan); background: rgba(10, 40, 60, 0.45);
+  border: 1px solid var(--ml-cyan-faint); border-left: 0; padding: 1.4em 0.55em; cursor: pointer; z-index: 4;
+}
+.ml-rail.ml-on, .ml-rail:hover, .ml-rail:focus-visible { border-color: var(--ml-cyan); outline: none; }
+.ml-error { pointer-events: auto; display: flex; align-items: center; gap: 1.2em; }
+.ml-error button { font: inherit; letter-spacing: 0.25em; color: var(--ml-ink); background: none; border: 1px solid var(--ml-cyan); padding: 0.4em 0.9em; cursor: pointer; }
+
+.ml-root:not([data-size="compact"]) .ml-rail {
+  left: 3vw; top: calc(var(--ml-top) - 40px); transform: none; writing-mode: horizontal-tb;
+  border-left: 1px solid var(--ml-cyan-faint); padding: 0.7em 1.1em;
+}
+.ml-root:not([data-size="compact"]) .ml-rail.ml-on,
+.ml-root:not([data-size="compact"]) .ml-rail:hover,
+.ml-root:not([data-size="compact"]) .ml-rail:focus-visible { border-color: var(--ml-cyan); }
+.ml-root:not([data-size="compact"]) .ml-left { left: 3vw; top: var(--ml-top); }
+
+/* ---- medium: flat, narrower panels ---------------------------------------- */
+.ml-root[data-size="medium"] .ml-panel { transform: none; width: clamp(210px, 25vw, 330px); top: 11vh; }
+.ml-root[data-size="medium"] { --ml-column: clamp(180px, 20vw, 280px); }
+/* The index opens under its tab, like the figure it lies over. */
+.ml-root[data-size="medium"] .ml-left { top: var(--ml-top); }
+.ml-root[data-size="medium"] .ml-body { bottom: 15vh; }
+.ml-root[data-size="medium"] .ml-right { bottom: 16vh; }
+.ml-root[data-size="medium"] .ml-bottom { width: min(76vw, 900px); }
+
+/* ---- compact: rail on the left, the reader as a sheet from the bottom ----- */
+.ml-root[data-size="compact"] .ml-head { top: 12px; left: 14px; }
+.ml-root[data-size="compact"] .ml-sub { display: none; }
+.ml-root[data-size="compact"] .ml-corner { top: 10px; right: 12px; }
+/* No room for a figure beside the brain on a small screen. */
+.ml-root[data-size="compact"] .ml-body { display: none; }
+/* The rail sits high, clear of the reading sheet that rises from the bottom. */
+.ml-root[data-size="compact"] .ml-rail { top: 52px; transform: rotate(180deg); }
+.ml-root[data-size="compact"] .ml-left {
+  transform: none; left: 30px; top: 52px; width: min(300px, 78vw);
+  max-height: calc(100% - 150px); overflow-y: auto; z-index: 4; background: rgba(2, 10, 18, 0.92);
+}
+.ml-root[data-size="compact"] .ml-right:not(.ml-wide) {
+  transform: none; left: 12px; right: 12px; width: auto;
+  top: auto; bottom: 64px; height: min(56%, 460px);
+  background: rgba(2, 10, 18, 0.9); z-index: 3;
+}
+.ml-root[data-size="compact"] .ml-right.ml-wide { left: 12px; top: 48px; bottom: 64px; width: calc(100% - 24px); }
+.ml-root[data-size="compact"] .ml-bottom { width: calc(100% - 28px); bottom: 14px; }
+.ml-root[data-size="compact"] .ml-percent { font-size: 26px; }
+
+/* ---- focus: for reading. The hologram and its motion are untouched. -------
+ * Panels lie flat, because text on a panel turned in 3D is rasterised at an
+ * angle and goes soft; the glow around letters goes, because at small sizes it
+ * smears them; the reader gets a darker ground so the text stands off it.
+ */
+.ml-root.ml-focus .ml-hud { text-shadow: none; }
+.ml-root.ml-focus .ml-panel { transform: none; }
+.ml-root.ml-focus .ml-panel.ml-right { background: rgba(2, 10, 18, 0.9); }
+.ml-root.ml-focus .ml-reading { color: #e6f8ff; }
+.ml-root.ml-focus .ml-studied, .ml-root.ml-focus .ml-notice { text-shadow: none; }
+
+@keyframes ml-in { from { opacity: 0; } }
+@keyframes ml-recall { from { opacity: 0; } }
+@keyframes ml-hold { to { width: 100%; } }
+@media (prefers-reduced-motion: reduce) {
+  .ml-root, .ml-reading, .ml-timeline { animation: none; }
+  .ml-panel { transition: none; }
+}

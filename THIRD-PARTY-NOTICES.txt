@@ -5,6 +5,27 @@ Anatria3D is educational software. It is NOT a medical device, and it is not
 for diagnosis or treatment of any person.
 
 
+The application — Business Source License 1.1
+---------------------------------------------
+
+Licensor: Nurdzhan Kerimov (Digital Rose). Copyright (c) 2026.
+
+Free of charge for study, teaching and academic research, and for
+non-commercial evaluation by healthcare professionals.
+
+Any other production use — a commercial clinic or healthcare business,
+any revenue-generating environment, re-branding, or distribution as part of a
+paid product or service — requires a commercial licence. Write to
+anatria@digitalrose.org.
+
+On 2030-10-01 this version converts to the Apache License, Version 2.0.
+The full terms are in the LICENSE file installed with the application.
+
+The licence above covers the application's own code, and nothing else. The
+anatomy below is third-party material under its own licences, which this one
+does not restrict.
+
+
 The 3D meshes and the anatomical nomenclature shipped with this application are
 not original to it. They come from two unrelated open datasets, under two
 different licences, and they are kept in separate files for that reason.

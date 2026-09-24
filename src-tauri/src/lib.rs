@@ -15,6 +15,7 @@ mod control_frame;
 mod control_listener;
 #[cfg(windows)]
 mod control_pipe;
+mod display;
 mod keyring_store;
 pub(crate) mod sidecar;
 mod study_db;
@@ -32,6 +33,10 @@ const STUDY_DB: &str = "study.db";
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    // First of all, while the process has one thread: the webview's browser
+    // arguments are fixed when the window is created, before any setup runs.
+    display::apply_before_window();
+
     tauri::Builder::default()
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_dialog::init())
@@ -85,6 +90,8 @@ pub fn run() {
             commands::clear_log,
             commands::log_event,
             commands::save_log_copy,
+            commands::display_status,
+            commands::set_stable_display,
         ])
         .setup(|app| {
             // Before anything else is visible for long enough to be read: a

@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 
+import { useCopy } from "@/features/chat/useCopy";
 import { APP_VERSION_LABEL } from "@/lib/appVersion";
 import { MAX_SEVERITY, MAX_VISITS } from "@/lib/studyDb";
+
+/** Where to write for support, custom work or institutional use. */
+const CONTACT_EMAIL = "anatria@digitalrose.org";
 
 /**
  * How the app works, for someone opening it for the first time.
@@ -43,9 +47,13 @@ const SECTIONS: Section[] = [
           off.
         </Callout>
         <p>
-          Everything stays on your machine. The anatomy ships with the app, your notes
-          live in a local file, and the only thing that ever leaves is the question you
-          type — sent to the AI provider whose key you supplied.
+          Everything stays on your machine except what the assistant needs to answer.
+          The anatomy ships with the app and your journal lives in a local file. When
+          you ask, Anatria3D sends the AI provider whose key you supplied your
+          question, the recent conversation, what is on screen — the structures
+          selected, the scanner and the heart — and, in a case drill, the invented
+          patient's file. Nothing goes anywhere else. Apart from checking your key,
+          nothing is sent while you are not asking.
         </p>
         <Callout>
           <strong>There are two atlases, and they are not the same size.</strong> The{" "}
@@ -782,7 +790,7 @@ const SECTIONS: Section[] = [
         <p>
           Set your <Ui>profile</Ui> before asking. The same structure is explained
           three different ways: everyday language for a layperson, terminology and
-          mechanism for a student, clinical density for a clinician.
+          mechanism for a student, clinical density for a professional.
         </p>
         <p>
           Then set the answer language. <Ui>BG</Ui>, <Ui>ES</Ui> and <Ui>EN</Ui> fix
@@ -875,6 +883,8 @@ const SECTIONS: Section[] = [
           Answer in your own words, and it grades what you wrote out of 100: what you
           got right, what you missed, and the reasoning it was looking for. The score
           goes into your journal, so the average across your drills means something.
+          It is feedback for your own study, written by an AI model — not a formal
+          assessment, and not meant to grade anyone for a course or a job.
         </p>
         <Callout>
           <strong>The patient is invented.</strong> Every scenario is constructed for
@@ -907,10 +917,11 @@ const SECTIONS: Section[] = [
           who the patient is — you invent the case yourself, for teaching. It is not a
           digital twin either: a twin is a model of a real person kept in step with data
           from them, and nothing here is connected to anyone or ever will be. The
-          boundary in the first section applies to every word of it, so do not write a
-          real person's details into a case — not because they would leave your machine,
-          but because that is not what this is for, and the assistant will stop when it
-          notices.
+          boundary in the first section applies to every word of it, so never write a
+          real person's details into a case. That is not what this is for, the
+          assistant will stop when it notices — and the whole file is sent to your AI
+          provider with every turn of the drill, so a real person's health details
+          would leave your machine.
         </Callout>
 
         <Sub>Opening one</Sub>
@@ -1143,6 +1154,82 @@ const SECTIONS: Section[] = [
           <em>every</em> page, in your language and in English, because pages get
           separated from each other.
         </Callout>
+      </>
+    ),
+  },
+  {
+    id: "memory",
+    nav: "Study memory",
+    title: "Your journal, as a map of memories",
+    body: (
+      <>
+        <p>
+          <Ui>MEMORY</Ui>, at the top of the window, opens your journal as a
+          hologram: a brain with every study session, case visit and note laid on it
+          as a point of light — cyan, amber and violet — joined by a thread in the
+          order you made them, from the back of the brain forwards. It is the same
+          journal as the <Ui>Study</Ui> tab, seen as one sequence instead of a list.
+        </p>
+        <p>
+          Point at a memory to see what it is; click it to read it on the right, and{" "}
+          <Ui>⤢</Ui> to read it large. Drag to turn the brain. The strip along the
+          bottom is every memory in order, and <Ui>Memory index</Ui> opens the counts,
+          the months and the most recent. <Ui>←</Ui> and <Ui>→</Ui> walk from one
+          memory to the next, <Ui>Enter</Ui> reads the open one large, and{" "}
+          <Ui>Esc</Ui> steps back one thing at a time, and then leaves. <Ui>?</Ui>, in
+          the top corner or on the keyboard, lists every control on the screen itself.
+        </p>
+
+        <Sub>The figure beside it</Sub>
+        <p>
+          The body standing on its own projector lights, in amber, the structures the
+          open memory was about — the ones that were selected, and the ones the
+          assistant pointed to in its answers — and names them underneath. Point at a
+          name to see that structure alone, the others dimmed; click it to keep it
+          that way, and click it again to see them all. <Ui>More</Ui> unfolds the
+          rest of the list when it is longer than the screen has room for, and{" "}
+          <Ui>Zoom in</Ui> moves the figure in on the chosen structure — or on all of
+          them, if none is chosen — for the small ones. Up close the figure stops
+          turning by itself, so it holds still while you look; drag it to turn it,
+          and <Ui>Whole body</Ui> steps back. It is a
+          figure to look at: nothing you do here changes the atlas, and the atlas
+          waits, paused, until you leave.
+        </p>
+
+        <Sub>Erasing a memory</Sub>
+        <p>
+          Hold <Ui>Hold to erase</Ui> until the bar fills. The memory dissolves, and
+          for eight seconds <Ui>Restore</Ui> brings it back. After that it is deleted
+          from your journal for good — the same delete as in the <Ui>Study</Ui> tab.
+          Leaving the screen while one is counting down completes it.
+        </p>
+
+        <Sub>Reading comfortably</Sub>
+        <p>
+          <Ui>Focus</Ui> takes away the film texture that moves over the picture,
+          sets the panels flat and the text sharp, and leaves the hologram and all
+          its movement as they are. <Ui>Sound</Ui> turns off the tones that answer
+          what you do. Both are remembered.
+        </p>
+        <Callout>
+          <strong>It only reads what is already on this computer.</strong> Nothing
+          is sent anywhere. If the graphics card is slow to start it, has no
+          acceleration, or resets, the screen says so; on a machine that cannot keep
+          up it eases its own effects rather than stutter, and tells you. With no 3D
+          at all, the index and the reader still work.
+        </Callout>
+
+        <Sub>If the screen blinks</Sub>
+        <p>
+          Some monitors with a variable refresh rate (FreeSync, G-SYNC, “variable
+          refresh rate” in Windows) blink for an instant when a window’s frame rate
+          dips, and a dark screen with a bright hologram shows it most. Turning off
+          variable refresh for windowed apps — in Windows’ graphics settings or the
+          monitor’s own menu — cures it. <Ui>Stable display</Ui> in Settings is a
+          second remedy for other combinations of card and driver: it draws the
+          window by a slower, steadier route from the next launch, so leave it off
+          unless you see the blink.
+        </p>
       </>
     ),
   },
@@ -1394,6 +1481,100 @@ const SECTIONS: Section[] = [
     ),
   },
   {
+    id: "regulations",
+    nav: "Regulations",
+    title: "Regulatory transparency",
+    body: (
+      <>
+        <p>
+          What Anatria3D is, set against the European rules that could apply to it.
+          Every statement below describes how the application is built and can be
+          checked in its source code. It is a statement by the developer, not a
+          certificate: no authority has assessed it, and a tool of this kind does not
+          require one.
+        </p>
+        <Callout>
+          <strong>Intended purpose.</strong> Anatria3D is for studying and teaching
+          human anatomy. A professional may also use it as a visual aid to explain
+          anatomy, and how conditions affect the body, in general terms and on a
+          generic model. It does not diagnose, triage, monitor or recommend treatment
+          for anyone. The explanation, and every clinical judgement, belong to the
+          professional.
+        </Callout>
+
+        <Sub>EU AI Act — Regulation (EU) 2024/1689</Sub>
+        <p>
+          <strong>Transparency (Article 50).</strong> The assistant is an AI model,
+          and the conversation says so before the first question. Every answer names
+          the model that wrote it, and a printed page that holds generated text says
+          so at its foot.
+        </p>
+        <p>
+          <strong>Not a high-risk system (Article 6, Annex III).</strong> Anatria3D is
+          not a safety component of a medical device, and it does not decide admission
+          to education or assess anyone formally. Case-drill scores are feedback for
+          your own study. Using them to grade students or staff for a course or a job
+          is outside the intended purpose.
+        </p>
+        <p>
+          <strong>The models.</strong> Answers come from a general-purpose AI model
+          by Anthropic, OpenAI or Google, which you choose and reach with your own key.
+          The obligations on those models (Articles 53 to 55) rest with their
+          providers.
+        </p>
+
+        <Sub>Medical devices — Regulation (EU) 2017/745 (MDR)</Sub>
+        <p>
+          Under Rule 11, software intended to inform diagnostic or therapeutic
+          decisions about a patient is a medical device. Anatria3D is not intended
+          for that, is not a medical device, and carries no CE marking as one.
+        </p>
+        <Rows
+          rows={[
+            ["The assistant", "Declines every question about a specific person — you, a relative, a patient — and points to a qualified professional. The rule applies in every profile and language, and automated tests check that it is always present."],
+            ["The top bar", "Says “Educational use only — not a medical device” permanently. It cannot be closed."],
+            ["Case drills", "Every patient is invented for teaching, and says so. The drill stops if a real person is described."],
+          ]}
+        />
+
+        <Sub>Data protection — GDPR, Regulation (EU) 2016/679</Sub>
+        <Rows
+          rows={[
+            ["No collection", "No account, no server, no analytics, no telemetry. The developer receives nothing from your use of the application."],
+            ["Stored locally", "Your journal is a file on this computer. You can delete any entry, and nobody else holds a copy."],
+            ["Sent to your provider", "Only while you ask: your question, the recent conversation, what is on screen and, in a case drill, the invented patient's file — to the AI provider you chose, under your own key and your own agreement with them. Checking a key lists its models and sends nothing else."],
+            ["Health data (Art. 9)", "There is no field for a real person anywhere. Do not type a patient's details into the assistant or a case: they would be sent to your provider."],
+            ["Keys and voice", "API keys are kept in your system's keyring, never in the interface. Answers are read aloud only by voices installed on this computer."],
+          ]}
+        />
+
+        <Sub>How the assistant acts on the model</Sub>
+        <p>
+          The assistant can only call a fixed set of typed actions — move the camera,
+          isolate, highlight, section, mark a pathology — and every structure it names
+          is checked against the atlas before anything moves. It cannot run commands,
+          read your files or reach the network beyond your provider. Messages between
+          the assistant and the viewer are validated on both sides (Pydantic and Zod).
+          The optional control bridge for an agent on this computer is off until you
+          switch it on.
+        </p>
+
+        <Sub>Explaining anatomy to a patient</Sub>
+        <Rows
+          rows={[
+            ["Generic model", "The body on screen is a reference atlas, not the patient. Say so."],
+            ["No patient data", "Use the atlas directly, or ask general questions — “show how a disc herniation compresses a nerve root” — never about the person in front of you."],
+            ["The judgement", "Anatria3D shows anatomy. What it means for the patient is the professional's to say."],
+          ]}
+        />
+        <p className="text-[11px] text-slate-500">
+          Questions about any of this, or about use in an institution:{" "}
+          <span className="select-all text-slate-300">{CONTACT_EMAIL}</span>
+        </p>
+      </>
+    ),
+  },
+  {
     id: "credits",
     nav: "Credits",
     title: "Who built this, and what it is made of",
@@ -1408,16 +1589,23 @@ const SECTIONS: Section[] = [
           for anatomy — the atlas, the assistant and the study journal alike.
         </Credit>
 
-        <Credit role="Copyright" name="Digital Rose" badge="digitalrose.org">
-          Digital Rose holds the copyright in the Anatria3D application and its
-          name. The <strong>source code is released under the Apache&nbsp;2.0
-          licence</strong>, which grants you the right to use, study, modify and
-          redistribute it, including commercially. The name and marks are not part
-          of that grant: a fork is welcome, a fork called Anatria3D is not.
+        <Credit role="Copyright & licence" name="Nurdzhan Kerimov (Digital Rose)" badge="digitalrose.org">
+          Anatria3D is developed by Nurdzhan Kerimov (Digital Rose) and distributed
+          under the <strong>Business Source License&nbsp;1.1</strong>.{" "}
+          <strong>Free</strong> for personal study, teaching, academic research and
+          non-commercial evaluation by healthcare professionals — you may read,
+          modify and redistribute the source on those terms. Deployment in a clinic,
+          a private practice or any other revenue-generating setting, and
+          redistribution inside a paid product, need a commercial agreement. Each
+          version converts automatically to the Apache&nbsp;2.0 licence on its
+          change date, 1 October 2030 for this one. The name and marks are separate
+          from any of that: a fork is welcome, a fork called Anatria3D is not.
         </Credit>
 
+        <ContactCard />
+
         <p>
-          It is given to students and to universities. That is not a slogan about
+          It is free for students and for universities. That is not a slogan about
           the licence — it <em>is</em> the licence, and it is why this page reads
           the way it does rather than reserving all rights.
         </p>
@@ -1447,9 +1635,10 @@ const SECTIONS: Section[] = [
           rights over them.
           <br />
           <br />
-          The two licences do not merge. The code is Apache&nbsp;2.0 and the anatomy
-          is CC BY-SA 4.0, whichever way you redistribute either. The full text of
-          both ships in the application folder, with the attribution in{" "}
+          The licences do not merge, and the application's licence does not reach the
+          anatomy: the meshes and labels stay CC BY-SA 4.0 whatever the code is under,
+          and their own licence allows commercial use by anyone. The full text of each
+          ships in the application folder, with the attribution in{" "}
           <Ui>anatomy/NOTICE</Ui>.
         </Callout>
 
@@ -1463,9 +1652,10 @@ const SECTIONS: Section[] = [
           own licence; none of them is ours.
         </p>
         <p className="pt-2 text-[11px] text-slate-500">
-          Anatria3D {APP_VERSION_LABEL}. © 2026 Digital Rose. Anatria3D is a trademark of
-          Digital Rose. Application code under Apache-2.0; anatomical assets under CC
-          BY-SA 4.0.
+          Anatria3D {APP_VERSION_LABEL}. © 2026 Nurdzhan Kerimov (Digital Rose).
+          Anatria3D is a trademark of Digital Rose. Application code under the
+          Business Source License 1.1, converting to Apache-2.0 on 2030-10-01;
+          anatomical assets under CC BY-SA 4.0 and CC BY 4.0.
         </p>
       </>
     ),
@@ -1629,6 +1819,36 @@ function Rows({ rows }: { rows: [string, string][] }) {
 /** Something the reader will see named exactly this way in the interface. */
 function Ui({ children }: { children: React.ReactNode }) {
   return <span className="font-medium text-slate-200">{children}</span>;
+}
+
+/**
+ * The contact address, printed and copyable rather than a `mailto:` link, for
+ * the same reason as the domains below: opening it would need the webview's
+ * `opener:allow-open-url`, and one address is not worth widening that for.
+ */
+function ContactCard() {
+  const { copied, copy } = useCopy();
+  return (
+    <div className="rounded-lg border border-slate-700/70 bg-slate-950/50 px-4 py-3">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-slate-500">
+        Contact
+      </p>
+      <div className="mt-1 flex flex-wrap items-center gap-2">
+        <span className="select-all text-base font-semibold text-slate-100">{CONTACT_EMAIL}</span>
+        <button
+          type="button"
+          onClick={() => void copy(CONTACT_EMAIL)}
+          className="rounded border border-slate-700 px-1.5 py-0.5 text-[10px] uppercase tracking-wider text-slate-400 transition hover:border-sky-600 hover:text-sky-300"
+        >
+          {copied ? "Copied" : "Copy"}
+        </button>
+      </div>
+      <p className="mt-2 text-[12px] leading-relaxed text-slate-400">
+        Support, custom features, and use in a university, a school or a clinical
+        training setting.
+      </p>
+    </div>
+  );
 }
 
 /**
