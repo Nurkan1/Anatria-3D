@@ -2,7 +2,7 @@
 name = "anatria-engine"
 version = "0.1.0"
 description = "Anatria3D AI sidecar — multi-provider agent with typed 3D scene control"
-license = "Apache-2.0"
+license = "BUSL-1.1"
 requires-python = ">=3.12"
 
 dependencies = [

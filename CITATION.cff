@@ -46,7 +46,7 @@ identifiers:
     value: 10.5281/zenodo.21921085
     description: Concept DOI — always resolves to the latest archived version.
 
-license: Apache-2.0
+license: BUSL-1.1
 repository-code: https://github.com/Nurkan1/Anatria-3D
 version: 0.4.0
 date-released: 2026-09-17

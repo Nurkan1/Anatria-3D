@@ -1,14 +1,21 @@
 Anatria3D
 Copyright 2026 Digital Rose
 
-This product includes software developed by PYSBG, licensed under the Apache
-License, Version 2.0. See the LICENSE file alongside this one.
+The application source code is licensed under the Business Source License 1.1
+by Nurdzhan Kerimov (Digital Rose). It is free to use for study, teaching and
+academic research, and for non-commercial evaluation by healthcare
+professionals; any other production use needs a commercial licence. On
+2030-10-01 it converts to the Apache License, Version 2.0. See the LICENSE
+file alongside this one, and write to anatria@digitalrose.org for a commercial
+licence.
 
 --------------------------------------------------------------------------
 
 This product also includes anatomical 3D meshes and nomenclature that are NOT
-covered by the Apache License. They come from two unrelated open datasets, and
-they are under two different Creative Commons licences.
+part of the licensed work above and are NOT covered by its licence. They come
+from two unrelated open datasets, under two different Creative Commons
+licences, and nothing in the application's licence restricts the rights those
+licences grant you over them.
 
 The male atlas — `manifest.json`, `*_male.glb` —
 Creative Commons Attribution-ShareAlike 4.0 International:

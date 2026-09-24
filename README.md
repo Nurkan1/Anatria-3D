@@ -1,7 +1,7 @@
 # Anatria3D
 
 [![Gates](https://github.com/Nurkan1/Anatria-3D/actions/workflows/gates.yml/badge.svg)](https://github.com/Nurkan1/Anatria-3D/actions/workflows/gates.yml)
-[![License](https://img.shields.io/badge/code-Apache--2.0-blue)](LICENSE)
+[![License](https://img.shields.io/badge/code-BUSL--1.1-blue)](LICENSE)
 [![Male atlas](https://img.shields.io/badge/male%20atlas-CC%20BY--SA%204.0-blue)](public/anatomy/NOTICE)
 [![Female atlas](https://img.shields.io/badge/female%20atlas-CC%20BY%204.0-blue)](public/anatomy/NOTICE)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.21921085-blue)](https://doi.org/10.5281/zenodo.21921085)
@@ -16,6 +16,14 @@ actually loaded.
 > **Not a medical device.** Anatria3D is for anatomical education and study. It
 > does not diagnose, treat, or give advice about any individual. See
 > [Regulatory positioning](#regulatory-positioning).
+
+> **Free to study with, licensed to deploy commercially.** From v0.5.0 the
+> application's code is under the Business Source License 1.1: free for
+> students, teachers, academic research and non-commercial evaluation by
+> healthcare professionals, and converting to Apache-2.0 on 2030-10-01. Use in
+> a clinic or any other revenue-generating setting needs a commercial licence —
+> anatria@digitalrose.org. The anatomy keeps its own Creative Commons licences,
+> which this does not touch. See [Licensing](#licensing).
 
 ---
 
@@ -1041,17 +1049,35 @@ does not populate.
 
 ### Licensing
 
-The application source code is **Apache-2.0** ([`LICENSE`](LICENSE),
-[`NOTICE`](NOTICE)). Apache rather than MIT for two reasons specific to this
-project: it grants patents explicitly, which matters in a field as
-patent-dense as medical software and protects adopters as well as the author;
-and its warranty disclaimer is a drafted section rather than a sentence, which
-is worth having behind a product that positions itself outside MDR scope.
+The application source code is under the **Business Source License 1.1**
+([`LICENSE`](LICENSE), [`NOTICE`](NOTICE)), with Nurdzhan Kerimov (Digital
+Rose) as licensor. It is source-available rather than open source in the OSI
+sense, and it is time-limited: **each version converts to Apache-2.0 on its
+Change Date**, 2030-10-01 for this one, and the Apache text is already in the
+repository at [`LICENSES/Apache-2.0.txt`](LICENSES/Apache-2.0.txt).
 
-**The two licences do not merge.** Code is Apache-2.0, anatomy is CC BY-SA 4.0,
-and redistributing the anatomy keeps it under CC BY-SA 4.0 regardless of what
-is done with the code. [`THIRD-PARTY-NOTICES.txt`](THIRD-PARTY-NOTICES.txt) is
-the reader-facing summary of both — it is what the installer shows.
+| Use | Cost |
+|---|---|
+| Students, teachers, universities, schools, academic research | Free |
+| A healthcare professional evaluating it, non-commercially | Free |
+| Reading, modifying and redistributing the source, non-production | Free |
+| A clinic, a hospital or any revenue-generating setting | Commercial licence |
+| Re-branding, or shipping it inside a paid product or service | Commercial licence |
+
+Commercial licensing, pilots and institutional deployments:
+**anatria@digitalrose.org**.
+
+Versions up to and including v0.4.0 were published under Apache-2.0, and that
+grant is irrevocable: those releases stay Apache-2.0 forever. The BSL applies
+from v0.5.0 onwards.
+
+**The licences do not merge, and the code's licence does not reach the
+anatomy.** The meshes and nomenclature in `public/anatomy/` are third-party
+work under CC BY-SA 4.0 (male atlas) and CC BY 4.0 (female atlas). Those
+licences permit commercial use by anyone, and nothing here restricts them —
+doing so would breach them and end the right to ship the data at all.
+[`THIRD-PARTY-NOTICES.txt`](THIRD-PARTY-NOTICES.txt) is the reader-facing
+summary, and it is what the installer shows.
 
 ### Building the installer
 

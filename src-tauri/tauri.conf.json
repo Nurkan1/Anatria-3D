@@ -45,10 +45,11 @@
       "../tools/anatria_mcp/INSTALLED.md": "anatria-mcp/INSTALLED.md"
     },
     "category": "Education",
-    "publisher": "PYSBG",
-    "copyright": "Anatomy © Z-Anatomy / BodyParts3D (DBCLS), CC BY-SA 4.0",
+    "publisher": "Nurdzhan Kerimov (Digital Rose)",
+    "copyright": "Code © 2026 Nurdzhan Kerimov (Digital Rose), BUSL-1.1 · Anatomy © Z-Anatomy / BodyParts3D (DBCLS), CC BY-SA 4.0",
     "shortDescription": "Interactive anatomy and AI insights",
     "longDescription": "Anatria3D is an educational anatomy atlas with an AI assistant that can drive the 3D viewport. Not a medical device; not for diagnosis or treatment.",
+    "license": "BUSL-1.1",
     "licenseFile": "../THIRD-PARTY-NOTICES.txt",
     "windows": {
       "nsis": {
