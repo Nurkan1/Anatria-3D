@@ -13,6 +13,65 @@ There is **no auto-updater**, by design: the application never reaches the
 network on its own. A new version reaches you only when you download and install
 it, so this file is also the answer to "is it worth reinstalling".
 
+## [Unreleased]
+
+### Added
+
+**Study memory.** *Memory* in the top bar opens your journal as a hologram: a
+brain with every study session, case visit and note on it as a point of light,
+joined in the order you made them. Point at one to see what it is, click to read
+it, and hold *Erase* to remove it — with eight seconds to change your mind. A
+body stands beside the brain and lights, in amber, the structures the open
+memory was about. Point at a name to see that structure alone; click to keep it
+so. *Zoom in* moves the figure in on it, for the small ones. The left and right
+keys walk the memories, *Enter* reads one large, and *?* lists every control on
+the screen.
+
+**Focus, and sound.** *Focus* clears the film texture over the picture and sets
+the text flat and sharp for reading, leaving the hologram and its movement
+untouched. *Sound* turns the tones that answer what you do on or off. Both are
+remembered.
+
+**It says how it is running.** On a machine that cannot keep up, the hologram
+eases its own effects rather than stutter, and says so in a line under the
+title. With no 3D at all, the index and the reader still work.
+
+**Stable display.** A switch in Settings for a window that blinks on Windows or
+Linux: from the next launch the window is drawn by a slower, steadier route.
+Leave it off unless you see blinking.
+
+**Regulatory transparency.** A new section of *How Anatria3D works* sets the
+application against the EU AI Act, the MDR and the GDPR: what it is for, why it
+is not a high-risk system, what is sent to your AI provider and when, and how
+the assistant may act on the model. *Credits* now carries a contact address.
+
+### Changed
+
+**The licence.** From this release the application's code is under the Business
+Source License 1.1: free for study, teaching, academic research and
+non-commercial evaluation by healthcare professionals, and converting to
+Apache-2.0 on 1 October 2030. Deployment in a clinic or any other
+revenue-generating setting needs a commercial agreement —
+anatria@digitalrose.org. Releases up to 0.4.0 remain Apache-2.0. **The anatomy
+is unaffected**: the meshes and nomenclature keep their own Creative Commons
+licences, which this does not restrict.
+
+**Clearer about the AI.** The conversation says before the first question that
+the answers come from an AI model and can be wrong; a case drill's score is
+described as feedback for your own study rather than an assessment; the guide
+now lists exactly what is sent to your provider, including the case file of an
+open drill. The *Clinician* profile is called *Professional*.
+
+### Fixed
+
+**The Memory Lab reads on a small screen.** On a 1366×768 laptop the index tab
+no longer rises into the subtitle, and the large reader keeps clear of the
+figure and its list.
+
+**The hologram no longer dazzles.** Folds that line up edge-on used to pile into
+white and bury the memory points; they now fade with depth, and the points are
+lit as points rather than lamps.
+
 ## [0.4.0] — 2026-09-17
 
 ### Added

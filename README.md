@@ -695,7 +695,10 @@ or therapeutic decisions is a regulated medical device. Accordingly:
 
 - The AI is instructed, in every language and every user profile, to decline
   advice about a specific person and to redirect to a healthcare professional.
-- There are no patient-data fields anywhere in the application.
+- There is no field for a real person anywhere in the application. A case drill
+  holds a sex, an age, a height and a weight, and every one of them is invented
+  by the reader for teaching — the composer says so where they are typed, and
+  says that the file is sent to the reader's own AI provider with each turn.
 - Generated documents are titled *Educational Summary*, never *Clinical Report*.
 - The disclaimer layer is not a preference and cannot be dismissed.
 - The first-run guide opens on what the tool is *not* for, before it explains a
