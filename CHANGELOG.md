@@ -13,6 +13,24 @@ There is **no auto-updater**, by design: the application never reaches the
 network on its own. A new version reaches you only when you download and install
 it, so this file is also the answer to "is it worth reinstalling".
 
+## [Unreleased]
+
+### Fixed
+
+**The installer stated two licences.** The licence page shown before
+installing 0.5.0 opened with the Business Source License, and further down
+still carried the old section granting the code under Apache-2.0. The old
+section is gone; the page now states one licence for the code, and says that
+releases up to 0.4.0 remain Apache-2.0. The licence file that ships with the
+anatomy said the same stale thing and is corrected too.
+
+**The change date is four years after release, as the licence requires.** It
+read 1 October 2030, a week more than the four years the Business Source
+License allows from 0.5.0's publication on 24 September 2026. It now reads
+24 September 2030. For 0.5.0 nothing changes in practice: the licence's own
+terms already convert it on the fourth anniversary of its release, whichever
+date comes first.
+
 ## [0.5.0] — 2026-09-24
 
 ### Added
@@ -50,7 +68,7 @@ the assistant may act on the model. *Credits* now carries a contact address.
 **The licence.** From this release the application's code is under the Business
 Source License 1.1: free for study, teaching, academic research and
 non-commercial evaluation by healthcare professionals, and converting to
-Apache-2.0 on 1 October 2030. Deployment in a clinic or any other
+Apache-2.0 on 24 September 2030. Deployment in a clinic or any other
 revenue-generating setting needs a commercial agreement —
 anatria@digitalrose.org. Releases up to 0.4.0 remain Apache-2.0. **The anatomy
 is unaffected**: the meshes and nomenclature keep their own Creative Commons
