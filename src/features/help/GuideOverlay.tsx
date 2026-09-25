@@ -1598,7 +1598,7 @@ const SECTIONS: Section[] = [
           a private practice or any other revenue-generating setting, and
           redistribution inside a paid product, need a commercial agreement. Each
           version converts automatically to the Apache&nbsp;2.0 licence on its
-          change date, 1 October 2030 for this one. The name and marks are separate
+          change date, 24 September 2030 for this one. The name and marks are separate
           from any of that: a fork is welcome, a fork called Anatria3D is not.
         </Credit>
 
@@ -1644,7 +1644,7 @@ const SECTIONS: Section[] = [
 
         <h3 className="pt-2 text-[13px] font-semibold text-slate-200">Built with</h3>
         <p>
-          Open source the whole way down, and worth naming: <Ui>Tauri</Ui> for the
+          Built on open source the whole way down, and worth naming: <Ui>Tauri</Ui> for the
           desktop shell, <Ui>React</Ui> and <Ui>React Three Fiber</Ui> over{" "}
           <Ui>three.js</Ui> for the viewport, Google's <Ui>Draco</Ui> for mesh
           compression, <Ui>Rust</Ui> and <Ui>SQLite</Ui> for the study journal, and{" "}
@@ -1654,7 +1654,7 @@ const SECTIONS: Section[] = [
         <p className="pt-2 text-[11px] text-slate-500">
           Anatria3D {APP_VERSION_LABEL}. © 2026 Nurdzhan Kerimov (Digital Rose).
           Anatria3D is a trademark of Digital Rose. Application code under the
-          Business Source License 1.1, converting to Apache-2.0 on 2030-10-01;
+          Business Source License 1.1, converting to Apache-2.0 on 2030-09-24;
           anatomical assets under CC BY-SA 4.0 and CC BY 4.0.
         </p>
       </>

@@ -50,4 +50,8 @@ merge the two manifests. Nothing in the application does, and the test suite
 asserts it.
 
 Neither licence applies to the Anatria3D application source code, which is
-Apache-2.0 and merely aggregates these assets rather than adapting them.
+licensed separately — under the Business Source License 1.1 from version 0.5.0,
+and Apache-2.0 before it — and merely aggregates these assets rather than
+adapting them. Equally, the application's licence does not apply to these
+assets: whatever it restricts, the terms above are the only ones that govern
+the meshes and the nomenclature.

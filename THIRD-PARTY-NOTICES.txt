@@ -18,7 +18,7 @@ any revenue-generating environment, re-branding, or distribution as part of a
 paid product or service — requires a commercial licence. Write to
 anatria@digitalrose.org.
 
-On 2030-10-01 this version converts to the Apache License, Version 2.0.
+On 2030-09-24 this version converts to the Apache License, Version 2.0.
 The full terms are in the LICENSE file installed with the application.
 
 The licence above covers the application's own code, and nothing else. The
@@ -97,30 +97,20 @@ translation is performed at runtime by the AI assistant for the reader in front
 of it.
 
 
-Application source code — Apache License, Version 2.0
------------------------------------------------------
+Application source code — earlier versions
+-------------------------------------------
 
-  Copyright 2026 Digital Rose
+The licence for this version's code is the Business Source License 1.1 stated
+at the top of this notice, and its full text ships as LICENSE.
 
-  Licensed under the Apache License, Version 2.0 (the "License"); you may not
-  use this file except in compliance with the License. You may obtain a copy of
-  the License at
+Versions of Anatria3D up to and including 0.4.0 were published under the
+Apache License, Version 2.0, and remain under it. The Apache text ships as
+LICENSES/Apache-2.0.txt, because it is also the licence this version converts
+to on its change date.
 
-      http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-  License for the specific language governing permissions and limitations under
-  the License.
-
-You may use, modify and redistribute the application code, including inside
-your own institution's systems, provided you keep the copyright and licence
-notices and state any changes you made. The full text ships as LICENSE.
-
-Note the two licences do not merge: the code is Apache-2.0, the anatomy is
-CC BY-SA 4.0, and redistributing the anatomy keeps it under CC BY-SA 4.0
-whatever you do with the code.
+The licences do not merge: the code is under the Business Source License 1.1,
+the anatomy is under CC BY-SA 4.0 and CC BY 4.0, and redistributing the anatomy
+keeps it under those licences whatever you do with the code.
 
 
 Bundled components
