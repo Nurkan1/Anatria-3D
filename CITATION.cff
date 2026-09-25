@@ -47,8 +47,8 @@ identifiers:
 
 license: BUSL-1.1
 repository-code: https://github.com/Nurkan1/Anatria-3D
-version: 0.5.0
-date-released: 2026-09-24
+version: 0.5.1
+date-released: 2026-09-25
 
 # The anatomical meshes and nomenclature are not ours and are not covered by
 # the application's licence. Anyone citing this work should carry their attribution

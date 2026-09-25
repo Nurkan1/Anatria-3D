@@ -1,6 +1,6 @@
 [package]
 name = "anatria3d"
-version = "0.5.0"
+version = "0.5.1"
 description = "Interactive anatomy and AI insights"
 authors = ["Nurdzhan Kerimov (Digital Rose)"]
 edition = "2021"
