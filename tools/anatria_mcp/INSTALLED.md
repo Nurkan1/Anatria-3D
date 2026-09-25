@@ -59,7 +59,8 @@ search in any other language finds nothing even when the structure exists.
 
 ## Licence
 
-The code is under the Business Source License 1.1 (see LICENSE; it converts to
-Apache-2.0 on 2030-09-24). The anatomy it reads is not: the male atlas is
+The code is under the Business Source License 1.1 (see LICENSE; each version
+converts to Apache-2.0 four years after its release). The anatomy it reads is
+not: the male atlas is
 CC BY-SA 4.0 and the female trunk CC BY 4.0. Call `atlas_info` before
 reproducing any of it — the tool exists to answer exactly that.

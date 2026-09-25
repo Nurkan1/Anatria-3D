@@ -74,6 +74,23 @@ running.
 | `src-tauri/Cargo.lock` | the `anatria3d` package entry | `cargo` — commit it |
 | `CITATION.cff` | `version` **and** `date-released` | hand |
 
+### And the licence's Change Date, in the same commit
+
+`LICENSE` names a **Change Date**, the day this version converts to Apache-2.0.
+It must be **exactly four years after `date-released`** in `CITATION.cff`:
+
+- **Not later**, because the Business Source License lets a licensor use its
+  name only with a Change Date at most four years after the version is
+  published. 0.5.0 shipped a week past that because the date was chosen for a
+  release planned for another day.
+- **Not earlier**, because moving it with every release is what gives each
+  version its own four years. Left alone, every later version would convert on
+  the first one's date.
+
+The date is written in `LICENSE` and nowhere else; everything else states the
+rule. `tests/licence-consistency.test.ts` compares the two files, so a release
+commit that moves `date-released` without moving the Change Date fails Gates.
+
 And in the same commit, promote `## [Unreleased]` in
 [`CHANGELOG.md`](CHANGELOG.md) to `## [<version>] — <date>`. It is not one of
 the five — nothing breaks if it is missed — but it is the only record of *why*

@@ -20,7 +20,8 @@ actually loaded.
 > **Free to study with, licensed to deploy commercially.** From v0.5.0 the
 > application's code is under the Business Source License 1.1: free for
 > students, teachers, academic research and non-commercial evaluation by
-> healthcare professionals, and converting to Apache-2.0 on 2030-09-24. Use in
+> healthcare professionals, and each version converts to Apache-2.0 four years
+> after its release. Use in
 > a clinic or any other revenue-generating setting needs a commercial licence —
 > anatria@digitalrose.org. The anatomy keeps its own Creative Commons licences,
 > which this does not touch. See [Licensing](#licensing).
@@ -1070,8 +1071,9 @@ The application source code is under the **Business Source License 1.1**
 ([`LICENSE`](LICENSE), [`NOTICE`](NOTICE)), with Nurdzhan Kerimov (Digital
 Rose) as licensor. It is source-available rather than open source in the OSI
 sense, and it is time-limited: **each version converts to Apache-2.0 on its
-Change Date**, 2030-09-24 for this one, and the Apache text is already in the
-repository at [`LICENSES/Apache-2.0.txt`](LICENSES/Apache-2.0.txt).
+own Change Date, four years after that version's release**. The date is stated
+once, in the version's [`LICENSE`](LICENSE), and the Apache text is already in
+the repository at [`LICENSES/Apache-2.0.txt`](LICENSES/Apache-2.0.txt).
 
 | Use | Cost |
 |---|---|

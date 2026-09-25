@@ -51,12 +51,24 @@ describe("the application's licence", () => {
     }
   });
 
-  it("changes no later than four years after this version is released", () => {
+  it("changes exactly four years after this version is released", () => {
     const change = /^Change Date:\s+(\d{4}-\d{2}-\d{2})$/m.exec(read("LICENSE"))?.[1];
     const released = /^date-released:\s+(\d{4}-\d{2}-\d{2})$/m.exec(read("CITATION.cff"))?.[1];
     expect(change).toBeDefined();
     expect(released).toBeDefined();
-    expect(change! <= fourYearsAfter(released!)).toBe(true);
+    // Not "no later than": the licence's covenant sets the ceiling, and moving
+    // the date with every release is what gives each version its full four
+    // years. Equality is what makes the release procedure impossible to skip.
+    expect(change).toBe(fourYearsAfter(released!));
+  });
+
+  it("states the date only in LICENSE, where the release moves it", () => {
+    // A change date copied anywhere else goes stale at the next release. The
+    // other files state the rule instead; no date from 2030 on belongs in them.
+    const future = /\b20[3-9]\d-\d\d-\d\d\b/;
+    for (const file of ["NOTICE", "README.md", "THIRD-PARTY-NOTICES.txt", "tools/anatria_mcp/INSTALLED.md"]) {
+      expect(read(file), file).not.toMatch(future);
+    }
   });
 
   it("keeps the change licence it names", () => {

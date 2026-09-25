@@ -60,7 +60,9 @@ describe("GuideOverlay, licensing", () => {
   it("states the licence, what is free, and when it converts", () => {
     render(<GuideOverlay onClose={() => {}} />);
     expect(text()).toContain("Business Source License 1.1");
-    expect(text()).toContain("24 September 2030");
+    // The date itself lives only in LICENSE, where the release procedure moves it.
+    expect(text()).toContain("four years after its release");
+    expect(text()).not.toMatch(/\b20\d\d-\d\d-\d\d\b|\d{1,2} (January|February|March|April|May|June|July|August|September|October|November|December) 20\d\d/);
     expect(text()).toMatch(/commercial agreement/i);
   });
 

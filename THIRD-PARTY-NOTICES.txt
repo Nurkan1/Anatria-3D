@@ -18,8 +18,9 @@ any revenue-generating environment, re-branding, or distribution as part of a
 paid product or service — requires a commercial licence. Write to
 anatria@digitalrose.org.
 
-On 2030-09-24 this version converts to the Apache License, Version 2.0.
-The full terms are in the LICENSE file installed with the application.
+This version converts to the Apache License, Version 2.0 four years after
+its release, on the Change Date stated in the LICENSE file installed with the
+application, which holds the full terms.
 
 The licence above covers the application's own code, and nothing else. The
 anatomy below is third-party material under its own licences, which this one

@@ -24,12 +24,23 @@ section is gone; the page now states one licence for the code, and says that
 releases up to 0.4.0 remain Apache-2.0. The licence file that ships with the
 anatomy said the same stale thing and is corrected too.
 
-**The change date is four years after release, as the licence requires.** It
-read 1 October 2030, a week more than the four years the Business Source
-License allows from 0.5.0's publication on 24 September 2026. It now reads
-24 September 2030. For 0.5.0 nothing changes in practice: the licence's own
-terms already convert it on the fourth anniversary of its release, whichever
-date comes first.
+**The change date is four years after release, as the licence requires.**
+0.5.0's licence named 1 October 2030, a week more than the four years the
+Business Source License allows from its publication on 24 September 2026. For
+0.5.0 nothing changes in practice: the licence's own terms convert it on the
+fourth anniversary of its release, whichever date comes first.
+
+### Changed
+
+**Each version converts four years after its own release.** The Change Date
+now moves with every release, so each version keeps its full four years
+instead of all of them converting on the first one's date. The date is written
+once, in the version's `LICENSE`; the installer, the guide and the README state
+the rule rather than a date that would go stale.
+
+**Contributions need an agreement first.** `CONTRIBUTING.md` explains why: the
+code is also offered under commercial licences, and the Business Source License
+has no clause that licenses a contribution back automatically.
 
 ## [0.5.0] — 2026-09-24
 

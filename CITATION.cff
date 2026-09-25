@@ -35,7 +35,6 @@ keywords:
   - Terminologia Anatomica
   - female anatomy
   - local-first software
-  - open educational resources
 
 # The **concept** DOI, not the version one. Zenodo mints both: this resolves to
 # whichever release is newest, while 10.5281/zenodo.21921086 is frozen at
