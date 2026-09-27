@@ -84,6 +84,10 @@ export const TA2_CORRECTIONS = {
   "frontal branches of callosomarginal artery": {
     la: "Rami frontales arteriae callosomarginalis",
   },
+  // Row 5856 reads `Trucus`, the `n` dropped. The file's own genitives of the
+  // same term have it — row 4929 `Venae trunci encephali`, row 5860
+  // `Substantia alba trunci encephali`.
+  brainstem: { la: "Truncus encephali" },
   // Row 4571 reads `paritooccipitale`; row 5437 spells the root correctly in
   // `Sulcus parietooccipitalis`.
   "parieto-occipital artery": { la: "Arteria parietooccipitalis" },
