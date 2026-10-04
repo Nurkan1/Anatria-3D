@@ -13,6 +13,7 @@ import {
   VirtualPatientSchema,
   AiProviderSchema,
   AnatomicalSystemSchema,
+  BreathContextSchema,
   EngineErrorCodeSchema,
   EngineEventSchema,
   GenderModelSchema,
@@ -110,6 +111,7 @@ function typescriptSurface(): ProtocolSurface {
       CaseRecordUpdate: fieldsOf(CaseRecordUpdateSchema),
       ScannerContext: fieldsOf(ScannerContextSchema),
       HeartContext: fieldsOf(HeartContextSchema),
+      BreathContext: fieldsOf(BreathContextSchema),
     },
     unions: {
       SceneCommand: variantsOf(SceneCommandSchema, "action"),

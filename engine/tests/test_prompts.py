@@ -18,6 +18,7 @@ from anatria_engine.prompts import (
     build_instructions,
 )
 from anatria_engine.protocol import (
+    BreathContext,
     CaseComplaint,
     CaseRecordUpdate,
     CaseVisitSummary,
@@ -925,3 +926,66 @@ def test_a_drill_or_review_is_not_told_about_the_heartbeat(mode: SessionMode) ->
 
 def test_no_heartbeat_says_nothing_about_one() -> None:
     assert "THE HEARTBEAT ON SCREEN" not in instructions("layperson", "es")
+
+
+QUIET = BreathContext(
+    pattern="Quiet breathing",
+    rate="12 / min",
+    what="At rest, about half a litre a breath.",
+)
+WITH_PULSE = BreathContext(
+    pattern="Deep breathing",
+    rate="6 / min",
+    what="The diaphragm descends several times further.",
+    heart="Breathing on: the rate rises as the breath comes in and falls as it goes out.",
+)
+
+
+def breathing_instructions(
+    breathing: BreathContext, mode: SessionMode = "tutor", heart: HeartContext | None = None
+) -> str:
+    return build_instructions(
+        profile="student",
+        language="es",
+        organs=ORGANS,
+        selection=[],
+        mode=mode,
+        heart=heart,
+        breathing=breathing,
+    )
+
+
+def test_the_breathing_on_screen_is_the_subject_of_what_is_happening() -> None:
+    text = breathing_instructions(QUIET)
+    assert "THE BREATHING ON SCREEN" in text
+    assert "**Quiet breathing**" in text
+    assert "At rest, about half a litre a breath." in text
+    # Without the heartbeat there is no arrhythmia to explain.
+    assert "sinus arrhythmia" not in text
+
+
+def test_with_the_heartbeat_the_arrhythmia_is_part_of_what_is_on_screen() -> None:
+    text = breathing_instructions(WITH_PULSE, heart=AF)
+    assert "respiratory sinus arrhythmia" in text
+    assert "the rate rises as the breath comes in" in text
+
+
+def test_the_breathing_does_not_loosen_the_safety_block() -> None:
+    text = breathing_instructions(WITH_PULSE, heart=AF)
+    assert text.index(SAFETY) < text.index("THE BREATHING ON SCREEN")
+    assert "not anybody's breathing" in text
+
+
+def test_the_breathing_sits_before_the_heartbeat_so_a_new_rhythm_keeps_the_prefix() -> None:
+    text = breathing_instructions(WITH_PULSE, heart=AF)
+    assert text.index("THE BREATHING ON SCREEN") < text.index("THE HEARTBEAT ON SCREEN")
+    assert text.rstrip().endswith("keep to the general explanation.")
+
+
+@pytest.mark.parametrize("mode", ["case", "review"])
+def test_a_drill_or_review_is_not_told_about_the_breathing(mode: SessionMode) -> None:
+    assert "THE BREATHING ON SCREEN" not in breathing_instructions(QUIET, mode)
+
+
+def test_no_breathing_says_nothing_about_it() -> None:
+    assert "THE BREATHING ON SCREEN" not in instructions("layperson", "es")

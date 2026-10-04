@@ -2,10 +2,9 @@ import { describe, expect, it } from "vitest";
 
 import { BREATH_PATTERNS } from "./breathing";
 import { ClockTrace } from "./EcgStrip";
-import { breathNote } from "./HeartControls";
 import { RESTING_BPM } from "./heartbeat";
 import { rhythm, RhythmPlayer, RHYTHMS, type RhythmId } from "./rhythms";
-import { BreathPacer, sinusPace } from "./sinusArrhythmia";
+import { BreathPacer, breathNote, sinusPace } from "./sinusArrhythmia";
 
 /**
  * Play a rhythm for `seconds` of real time at a steady swing, as the driver

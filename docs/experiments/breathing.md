@@ -113,6 +113,64 @@ The assistant is deliberately not given a `set_breathing` tool: it can start
 the heartbeat already, and the owner's call is that breathing stays the
 reader's switch.
 
+## The vessels the organs carry
+
+The liver, spleen, kidneys, stomach and pancreas go down a centimetre or more
+in a breath; the vessels inside them are structures of their own, and left
+still they were swallowed. `viewer/breathCarry.ts` gives each vessel *vertex*
+a weight: 1 inside one of those organs or within 2 cm of it, falling to 0
+beyond, and 0 where the vessel leaves the aorta (which does not move) or opens
+into the heart (which moves by its own 5 mm). The shader mixes the vessel's own
+movement with the organs' by it, so a renal artery stretches from a still aorta
+to a moving kidney instead of tearing off one or being swallowed by the other.
+
+- **Measured once**, when the body starts breathing or what is on screen
+  changes, after 20 frames of the scene holding still. The organs are drawn into
+  a grid of 5 mm cubes, the outside is flooded in from the border, and whatever
+  it never reaches is inside; a chamfer distance from that solid and from the
+  anchors gives the weight, read between cubes on a straight line. On the male
+  atlas: 116 vessels, 0.35 s, once.
+- **A vessel nowhere near an organ gets no attribute.** Every breathing material
+  declares a default of 0 for it (`defaultAttributeValues`): WebGL keeps one
+  generic value per attribute slot across programs, and without the default a
+  mesh with no weight could read whatever another program left there. Checked
+  on the atlas: all 560 vessel materials default to 0.
+- Measured weights: hepatic veins 0.92–1, intrarenal vessels 1, splenic vessels
+  ~1, the renal artery 0 at the aorta to 0.92 at the kidney, the coeliac trunk
+  0–0.4, the inferior mesenteric artery 0, the thoracic inferior vena cava 0 at
+  the atrium to 1 in the liver.
+
+### What was wrong on the way here
+
+- **The inferior vena cava opened a gap at the atrium.** Carried with the liver
+  (12 mm) up to where it enters the right atrium (5 mm). The heart became an
+  anchor.
+- **Then the hepatic veins were left behind.** In this atlas they lie 6–12 mm
+  from the heart, the diaphragm between, and the heart's hold reached them:
+  carried a third of the way. They open into the vena cava, not the heart, and a
+  liver going down moves away from the heart, not into it — so the heart now
+  holds only the venae cavae (`selective`).
+- **Reading between cubes lifted a branch off the aorta.** With the hold
+  starting inside one cube, a branch read 0.1 at the aorta's wall. Every hold now
+  starts beyond a cube (6 mm).
+
+## The lit ghost
+
+The light the assistant puts on the buried part of what it is explaining is a
+mesh of its own; it now carries `breathOnBeforeCompile` with the structure's
+role, and shares the structure's geometry and so its carried weight.
+
+## The assistant knows
+
+While breathing is on, a tutoring turn tells the assistant what the panel says
+(`breathAim`, `BreathContext` on both sides of the protocol, `_breathing_rule`
+in the prompts), and, with the heart beating, what the breath does to it — so
+"why does the heart rate keep changing?" is answered as sinus arrhythmia, or why
+this rhythm does not show it. Placed before the heartbeat's section, so a newly
+picked rhythm keeps the cached prefix; below `SAFETY`, and silent in a drill or
+a review, for the heartbeat's reason. Not described in the asking guide: an
+experiment stays out of every guide until it is merged.
+
 ## What was wrong on the way
 
 - **The lungs came out through the ribs.** First they had a sideways travel of
@@ -130,13 +188,16 @@ reader's switch.
 ## Not done, and worth doing
 
 - The guide's paragraph, before any merge.
-- The assistant's picture of the scene does not say the body is breathing, so
-  it cannot mention the arrhythmia unprompted when it explains a rhythm.
 - A volume trace under the panel, like the heartbeat's ECG strip.
-- The lit ghost of an explained structure is a mesh of its own and does not
-  breathe.
-- The abdominal vessels inside the liver, spleen and kidneys (portal and
-  hepatic veins, splenic and renal vessels) do not go down with their organs.
+- The lit ghost of a heart chamber does not *beat* — it breathes, but carries
+  the plain breath, not the heartbeat's squeeze. As old as the heartbeat.
+- The carried weights are measured for where the meshes are. When the exploded
+  view slides them apart they are measured again once everything has stopped
+  (`carryPlacement`), another 0.35 s; while the pieces are still moving, the
+  weights are those of where they were.
+- The organs under the diaphragm all move by the same amount, as one block.
+  In life the kidneys and the liver move more than the pancreas, and the part
+  of the liver under the central tendon less than its dome.
 - The alloy body (`experiment/exosuit`) has its own breath. Merging this branch
   into it and giving the alloy material `injectBreath` would make the metal
   body breathe anatomically too.

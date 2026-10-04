@@ -22,6 +22,7 @@ their question. See `_language_rule`.
 from __future__ import annotations
 
 from anatria_engine.protocol import (
+    BreathContext,
     GenderModel,
     HeartContext,
     Language,
@@ -607,6 +608,54 @@ def _heart_rule(heart: HeartContext) -> str:
     )
 
 
+def _breathing_rule(breathing: BreathContext) -> str:
+    """The breathing the body is showing, as the subject of "what is happening?".
+
+    Like the heartbeat, an illustration on the atlas's static body: the parts
+    move the right way by about the right amount, and that is all the panel
+    claims. When the heart beats with it, what the breath does to the heart
+    rate — respiratory sinus arrhythmia, or why this rhythm does not show it —
+    is part of what is on screen.
+    """
+    lines = [
+        "## THE BREATHING ON SCREEN",
+        "",
+        f"The reader has the breathing simulation running: **{breathing.pattern}** "
+        f"({breathing.rate}). What the panel says it shows: {breathing.what}",
+        "",
+        "The body moves as in a breath: the diaphragm's dome descends, the lungs "
+        "lengthen downwards and move with the ribs, the ribs and sternum swing up "
+        "and forward, the liver, kidneys and spleen are pushed down with the vessels "
+        "inside them, and the belly wall moves out.",
+    ]
+    if breathing.heart:
+        lines += [
+            "",
+            f"The heartbeat is running with it. As the panel puts it: {breathing.heart}",
+            "",
+            "If they ask why the heart rate changes, or about the gaps between beats "
+            "on the trace, this is respiratory sinus arrhythmia: explain the vagal "
+            "mechanism — the vagus easing off the sinus node as a breath comes in and "
+            "taking hold again as it goes out — that it is normal, largest in the "
+            "young and with slow deep breathing, and why it is absent where the sinus "
+            "node is not what paces the ventricles.",
+        ]
+    lines += [
+        "",
+        'When they ask "what is happening?", "why does it move like that?" or '
+        "anything about the breathing without naming another subject, they mean "
+        "this. Explain the mechanics of quiet and deep breathing at their level. "
+        "The simulation is illustrative, not a model of respiratory mechanics; say "
+        "so when it matters. If their words name another subject, follow their words.",
+        "",
+        "This does not loosen the rules at the top. It is an illustration, not "
+        "anybody's breathing: if the reader asks about their own breathing or "
+        "someone else's, do not assess; point them to a qualified healthcare "
+        "professional and keep to the general explanation.",
+    ]
+    return "\n".join(lines)
+
+
 def _scene_inventory(
     organs: list[OrganMeta],
     selection: list[OrganContext],
@@ -914,6 +963,8 @@ def build_instructions(
     scanner: ScannerContext | None = None,
     #: The rhythm the heartbeat is showing, while it is on.
     heart: HeartContext | None = None,
+    #: The breathing the body is showing, while it is on.
+    breathing: BreathContext | None = None,
     # Defaulted rather than required, for the same reason every new protocol
     # field is optional on the way in: a window and a sidecar do not always
     # ship together, and the male atlas is what every build before this one
@@ -951,6 +1002,11 @@ def build_instructions(
     if grouping:
         layers.append(grouping)
     layers.append(_scene_inventory(organs, selection, scanner))
+    # Before the heartbeat: switched on and off less often than a rhythm is
+    # picked, so the cached prefix survives a new rhythm. Tutoring only, for the
+    # heartbeat's reason.
+    if breathing is not None and mode == "tutor":
+        layers.append(_breathing_rule(breathing))
     # Last, because it changes whenever a rhythm is picked. Tutoring only: in a
     # drill or a review the subject is the patient, and a rhythm left playing
     # in the viewport is not part of their case.

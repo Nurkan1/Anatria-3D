@@ -9,6 +9,7 @@ import { beatChamber } from "./heartbeat";
 import { primeHeartSound } from "./heartSound";
 import { OVERLAY_SWITCH_OFF, OVERLAY_SWITCH_ON } from "./overlayChrome";
 import { RHYTHM_GROUPS, RHYTHMS, rhythm } from "./rhythms";
+import { breathNote } from "./sinusArrhythmia";
 
 /**
  * The heartbeat's switch, and the little it needs to say.
@@ -36,17 +37,6 @@ import { RHYTHM_GROUPS, RHYTHMS, rhythm } from "./rhythms";
  * rhythm the sinus node does not pace does not follow, and that is worth
  * knowing too. See `sinusArrhythmia.ts`.
  */
-
-/** What the breath does to the rhythm on screen, by how much of it reaches the ventricles. */
-export function breathNote(followsBreath: number): string {
-  if (followsBreath <= 0) {
-    return "Breathing on: this rhythm does not follow it — the sinus node is not what paces the ventricles.";
-  }
-  const note =
-    "Breathing on: the rate rises as the breath comes in and falls as it goes out — sinus " +
-    "arrhythmia, normal and largest in the young. Watch the gaps between beats on the trace.";
-  return followsBreath < 1 ? `${note} At this rate it is small.` : note;
-}
 export function HeartControls() {
   const enabled = useHeartStore((s) => s.enabled);
   const sound = useHeartStore((s) => s.sound);

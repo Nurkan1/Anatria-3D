@@ -478,6 +478,23 @@ export const HeartContextSchema = z.object({
 });
 export type HeartContext = z.infer<typeof HeartContextSchema>;
 
+/**
+ * The breathing the body is showing, while it breathes.
+ *
+ * The panel's own strings, as the heartbeat's are. `heart` is what the breath
+ * does to the heartbeat on screen — the arrhythmia it brings, or why this
+ * rhythm does not follow it — and is absent while the heart is not beating.
+ * See `breathAim` for when it is sent.
+ */
+export const BreathContextSchema = z.object({
+  pattern: z.string().min(1).max(60),
+  rate: z.string().min(1).max(40),
+  /** What the breath does, as the panel says it. */
+  what: z.string().min(1).max(400),
+  heart: z.string().min(1).max(400).nullable().optional(),
+});
+export type BreathContext = z.infer<typeof BreathContextSchema>;
+
 export const AgentRequestSchema = z.object({
   request_id: z.string().min(1),
   query: z.string().min(1).max(8000),
@@ -545,6 +562,8 @@ export const AgentRequestSchema = z.object({
    * Optional on the way in, like every field added to an existing event.
    */
   heart: HeartContextSchema.optional(),
+  /** The breathing on screen, so "what is happening?" can mean that too. Optional, as `heart` is. */
+  breathing: BreathContextSchema.optional(),
 });
 export type AgentRequest = z.infer<typeof AgentRequestSchema>;
 

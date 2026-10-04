@@ -78,3 +78,17 @@ export class BreathPacer {
     this.share = 0.5;
   }
 }
+
+/**
+ * What the breath does to the rhythm on screen, by how much of it reaches the
+ * ventricles: the heartbeat's panel says it, and the assistant is told it.
+ */
+export function breathNote(followsBreath: number): string {
+  if (followsBreath <= 0) {
+    return "Breathing on: this rhythm does not follow it — the sinus node is not what paces the ventricles.";
+  }
+  const note =
+    "Breathing on: the rate rises as the breath comes in and falls as it goes out — sinus " +
+    "arrhythmia, normal and largest in the young. Watch the gaps between beats on the trace.";
+  return followsBreath < 1 ? `${note} At this rate it is small.` : note;
+}

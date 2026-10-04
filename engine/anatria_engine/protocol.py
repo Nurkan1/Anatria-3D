@@ -182,6 +182,20 @@ class HeartContext(Strict):
     sound: bool = False
 
 
+class BreathContext(Strict):
+    """The breathing the body is showing, while it breathes.
+
+    Sent in tutoring turns only, in the panel's own words. `heart` is what the
+    breath does to the heartbeat on screen, absent while the heart is still.
+    """
+
+    pattern: str = Field(min_length=1, max_length=60)
+    rate: str = Field(min_length=1, max_length=40)
+    #: What the breath does, as the panel says it.
+    what: str = Field(min_length=1, max_length=400)
+    heart: str | None = Field(default=None, min_length=1, max_length=400)
+
+
 class CaseComplaint(Strict):
     """Something the reader marked on the body.
 
@@ -537,6 +551,8 @@ class AgentRequest(Strict):
     #: The rhythm the heart is beating in, when the heartbeat is on. Defaulted
     #: for the same reason as `case`.
     heart: HeartContext | None = None
+    #: The breathing on screen, when it is on. Defaulted for the same reason.
+    breathing: BreathContext | None = None
     # Injected by Rust from the OS keyring — never present on the frontend side.
     api_key: str = Field(min_length=1, repr=False)
 

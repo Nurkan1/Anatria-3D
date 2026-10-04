@@ -37,6 +37,7 @@ import {
 import { completeHistory, useChatStore, type ChatMessage } from "@/stores/chatStore";
 import { chatPreferences, patchChatPreferences } from "@/stores/chatPreferences";
 import { useModelStore } from "@/stores/modelStore";
+import { useBreathStore } from "@/stores/breathStore";
 import { useHeartStore } from "@/stores/heartStore";
 import { useScanStore } from "@/stores/scanStore";
 import { groupNames, organLabel, useSceneStore } from "@/stores/sceneStore";
@@ -45,6 +46,7 @@ import { useUsageStore } from "@/stores/usageStore";
 
 import { GrowingTextarea } from "@/components/GrowingTextarea";
 import { shouldShowAimHint, useAimHint } from "./aimHint";
+import { breathAim } from "./breathContext";
 import { heartAim } from "./heartContext";
 import { scannerAim } from "./scannerContext";
 import { AimHint, AskingGuide } from "./AskingGuide";
@@ -627,6 +629,8 @@ export function ChatPanel() {
   const heartEnabled = useHeartStore((s) => s.enabled);
   const heartRhythm = useHeartStore((s) => s.rhythm);
   const heartSound = useHeartStore((s) => s.sound);
+  const breathEnabled = useBreathStore((s) => s.enabled);
+  const breathPattern = useBreathStore((s) => s.pattern);
   const { learned: aimHintLearned, retire: retireAimHint } = useAimHint();
 
   const messages = useChatStore((s) => s.messages);
@@ -970,6 +974,14 @@ export function ChatPanel() {
   const scannerNow = currentScannerAim();
   /** What the assistant is told about the heartbeat. See `heartAim`. */
   const heartNow = heartAim({ enabled: heartEnabled, mode, rhythm: heartRhythm, sound: heartSound });
+  /** What the assistant is told about the breathing. See `breathAim`. */
+  const breathNow = breathAim({
+    enabled: breathEnabled,
+    mode,
+    pattern: breathPattern,
+    heartEnabled,
+    rhythm: heartRhythm,
+  });
 
   async function send(text?: string) {
     const prompt = (text ?? draft).trim();
@@ -1011,6 +1023,7 @@ export function ChatPanel() {
         available_groups: groups, ...patient,
         ...(scanner ? { scanner } : {}),
         ...(heartNow ? { heart: heartNow } : {}),
+        ...(breathNow ? { breathing: breathNow } : {}),
       });
       if (!turns.markSent(requestId)) return;
       startTurn(requestId, prompt);

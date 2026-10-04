@@ -83,6 +83,7 @@ def build_agent(request: AgentRequest, scene: SceneContext) -> Agent[SceneContex
             groups=request.available_groups,
             scanner=request.scanner,
             heart=request.heart,
+            breathing=request.breathing,
         ),
         retries=TOOL_RETRIES,
     )
