@@ -150,6 +150,13 @@ export interface RhythmDefinition {
   quiver: { atria: number; ventricles: number };
   /** How the atria show on the ECG. `p` unless said otherwise. */
   atrialTrace?: AtrialTrace;
+  /**
+   * How much of the breath's swing in rate reaches the ventricles, 0 to 1: 1
+   * where the sinus node paces them, less where its pull is weak, and none
+   * where something else sets their pace. Omitted is none. See
+   * `sinusArrhythmia.ts`.
+   */
+  followsBreath?: number;
   plan: Planner;
 }
 
@@ -258,6 +265,7 @@ export const RHYTHMS: readonly RhythmDefinition[] = [
       "contract. The first sound is the AV valves closing, the second the aortic and " +
       "pulmonary valves.",
     quiver: NO_QUIVER,
+    followsBreath: 1,
     plan: sinus(RESTING_BPM, NORMAL_PR),
   },
   {
@@ -269,6 +277,8 @@ export const RHYTHMS: readonly RhythmDefinition[] = [
       "The same sequence, faster. Diastole shortens far more than systole, so the " +
       "ventricles have less time to fill between beats.",
     quiver: NO_QUIVER,
+    // A fast sinus rate is one the vagus has already let go of: little is left to swing.
+    followsBreath: 0.3,
     plan: sinus(130, 0.12),
   },
   {
@@ -278,6 +288,7 @@ export const RHYTHMS: readonly RhythmDefinition[] = [
     rate: "45 bpm",
     what: "The same sequence, slower, with long pauses in diastole.",
     quiver: NO_QUIVER,
+    followsBreath: 1,
     plan: sinus(45, 0.16),
   },
   {
@@ -289,6 +300,7 @@ export const RHYTHMS: readonly RhythmDefinition[] = [
       "Every atrial beat reaches the ventricles, but late: the pause between the atria " +
       "and the ventricles is longer than 0.2 seconds.",
     quiver: NO_QUIVER,
+    followsBreath: 1,
     plan: sinus(RESTING_BPM, 0.32),
   },
   {
@@ -300,6 +312,7 @@ export const RHYTHMS: readonly RhythmDefinition[] = [
       "Wenckebach: the pause after each atrial beat grows longer, until one atrial beat " +
       "is not followed by the ventricles at all. Then the sequence starts again.",
     quiver: NO_QUIVER,
+    followsBreath: 1,
     plan: (to, clocks, _random, out) => {
       const delays = [0.16, 0.24, 0.3];
       clocks.atria ??= 0;
@@ -322,6 +335,7 @@ export const RHYTHMS: readonly RhythmDefinition[] = [
       "The pause stays the same, but some atrial beats are not conducted: the atria " +
       "contract and the ventricles do not, without warning.",
     quiver: NO_QUIVER,
+    followsBreath: 1,
     plan: (to, clocks, _random, out) => {
       clocks.atria ??= 0;
       clocks.beat ??= 0;
@@ -413,6 +427,7 @@ export const RHYTHMS: readonly RhythmDefinition[] = [
       "next atrial beat finds them still recovering and is not conducted, so a pause " +
       "follows before the rhythm goes on.",
     quiver: NO_QUIVER,
+    followsBreath: 1,
     plan: (to, clocks, _random, out) => {
       clocks.atria ??= 0;
       clocks.beat ??= 0;
@@ -488,6 +503,7 @@ export const RHYTHMS: readonly RhythmDefinition[] = [
       "that swells and fades between S1 and S2. The second sound is softer, and the pulse " +
       "weaker.",
     quiver: NO_QUIVER,
+    followsBreath: 1,
     plan: sinusWith({ s2: 0.55, strength: 0.8 }, (beat, out) => {
       const at = beat.s1 + 0.04;
       out.murmurs.push({ at, length: beat.s2 - 0.03 - at, shape: "diamond", pitch: 220, q: 0.9, level: 0.6 });
@@ -502,6 +518,7 @@ export const RHYTHMS: readonly RhythmDefinition[] = [
       "A mitral valve that does not close: some blood leaks back into the left atrium for " +
       "all of systole, heard as an even, blowing murmur from S1 right up to S2. S1 is soft.",
     quiver: NO_QUIVER,
+    followsBreath: 1,
     plan: sinusWith({ s1: 0.55, strength: 0.85 }, (beat, out) => {
       out.murmurs.push({
         at: beat.s1 + 0.01,
@@ -522,6 +539,7 @@ export const RHYTHMS: readonly RhythmDefinition[] = [
       "An aortic valve that does not close: blood falls back into the left ventricle in " +
       "diastole, heard as a high, blowing murmur that starts at S2 and fades.",
     quiver: NO_QUIVER,
+    followsBreath: 1,
     plan: sinusWith({}, (beat, out) => {
       out.murmurs.push({ at: beat.s2 + 0.01, length: 0.34, shape: "decrescendo", pitch: 520, q: 1.5, level: 0.4 });
     }),
@@ -535,6 +553,7 @@ export const RHYTHMS: readonly RhythmDefinition[] = [
       "A narrowed mitral valve: a loud S1, a short opening snap after S2 as the stiff valve " +
       "opens, then a low rumble through diastole that grows as the atria contract.",
     quiver: NO_QUIVER,
+    followsBreath: 1,
     plan: sinusWith({ s1: 1 }, (beat, out) => {
       out.extras.push({ at: beat.s2 + 0.08, kind: "snap" });
       const at = beat.s2 + 0.13;
@@ -551,6 +570,7 @@ export const RHYTHMS: readonly RhythmDefinition[] = [
       "lub-dub-ta, like the word Kentucky. Normal in children and athletes, a sign of " +
       "heart failure in older adults.",
     quiver: NO_QUIVER,
+    followsBreath: 1,
     plan: sinusWith({}, (beat, out) => {
       out.extras.push({ at: beat.s2 + 0.15, kind: "s3" });
     }),
@@ -564,6 +584,7 @@ export const RHYTHMS: readonly RhythmDefinition[] = [
       "A low thud just before S1, as the atria push blood into a stiff ventricle: " +
       "ta-lub-dub, like the word Tennessee.",
     quiver: NO_QUIVER,
+    followsBreath: 1,
     plan: sinusWith({}, (beat, out) => {
       out.extras.push({ at: beat.s1 - 0.07, kind: "s4" });
     }),

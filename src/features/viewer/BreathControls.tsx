@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 
 import { useBreathStore } from "@/stores/breathStore";
+import { useHeartStore } from "@/stores/heartStore";
 import { useSceneStore } from "@/stores/sceneStore";
 
 import { BREATH_NOW } from "./BreathDriver";
 import { BREATH_PATTERNS, type BreathPatternId } from "./breathing";
 import { OVERLAY_SWITCH_OFF, OVERLAY_SWITCH_ON } from "./overlayChrome";
+import { rhythm } from "./rhythms";
 
 /**
  * The breathing's switch, and what it needs to say. See `breathing.ts`.
@@ -50,6 +52,9 @@ export function BreathControls() {
   const toggle = useBreathStore((s) => s.toggle);
   const setPattern = useBreathStore((s) => s.setPattern);
   const lungsHidden = useSceneStore((s) => s.hiddenSystems.includes("respiratory"));
+  // Said here only when the heart on screen does follow; the heartbeat's panel
+  // says when it does not, and why.
+  const heartFollows = useHeartStore((s) => s.enabled && (rhythm(s.rhythm).followsBreath ?? 0) > 0);
   const phase = useBreathPhase(enabled);
   const pattern = BREATH_PATTERNS[patternId];
 
@@ -75,6 +80,12 @@ export function BreathControls() {
           <p className="mt-0.5 font-medium text-slate-200">{pattern.label}</p>
           <p className="mt-0.5" aria-live="off">{PHASE[phase]}</p>
           <p className="mt-0.5 text-slate-500">{pattern.what}</p>
+          {heartFollows && (
+            <p className="mt-0.5 text-rose-300/80">
+              The heart follows: faster as the breath comes in, slower as it goes out
+              {patternId === "deep" ? " — most of all when breathing slow and deep like this." : "."}
+            </p>
+          )}
           {lungsHidden && (
             <p className="mt-0.5 text-amber-300/80">
               Switch the respiratory system on to see the lungs fill.

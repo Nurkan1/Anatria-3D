@@ -2,14 +2,71 @@ import { useEffect, useRef } from "react";
 
 import type { RhythmPlayer } from "./rhythms";
 
+/** How many frames of the two clocks are kept: about two seconds' worth. */
+const CLOCK_SAMPLES = 128;
+
 /**
- * What the ECG strip reads: the rhythm being played and the heartbeat's clock.
+ * Real time against the heart's own time, for the last couple of seconds.
+ *
+ * The heart's clock runs faster or slower than real time while the breath
+ * swings its rate (`sinusArrhythmia.ts`). The strip has to sweep in real
+ * seconds, as a monitor does — swept in the heart's seconds, every interval
+ * between beats would come out the same and the arrhythmia would be invisible
+ * on the very trace that shows it. Each frame the driver records both clocks;
+ * between two frames the heart's ran at one speed, so a straight line between
+ * them is exact.
+ */
+export class ClockTrace {
+  private readonly real = new Float64Array(CLOCK_SAMPLES);
+  private readonly heart = new Float64Array(CLOCK_SAMPLES);
+  private count = 0;
+  private head = 0;
+
+  push(real: number, heart: number): void {
+    this.real[this.head] = real;
+    this.heart[this.head] = heart;
+    this.head = (this.head + 1) % CLOCK_SAMPLES;
+    this.count = Math.min(CLOCK_SAMPLES, this.count + 1);
+  }
+
+  /** The heart's time at real time `real`; outside what is kept, at real speed. */
+  heartAt(real: number): number {
+    if (this.count === 0) return real;
+    const at = (back: number) => (this.head - 1 - back + CLOCK_SAMPLES) % CLOCK_SAMPLES;
+    let later = at(0);
+    if (real >= this.real[later]!) return this.heart[later]! + (real - this.real[later]!);
+    for (let back = 1; back < this.count; back++) {
+      const earlier = at(back);
+      const from = this.real[earlier]!;
+      if (real >= from) {
+        const span = this.real[later]! - from;
+        const along = span > 0 ? (real - from) / span : 1;
+        return this.heart[earlier]! + along * (this.heart[later]! - this.heart[earlier]!);
+      }
+      later = earlier;
+    }
+    return this.heart[later]! - (this.real[later]! - real);
+  }
+
+  reset(): void {
+    this.count = 0;
+    this.head = 0;
+  }
+}
+
+/**
+ * What the ECG strip reads: the rhythm being played, real time, and how the
+ * heart's own clock maps onto it.
  *
  * Written by `HeartbeatDriver` every frame and read by the strip's own loop, so
  * the trace and the heart come from one player on one clock and cannot drift
  * apart — and the viewer does not re-render sixty times a second to carry it.
  */
-export const HEART_TRACE: { player: RhythmPlayer | null; now: number } = { player: null, now: 0 };
+export const HEART_TRACE: { player: RhythmPlayer | null; now: number; clock: ClockTrace } = {
+  player: null,
+  now: 0,
+  clock: new ClockTrace(),
+};
 
 /** Seconds across the strip, like a monitor sweeping at 25 mm/s over 10 cm. */
 export const SWEEP_S = 4;
@@ -71,7 +128,7 @@ export function EcgStrip() {
 
     const draw = () => {
       frame = requestAnimationFrame(draw);
-      const { player, now } = HEART_TRACE;
+      const { player, now, clock } = HEART_TRACE;
       if (player !== lastPlayer) {
         // A new rhythm starts a clean strip.
         lastPlayer = player;
@@ -83,7 +140,7 @@ export function EcgStrip() {
       const column = sweepColumn(now);
       if (lastColumn < 0) {
         lastColumn = column;
-        lastRow = traceRow(player.ecgAt(now));
+        lastRow = traceRow(player.ecgAt(clock.heartAt(now)));
         return;
       }
       // How many columns the pen moved, through a wrap if there was one.
@@ -100,7 +157,7 @@ export function EcgStrip() {
         const t = now - ((steps - i) / WIDTH) * SWEEP_S;
         clearColumns(x + 1, x + 1 + GAP);
         clearColumns(x, x + 1);
-        const row = traceRow(player.ecgAt(t));
+        const row = traceRow(player.ecgAt(clock.heartAt(t)));
         context.beginPath();
         // Across a wrap the segment starts at the left edge, not from the right.
         context.moveTo(x === 0 ? 0 : x - 1, lastRow);

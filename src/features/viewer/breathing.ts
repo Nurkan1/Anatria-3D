@@ -124,6 +124,11 @@ export interface BreathPattern {
   inhale: number;
   /** How much bigger than a quiet breath. */
   depth: number;
+  /**
+   * How far the heart rate swings with this breath, as a fraction of the rate,
+   * up and down: respiratory sinus arrhythmia. See `sinusArrhythmia.ts`.
+   */
+  sinusSwing: number;
   /** What happens, in a sentence a student can keep. */
   what: string;
 }
@@ -135,6 +140,7 @@ export const BREATH_PATTERNS: Record<BreathPatternId, BreathPattern> = {
     period: 5,
     inhale: 0.4,
     depth: 1,
+    sinusSwing: 0.05,
     what:
       "At rest, about half a litre a breath. Breathing in is the diaphragm's work; breathing out needs no muscle — the lungs and the chest wall spring back.",
   },
@@ -144,6 +150,7 @@ export const BREATH_PATTERNS: Record<BreathPatternId, BreathPattern> = {
     period: 10,
     inhale: 0.45,
     depth: 3,
+    sinusSwing: 0.11,
     what:
       "The diaphragm descends several times further, and the muscles of the chest wall lift the ribs higher. Out is still mostly recoil.",
   },

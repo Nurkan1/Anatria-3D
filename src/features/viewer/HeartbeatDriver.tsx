@@ -39,11 +39,13 @@ import {
   PulseTrain,
   type FlowKind,
 } from "./bloodFlow";
+import { BREATH_NOW } from "./BreathDriver";
 import { HEART_TRACE } from "./EcgStrip";
 import { flowPaths, type PathMesh } from "./flowPaths";
 import { LightGuard, prefersReducedMotion } from "./lightGuard";
 import { playDub, playExtra, playLub, playMurmur } from "./heartSound";
 import { rhythm, RhythmPlayer } from "./rhythms";
+import { BreathPacer } from "./sinusArrhythmia";
 
 /**
  * The longest a single frame may advance the heart, in seconds.
@@ -126,6 +128,14 @@ const PATH_SETTLE_FRAMES = 20;
  * mesh's chamber centre in that mesh's own coordinates — so an exploded or
  * moved heart still contracts towards the right point — and plays the heart
  * sounds the rhythm laid down for that frame.
+ *
+ * Two clocks: real seconds, and the heart's own. They are the same unless the
+ * body is breathing too and the rhythm is one the breath reaches, when the
+ * heart's runs a little faster as the breath comes in and slower as it goes
+ * out — see `sinusArrhythmia.ts`. The rhythm is played on the heart's clock;
+ * everything that has to be true in real seconds stays on the real one: the
+ * flash guard, which counts flashes a second, the blood's travel, and the ECG
+ * strip's sweep.
  */
 export function HeartbeatDriver({
   boxes,
@@ -155,8 +165,13 @@ export function HeartbeatDriver({
     BEAT_REACH_VENTRICLES.value = holds.ventricles?.reach ?? 0;
   }, [enabled, boxes, organs, revision]);
 
-  /** Seconds of heartbeat so far. Restarts at the top of a cycle each time. */
+  /** Seconds of heartbeat so far, on the heart's clock. Restarts at the top of a cycle each time. */
   const clock = useRef(0);
+  /** The same, in real seconds. */
+  const real = useRef(0);
+  /** Whether nothing was contracting in the last frame: only then may the breath move the clock. */
+  const resting = useRef(true);
+  const pacer = useMemo(() => new BreathPacer(), []);
   /** The registry version the seams were last measured for. */
   const measured = useRef(-1);
   /** The vessel registry version the paths were measured for, and how long it has held. */
@@ -173,14 +188,22 @@ export function HeartbeatDriver({
   useEffect(() => {
     player.current = null;
     clock.current = 0;
+    real.current = 0;
+    resting.current = true;
+    pacer.reset();
+    HEART_TRACE.clock.reset();
     pulses.reset();
-  }, [rhythmId, pulses]);
+  }, [rhythmId, pulses, pacer]);
   const inverse = useMemo(() => new THREE.Matrix4(), []);
 
   useEffect(() => {
     if (enabled) return;
     // Back to rest, so the next time it starts it starts from a heart at rest.
     clock.current = 0;
+    real.current = 0;
+    resting.current = true;
+    pacer.reset();
+    HEART_TRACE.clock.reset();
     measured.current = -1;
     pathsMeasured.current = -1;
     player.current = null;
@@ -195,7 +218,7 @@ export function HeartbeatDriver({
     pulses.reset();
     FLOW_UNIFORMS.uPulseStrength.value.fill(0);
     FLOW_UNIFORMS.uVenous.value = 0;
-  }, [enabled, pulses, guards]);
+  }, [enabled, pulses, guards, pacer]);
 
   useFrame((_, delta) => {
     if (!enabled || !centres) return;
@@ -217,14 +240,21 @@ export function HeartbeatDriver({
       }
     }
 
+    const step = Math.min(delta, LONGEST_STEP_S);
+    const definition = rhythm(rhythmId);
+    const swing = BREATH_NOW.swing * (definition.followsBreath ?? 0);
     const before = clock.current;
-    const after = before + Math.min(delta, LONGEST_STEP_S);
+    const after = before + pacer.advance(step, swing, resting.current);
     clock.current = after;
+    real.current += step;
+    const now = real.current;
 
-    player.current ??= new RhythmPlayer(rhythm(rhythmId));
+    player.current ??= new RhythmPlayer(definition);
     const beat = player.current.advance(before, after);
+    resting.current = beat.atria === 0 && beat.ventricles === 0;
     HEART_TRACE.player = player.current;
-    HEART_TRACE.now = after;
+    HEART_TRACE.now = now;
+    HEART_TRACE.clock.push(now, after);
     BEAT_ATRIA.value = beat.atria;
     BEAT_VENTRICLES.value = beat.ventricles;
 
@@ -238,16 +268,15 @@ export function HeartbeatDriver({
     BEAT_GLOW.value = (useSceneStore.getState().systemOpacity.cardiovascular ?? 1) < 1 ? 1 : 0;
     // The light follows the beat only while that is safe to watch.
     const calm = prefersReducedMotion();
-    const step = after - before;
-    BEAT_LIGHT_ATRIA.value = guards.atria.next(after, step, beat.atria / SQUEEZE.atria, calm);
-    BEAT_LIGHT_VENTRICLES.value = guards.ventricles.next(after, step, beat.ventricles / SQUEEZE.ventricles, calm);
+    BEAT_LIGHT_ATRIA.value = guards.atria.next(now, step, beat.atria / SQUEEZE.atria, calm);
+    BEAT_LIGHT_VENTRICLES.value = guards.ventricles.next(now, step, beat.ventricles / SQUEEZE.ventricles, calm);
     FLOW_UNIFORMS.uFlowSteady.value = guards.ventricles.steady ? 1 : 0;
 
     // The blood follows the contractions, heard or not.
-    for (const level of beat.lub) pulses.launch(after, level);
-    pulses.advance(after, after - before, FLOW_UNIFORMS.uPulseAge.value, FLOW_UNIFORMS.uPulseStrength.value);
+    for (const level of beat.lub) pulses.launch(now, level);
+    pulses.advance(now, step, FLOW_UNIFORMS.uPulseAge.value, FLOW_UNIFORMS.uPulseStrength.value);
     FLOW_UNIFORMS.uVenous.value = pulses.venous;
-    FLOW_UNIFORMS.uFlowTime.value = after;
+    FLOW_UNIFORMS.uFlowTime.value = now;
     for (const kind of Object.keys(FLOW_CHAMBER) as FlowKind[]) {
       const centre = centres.get(FLOW_CHAMBER[kind]);
       if (centre) FLOW_SOURCES[kind].value.copy(centre);

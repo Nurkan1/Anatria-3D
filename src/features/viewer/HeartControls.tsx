@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 
+import { useBreathStore } from "@/stores/breathStore";
 import { useHeartStore } from "@/stores/heartStore";
 import { useSceneStore } from "@/stores/sceneStore";
 
@@ -27,7 +28,25 @@ import { RHYTHM_GROUPS, RHYTHMS, rhythm } from "./rhythms";
  *
  * And what they are is said where they are chosen: textbook patterns for study.
  * Each is one representative example; nobody's heart is read from it.
+ *
+ * # With the breathing on
+ *
+ * The heart follows the breath — respiratory sinus arrhythmia — and the panel
+ * says so only then, and says it of the rhythm in front of the reader: a
+ * rhythm the sinus node does not pace does not follow, and that is worth
+ * knowing too. See `sinusArrhythmia.ts`.
  */
+
+/** What the breath does to the rhythm on screen, by how much of it reaches the ventricles. */
+export function breathNote(followsBreath: number): string {
+  if (followsBreath <= 0) {
+    return "Breathing on: this rhythm does not follow it — the sinus node is not what paces the ventricles.";
+  }
+  const note =
+    "Breathing on: the rate rises as the breath comes in and falls as it goes out — sinus " +
+    "arrhythmia, normal and largest in the young. Watch the gaps between beats on the trace.";
+  return followsBreath < 1 ? `${note} At this rate it is small.` : note;
+}
 export function HeartControls() {
   const enabled = useHeartStore((s) => s.enabled);
   const sound = useHeartStore((s) => s.sound);
@@ -35,6 +54,7 @@ export function HeartControls() {
   const toggle = useHeartStore((s) => s.toggle);
   const setSound = useHeartStore((s) => s.setSound);
   const setRhythm = useHeartStore((s) => s.setRhythm);
+  const breathing = useBreathStore((s) => s.enabled);
   const organs = useSceneStore((s) => s.organs);
   const cardiovascularHidden = useSceneStore((s) => s.hiddenSystems.includes("cardiovascular"));
   // The blood is drawn only through see-through vessels. See `bloodFlow.ts`.
@@ -82,6 +102,7 @@ export function HeartControls() {
           <p className="mt-0.5 font-medium text-slate-200">{current.label}</p>
           <p className="mt-0.5">{current.what}</p>
           <EcgStrip />
+          {breathing && <p className="mt-0.5 text-sky-300/80">{breathNote(current.followsBreath ?? 0)}</p>}
           {cardiovascularHidden && (
             <p className="mt-0.5 text-amber-300/80">
               Switch the cardiovascular system on to see it.

@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { useBreathStore } from "@/stores/breathStore";
 
 import { BREATH_AXIS, BREATH_FILL, BREATH_PATTERNS, breathFill, breathingIn } from "./breathing";
+import { sinusPace } from "./sinusArrhythmia";
 
 /**
  * The breath's clock. See `breathing.ts`.
@@ -23,9 +24,11 @@ const EASE = 1;
 
 /**
  * Whether the body is breathing in right now — for the panel, which reads it
- * on its own schedule rather than having the scene re-render it.
+ * on its own schedule rather than having the scene re-render it — and how far
+ * the breath is pulling the heart rate above or below its own, as a fraction:
+ * 0 whenever the body is not breathing. See `sinusArrhythmia.ts`.
  */
-export const BREATH_NOW = { inhaling: false, running: false };
+export const BREATH_NOW = { inhaling: false, running: false, swing: 0 };
 
 export function BreathDriver({
   boxes,
@@ -62,11 +65,13 @@ export function BreathDriver({
   const clock = useRef(0);
   const amplitude = useRef(0);
   const depth = useRef(1);
+  const sinusSwing = useRef(BREATH_PATTERNS.quiet.sinusSwing);
 
   useEffect(
     () => () => {
       BREATH_FILL.value = 0;
       BREATH_NOW.running = false;
+      BREATH_NOW.swing = 0;
     },
     [],
   );
@@ -80,6 +85,7 @@ export function BreathDriver({
       if (BREATH_NOW.running) {
         BREATH_FILL.value = 0;
         BREATH_NOW.running = false;
+        BREATH_NOW.swing = 0;
         clock.current = 0;
       }
       return;
@@ -98,10 +104,12 @@ export function BreathDriver({
       if (fill < 0.02) amplitude.current = 0;
     }
     depth.current += (pattern.depth - depth.current) * Math.min(1, step * 1.5);
+    sinusSwing.current += (pattern.sinusSwing - sinusSwing.current) * Math.min(1, step * 1.5);
 
     BREATH_FILL.value = fill * amplitude.current * depth.current;
     BREATH_NOW.inhaling = inhaling;
     BREATH_NOW.running = amplitude.current > 0;
+    BREATH_NOW.swing = amplitude.current * sinusSwing.current * sinusPace(clock.current, pattern);
   });
 
   return null;
