@@ -2,6 +2,7 @@ import * as THREE from "three";
 
 import type { ManifestOrgan } from "@/lib/schemas";
 
+import { BREATH_ROLE, injectBreath } from "./breathing";
 import { beatChamber, BLOOD_HEX, type Chamber } from "./heartbeat";
 
 /**
@@ -318,6 +319,7 @@ function flowOnBeforeCompile(this: THREE.Material, shader: Shader): void {
   shader.fragmentShader = shader.fragmentShader
     .replace("#include <common>", `#include <common>\n${FLOW_FRAGMENT}`)
     .replace("vec4 diffuseColor = vec4( diffuse, opacity );", "vec4 diffuseColor = vec4( diffuse, opacity * flowGlow() );");
+  injectBreath(shader, this);
 }
 
 const materials = new Map<FlowKind, THREE.MeshBasicMaterial>();
@@ -338,6 +340,9 @@ export function flowMaterial(kind: FlowKind): THREE.MeshBasicMaterial {
       flowMode: FLOW_MODE[kind],
       flowGain: FLOW_GAIN[kind],
       flowSpeed: kind === "pulmonary_artery" ? FLOW_SHAPE.pulmonarySpeed : FLOW_SHAPE.arterySpeed,
+      // The light is a mesh of its own over the vessel, and has to breathe as
+      // the vessel under it does or it is left behind. See `breathing.ts`.
+      breathRole: kind.startsWith("pulmonary") ? BREATH_ROLE.lung : BREATH_ROLE.vessel,
     };
     material.onBeforeCompile = flowOnBeforeCompile;
     materials.set(kind, material);

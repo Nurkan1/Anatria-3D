@@ -2,9 +2,21 @@ import { useFrame } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
+import type { ManifestOrgan } from "@/lib/schemas";
 import { useBreathStore } from "@/stores/breathStore";
+import { useSceneStore } from "@/stores/sceneStore";
 
-import { BREATH_AXIS, BREATH_FILL, BREATH_PATTERNS, breathFill, breathingIn } from "./breathing";
+import {
+  BREATH_AXIS,
+  BREATH_FILL,
+  BREATH_FRAME,
+  BREATH_PATTERNS,
+  BREATH_ROLE,
+  breathFill,
+  breathingIn,
+  breathRole,
+} from "./breathing";
+import { beatChamber, isChamberWall } from "./heartbeat";
 import { sinusPace } from "./sinusArrhythmia";
 
 /**
@@ -29,6 +41,37 @@ const EASE = 1;
  * 0 whenever the body is not breathing. See `sinusArrhythmia.ts`.
  */
 export const BREATH_NOW = { inhaling: false, running: false, swing: 0 };
+
+type Measured = Pick<ManifestOrgan, "organ_id" | "system" | "name_en" | "ta2_latin" | "path">;
+
+/**
+ * The chest's heights for `BREATH_FRAME`: the bottom and top of the lungs
+ * together, and the top of the heart's chamber walls.
+ *
+ * Measured from what is loaded. With the lungs or the heart switched off their
+ * vessels can still be on screen, so each falls back to where it lies in a
+ * body of ordinary proportions, from the sternum's height — the lungs from
+ * sixteen centimetres below it to fourteen above, the heart's top four above.
+ */
+export function breathFrame(
+  boxes: ReadonlyMap<string, THREE.Box3>,
+  organs: Iterable<Measured>,
+  sternumY: number,
+): [number, number, number] {
+  const lungs = new THREE.Box3();
+  const heart = new THREE.Box3();
+  for (const organ of organs) {
+    const box = boxes.get(organ.organ_id);
+    if (!box || box.isEmpty()) continue;
+    if (organ.system === "respiratory" && breathRole(organ) === BREATH_ROLE.lung) lungs.union(box);
+    else if (beatChamber(organ) !== null && isChamberWall(organ)) heart.union(box);
+  }
+  return [
+    lungs.isEmpty() ? sternumY - 0.16 : lungs.min.y,
+    lungs.isEmpty() ? sternumY + 0.14 : lungs.max.y,
+    heart.isEmpty() ? sternumY + 0.04 : heart.max.y,
+  ];
+}
 
 export function BreathDriver({
   boxes,
@@ -61,6 +104,12 @@ export function BreathDriver({
   useEffect(() => {
     BREATH_AXIS.value = axis;
   }, [axis]);
+
+  const organs = useSceneStore((s) => s.organs);
+  useEffect(() => {
+    BREATH_FRAME.value = breathFrame(boxes, Object.values(organs), axis[1]!);
+    // `boxes` is filled in place; `revision` says when.
+  }, [boxes, organs, axis, revision]);
 
   const clock = useRef(0);
   const amplitude = useRef(0);

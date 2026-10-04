@@ -41,6 +41,13 @@ export const BREATH_ROLE = {
   /** The front of the abdomen, which moves out to make room. */
   belly: 5,
   heart: 6,
+  /**
+   * Every other vessel: moved by where it runs rather than by what it is —
+   * with the ribs by the chest wall, with the heart in the middle of the chest.
+   * The vessels that run beside the ribs are in meshes named for other things
+   * (the azygos, the internal thoracic veins), so a name could not find them.
+   */
+  vessel: 7,
 } as const;
 export type BreathRole = (typeof BREATH_ROLE)[keyof typeof BREATH_ROLE];
 
@@ -105,7 +112,11 @@ export function breathRole(
     case "lymphatic":
       return has(text, UNDER_DIAPHRAGM) && !text.includes("node") ? BREATH_ROLE.viscera : BREATH_ROLE.none;
     case "cardiovascular":
-      return heartChamber ? BREATH_ROLE.heart : BREATH_ROLE.none;
+      if (heartChamber) return BREATH_ROLE.heart;
+      // The pulmonary arteries and veins branch inside the lung: they move as
+      // the lung around them does, or the lung swallows them.
+      if (organ.path?.includes("Pulmonary vessels")) return BREATH_ROLE.lung;
+      return BREATH_ROLE.vessel;
     default:
       return BREATH_ROLE.none;
   }
@@ -204,6 +215,16 @@ export const BREATH_TRAVEL = {
 /** How full, times how deep. One write a frame, from the driver. 0 with breathing off. */
 export const BREATH_FILL = { value: 0 };
 /**
+ * The chest's heights, in world space: the bottom and the top of the lungs
+ * taken together, and the top of the heart. Measured by the driver.
+ *
+ * One height for both lungs and everything in them, not one per lobe: a
+ * pulmonary artery's own box says nothing about where it lies in the lung, and
+ * it has to move exactly as the lung tissue around it. Measured per lobe, the
+ * lobes also moved differently on either side of a fissure.
+ */
+export const BREATH_FRAME: { value: number[] } = { value: [1.16, 1.46, 1.36] };
+/**
  * The chest, as the breath measures it: x is the midline, y the middle of the
  * sternum, z the axis the ribs swing about — a hand's depth behind the sternum.
  */
@@ -225,7 +246,7 @@ const m = (value: number) => value.toFixed(4);
  * centimetre or two that is under what a pointer can tell.
  *
  * `owner` is the material, as three calls the hook: its `userData` carries the
- * structure's role and, for the lungs and the diaphragm, its height.
+ * structure's role and, for the diaphragm, its height.
  */
 export function injectBreath(shader: Shader, owner: unknown): void {
   if (!shader.vertexShader.includes(ANCHOR)) {
@@ -238,9 +259,10 @@ export function injectBreath(shader: Shader, owner: unknown): void {
   shader.uniforms.uBreathAxis = BREATH_AXIS;
   shader.uniforms.uBreathRole = { value: data?.breathRole ?? BREATH_ROLE.none };
   shader.uniforms.uBreathSpan = { value: [span[0], span[1]] };
+  shader.uniforms.uBreathFrame = BREATH_FRAME;
 
   shader.vertexShader =
-    "uniform float uBreathFill;\nuniform vec3 uBreathAxis;\nuniform float uBreathRole;\nuniform vec2 uBreathSpan;\n" +
+    "uniform float uBreathFill;\nuniform vec3 uBreathAxis;\nuniform float uBreathRole;\nuniform vec2 uBreathSpan;\nuniform vec3 uBreathFrame;\n" +
     shader.vertexShader.replace(
       ANCHOR,
       `${ANCHOR}
@@ -249,6 +271,7 @@ if (uBreathFill > 0.0 && uBreathRole > 0.5) {
   vec2 breathFromAxis = vec2(breathWorld.x - uBreathAxis.x, breathWorld.z - uBreathAxis.z);
   vec2 breathOut = breathFromAxis / max(length(breathFromAxis), 1e-4);
   // How far up its own height this vertex is: 0 at the bottom, 1 at the top.
+  // Only the diaphragm carries a height of its own.
   float breathUp = clamp((breathWorld.y - uBreathSpan.x) / max(uBreathSpan.y - uBreathSpan.x, 1e-4), 0.0, 1.0);
   // The front of the trunk moves; the back, hinged on the spine, hardly does.
   float breathFront = 0.15 + 0.85 * clamp(0.5 + 0.5 * breathOut.y, 0.0, 1.0);
@@ -258,6 +281,10 @@ if (uBreathFill > 0.0 && uBreathRole > 0.5) {
   float breathTrunk = 1.0 - smoothstep(0.17, 0.24, abs(breathFromAxis.x));
   vec3 breathChest = vec3(breathOut.x * ${m(BREATH_TRAVEL.chestOut)}, ${m(BREATH_TRAVEL.chestUp)}, breathOut.y * ${m(BREATH_TRAVEL.chestForward)})
     * exp(-breathTall * breathTall) * breathFront * breathTrunk;
+  // The belly wall's: out around the navel.
+  float breathBellyTall = (breathWorld.y - (uBreathAxis.y - 0.27)) / 0.14;
+  vec3 breathBelly = vec3(breathOut.x * ${m(BREATH_TRAVEL.bellyForward * 0.3)}, 0.0, breathOut.y * ${m(BREATH_TRAVEL.bellyForward)})
+    * exp(-breathBellyTall * breathBellyTall) * breathFront;
   vec3 breathMove = vec3(0.0);
   if (abs(uBreathRole - ${BREATH_ROLE.chestWall}.0) < 0.5) {
     breathMove = breathChest;
@@ -266,7 +293,7 @@ if (uBreathFill > 0.0 && uBreathRole > 0.5) {
     // apex, longest at the base — and only where the base rests on the dome.
     // Its outer edge lies against the ribs, and sliding that down the inside of
     // a cage that narrows took it out through them.
-    float base = 1.0 - breathUp;
+    float base = 1.0 - clamp((breathWorld.y - uBreathFrame.x) / max(uBreathFrame.y - uBreathFrame.x, 1e-4), 0.0, 1.0);
     float onDome = 1.0 - smoothstep(0.07, 0.12, abs(breathFromAxis.x));
     breathMove = breathChest + vec3(0.0, -${m(BREATH_TRAVEL.lungDown)} * base * base * onDome, 0.0);
   } else if (abs(uBreathRole - ${BREATH_ROLE.diaphragm}.0) < 0.5) {
@@ -275,11 +302,36 @@ if (uBreathFill > 0.0 && uBreathRole > 0.5) {
   } else if (abs(uBreathRole - ${BREATH_ROLE.viscera}.0) < 0.5) {
     breathMove = vec3(0.0, -${m(BREATH_TRAVEL.viscera)}, ${m(BREATH_TRAVEL.viscera * 0.15)});
   } else if (abs(uBreathRole - ${BREATH_ROLE.belly}.0) < 0.5) {
-    float tall = (breathWorld.y - (uBreathAxis.y - 0.27)) / 0.14;
-    breathMove = vec3(breathOut.x * ${m(BREATH_TRAVEL.bellyForward * 0.3)}, 0.0, breathOut.y * ${m(BREATH_TRAVEL.bellyForward)})
-      * exp(-tall * tall) * breathFront;
+    breathMove = breathBelly;
   } else if (abs(uBreathRole - ${BREATH_ROLE.heart}.0) < 0.5) {
     breathMove = vec3(0.0, -${m(BREATH_TRAVEL.heart)}, 0.0);
+  } else if (abs(uBreathRole - ${BREATH_ROLE.vessel}.0) < 0.5) {
+    // By the body wall — the intercostal and internal thoracic vessels, the
+    // epigastric ones in the belly — it moves as the wall does. Deep in the
+    // trunk, near the line the ribs swing about, the wall's movement is gone.
+    // Measured on the male atlas, from that line: the ascending aorta, the
+    // venae cavae and the brachiocephalic veins all lie within 3.4 cm of it,
+    // the internal thoracic vessels at a median of 5.3, the intercostals at
+    // 11. So the change is made between 3 and 5 cm. A first guess, 5 to 10,
+    // left the internal thoracic vessels half behind the lung, which covered
+    // them. The lung itself moves with the wall right in to the mediastinum,
+    // but there it moves away from the great vessels, not into them.
+    //
+    // And above the heart everything goes with the wall: the thoracic inlet
+    // lifts and comes forward with the first ribs, and the apex of the lung
+    // with it. Held still there, the top of the internal thoracic veins and
+    // the brachiocephalic veins were left up to a centimetre behind the lung
+    // in a deep breath; the ascending aorta and the venae cavae below the
+    // heart's top still ride the heart.
+    float wall = max(smoothstep(0.03, 0.05, length(breathFromAxis)),
+      smoothstep(uBreathFrame.z, uBreathFrame.z + 0.04, breathWorld.y));
+    // In the middle of the chest it goes down with the heart: fully below the
+    // heart's top, fading out towards the root of the neck, and not at all
+    // below the lungs, where the diaphragm no longer carries it.
+    float middle = (1.0 - smoothstep(0.06, 0.11, abs(breathFromAxis.x)))
+      * (1.0 - smoothstep(uBreathFrame.z, uBreathFrame.z + 0.08, breathWorld.y))
+      * smoothstep(uBreathFrame.x - 0.06, uBreathFrame.x, breathWorld.y);
+    breathMove = (breathChest + breathBelly) * wall + vec3(0.0, -${m(BREATH_TRAVEL.heart)}, 0.0) * middle * (1.0 - wall);
   }
   breathWorld.xyz += breathMove * uBreathFill;
   mvPosition = viewMatrix * breathWorld;
@@ -303,9 +355,10 @@ const STILL: BreathData = Object.freeze({ breathRole: BREATH_ROLE.none });
 /**
  * What a structure's material carries for the breath.
  *
- * The lungs and the diaphragm need their own height — a lung is held at its
- * apex, a dome moves at its top — so they get it from the box the scene has
- * already measured. Everything that does not breathe shares one frozen object.
+ * The diaphragm needs its own height — a dome moves at its top — so it gets
+ * it from the box the scene has already measured. The lungs are measured
+ * together instead, by the driver (`BREATH_FRAME`). Everything that does not
+ * breathe shares one frozen object.
  */
 export function breathData(
   organ: Pick<ManifestOrgan, "system" | "name_en" | "path">,
@@ -315,7 +368,7 @@ export function breathData(
   const role = breathRole(organ, heartChamber);
   if (role === BREATH_ROLE.none) return STILL;
   const span: readonly [number, number] | undefined =
-    worldBox && (role === BREATH_ROLE.lung || role === BREATH_ROLE.diaphragm)
+    worldBox && role === BREATH_ROLE.diaphragm
       ? [worldBox.min.y, worldBox.max.y]
       : undefined;
   return Object.freeze(span ? { breathRole: role, breathSpan: span } : { breathRole: role });

@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import * as THREE from "three";
 import { describe, expect, it } from "vitest";
 
 import type { ManifestOrgan } from "@/lib/schemas";
@@ -7,6 +8,7 @@ import type { ManifestOrgan } from "@/lib/schemas";
 import {
   BREATH_AXIS,
   BREATH_FILL,
+  BREATH_FRAME,
   BREATH_PATTERNS,
   BREATH_ROLE,
   BREATH_TRAVEL,
@@ -17,7 +19,9 @@ import {
   breathRole,
   injectBreath,
 } from "./breathing";
-import { beatChamber } from "./heartbeat";
+import { breathFrame } from "./BreathDriver";
+import { flowMaterial } from "./bloodFlow";
+import { beatChamber, isChamberWall } from "./heartbeat";
 
 type Shader = Parameters<typeof injectBreath>[0];
 
@@ -67,12 +71,19 @@ describe("who does what in a breath, on the shipped atlas", () => {
     expect(node && breathRole(node)).toBe(BREATH_ROLE.none);
   });
 
-  it("lets the heart's chambers ride the diaphragm, and no other vessel", () => {
+  it("lets the heart's chambers ride the diaphragm", () => {
     const chambers = male.organs.filter((entry) => beatChamber(entry) !== null);
     expect(chambers.length).toBeGreaterThan(0);
     for (const chamber of chambers) expect(breathRole(chamber, true)).toBe(BREATH_ROLE.heart);
-    const aorta = male.organs.find((entry) => entry.system === "cardiovascular" && beatChamber(entry) === null);
-    expect(aorta && breathRole(aorta, false)).toBe(BREATH_ROLE.none);
+  });
+
+  it("moves the vessels inside the lung as the lung, and every other vessel by where it runs", () => {
+    for (const id of ["right_pulmonary_artery", "posterior_basal_segmental_artery_of_left_lung", "left_inferior_pulmonary_vein"]) {
+      expect(roleOf(id)).toBe(BREATH_ROLE.lung);
+    }
+    for (const id of ["thoracic_aorta", "azygos_vein", "internal_thoracic_veins_l", "posterior_intercostal_arteries_r"]) {
+      expect(roleOf(id)).toBe(BREATH_ROLE.vessel);
+    }
   });
 
   it("breathes the trunk-only body too, with what it has", () => {
@@ -81,7 +92,12 @@ describe("who does what in a breath, on the shipped atlas", () => {
   });
 
   it("leaves most of the body still", () => {
-    const moving = male.organs.filter((entry) => breathRole(entry, beatChamber(entry) !== null) !== BREATH_ROLE.none);
+    // The vessels are placed by where they run, and the shader leaves those
+    // outside the trunk still; what is counted here is what moves by name.
+    const moving = male.organs.filter((entry) => {
+      const role = breathRole(entry, beatChamber(entry) !== null);
+      return role !== BREATH_ROLE.none && role !== BREATH_ROLE.vessel;
+    });
     expect(moving.length).toBeGreaterThan(60);
     expect(moving.length / male.organs.length).toBeLessThan(0.2);
   });
@@ -147,6 +163,8 @@ describe("the shader", () => {
     const projected = moved.vertexShader.indexOf("#include <project_vertex>");
     expect(projected).toBeGreaterThan(-1);
     expect(moved.vertexShader.indexOf("breathWorld")).toBeGreaterThan(projected);
+    // The lungs read the chest's shared heights, not their own.
+    expect(moved.uniforms.uBreathFrame).toBe(BREATH_FRAME);
     // And costs one test when nothing breathes.
     expect(moved.vertexShader).toContain("if (uBreathFill > 0.0 && uBreathRole > 0.5)");
   });
@@ -161,13 +179,59 @@ describe("the shader", () => {
 describe("what a material carries", () => {
   const box = { min: { y: 1.05 }, max: { y: 1.45 } };
 
-  it("gives the lungs and the diaphragm their height, which their motion is measured against", () => {
+  it("gives the diaphragm its own height, which its dome's motion is measured against", () => {
     expect(breathData(organ("diaphragm"), box).breathSpan).toEqual([1.05, 1.45]);
+  });
+
+  it("measures the lungs together instead, so a vessel inside one moves as the tissue around it", () => {
+    expect(breathData(organ("right_pulmonary_artery"), box).breathSpan).toBeUndefined();
+    const lobe = male.organs.find((entry) => entry.system === "respiratory" && breathRole(entry) === BREATH_ROLE.lung)!;
+    expect(breathData(lobe, box).breathSpan).toBeUndefined();
   });
 
   it("gives everything still one shared object", () => {
     const femur = male.organs.find((entry) => entry.name_en.toLowerCase().startsWith("femur"))!;
     const humerus = male.organs.find((entry) => entry.name_en.toLowerCase().startsWith("humerus"))!;
     expect(breathData(femur, box)).toBe(breathData(humerus, box));
+  });
+});
+
+describe("the chest's heights", () => {
+  const at = (minY: number, maxY: number) => new THREE.Box3(new THREE.Vector3(0, minY, 0), new THREE.Vector3(1, maxY, 1));
+
+  it("takes both lungs together, and the top of the heart's walls", () => {
+    const lobes = male.organs.filter((entry) => entry.system === "respiratory" && breathRole(entry) === BREATH_ROLE.lung);
+    const wall = male.organs.find((entry) => beatChamber(entry) !== null && isChamberWall(entry))!;
+    const boxes = new Map<string, THREE.Box3>([
+      [lobes[0]!.organ_id, at(1.2, 1.35)],
+      [lobes[1]!.organ_id, at(1.15, 1.48)],
+      [wall.organ_id, at(1.22, 1.37)],
+    ]);
+    expect(breathFrame(boxes, male.organs, 1.32)).toEqual([1.15, 1.48, 1.37]);
+  });
+
+  it("falls back to ordinary proportions for what is not loaded", () => {
+    const [bottom, top, heart] = breathFrame(new Map(), male.organs, 1.3);
+    expect(bottom).toBeCloseTo(1.14);
+    expect(top).toBeCloseTo(1.44);
+    expect(heart).toBeCloseTo(1.34);
+  });
+});
+
+describe("the blood's light", () => {
+  it("breathes as the vessel it lies over", () => {
+    expect(flowMaterial("artery").userData.breathRole).toBe(BREATH_ROLE.vessel);
+    expect(flowMaterial("vein").userData.breathRole).toBe(BREATH_ROLE.vessel);
+    expect(flowMaterial("pulmonary_artery").userData.breathRole).toBe(BREATH_ROLE.lung);
+    expect(flowMaterial("pulmonary_vein").userData.breathRole).toBe(BREATH_ROLE.lung);
+    const shader = {
+      uniforms: {},
+      vertexShader: ["#include <common>", "void main() {", "#include <project_vertex>", "}"].join("\n"),
+      fragmentShader: ["#include <common>", "vec4 diffuseColor = vec4( diffuse, opacity );"].join("\n"),
+    } as unknown as Shader;
+    const material = flowMaterial("artery");
+    material.onBeforeCompile.call(material, shader, undefined as never);
+    expect(shader.vertexShader).toContain("breathWorld");
+    expect(shader.uniforms.uBreathRole!.value).toBe(BREATH_ROLE.vessel);
   });
 });

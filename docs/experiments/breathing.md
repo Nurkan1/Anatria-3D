@@ -21,6 +21,8 @@ the shader moves it by where it is:
 | Viscera | liver, stomach, spleen, pancreas, gallbladder, duodenum, kidneys, adrenals; not lymph nodes | down 1.2 cm |
 | Belly | rectus abdominis, obliques, transversus, the abdomen's skin | forward 7 mm around the navel |
 | Heart | the chambers the heartbeat recognises | down 5 mm, riding the diaphragm |
+| Vessels in the lung | pulmonary arteries and veins and their lobar and segmental branches | exactly as the lung tissue around them |
+| Every other vessel | by where it runs | with the wall by the ribs and above the heart; down with the heart in the middle of the chest |
 
 Deep breathing is three times these, at 6 a minute instead of 12, and in
 faster than out in both. Switched on it fades in over a second; switched off,
@@ -48,6 +50,32 @@ claimed. It is not a mechanical simulation.
 The geometry the pointer is tested against does not move. At a centimetre or
 two that is under what a pointer can tell; at deep breathing's 4.5 cm on the
 diaphragm it may be noticed when clicking the dome mid-breath.
+
+## The vessels
+
+The owner caught it watching a deep breath in a glass body: the intercostal
+vessels and the internal thoracic ones stood still while the lung came
+forward with the ribs, and the lung swallowed them.
+
+- **Inside the lung**, the pulmonary arteries and veins take the lung's part.
+  For that the lungs are now measured **together** (`BREATH_FRAME`), not one
+  lobe at a time: a segmental artery's own box says nothing about where it
+  lies in the lung. It also stops the lobes moving differently on either side
+  of a fissure, so the lungs' own movement changed slightly with it.
+- **Everything else is placed by where it runs**, not by its name — the
+  vessels along the ribs are partly in meshes named for something else (the
+  azygos, the internal thoracic veins). By the wall, it goes with the wall;
+  deep in the middle of the chest below the heart's top, down with the heart;
+  above the heart, with the wall again, as the thoracic inlet lifts with the
+  first ribs. Nothing outside the trunk moves.
+- **The blood's light** breathes with the vessel under it.
+
+Measured on the male atlas, from the line the ribs swing about: ascending
+aorta, venae cavae and brachiocephalic veins within 3.4 cm; internal thoracic
+vessels at a median of 5.3 cm; intercostals at 11. A first guess put the
+change between 5 and 10 cm, which left the internal thoracic vessels lagging
+the lung by up to 13 mm in a deep breath. Between 3 and 5 cm, with the inlet
+following the wall: median 0 mm, the worst tenth 1–2 mm.
 
 ## The heart follows the breath
 
@@ -105,9 +133,10 @@ reader's switch.
 - The assistant's picture of the scene does not say the body is breathing, so
   it cannot mention the arrhythmia unprompted when it explains a rhythm.
 - A volume trace under the panel, like the heartbeat's ECG strip.
-- The blood's light (`bloodFlow.ts`) and the lit ghost of an explained
-  structure are meshes of their own and do not breathe; on the heart's
-  chambers the light can lag the wall by its 5 mm.
+- The lit ghost of an explained structure is a mesh of its own and does not
+  breathe.
+- The abdominal vessels inside the liver, spleen and kidneys (portal and
+  hepatic veins, splenic and renal vessels) do not go down with their organs.
 - The alloy body (`experiment/exosuit`) has its own breath. Merging this branch
   into it and giving the alloy material `injectBreath` would make the metal
   body breathe anatomically too.
