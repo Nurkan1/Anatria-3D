@@ -16,6 +16,7 @@ import {
   breathingIn,
   breathRole,
 } from "./breathing";
+import { CARRY_VERSION, carryPlacement, measureCarry } from "./breathCarry";
 import { beatChamber, isChamberWall } from "./heartbeat";
 import { sinusPace } from "./sinusArrhythmia";
 
@@ -33,6 +34,17 @@ import { sinusPace } from "./sinusArrhythmia";
 
 /** Seconds to come up to full depth, or to settle. */
 const EASE = 1;
+
+/**
+ * Frames what is on screen must stay unchanged before the carried vessels are
+ * measured — systems load a few meshes a frame, and measuring on every one
+ * would measure the abdomen dozens of times while it was still arriving.
+ */
+const CARRY_SETTLE_FRAMES = 20;
+/** Under this, summed over every registered mesh, the scene is holding still this frame. In metres. */
+const CARRY_STILL = 1e-5;
+/** Over this since the last measurement, summed the same way, it has moved enough to measure again. */
+const CARRY_MOVED = 0.002;
 
 /**
  * Whether the body is breathing in right now — for the panel, which reads it
@@ -113,6 +125,9 @@ export function BreathDriver({
 
   const clock = useRef(0);
   const amplitude = useRef(0);
+  /** What the carried vessels were last measured for, and how long the scene has held still. */
+  const carried = useRef({ version: -1, revision: -1, placement: Number.NaN });
+  const carryStill = useRef({ version: -1, placement: Number.NaN, frames: 0 });
   const depth = useRef(1);
   const sinusSwing = useRef(BREATH_PATTERNS.quiet.sinusSwing);
 
@@ -139,6 +154,28 @@ export function BreathDriver({
       }
       return;
     }
+    // Which vessels the organs carry, measured once the scene has settled, and
+    // again whenever something is added or removed or the meshes have moved —
+    // the exploded view — once they have stopped. "Stopped" is strict and
+    // "moved" is not: the explosion eases in and out over a long tail, and a
+    // looser test measured several times on its last tenths of a millimetre.
+    const version = CARRY_VERSION.value;
+    const placement = carryPlacement();
+    const still = carryStill.current;
+    const holding = version === still.version && Math.abs(placement - still.placement) < CARRY_STILL;
+    still.frames = holding ? still.frames + 1 : 0;
+    still.version = version;
+    still.placement = placement;
+    const last = carried.current;
+    const changed =
+      version !== last.version ||
+      revision !== last.revision ||
+      !(Math.abs(placement - last.placement) < CARRY_MOVED);
+    if (changed && still.frames >= CARRY_SETTLE_FRAMES) {
+      carried.current = { version, revision, placement };
+      measureCarry();
+    }
+
     const step = Math.min(delta, 0.05);
     clock.current += step;
     const fill = breathFill(clock.current, pattern);

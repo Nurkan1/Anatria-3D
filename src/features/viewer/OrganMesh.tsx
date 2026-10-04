@@ -8,7 +8,8 @@ import { pressTravelled } from "./dragGuard";
 
 import { shouldSuppressClick } from "./areaSelect";
 import { coverageColour } from "./coverage";
-import { breathData, breathOnBeforeCompile } from "./breathing";
+import { registerCarry } from "./breathCarry";
+import { BREATH_ROLE, breathData, breathOnBeforeCompile } from "./breathing";
 import { scanColour, type BodyTone } from "./scan";
 import { FACING, scanBandMaterialProps, scanRangeAlong, STANDING } from "./scanBand";
 import {
@@ -382,6 +383,28 @@ export const OrganMesh = memo(function OrganMesh({
    * does not stop the chest.
    */
   const breath = useMemo(() => breathData(organ, worldBox, chamber !== null), [organ, worldBox, chamber]);
+  /**
+   * What this structure is to the measurement of which vessels the organs under
+   * the diaphragm carry — see `breathCarry.ts`. Registered whatever the switch
+   * says: joining a map costs nothing, and the driver measures only while the
+   * body breathes.
+   */
+  const carryPart = useMemo(() => {
+    if (breath.breathRole === BREATH_ROLE.viscera) return "carrier" as const;
+    // The heart moves with a breath by its own measure, and a vessel opening
+    // into it — the inferior vena cava, out of the liver — keeps the heart's there.
+    if (breath.breathRole === BREATH_ROLE.heart) return "heart" as const;
+    if (breath.breathRole !== BREATH_ROLE.vessel) return null;
+    const name = organ.name_en.toLowerCase();
+    // The aorta does not move with a breath; what leaves it is held there.
+    if (name.includes("aorta")) return "anchor" as const;
+    return name.includes("vena cava") ? ("vena cava" as const) : ("vessel" as const);
+  }, [breath, organ.name_en]);
+  useEffect(() => {
+    const mesh = meshRef.current;
+    if (!mesh || carryPart === null) return;
+    return registerCarry(organ.organ_id, { mesh, part: carryPart });
+  }, [carryPart, organ.organ_id]);
   const beating = useHeartStore((s) => chamber !== null && s.enabled);
   const beatUserData = useMemo(() => {
     if (chamber === null) return null;
@@ -766,6 +789,9 @@ export const OrganMesh = memo(function OrganMesh({
           renderOrder={4}
         >
           <meshBasicMaterial
+            // It breathes with the structure it lights, or it is left behind.
+            onBeforeCompile={breathOnBeforeCompile}
+            userData={breath}
             color={LIT_LIGHT}
             transparent
             opacity={OCCLUDED_FLOOR + litGlow * OCCLUDED_RANGE}

@@ -2,6 +2,8 @@ import type { Material } from "three";
 
 import type { ManifestOrgan } from "@/lib/schemas";
 
+import { CARRY_ATTRIBUTE } from "./breathCarry";
+
 /**
  * Breathing: the body moving as a body does at rest, and what moves it.
  *
@@ -260,9 +262,17 @@ export function injectBreath(shader: Shader, owner: unknown): void {
   shader.uniforms.uBreathRole = { value: data?.breathRole ?? BREATH_ROLE.none };
   shader.uniforms.uBreathSpan = { value: [span[0], span[1]] };
   shader.uniforms.uBreathFrame = BREATH_FRAME;
+  // A mesh without the carried weight must read 0 for it, not whatever another
+  // program left in that attribute slot: WebGL keeps one generic value per
+  // slot for every program, and three writes one only when a material asks.
+  if (owner && typeof owner === "object") {
+    const material = owner as { defaultAttributeValues?: Record<string, number[]> };
+    material.defaultAttributeValues = { ...material.defaultAttributeValues, [CARRY_ATTRIBUTE]: [0] };
+  }
 
   shader.vertexShader =
     "uniform float uBreathFill;\nuniform vec3 uBreathAxis;\nuniform float uBreathRole;\nuniform vec2 uBreathSpan;\nuniform vec3 uBreathFrame;\n" +
+    `attribute float ${CARRY_ATTRIBUTE};\n` +
     shader.vertexShader.replace(
       ANCHOR,
       `${ANCHOR}
@@ -285,6 +295,8 @@ if (uBreathFill > 0.0 && uBreathRole > 0.5) {
   float breathBellyTall = (breathWorld.y - (uBreathAxis.y - 0.27)) / 0.14;
   vec3 breathBelly = vec3(breathOut.x * ${m(BREATH_TRAVEL.bellyForward * 0.3)}, 0.0, breathOut.y * ${m(BREATH_TRAVEL.bellyForward)})
     * exp(-breathBellyTall * breathBellyTall) * breathFront;
+  // The organs under the diaphragm: pushed down, and a little forward.
+  vec3 breathViscera = vec3(0.0, -${m(BREATH_TRAVEL.viscera)}, ${m(BREATH_TRAVEL.viscera * 0.15)});
   vec3 breathMove = vec3(0.0);
   if (abs(uBreathRole - ${BREATH_ROLE.chestWall}.0) < 0.5) {
     breathMove = breathChest;
@@ -300,7 +312,7 @@ if (uBreathFill > 0.0 && uBreathRole > 0.5) {
     // The dome flattens: its top travels, its rim on the ribs stays.
     breathMove = vec3(0.0, -${m(BREATH_TRAVEL.diaphragm)} * breathUp * breathUp, 0.0);
   } else if (abs(uBreathRole - ${BREATH_ROLE.viscera}.0) < 0.5) {
-    breathMove = vec3(0.0, -${m(BREATH_TRAVEL.viscera)}, ${m(BREATH_TRAVEL.viscera * 0.15)});
+    breathMove = breathViscera;
   } else if (abs(uBreathRole - ${BREATH_ROLE.belly}.0) < 0.5) {
     breathMove = breathBelly;
   } else if (abs(uBreathRole - ${BREATH_ROLE.heart}.0) < 0.5) {
@@ -331,7 +343,10 @@ if (uBreathFill > 0.0 && uBreathRole > 0.5) {
     float middle = (1.0 - smoothstep(0.06, 0.11, abs(breathFromAxis.x)))
       * (1.0 - smoothstep(uBreathFrame.z, uBreathFrame.z + 0.08, breathWorld.y))
       * smoothstep(uBreathFrame.x - 0.06, uBreathFrame.x, breathWorld.y);
-    breathMove = (breathChest + breathBelly) * wall + vec3(0.0, -${m(BREATH_TRAVEL.heart)}, 0.0) * middle * (1.0 - wall);
+    vec3 own = (breathChest + breathBelly) * wall + vec3(0.0, -${m(BREATH_TRAVEL.heart)}, 0.0) * middle * (1.0 - wall);
+    // Inside the organs under the diaphragm, and where it leaves them, it goes
+    // with them instead — see breathCarry.ts.
+    breathMove = mix(own, breathViscera, clamp(${CARRY_ATTRIBUTE}, 0.0, 1.0));
   }
   breathWorld.xyz += breathMove * uBreathFill;
   mvPosition = viewMatrix * breathWorld;
