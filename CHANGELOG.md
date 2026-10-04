@@ -13,6 +13,31 @@ There is **no auto-updater**, by design: the application never reaches the
 network on its own. A new version reaches you only when you download and install
 it, so this file is also the answer to "is it worth reinstalling".
 
+## [Unreleased]
+
+### Added
+
+**The body breathes.** *Breathing*, under the heartbeat, makes the body breathe
+at rest (twelve breaths a minute) or deeply (six). The panel says which half of
+the breath it is and what is doing it. Each part moves as it does in a body:
+the dome of the diaphragm descends while its rim stays, the lungs move with the
+ribs and lengthen downwards over the dome, the ribs and sternum swing up and
+forward, the liver, kidneys and spleen are pushed down, and the belly wall moves
+out. The vessels go with what they lie in, stretching from the aorta, which
+stays still. It is an illustration of a breath, not a model of respiratory
+mechanics, and says so.
+
+**The heart follows the breath.** With the heartbeat on as well, the heart rate
+rises a little as each breath comes in and falls as it goes out — respiratory
+sinus arrhythmia, normal and largest with slow deep breaths. The ECG sweeps in
+real seconds, so the changing gaps between beats can be watched on it. Rhythms
+the sinus node does not pace — atrial fibrillation, flutter, complete block,
+ventricular rhythms — do not follow, and the panel says why.
+
+**The assistant knows the body is breathing.** While it breathes, a question
+like *"why does the heart rate keep changing?"* is answered about what is on the
+screen.
+
 ## [0.5.1] — 2026-09-25
 
 ### Fixed
