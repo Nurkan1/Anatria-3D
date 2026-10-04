@@ -652,12 +652,63 @@ const SECTIONS: Section[] = [
           system asks for reduced motion.
         </p>
 
+        <Sub>With the breathing on</Sub>
+        <p>
+          Switch on <Ui>Breathing</Ui> as well and the heart follows the breath: a
+          little faster as each breath comes in, a little slower as it goes out. That
+          is respiratory sinus arrhythmia — normal, largest in the young, and largest
+          of all with slow deep breaths, which is why <Ui>Deep</Ui> shows it best. The
+          ECG sweeps in real seconds, so the gaps between beats can be watched closing
+          and opening. Only a heart paced by its sinus node does this: in atrial
+          fibrillation, flutter, complete block or a ventricular rhythm the breath
+          does not reach the ventricles, and the panel says so.
+        </p>
+
         <Sub>Asking about it</Sub>
         <p>
           While the heart beats, the assistant is told which pattern is playing, so{" "}
           <em>“what is this, and how does it happen?”</em> is a question about it. It
           can also set a rhythm itself: ask it to explain or compare Mobitz I and II,
           or what aortic stenosis sounds like, and it plays each while it explains.
+        </p>
+      </>
+    ),
+  },
+  {
+    id: "breathing",
+    nav: "Breathing",
+    title: "Watching the body breathe",
+    body: (
+      <>
+        <p>
+          <Ui>Breathing</Ui>, under the heartbeat, makes the body breathe — quietly,
+          twelve breaths a minute, or <Ui>Deep</Ui> at six. The panel says at every
+          moment which half of the breath it is and what is doing it: breathing in is
+          the diaphragm’s work; breathing out at rest needs no muscle at all, because
+          the lungs and the chest wall spring back.
+        </p>
+        <p>
+          Each part moves as it does in a body, not as a chest that swells. The dome
+          of the diaphragm descends while its rim on the ribs stays; the lungs move
+          with the ribs and lengthen downwards over the dome; the ribs and sternum
+          swing up and forward, most at the front; the liver, kidneys and spleen are
+          pushed down, and the belly wall moves out to make room. The vessels go with
+          what they lie in — those inside the lung with the lung, those along the ribs
+          with the ribs, those inside the liver or a kidney with the organ, stretching
+          from the aorta, which stays still. Switched off, the breath is allowed to
+          finish going out before the body stops.
+        </p>
+        <Callout>
+          <strong>It is an illustration of a breath, not a model of one.</strong> The
+          right parts move the right way by about the right amount, on one
+          representative body; it is not a simulation of respiratory mechanics, and
+          nothing here reads, or stands in for, anyone’s breathing.
+        </Callout>
+        <p>
+          While the body breathes, the assistant is told so, and with the heart beating
+          too it is told what the breath is doing to it — so{" "}
+          <em>“why does the heart rate keep changing?”</em> is a question it can answer
+          about what is on the screen.
         </p>
       </>
     ),
