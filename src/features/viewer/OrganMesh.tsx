@@ -8,6 +8,7 @@ import { pressTravelled } from "./dragGuard";
 
 import { shouldSuppressClick } from "./areaSelect";
 import { coverageColour } from "./coverage";
+import { breathData, breathOnBeforeCompile } from "./breathing";
 import { scanColour, type BodyTone } from "./scan";
 import { FACING, scanBandMaterialProps, scanRangeAlong, STANDING } from "./scanBand";
 import {
@@ -373,6 +374,14 @@ export const OrganMesh = memo(function OrganMesh({
    * not.
    */
   const chamber = useMemo(() => beatChamber(organ), [organ]);
+  /**
+   * The structure's part in a breath — see `breathing.ts`.
+   *
+   * Every material this structure draws with carries it: the plain one, the
+   * scanner's and the heartbeat's all breathe, so switching any of them on
+   * does not stop the chest.
+   */
+  const breath = useMemo(() => breathData(organ, worldBox, chamber !== null), [organ, worldBox, chamber]);
   const beating = useHeartStore((s) => chamber !== null && s.enabled);
   const beatUserData = useMemo(() => {
     if (chamber === null) return null;
@@ -381,12 +390,13 @@ export const OrganMesh = memo(function OrganMesh({
     if (!geometry.boundingBox) geometry.computeBoundingBox();
     const centre = geometry.boundingBox?.getCenter(new THREE.Vector3()) ?? new THREE.Vector3();
     return {
+      ...breath,
       organId: organ.organ_id,
       beatAtrium: isAtrium(chamber) ? 1 : 0,
       beatLeft: chamber.startsWith("left") ? 1 : 0,
       beatCentre: { value: centre },
     };
-  }, [chamber, geometry, organ.organ_id]);
+  }, [chamber, geometry, organ.organ_id, breath]);
   useEffect(() => {
     const mesh = meshRef.current;
     if (!beating || !mesh || chamber === null || !beatUserData) return;
@@ -581,6 +591,19 @@ export const OrganMesh = memo(function OrganMesh({
     return [shown.r, shown.g, shown.b];
   }, [scanBandEnabled, organ, overlay, coverageTouches, coverageBusiest]);
 
+  /**
+   * The scanner's material props, carrying the breath as well.
+   *
+   * Memoised: the scanner keeps its own values on `userData`, and a merged
+   * object built in the render would be a new one on every hover.
+   */
+  const scanProps = useMemo(() => {
+    if (!scanBandEnabled) return null;
+    const props = scanBandMaterialProps(true, scanSpan, revealColour, scanSpanFront);
+    const own = (props as { userData?: object }).userData;
+    return { ...props, userData: { ...own, ...breath } };
+  }, [scanBandEnabled, scanSpan, revealColour, scanSpanFront, breath]);
+
   const surface = {
     color,
     emissive,
@@ -683,7 +706,12 @@ export const OrganMesh = memo(function OrganMesh({
         onStudy(organ.organ_id, additive);
       }}
     >
-      <meshStandardMaterial ref={material} {...surface} />
+      <meshStandardMaterial
+        ref={material}
+        {...surface}
+        onBeforeCompile={breathOnBeforeCompile}
+        userData={breath}
+      />
       {/* PoC scaffolding: only the last material is attached/drawn. R3F restores
           the original attachment on unmount and disposes the temporary material.
           Keep the original alive so its warmed program cache also survives. */}
@@ -691,7 +719,7 @@ export const OrganMesh = memo(function OrganMesh({
         <meshStandardMaterial
           ref={scanMaterial}
           {...surface}
-          {...scanBandMaterialProps(true, scanSpan, revealColour, scanSpanFront)}
+          {...scanProps}
         />
       )}
       {/*

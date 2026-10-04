@@ -1,4 +1,6 @@
 import type { Material } from "three";
+
+import { injectBreath } from "./breathing";
 import type { SectionPlaneName } from "./axialSlice";
 
 /**
@@ -394,6 +396,8 @@ export function scanBandOnBeforeCompile(this: unknown, shader: Shader): void {
       : uScanTint;
     totalEmissiveRadiance += pulseColour * wake * uScanPulse * ${PULSE_GAIN} * uScanEntry;`,
     );
+  // The scanner does not stop the chest. See `breathing.ts`.
+  injectBreath(shader, this);
 }
 
 const ON = Object.freeze({ onBeforeCompile: scanBandOnBeforeCompile });

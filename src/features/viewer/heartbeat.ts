@@ -3,6 +3,8 @@ import type { Material } from "three";
 
 import type { ManifestOrgan } from "@/lib/schemas";
 
+import { injectBreath } from "./breathing";
+
 /**
  * The heart, beating — phase 0 of an experiment, built to be looked at and
  * measured before anything is built on it.
@@ -317,6 +319,8 @@ diffuseColor.a = max(diffuseColor.a, beatGlow);
 ${opaque}`,
       );
   }
+  // The heart sits on the diaphragm and goes down with it. See `breathing.ts`.
+  injectBreath(shader, this);
 }
 
 /** A heart mesh while it beats: what the driver needs to keep it right. */
