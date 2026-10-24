@@ -10,7 +10,17 @@ dependencies = [
     # Slim install with only the three providers the app exposes. The full
     # `pydantic-ai` package pulls in every provider integration, which would
     # roughly triple the PyInstaller bundle for no benefit.
-    "pydantic-ai-slim[anthropic,google,openai]>=2.25.0",
+    #
+    # Pinned exactly. This is the agent itself and it ships inside the sidecar,
+    # which CI builds from whatever this line resolves to on the day: unpinned,
+    # v0.6.0 shipped 2.54.0 while the developer's venv had 2.25.0, and by
+    # 2026-10-24 CI was installing 2.61.0, which hands a tool's ModelRetry back
+    # as a tool-return part instead of a retry-prompt (five tests failed on it;
+    # the model still receives the text). 2.54.0 is what v0.6.0 shipped and was
+    # tested with on Windows and Linux. Move it on purpose, with the whole
+    # suite and a real provider turn, and update `retries()` in
+    # tests/test_scene_tools.py when crossing into the new part kind.
+    "pydantic-ai-slim[anthropic,google,openai]==2.54.0",
 ]
 
 # NOTE: there is no PDF renderer here, and there will not be one. Printing is
