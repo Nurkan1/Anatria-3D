@@ -26,7 +26,12 @@ dev = [
     "pyinstaller>=6.21.0",
     "pytest>=9.1.1",
     "pytest-asyncio>=0.24",
-    "ruff>=0.9",
+    # Pinned to one minor release. Ruff adds rules in minor releases, and with
+    # "RUF" selected below each new one is on the moment CI installs it: an
+    # unpinned ruff turned Gates red on 2026-10-21 with no commit at all (RUF071
+    # in 0.17), and the same would have failed a release workflow after its tag
+    # existed. Move it on purpose, run `ruff check`, and fix what it finds.
+    "ruff>=0.17.1,<0.18",
 ]
 
 [build-system]
