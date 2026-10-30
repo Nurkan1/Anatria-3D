@@ -51,6 +51,9 @@ import { heartAim } from "./heartContext";
 import { scannerAim } from "./scannerContext";
 import { AimHint, AskingGuide } from "./AskingGuide";
 import { CaseBar } from "./CaseBar";
+import { LocalChatPanel } from "@/features/local/LocalChatPanel";
+import { useLocalChatStore } from "@/stores/localChatStore";
+
 import { Markdown } from "./Markdown";
 import { collectOrganRefs, stripOrganRefs } from "./organRefs";
 import { BridgeIndicator } from "./BridgeIndicator";
@@ -621,6 +624,9 @@ export function ChatPanel() {
   const isolatedOrganIds = useSceneStore((s) => s.isolatedOrganIds);
   const hiddenSystems = useSceneStore((s) => s.hiddenSystems);
   const genderModel = useSceneStore((s) => s.genderModel);
+  // The local chat's screen, over this panel; see `LocalChatPanel`.
+  const localOpen = useLocalChatStore((s) => s.open);
+  const setLocalOpen = useLocalChatStore((s) => s.setOpen);
   // Subscribed so the note above the composer appears and goes with the switch
   // and the pin. The level and the crossing are read when it renders.
   const scanEnabled = useScanStore((s) => s.enabled);
@@ -1052,7 +1058,14 @@ export function ChatPanel() {
   }
 
   return (
-    <div className="flex h-full min-h-0 flex-col">
+    <div className="relative flex h-full min-h-0 flex-col">
+      <LocalChatPanel
+        open={localOpen}
+        engineReady={engineReady}
+        profile={profile}
+        language={language}
+        genderModel={genderModel}
+      />
       <header className="flex items-center gap-2 border-b border-slate-800 px-3 py-2">
         <h1 className="text-sm font-semibold tracking-tight">
           Anatria<span className="text-sky-400">3D</span>
@@ -1088,6 +1101,14 @@ export function ChatPanel() {
             disabled={messages.length === 0}
           />
           <ModeSwitch mode={mode} onChange={beginSession} />
+          <button
+            type="button"
+            onClick={() => setLocalOpen(true)}
+            className="rounded border border-violet-800/70 px-2 py-0.5 text-[10px] text-violet-300 transition hover:border-violet-500 hover:text-violet-200"
+            title="Chat with a model in Ollama on this computer — words only, it cannot move the atlas"
+          >
+            Local
+          </button>
         </div>
       </header>
 
