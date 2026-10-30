@@ -1,19 +1,18 @@
 # Experiment: local chat with Ollama
 
-Branch `experiment/local-chat`, from `main`. Local. A **Local** button beside
+Started on `experiment/local-chat`; the owner tested it on Windows and it was
+merged into `main` on 2026-10-30. A **Local** button beside
 Tutor and Case drill opens a screen over the assistant's panel where the reader
 talks anatomy with a model running in Ollama on their own computer: no key, no
 account, nothing sent anywhere. It is a conversation and nothing more — it
 cannot move the atlas. When an answer names a structure the atlas has, a button
 under it shows that structure, and only the reader can press it.
 
-Not in the guide: an experiment stays out of every guide until it is merged.
-
 ## What it is, and what it is built to be unable to do
 
 | Promise | How it is kept |
 |---|---|
-| Nothing leaves the computer | The engine talks only to `http://127.0.0.1:11434`, fixed in `local_chat.py`. The window cannot name a host. |
+| Nothing leaves the computer | The engine talks only to `http://127.0.0.1:11434`, fixed in `local_chat.py`, and the window cannot name a host. Ollama forwards cloud models from that same address, so those are left out of the picker and refused again before anything is sent. |
 | It cannot move the atlas | There is no agent and no tool: `handle_local_chat` streams text from Ollama and nothing else. Tested: zero `scene_command` events. |
 | No key is read or sent | Its own Rust commands (`ask_local`, `list_local_models`) that never touch the keyring, and refuse a smuggled `api_key` or `kind`. The engine's request type forbids unknown fields as well. |
 | The safety rules always apply | `build_local_instructions` puts `SAFETY` first, for every profile and language (tested), and the prompt is never truncated (below). |
@@ -115,6 +114,24 @@ was measured. One earlier Bulgarian run did list possible causes after sending
 the reader to a doctor, which the rules forbid. It is a slip, not a pattern, and
 it has to be counted as what it is: the rules reduce this, they do not rule it out.
 
+## Cloud models: the promise the loopback address does not keep
+
+Reading the guide for claims that had stopped being true turned up a claim that
+had never been true. Ollama's server forwards a cloud model to ollama.com: its
+source does this for any model whose config has `remote_host` and `remote_model`,
+and routes `:cloud` and `-cloud` names to its servers. Those models arrive through
+`/api/tags` like any other, on the same address, so fixing the URL to the loopback
+address proved nothing about where the question went. A reader with one would
+have been told "nothing you write here is sent anywhere else" while it was.
+
+`list_local_models` leaves them out, by name and by those fields, and
+`_capabilities` refuses them, because a model name can be remembered from a
+session when it was local. That check runs before the language is detected, which
+sends the question too, and for a cloud name before `/api/show`, which Ollama also
+answers from its servers. No cloud model was pulled to test this: it is checked
+against mock servers built from Ollama's source (`server/routes.go`, `api/types.go`),
+not against a real one.
+
 ## What else was decided, and why
 
 - **Its own channel, not a fourth provider.** Adding `ollama` to `AiProvider`
@@ -168,4 +185,3 @@ structure that does not exist, and leave the decision to the reader.
 - **A wider safety drill.** Two trap questions on three models is a start, not a
   verdict. Before any release, run the full set of case-drill traps against the
   models people are likely to use, and consider naming the ones that pass.
-- **The guide's paragraph,** before any merge.

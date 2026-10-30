@@ -228,7 +228,9 @@ structures — 3,478 in the male atlas, 264 in the female trunk — the
 labelling, cross-sections, exploded views and image export work offline the
 moment you install. Only the AI tutor needs an API key of your own —
 which also means your questions go straight to your provider, never through a
-server of ours.
+server of ours. If you have [Ollama](https://ollama.com) and a model installed,
+**Local** gives you a conversation on your own computer with no key at all: it
+talks, but it cannot move the atlas, and its answers are less reliable.
 
 > **Windows will warn you the first time.** Anatria3D is not code-signed — a
 > certificate costs money the project does not spend — so you will see *"Windows

@@ -53,7 +53,8 @@ const SECTIONS: Section[] = [
           question, the recent conversation, what is on screen — the structures
           selected, the scanner and the heart — and, in a case drill, the invented
           patient's file. Nothing goes anywhere else. Apart from checking your key,
-          nothing is sent while you are not asking.
+          nothing is sent while you are not asking. A <em>Local model</em> sends
+          nothing at all: it runs on your own computer.
         </p>
         <Callout>
           <strong>There are two atlases, and they are not the same size.</strong> The{" "}
@@ -816,7 +817,9 @@ const SECTIONS: Section[] = [
           The assistant needs a key from an AI provider — Anthropic, OpenAI or Google.
           Open <Ui>Settings</Ui> in the assistant panel, paste one, and the app will
           fetch the models that key can use. That same call is what proves the key
-          works, so there is no separate test to run.
+          works, so there is no separate test to run. If you would rather talk to a
+          model on your own computer, with no key, see <em>Local model</em> below. It
+          can talk, but it cannot do what this section describes.
         </p>
         <Callout>
           Your key is stored in your operating system's credential manager and is never
@@ -914,6 +917,124 @@ const SECTIONS: Section[] = [
           the profession's nomenclature and it does not change by country — translating
           it for your level and language is the assistant's job, done per question.
         </p>
+      </>
+    ),
+  },
+  {
+    id: "local",
+    nav: "Local model",
+    title: "A model on your own computer",
+    body: (
+      <>
+        <p>
+          <Ui>Local</Ui>, beside <Ui>Tutor</Ui> and <Ui>Case drill</Ui>, opens a
+          conversation with a model running on your own machine. It needs no key and
+          no account, costs nothing per question, and nothing you write leaves the
+          computer. <Ui>← Tutor</Ui> takes you back, and the tutor's conversation is
+          where you left it.
+        </p>
+        <Callout>
+          <strong>It is a conversation, not the assistant.</strong> Think of it as
+          someone to talk anatomy over, who has read a lot and remembers it imperfectly.
+          Everything that makes the assistant teach from the model — moving the camera,
+          isolating, cutting sections, marking a disease state, the heart and the
+          breath, case drills, the journal — belongs to the assistant in{" "}
+          <Ui>Tutor</Ui>.
+        </Callout>
+
+        <Sub>What you need first</Sub>
+        <p>
+          Anatria3D does not include a model and will not download one. The models run
+          in <strong>Ollama</strong>, a free program from another project that you
+          install yourself.
+        </p>
+        <Rows
+          rows={[
+            ["1. Install Ollama", "From ollama.com, for your system. It keeps running in the background and needs no account for this."],
+            ["2. Download a model", "In a terminal, for example: ollama pull gemma3:4b. This is the one download, from Ollama and not from us. After it, no internet is needed."],
+            ["3. Press Check", "Open Local and press Check. The models you have downloaded appear in the list at the top, and the last one you used is remembered."],
+          ]}
+        />
+        <Callout>
+          <strong>The model runs on your hardware, so your hardware sets the limit.</strong>{" "}
+          The size shown beside each model is its download, and it needs at least that
+          much free memory while it runs, on top of what the atlas uses. A graphics card
+          makes it much quicker; without one a model still works, more slowly. The first
+          question takes longest, because the model has to load.
+        </Callout>
+        <p>
+          Three models have been tried against the rules below.{" "}
+          <Ui>qwen3.5:9b</Ui> (about 6.6 GB) behaved best, <Ui>gemma3:4b</Ui> (about
+          3.3 GB) is lighter and behaved well, and <Ui>llama3.1:8b</Ui> (about 4.9 GB)
+          was the weakest and the poorest in Bulgarian. Any other chat model Ollama has
+          will appear in the list too, but it has not been tried. Models that cannot
+          hold a conversation, such as embedding models, are left out.
+        </p>
+
+        <Sub>What it cannot do</Sub>
+        <Rows
+          rows={[
+            ["Move the atlas", "It has no tools. Whatever it says, nothing on screen changes unless you press a button yourself. If it claims to have shown you something, it has not."],
+            ["Be kept", "Local conversations are not saved to your journal. New clears the conversation, and closing the app ends it."],
+            ["See the scene", "It knows what you have selected, so “this” works, and it is told your profile and which body is open. It does not know what else is on screen, the scanner, or the heart and breath."],
+            ["Count towards Usage", "It costs no tokens from a provider, so it does not appear in Usage."],
+            ["Remember a very long talk", "The oldest messages are dropped to keep the rules in reach. If Ollama ever drops the start of the conversation itself, the answer is not shown and you are asked to start a new one."],
+            ["Use Ollama's cloud", "Ollama also offers models that run on its servers. They are not listed here and are refused, because this screen promises that nothing leaves your computer. Only models you have downloaded can be used."],
+          ]}
+        />
+
+        <Sub>Show in the atlas</Sub>
+        <p>
+          When an answer names a structure by its exact Terminologia Anatomica Latin
+          name, and the atlas has that structure on a system you have switched on, a
+          button appears under the answer. Pressing it isolates the structure and flies
+          to it. Nothing happens until you press.
+        </p>
+        <Callout>
+          The Latin has to be exact, so a name the model got wrong or invented offers no
+          button. That keeps the button from pointing at the wrong structure. It says
+          nothing about the sentence around it: a button means the name is real, not
+          that what was said about it is true. A structure named only in Spanish or
+          Bulgarian offers no button either.
+        </Callout>
+
+        <Sub>The language of the answer</Sub>
+        <p>
+          The <Ui>BG</Ui>, <Ui>ES</Ui>, <Ui>EN</Ui> and <Ui>Auto</Ui> buttons do not
+          apply here. A local model answers in the language you ask in, so you can ask
+          in Bulgarian with the rest of the app in Spanish, and change language in the
+          middle of a conversation. A message that is only a Latin term, or too short to
+          tell, such as "ok", stays in the language you were using.
+        </p>
+        <Callout>
+          <strong>If it is not one of the languages it can be trusted with, it answers
+          in English and says so.</strong> A small model will happily write a language
+          it knows badly, fluently and wrongly, and it cannot tell that it is doing so.
+          So the list is fixed in the application: the main European and Asian
+          languages, with Arabic, Hebrew and Persian. A language being on it means the
+          model will write it, not that it will be right in it. Languages close to each
+          other are sometimes mistaken for one another, those written in Cyrillic above
+          all.
+        </Callout>
+
+        <Sub>How far to trust it</Sub>
+        <Callout>
+          <strong>Local models make more mistakes than the large ones.</strong> They
+          state wrong anatomy with the same confidence as right anatomy. In testing that
+          meant wrong structures, invented Latin and a ventricle pumping into the wrong
+          artery, in Bulgarian and Japanese among others. Use it to think aloud. Check
+          anything that matters against the atlas, or ask the assistant.
+        </Callout>
+        <Callout>
+          <strong>The rules are the same, and a small model keeps them less well.</strong>{" "}
+          It is given the same instructions as the assistant: it teaches, and does not
+          assess anyone. They come first in everything it reads and are repeated last.
+          In testing it declined and sent the reader to a doctor or to emergency care,
+          but one answer still listed possible causes after doing so. It is a model on
+          your computer, not a safeguard. Never use it to decide anything about a real
+          person, yourself included. If you have symptoms, see a qualified professional,
+          and in an emergency call your emergency number.
+        </Callout>
       </>
     ),
   },
@@ -1294,6 +1415,8 @@ const SECTIONS: Section[] = [
           Anatria3D is free and always will be. The <em>assistant</em> is not: it runs
           on your own API key, and every answer is billed to you by your provider.
           Nobody should have to find that out from a statement at the end of the month.
+          A <em>Local model</em> is the exception: it runs on your own machine, costs
+          nothing per question, and does not appear here.
         </p>
         <p>
           The <Ui>Usage</Ui> tab on the left is the whole picture. <Ui>Daily</Ui> covers
@@ -1568,10 +1691,12 @@ const SECTIONS: Section[] = [
           is outside the intended purpose.
         </p>
         <p>
-          <strong>The models.</strong> Answers come from a general-purpose AI model
-          by Anthropic, OpenAI or Google, which you choose and reach with your own key.
-          The obligations on those models (Articles 53 to 55) rest with their
-          providers.
+          <strong>The models.</strong> The assistant's answers come from a
+          general-purpose AI model by Anthropic, OpenAI or Google, which you choose and
+          reach with your own key. The obligations on those models (Articles 53 to 55)
+          rest with their providers. A <em>Local model</em> is one you chose and
+          installed yourself in Ollama. Anatria3D does not supply it, and whatever
+          obligations apply to it rest with whoever publishes it.
         </p>
 
         <Sub>Medical devices — Regulation (EU) 2017/745 (MDR)</Sub>
@@ -1583,6 +1708,7 @@ const SECTIONS: Section[] = [
         <Rows
           rows={[
             ["The assistant", "Declines every question about a specific person — you, a relative, a patient — and points to a qualified professional. The rule applies in every profile and language, and automated tests check that it is always present."],
+            ["A local model", "Is given the same rule, first and again last, and automated tests check that too. A small model keeps it less reliably than a large one, so the Local screen says it makes more mistakes, and it must not be used to decide anything about a person. It has no tools, so it cannot act on the atlas."],
             ["The top bar", "Says “Educational use only — not a medical device” permanently. It cannot be closed."],
             ["Case drills", "Every patient is invented for teaching, and says so. The drill stops if a real person is described."],
           ]}
@@ -1594,7 +1720,8 @@ const SECTIONS: Section[] = [
             ["No collection", "No account, no server, no analytics, no telemetry. The developer receives nothing from your use of the application."],
             ["Stored locally", "Your journal is a file on this computer. You can delete any entry, and nobody else holds a copy."],
             ["Sent to your provider", "Only while you ask: your question, the recent conversation, what is on screen and, in a case drill, the invented patient's file — to the AI provider you chose, under your own key and your own agreement with them. Checking a key lists its models and sends nothing else."],
-            ["Health data (Art. 9)", "There is no field for a real person anywhere. Do not type a patient's details into the assistant or a case: they would be sent to your provider."],
+            ["A local model", "Your question, the recent conversation and what you have selected go to Ollama on this computer, at its local address, and to nowhere else. Models that run on Ollama's servers are refused. Nothing is saved. Ollama is separate software with its own terms."],
+            ["Health data (Art. 9)", "There is no field for a real person anywhere. Do not type a patient's details into the assistant or a case: they would be sent to your provider. Staying on your computer does not make a local model the place for them either."],
             ["Keys and voice", "API keys are kept in your system's keyring, never in the interface. Answers are read aloud only by voices installed on this computer."],
           ]}
         />
@@ -1607,7 +1734,8 @@ const SECTIONS: Section[] = [
           read your files or reach the network beyond your provider. Messages between
           the assistant and the viewer are validated on both sides (Pydantic and Zod).
           The optional control bridge for an agent on this computer is off until you
-          switch it on.
+          switch it on. A local model has none of these actions: only you can show what
+          it names, with a button that accepts an exact name from the atlas.
         </p>
 
         <Sub>Explaining anatomy to a patient</Sub>

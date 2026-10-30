@@ -62,7 +62,9 @@ The parts where a bug would cost a user something real:
   choose a path is a real finding.
 - **The sidecar boundary** — the NDJSON protocol between Rust and Python, and
   anything that turns a provider's response into code execution, a file write,
-  or a command.
+  or a command. The local model is held to the same bar, and to one more: a way
+  to make it reach anything but Ollama on the loopback address, or to reach a
+  model Ollama forwards to a server, is a real finding.
 - **The study journal** — SQL injection, or a crafted journal export that does
   something other than merge when imported.
 - **The build and release path** — the GitHub Actions workflow, and anything

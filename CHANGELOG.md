@@ -13,6 +13,28 @@ There is **no auto-updater**, by design: the application never reaches the
 network on its own. A new version reaches you only when you download and install
 it, so this file is also the answer to "is it worth reinstalling".
 
+## [Unreleased]
+
+### Added
+
+**Talk to a model on your own computer.** *Local*, beside *Tutor* and *Case
+drill*, opens a conversation with a model running in
+[Ollama](https://ollama.com), which you install yourself along with a model. It
+needs no key and no account, costs nothing per question, and nothing you write
+leaves the computer. Models that Ollama runs on its own servers are not offered.
+It is a conversation and nothing more: it cannot move the atlas, its answers are
+not saved to your journal, and small models make more mistakes than the large
+ones. The guide has a section on what it needs and where it stops.
+
+**It answers in the language you ask in.** With the interface in Spanish you can
+ask in Bulgarian and be answered in Bulgarian. A language a small model cannot be
+trusted with is answered in English, and it says so.
+
+**Buttons that show what it names.** When an answer gives the exact Terminologia
+Anatomica name of a structure the atlas has on screen, a button under it isolates
+that structure. Only you can press it, and a misspelt or invented name offers
+none.
+
 ## [0.6.0] — 2026-10-04
 
 ### Added

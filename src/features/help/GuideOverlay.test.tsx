@@ -44,6 +44,37 @@ describe("GuideOverlay, regulatory transparency", () => {
   });
 });
 
+describe("GuideOverlay, the local model", () => {
+  it("says what has to be installed, and that the app does not do it", () => {
+    render(<GuideOverlay onClose={() => {}} />);
+    expect(screen.getByRole("heading", { name: "A model on your own computer" })).toBeTruthy();
+    expect(text()).toContain("Anatria3D does not include a model and will not download one");
+    expect(text()).toContain("ollama pull gemma3:4b");
+  });
+
+  it("states every limit a reader could otherwise assume away", () => {
+    render(<GuideOverlay onClose={() => {}} />);
+    expect(text()).toContain("It has no tools");
+    expect(text()).toContain("not saved to your journal");
+    expect(text()).toContain("Local models make more mistakes than the large ones");
+    expect(text()).toContain("Ollama also offers models that run on its servers");
+    expect(text()).toContain("a button means the name is real, not that what was said about it is true");
+  });
+
+  it("never lets a small model inherit the assistant's promise to decline", () => {
+    render(<GuideOverlay onClose={() => {}} />);
+    expect(text()).toContain("a small model keeps them less well");
+    expect(text()).toContain("A small model keeps it less reliably than a large one");
+    expect(text()).toContain("It is a model on your computer, not a safeguard");
+  });
+
+  it("says plainly where a local conversation goes", () => {
+    render(<GuideOverlay onClose={() => {}} />);
+    expect(text()).toContain("go to Ollama on this computer, at its local address, and to nowhere else");
+    expect(text()).toContain("Models that run on Ollama's servers are refused");
+  });
+});
+
 describe("GuideOverlay, contact", () => {
   it("prints the address and copies it", async () => {
     const writeText = vi.fn().mockResolvedValue(undefined);
