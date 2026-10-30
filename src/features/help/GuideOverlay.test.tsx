@@ -63,8 +63,9 @@ describe("GuideOverlay, the local model", () => {
 
   it("never lets a small model inherit the assistant's promise to decline", () => {
     render(<GuideOverlay onClose={() => {}} />);
-    expect(text()).toContain("a small model keeps them less well");
-    expect(text()).toContain("A small model keeps it less reliably than a large one");
+    expect(text()).toContain("A question about a real person gets a fixed notice, not an answer");
+    expect(text()).toContain("so it is not a guarantee");
+    expect(text()).toContain("Because a small model keeps it less reliably");
     expect(text()).toContain("It is a model on your computer, not a safeguard");
   });
 

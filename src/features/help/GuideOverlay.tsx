@@ -963,12 +963,13 @@ const SECTIONS: Section[] = [
           question takes longest, because the model has to load.
         </Callout>
         <p>
-          Three models have been tried against the rules below.{" "}
-          <Ui>qwen3.5:9b</Ui> (about 6.6 GB) behaved best, <Ui>gemma3:4b</Ui> (about
-          3.3 GB) is lighter and behaved well, and <Ui>llama3.1:8b</Ui> (about 4.9 GB)
-          was the weakest and the poorest in Bulgarian. Any other chat model Ollama has
-          will appear in the list too, but it has not been tried. Models that cannot
-          hold a conversation, such as embedding models, are left out.
+          Three models have been put through the same set of traps.{" "}
+          <Ui>qwen3.5:9b</Ui> (about 6.6 GB) kept to the rules best and is the one to
+          prefer. <Ui>llama3.1:8b</Ui> (about 4.9 GB) kept to them too, but writes the
+          poorest Bulgarian. <Ui>gemma3:4b</Ui> (about 3.3 GB) is the lightest and,
+          left to answer on its own, broke them most often. Any other chat model Ollama
+          has will appear in the list too, but it has not been tried. Models that
+          cannot hold a conversation, such as embedding models, are left out.
         </p>
 
         <Sub>What it cannot do</Sub>
@@ -1026,15 +1027,32 @@ const SECTIONS: Section[] = [
           anything that matters against the atlas, or ask the assistant.
         </Callout>
         <Callout>
-          <strong>The rules are the same, and a small model keeps them less well.</strong>{" "}
-          It is given the same instructions as the assistant: it teaches, and does not
-          assess anyone. They come first in everything it reads and are repeated last.
-          In testing it declined and sent the reader to a doctor or to emergency care,
-          but one answer still listed possible causes after doing so. It is a model on
-          your computer, not a safeguard. Never use it to decide anything about a real
-          person, yourself included. If you have symptoms, see a qualified professional,
-          and in an emergency call your emergency number.
+          <strong>A question about a real person gets a fixed notice, not an
+          answer.</strong> Told the rules as plainly as they can be told, small models
+          still broke them: one worked out a dose for a child, one called the worst
+          headache of someone's life muscle tension, and all of them invented helpline
+          numbers. So before answering, the model is asked one thing only: is this about
+          the health of a real person, how much of a medicine to take, or someone who
+          wants to hurt themselves? If it is, the model writes nothing. You get a notice
+          written in advance, marked <Ui>Anatria3D notice</Ui>, that sends you to a
+          professional and says when to call your emergency number. It carries no phone
+          number, because the right one depends on where you are.
         </Callout>
+        <Callout>
+          <strong>That check is made by the same small model, so it is not a
+          guarantee.</strong> In testing it stopped 133 of 135 such messages across three
+          models and three languages, and none of the study questions. What gets past it
+          meets the same rules the assistant has, kept less well: of the two that did,
+          one still named a medicine. It is a model on your computer, not a safeguard.
+          Never use it to decide anything about a real person, yourself included. If you
+          have symptoms, see a qualified professional, and in an emergency call your
+          emergency number.
+        </Callout>
+        <p>
+          If it stops something you meant as study, ask it in general terms, about no one
+          in particular. Disease mechanisms, how a drug works and differential lists are
+          all fine.
+        </p>
       </>
     ),
   },
@@ -1708,7 +1726,7 @@ const SECTIONS: Section[] = [
         <Rows
           rows={[
             ["The assistant", "Declines every question about a specific person — you, a relative, a patient — and points to a qualified professional. The rule applies in every profile and language, and automated tests check that it is always present."],
-            ["A local model", "Is given the same rule, first and again last, and automated tests check that too. A small model keeps it less reliably than a large one, so the Local screen says it makes more mistakes, and it must not be used to decide anything about a person. It has no tools, so it cannot act on the atlas."],
+            ["A local model", "Is given the same rule, first and again last, and automated tests check that too. Because a small model keeps it less reliably, a message about a real person is first sorted out and answered with a fixed notice the model does not write. That sorting is done by the model and is not perfect, so a local model must not be used to decide anything about a person. It has no tools, so it cannot act on the atlas."],
             ["The top bar", "Says “Educational use only — not a medical device” permanently. It cannot be closed."],
             ["Case drills", "Every patient is invented for teaching, and says so. The drill stops if a real person is described."],
           ]}

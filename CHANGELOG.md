@@ -26,6 +26,13 @@ It is a conversation and nothing more: it cannot move the atlas, its answers are
 not saved to your journal, and small models make more mistakes than the large
 ones. The guide has a section on what it needs and where it stops.
 
+**A question about a real person gets a fixed notice.** Small models broke the
+safety rules however plainly they were told them, so a message about someone's
+health, a medicine dose or a reader in distress is sorted out first and answered
+with a notice written in advance, which the model has no part in. The sorting is
+done by the same small model, so it is good and not perfect, and the guide says
+how good.
+
 **It answers in the language you ask in.** With the interface in Spanish you can
 ask in Bulgarian and be answered in Bulgarian. A language a small model cannot be
 trusted with is answered in English, and it says so.
