@@ -15,6 +15,7 @@ from anatria_engine.local_chat import (
     LocalDone,
     LocalModelError,
     LocalText,
+    RemoteModelError,
     TruncatedPromptError,
     detect_answer_language,
     estimate_tokens,
@@ -197,6 +198,72 @@ async def test_says_which_model_is_missing() -> None:
 
     with pytest.raises(LocalModelError, match="no model named"):
         await collect(model="nope:1b", system="s", history=[], query="q", transport=ollama(server))
+
+
+# -- models that run somewhere else ---------------------------------------------
+#
+# Ollama's server forwards a cloud model to ollama.com from the same loopback
+# address, under the same kind of name, so "nothing leaves this computer" would
+# be false for a reader who has one.
+
+
+def test_a_cloud_model_is_never_offered() -> None:
+    def server(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/api/tags":
+            return httpx.Response(200, json={"models": [
+                {"name": "gemma3:4b"},
+                {"name": "gemma4:cloud"},
+                {"name": "gpt-oss:120b-cloud"},
+                {"name": "renamed:7b", "remote_host": "https://ollama.com:443"},
+                {"name": "aliased:7b", "remote_model": "gpt-oss:120b"},
+                {"name": "hidden:7b"},
+            ]})
+        name = json.loads(request.content)["model"]
+        if name == "hidden:7b":
+            return httpx.Response(200, json={"remote_host": "https://ollama.com:443"})
+        return show(["completion"])
+
+    _, models = __import__("asyncio").run(list_local_models(ollama(server)))
+    assert [m.name for m in models] == ["gemma3:4b"]
+
+
+async def test_a_cloud_name_sends_nothing_at_all() -> None:
+    # Remembered from an earlier session, say: the picker is not the only way in.
+    def server(request: httpx.Request) -> httpx.Response:
+        raise AssertionError(f"reached Ollama: {request.url.path}")
+
+    with pytest.raises(RemoteModelError, match="not on this computer"):
+        await collect(
+            model="gemma4:cloud", system="s", history=[], query="q", transport=ollama(server)
+        )
+
+
+async def test_a_model_ollama_reports_as_remote_is_refused_before_the_question() -> None:
+    seen: list[str] = []
+
+    def server(request: httpx.Request) -> httpx.Response:
+        seen.append(request.url.path)
+        return httpx.Response(200, json={"remote_host": "https://ollama.com:443"})
+
+    with pytest.raises(RemoteModelError):
+        await collect(
+            model="renamed:7b", system="s", history=[], query="q", transport=ollama(server)
+        )
+    assert seen == ["/api/show"]
+
+
+async def test_detecting_the_language_does_not_send_a_remote_model_the_question() -> None:
+    seen: list[str] = []
+
+    def server(request: httpx.Request) -> httpx.Response:
+        seen.append(request.url.path)
+        return httpx.Response(200, json={"remote_model": "gpt-oss:120b"})
+
+    answer = await detect_answer_language(
+        model="renamed:7b", history=[], query="What does the heart do?", transport=ollama(server)
+    )
+    assert answer == AnswerLanguage("English")
+    assert seen == ["/api/show"]
 
 
 # -- the language of the answer --------------------------------------------------

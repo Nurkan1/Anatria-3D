@@ -321,7 +321,7 @@ function StatusLine({
   let text: string | null = null;
   if (!engineReady) text = "The engine is not running — restart it from the tutor's panel.";
   else if (status === "absent")
-    text = "Ollama is not running on this computer. Start it, then press Check.";
+    text = "Ollama is not running on this computer. Install it from ollama.com or start it, then press Check.";
   else if (status === "error") text = detail ?? "Ollama could not be asked for its models.";
   else if (status === "running" && empty)
     text = "Ollama has no chat model yet. Pull one — for example: ollama pull gemma3:4b — then press Check.";

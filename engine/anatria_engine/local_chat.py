@@ -50,6 +50,14 @@ know it is wrong cannot take the way out. So the decision is a list.
 Only to Ollama's default address on the loopback interface, fixed here. The
 window cannot name another host: a renderer that could aim the engine at an
 arbitrary URL would be a way to send the reader's conversation anywhere.
+
+That is not enough on its own, because the loopback address is not always the
+end of the road. Ollama's server forwards a cloud model to ollama.com: it has
+the same shape of name, sits in the same `/api/tags` list and answers on the same
+address, so a reader who has one would be told "nothing leaves this computer"
+while their questions did. Such a model is left out of the picker, and refused
+again before anything is sent, because a name can be remembered from before it
+stopped being local (`RemoteModelError`).
 """
 
 from __future__ import annotations
@@ -139,6 +147,10 @@ class TruncatedPromptError(LocalModelError):
     """Ollama evaluated less of the prompt than was sent; the answer is not trusted."""
 
 
+class RemoteModelError(LocalModelError):
+    """The model runs on a server, which is what this screen promises not to use."""
+
+
 @dataclass(frozen=True)
 class LocalText:
     text: str
@@ -204,14 +216,38 @@ _NOT_RUNNING = (
 )
 
 
+def _is_cloud_name(name: str) -> bool:
+    """A tag Ollama routes to its servers: `gemma4:cloud`, `gpt-oss:120b-cloud`."""
+    tag = name.rpartition(":")[2].lower()
+    return tag == "cloud" or tag.endswith("-cloud")
+
+
+def _names_a_server(record: dict[str, object]) -> bool:
+    """Whether an entry from `/api/tags` or `/api/show` is forwarded somewhere else."""
+    return bool(record.get("remote_host") or record.get("remote_model"))
+
+
+def _remote_model_error(name: str) -> RemoteModelError:
+    return RemoteModelError(
+        f"{name} runs on a server, not on this computer, so it is not available here. "
+        "Pick a model you have downloaded."
+    )
+
+
 async def _capabilities(client: httpx.AsyncClient, name: str) -> list[str]:
+    # Before the request: Ollama answers `/api/show` for a cloud name from its servers.
+    if _is_cloud_name(name):
+        raise _remote_model_error(name)
     response = await client.post("/api/show", json={"model": name})
     if response.status_code == 404:
         raise LocalModelError(
             f"Ollama has no model named {name!r}. Pull it first, or pick another."
         )
     response.raise_for_status()
-    value = response.json().get("capabilities")
+    record = response.json()
+    if _names_a_server(record):
+        raise _remote_model_error(name)
+    value = record.get("capabilities")
     return [str(item) for item in value] if isinstance(value, list) else []
 
 
@@ -223,7 +259,8 @@ async def list_local_models(
     Embedding-only models (an `bge-m3` pulled for retrieval) are left out: they
     cannot hold a conversation, and offering one would only produce an error.
     A model that does not report its capabilities is offered — older servers
-    say nothing, and every model they serve can chat.
+    say nothing, and every model they serve can chat. Cloud models are left out
+    too: see the module notes.
     """
     async with _client(transport) as client:
         try:
@@ -236,7 +273,12 @@ async def list_local_models(
             name = entry.get("name") or entry.get("model")
             if not isinstance(name, str) or not name:
                 continue
-            capabilities = await _capabilities(client, name)
+            if _is_cloud_name(name) or _names_a_server(entry):
+                continue
+            try:
+                capabilities = await _capabilities(client, name)
+            except RemoteModelError:
+                continue
             if capabilities and "completion" not in capabilities:
                 continue
             details = entry.get("details") or {}
