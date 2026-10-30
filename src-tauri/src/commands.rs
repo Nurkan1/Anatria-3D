@@ -125,6 +125,57 @@ pub fn list_models(engine: State<'_, EngineHandle>, request: FrontendRequest) ->
     Ok(())
 }
 
+/// A request for the local model in Ollama: no provider and no credential.
+///
+/// Its own type, rather than a fourth `Provider`, so nothing about it can reach
+/// the keyring: there is no key to read, and a variant of `Provider` would be
+/// one `save_api_key` call away from storing something under a name that means
+/// nothing. Rust still owns the discriminator and still refuses a smuggled
+/// `api_key` — the engine's request type forbids unknown fields as well, but a
+/// key turning up here is a bug or an injection attempt worth saying so about.
+#[derive(Debug, Deserialize)]
+pub struct LocalRequest {
+    request_id: String,
+    #[serde(flatten)]
+    rest: Map<String, Value>,
+}
+
+fn build_local_frame(kind: &str, request: LocalRequest) -> CommandResult<String> {
+    if let Some(field) = RESERVED_FIELDS
+        .iter()
+        .find(|field| request.rest.contains_key(**field))
+    {
+        return Err(CommandError::Invalid(format!(
+            "request must not set the reserved field '{field}'"
+        )));
+    }
+    let mut frame = request.rest;
+    frame.insert("kind".into(), Value::String(kind.into()));
+    frame.insert("request_id".into(), Value::String(request.request_id));
+    serde_json::to_string(&Value::Object(frame))
+        .map_err(|e| CommandError::Invalid(e.to_string()))
+}
+
+/// One turn with a model in Ollama on this computer. Words only — see
+/// `engine/anatria_engine/local_chat.py`.
+#[tauri::command]
+pub fn ask_local(engine: State<'_, EngineHandle>, request: LocalRequest) -> CommandResult<()> {
+    let frame = build_local_frame("local_chat_request", request)?;
+    engine.send_frame(&frame)?;
+    Ok(())
+}
+
+/// Which chat models Ollama on this computer has, and whether it is running.
+#[tauri::command]
+pub fn list_local_models(
+    engine: State<'_, EngineHandle>,
+    request: LocalRequest,
+) -> CommandResult<()> {
+    let frame = build_local_frame("local_models_request", request)?;
+    engine.send_frame(&frame)?;
+    Ok(())
+}
+
 /// Is the engine up, and if not, why?
 ///
 /// The companion to the `ready` event rather than a duplicate of it. That event
@@ -660,7 +711,36 @@ pub fn set_stable_display(app: tauri::AppHandle, log: State<'_, AppLog>, on: boo
 
 #[cfg(test)]
 mod tests {
-    use super::suggested_file_name;
+    use super::{build_local_frame, suggested_file_name, LocalRequest};
+
+    fn local(json: &str) -> LocalRequest {
+        serde_json::from_str(json).expect("a request")
+    }
+
+    #[test]
+    fn a_local_request_gets_its_kind_and_id_and_nothing_else() {
+        let frame = build_local_frame(
+            "local_chat_request",
+            local(r#"{"request_id":"local-1","query":"hola","model":"gemma3:4b"}"#),
+        )
+        .expect("a frame");
+        let value: serde_json::Value = serde_json::from_str(&frame).unwrap();
+        assert_eq!(value["kind"], "local_chat_request");
+        assert_eq!(value["request_id"], "local-1");
+        assert_eq!(value["query"], "hola");
+        // No credential is ever added: there is none to read.
+        assert!(value.get("api_key").is_none());
+    }
+
+    #[test]
+    fn a_local_request_cannot_smuggle_a_key_or_a_kind() {
+        for json in [
+            r#"{"request_id":"local-1","api_key":"sk-anything"}"#,
+            r#"{"request_id":"local-1","kind":"agent_request"}"#,
+        ] {
+            assert!(build_local_frame("local_chat_request", local(json)).is_err());
+        }
+    }
 
     #[test]
     fn keeps_a_reasonable_name() {

@@ -87,6 +87,9 @@ def build_surface() -> dict[str, Any]:
             "ScannerContext": fields_of(p.ScannerContext),
             "HeartContext": fields_of(p.HeartContext),
             "BreathContext": fields_of(p.BreathContext),
+            "LocalChatRequest": fields_of(p.LocalChatRequest),
+            "LocalModelsRequest": fields_of(p.LocalModelsRequest),
+            "LocalModelInfo": fields_of(p.LocalModelInfo),
         },
         "unions": {
             "SceneCommand": variants_of(p.SceneCommand, "action"),

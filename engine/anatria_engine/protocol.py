@@ -21,7 +21,7 @@ from __future__ import annotations
 
 from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import AfterValidator, BaseModel, ConfigDict, Field
 
 PROTOCOL_VERSION = 2
 ENGINE_VERSION = "0.1.0"
@@ -571,6 +571,52 @@ class ListModelsRequest(Strict):
     api_key: str = Field(min_length=1, repr=False)
 
 
+#: An Ollama model name: `qwen3.5:9b`, `library/llama3.1:8b`,
+#: `hf.co/user/repo:Q4_K_M`. Nothing that could leave the name and become a path
+#: or a query on the request it is put into. The host is fixed in
+#: `local_chat.py`, so a URL here could not redirect anything — it is refused
+#: anyway (`_local_model_name`), along with `..`, because neither is a name.
+LOCAL_MODEL_PATTERN = r"^[A-Za-z0-9][A-Za-z0-9._:/@-]{0,199}$"
+
+
+def _local_model_name(value: str) -> str:
+    if "://" in value or ".." in value:
+        raise ValueError("not an Ollama model name")
+    return value
+
+
+LocalModelName = Annotated[
+    str, Field(pattern=LOCAL_MODEL_PATTERN), AfterValidator(_local_model_name)
+]
+
+
+class LocalChatRequest(Strict):
+    """A conversation turn with a model running in Ollama on this computer.
+
+    Words only: no scene, no tools, no key. Rust forwards it without reading
+    the keyring, and the engine answers it without building an agent — see
+    `local_chat.py`. The structures selected are sent so "this" can mean them;
+    the inventory is not, because nothing here can act on it.
+    """
+
+    kind: Literal["local_chat_request"] = "local_chat_request"
+    request_id: str = Field(min_length=1)
+    query: str = Field(min_length=1, max_length=8000)
+    history: list[TranscriptTurn] = Field(default_factory=list, max_length=100)
+    model: LocalModelName
+    profile: UserProfile
+    language: Language
+    gender_model: GenderModel = "male"
+    selection: list[OrganContext] = Field(default_factory=list, max_length=64)
+
+
+class LocalModelsRequest(Strict):
+    """Ask Ollama on this computer which chat models it has."""
+
+    kind: Literal["local_models_request"] = "local_models_request"
+    request_id: str = Field(min_length=1)
+
+
 class CancelRequest(Strict):
     kind: Literal["cancel"] = "cancel"
     request_id: str = Field(min_length=1)
@@ -581,7 +627,12 @@ class ShutdownRequest(Strict):
 
 
 EngineRequest = Annotated[
-    AgentRequest | ListModelsRequest | CancelRequest | ShutdownRequest,
+    AgentRequest
+    | ListModelsRequest
+    | LocalChatRequest
+    | LocalModelsRequest
+    | CancelRequest
+    | ShutdownRequest,
     Field(discriminator="kind"),
 ]
 
@@ -663,6 +714,24 @@ class ModelsEvent(Strict):
     models: list[ModelInfo]
 
 
+class LocalModelInfo(Strict):
+    name: LocalModelName
+    #: As Ollama reports it: "8.0B", "4.3B". Absent when it does not say.
+    parameter_size: str | None = None
+    #: On disk, in bytes — a fair guide to the memory it will need.
+    size_bytes: int | None = Field(default=None, ge=0)
+
+
+class LocalModelsEvent(Strict):
+    """What Ollama on this computer offers, and whether it answered at all."""
+
+    type: Literal["local_models"] = "local_models"
+    request_id: str
+    #: False when nothing answered on Ollama's address: not installed, or not started.
+    running: bool
+    models: list[LocalModelInfo]
+
+
 class CaseVerdictEvent(Strict):
     """The grade for a case drill, from the assistant's own evaluation.
 
@@ -711,6 +780,7 @@ EngineEvent = Annotated[
     | ToolStartedEvent
     | SceneCommandEvent
     | ModelsEvent
+    | LocalModelsEvent
     | CaseVerdictEvent
     | DoneEvent
     | ErrorEvent,

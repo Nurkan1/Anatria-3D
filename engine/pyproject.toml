@@ -21,6 +21,10 @@ dependencies = [
     # suite and a real provider turn, and update `retries()` in
     # tests/test_scene_tools.py when crossing into the new part kind.
     "pydantic-ai-slim[anthropic,google,openai]==2.54.0",
+    # Imported directly by the local Ollama chat (`local_chat.py`). Already in
+    # the sidecar through the provider SDKs; named here because this code
+    # depends on it, not only something it depends on.
+    "httpx>=0.28.1,<0.29",
 ]
 
 # NOTE: there is no PDF renderer here, and there will not be one. Printing is

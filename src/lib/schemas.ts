@@ -580,6 +580,50 @@ export const ListModelsRequestSchema = z.object({
 });
 export type ListModelsRequest = z.infer<typeof ListModelsRequestSchema>;
 
+/**
+ * An Ollama model name, as `local_chat.py` will send it to Ollama on this
+ * computer: `qwen3.5:9b`, `library/llama3.1:8b`, `hf.co/user/repo:Q4_K_M`.
+ * Mirrors `LOCAL_MODEL_PATTERN` and `_local_model_name` on the Pydantic side.
+ */
+export const LocalModelNameSchema = z
+  .string()
+  .regex(/^[A-Za-z0-9][A-Za-z0-9._:/@-]{0,199}$/)
+  .refine((value) => !value.includes("://") && !value.includes(".."), "not an Ollama model name");
+
+/**
+ * A conversation turn with a model running in Ollama on this computer.
+ *
+ * Words only: no scene, no tools, no key. Rust forwards it without touching the
+ * keyring and the engine answers it without building an agent, so nothing it
+ * says can move the atlas. See `engine/anatria_engine/local_chat.py`.
+ */
+export const LocalChatRequestSchema = z.object({
+  request_id: z.string().min(1),
+  query: z.string().min(1).max(8000),
+  history: z.array(ChatTurnSchema).max(100).default([]),
+  model: LocalModelNameSchema,
+  profile: UserProfileSchema,
+  language: LanguageSchema,
+  gender_model: GenderModelSchema.default("male"),
+  selection: z.array(OrganContextSchema).max(64).default([]),
+});
+export type LocalChatRequest = z.input<typeof LocalChatRequestSchema>;
+
+/** Ask Ollama on this computer which chat models it has. */
+export const LocalModelsRequestSchema = z.object({
+  request_id: z.string().min(1),
+});
+export type LocalModelsRequest = z.infer<typeof LocalModelsRequestSchema>;
+
+export const LocalModelInfoSchema = z.object({
+  name: LocalModelNameSchema,
+  /** As Ollama reports it: "8.0B". */
+  parameter_size: z.string().nullable().optional(),
+  /** On disk, in bytes — a fair guide to the memory it will need. */
+  size_bytes: z.number().int().nonnegative().nullable().optional(),
+});
+export type LocalModelInfo = z.infer<typeof LocalModelInfoSchema>;
+
 export const ModelInfoSchema = z.object({
   id: z.string().min(1),
   label: z.string().min(1),
@@ -657,6 +701,13 @@ export const EngineEventSchema = z.discriminatedUnion("type", [
     request_id: z.string(),
     provider: AiProviderSchema,
     models: z.array(ModelInfoSchema),
+  }),
+  /** What Ollama on this computer offers, and whether it answered at all. */
+  z.object({
+    type: z.literal("local_models"),
+    request_id: z.string(),
+    running: z.boolean(),
+    models: z.array(LocalModelInfoSchema),
   }),
   /**
    * The grade for a case drill, emitted by the assistant's own tool once it has

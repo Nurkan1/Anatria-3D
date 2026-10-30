@@ -18,12 +18,17 @@ from anatria_engine.protocol import (
     EngineRequest,
     ErrorEvent,
     ListModelsRequest,
+    LocalChatRequest,
+    LocalModelsRequest,
     ReadyEvent,
     ShutdownRequest,
 )
 from anatria_engine.transport import StdinReader, Transport, parse_json_line
 
 _request_adapter: TypeAdapter[EngineRequest] = TypeAdapter(EngineRequest)
+
+#: The requests that run as a task of their own and can be cancelled.
+SpawnedRequest = AgentRequest | ListModelsRequest | LocalChatRequest | LocalModelsRequest
 
 # How long in-flight requests may keep running after stdin closes or a
 # `shutdown` frame arrives. See `Engine._drain`.
@@ -85,10 +90,10 @@ class Engine:
                 self._shutdown.set()
             case CancelRequest():
                 self._cancel(request.request_id)
-            case AgentRequest() | ListModelsRequest():
+            case AgentRequest() | ListModelsRequest() | LocalChatRequest() | LocalModelsRequest():
                 self._spawn(request)
 
-    def _spawn(self, request: AgentRequest | ListModelsRequest) -> None:
+    def _spawn(self, request: SpawnedRequest) -> None:
         request_id = request.request_id
         if request_id in self._tasks:
             self._transport.emit(
@@ -109,7 +114,7 @@ class Engine:
         if task is not None:
             task.cancel()
 
-    async def _run(self, request: AgentRequest | ListModelsRequest) -> None:
+    async def _run(self, request: SpawnedRequest) -> None:
         try:
             # Imported lazily, and *inside* the guard: the whole point is that a
             # broken provider SDK becomes an error event on the request that
@@ -119,10 +124,16 @@ class Engine:
             from anatria_engine.handlers import (
                 handle_agent_request,
                 handle_list_models,
+                handle_local_chat,
+                handle_local_models,
             )
 
             if isinstance(request, AgentRequest):
                 await handle_agent_request(request, self._transport)
+            elif isinstance(request, LocalChatRequest):
+                await handle_local_chat(request, self._transport)
+            elif isinstance(request, LocalModelsRequest):
+                await handle_local_models(request, self._transport)
             else:
                 await handle_list_models(request, self._transport)
         except asyncio.CancelledError:

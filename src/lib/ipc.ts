@@ -5,10 +5,14 @@ import {
   AgentRequestSchema,
   EngineEventSchema,
   ListModelsRequestSchema,
+  LocalChatRequestSchema,
+  LocalModelsRequestSchema,
   type AgentRequest,
   type AiProvider,
   type EngineEvent,
   type ListModelsRequest,
+  type LocalChatRequest,
+  type LocalModelsRequest,
 } from "./schemas";
 
 /** Channel Rust forwards every engine frame on. Mirrors `sidecar::ENGINE_EVENT`. */
@@ -55,6 +59,22 @@ export function askAgent(request: AgentRequest): Promise<void> {
  */
 export function listModels(request: ListModelsRequest): Promise<void> {
   return invoke("list_models", { request: ListModelsRequestSchema.parse(request) });
+}
+
+/**
+ * One turn with a model running in Ollama on this computer.
+ *
+ * Its own command, not `askAgent` with another provider: Rust forwards it
+ * without reading the keyring, and the engine answers it without tools, so a
+ * local model's answer cannot move the atlas. See `local_chat.py`.
+ */
+export function askLocal(request: LocalChatRequest): Promise<void> {
+  return invoke("ask_local", { request: LocalChatRequestSchema.parse(request) });
+}
+
+/** Which chat models Ollama on this computer has; answered by a `local_models` event. */
+export function listLocalModels(request: LocalModelsRequest): Promise<void> {
+  return invoke("list_local_models", { request: LocalModelsRequestSchema.parse(request) });
 }
 
 export interface EngineStatus {

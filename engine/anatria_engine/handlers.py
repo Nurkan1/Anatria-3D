@@ -20,6 +20,9 @@ from anatria_engine.protocol import (
     DoneEvent,
     ErrorEvent,
     ListModelsRequest,
+    LocalChatRequest,
+    LocalModelsEvent,
+    LocalModelsRequest,
     ModelsEvent,
     SceneCommandEvent,
     TextDeltaEvent,
@@ -174,6 +177,63 @@ async def handle_list_models(request: ListModelsRequest, transport: Transport) -
     )
     # Listing a catalogue is not a turn: it ran on no model and cost nothing
     # attributable, so both fields are honestly empty rather than zeroed.
+    transport.emit(DoneEvent(request_id=request.request_id, usage=None, model=None))
+
+
+async def handle_local_chat(request: LocalChatRequest, transport: Transport) -> None:
+    """One turn with a model in Ollama on this computer — text and nothing else.
+
+    No agent and no scene context are built, so no tool exists for a small
+    model to call: the viewport cannot move whatever it answers. See
+    `local_chat.py` for why the prompt is fitted and checked.
+    """
+    from anatria_engine.local_chat import LocalDone, LocalModelError, LocalText, stream_local_chat
+    from anatria_engine.prompts import build_local_instructions
+
+    system = build_local_instructions(
+        profile=request.profile,
+        language=request.language,
+        selection=request.selection,
+        gender=request.gender_model,
+    )
+    try:
+        async for event in stream_local_chat(
+            model=request.model, system=system, history=request.history, query=request.query
+        ):
+            if isinstance(event, LocalText):
+                transport.emit(TextDeltaEvent(request_id=request.request_id, text=event.text))
+            elif isinstance(event, LocalDone):
+                transport.emit(
+                    DoneEvent(request_id=request.request_id, usage=event.usage, model=event.model)
+                )
+    except asyncio.CancelledError:
+        raise
+    except LocalModelError as exc:
+        transport.emit(
+            ErrorEvent(request_id=request.request_id, code="provider_error", message=str(exc))
+        )
+    except Exception as exc:  # a local server fault must not kill the engine
+        transport.emit(
+            ErrorEvent(request_id=request.request_id, code="internal_error", message=_readable(exc))
+        )
+
+
+async def handle_local_models(request: LocalModelsRequest, transport: Transport) -> None:
+    """Say whether Ollama answers here, and which chat models it has."""
+    from anatria_engine.local_chat import list_local_models
+
+    try:
+        running, models = await list_local_models()
+    except asyncio.CancelledError:
+        raise
+    except Exception as exc:
+        transport.emit(
+            ErrorEvent(request_id=request.request_id, code="provider_error", message=_readable(exc))
+        )
+        return
+    transport.emit(
+        LocalModelsEvent(request_id=request.request_id, running=running, models=models)
+    )
     transport.emit(DoneEvent(request_id=request.request_id, usage=None, model=None))
 
 

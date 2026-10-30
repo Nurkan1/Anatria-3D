@@ -1013,3 +1013,71 @@ def build_instructions(
     if heart is not None and mode == "tutor":
         layers.append(_heart_rule(heart))
     return "\n\n".join(layers)
+
+
+LOCAL_CHAT = """## THIS CONVERSATION
+
+You are running on the reader's own computer, in Ollama, in a panel that is for
+conversation only. You have no tools and no control over the 3D atlas: you
+cannot move the camera, isolate, highlight, hide or select anything, and the
+atlas does not change when you answer. Never say or imply that you have shown,
+opened, isolated or highlighted something.
+
+When you name an anatomical structure, give its Terminologia Anatomica Latin
+name in parentheses straight after it — for example "the left ventricle
+(Ventriculus sinister)" — written exactly as Terminologia Anatomica spells it.
+The panel uses that name to offer the reader a button that shows the structure
+in the atlas; a misspelt or invented Latin name simply offers nothing, so if you
+are not sure of the Latin, leave it out rather than guess.
+
+You are a small local model and you can be wrong. Keep answers focused and
+reasonably short, say plainly when you are unsure, and do not invent sources,
+figures or names."""
+
+
+#: Repeated at the end of a local model's instructions, after `SAFETY` at the top.
+#:
+#: Measured, not assumed: with `SAFETY` only at the top, llama3.1:8b answered a
+#: Bulgarian reader's three-day headache by naming "the main probability" — a
+#: food allergy — and met a Spanish reader's chest pain radiating to the arm
+#: without saying it was urgent. Small models weigh what they read last; the
+#: rules stay first, where nothing can argue past them, and are restated here
+#: where a small model will still be holding them when it answers.
+LOCAL_SAFETY_REMINDER = """## BEFORE YOU ANSWER
+
+Re-read the rules at the top; they still apply in full. If the reader describes
+their own symptoms or someone else's: do not say what the cause is or might
+"most likely" be, do not name any medicine, dose or remedy for them, and do not
+reassure them it is nothing. Tell them to see a doctor — and for chest pain,
+sudden severe headache, difficulty breathing, fainting, weakness or numbness on
+one side, or heavy bleeding, to call emergency services or go to an emergency
+department now. Then you may explain the general anatomy involved."""
+
+
+def build_local_instructions(
+    *,
+    profile: UserProfile,
+    language: Language,
+    selection: list[OrganContext],
+    gender: GenderModel = "male",
+) -> str:
+    """Compose the instructions for a turn with a local model in Ollama.
+
+    `SAFETY` first, exactly as for every other turn, because it is what keeps
+    the application outside medical-device regulation and a small model needs
+    it no less than a large one. `SCENE` is left out: it teaches the tools, and
+    this conversation has none. The inventory is left out too — nothing here
+    can act on an organ id, and a small model's context is better spent on the
+    conversation. The selection stays, so "this" can mean what the reader picked.
+    """
+    layers = [SAFETY, LOCAL_CHAT, PROFILES[profile], _language_rule(language), _body_rule(gender)]
+    if selection:
+        named = "\n".join(f"- {organ.describe()}" for organ in selection[:64])
+        layers.append(
+            "## SELECTED IN THE ATLAS\n\n"
+            "When the reader says \"this\" or \"these\" without naming anything, "
+            f"they mean what they have selected:\n{named}"
+        )
+    layers.append(LOCAL_SAFETY_REMINDER)
+    return "\n\n".join(layers)
+

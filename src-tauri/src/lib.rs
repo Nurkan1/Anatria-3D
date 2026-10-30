@@ -51,6 +51,8 @@ pub fn run() {
             commands::delete_api_key,
             commands::ask_agent,
             commands::list_models,
+            commands::ask_local,
+            commands::list_local_models,
             commands::engine_status,
             commands::restart_engine,
             commands::cancel_request,
