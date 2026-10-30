@@ -1063,7 +1063,6 @@ export function ChatPanel() {
         open={localOpen}
         engineReady={engineReady}
         profile={profile}
-        language={language}
         genderModel={genderModel}
       />
       <header className="flex items-center gap-2 border-b border-slate-800 px-3 py-2">

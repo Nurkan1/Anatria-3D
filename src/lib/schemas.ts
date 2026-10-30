@@ -603,7 +603,6 @@ export const LocalChatRequestSchema = z.object({
   history: z.array(ChatTurnSchema).max(100).default([]),
   model: LocalModelNameSchema,
   profile: UserProfileSchema,
-  language: LanguageSchema,
   gender_model: GenderModelSchema.default("male"),
   selection: z.array(OrganContextSchema).max(64).default([]),
 });

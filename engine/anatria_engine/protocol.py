@@ -596,7 +596,8 @@ class LocalChatRequest(Strict):
     Words only: no scene, no tools, no key. Rust forwards it without reading
     the keyring, and the engine answers it without building an agent — see
     `local_chat.py`. The structures selected are sent so "this" can mean them;
-    the inventory is not, because nothing here can act on it.
+    the inventory is not, because nothing here can act on it. Neither is the
+    language setting: the model answers in the language of the question.
     """
 
     kind: Literal["local_chat_request"] = "local_chat_request"
@@ -605,7 +606,6 @@ class LocalChatRequest(Strict):
     history: list[TranscriptTurn] = Field(default_factory=list, max_length=100)
     model: LocalModelName
     profile: UserProfile
-    language: Language
     gender_model: GenderModel = "male"
     selection: list[OrganContext] = Field(default_factory=list, max_length=64)
 

@@ -1035,6 +1035,37 @@ reasonably short, say plainly when you are unsure, and do not invent sources,
 figures or names."""
 
 
+def _local_language_rule(language: str, *, unsupported: bool) -> str:
+    """The language a local model writes in: named, and decided before it is asked.
+
+    A small model cannot be told to work this out for itself. Measured on
+    gemma3:4b, with the same eight questions:
+
+    - `_language_rule("es")`, whose override says to follow a reader who writes in
+      another language: every question but one answered in Spanish, in Bulgarian,
+      Turkish, German, Arabic and Japanese alike. It keeps the default and drops
+      the exception.
+    - "Answer in the language of the reader's message, or in English if you cannot
+      write it well": almost everything answered in English, Spanish included.
+      Offered a way out, it takes it.
+    - The language named outright: all of them in the right language. So
+      `local_chat.detect_answer_language` decides, and this only states the result.
+    """
+    rule = (
+        "## THE LANGUAGE OF YOUR ANSWER\n\n"
+        f"Write your entire answer in {language}, even though these instructions "
+        "are in English."
+    )
+    if unsupported:
+        rule += (
+            " The reader wrote in another language, which a local model cannot be "
+            "relied on to write correctly. Begin with exactly this sentence: \"I "
+            "cannot answer reliably in your language, so this answer is in English.\" "
+            "Keep the rest in plain, simple English."
+        )
+    return f"{rule}\n\n{_NOMENCLATURE_RULE}"
+
+
 #: Repeated at the end of a local model's instructions, after `SAFETY` at the top.
 #:
 #: Measured, not assumed: with `SAFETY` only at the top, llama3.1:8b answered a
@@ -1057,8 +1088,9 @@ department now. Then you may explain the general anatomy involved."""
 def build_local_instructions(
     *,
     profile: UserProfile,
-    language: Language,
     selection: list[OrganContext],
+    answer_language: str,
+    unsupported_language: bool = False,
     gender: GenderModel = "male",
 ) -> str:
     """Compose the instructions for a turn with a local model in Ollama.
@@ -1069,8 +1101,16 @@ def build_local_instructions(
     this conversation has none. The inventory is left out too — nothing here
     can act on an organ id, and a small model's context is better spent on the
     conversation. The selection stays, so "this" can mean what the reader picked.
+    The language comes from the question, not the setting, and is named twice,
+    the second time as the very last line: see `_local_language_rule`.
     """
-    layers = [SAFETY, LOCAL_CHAT, PROFILES[profile], _language_rule(language), _body_rule(gender)]
+    layers = [
+        SAFETY,
+        LOCAL_CHAT,
+        PROFILES[profile],
+        _local_language_rule(answer_language, unsupported=unsupported_language),
+        _body_rule(gender),
+    ]
     if selection:
         named = "\n".join(f"- {organ.describe()}" for organ in selection[:64])
         layers.append(
@@ -1079,5 +1119,6 @@ def build_local_instructions(
             f"they mean what they have selected:\n{named}"
         )
     layers.append(LOCAL_SAFETY_REMINDER)
+    layers.append(f"Write your entire answer in {answer_language}.")
     return "\n\n".join(layers)
 

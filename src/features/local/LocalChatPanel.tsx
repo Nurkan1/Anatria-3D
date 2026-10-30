@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { Markdown } from "@/features/chat/Markdown";
 import { askLocal, cancelRequest, listLocalModels, newRequestId, onEngineEvent } from "@/lib/ipc";
-import type { ChatTurn, GenderModel, Language, OrganContext, UserProfile } from "@/lib/schemas";
+import type { ChatTurn, GenderModel, OrganContext, UserProfile } from "@/lib/schemas";
 import { useLocalChatStore, type LocalMessage } from "@/stores/localChatStore";
 import { useSceneStore } from "@/stores/sceneStore";
 
@@ -51,13 +51,11 @@ export function LocalChatPanel({
   open,
   engineReady,
   profile,
-  language,
   genderModel,
 }: {
   open: boolean;
   engineReady: boolean;
   profile: UserProfile;
-  language: Language;
   genderModel: GenderModel;
 }) {
   const store = useLocalChatStore();
@@ -171,7 +169,6 @@ export function LocalChatPanel({
       history: past,
       model,
       profile,
-      language,
       gender_model: genderModel,
       selection,
     }).catch((err: unknown) => useLocalChatStore.getState().fail(id, String(err)));

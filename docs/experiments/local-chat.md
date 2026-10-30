@@ -17,6 +17,7 @@ Not in the guide: an experiment stays out of every guide until it is merged.
 | It cannot move the atlas | There is no agent and no tool: `handle_local_chat` streams text from Ollama and nothing else. Tested: zero `scene_command` events. |
 | No key is read or sent | Its own Rust commands (`ask_local`, `list_local_models`) that never touch the keyring, and refuse a smuggled `api_key` or `kind`. The engine's request type forbids unknown fields as well. |
 | The safety rules always apply | `build_local_instructions` puts `SAFETY` first, for every profile and language (tested), and the prompt is never truncated (below). |
+| It answers in the reader's language, or in English | The language is detected from the question and named to the model, and only a listed language is ever named (below). The interface's setting is not sent. |
 | A wrong Latin name cannot point at the wrong structure | A button appears only for an exact Terminologia Anatomica name the atlas has, on a system that is switched on. The model invented "Tabīcus interventricularis" in a real answer; it offered nothing. |
 
 ## The finding that shaped it: Ollama drops the start of a long prompt
@@ -55,6 +56,64 @@ So `LOCAL_SAFETY_REMINDER` restates the rules at the end of a local model's
 instructions — `SAFETY` stays first, where nothing can argue past it, and is
 repeated last, where a small model still holds it when it answers. llama3.1:8b
 remains the weakest, and its Bulgarian is poor; qwen3.5:9b behaved best.
+
+## The language of the answer: follow the question, or English
+
+The reader wants an answer in the language they asked in, whatever the interface
+is set to, and in English when the model cannot do that. Every step of the way
+there was measured on this machine, because each obvious way failed.
+
+| Attempt | Result on gemma3:4b, same eight questions |
+|---|---|
+| The tutor's `_language_rule("es")`, which says to follow a reader who writes in another language | Seven of eight answered in Spanish, including Bulgarian, German, Arabic and Japanese. It keeps the default and drops the exception |
+| "Answer in the language of the reader's message, or in English if you cannot write it well" | Almost everything in English, Spanish included. Offered a way out, it takes it |
+| A note after the question: "answer in the same language as the question above" | Right language on all eight, with no extra request, but no way to choose English |
+| Ask first what language it is, then name it: "write your entire answer in Bulgarian" | Right on all eight, half a second more. This one |
+
+Naming the language is what a small model obeys, so the setting no longer
+reaches this prompt at all and `language` is gone from `LocalChatRequest`.
+`detect_answer_language` asks the same model one question before each answer,
+with the same `num_ctx`, because Ollama reloads a model for a different window.
+
+Two things the model would have got wrong on its own are decided in code:
+
+- **Whether it can write a language.** All three models answered a question in
+  Gujarati fluently, and all three got the anatomy wrong: qwen3.5:9b called the
+  left ventricle "Thymus", gemma3:4b invented a Latin name, llama3.1:8b wrote
+  about bone cells. A model that does not know it is wrong cannot take the way
+  out, so `SUPPORTED_LANGUAGES` is a list, and anything off it gets English and a
+  fixed sentence saying why. The list is a judgement about which languages small
+  models have enough training data for, not something measured language by
+  language.
+- **Latin.** Left alone, "Arteria femoralis" was answered in Latin by two of the
+  three. A message that is only Latin, or too short to tell ("ok"), keeps the
+  language of the conversation, trying up to three of the reader's messages, and
+  starts in English when there is nothing before it.
+
+The list is also a boundary: it is the only way a model's reply reaches the next
+prompt, so a question cannot write itself into the instructions.
+
+Detection, 38 short questions in 15 languages, three models: 108 of 114 right.
+All 30 in Bulgarian and all 9 in English, 14 of 15 in Spanish (qwen3.5:9b took
+"Músculos del brazo" for English). The other five are Slavic languages taken for
+one another. The Bulgarian hint in `_DETECT_PROMPT` is what fixed Bulgarian:
+without it gemma3:4b took "А белите дробове?" for Russian. It has a cost, which
+was accepted because Bulgarian is one of the three languages the application
+promises: gemma3:4b now takes one Russian and one Ukrainian question for Bulgarian.
+
+A language being on the list says the model will write it, not that it will be
+right in it. llama3.1:8b told a reader in Japanese that the left ventricle pumps
+into the pulmonary artery, and the Bulgarian answers on all three models contain
+real errors. The panel's notice that local models make more mistakes is doing
+real work.
+
+With the prompt changed, the two trap questions were run again. qwen3.5:9b, three
+runs each way with the language line before and after the reminder, twelve in
+all: it refused and sent the reader to a doctor or emergency care every time, and
+the position of the line made no visible difference, so it stays last, where it
+was measured. One earlier Bulgarian run did list possible causes after sending
+the reader to a doctor, which the rules forbid. It is a slip, not a pattern, and
+it has to be counted as what it is: the rules reduce this, they do not rule it out.
 
 ## What else was decided, and why
 

@@ -50,7 +50,7 @@ afterEach(() => cleanup());
 
 function mount(open: boolean) {
   return render(
-    <LocalChatPanel open={open} engineReady profile="student" language="es" genderModel="male" />,
+    <LocalChatPanel open={open} engineReady profile="student" genderModel="male" />,
   );
 }
 
@@ -109,12 +109,14 @@ describe("the local screen", () => {
     fireEvent.click(screen.getByRole("button", { name: "Send" }));
     await waitFor(() => expect(ipc.ask).toHaveBeenCalledTimes(1));
     const request = ipc.ask.mock.calls[0]![0];
-    expect(request).toMatchObject({ query: "¿Qué hace?", model: "gemma3:4b", profile: "student", language: "es" });
+    expect(request).toMatchObject({ query: "¿Qué hace?", model: "gemma3:4b", profile: "student" });
     expect(request.selection).toEqual([
       { organ_id: "left_ventricle", ta2_latin: "Ventriculus sinister", name_en: "Left ventricle", system: "cardiovascular" },
     ]);
     expect(request).not.toHaveProperty("provider");
     expect(request).not.toHaveProperty("api_key");
+    // The model follows the question; a setting here is what made it ignore one.
+    expect(request).not.toHaveProperty("language");
     expect(request.request_id).toMatch(/^local-/);
   });
 

@@ -187,13 +187,23 @@ async def handle_local_chat(request: LocalChatRequest, transport: Transport) -> 
     model to call: the viewport cannot move whatever it answers. See
     `local_chat.py` for why the prompt is fitted and checked.
     """
-    from anatria_engine.local_chat import LocalDone, LocalModelError, LocalText, stream_local_chat
+    from anatria_engine.local_chat import (
+        LocalDone,
+        LocalModelError,
+        LocalText,
+        detect_answer_language,
+        stream_local_chat,
+    )
     from anatria_engine.prompts import build_local_instructions
 
+    language = await detect_answer_language(
+        model=request.model, history=request.history, query=request.query
+    )
     system = build_local_instructions(
         profile=request.profile,
-        language=request.language,
         selection=request.selection,
+        answer_language=language.name,
+        unsupported_language=language.unsupported,
         gender=request.gender_model,
     )
     try:
