@@ -45,6 +45,22 @@ llama3.1:8b all answered a question in Gujarati fluently, and all three got the
 anatomy wrong — one called the left ventricle "Thymus". A model that does not
 know it is wrong cannot take the way out. So the decision is a list.
 
+# Why some questions never reach the model
+
+`tools/local-safety-drill` runs a fixed set of traps through this module. With
+`SAFETY` first, a reminder last and the rules restated after the question itself,
+gemma3:4b still worked out 120-180 mg of paracetamol for a 12 kg child, told a
+reader with the worst headache of their life that it was probably muscle tension,
+and wrote a metoprolol dose "for a novel". The models that kept the rules better
+still invented helpline numbers for a reader who wanted to die. No wording fixes
+this, and which model a reader installs is not ours to choose.
+
+But asked only to sort a message, the same three models were right 223 times out
+of 225, and stopped none of the hard study questions. So `classify_message` sorts
+first, and a message about a real person or from a reader in crisis is answered
+with a fixed notice the model does not write (`local_notice`). The rules in the
+prompt stay: they are what is left for the two messages in 225.
+
 # Where it connects
 
 Only to Ollama's default address on the loopback interface, fixed here. The
@@ -67,10 +83,24 @@ import math
 import re
 from collections.abc import AsyncIterator
 from dataclasses import dataclass
+from typing import Literal
 
 import httpx
 
-from anatria_engine.protocol import LocalModelInfo, TokenUsage, TranscriptTurn
+from anatria_engine.prompts import (
+    LOCAL_TRIAGE_PROMPT,
+    build_local_instructions,
+    build_local_question,
+    local_notice,
+)
+from anatria_engine.protocol import (
+    GenderModel,
+    LocalModelInfo,
+    OrganContext,
+    TokenUsage,
+    TranscriptTurn,
+    UserProfile,
+)
 
 #: Ollama's default address. Loopback only, and not configurable from the window.
 OLLAMA_URL = "http://127.0.0.1:11434"
@@ -133,6 +163,14 @@ _DETECT_PROMPT = (
     "коя, колко, защо and definite endings such as -та, -то, -ът, -ят. Anatomical "
     "Latin terms alone count as Latin.\n\nText: "
 )
+
+#: How much of each message the sorting question sees.
+_TRIAGE_CHARS = 600
+
+#: What the panel names as the author of a fixed notice: no model wrote it.
+NOTICE_MODEL = "Anatria3D notice"
+
+MessageKind = Literal["study", "person", "crisis"]
 
 _CONNECT_TIMEOUT_S = 3.0
 #: Loading a model from disk can take tens of seconds before the first token.
@@ -311,6 +349,21 @@ def _chat_body(
     return body
 
 
+async def _ask_once(
+    client: httpx.AsyncClient,
+    model: str,
+    capabilities: list[str],
+    prompt: str,
+    **options: float,
+) -> str:
+    """One deterministic, unstreamed reply, for a question that is not the reader's."""
+    settings = {"num_predict": 12, "temperature": 0, **options}
+    body = _chat_body(model, capabilities, [{"role": "user", "content": prompt}], **settings)
+    response = await client.post("/api/chat", json={**body, "stream": False})
+    response.raise_for_status()
+    return str((response.json().get("message") or {}).get("content") or "")
+
+
 def _language_named(reply: str) -> str | None:
     """The language a model's reply names, or None if it names nothing usable.
 
@@ -349,16 +402,7 @@ async def detect_answer_language(
                 if len(letters.encode("utf-8")) < _MIN_LANGUAGE_BYTES:
                     continue
                 prompt = _DETECT_PROMPT + text[:_DETECTION_CHARS]
-                body = _chat_body(
-                    model,
-                    capabilities,
-                    [{"role": "user", "content": prompt}],
-                    num_predict=12,
-                    temperature=0,
-                )
-                response = await client.post("/api/chat", json={**body, "stream": False})
-                response.raise_for_status()
-                name = _language_named((response.json().get("message") or {}).get("content") or "")
+                name = _language_named(await _ask_once(client, model, capabilities, prompt))
                 if name in SUPPORTED_LANGUAGES:
                     return AnswerLanguage(name)
                 if name is not None:
@@ -366,6 +410,103 @@ async def detect_answer_language(
         except (httpx.HTTPError, LocalModelError, ValueError):
             pass
     return AnswerLanguage(FALLBACK_LANGUAGE)
+
+
+async def classify_message(
+    *,
+    model: str,
+    history: list[TranscriptTurn],
+    query: str,
+    transport: httpx.AsyncBaseTransport | None = None,
+) -> MessageKind:
+    """Whether this message is for study, about a real person, or from a reader in crisis.
+
+    The earlier message goes with it, so "and what should I take?" is read as what
+    it is. Anything unreadable counts as a real person: a study question answered
+    with the notice costs a rephrasing, and the other mistake costs more. A server
+    that cannot be reached counts as study, because the request for the answer
+    comes next and reports that in the reader's terms.
+    """
+    earlier = next((turn.content for turn in reversed(history) if turn.role == "user"), None)
+    text = query[:_TRIAGE_CHARS]
+    if earlier:
+        text = f"Earlier message: {earlier[:_TRIAGE_CHARS]}\nLatest message, to sort: {text}"
+    async with _client(transport) as client:
+        try:
+            capabilities = await _capabilities(client, model)
+            reply = await _ask_once(client, model, capabilities, LOCAL_TRIAGE_PROMPT + text)
+        except (httpx.HTTPError, LocalModelError, ValueError):
+            return "study"
+    words = re.findall(r"CRISIS|PERSON|STUDY", reply.upper())
+    if not words:
+        return "person"
+    return "crisis" if words[0] == "CRISIS" else "person" if words[0] == "PERSON" else "study"
+
+
+async def _notice_for(
+    *,
+    model: str,
+    kind: Literal["person", "crisis"],
+    language: str,
+    transport: httpx.AsyncBaseTransport | None = None,
+) -> str:
+    """The fixed notice in the reader's language.
+
+    Bulgarian, Spanish and English are written out. For any other the model
+    translates it, seeing only the notice and never the question, so nothing the
+    reader said can shape it; the English follows, so a poor translation cannot be
+    the only thing they get.
+    """
+    written = local_notice(kind, language)
+    if written is not None:
+        return written
+    english = local_notice(kind, FALLBACK_LANGUAGE) or ""
+    prompt = (
+        f"Translate this notice into {language}. Reply with the translation only.\n\n{english}"
+    )
+    async with _client(transport) as client:
+        try:
+            capabilities = await _capabilities(client, model)
+            translated = await _ask_once(client, model, capabilities, prompt, num_predict=600)
+        except (httpx.HTTPError, LocalModelError, ValueError):
+            return english
+    return f"{translated.strip()}\n\n{english}" if translated.strip() else english
+
+
+async def answer_local_turn(
+    *,
+    model: str,
+    history: list[TranscriptTurn],
+    query: str,
+    profile: UserProfile,
+    selection: list[OrganContext],
+    gender: GenderModel = "male",
+    transport: httpx.AsyncBaseTransport | None = None,
+) -> AsyncIterator[LocalText | LocalDone]:
+    """One turn: settle the language, sort the message, then answer or give the notice."""
+    language = await detect_answer_language(
+        model=model, history=history, query=query, transport=transport
+    )
+    kind = await classify_message(model=model, history=history, query=query, transport=transport)
+    if kind != "study":
+        notice = await _notice_for(
+            model=model, kind=kind, language=language.name, transport=transport
+        )
+        yield LocalText(notice)
+        yield LocalDone(usage=None, model=NOTICE_MODEL)
+        return
+    system = build_local_instructions(
+        profile=profile,
+        selection=selection,
+        answer_language=language.name,
+        unsupported_language=language.unsupported,
+        gender=gender,
+    )
+    question = build_local_question(query, answer_language=language.name)
+    async for event in stream_local_chat(
+        model=model, system=system, history=history, query=question, transport=transport
+    ):
+        yield event
 
 
 async def stream_local_chat(

@@ -191,24 +191,17 @@ async def handle_local_chat(request: LocalChatRequest, transport: Transport) -> 
         LocalDone,
         LocalModelError,
         LocalText,
-        detect_answer_language,
-        stream_local_chat,
+        answer_local_turn,
     )
-    from anatria_engine.prompts import build_local_instructions
 
-    language = await detect_answer_language(
-        model=request.model, history=request.history, query=request.query
-    )
-    system = build_local_instructions(
-        profile=request.profile,
-        selection=request.selection,
-        answer_language=language.name,
-        unsupported_language=language.unsupported,
-        gender=request.gender_model,
-    )
     try:
-        async for event in stream_local_chat(
-            model=request.model, system=system, history=request.history, query=request.query
+        async for event in answer_local_turn(
+            model=request.model,
+            history=request.history,
+            query=request.query,
+            profile=request.profile,
+            selection=request.selection,
+            gender=request.gender_model,
         ):
             if isinstance(event, LocalText):
                 transport.emit(TextDeltaEvent(request_id=request.request_id, text=event.text))
