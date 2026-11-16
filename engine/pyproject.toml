@@ -21,6 +21,19 @@ dependencies = [
     # suite and a real provider turn, and update `retries()` in
     # tests/test_scene_tools.py when crossing into the new part kind.
     "pydantic-ai-slim[anthropic,google,openai]==2.54.0",
+    # The provider SDKs, pinned for the same reason and found the same way:
+    # pydantic-ai-slim asks only for `anthropic>=1.9.0`, so v0.7.0 shipped
+    # anthropic 2.3.0, where `BetaMessageParam` is a Union that pydantic-ai
+    # 2.54.0 still calls as a TypedDict. Every Claude turn failed with "Cannot
+    # instantiate typing.Union" on every platform, and all 378 tests passed,
+    # because none built a real Anthropic request; tests/test_provider_requests.py
+    # does now. 1.11.0 (what v0.6.0 shipped) to 1.17.0 work, 2.0.0 onwards do
+    # not. OpenAI and Google are the versions v0.7.0 shipped and were checked
+    # against the live APIs. Move any of them together with pydantic-ai, on
+    # purpose, with that test and a real turn per provider.
+    "anthropic==1.17.0",
+    "openai==3.41.0",
+    "google-genai==2.34.0",
     # Imported directly by the local Ollama chat (`local_chat.py`). Already in
     # the sidecar through the provider SDKs; named here because this code
     # depends on it, not only something it depends on.

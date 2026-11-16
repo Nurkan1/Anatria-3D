@@ -13,6 +13,18 @@ There is **no auto-updater**, by design: the application never reaches the
 network on its own. A new version reaches you only when you download and install
 it, so this file is also the answer to "is it worth reinstalling".
 
+## [Unreleased]
+
+### Fixed
+
+**Claude answers again.** In 0.7.0, on Windows and Linux alike, every question
+to a Claude model failed with *internal_error: Cannot instantiate typing.Union*.
+The installer had been built with a newer version of Anthropic's library than
+the one the assistant was written for. The versions of all three providers'
+libraries are now fixed in place, and a test sends a real request through each
+of them before any release can be built. OpenAI, Gemini and the local model
+were not affected.
+
 ## [0.7.0] — 2026-10-30
 
 ### Added
