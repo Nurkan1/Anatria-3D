@@ -244,6 +244,21 @@ class CasePath(Strict):
     points: list[CasePathPoint] = Field(min_length=1, max_length=12)
 
 
+class CaseHypothesis(Strict):
+    """A student's answer to the case, drawn on the body: the anatomical route
+    they think explains it, and why.
+
+    Kept apart from `CasePath` on purpose. A path is part of the presentation;
+    this is a guess about it, and the assistant must never read one as the other.
+    """
+
+    label: str = Field(min_length=1, max_length=200)
+    spread: PathSpread
+    points: list[CasePathPoint] = Field(min_length=1, max_length=12)
+    #: The student's reasoning, in their words.
+    reflection: str = Field(min_length=1, max_length=20_000)
+
+
 class CaseVisitSummary(Strict):
     """A past visit, as the current one needs to remember it."""
 
@@ -313,6 +328,8 @@ class VirtualPatient(Strict):
     complaints: list[CaseComplaint] = Field(default_factory=list, max_length=200)
     #: Symptom paths, oldest first. Defaulted, like every field added later.
     paths: list[CasePath] = Field(default_factory=list, max_length=20)
+    #: The student's hypotheses that are switched on. Defaulted, like `paths`.
+    hypotheses: list[CaseHypothesis] = Field(default_factory=list, max_length=20)
     #: Earlier visits, oldest first. Read from the journal, never generated.
     earlier_visits: list[CaseVisitSummary] = Field(default_factory=list, max_length=20)
 

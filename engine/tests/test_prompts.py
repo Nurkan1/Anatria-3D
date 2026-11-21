@@ -20,6 +20,7 @@ from anatria_engine.prompts import (
 from anatria_engine.protocol import (
     BreathContext,
     CaseComplaint,
+    CaseHypothesis,
     CasePath,
     CasePathPoint,
     CaseRecordUpdate,
@@ -483,6 +484,39 @@ def test_a_path_comes_before_the_written_findings() -> None:
     text = _case_text(patient)
     paths_at = text.index("### Symptom paths drawn on the body")
     assert paths_at < text.index("### What is on the record")
+
+
+GUESS = CaseHypothesis(
+    label="Lower trunk",
+    spread="radiating",
+    points=[
+        CasePathPoint(organ_id="truncus_inferior", label="Truncus inferior plexus brachialis"),
+        CasePathPoint(organ_id="nervus_ulnaris", label="Nervus ulnaris"),
+    ],
+    reflection="Little finger and medial forearm point to C8-T1.",
+)
+
+
+def test_a_hypothesis_is_given_as_the_students_answer_never_as_a_finding() -> None:
+    text = _case_text(_with_paths(RADICULAR).model_copy(update={"hypotheses": [GUESS]}))
+    assert "### The student's hypotheses, drawn on the body" in text
+    assert "**These are the student's answer, not part of the case.**" in text
+    assert "never take a hypothesis as a finding" in text
+    assert "Their reasoning: Little finger and medial forearm point to C8-T1." in text
+    route = text[text.index("**Lower trunk**"):].splitlines()[0]
+    assert route.index("Truncus inferior") < route.index("Nervus ulnaris")
+
+
+def test_a_hypothesis_is_answered_socratically_and_not_graded_on_sight() -> None:
+    text = _case_text(PATIENT.model_copy(update={"hypotheses": [GUESS]}))
+    assert "**Socratically**" in text
+    assert "Name each topographic error precisely" in text
+    assert "ask one question that makes them connect the" in text
+    assert "**Do not grade it yet and do not state the sealed answer.**" in text
+
+
+def test_a_case_with_no_hypothesis_carries_no_hypothesis_section() -> None:
+    assert "### The student's hypotheses" not in _case_text(_with_paths(RADICULAR))
 
 
 def test_a_case_with_no_paths_carries_no_path_section() -> None:

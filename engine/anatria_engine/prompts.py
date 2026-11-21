@@ -23,6 +23,7 @@ from __future__ import annotations
 
 from anatria_engine.protocol import (
     BreathContext,
+    CaseHypothesis,
     CasePath,
     GenderModel,
     HeartContext,
@@ -835,16 +836,10 @@ def _symptom_paths_rule(paths: list[CasePath]) -> str:
         "",
     ]
     for path in paths:
-        stops = []
-        for point in path.points:
-            detail = [
-                _CHARACTER_MEANING[point.character] if point.character else None,
-                f"{point.intensity}/10" if point.intensity is not None else None,
-            ]
-            said = ", ".join(part for part in detail if part)
-            stops.append(f"{point.label} (`{point.organ_id}`{', ' + said if said else ''})")
-        joiner = "; " if path.spread == "multifocal" else " → "
-        lines.append(f"- **{path.label}**, {_SPREAD_MEANING[path.spread]}: {joiner.join(stops)}")
+        lines.append(
+            f"- **{path.label}**, {_SPREAD_MEANING[path.spread]}: "
+            f"{_route(path.points, path.spread)}"
+        )
         if path.trigger:
             lines.append(f"  - Brought on or changed by: {path.trigger}")
     lines += [
@@ -854,6 +849,62 @@ def _symptom_paths_rule(paths: list[CasePath]) -> str:
         "you must never describe it as one. When you explain a path, light the "
         "real structures that account for it with `illuminate_structures` (the "
         "root, the trunk, the viscus) so the anatomy on screen is the atlas's own.",
+    ]
+    return "\n".join(lines)
+
+
+def _route(points: list, spread: str) -> str:
+    """A path's stops in order, as the prompt says them."""
+    stops = []
+    for point in points:
+        detail = [
+            _CHARACTER_MEANING[point.character] if point.character else None,
+            f"{point.intensity}/10" if point.intensity is not None else None,
+        ]
+        said = ", ".join(part for part in detail if part)
+        stops.append(f"{point.label} (`{point.organ_id}`{', ' + said if said else ''})")
+    return ("; " if spread == "multifocal" else " → ").join(stops)
+
+
+def _hypotheses_rule(hypotheses: list[CaseHypothesis]) -> str:
+    """The student's own answer, drawn on the body, and how to answer it.
+
+    Socratic rather than graded on sight, because the owner asked for the
+    student to be led to the relation between structure and symptom, not handed
+    it. Grading still happens, through the ordinary rule, once they have had
+    the chance to answer the questions this asks.
+    """
+    lines = [
+        "### The student's hypotheses, drawn on the body",
+        "",
+        "**These are the student's answer, not part of the case.** Each is the "
+        "anatomical route they think explains it, with their reasoning. They say "
+        "nothing about the patient: never take a hypothesis as a finding.",
+        "",
+    ]
+    for hypothesis in hypotheses:
+        lines.append(
+            f"- **{hypothesis.label}**, {_SPREAD_MEANING[hypothesis.spread]}: "
+            f"{_route(hypothesis.points, hypothesis.spread)}"
+        )
+        lines.append(f"  - Their reasoning: {hypothesis.reflection.strip()}")
+    lines += [
+        "",
+        "When the student asks about a hypothesis or puts it forward, answer it "
+        "**Socratically**, against what this case turned out to be:",
+        "",
+        "1. Say what is anatomically right in it, naming the structures.",
+        "2. Name each topographic error precisely: the root, trunk, cord, nerve, "
+        "dermatome or territory they chose, and what they confused it with.",
+        "3. For each error, ask one question that makes them connect the "
+        "structure to the symptom (which root carries the little finger?), "
+        "instead of giving the right structure.",
+        "4. Light the structures of their hypothesis with `illuminate_structures` "
+        "so they see what they drew in the atlas's own anatomy.",
+        "",
+        "**Do not grade it yet and do not state the sealed answer.** Grade, as "
+        "described in the drill rules, when the student answers your questions "
+        "or asks to be graded. Speak of the patient in the third person throughout.",
     ]
     return "\n".join(lines)
 
@@ -897,6 +948,9 @@ def _virtual_patient_rule(patient: VirtualPatient) -> str:
     # stopped reading for the presentation by the time it reached the path.
     if patient.paths:
         lines += ["", _symptom_paths_rule(patient.paths)]
+
+    if patient.hypotheses:
+        lines += ["", _hypotheses_rule(patient.hypotheses)]
 
     if patient.findings.strip():
         lines += [

@@ -8,6 +8,7 @@ import { z } from "zod";
 import {
   AgentRequestSchema,
   CaseComplaintSchema,
+  CaseHypothesisSchema,
   CasePathPointSchema,
   CasePathSchema,
   PathCharacterSchema,
@@ -118,6 +119,7 @@ function typescriptSurface(): ProtocolSurface {
       CaseComplaint: fieldsOf(CaseComplaintSchema),
       CasePath: fieldsOf(CasePathSchema),
       CasePathPoint: fieldsOf(CasePathPointSchema),
+      CaseHypothesis: fieldsOf(CaseHypothesisSchema),
       CaseVisitSummary: fieldsOf(CaseVisitSummarySchema),
       CaseRecordUpdate: fieldsOf(CaseRecordUpdateSchema),
       ScannerContext: fieldsOf(ScannerContextSchema),

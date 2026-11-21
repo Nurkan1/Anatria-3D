@@ -408,6 +408,17 @@ export const CasePathSchema = z.object({
 });
 
 /**
+ * A student's answer, drawn on the body: the route they think explains the
+ * case, and why. Never part of the presentation.
+ */
+export const CaseHypothesisSchema = z.object({
+  label: z.string().min(1).max(200),
+  spread: PathSpreadSchema,
+  points: z.array(CasePathPointSchema).min(1).max(12),
+  reflection: z.string().min(1).max(20_000),
+});
+
+/**
  * Something learned about the patient after the case was opened.
  *
  * `findings` is what was sealed on day one. These accumulate beside it, each
@@ -472,6 +483,8 @@ export const VirtualPatientSchema = z.object({
   complaints: z.array(CaseComplaintSchema).max(200).default([]),
   /** Symptom paths that are switched on. Defaulted, like every field added later. */
   paths: z.array(CasePathSchema).max(20).default([]),
+  /** The student's switched-on hypotheses. Defaulted, like `paths`. */
+  hypotheses: z.array(CaseHypothesisSchema).max(20).default([]),
   earlier_visits: z.array(CaseVisitSummarySchema).max(20).default([]),
 });
 export type VirtualPatient = z.infer<typeof VirtualPatientSchema>;

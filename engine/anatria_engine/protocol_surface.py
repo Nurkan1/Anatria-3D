@@ -86,6 +86,7 @@ def build_surface() -> dict[str, Any]:
             "CaseComplaint": fields_of(p.CaseComplaint),
             "CasePath": fields_of(p.CasePath),
             "CasePathPoint": fields_of(p.CasePathPoint),
+            "CaseHypothesis": fields_of(p.CaseHypothesis),
             "CaseVisitSummary": fields_of(p.CaseVisitSummary),
             "CaseRecordUpdate": fields_of(p.CaseRecordUpdate),
             "ScannerContext": fields_of(p.ScannerContext),
