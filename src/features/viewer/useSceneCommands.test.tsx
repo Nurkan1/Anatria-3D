@@ -37,3 +37,27 @@ it("ignores a subscription that completes after unmount", async () => {
   expect(onTextDelta).not.toHaveBeenCalled();
   expect(bridge.off).toHaveBeenCalledTimes(1);
 });
+
+it("hands a drafted case to the case store, and keeps its failure out of the chat", async () => {
+  const { useCaseStore } = await import("@/stores/caseStore");
+  const receive = vi.fn();
+  const fail = vi.fn();
+  const finish = vi.fn();
+  useCaseStore.setState({ receiveCaseDraft: receive, failCaseDraft: fail, finishCaseDraft: finish });
+  bridge.subscribe.mockImplementation(async (callback) => { bridge.event = callback; return bridge.off; });
+  const onError = vi.fn();
+  const onDone = vi.fn();
+  renderHook(() => useSceneCommands({ onError, onDone }));
+  await act(async () => {});
+
+  const draft = { title: "Case", sex: "male" as const, findings: "", ground_truth: "Answer." };
+  act(() => bridge.event!({ type: "case_draft", request_id: "draft-1", draft }));
+  act(() => bridge.event!({ type: "done", request_id: "draft-1", usage: null, model: "m" }));
+  act(() => bridge.event!({ type: "error", request_id: "draft-2", code: "provider_error", message: "no" }));
+
+  expect(receive).toHaveBeenCalledWith("draft-1", draft);
+  expect(finish).toHaveBeenCalledWith("draft-1", null, "m");
+  expect(fail).toHaveBeenCalledWith("draft-2", "no");
+  expect(onError).not.toHaveBeenCalled();
+  expect(onDone).not.toHaveBeenCalled();
+});

@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { GrowingTextarea } from "@/components/GrowingTextarea";
-import type { Language, UserProfile } from "@/lib/schemas";
+import type { CaseDraft, CaseLevel, Language, UserProfile } from "@/lib/schemas";
 import { whenLabel } from "@/features/study/whenLabel";
 import { getStudySession, type CaseFile, type CaseSex } from "@/lib/studyDb";
 import {
@@ -13,7 +13,9 @@ import {
   useCaseStore,
   visitLabel,
 } from "@/stores/caseStore";
+import { chatPreferences } from "@/stores/chatPreferences";
 import { useChatStore } from "@/stores/chatStore";
+import { useModelStore } from "@/stores/modelStore";
 import { askToConfirm } from "@/stores/confirmStore";
 import { useSceneStore } from "@/stores/sceneStore";
 
@@ -591,6 +593,9 @@ function CaseComposer({
 }) {
   const openCase = useCaseStore((s) => s.open);
   const error = useCaseStore((s) => s.error);
+  const generation = useCaseStore((s) => s.generation);
+  const addGeneratedPath = useCaseStore((s) => s.addGeneratedPath);
+  const resetCaseDraft = useCaseStore((s) => s.resetCaseDraft);
 
   const [title, setTitle] = useState("");
   const [sex, setSex] = useState<CaseSex>("female");
@@ -600,6 +605,32 @@ function CaseComposer({
   const [findings, setFindings] = useState("");
   const [answer, setAnswer] = useState("");
   const [busy, setBusy] = useState(false);
+  /** The path a generated case came with, drawn once the case is sealed. */
+  const [generatedPath, setGeneratedPath] = useState<CaseDraft["path"]>(null);
+  const [keepPath, setKeepPath] = useState(true);
+  const [answerHidden, setAnswerHidden] = useState(false);
+
+  // A finished draft fills the form, once per draft. Every field stays the
+  // author's to change before sealing: the assistant writes a draft, not a case.
+  const filled = useRef<string | null>(null);
+  useEffect(() => {
+    const draft = generation.status === "ready" ? generation.draft : null;
+    if (!draft || filled.current === generation.requestId) return;
+    filled.current = generation.requestId;
+    setTitle(draft.title);
+    setSex(draft.sex);
+    setAge(draft.age_years == null ? "" : String(draft.age_years));
+    setHeight(draft.height_cm == null ? "" : String(draft.height_cm));
+    setWeight(draft.weight_kg == null ? "" : String(draft.weight_kg));
+    setFindings(draft.findings);
+    setAnswer(draft.ground_truth);
+    setGeneratedPath(draft.path ?? null);
+    setKeepPath(true);
+  }, [generation]);
+
+  // A draft belongs to this form. Closing it puts the draft away, so the next
+  // new case does not open already filled with the last one.
+  useEffect(() => () => resetCaseDraft(), [resetCaseDraft]);
 
   const ready = title.trim().length > 0 && answer.trim().length > 0;
 
@@ -626,6 +657,7 @@ function CaseComposer({
         profile,
         language,
       });
+      if (created && generatedPath && keepPath) await addGeneratedPath(created.id, generatedPath);
       if (created) onClose();
     } finally {
       setBusy(false);
@@ -656,6 +688,8 @@ function CaseComposer({
         Invented for teaching — never a real person. The case is sent to your AI
         provider with every turn of the drill.
       </p>
+
+      <CaseDrafter profile={profile} language={language} />
 
       <input
         value={title}
@@ -733,14 +767,56 @@ function CaseComposer({
         className="w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 leading-relaxed outline-none placeholder:text-slate-600 focus:border-sky-600"
       />
 
-      <GrowingTextarea
-        limit="24vh"
-        value={answer}
-        onChange={(event) => setAnswer(event.target.value)}
-        rows={3}
-        placeholder="What is actually going on. Sealed now, revealed when you ask."
-        className="w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 leading-relaxed outline-none placeholder:text-slate-600 focus:border-sky-600"
-      />
+      {answerHidden ? (
+        <div className="flex items-center gap-2 rounded border border-dashed border-slate-700 px-2 py-1.5 text-slate-500">
+          <span className="flex-1">
+            Answer hidden{answer.trim() ? ` · ${answer.trim().length} characters, sealed with the case` : ""}
+          </span>
+          <button
+            type="button"
+            onClick={() => setAnswerHidden(false)}
+            className="rounded px-1 text-slate-500 transition hover:text-slate-200"
+          >
+            show
+          </button>
+        </div>
+      ) : (
+        <GrowingTextarea
+          limit="24vh"
+          value={answer}
+          onChange={(event) => setAnswer(event.target.value)}
+          rows={3}
+          placeholder="What is actually going on. Sealed now, revealed when you ask."
+          className="w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 leading-relaxed outline-none placeholder:text-slate-600 focus:border-sky-600"
+        />
+      )}
+      {/* For a student who drafts a case to practise on: the answer is written,
+          and sealed, without being read first. */}
+      <label className="flex items-center gap-1.5 text-slate-500">
+        <input
+          type="checkbox"
+          checked={answerHidden}
+          onChange={(event) => setAnswerHidden(event.target.checked)}
+          className="accent-sky-500"
+        />
+        Hide the answer from me, to practise on this case myself
+      </label>
+
+      {generatedPath && (
+        <label className="flex items-start gap-1.5 rounded border border-rose-900/50 bg-rose-500/5 px-2 py-1.5 text-rose-200/90">
+          <input
+            type="checkbox"
+            checked={keepPath}
+            onChange={(event) => setKeepPath(event.target.checked)}
+            className="mt-0.5 accent-rose-500"
+          />
+          <span>
+            Symptom path “{generatedPath.label}”, {generatedPath.points.length} stops:{" "}
+            {generatedPath.points.map((point) => point.label).join(" → ")}. Drawn on the
+            body when you seal; you can change or delete it afterwards.
+          </span>
+        </label>
+      )}
       <p className="leading-snug text-slate-600">
         Written before anything is attempted, and never editable afterwards — an
         answer decided once the attempt is in hand grades nothing.
@@ -756,6 +832,131 @@ function CaseComposer({
       >
         Seal and open
       </button>
+    </div>
+  );
+}
+
+/** Regions a teacher is likely to ask for. Suggestions only: any wording works. */
+const DRAFT_REGIONS = [
+  "Brachial plexus",
+  "Cranial nerves",
+  "Thorax",
+  "Heart",
+  "Abdomen",
+  "Lumbosacral plexus",
+  "Lower limb",
+  "Upper limb",
+  "Vertebral column",
+];
+
+const DRAFT_LANGUAGES: { value: Language; label: string }[] = [
+  { value: "bg", label: "BG" },
+  { value: "es", label: "ES" },
+  { value: "en", label: "EN" },
+];
+
+/**
+ * Ask the assistant for a case, and fill the form with it.
+ *
+ * It uses the provider and model the chat is set to, on the reader's own key,
+ * and what it cost is filed in Usage. The structures for the path come from
+ * the body currently loaded, so every stop is one the atlas can draw.
+ */
+function CaseDrafter({ profile, language }: { profile: UserProfile; language: Language }) {
+  const generation = useCaseStore((s) => s.generation);
+  const requestCaseDraft = useCaseStore((s) => s.requestCaseDraft);
+  const [region, setRegion] = useState("");
+  const [level, setLevel] = useState<CaseLevel>("preclinical");
+  const [writeIn, setWriteIn] = useState<Language>(language === "auto" ? "en" : language);
+
+  const working = generation.status === "working";
+
+  function draft() {
+    const provider = chatPreferences().provider;
+    const organs = Object.values(useSceneStore.getState().organs).map(
+      ({ organ_id, ta2_latin, name_en, system }) => ({ organ_id, ta2_latin, name_en, system }),
+    );
+    void requestCaseDraft({
+      region,
+      level,
+      language: writeIn,
+      profile,
+      provider,
+      model: useModelStore.getState().get(provider).selected,
+      organs: organs.slice(0, 5000),
+    });
+  }
+
+  return (
+    <div className="space-y-1.5 rounded border border-slate-800 bg-slate-900/50 px-2 py-1.5">
+      <p className="font-semibold uppercase tracking-wider text-slate-500">Draft with the assistant</p>
+      <input
+        value={region}
+        onChange={(event) => setRegion(event.target.value)}
+        list="case-draft-regions"
+        placeholder="Region or system, e.g. Brachial plexus"
+        maxLength={200}
+        className="w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 outline-none placeholder:text-slate-600 focus:border-sky-600"
+      />
+      <datalist id="case-draft-regions">
+        {DRAFT_REGIONS.map((entry) => (
+          <option key={entry} value={entry} />
+        ))}
+      </datalist>
+      <div className="flex items-center gap-1.5">
+        <div role="radiogroup" aria-label="Level" className="flex overflow-hidden rounded border border-slate-700">
+          {(
+            [
+              ["preclinical", "Preclinical"],
+              ["clinical", "Clinical correlation"],
+            ] as const
+          ).map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              role="radio"
+              aria-checked={level === value}
+              onClick={() => setLevel(value)}
+              className={`px-2 py-0.5 transition ${
+                level === value ? "bg-slate-700/70 text-slate-100" : "text-slate-500 hover:text-slate-300"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        <select
+          aria-label="Language of the case"
+          value={writeIn}
+          onChange={(event) => setWriteIn(event.target.value as Language)}
+          className="rounded border border-slate-700 bg-slate-950 px-1 py-0.5 text-slate-300"
+        >
+          {DRAFT_LANGUAGES.map((entry) => (
+            <option key={entry.value} value={entry.value}>
+              {entry.label}
+            </option>
+          ))}
+        </select>
+        <button
+          type="button"
+          onClick={draft}
+          disabled={working || region.trim() === ""}
+          className="ml-auto rounded border border-sky-700/60 bg-sky-600/15 px-2 py-0.5 text-sky-200 transition hover:bg-sky-600/25 disabled:opacity-40"
+        >
+          {working ? "Writing…" : "Draft the case"}
+        </button>
+      </div>
+      {generation.status === "ready" && (
+        <p className="leading-snug text-emerald-300/80">
+          Drafted below. Read every field and change what you like before sealing.
+        </p>
+      )}
+      {generation.status === "failed" && generation.error && (
+        <p className="leading-snug text-rose-400">{generation.error}</p>
+      )}
+      <p className="leading-snug text-slate-600">
+        Uses the provider and model the chat is set to, on your key; the cost appears in Usage.
+      </p>
     </div>
   );
 }

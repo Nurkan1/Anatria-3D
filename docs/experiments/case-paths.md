@@ -104,9 +104,41 @@ and generate a case with the assistant. This notebook covers phase 1.
 - A probe without tools is not a probe: asked to light structures, the model
   only wrote the call as text. Stub tools fixed the measurement.
 
+## Phase 3: drafting a case with the assistant
+
+- "Draft with the assistant" in the new-case form: region (free text, with
+  suggestions), Preclinical or Clinical correlation, BG/ES/EN. It uses the
+  provider and model the chat is set to, on the reader's key, and the cost is
+  filed in Usage. A draft fills every field and nothing is opened or sealed: the
+  author reads it, changes it and seals it. A pre-drawn path is listed with its
+  stops and drawn when the case is sealed. "Hide the answer from me" lets a
+  student seal a drafted case without reading its answer.
+- `case_draft.py`: structured output, a `find_structures` tool over the atlas
+  the window sent, an output validator that sends invented ids back, and
+  `to_draft`, which drops whatever still gets through and drops a path left
+  with too few real stops. `SAFETY` comes first, as for every turn.
+- The draft's events are routed to the case store by request id prefix
+  (`draft-`), so a drafter's failure never surfaces as a failed chat turn.
+
+### Measured on local models, since the owner's key is not used here
+
+- llama3.1:8b wrote the output call as text instead of making it, and cut it
+  off: not usable for this. Its draft also titled the case "Brachial Plexus
+  Compression", which names the answer; the prompt now forbids a diagnosis in
+  the title.
+- qwen3.5:9b spent its token limit thinking until reasoning was switched off.
+  Then it searched the atlas properly and found real ids, but sent the path as
+  a JSON string, which failed every retry. `GeneratedCase` now reads a path sent
+  as text. After that, on the real 3,478-structure atlas: brachial plexus,
+  clinical, Bulgarian in 17 s; lower limb, preclinical, Spanish in 61 s. Every
+  stop was a real structure.
+- The content of those drafts was weak: a radicular pain called referred, and
+  arteries given as the places a claudication is felt. That is the reason the
+  draft fills a form instead of opening a case. Claude and GPT, which the owner
+  uses, are for him to check.
+
 ## Not done yet
 
-- Phase 3, the case generator.
 - The guide's section, before any merge.
 - The two prompt fixes are measured on qwen3.5:9b only. Gemini and Claude,
   which the drill actually runs on, are for the owner to check with his key.

@@ -1,7 +1,18 @@
 import { create } from "zustand";
 
-import type { VirtualPatient } from "@/lib/schemas";
+import { draftCase } from "@/lib/ipc";
+import type {
+  AiProvider,
+  CaseDraft,
+  CaseLevel,
+  Language,
+  OrganMeta,
+  TokenUsage,
+  UserProfile,
+  VirtualPatient,
+} from "@/lib/schemas";
 import * as db from "@/lib/studyDb";
+import { useUsageStore } from "@/stores/usageStore";
 import {
   MAX_VISITS,
   type CaseDigest,
@@ -54,6 +65,43 @@ export function draftProblem(draft: PathDraft): string | null {
   }
   return null;
 }
+
+/**
+ * A case being written by the assistant, for the new-case form.
+ *
+ * Held here because the answer arrives on the engine's event channel, which the
+ * form does not own. The form reads `draft` and fills its own fields from it;
+ * nothing is opened or sealed until the author does it themselves.
+ */
+export interface CaseGeneration {
+  status: "idle" | "working" | "ready" | "failed";
+  requestId: string | null;
+  /** Which provider wrote it, so what it cost is filed against the right one. */
+  provider: AiProvider | null;
+  draft: CaseDraft | null;
+  error: string | null;
+}
+
+export interface CaseDraftAsk {
+  region: string;
+  level: CaseLevel;
+  language: Language;
+  profile: UserProfile;
+  provider: AiProvider;
+  model: string | null;
+  organs: OrganMeta[];
+}
+
+const IDLE_GENERATION: CaseGeneration = {
+  status: "idle",
+  requestId: null,
+  provider: null,
+  draft: null,
+  error: null,
+};
+
+/** Request ids for drafts carry this prefix, so the event router can tell them apart. */
+export const CASE_DRAFT_PREFIX = "draft-";
 
 /** The message that asks the assistant about a hypothesis, in the reader's own words. */
 export function feedbackRequest(path: Pick<CasePath, "label" | "reflection">): string {
@@ -114,6 +162,8 @@ interface CaseStore {
    * `seq` makes asking twice about the same hypothesis two requests.
    */
   feedbackAsk: { seq: number; text: string } | null;
+  /** A case the assistant is writing, or has written, for the new-case form. */
+  generation: CaseGeneration;
   error: string | null;
   loaded: boolean;
 
@@ -133,6 +183,15 @@ interface CaseStore {
   askAboutHypothesis: (id: number) => void;
   /** Called by the chat panel once it has taken the question. */
   clearFeedbackAsk: () => void;
+  /** Ask the assistant to write a case. The answer arrives through the event router. */
+  requestCaseDraft: (ask: CaseDraftAsk) => Promise<void>;
+  receiveCaseDraft: (requestId: string, draft: CaseDraft) => void;
+  failCaseDraft: (requestId: string, message: string) => void;
+  /** The draft's `done`: files what it cost in Usage. */
+  finishCaseDraft: (requestId: string, usage: TokenUsage | null | undefined, model: string | null | undefined) => void;
+  resetCaseDraft: () => void;
+  /** Draw a generated case's path on the case it was sealed as. */
+  addGeneratedPath: (caseId: string, path: NonNullable<CaseDraft["path"]>) => Promise<CasePath | null>;
   savePath: () => Promise<CasePath | null>;
   setPathActive: (id: number, active: boolean) => Promise<boolean>;
   removePath: (id: number) => Promise<boolean>;
@@ -279,6 +338,7 @@ export const useCaseStore = create<CaseStore>((set, get) => ({
   paths: [],
   draft: null,
   feedbackAsk: null,
+  generation: IDLE_GENERATION,
   error: null,
   loaded: false,
 
@@ -417,6 +477,79 @@ export const useCaseStore = create<CaseStore>((set, get) => ({
   },
 
   clearFeedbackAsk: () => set({ feedbackAsk: null }),
+
+  requestCaseDraft: async (ask) => {
+    if (get().generation.status === "working") return;
+    const requestId = `${CASE_DRAFT_PREFIX}${crypto.randomUUID()}`;
+    set({ generation: { ...IDLE_GENERATION, status: "working", requestId, provider: ask.provider } });
+    try {
+      await draftCase({
+        request_id: requestId,
+        provider: ask.provider,
+        ...(ask.model ? { model: ask.model } : {}),
+        region: ask.region.trim(),
+        level: ask.level,
+        language: ask.language,
+        profile: ask.profile,
+        available_organs: ask.organs,
+      });
+    } catch (error) {
+      get().failCaseDraft(requestId, message(error));
+    }
+  },
+
+  receiveCaseDraft: (requestId, draft) => {
+    // Only the draft that was asked for last: an older one arriving late must
+    // not overwrite what the author is now reading.
+    if (get().generation.requestId !== requestId) return;
+    set((state) => ({ generation: { ...state.generation, status: "ready", draft, error: null } }));
+  },
+
+  failCaseDraft: (requestId, text) => {
+    if (get().generation.requestId !== requestId) return;
+    set((state) => ({ generation: { ...state.generation, status: "failed", error: text } }));
+  },
+
+  finishCaseDraft: (requestId, usage, model) => {
+    const { requestId: current, provider } = get().generation;
+    if (current !== requestId || !provider || !usage || !model) return;
+    void useUsageStore.getState().record({
+      session_id: null,
+      provider,
+      model,
+      input_tokens: usage.input_tokens,
+      output_tokens: usage.output_tokens,
+      cache_read_tokens: usage.cache_read_tokens ?? 0,
+    });
+  },
+
+  resetCaseDraft: () => set({ generation: IDLE_GENERATION }),
+
+  addGeneratedPath: async (caseId, path) => {
+    try {
+      const saved = await db.addCasePath({
+        case_id: caseId,
+        kind: "presentation",
+        label: path.label,
+        spread: path.spread,
+        trigger: path.trigger ?? null,
+        points: path.points.map((point) => ({
+          organ_id: point.organ_id,
+          organ_label: point.label,
+          character: point.character ?? null,
+          intensity: point.intensity ?? null,
+        })),
+      });
+      set((state) => ({
+        paths: state.activeCaseId === caseId ? [...state.paths, saved] : state.paths,
+        error: null,
+      }));
+      return saved;
+    } catch (error) {
+      set({ error: message(error) });
+      return null;
+    }
+  },
 
   savePath: async () => {
     const { draft, activeCaseId } = get();

@@ -16,7 +16,9 @@ vi.mock("@/lib/studyDb", () => ({
   caseFindings: vi.fn(),
   deleteCaseFinding: vi.fn(),
   getStudySession: vi.fn(),
+  addCasePath: vi.fn(),
   MAX_VISITS: 20,
+  MAX_PATH_POINTS: 12,
   MAX_SEVERITY: 10,
 }));
 
@@ -234,3 +236,79 @@ describe("the record panel's height", () => {
     expect(RECORD_MAX_HEIGHT).toBe("max-h-[50vh]");
   });
 });
+
+describe("drafting a case with the assistant", () => {
+  const DRAFTED = {
+    title: "Numbness in the left hand, 42",
+    sex: "male" as const,
+    age_years: 42,
+    height_cm: 178,
+    weight_kg: 81,
+    findings: "Two months of tingling in the little finger.",
+    ground_truth: "Compression of the lower trunk.",
+    path: {
+      label: "Neck to little finger",
+      spread: "radiating" as const,
+      points: [
+        { organ_id: "brachial_plexus_l", label: "Plexus brachialis" },
+        { organ_id: "ulnar_nerve_l", label: "Nervus ulnaris" },
+      ],
+    },
+  };
+
+  function composer() {
+    useCaseStore.setState({ cases: [], activeCaseId: null, error: null, loaded: true });
+    useCaseStore.getState().resetCaseDraft();
+    render(<CaseBar profile="student" language="es" />);
+    fireEvent.click(screen.getByRole("button", { name: /New patient/ }));
+  }
+
+  function arrive() {
+    act(() => useCaseStore.setState({
+      generation: { status: "ready", requestId: "draft-1", provider: "anthropic", draft: DRAFTED, error: null },
+    }));
+  }
+
+  it("fills every field of the form with the draft, for the author to change", () => {
+    composer();
+    expect(screen.getByText("Draft with the assistant")).toBeTruthy();
+    arrive();
+
+    expect((screen.getByPlaceholderText(/What the case is about/) as HTMLInputElement).value).toBe(
+      "Numbness in the left hand, 42",
+    );
+    expect((screen.getByPlaceholderText("Age") as HTMLInputElement).value).toBe("42");
+    expect((screen.getByPlaceholderText(/What is on the record/) as HTMLTextAreaElement).value).toBe(
+      "Two months of tingling in the little finger.",
+    );
+    expect(screen.getByText(/Symptom path “Neck to little finger”, 2 stops/)).toBeTruthy();
+  });
+
+  it("draws the drafted path on the case once it is sealed", async () => {
+    db.createCase.mockResolvedValue({ ...PATIENT, id: "new-case" });
+    db.addCasePath.mockResolvedValue({ id: 3 } as never);
+    composer();
+    arrive();
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: "Seal and open" }));
+    });
+
+    expect(db.createCase).toHaveBeenCalledWith(
+      expect.objectContaining({ ground_truth: "Compression of the lower trunk.", sex: "male" }),
+    );
+    expect(db.addCasePath).toHaveBeenCalledWith(
+      expect.objectContaining({ case_id: "new-case", kind: "presentation", label: "Neck to little finger" }),
+    );
+  });
+
+  it("can seal the answer without the author reading it", () => {
+    composer();
+    arrive();
+    fireEvent.click(screen.getByLabelText(/Hide the answer from me/));
+
+    expect(screen.queryByText("Compression of the lower trunk.")).toBeNull();
+    expect(screen.getByText(/Answer hidden · 31 characters, sealed with the case/)).toBeTruthy();
+  });
+});
+

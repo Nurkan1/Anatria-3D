@@ -10,6 +10,7 @@ import type {
 } from "@/lib/schemas";
 import { useSceneStore } from "@/stores/sceneStore";
 import { useBridgeStore } from "@/stores/bridgeStore";
+import { CASE_DRAFT_PREFIX, useCaseStore } from "@/stores/caseStore";
 
 export interface SceneCommandBridgeOptions {
   /** Checked before a command can touch the viewport. Bridge commands are independent. */
@@ -115,10 +116,23 @@ export function useSceneCommands(options: SceneCommandBridgeOptions = {}) {
         case "case_verdict":
           onCaseVerdict?.(event.request_id, event.score, event.verdict);
           break;
+        // A case the assistant wrote belongs to the new-case form, not to a
+        // chat turn: its draft, its cost and its failure all go to the case store.
+        case "case_draft":
+          useCaseStore.getState().receiveCaseDraft(event.request_id, event.draft);
+          break;
         case "done":
+          if (event.request_id.startsWith(CASE_DRAFT_PREFIX)) {
+            useCaseStore.getState().finishCaseDraft(event.request_id, event.usage, event.model);
+            break;
+          }
           onDone?.(event.request_id, event.usage, event.model);
           break;
         case "error":
+          if (event.request_id?.startsWith(CASE_DRAFT_PREFIX)) {
+            useCaseStore.getState().failCaseDraft(event.request_id, event.message);
+            break;
+          }
           onError?.(event.code, event.message, event.request_id);
           break;
       }
