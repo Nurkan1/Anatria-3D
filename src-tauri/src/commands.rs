@@ -15,8 +15,8 @@ use crate::display::{self, DisplaySettings, DisplayStatus};
 use crate::keyring_store::{self, KeyringError, Provider};
 use crate::sidecar::{EngineError, EngineHandle, EngineStatus};
 use crate::study_db::{
-    CaseDigest, CaseFile, CaseFinding, CaseInput, CaseSymptom, FindingInput, ImportSummary,
-    JournalExport, Note, NoteInput, SessionDetail, SessionSummary, StudyCoverage, StudyDb,
+    CaseDigest, CaseFile, CaseFinding, CaseInput, CasePath, CaseSymptom, FindingInput, ImportSummary,
+    JournalExport, Note, NoteInput, PathInput, SessionDetail, SessionSummary, StudyCoverage, StudyDb,
     StudyError, StudyStats, SymptomInput, TurnInput, UsageBucket, UsageInput,
 };
 
@@ -313,6 +313,29 @@ pub fn case_symptoms(db: State<'_, StudyDb>, case_id: String) -> CommandResult<V
 #[tauri::command]
 pub fn delete_case_symptom(db: State<'_, StudyDb>, id: i64) -> CommandResult<()> {
     db.delete_symptom(id)?;
+    Ok(())
+}
+
+/// Draw a symptom path on a case: where it starts, passes and ends.
+#[tauri::command]
+pub fn add_case_path(db: State<'_, StudyDb>, path: PathInput) -> CommandResult<CasePath> {
+    Ok(db.add_path(path)?)
+}
+
+#[tauri::command]
+pub fn case_paths(db: State<'_, StudyDb>, case_id: String) -> CommandResult<Vec<CasePath>> {
+    Ok(db.paths(&case_id)?)
+}
+
+#[tauri::command]
+pub fn set_case_path_active(db: State<'_, StudyDb>, id: i64, active: bool) -> CommandResult<()> {
+    db.set_path_active(id, active)?;
+    Ok(())
+}
+
+#[tauri::command]
+pub fn delete_case_path(db: State<'_, StudyDb>, id: i64) -> CommandResult<()> {
+    db.delete_path(id)?;
     Ok(())
 }
 

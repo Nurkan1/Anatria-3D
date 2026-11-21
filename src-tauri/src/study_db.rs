@@ -26,7 +26,7 @@ use serde::{Deserialize, Serialize};
 /// Schema revision, tracked in SQLite's own `user_version` pragma. Bump it and
 /// add a step to `migrate` — never edit an existing step, or a database written
 /// by a released build becomes unreadable.
-const SCHEMA_VERSION: i32 = 10;
+const SCHEMA_VERSION: i32 = 11;
 
 /// Marker on an exported journal, so an unrelated `.json` is refused with a
 /// sentence rather than a parse error.
@@ -53,6 +53,16 @@ const MAX_COMMANDS: usize = 64 * 1024;
 /// and refusing the twenty-first with a sentence beats a case that quietly
 /// becomes expensive.
 const MAX_VISITS: i64 = 20;
+
+/// How a symptom travels along a path. See `CasePath`.
+const PATH_SPREADS: [&str; 3] = ["radiating", "referred", "multifocal"];
+/// What is felt at one stop. A closed list, so the assistant and the reader
+/// read the same four words rather than whatever was typed.
+const PATH_CHARACTERS: [&str; 4] = ["pressing", "sharp", "tingling", "weakness"];
+/// Whose path it is: the patient's presentation, or a student's guess at it.
+const PATH_KINDS: [&str; 2] = ["presentation", "hypothesis"];
+/// Enough for a root, a trunk, two branches and where it ends, several times over.
+const MAX_PATH_POINTS: usize = 12;
 
 #[derive(Debug, thiserror::Error)]
 pub enum StudyError {
@@ -261,6 +271,78 @@ pub struct SymptomInput {
     pub severity: Option<i64>,
 }
 
+/// One stop on a symptom path: a structure, and what is felt there.
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct PathPoint {
+    pub organ_id: String,
+    /// Kept beside the id for the same reason `organ_label` is on a symptom.
+    #[serde(default)]
+    pub organ_label: Option<String>,
+    /// One of `PATH_CHARACTERS`, or absent when it was not said.
+    #[serde(default)]
+    pub character: Option<String>,
+    /// 0–10, the same scale as a marked complaint.
+    #[serde(default)]
+    pub intensity: Option<i64>,
+}
+
+/// A symptom that travels: from where it starts, through where it passes, to
+/// where it ends up.
+///
+/// A list of marked complaints cannot say that the pain in the hand and the
+/// pain in the neck are one pain moving, nor which way it moves, and that is
+/// the difference between a root compressed in the neck and two problems. The
+/// first point is the start, the last the end, the rest the way between.
+///
+/// `spread` says what kind of travel it is, because the same two points mean
+/// different things: `radiating` follows a nerve, `referred` is felt far from a
+/// viscus that causes it, `multifocal` is several places with no route between
+/// them, and has no direction at all.
+///
+/// `kind` keeps a student's hypothesis apart from the patient's presentation:
+/// one is part of the case, the other is an answer to it, and the assistant
+/// must never take the second for the first.
+#[derive(Debug, Serialize, Deserialize)]
+pub struct CasePath {
+    pub id: i64,
+    pub kind: String,
+    pub label: String,
+    pub spread: String,
+    /// What brings it on or changes it: "worse lifting the arm".
+    #[serde(default)]
+    pub trigger: Option<String>,
+    /// A student's reasoning for a hypothesis. Empty on a presentation.
+    #[serde(default)]
+    pub reflection: Option<String>,
+    pub points: Vec<PathPoint>,
+    /// Shown, and told to the assistant. A path switched off is kept.
+    pub active: bool,
+    #[serde(default)]
+    pub session_id: Option<String>,
+    pub created_at: i64,
+    pub updated_at: i64,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct PathInput {
+    pub case_id: String,
+    #[serde(default)]
+    pub session_id: Option<String>,
+    #[serde(default = "presentation")]
+    pub kind: String,
+    pub label: String,
+    pub spread: String,
+    #[serde(default)]
+    pub trigger: Option<String>,
+    #[serde(default)]
+    pub reflection: Option<String>,
+    pub points: Vec<PathPoint>,
+}
+
+fn presentation() -> String {
+    "presentation".to_owned()
+}
+
 /// One visit, as the next one needs to remember it.
 #[derive(Debug, Serialize)]
 pub struct CaseVisit {
@@ -286,6 +368,8 @@ pub struct CaseDigest {
     /// What has been added to the record since, oldest first. The opening
     /// findings stay on `case`, sealed where they were written.
     pub record_updates: Vec<CaseFinding>,
+    /// Symptom paths, presentations and hypotheses alike, oldest first.
+    pub paths: Vec<CasePath>,
 }
 
 #[derive(Debug, Serialize)]
@@ -371,6 +455,9 @@ pub struct ExportCase {
     /// exported before v7 still restores — it simply has none.
     #[serde(default)]
     pub record_updates: Vec<CaseFinding>,
+    /// Symptom paths, same rule; absent from a journal exported before v11.
+    #[serde(default)]
+    pub paths: Vec<CasePath>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -997,6 +1084,9 @@ impl StudyDb {
             let record_updates = added
                 .query_map(params![id], read_finding_row)?
                 .collect::<rusqlite::Result<Vec<_>>>()?;
+            drop(added);
+
+            let paths = read_paths(conn, &id)?;
 
             Ok(Some(CaseDigest {
                 case,
@@ -1004,6 +1094,7 @@ impl StudyDb {
                 visits,
                 symptoms,
                 record_updates,
+                paths,
             }))
         })
     }
@@ -1136,6 +1227,83 @@ impl StudyDb {
     pub fn delete_symptom(&self, id: i64) -> Result<()> {
         self.with(|conn| {
             conn.execute("DELETE FROM case_symptom WHERE id = ?1", params![id])?;
+            Ok(())
+        })
+    }
+
+    /// Draw a symptom path on a case. See `CasePath`.
+    pub fn add_path(&self, input: PathInput) -> Result<CasePath> {
+        let case_id = require(&input.case_id, "case_id")?;
+        let kind = one_of("kind", &input.kind, &PATH_KINDS)?;
+        let spread = one_of("spread", &input.spread, &PATH_SPREADS)?;
+        let label = clamp(&input.label, MAX_TITLE);
+        if label.is_empty() {
+            return Err(StudyError::Invalid("a path needs a name".into()));
+        }
+        let points = checked_points(&spread, &input.points)?;
+        let trigger = optional_text(input.trigger.as_deref(), MAX_TITLE);
+        let reflection = optional_text(input.reflection.as_deref(), MAX_BODY);
+        let encoded = serde_json::to_string(&points)
+            .map_err(|error| StudyError::Invalid(error.to_string()))?;
+
+        let now = now_ms();
+        self.with(|conn| {
+            let known: bool = conn.query_row(
+                "SELECT EXISTS (SELECT 1 FROM case_file WHERE id = ?1)",
+                params![case_id],
+                |row| row.get(0),
+            )?;
+            if !known {
+                return Err(StudyError::Invalid(format!("no case {case_id:?} to draw on")));
+            }
+            conn.execute(
+                "INSERT INTO case_path
+                     (case_id, session_id, kind, label, spread, trigger_note, reflection,
+                      points, active, created_at, updated_at)
+                 VALUES (?1, (SELECT id FROM study_session WHERE id = ?2),
+                         ?3, ?4, ?5, ?6, ?7, ?8, 1, ?9, ?9)",
+                params![
+                    case_id,
+                    input.session_id,
+                    kind,
+                    label,
+                    spread,
+                    trigger,
+                    reflection,
+                    encoded,
+                    now,
+                ],
+            )?;
+            let id = conn.last_insert_rowid();
+            conn.query_row(
+                &PATH_SELECT.replace("WHERE case_id = ?1", "WHERE id = ?1"),
+                params![id],
+                read_path_row,
+            )
+            .map_err(StudyError::from)
+        })
+    }
+
+    /// Symptom paths drawn on this case, oldest first.
+    pub fn paths(&self, case_id: &str) -> Result<Vec<CasePath>> {
+        let id = require(case_id, "case_id")?;
+        self.with(|conn| read_paths(conn, &id))
+    }
+
+    /// Show a path, or put it away without losing it.
+    pub fn set_path_active(&self, id: i64, active: bool) -> Result<()> {
+        self.with(|conn| {
+            conn.execute(
+                "UPDATE case_path SET active = ?2, updated_at = ?3 WHERE id = ?1",
+                params![id, active, now_ms()],
+            )?;
+            Ok(())
+        })
+    }
+
+    pub fn delete_path(&self, id: i64) -> Result<()> {
+        self.with(|conn| {
+            conn.execute("DELETE FROM case_path WHERE id = ?1", params![id])?;
             Ok(())
         })
     }
@@ -1392,6 +1560,7 @@ impl StudyDb {
                         updated_at: row.get(13)?,
                         symptoms: Vec::new(),
                         record_updates: Vec::new(),
+                        paths: Vec::new(),
                     })
                 })?
                 .collect::<rusqlite::Result<Vec<_>>>()?;
@@ -1409,6 +1578,9 @@ impl StudyDb {
             }
             drop(marked);
             drop(added);
+            for entry in &mut cases {
+                entry.paths = read_paths(conn, &entry.id)?;
+            }
 
             Ok(JournalExport {
                 format: EXPORT_FORMAT.to_owned(),
@@ -1673,6 +1845,48 @@ impl StudyDb {
                         "INSERT INTO case_finding (case_id, visit_no, body, created_at)
                          VALUES (?1, ?2, ?3, ?4)",
                         params![case.id, entry.visit_no.max(1), body, entry.created_at],
+                    )?;
+                }
+
+                // Paths are checked as strictly as a fresh one: a file edited
+                // by hand, or written by a later version, must not put a path
+                // in the journal that the application could not have drawn.
+                for path in &case.paths {
+                    let label = clamp(&path.label, MAX_TITLE);
+                    let checked = one_of("kind", &path.kind, &PATH_KINDS).and_then(|kind| {
+                        let spread = one_of("spread", &path.spread, &PATH_SPREADS)?;
+                        let points = checked_points(&spread, &path.points)?;
+                        Ok((kind, spread, points))
+                    });
+                    let Ok((kind, spread, points)) = checked else {
+                        summary.skipped += 1;
+                        continue;
+                    };
+                    if label.is_empty() {
+                        summary.skipped += 1;
+                        continue;
+                    }
+                    let encoded = serde_json::to_string(&points)
+                        .map_err(|error| StudyError::Invalid(error.to_string()))?;
+                    tx.execute(
+                        "INSERT INTO case_path
+                             (case_id, session_id, kind, label, spread, trigger_note,
+                              reflection, points, active, created_at, updated_at)
+                         VALUES (?1, (SELECT id FROM study_session WHERE id = ?2),
+                                 ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)",
+                        params![
+                            case.id,
+                            path.session_id,
+                            kind,
+                            label,
+                            spread,
+                            optional_text(path.trigger.as_deref(), MAX_TITLE),
+                            optional_text(path.reflection.as_deref(), MAX_BODY),
+                            encoded,
+                            path.active,
+                            path.created_at,
+                            path.updated_at,
+                        ],
                     )?;
                 }
             }
@@ -2304,6 +2518,40 @@ fn migrate(conn: &mut Connection) -> rusqlite::Result<()> {
         tx.execute_batch("ALTER TABLE study_message ADD COLUMN commands TEXT;")?;
     }
 
+    if version < 11 {
+        // Symptom paths: a complaint that travels, and which way.
+        //
+        // A table of its own rather than columns on `case_symptom`, because a
+        // path is not a complaint with extras. A complaint is one place; a
+        // path is an ordered set of them with a kind of travel between, and a
+        // student's hypothesis is a path that is not part of the case at all.
+        //
+        // The points are one JSON column, checked in Rust on every write
+        // (`checked_points`), rather than a table of rows. A path is drawn,
+        // shown and put away as one thing, never queried point by point, and
+        // a second table would be one more thing for export and import to keep
+        // in step. CASCADE like `case_symptom`: a path means nothing without
+        // its patient.
+        tx.execute_batch(
+            "CREATE TABLE case_path (
+                 id           INTEGER PRIMARY KEY AUTOINCREMENT,
+                 case_id      TEXT NOT NULL REFERENCES case_file(id) ON DELETE CASCADE,
+                 session_id   TEXT REFERENCES study_session(id) ON DELETE SET NULL,
+                 kind         TEXT NOT NULL CHECK (kind IN ('presentation', 'hypothesis')),
+                 label        TEXT NOT NULL,
+                 spread       TEXT NOT NULL
+                              CHECK (spread IN ('radiating', 'referred', 'multifocal')),
+                 trigger_note TEXT,
+                 reflection   TEXT,
+                 points       TEXT NOT NULL,
+                 active       INTEGER NOT NULL DEFAULT 1 CHECK (active IN (0, 1)),
+                 created_at   INTEGER NOT NULL,
+                 updated_at   INTEGER NOT NULL
+             );
+             CREATE INDEX idx_path_case ON case_path(case_id, created_at);",
+        )?;
+    }
+
     tx.pragma_update(None, "user_version", SCHEMA_VERSION)?;
     tx.commit()
 }
@@ -2422,6 +2670,89 @@ fn read_symptom_row(row: &rusqlite::Row<'_>) -> rusqlite::Result<CaseSymptom> {
         session_id: row.get(5)?,
         created_at: row.get(6)?,
     })
+}
+
+/// Oldest first, like the complaints.
+const PATH_SELECT: &str = "SELECT id, kind, label, spread, trigger_note, reflection, points,
+                                  active, session_id, created_at, updated_at
+                           FROM case_path
+                           WHERE case_id = ?1
+                           ORDER BY created_at, id";
+
+fn read_paths(conn: &Connection, case_id: &str) -> Result<Vec<CasePath>> {
+    let mut statement = conn.prepare(PATH_SELECT)?;
+    let rows = statement
+        .query_map(params![case_id], read_path_row)?
+        .collect::<rusqlite::Result<Vec<_>>>()?;
+    Ok(rows)
+}
+
+fn read_path_row(row: &rusqlite::Row<'_>) -> rusqlite::Result<CasePath> {
+    let raw: String = row.get(6)?;
+    // Written only through `checked_points`, so this cannot fail on a journal
+    // this application wrote. If it ever does, the path is shown with no
+    // points rather than the whole case failing to open.
+    let points = serde_json::from_str(&raw).unwrap_or_default();
+    Ok(CasePath {
+        id: row.get(0)?,
+        kind: row.get(1)?,
+        label: row.get(2)?,
+        spread: row.get(3)?,
+        trigger: row.get(4)?,
+        reflection: row.get(5)?,
+        points,
+        active: row.get(7)?,
+        session_id: row.get(8)?,
+        created_at: row.get(9)?,
+        updated_at: row.get(10)?,
+    })
+}
+
+/// `value`, trimmed, if it is one of `allowed`.
+fn one_of(field: &str, value: &str, allowed: &[&str]) -> Result<String> {
+    let trimmed = value.trim();
+    if allowed.contains(&trimmed) {
+        Ok(trimmed.to_owned())
+    } else {
+        Err(StudyError::Invalid(format!("{field} must be one of {allowed:?}, not {trimmed:?}")))
+    }
+}
+
+fn optional_text(value: Option<&str>, max: usize) -> Option<String> {
+    value.map(|text| clamp(text, max)).filter(|text| !text.is_empty())
+}
+
+/// The points of a path, checked: a route needs a start and an end, a
+/// multifocal set needs one place, and every stop names a structure.
+fn checked_points(spread: &str, points: &[PathPoint]) -> Result<Vec<PathPoint>> {
+    let fewest = if spread == "multifocal" { 1 } else { 2 };
+    if points.len() < fewest {
+        return Err(StudyError::Invalid(format!(
+            "a {spread} path needs at least {fewest} point(s)"
+        )));
+    }
+    if points.len() > MAX_PATH_POINTS {
+        return Err(StudyError::Invalid(format!(
+            "a path holds at most {MAX_PATH_POINTS} points"
+        )));
+    }
+    points
+        .iter()
+        .map(|point| {
+            let organ_id = require(&point.organ_id, "organ_id")?;
+            check_range("intensity", point.intensity, 0, 10)?;
+            let character = match point.character.as_deref().map(str::trim) {
+                None | Some("") => None,
+                Some(value) => Some(one_of("character", value, &PATH_CHARACTERS)?),
+            };
+            Ok(PathPoint {
+                organ_id,
+                organ_label: optional_text(point.organ_label.as_deref(), MAX_TITLE),
+                character,
+                intensity: point.intensity,
+            })
+        })
+        .collect()
 }
 
 /// Ordered by `id`, not by `visit_no`: several entries can share a visit, and
@@ -2769,8 +3100,11 @@ mod tests {
         .unwrap();
 
         // Wind the shape back with the stamp, as the v6 and v8 tests do.
-        conn.execute_batch("ALTER TABLE study_message DROP COLUMN commands;")
-            .unwrap();
+        conn.execute_batch(
+            "ALTER TABLE study_message DROP COLUMN commands;
+             DROP TABLE case_path;",
+        )
+        .unwrap();
         conn.pragma_update(None, "user_version", 9).unwrap();
 
         migrate(&mut conn).expect("a v9 journal must migrate");
@@ -3429,6 +3763,7 @@ mod tests {
         // the thing it is.
         conn.execute_batch(
             "DROP TABLE case_finding;
+             DROP TABLE case_path;
              ALTER TABLE study_message DROP COLUMN commands;
              ALTER TABLE case_file DROP COLUMN revealed_at;
              ALTER TABLE study_message DROP COLUMN cache_read_tokens;
@@ -3473,7 +3808,8 @@ mod tests {
         conn.execute_batch(
             "ALTER TABLE study_message DROP COLUMN commands;
              ALTER TABLE study_message DROP COLUMN cache_read_tokens;
-             ALTER TABLE token_usage DROP COLUMN cache_read_tokens;",
+             ALTER TABLE token_usage DROP COLUMN cache_read_tokens;
+             DROP TABLE case_path;",
         )
         .unwrap();
         conn.pragma_update(None, "user_version", 8).unwrap();
@@ -4584,5 +4920,210 @@ mod tests {
             .unwrap();
 
         assert_eq!(note.session_id.as_deref(), Some("s1"));
+    }
+
+    // -- symptom paths -------------------------------------------------------
+
+    fn point(organ_id: &str, intensity: i64) -> PathPoint {
+        PathPoint {
+            organ_id: organ_id.into(),
+            organ_label: Some(organ_id.replace('_', " ")),
+            character: Some("tingling".into()),
+            intensity: Some(intensity),
+        }
+    }
+
+    /// A root compressed in the neck: felt at the root, down the arm, in the thumb.
+    fn radicular(case_id: &str) -> PathInput {
+        PathInput {
+            case_id: case_id.into(),
+            session_id: None,
+            kind: "presentation".into(),
+            label: "Neck to thumb".into(),
+            spread: "radiating".into(),
+            trigger: Some("Worse turning the head to the right".into()),
+            reflection: None,
+            points: vec![
+                point("nervus_spinalis_c6", 8),
+                point("nervus_radialis", 5),
+                point("pollex", 3),
+            ],
+        }
+    }
+
+    #[test]
+    fn a_path_keeps_its_stops_in_the_order_the_symptom_travels() {
+        // The order *is* the direction: start, the way between, the end.
+        let db = StudyDb::in_memory();
+        db.create_case(case("c1")).unwrap();
+
+        let drawn = db.add_path(radicular("c1")).unwrap();
+
+        assert_eq!(
+            drawn.points.iter().map(|p| p.organ_id.as_str()).collect::<Vec<_>>(),
+            vec!["nervus_spinalis_c6", "nervus_radialis", "pollex"]
+        );
+        assert_eq!(drawn.spread, "radiating");
+        assert_eq!(drawn.kind, "presentation");
+        assert_eq!(drawn.trigger.as_deref(), Some("Worse turning the head to the right"));
+        assert!(drawn.active);
+        assert_eq!(db.paths("c1").unwrap().len(), 1);
+    }
+
+    #[test]
+    fn a_route_needs_a_start_and_an_end_and_a_multifocal_set_needs_one_place() {
+        let db = StudyDb::in_memory();
+        db.create_case(case("c1")).unwrap();
+
+        let mut one_stop = radicular("c1");
+        one_stop.points.truncate(1);
+        let message = db.add_path(one_stop).unwrap_err().to_string();
+        assert!(message.contains("at least 2"), "unhelpful message: {message}");
+
+        let mut scattered = radicular("c1");
+        scattered.spread = "multifocal".into();
+        scattered.points.truncate(1);
+        assert!(db.add_path(scattered).is_ok());
+    }
+
+    #[test]
+    fn a_path_refuses_words_the_assistant_was_not_taught() {
+        // Closed lists, so the reader and the assistant read the same four
+        // characters and three kinds of travel, not whatever was typed.
+        let db = StudyDb::in_memory();
+        db.create_case(case("c1")).unwrap();
+
+        let mut spread = radicular("c1");
+        spread.spread = "sideways".into();
+        assert!(db.add_path(spread).is_err());
+
+        let mut character = radicular("c1");
+        character.points[0].character = Some("burning hot".into());
+        assert!(db.add_path(character).is_err());
+
+        let mut kind = radicular("c1");
+        kind.kind = "diagnosis".into();
+        assert!(db.add_path(kind).is_err());
+
+        let mut intensity = radicular("c1");
+        intensity.points[1].intensity = Some(11);
+        let message = db.add_path(intensity).unwrap_err().to_string();
+        assert!(message.contains("0 and 10"), "unhelpful message: {message}");
+    }
+
+    #[test]
+    fn a_path_needs_a_case_that_exists() {
+        let db = StudyDb::in_memory();
+        assert!(db.add_path(radicular("ghost")).is_err());
+    }
+
+    #[test]
+    fn a_path_put_away_is_kept_and_can_come_back() {
+        let db = StudyDb::in_memory();
+        db.create_case(case("c1")).unwrap();
+        let drawn = db.add_path(radicular("c1")).unwrap();
+
+        db.set_path_active(drawn.id, false).unwrap();
+        assert!(!db.paths("c1").unwrap()[0].active);
+
+        db.set_path_active(drawn.id, true).unwrap();
+        assert!(db.paths("c1").unwrap()[0].active);
+
+        db.delete_path(drawn.id).unwrap();
+        assert!(db.paths("c1").unwrap().is_empty());
+    }
+
+    #[test]
+    fn a_hypothesis_is_kept_apart_from_the_presentation() {
+        // One is part of the case, the other is an answer to it.
+        let db = StudyDb::in_memory();
+        db.create_case(case("c1")).unwrap();
+        db.add_path(radicular("c1")).unwrap();
+        let mut guess = radicular("c1");
+        guess.kind = "hypothesis".into();
+        guess.reflection = Some("Thumb and lateral forearm point to C6.".into());
+        db.add_path(guess).unwrap();
+
+        let paths = db.paths("c1").unwrap();
+        assert_eq!(
+            paths.iter().map(|p| p.kind.as_str()).collect::<Vec<_>>(),
+            vec!["presentation", "hypothesis"]
+        );
+        assert_eq!(paths[1].reflection.as_deref(), Some("Thumb and lateral forearm point to C6."));
+    }
+
+    #[test]
+    fn paths_go_when_their_case_goes_and_reach_the_digest() {
+        let db = StudyDb::in_memory();
+        db.create_case(case("c1")).unwrap();
+        db.add_path(radicular("c1")).unwrap();
+        assert_eq!(db.case_digest("c1").unwrap().unwrap().paths.len(), 1);
+
+        db.delete_case("c1").unwrap();
+        assert!(db.paths("c1").unwrap().is_empty());
+    }
+
+    #[test]
+    fn paths_travel_inside_their_case_through_export_and_import() {
+        let source = StudyDb::in_memory();
+        source.create_case(case("c1")).unwrap();
+        let drawn = source.add_path(radicular("c1")).unwrap();
+        source.set_path_active(drawn.id, false).unwrap();
+        let export = source.export().unwrap();
+
+        let target = StudyDb::in_memory();
+        target.import(export).unwrap();
+
+        let arrived = target.paths("c1").unwrap();
+        assert_eq!(arrived.len(), 1);
+        assert_eq!(arrived[0].points, drawn.points);
+        assert!(!arrived[0].active, "put away stays put away");
+    }
+
+    #[test]
+    fn an_imported_path_the_application_could_not_have_drawn_is_skipped() {
+        let source = StudyDb::in_memory();
+        source.create_case(case("c1")).unwrap();
+        source.add_path(radicular("c1")).unwrap();
+        let mut export = source.export().unwrap();
+        export.cases[0].paths[0].spread = "sideways".into();
+
+        let target = StudyDb::in_memory();
+        let summary = target.import(export).unwrap();
+
+        assert!(target.paths("c1").unwrap().is_empty());
+        assert!(summary.skipped >= 1);
+        assert!(target.case_answer("c1").unwrap().is_some(), "the case still arrives");
+    }
+
+    #[test]
+    fn a_v10_journal_gains_paths_without_losing_a_case() {
+        // The upgrade every reader's machine performs on the next release.
+        let mut conn = Connection::open_in_memory().unwrap();
+        migrate(&mut conn).unwrap();
+        conn.execute_batch(
+            "INSERT INTO case_file
+                 (id, title, sex, ground_truth, sealed_at, profile, language,
+                  created_at, updated_at)
+             VALUES ('c1', 'Neck pain', 'male', 'C6 radiculopathy', 1, 'student', 'es', 1, 1);
+             INSERT INTO case_symptom (case_id, organ_id, symptom, severity, created_at)
+             VALUES ('c1', 'collum', 'Neck pain', 6, 1);",
+        )
+        .unwrap();
+
+        // Wind the shape back with the stamp, as the earlier upgrade tests do.
+        conn.execute_batch("DROP TABLE case_path;").unwrap();
+        conn.pragma_update(None, "user_version", 10).unwrap();
+
+        migrate(&mut conn).expect("a v10 journal must migrate");
+
+        let kept: String = conn
+            .query_row("SELECT symptom FROM case_symptom", [], |row| row.get(0))
+            .unwrap();
+        assert_eq!(kept, "Neck pain");
+        let paths: i64 = conn
+            .query_row("SELECT COUNT(*) FROM case_path", [], |row| row.get(0))
+            .unwrap();
+        assert_eq!(paths, 0, "nothing is invented for a case drawn before paths existed");
     }
 }
