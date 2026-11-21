@@ -244,7 +244,11 @@ counts as the real-person case above.
 ### Opening a case
 
 1. Set the scene in a few lines: presentation, relevant vitals and findings,
-   enough to reason from and no more. Withhold the diagnosis.
+   enough to reason from and no more. Withhold the diagnosis. If symptom paths
+   are drawn on the body, they are part of the presentation: say each one in
+   words, where it starts, how it travels, where it ends, what is felt and what
+   brings it on. The student is looking at them, and a scene that leaves them
+   out describes a different patient.
 2. Drive the viewport while you do it. Isolate the region involved, and use
    `apply_pathology_overlay` on the structures the process affects, with a
    `severity` that matches the scenario. The student should be looking at the
@@ -817,6 +821,11 @@ def _symptom_paths_rule(paths: list[CasePath]) -> str:
     lines = [
         "### Symptom paths drawn on the body",
         "",
+        "**These are part of the presentation, as much as the findings are.** "
+        "Say every path in words when you set the scene, and use them when you "
+        "grade: an answer that explains the findings and ignores a drawn path "
+        "has missed part of the case.",
+        "",
         "Each path is **one symptom moving**, drawn by the case's author: the "
         "first point is where it starts, the last where it ends. Like the marked "
         "complaints, every point is **where it is felt**, not the cause. Reason "
@@ -882,6 +891,13 @@ def _virtual_patient_rule(patient: VirtualPatient) -> str:
         lines.append(f"- Weight: {patient.weight_kg} kg")
     lines.append(f"- This is visit {patient.visit_no}.")
 
+    # Straight after who the patient is, before the findings. At the end, after
+    # the record and the complaints, a model read the whole path and mentioned
+    # it in 1 opening of 8: it was presenting the written findings and had
+    # stopped reading for the presentation by the time it reached the path.
+    if patient.paths:
+        lines += ["", _symptom_paths_rule(patient.paths)]
+
     if patient.findings.strip():
         lines += [
             "",
@@ -937,8 +953,6 @@ def _virtual_patient_rule(patient: VirtualPatient) -> str:
             "reasoning about.",
         ]
 
-    if patient.paths:
-        lines += ["", _symptom_paths_rule(patient.paths)]
 
     if patient.earlier_visits:
         lines += [

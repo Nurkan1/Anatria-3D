@@ -60,6 +60,28 @@ and generate a case with the assistant. This notebook covers phase 1.
   `zIndexRange` is now `[9, 0]`. Hot reload did not apply the change to a
   mounted label, which looked like the fix failing until the page was reloaded.
 
+## Found by the owner, testing the installer
+
+- **A student taken for the patient.** "What could cause it, I think it is
+  overload" was answered by gemini-3.1-flash-lite with "since you describe
+  symptoms affecting your health, I am an educational tool, not a doctor", then
+  "your job as a mechanic". The real-person rule in `CASE` was worded so broadly
+  that any first person fired it. It now needs an unmistakable statement, and a
+  "Who is speaking" section sets the roles: the writer is a student, the patient
+  is spoken of in the third person, and a drill never opens with a disclaimer.
+  qwen3.5:9b, same case and message: refused 1 in 6 before, 0 in 10 after.
+- **The path reached the model and was ignored.** Read back from his journal:
+  the path was active and was in the prompt whole. qwen3.5:9b mentioned it in 0
+  of 5 openings. Saying that paths belong to the presentation raised it to 1 of
+  8; moving the section from the end of the patient (after the record and the
+  complaints, just before the seal) to straight after the patient's details
+  raised it to 6 of 8, and 4 of 4 when asked to start the case. Position did
+  most of the work, the same lesson as the local chat's language line.
+- A first attempt to measure with a path consistent with the case was thrown
+  away: its words were already in the written findings, so a mention could not
+  be told apart from the findings. His own path ran over the abdomen while the
+  case is the left arm, which made it the clean test.
+
 ## Not done yet
 
 - Phase 2, the student's hypothesis and Socratic feedback, and the

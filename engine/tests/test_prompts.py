@@ -469,6 +469,22 @@ def test_the_drawn_line_is_never_passed_off_as_a_nerve() -> None:
     assert "`illuminate_structures`" in text
 
 
+def test_a_drawn_path_is_part_of_the_scene_the_model_sets() -> None:
+    # Measured 2026-11-21 on the owner's own case: the path reached the prompt
+    # whole, and qwen3.5:9b mentioned it in 0 of 5 openings, presenting only
+    # the written findings. Nothing had said a path belongs to the presentation.
+    text = _case_text(_with_paths(RADICULAR))
+    assert "**These are part of the presentation, as much as the findings are.**" in text
+    assert "If symptom paths\n   are drawn on the body, they are part of the presentation" in CASE
+
+
+def test_a_path_comes_before_the_written_findings() -> None:
+    patient = _with_paths(RADICULAR).model_copy(update={"findings": "BP 125/80."})
+    text = _case_text(patient)
+    paths_at = text.index("### Symptom paths drawn on the body")
+    assert paths_at < text.index("### What is on the record")
+
+
 def test_a_case_with_no_paths_carries_no_path_section() -> None:
     assert "### Symptom paths" not in _case_text(PATIENT)
 
