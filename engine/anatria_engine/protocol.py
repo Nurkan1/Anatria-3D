@@ -76,6 +76,9 @@ HeartRhythmId = Literal[
 #: summary is generated prose, and the journal holds what the reader did.
 SessionMode = Literal["tutor", "case", "review"]
 
+#: How hard a generated case is. See `CaseDraftRequest`.
+CaseLevel = Literal["preclinical", "clinical"]
+
 #: How a symptom travels along a drawn path. See `CasePath`.
 PathSpread = Literal["radiating", "referred", "multifocal"]
 #: What is felt at one stop of a path. A closed list: the journal refuses any other.
@@ -257,6 +260,32 @@ class CaseHypothesis(Strict):
     points: list[CasePathPoint] = Field(min_length=1, max_length=12)
     #: The student's reasoning, in their words.
     reflection: str = Field(min_length=1, max_length=20_000)
+
+
+class DraftPath(Strict):
+    """The symptom path a generated case comes with, stops already checked."""
+
+    label: str = Field(min_length=1, max_length=200)
+    spread: PathSpread
+    trigger: str | None = Field(default=None, max_length=200)
+    points: list[CasePathPoint] = Field(min_length=1, max_length=12)
+
+
+class CaseDraft(Strict):
+    """A case the assistant wrote, for its author to read and change before sealing.
+
+    Nothing here is opened or sealed. It fills the same form a hand-written case
+    uses, and the author seals it, so the case stays theirs.
+    """
+
+    title: str = Field(min_length=1, max_length=200)
+    sex: Literal["male", "female"]
+    age_years: int | None = Field(default=None, ge=0, le=130)
+    height_cm: int | None = Field(default=None, ge=30, le=260)
+    weight_kg: float | None = Field(default=None, gt=0, le=400)
+    findings: str = Field(default="", max_length=20_000)
+    ground_truth: str = Field(min_length=1, max_length=20_000)
+    path: DraftPath | None = None
 
 
 class CaseVisitSummary(Strict):
@@ -608,6 +637,25 @@ class AgentRequest(Strict):
     api_key: str = Field(min_length=1, repr=False)
 
 
+class CaseDraftRequest(Strict):
+    """Ask the assistant to write a teaching case. See `case_draft.py`."""
+
+    kind: Literal["case_draft_request"] = "case_draft_request"
+    request_id: str = Field(min_length=1)
+    provider: AiProvider
+    model: str | None = None
+    #: What the case is about, in the author's words: "brachial plexus".
+    region: str = Field(min_length=1, max_length=200)
+    level: CaseLevel
+    #: The language the case is written in.
+    language: Language
+    profile: UserProfile
+    #: The atlas the path's stops must come from.
+    available_organs: list[OrganMeta] = Field(min_length=1, max_length=5000)
+    # Injected by Rust from the OS keyring — never present on the frontend side.
+    api_key: str = Field(min_length=1, repr=False)
+
+
 class ListModelsRequest(Strict):
     """Ask a provider which models this key can actually use.
 
@@ -680,6 +728,7 @@ class ShutdownRequest(Strict):
 EngineRequest = Annotated[
     AgentRequest
     | ListModelsRequest
+    | CaseDraftRequest
     | LocalChatRequest
     | LocalModelsRequest
     | CancelRequest
@@ -783,6 +832,14 @@ class LocalModelsEvent(Strict):
     models: list[LocalModelInfo]
 
 
+class CaseDraftEvent(Strict):
+    """A case the assistant wrote, for the form. A `done` follows with what it cost."""
+
+    type: Literal["case_draft"] = "case_draft"
+    request_id: str
+    draft: CaseDraft
+
+
 class CaseVerdictEvent(Strict):
     """The grade for a case drill, from the assistant's own evaluation.
 
@@ -832,6 +889,7 @@ EngineEvent = Annotated[
     | SceneCommandEvent
     | ModelsEvent
     | LocalModelsEvent
+    | CaseDraftEvent
     | CaseVerdictEvent
     | DoneEvent
     | ErrorEvent,

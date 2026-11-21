@@ -15,6 +15,7 @@ from pydantic import TypeAdapter, ValidationError
 from anatria_engine.protocol import (
     AgentRequest,
     CancelRequest,
+    CaseDraftRequest,
     EngineRequest,
     ErrorEvent,
     ListModelsRequest,
@@ -28,7 +29,9 @@ from anatria_engine.transport import StdinReader, Transport, parse_json_line
 _request_adapter: TypeAdapter[EngineRequest] = TypeAdapter(EngineRequest)
 
 #: The requests that run as a task of their own and can be cancelled.
-SpawnedRequest = AgentRequest | ListModelsRequest | LocalChatRequest | LocalModelsRequest
+SpawnedRequest = (
+    AgentRequest | ListModelsRequest | CaseDraftRequest | LocalChatRequest | LocalModelsRequest
+)
 
 # How long in-flight requests may keep running after stdin closes or a
 # `shutdown` frame arrives. See `Engine._drain`.
@@ -90,7 +93,13 @@ class Engine:
                 self._shutdown.set()
             case CancelRequest():
                 self._cancel(request.request_id)
-            case AgentRequest() | ListModelsRequest() | LocalChatRequest() | LocalModelsRequest():
+            case (
+                AgentRequest()
+                | ListModelsRequest()
+                | CaseDraftRequest()
+                | LocalChatRequest()
+                | LocalModelsRequest()
+            ):
                 self._spawn(request)
 
     def _spawn(self, request: SpawnedRequest) -> None:
@@ -123,6 +132,7 @@ class Engine:
             # hang, with the reason only on stderr.
             from anatria_engine.handlers import (
                 handle_agent_request,
+                handle_case_draft,
                 handle_list_models,
                 handle_local_chat,
                 handle_local_models,
@@ -130,6 +140,8 @@ class Engine:
 
             if isinstance(request, AgentRequest):
                 await handle_agent_request(request, self._transport)
+            elif isinstance(request, CaseDraftRequest):
+                await handle_case_draft(request, self._transport)
             elif isinstance(request, LocalChatRequest):
                 await handle_local_chat(request, self._transport)
             elif isinstance(request, LocalModelsRequest):

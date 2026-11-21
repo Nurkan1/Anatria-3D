@@ -615,6 +615,47 @@ export type AgentRequest = z.infer<typeof AgentRequestSchema>;
  * proves the credential works, so there is no separate "test key" path that
  * could drift from the real one.
  */
+/** How hard a generated case is. */
+export const CaseLevelSchema = z.enum(["preclinical", "clinical"]);
+export type CaseLevel = z.infer<typeof CaseLevelSchema>;
+
+/**
+ * Ask the assistant to write a teaching case. `api_key` and `kind` are added
+ * by Rust; the draft comes back as a `case_draft` event, for the form.
+ */
+export const CaseDraftRequestSchema = z.object({
+  request_id: z.string().min(1),
+  provider: AiProviderSchema,
+  model: z.string().nullable().optional(),
+  region: z.string().min(1).max(200),
+  level: CaseLevelSchema,
+  language: LanguageSchema,
+  profile: UserProfileSchema,
+  available_organs: z.array(OrganMetaSchema).min(1).max(5000),
+});
+export type CaseDraftRequest = z.input<typeof CaseDraftRequestSchema>;
+
+/** The symptom path a generated case comes with, stops already checked. */
+export const DraftPathSchema = z.object({
+  label: z.string().min(1).max(200),
+  spread: PathSpreadSchema,
+  trigger: z.string().max(200).nullable().optional(),
+  points: z.array(CasePathPointSchema).min(1).max(12),
+});
+
+/** A case the assistant wrote, for its author to read and change before sealing. */
+export const CaseDraftSchema = z.object({
+  title: z.string().min(1).max(200),
+  sex: z.enum(["male", "female"]),
+  age_years: z.number().int().min(0).max(130).nullable().optional(),
+  height_cm: z.number().int().min(30).max(260).nullable().optional(),
+  weight_kg: z.number().positive().max(400).nullable().optional(),
+  findings: z.string().max(20_000).default(""),
+  ground_truth: z.string().min(1).max(20_000),
+  path: DraftPathSchema.nullable().optional(),
+});
+export type CaseDraft = z.infer<typeof CaseDraftSchema>;
+
 export const ListModelsRequestSchema = z.object({
   request_id: z.string().min(1),
   provider: AiProviderSchema,
@@ -758,6 +799,12 @@ export const EngineEventSchema = z.discriminatedUnion("type", [
    * student can act on, and it cannot be recovered from a paragraph after the
    * fact. The reasoning still streams as text — this is the part worth storing.
    */
+  /** A case the assistant wrote. A `done` follows with what it cost. */
+  z.object({
+    type: z.literal("case_draft"),
+    request_id: z.string(),
+    draft: CaseDraftSchema,
+  }),
   z.object({
     type: z.literal("case_verdict"),
     request_id: z.string(),

@@ -3,11 +3,13 @@ import { listen, type UnlistenFn } from "@tauri-apps/api/event";
 
 import {
   AgentRequestSchema,
+  CaseDraftRequestSchema,
   EngineEventSchema,
   ListModelsRequestSchema,
   LocalChatRequestSchema,
   LocalModelsRequestSchema,
   type AgentRequest,
+  type CaseDraftRequest,
   type AiProvider,
   type EngineEvent,
   type ListModelsRequest,
@@ -57,6 +59,11 @@ export function askAgent(request: AgentRequest): Promise<void> {
  * populates the picker and validates the credential — a bad key comes back as
  * an `invalid_api_key` error event on the same request id.
  */
+/** Ask the assistant to write a teaching case. The draft arrives as a `case_draft` event. */
+export function draftCase(request: CaseDraftRequest): Promise<void> {
+  return invoke("draft_case", { request: CaseDraftRequestSchema.parse(request) });
+}
+
 export function listModels(request: ListModelsRequest): Promise<void> {
   return invoke("list_models", { request: ListModelsRequestSchema.parse(request) });
 }

@@ -162,6 +162,10 @@ async def run_agent(
 
 
 def _usage_of(event: AgentRunResultEvent) -> TokenUsage | None:
+    return usage_of_result(event.result)
+
+
+def usage_of_result(result: object) -> TokenUsage | None:
     """Token accounting; a missing count must not fail the turn.
 
     # Why there is no `except Exception` here any more
@@ -179,7 +183,7 @@ def _usage_of(event: AgentRunResultEvent) -> TokenUsage | None:
     returning `None` with a shrug, because that is the difference between a
     provider that reports nothing and a library that moved its API again.
     """
-    usage = getattr(event.result, "usage", None)
+    usage = getattr(result, "usage", None)
     # Tolerated because pydantic-ai exposed this as a method before 2.x, and a
     # turn is not the place to find out which one is installed.
     if callable(usage):

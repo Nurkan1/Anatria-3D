@@ -118,6 +118,14 @@ pub fn ask_agent(engine: State<'_, EngineHandle>, request: FrontendRequest) -> C
     Ok(())
 }
 
+/// Ask the assistant to write a teaching case. The key is added here, as for a turn.
+#[tauri::command]
+pub fn draft_case(engine: State<'_, EngineHandle>, request: FrontendRequest) -> CommandResult<()> {
+    let frame = build_frame("case_draft_request", request)?;
+    engine.send_frame(&frame)?;
+    Ok(())
+}
+
 #[tauri::command]
 pub fn list_models(engine: State<'_, EngineHandle>, request: FrontendRequest) -> CommandResult<()> {
     let frame = build_frame("list_models", request)?;

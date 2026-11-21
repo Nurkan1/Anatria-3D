@@ -16,6 +16,8 @@ from anatria_engine.agent import (
 from anatria_engine.model_discovery import list_models
 from anatria_engine.protocol import (
     AgentRequest,
+    CaseDraftEvent,
+    CaseDraftRequest,
     CaseVerdictEvent,
     DoneEvent,
     ErrorEvent,
@@ -178,6 +180,33 @@ async def handle_list_models(request: ListModelsRequest, transport: Transport) -
     # Listing a catalogue is not a turn: it ran on no model and cost nothing
     # attributable, so both fields are honestly empty rather than zeroed.
     transport.emit(DoneEvent(request_id=request.request_id, usage=None, model=None))
+
+
+async def handle_case_draft(request: CaseDraftRequest, transport: Transport) -> None:
+    """Write a teaching case for its author to check. See `case_draft.py`."""
+    from anatria_engine.case_draft import draft_case
+
+    try:
+        draft, usage, model = await draft_case(request)
+    except asyncio.CancelledError:
+        raise
+    except ProviderError as exc:
+        transport.emit(
+            ErrorEvent(request_id=request.request_id, code="provider_error", message=str(exc))
+        )
+        return
+    except Exception as exc:  # provider faults must not kill the engine
+        transport.emit(
+            ErrorEvent(
+                request_id=request.request_id, code=_classify(exc), message=_readable(exc)
+            )
+        )
+        return
+
+    transport.emit(CaseDraftEvent(request_id=request.request_id, draft=draft))
+    # A draft is a real call to the reader's provider, so what it cost is
+    # reported like any turn's and filed in Usage.
+    transport.emit(DoneEvent(request_id=request.request_id, usage=usage, model=model))
 
 
 async def handle_local_chat(request: LocalChatRequest, transport: Transport) -> None:

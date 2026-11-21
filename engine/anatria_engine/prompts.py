@@ -24,6 +24,7 @@ from __future__ import annotations
 from anatria_engine.protocol import (
     BreathContext,
     CaseHypothesis,
+    CaseLevel,
     CasePath,
     GenderModel,
     HeartContext,
@@ -1170,6 +1171,70 @@ def build_instructions(
     if heart is not None and mode == "tutor":
         layers.append(_heart_rule(heart))
     return "\n\n".join(layers)
+
+
+#: How each level of a generated case is pitched.
+_LEVEL_MEANING: dict[CaseLevel, str] = {
+    "preclinical": (
+        "preclinical: anatomy first. One clear structure is responsible, the "
+        "presentation is classic, and the reasoning is from symptom to structure."
+    ),
+    "clinical": (
+        "clinical correlation: a realistic presentation with a red flag or a "
+        "differential to rule out, still with one answer, reached by relating "
+        "structure, symptom and findings."
+    ),
+}
+
+CASE_DRAFT = """\
+## Writing a teaching case
+
+You are writing **one invented patient** for a case drill in an anatomy atlas.
+They do not exist: give no name, no initials, no place, no date, nothing that
+could point at anyone. Write the case as a teacher would, for a student to
+reason through.
+
+Fill every field:
+
+- **title**: the presenting complaint and the age, short, e.g. "Numbness in
+  the left hand, 42". Never the diagnosis or the structure responsible: a title
+  that says "brachial plexus compression" has answered the case.
+- **sex, age_years, height_cm, weight_kg**: plausible for the case.
+- **findings**: what the student is given. The presenting complaint, told in
+  the third person, the history, examination and results: enough to reason
+  from. Never the diagnosis, and nothing that names it.
+- **ground_truth**: what is actually going on, the mechanism, and the
+  anatomical explanation, with each structure's Terminologia Anatomica Latin
+  name. This is sealed: the student reads it only when they open it.
+- **path**: the symptom as the patient feels it, drawn on the body, from where
+  it starts to where it ends, 2 to 6 stops. Choose **radiating** when it follows
+  a nerve, **referred** when it is felt far from a viscus that causes it, and
+  **multifocal** for separate places with no route. Give what is felt and how
+  much at each stop, and what brings it on. Stops are where it is **felt**, not
+  the hidden cause. Every stop must be an `organ_id` that `find_structures`
+  returned: search for each one, and never invent an id. If nothing loaded
+  fits, leave the path out.
+
+Give no medicine names with doses. Keep findings and the explanation
+consistent with each other and with the path."""
+
+
+def build_case_draft_instructions(
+    *, profile: UserProfile, language: Language, level: CaseLevel
+) -> str:
+    """Instructions for writing a case. `SAFETY` first, as for every turn."""
+    written_in = LANGUAGE_NAMES.get(language, "English")  # type: ignore[call-overload]
+    return "\n\n".join(
+        [
+            SAFETY,
+            CASE_DRAFT,
+            f"Pitch it at this level: {_LEVEL_MEANING[level]}",
+            PROFILES[profile],
+            f"Write the title, findings, ground_truth and the path's label and "
+            f"trigger in {written_in}. Structure names in the explanation carry "
+            f"their Terminologia Anatomica Latin name.",
+        ]
+    )
 
 
 LOCAL_CHAT = """## THIS CONVERSATION
