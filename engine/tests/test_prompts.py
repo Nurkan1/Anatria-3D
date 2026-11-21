@@ -204,6 +204,24 @@ def test_a_real_person_ends_the_drill() -> None:
     assert "never the subject of a simulation" in CASE
 
 
+def test_a_student_thinking_aloud_is_not_taken_for_the_patient() -> None:
+    # Measured 2026-11-21: a student typed "what could cause it, I think it is
+    # overload" in a drill, and gemini-3.1-flash-lite answered "since you
+    # describe symptoms affecting your health, I am an educational tool, not a
+    # doctor", then spoke of "your job as a mechanic". The real-person rule had
+    # been worded so broadly that any first person fired it.
+    assert "says, unmistakably, that they are describing a real person" in CASE
+    assert "it never\ncounts as the real-person case above" in CASE
+    assert "Speak of the patient in the third person" in CASE
+    assert '"your job as a mechanic" is wrong' in CASE
+    assert "**Do not open with a disclaimer.**" in CASE
+
+
+def test_who_is_speaking_is_said_before_the_case_is_opened() -> None:
+    # The roles have to be settled before the model reads the case and starts writing.
+    assert CASE.index("### Who is speaking") < CASE.index("### Opening a case")
+
+
 def test_the_drill_withholds_the_answer() -> None:
     # Without this the model asks its question and then answers it in the same
     # turn, which is a lecture wearing a case's clothes.
