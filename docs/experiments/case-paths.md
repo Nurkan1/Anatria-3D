@@ -140,5 +140,6 @@ and generate a case with the assistant. This notebook covers phase 1.
 ## Not done yet
 
 - The guide's section, before any merge.
-- The two prompt fixes are measured on qwen3.5:9b only. Gemini and Claude,
-  which the drill actually runs on, are for the owner to check with his key.
+- Checked by the owner on 2026-11-21 with his own key: generating a case and
+  the Socratic reply to a hypothesis both worked as intended. Not yet run on
+  Linux.
