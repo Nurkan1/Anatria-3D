@@ -381,6 +381,32 @@ export const CaseComplaintSchema = z.object({
   severity: z.number().int().min(0).max(10).nullable().optional(),
 });
 
+/** How a symptom travels along a drawn path. */
+export const PathSpreadSchema = z.enum(["radiating", "referred", "multifocal"]);
+export type PathSpread = z.infer<typeof PathSpreadSchema>;
+/** What is felt at one stop of a path. A closed list: the journal refuses any other. */
+export const PathCharacterSchema = z.enum(["pressing", "sharp", "tingling", "weakness"]);
+export type PathCharacter = z.infer<typeof PathCharacterSchema>;
+
+/** One stop on a symptom path: where it is felt, how, and how much. */
+export const CasePathPointSchema = z.object({
+  organ_id: z.string().min(1),
+  label: z.string().min(1),
+  character: PathCharacterSchema.nullable().optional(),
+  intensity: z.number().int().min(0).max(10).nullable().optional(),
+});
+
+/**
+ * A symptom that travels, as the case's author drew it. First point is the
+ * start, last is the end. Every point is where it is *felt*, like a complaint.
+ */
+export const CasePathSchema = z.object({
+  label: z.string().min(1).max(200),
+  spread: PathSpreadSchema,
+  trigger: z.string().max(200).nullable().optional(),
+  points: z.array(CasePathPointSchema).min(1).max(12),
+});
+
 /**
  * Something learned about the patient after the case was opened.
  *
@@ -444,6 +470,8 @@ export const VirtualPatientSchema = z.object({
    *  default reads as optional on both sides, and the contract test compares
    *  exactly that. */
   complaints: z.array(CaseComplaintSchema).max(200).default([]),
+  /** Symptom paths that are switched on. Defaulted, like every field added later. */
+  paths: z.array(CasePathSchema).max(20).default([]),
   earlier_visits: z.array(CaseVisitSummarySchema).max(20).default([]),
 });
 export type VirtualPatient = z.infer<typeof VirtualPatientSchema>;

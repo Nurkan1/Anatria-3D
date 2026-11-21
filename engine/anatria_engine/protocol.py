@@ -76,6 +76,11 @@ HeartRhythmId = Literal[
 #: summary is generated prose, and the journal holds what the reader did.
 SessionMode = Literal["tutor", "case", "review"]
 
+#: How a symptom travels along a drawn path. See `CasePath`.
+PathSpread = Literal["radiating", "referred", "multifocal"]
+#: What is felt at one stop of a path. A closed list: the journal refuses any other.
+PathCharacter = Literal["pressing", "sharp", "tingling", "weakness"]
+
 AnatomicalSystem = Literal[
     "cardiovascular",
     "respiratory",
@@ -212,6 +217,33 @@ class CaseComplaint(Strict):
     severity: int | None = Field(default=None, ge=0, le=10)
 
 
+class CasePathPoint(Strict):
+    """One stop on a symptom path: where it is felt, how, and how much."""
+
+    organ_id: str = Field(min_length=1)
+    #: The structure's name, so the assistant can speak it without leaking an id.
+    label: str = Field(min_length=1)
+    character: PathCharacter | None = None
+    intensity: int | None = Field(default=None, ge=0, le=10)
+
+
+class CasePath(Strict):
+    """A symptom that travels, as the case's author drew it on the body.
+
+    The first point is where it starts, the last where it ends, the rest the
+    way between. Like a complaint, every point is **where it is felt**: a
+    referred path ends in the arm because that is where the heart's pain is
+    felt, not because the arm is the cause. Only paths that are switched on are
+    sent; a student's hypothesis is never sent as part of the presentation.
+    """
+
+    label: str = Field(min_length=1, max_length=200)
+    spread: PathSpread
+    #: What brings it on or changes it, in the author's words.
+    trigger: str | None = Field(default=None, max_length=200)
+    points: list[CasePathPoint] = Field(min_length=1, max_length=12)
+
+
 class CaseVisitSummary(Strict):
     """A past visit, as the current one needs to remember it."""
 
@@ -279,6 +311,8 @@ class VirtualPatient(Strict):
     visit_no: int = Field(ge=1)
     #: The presentation so far, oldest first.
     complaints: list[CaseComplaint] = Field(default_factory=list, max_length=200)
+    #: Symptom paths, oldest first. Defaulted, like every field added later.
+    paths: list[CasePath] = Field(default_factory=list, max_length=20)
     #: Earlier visits, oldest first. Read from the journal, never generated.
     earlier_visits: list[CaseVisitSummary] = Field(default_factory=list, max_length=20)
 

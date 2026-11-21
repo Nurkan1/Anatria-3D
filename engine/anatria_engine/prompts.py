@@ -23,6 +23,7 @@ from __future__ import annotations
 
 from anatria_engine.protocol import (
     BreathContext,
+    CasePath,
     GenderModel,
     HeartContext,
     Language,
@@ -763,6 +764,72 @@ def _joined(lines: list[str]) -> str:
     return "\n".join(lines)
 
 
+#: How each kind of travel reads, said once so every path below is read alike.
+_SPREAD_MEANING = {
+    "radiating": "radiating: it travels along a nerve, in this direction",
+    "referred": (
+        "referred: it is felt at these points and caused somewhere else, so the "
+        "points are not the source"
+    ),
+    "multifocal": "multifocal: separate places with no route and no direction between them",
+}
+
+_CHARACTER_MEANING = {
+    "pressing": "pressing, dull",
+    "sharp": "sharp, electric",
+    "tingling": "tingling, paraesthesia",
+    "weakness": "motor weakness",
+}
+
+
+def _symptom_paths_rule(paths: list[CasePath]) -> str:
+    """The symptom paths the case's author drew, and how to read them.
+
+    A list of complaints cannot say that the pain in the neck and the pain in
+    the thumb are one pain moving outwards, and a model reading two complaints
+    reasons about two problems. A path says it is one, which way it goes and
+    what kind of travel it is, which is most of what separates a root from a
+    plexus from a viscus.
+
+    The line on screen joins the marked structures' centres and nothing more.
+    The model is told so, because "this line is the nerve" is exactly the
+    confident wrong picture the viewer refuses to draw.
+    """
+    lines = [
+        "### Symptom paths drawn on the body",
+        "",
+        "Each path is **one symptom moving**, drawn by the case's author: the "
+        "first point is where it starts, the last where it ends. Like the marked "
+        "complaints, every point is **where it is felt**, not the cause. Reason "
+        "about which structures explain the whole route at once, and use the "
+        "kind of travel: a radiating line and a referred one between the same "
+        "two places point to different causes.",
+        "",
+    ]
+    for path in paths:
+        stops = []
+        for point in path.points:
+            detail = [
+                _CHARACTER_MEANING[point.character] if point.character else None,
+                f"{point.intensity}/10" if point.intensity is not None else None,
+            ]
+            said = ", ".join(part for part in detail if part)
+            stops.append(f"{point.label} (`{point.organ_id}`{', ' + said if said else ''})")
+        joiner = "; " if path.spread == "multifocal" else " → "
+        lines.append(f"- **{path.label}**, {_SPREAD_MEANING[path.spread]}: {joiner.join(stops)}")
+        if path.trigger:
+            lines.append(f"  - Brought on or changed by: {path.trigger}")
+    lines += [
+        "",
+        "**The reader sees each path as a line joining the marked structures. "
+        "It is a schematic link, not the course of a nerve or a dermatome**, and "
+        "you must never describe it as one. When you explain a path, light the "
+        "real structures that account for it with `illuminate_structures` (the "
+        "root, the trunk, the viscus) so the anatomy on screen is the atlas's own.",
+    ]
+    return "\n".join(lines)
+
+
 def _virtual_patient_rule(patient: VirtualPatient) -> str:
     """The open case, and the one thing it changes about the safety layer.
 
@@ -850,6 +917,9 @@ def _virtual_patient_rule(patient: VirtualPatient) -> str:
             "through them, so the reader can see the presentation they are "
             "reasoning about.",
         ]
+
+    if patient.paths:
+        lines += ["", _symptom_paths_rule(patient.paths)]
 
     if patient.earlier_visits:
         lines += [

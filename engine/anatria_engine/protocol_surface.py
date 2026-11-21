@@ -69,6 +69,8 @@ def build_surface() -> dict[str, Any]:
             "ScannerPlane": sorted(get_args(p.ScannerPlane)),
             "HeartRhythmId": sorted(get_args(p.HeartRhythmId)),
             "SessionMode": sorted(get_args(p.SessionMode)),
+            "PathSpread": sorted(get_args(p.PathSpread)),
+            "PathCharacter": sorted(get_args(p.PathCharacter)),
             "AnatomicalSystem": sorted(get_args(p.AnatomicalSystem)),
             "EngineErrorCode": sorted(get_args(p.EngineErrorCode)),
         },
@@ -82,6 +84,8 @@ def build_surface() -> dict[str, Any]:
             # agreeing on both sides says nothing about the shape it carries.
             "VirtualPatient": fields_of(p.VirtualPatient),
             "CaseComplaint": fields_of(p.CaseComplaint),
+            "CasePath": fields_of(p.CasePath),
+            "CasePathPoint": fields_of(p.CasePathPoint),
             "CaseVisitSummary": fields_of(p.CaseVisitSummary),
             "CaseRecordUpdate": fields_of(p.CaseRecordUpdate),
             "ScannerContext": fields_of(p.ScannerContext),

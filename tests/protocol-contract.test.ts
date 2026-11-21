@@ -8,6 +8,10 @@ import { z } from "zod";
 import {
   AgentRequestSchema,
   CaseComplaintSchema,
+  CasePathPointSchema,
+  CasePathSchema,
+  PathCharacterSchema,
+  PathSpreadSchema,
   CaseRecordUpdateSchema,
   CaseVisitSummarySchema,
   VirtualPatientSchema,
@@ -95,6 +99,8 @@ function typescriptSurface(): ProtocolSurface {
       ScannerPlane: sorted(ScannerPlaneSchema as never),
       HeartRhythmId: sorted(HeartRhythmIdSchema as never),
       SessionMode: sorted(SessionModeSchema as never),
+      PathSpread: sorted(PathSpreadSchema as never),
+      PathCharacter: sorted(PathCharacterSchema as never),
       AnatomicalSystem: sorted(AnatomicalSystemSchema as never),
       EngineErrorCode: sorted(EngineErrorCodeSchema as never),
     },
@@ -110,6 +116,8 @@ function typescriptSurface(): ProtocolSurface {
       // nothing about what travels inside it.
       VirtualPatient: fieldsOf(VirtualPatientSchema),
       CaseComplaint: fieldsOf(CaseComplaintSchema),
+      CasePath: fieldsOf(CasePathSchema),
+      CasePathPoint: fieldsOf(CasePathPointSchema),
       CaseVisitSummary: fieldsOf(CaseVisitSummarySchema),
       CaseRecordUpdate: fieldsOf(CaseRecordUpdateSchema),
       ScannerContext: fieldsOf(ScannerContextSchema),

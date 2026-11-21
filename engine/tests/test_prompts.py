@@ -20,6 +20,8 @@ from anatria_engine.prompts import (
 from anatria_engine.protocol import (
     BreathContext,
     CaseComplaint,
+    CasePath,
+    CasePathPoint,
     CaseRecordUpdate,
     CaseVisitSummary,
     HeartContext,
@@ -388,6 +390,69 @@ PATIENT = VirtualPatient(
         )
     ],
 )
+
+
+def _with_paths(*paths: CasePath) -> VirtualPatient:
+    return PATIENT.model_copy(update={"paths": list(paths)})
+
+
+RADICULAR = CasePath(
+    label="Neck to thumb",
+    spread="radiating",
+    trigger="Worse turning the head to the right",
+    points=[
+        CasePathPoint(organ_id="nervus_spinalis_c6", label="Nervus spinalis C6",
+                      character="sharp", intensity=8),
+        CasePathPoint(organ_id="nervus_radialis", label="Nervus radialis", character="tingling"),
+        CasePathPoint(organ_id="pollex", label="Pollex", intensity=3),
+    ],
+)
+
+
+def _case_text(patient: VirtualPatient) -> str:
+    return build_instructions(
+        profile="student", language="es", organs=ORGANS, selection=[], mode="case",
+        patient=patient,
+    )
+
+
+def test_a_path_reaches_the_model_in_order_with_what_is_felt_at_each_stop() -> None:
+    text = _case_text(_with_paths(RADICULAR))
+
+    assert "### Symptom paths drawn on the body" in text
+    route = text[text.index("**Neck to thumb**"):].splitlines()[0]
+    stops = [route.index(name) for name in ("Nervus spinalis C6", "Nervus radialis", "Pollex")]
+    assert stops == sorted(stops)
+    assert "→" in route
+    assert "sharp, electric, 8/10" in route
+    assert "tingling, paraesthesia" in route
+    assert "Brought on or changed by: Worse turning the head to the right" in text
+
+
+def test_a_referred_path_says_its_points_are_not_the_source() -> None:
+    referred = RADICULAR.model_copy(update={"label": "Chest to arm", "spread": "referred"})
+    text = _case_text(_with_paths(referred))
+    assert "caused somewhere else, so the points are not the source" in text
+
+
+def test_a_multifocal_set_has_no_arrow_because_it_has_no_direction() -> None:
+    scattered = RADICULAR.model_copy(update={"label": "Scattered", "spread": "multifocal"})
+    line = _case_text(_with_paths(scattered))
+    route = line[line.index("**Scattered**"):].splitlines()[0]
+    assert "→" not in route
+    assert "no route and no direction" in route
+
+
+def test_the_drawn_line_is_never_passed_off_as_a_nerve() -> None:
+    # The viewer refuses to draw a confident wrong picture; the model must not
+    # describe the schematic line as one either.
+    text = _case_text(_with_paths(RADICULAR))
+    assert "It is a schematic link, not the course of a nerve or a dermatome" in text
+    assert "`illuminate_structures`" in text
+
+
+def test_a_case_with_no_paths_carries_no_path_section() -> None:
+    assert "### Symptom paths" not in _case_text(PATIENT)
 
 
 def test_the_grade_is_named_as_a_tool_call_and_not_as_output() -> None:
