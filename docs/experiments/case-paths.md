@@ -84,9 +84,9 @@ and generate a case with the assistant. This notebook covers phase 1.
 
 ## Not done yet
 
-- Phase 2, the student's hypothesis and Socratic feedback, and the
-  third-person rule in the case prompt.
+- Phase 2, the student's hypothesis and Socratic feedback. The third-person
+  rule it called for is done above.
 - Phase 3, the case generator.
 - The guide's section, before any merge.
-- Not yet run in the desktop app against a real journal, only in tests and in
-  the browser with an injected case.
+- The two prompt fixes are measured on qwen3.5:9b only. Gemini and Claude,
+  which the drill actually runs on, are for the owner to check with his key.
