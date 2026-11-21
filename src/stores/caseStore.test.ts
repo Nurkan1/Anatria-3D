@@ -247,6 +247,7 @@ describe("the record the panel is given", () => {
     record_updates: [
       { id: 1, visit_no: 2, body: "Weight down 5 kg. BP 130/85.", created_at: 2_000 },
     ],
+    paths: [],
   };
 
   it("never takes the sealed answer into the store", async () => {
@@ -451,6 +452,7 @@ describe("the record that accrues", () => {
       visits: [],
       symptoms: [],
       record_updates: [ENTRY],
+      paths: [],
     });
 
     await store().refresh();

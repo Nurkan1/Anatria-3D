@@ -297,6 +297,54 @@ export interface FindingInput {
   body: string;
 }
 
+/** How a symptom travels. Mirrors the journal's check and `PathSpreadSchema`. */
+export type PathSpread = "radiating" | "referred" | "multifocal";
+/** What is felt at one stop. Mirrors the journal's check and `PathCharacterSchema`. */
+export type PathCharacter = "pressing" | "sharp" | "tingling" | "weakness";
+
+/** One stop on a symptom path: a structure, and what is felt there. */
+export interface PathPoint {
+  organ_id: string;
+  /** Kept beside the id, as on a complaint: the structure's system may be off. */
+  organ_label: string | null;
+  character: PathCharacter | null;
+  intensity: number | null;
+}
+
+/**
+ * A symptom that travels: start, the way between, end. The first point is the
+ * start and the last the end. `kind` keeps a student's hypothesis apart from
+ * the patient's presentation: one is part of the case, the other answers it.
+ */
+export interface CasePath {
+  id: number;
+  kind: "presentation" | "hypothesis";
+  label: string;
+  spread: PathSpread;
+  trigger: string | null;
+  reflection: string | null;
+  points: PathPoint[];
+  /** Shown, and told to the assistant. A path switched off is kept. */
+  active: boolean;
+  session_id: string | null;
+  created_at: number;
+  updated_at: number;
+}
+
+export interface PathInput {
+  case_id: string;
+  session_id?: string | null;
+  kind?: CasePath["kind"];
+  label: string;
+  spread: PathSpread;
+  trigger?: string | null;
+  reflection?: string | null;
+  points: PathPoint[];
+}
+
+/** Mirrors the journal: a route needs a start and an end, and holds at most this many stops. */
+export const MAX_PATH_POINTS = 12;
+
 export interface CaseDigest {
   case: CaseFile;
   /** Bound for the engine, which needs the script to keep the course coherent. */
@@ -306,6 +354,8 @@ export interface CaseDigest {
   symptoms: CaseSymptom[];
   /** Oldest first — what has been added to the record since it was opened. */
   record_updates: CaseFinding[];
+  /** Symptom paths, presentations and hypotheses alike, oldest first. */
+  paths: CasePath[];
 }
 
 /** Highest severity a complaint may carry, mirroring the journal's check. */
@@ -322,6 +372,23 @@ export function caseSymptoms(caseId: string): Promise<CaseSymptom[]> {
 
 export function deleteCaseSymptom(id: number): Promise<void> {
   return invoke("delete_case_symptom", { id });
+}
+
+/** Draw a symptom path on a case. */
+export function addCasePath(path: PathInput): Promise<CasePath> {
+  return invoke("add_case_path", { path });
+}
+
+export function casePaths(caseId: string): Promise<CasePath[]> {
+  return invoke("case_paths", { caseId });
+}
+
+export function setCasePathActive(id: number, active: boolean): Promise<void> {
+  return invoke("set_case_path_active", { id, active });
+}
+
+export function deleteCasePath(id: number): Promise<void> {
+  return invoke("delete_case_path", { id });
 }
 
 /** Add to the record. There is no equivalent for the sealed answer. */

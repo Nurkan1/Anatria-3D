@@ -35,6 +35,7 @@ import { domRect, mainRect } from "./studyLayout";
 import { StudyViewsToggle } from "./StudyViewsToggle";
 import { LassoSelect } from "./LassoSelect";
 import { PathwayBar } from "./PathwayBar";
+import { SymptomPathsPanel } from "./SymptomPathsPanel";
 import { SelectionBar } from "./SelectionBar";
 import { StructureMenu, type MenuTarget } from "./StructureMenu";
 import { useCaseMarks } from "./useCaseMarks";
@@ -299,6 +300,8 @@ export function AnatomyViewer({ paused = false }: { paused?: boolean } = {}) {
         at the bottom and stay.
       */}
       <div className="pointer-events-none absolute top-3 bottom-3 left-3 z-20 flex flex-col items-start justify-end gap-1.5 overflow-hidden">
+        {/* Only with a patient open and a path to show or draw. */}
+        <SymptomPathsPanel />
         <RenderStatsPanel />
         {/* Hides itself when the sweep is off — see `ScanReadout`. */}
         <ScanReadout />

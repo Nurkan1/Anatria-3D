@@ -78,6 +78,7 @@ import { useExplodeMotion } from "./useExplodeMotion";
 import { setViewerHandle } from "./viewerBridge";
 import { OrganMesh } from "./OrganMesh";
 import { PathwayFlow } from "./PathwayFlow";
+import { SymptomPathsLayer } from "./SymptomPaths";
 
 /**
  * Plane normals point *away* from the half-space that is kept, which is what
@@ -1194,6 +1195,13 @@ export function AnatomyScene({
           modelScale={modelScale}
         />
       )}
+
+      {/* Renders nothing unless a case is open. */}
+      <SymptomPathsLayer
+        centres={centres.current}
+        centresRevision={centresRevision}
+        modelScale={modelScale}
+      />
 
       <CameraRig
         focusRequest={focusRequest}

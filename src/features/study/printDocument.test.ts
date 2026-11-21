@@ -145,6 +145,7 @@ function digest(overrides: Partial<CaseDigest> = {}): CaseDigest {
         created_at: 1_700_150_000_000,
       },
     ],
+    paths: [],
     ...overrides,
   };
 }

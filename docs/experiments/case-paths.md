@@ -1,0 +1,70 @@
+# Experiment: symptom paths in case drills
+
+Branch `experiment/case-paths`, from `main` at v0.7.1. Built for a presentation
+at the University of Plovdiv on 2026-12-07. Not in the guide: an experiment
+stays out of it until it is merged.
+
+The owner's brief, in three phases: draw a symptom's route on the body (start,
+waypoints, end) with its kind of travel, character and intensity; let a student
+draw their own hypothesis and be answered Socratically against the sealed case;
+and generate a case with the assistant. This notebook covers phase 1.
+
+## Phase 1: what exists
+
+- **The journal** (`study_db.rs`, schema v11) has a `case_path` table: kind
+  (`presentation` or `hypothesis`, so phase 2 needs no second migration),
+  label, spread, trigger, reflection, the points as JSON, active, timestamps.
+  CASCADE with the case, like `case_symptom`. Export and import carry paths
+  inside their case, and an imported path the application could not have drawn
+  is skipped, not stored.
+- **The wire** (`CasePath`, `CasePathPoint` on `VirtualPatient`, both sides,
+  contract test extended). Only paths that are switched on, and never a
+  hypothesis, are sent.
+- **The prompt** (`_symptom_paths_rule`) gives each path in order, with what is
+  felt at each stop, and says what each kind of travel means.
+- **The viewer**: right-click a structure, "Start a symptom path here", then
+  "Add as stop N" on the next ones. A panel in the viewport names and describes
+  it; saved paths can be switched off and deleted. `SymptomPathsLayer` draws
+  them.
+
+## Decisions, and why
+
+- **Stops are structures, not points on the skin.** The existing complaints are
+  structures too, and a structure carries its TA2 name, which is what the
+  assistant reasons with. A surface point would carry nothing.
+- **The line is schematic and says so, three times.** It joins the marked
+  structures' centres. The atlas has no dermatome data, and a line that bent
+  along the skin as if it knew where C6 runs is the confident wrong picture
+  AGENTS.md §4.4 forbids. The panel says it in words, the assistant is told it
+  must never call the line a nerve, and is asked to light the real structures
+  with `illuminate_structures` instead.
+- **The kind of travel is drawn, not only written.** Radiating is solid with
+  arrows, referred is dashed, multifocal has no line at all. The same two
+  places joined solidly would claim a route that referred pain does not have.
+- **Rose**, because cyan is selection, violet is a physiological route and
+  amber to crimson is pathology severity.
+- **Case drills only.** A path is filed on an invented patient. There is no way
+  to draw one in the tutor, where it would describe the reader.
+- **Closed vocabularies** (three spreads, four characters), checked in Rust,
+  Pydantic and Zod, so the reader and the assistant read the same words.
+
+## Found while building
+
+- `cargo fmt` reformatted five files the change did not touch; the repository
+  is not rustfmt-clean. Reverted, and the change re-applied without it.
+- Three older migration tests wound the journal back to v6, v8 and v9 without
+  dropping the v11 table, so migrating again tried to create it twice. AGENTS.md
+  §4.6 says to wind the shape back, not only the stamp; the v8 test already did
+  that for v10's column, and these now do it for v11's table.
+- Path labels (drei `Html`) were drawn over the viewport's own panels at z-20.
+  `zIndexRange` is now `[9, 0]`. Hot reload did not apply the change to a
+  mounted label, which looked like the fix failing until the page was reloaded.
+
+## Not done yet
+
+- Phase 2, the student's hypothesis and Socratic feedback, and the
+  third-person rule in the case prompt.
+- Phase 3, the case generator.
+- The guide's section, before any merge.
+- Not yet run in the desktop app against a real journal, only in tests and in
+  the browser with an injected case.

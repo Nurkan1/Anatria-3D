@@ -10,8 +10,38 @@ import {
   type CaseVisit,
   type CaseSymptom,
   type CaseFinding,
+  type CasePath,
+  type PathCharacter,
+  type PathPoint,
+  type PathSpread,
   type SymptomInput,
+  MAX_PATH_POINTS,
 } from "@/lib/studyDb";
+
+/**
+ * A symptom path being drawn, before it is saved.
+ *
+ * Held here rather than in the panel, because it is built from two places at
+ * once: stops are added from the right-click menu on the body, and named and
+ * described in the panel. Not persisted: a half-drawn path is abandoned with
+ * the window, exactly like a half-typed complaint.
+ */
+export interface PathDraft {
+  label: string;
+  spread: PathSpread;
+  trigger: string;
+  points: PathPoint[];
+}
+
+/** What a draft needs before it can be saved, mirroring the journal's check. */
+export function draftProblem(draft: PathDraft): string | null {
+  const fewest = draft.spread === "multifocal" ? 1 : 2;
+  if (draft.points.length < fewest) {
+    return fewest === 1 ? "Add a place on the body." : "A path needs a start and an end.";
+  }
+  if (draft.label.trim() === "") return "Give the path a name.";
+  return null;
+}
 
 /**
  * Case files, and which one the conversation is currently a visit to.
@@ -51,6 +81,10 @@ interface CaseStore {
    * backwards grades nothing.
    */
   record: CaseFinding[];
+  /** Symptom paths on the active case, oldest first. */
+  paths: CasePath[];
+  /** A path being drawn, or `null`. See `PathDraft`. */
+  draft: PathDraft | null;
   error: string | null;
   loaded: boolean;
 
@@ -58,6 +92,17 @@ interface CaseStore {
   /** Mark a complaint where the reader pointed. */
   mark: (input: SymptomInput) => Promise<CaseSymptom | null>;
   unmark: (id: number) => Promise<boolean>;
+  /** Start a new path at this structure, or add it as the next stop of the one being drawn. */
+  addToPath: (point: Pick<PathPoint, "organ_id" | "organ_label">) => void;
+  updateDraft: (patch: Partial<Omit<PathDraft, "points">>) => void;
+  updateDraftPoint: (index: number, patch: { character?: PathCharacter | null; intensity?: number | null }) => void;
+  removeDraftPoint: (index: number) => void;
+  /** Move a stop one place earlier (-1) or later (+1). The order is the direction. */
+  moveDraftPoint: (index: number, by: -1 | 1) => void;
+  discardDraft: () => void;
+  savePath: () => Promise<CasePath | null>;
+  setPathActive: (id: number, active: boolean) => Promise<boolean>;
+  removePath: (id: number) => Promise<boolean>;
   /** Add to the record, stamped by the journal with the visit it was learned at. */
   note: (body: string) => Promise<CaseFinding | null>;
   unnote: (id: number) => Promise<boolean>;
@@ -198,6 +243,8 @@ export const useCaseStore = create<CaseStore>((set, get) => ({
   symptoms: [],
   visits: [],
   record: [],
+  paths: [],
+  draft: null,
   error: null,
   loaded: false,
 
@@ -217,6 +264,7 @@ export const useCaseStore = create<CaseStore>((set, get) => ({
         // out into the store: what the panel is never given, it can never show.
         visits: digest?.visits ?? [],
         record: digest?.record_updates ?? [],
+        paths: digest?.paths ?? [],
         error: null,
         loaded: true,
       });
@@ -235,6 +283,8 @@ export const useCaseStore = create<CaseStore>((set, get) => ({
         symptoms: [],
         visits: [],
         record: [],
+        paths: [],
+        draft: null,
         error: null,
       }));
       return opened;
@@ -245,7 +295,8 @@ export const useCaseStore = create<CaseStore>((set, get) => ({
   },
 
   select: (caseId) => {
-    set({ activeCaseId: caseId, symptoms: [], visits: [], record: [] });
+    // The draft goes too: a path half-drawn on one patient must not be saved on another.
+    set({ activeCaseId: caseId, symptoms: [], visits: [], record: [], paths: [], draft: null });
     // The presentation belongs to the case, so switching cases without
     // reloading would show the previous patient's complaints on this one.
     if (caseId) void get().refresh();
@@ -269,6 +320,98 @@ export const useCaseStore = create<CaseStore>((set, get) => ({
         symptoms: state.symptoms.filter((entry) => entry.id !== id),
         error: null,
       }));
+      return true;
+    } catch (error) {
+      set({ error: message(error) });
+      return false;
+    }
+  },
+
+  addToPath: (point) => {
+    const draft = get().draft;
+    const stop: PathPoint = {
+      organ_id: point.organ_id,
+      organ_label: point.organ_label,
+      character: null,
+      intensity: null,
+    };
+    if (!draft) {
+      set({ draft: { label: "", spread: "radiating", trigger: "", points: [stop] } });
+      return;
+    }
+    // The same structure twice in a row is a zero-length step with no direction.
+    if (draft.points.at(-1)?.organ_id === point.organ_id) return;
+    if (draft.points.length >= MAX_PATH_POINTS) return;
+    set({ draft: { ...draft, points: [...draft.points, stop] } });
+  },
+
+  updateDraft: (patch) => {
+    const draft = get().draft;
+    if (draft) set({ draft: { ...draft, ...patch } });
+  },
+
+  updateDraftPoint: (index, patch) => {
+    const draft = get().draft;
+    if (!draft || !draft.points[index]) return;
+    const points = draft.points.map((point, at) => (at === index ? { ...point, ...patch } : point));
+    set({ draft: { ...draft, points } });
+  },
+
+  removeDraftPoint: (index) => {
+    const draft = get().draft;
+    if (!draft) return;
+    set({ draft: { ...draft, points: draft.points.filter((_, at) => at !== index) } });
+  },
+
+  moveDraftPoint: (index, by) => {
+    const draft = get().draft;
+    const target = index + by;
+    if (!draft || target < 0 || target >= draft.points.length) return;
+    const points = [...draft.points];
+    [points[index], points[target]] = [points[target]!, points[index]!];
+    set({ draft: { ...draft, points } });
+  },
+
+  discardDraft: () => set({ draft: null }),
+
+  savePath: async () => {
+    const { draft, activeCaseId } = get();
+    if (!draft || !activeCaseId || draftProblem(draft)) return null;
+    try {
+      const saved = await db.addCasePath({
+        case_id: activeCaseId,
+        kind: "presentation",
+        label: draft.label.trim(),
+        spread: draft.spread,
+        trigger: draft.trigger.trim() || null,
+        points: draft.points,
+      });
+      set((state) => ({ paths: [...state.paths, saved], draft: null, error: null }));
+      return saved;
+    } catch (error) {
+      set({ error: message(error) });
+      return null;
+    }
+  },
+
+  setPathActive: async (id, active) => {
+    try {
+      await db.setCasePathActive(id, active);
+      set((state) => ({
+        paths: state.paths.map((path) => (path.id === id ? { ...path, active } : path)),
+        error: null,
+      }));
+      return true;
+    } catch (error) {
+      set({ error: message(error) });
+      return false;
+    }
+  },
+
+  removePath: async (id) => {
+    try {
+      await db.deleteCasePath(id);
+      set((state) => ({ paths: state.paths.filter((path) => path.id !== id), error: null }));
       return true;
     } catch (error) {
       set({ error: message(error) });
@@ -317,6 +460,8 @@ export const useCaseStore = create<CaseStore>((set, get) => ({
         symptoms: state.activeCaseId === caseId ? [] : state.symptoms,
         visits: state.activeCaseId === caseId ? [] : state.visits,
         record: state.activeCaseId === caseId ? [] : state.record,
+        paths: state.activeCaseId === caseId ? [] : state.paths,
+        draft: state.activeCaseId === caseId ? null : state.draft,
         error: null,
       }));
       return true;
@@ -422,6 +567,22 @@ export async function virtualPatientContext(
         symptom: symptom.symptom,
         severity: symptom.severity,
       })),
+      // Only what is switched on, and never a student's hypothesis: that is an
+      // answer to the case, and sending it as part of the presentation would
+      // let the assistant grade a guess against itself.
+      paths: digest.paths
+        .filter((path) => path.active && path.kind === "presentation")
+        .map((path) => ({
+          label: path.label,
+          spread: path.spread,
+          trigger: path.trigger,
+          points: path.points.map((point) => ({
+            organ_id: point.organ_id,
+            label: point.organ_label ?? labelFor(point.organ_id) ?? point.organ_id,
+            character: point.character,
+            intensity: point.intensity,
+          })),
+        })),
       earlier_visits: digest.visits
         .filter((visit) => visit.visit_no < visitNo)
         .map((visit) => ({

@@ -44,6 +44,8 @@ export function StructureMenu({
   const activePatient = useCaseStore(activeCase);
   const symptoms = useCaseStore((s) => s.symptoms);
   const unmark = useCaseStore((s) => s.unmark);
+  const draft = useCaseStore((s) => s.draft);
+  const addToPath = useCaseStore((s) => s.addToPath);
   const menuRef = useRef<HTMLDivElement>(null);
   const [marking, setMarking] = useState(false);
 
@@ -179,6 +181,24 @@ export function StructureMenu({
                 {activePatient.title}
               </p>
               <MenuItem onClick={() => setMarking(true)}>Mark a complaint here</MenuItem>
+              {/* A symptom that travels: started here, then extended one
+                  structure at a time from this same menu. The panel in the
+                  viewport is where it is named and described. */}
+              {draft?.points.at(-1)?.organ_id === organ.organ_id ? (
+                <p className="px-3 py-1.5 text-[10px] text-slate-500">
+                  Already the last stop of the path being drawn
+                </p>
+              ) : (
+                <MenuItem
+                  onClick={act(() =>
+                    addToPath({ organ_id: organ.organ_id, organ_label: organLabel(organ) }),
+                  )}
+                >
+                  {draft
+                    ? `Add as stop ${draft.points.length + 1} of the path`
+                    : "Start a symptom path here"}
+                </MenuItem>
+              )}
               {marked.length > 0 && (
                 <div className="px-3 pb-1.5 pt-0.5 space-y-0.5">
                   {marked.map((entry) => (
