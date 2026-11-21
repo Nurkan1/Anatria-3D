@@ -38,7 +38,7 @@ const SAVED: CasePath = {
 
 beforeEach(() => {
   vi.clearAllMocks();
-  useCaseStore.setState({ cases: [CASE], activeCaseId: "c1", paths: [], draft: null, error: null });
+  useCaseStore.setState({ cases: [CASE], activeCaseId: "c1", paths: [], draft: null, feedbackAsk: null, error: null });
 });
 afterEach(() => cleanup());
 
@@ -87,5 +87,32 @@ describe("the symptom paths panel", () => {
     expect(db.deleteCasePath).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole("button", { name: "Delete?" }));
     expect(db.deleteCasePath).toHaveBeenCalledWith(7);
+  });
+});
+
+describe("drawing a hypothesis", () => {
+  it("asks for the reasoning instead of a trigger, and says what to trace", () => {
+    useCaseStore.getState().addToPath({ organ_id: "a", organ_label: "A" });
+    useCaseStore.getState().addToPath({ organ_id: "b", organ_label: "B" });
+    render(<SymptomPathsPanel />);
+
+    fireEvent.click(screen.getByRole("radio", { name: "My hypothesis" }));
+
+    expect(screen.getByLabelText("Your reasoning")).toBeTruthy();
+    expect(screen.queryByPlaceholderText(/Brought on by/)).toBeNull();
+    expect(screen.getByText(/Trace the anatomical route you think explains the case/)).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Save hypothesis" })).toBeTruthy();
+  });
+
+  it("lists hypotheses apart from the patient's symptoms, each with a way to ask about it", () => {
+    useCaseStore.setState({
+      paths: [SAVED, { ...SAVED, id: 8, kind: "hypothesis", label: "Lower trunk", reflection: "C8-T1." }],
+    });
+    render(<SymptomPathsPanel />);
+
+    expect(screen.getByText("Patient's symptoms")).toBeTruthy();
+    expect(screen.getByText("My hypotheses")).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "Ask" }));
+    expect(useCaseStore.getState().feedbackAsk?.text).toBe('My hypothesis is "Lower trunk": C8-T1.');
   });
 });

@@ -989,6 +989,16 @@ export function ChatPanel() {
     rhythm: heartRhythm,
   });
 
+  // A question about a hypothesis, asked from the symptom paths panel. Sent
+  // through `send` so it is filed, checked and failed exactly like a typed one.
+  const feedbackAsk = useCaseStore((s) => s.feedbackAsk);
+  useEffect(() => {
+    if (!feedbackAsk) return;
+    useCaseStore.getState().clearFeedbackAsk();
+    if (mode === "case") void send(feedbackAsk.text);
+    // `send` is rebuilt each render; the request is what this reacts to.
+  }, [feedbackAsk]);
+
   async function send(text?: string) {
     const prompt = (text ?? draft).trim();
     if (!prompt || !engineReady || useChatStore.getState().pendingRequestId || preparingRef.current) return;

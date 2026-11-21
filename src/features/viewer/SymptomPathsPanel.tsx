@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import type { PathCharacter, PathSpread } from "@/lib/studyDb";
+import type { CasePath, PathCharacter, PathSpread } from "@/lib/studyDb";
 import { activeCase, draftProblem, useCaseStore } from "@/stores/caseStore";
 
 /**
@@ -44,8 +44,7 @@ export function SymptomPathsPanel() {
   const paths = useCaseStore((s) => s.paths);
   const draft = useCaseStore((s) => s.draft);
 
-  const presentations = paths.filter((path) => path.kind === "presentation");
-  if (!patient || (!draft && presentations.length === 0)) return null;
+  if (!patient || (!draft && paths.length === 0)) return null;
 
   return (
     <section
@@ -62,6 +61,19 @@ export function SymptomPathsPanel() {
   );
 }
 
+const KINDS: { value: CasePath["kind"]; label: string; title: string }[] = [
+  {
+    value: "presentation",
+    label: "Patient's symptom",
+    title: "Where the patient feels it and how it travels. Part of the case.",
+  },
+  {
+    value: "hypothesis",
+    label: "My hypothesis",
+    title: "The anatomical route you think explains the case, and why. The assistant answers it.",
+  },
+];
+
 function DraftEditor() {
   const draft = useCaseStore((s) => s.draft)!;
   const updateDraft = useCaseStore((s) => s.updateDraft);
@@ -74,6 +86,7 @@ function DraftEditor() {
 
   const problem = draftProblem(draft);
   const last = draft.points.length - 1;
+  const hypothesis = draft.kind === "hypothesis";
 
   async function save() {
     setBusy(true);
@@ -83,10 +96,39 @@ function DraftEditor() {
 
   return (
     <div className="space-y-2 px-3 py-2">
+      <div role="radiogroup" aria-label="Whose path" className="flex gap-1">
+        {KINDS.map((kind) => (
+          <button
+            key={kind.value}
+            type="button"
+            role="radio"
+            aria-checked={draft.kind === kind.value}
+            title={kind.title}
+            onClick={() => updateDraft({ kind: kind.value })}
+            className={`flex-1 rounded border px-1 py-0.5 text-[10px] transition ${
+              draft.kind === kind.value
+                ? kind.value === "hypothesis"
+                  ? "border-lime-500 bg-lime-500/15 text-lime-100"
+                  : "border-rose-500 bg-rose-500/20 text-rose-100"
+                : "border-slate-700 text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            {kind.label}
+          </button>
+        ))}
+      </div>
+
+      {hypothesis && (
+        <p className="text-[10px] leading-snug text-lime-200/80">
+          Trace the anatomical route you think explains the case, from where it starts to where
+          the patient feels it, then say why.
+        </p>
+      )}
+
       <input
         value={draft.label}
         onChange={(event) => updateDraft({ label: event.target.value })}
-        placeholder="Name, e.g. Neck to thumb"
+        placeholder={hypothesis ? "Name, e.g. Lower trunk to ulnar nerve" : "Name, e.g. Neck to thumb"}
         maxLength={200}
         className="w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 text-[11px] text-slate-100 outline-none placeholder:text-slate-600 focus:border-rose-600"
       />
@@ -181,13 +223,25 @@ function DraftEditor() {
         Right-click a structure on the body to add the next stop.
       </p>
 
-      <input
-        value={draft.trigger}
-        onChange={(event) => updateDraft({ trigger: event.target.value })}
-        placeholder="Brought on by…, e.g. lifting the arm"
-        maxLength={200}
-        className="w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 text-[11px] text-slate-100 outline-none placeholder:text-slate-600 focus:border-rose-600"
-      />
+      {hypothesis ? (
+        <textarea
+          value={draft.reflection}
+          onChange={(event) => updateDraft({ reflection: event.target.value })}
+          placeholder="Why this route? e.g. the little finger and the medial forearm point to C8–T1…"
+          aria-label="Your reasoning"
+          rows={3}
+          maxLength={4000}
+          className="w-full resize-none rounded border border-slate-700 bg-slate-950 px-2 py-1 text-[11px] text-slate-100 outline-none placeholder:text-slate-600 focus:border-lime-600"
+        />
+      ) : (
+        <input
+          value={draft.trigger}
+          onChange={(event) => updateDraft({ trigger: event.target.value })}
+          placeholder="Brought on by…, e.g. lifting the arm"
+          maxLength={200}
+          className="w-full rounded border border-slate-700 bg-slate-950 px-2 py-1 text-[11px] text-slate-100 outline-none placeholder:text-slate-600 focus:border-rose-600"
+        />
+      )}
 
       <p className="text-[10px] leading-snug text-slate-500">
         The line joins the structures you marked. It is a schematic, not the course of a nerve or
@@ -200,9 +254,13 @@ function DraftEditor() {
           type="button"
           onClick={() => void save()}
           disabled={busy || problem !== null}
-          className="flex-1 rounded border border-rose-700/60 bg-rose-500/15 px-2 py-1 text-[10px] text-rose-100 transition hover:bg-rose-500/25 disabled:opacity-40"
+          className={`flex-1 rounded border px-2 py-1 text-[10px] transition disabled:opacity-40 ${
+            hypothesis
+              ? "border-lime-700/60 bg-lime-500/15 text-lime-100 hover:bg-lime-500/25"
+              : "border-rose-700/60 bg-rose-500/15 text-rose-100 hover:bg-rose-500/25"
+          }`}
         >
-          Save path
+          {hypothesis ? "Save hypothesis" : "Save path"}
         </button>
         <button
           type="button"
@@ -218,15 +276,30 @@ function DraftEditor() {
 
 function PathList() {
   const paths = useCaseStore((s) => s.paths);
+  const presentations = paths.filter((path) => path.kind === "presentation");
+  const hypotheses = paths.filter((path) => path.kind === "hypothesis");
+
+  return (
+    <div>
+      {presentations.length > 0 && <PathGroup title="Patient's symptoms" paths={presentations} />}
+      {hypotheses.length > 0 && <PathGroup title="My hypotheses" paths={hypotheses} />}
+    </div>
+  );
+}
+
+function PathGroup({ title, paths }: { title: string; paths: CasePath[] }) {
   const setPathActive = useCaseStore((s) => s.setPathActive);
   const removePath = useCaseStore((s) => s.removePath);
+  const askAboutHypothesis = useCaseStore((s) => s.askAboutHypothesis);
   const [confirming, setConfirming] = useState<number | null>(null);
 
   return (
-    <ul className="divide-y divide-slate-800">
-      {paths
-        .filter((path) => path.kind === "presentation")
-        .map((path) => (
+    <>
+      <p className="border-b border-slate-800 px-3 pb-0.5 pt-1.5 text-[9px] uppercase tracking-wider text-slate-600">
+        {title}
+      </p>
+      <ul className="divide-y divide-slate-800">
+        {paths.map((path) => (
           <li key={path.id} className="flex items-center gap-2 px-3 py-1.5">
             <input
               type="checkbox"
@@ -234,7 +307,7 @@ function PathList() {
               onChange={(event) => void setPathActive(path.id, event.target.checked)}
               aria-label={`Show ${path.label}`}
               title="Shown on the body and told to the assistant"
-              className="accent-rose-500"
+              className={path.kind === "hypothesis" ? "accent-lime-500" : "accent-rose-500"}
             />
             <span className="min-w-0 flex-1">
               <span className={`block truncate ${path.active ? "text-slate-200" : "text-slate-500"}`}>
@@ -246,6 +319,17 @@ function PathList() {
                 {path.trigger ? ` · ${path.trigger}` : ""}
               </span>
             </span>
+            {path.kind === "hypothesis" && (
+              <button
+                type="button"
+                onClick={() => askAboutHypothesis(path.id)}
+                disabled={!path.active}
+                title={path.active ? "Ask the assistant about this hypothesis" : "Switch it on first"}
+                className="shrink-0 rounded border border-lime-700/60 px-1.5 py-0.5 text-[10px] text-lime-200 transition hover:bg-lime-500/15 disabled:opacity-40"
+              >
+                Ask
+              </button>
+            )}
             {confirming === path.id ? (
               <button
                 type="button"
@@ -269,7 +353,8 @@ function PathList() {
             )}
           </li>
         ))}
-    </ul>
+      </ul>
+    </>
   );
 }
 

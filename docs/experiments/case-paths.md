@@ -82,10 +82,30 @@ and generate a case with the assistant. This notebook covers phase 1.
   be told apart from the findings. His own path ran over the abdomen while the
   case is the left arm, which made it the clean test.
 
+## Phase 2: the student's hypothesis
+
+- The draft has a kind: "Patient's symptom" or "My hypothesis". A hypothesis
+  needs the student's reasoning before it can be saved, has no trigger, and is
+  drawn in lime with the same line styles. The panel lists the two apart.
+- "Ask" on a saved hypothesis puts the student's own words in the chat
+  (`feedbackAsk` on the case store), and the chat panel sends them with its
+  ordinary `send`, so the turn is filed and checked like a typed one. Outside a
+  case drill the request is dropped.
+- `CaseHypothesis` travels beside the presentation in `VirtualPatient`, never
+  inside it, and only when switched on. `_hypotheses_rule` says they are the
+  student's answer and never a finding, and asks for a Socratic reply: what is
+  right, each topographic error named, one question per error, the structures
+  lit, no grade yet and no sealed answer.
+- qwen3.5:9b with a deliberately wrong hypothesis (C5 and the axillary nerve on
+  a lower-trunk case): 3 of 3 answers said what was right, asked 1 to 4
+  questions, kept the seal and did not grade. All 3 also named C8, which gives
+  part of the answer away; a stronger model should hold that line better, and
+  it is for the owner to check on Claude.
+- A probe without tools is not a probe: asked to light structures, the model
+  only wrote the call as text. Stub tools fixed the measurement.
+
 ## Not done yet
 
-- Phase 2, the student's hypothesis and Socratic feedback. The third-person
-  rule it called for is done above.
 - Phase 3, the case generator.
 - The guide's section, before any merge.
 - The two prompt fixes are measured on qwen3.5:9b only. Gemini and Claude,

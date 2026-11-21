@@ -27,9 +27,16 @@ import {
  * the window, exactly like a half-typed complaint.
  */
 export interface PathDraft {
+  /**
+   * The patient's symptom, or the student's answer. A hypothesis is the route
+   * the student thinks explains the case, with their reasoning; it is drawn in
+   * its own colour and never sent as part of the presentation.
+   */
+  kind: CasePath["kind"];
   label: string;
   spread: PathSpread;
   trigger: string;
+  reflection: string;
   points: PathPoint[];
 }
 
@@ -40,7 +47,20 @@ export function draftProblem(draft: PathDraft): string | null {
     return fewest === 1 ? "Add a place on the body." : "A path needs a start and an end.";
   }
   if (draft.label.trim() === "") return "Give the path a name.";
+  // The reasoning is the half of a hypothesis worth answering: a route with no
+  // "because" can only be marked right or wrong.
+  if (draft.kind === "hypothesis" && draft.reflection.trim() === "") {
+    return "Say why you think this is the route.";
+  }
   return null;
+}
+
+/** The message that asks the assistant about a hypothesis, in the reader's own words. */
+export function feedbackRequest(path: Pick<CasePath, "label" | "reflection">): string {
+  const reasoning = path.reflection?.trim();
+  return reasoning
+    ? `My hypothesis is "${path.label}": ${reasoning}`
+    : `My hypothesis is "${path.label}".`;
 }
 
 /**
@@ -85,6 +105,15 @@ interface CaseStore {
   paths: CasePath[];
   /** A path being drawn, or `null`. See `PathDraft`. */
   draft: PathDraft | null;
+  /**
+   * A question about a hypothesis, waiting for the chat panel to send it.
+   *
+   * The panel that holds the hypothesis is not the panel that talks to the
+   * engine, and the chat panel's `send` is what files the turn, checks the
+   * engine and handles errors. Handing it the words keeps one way to ask.
+   * `seq` makes asking twice about the same hypothesis two requests.
+   */
+  feedbackAsk: { seq: number; text: string } | null;
   error: string | null;
   loaded: boolean;
 
@@ -100,6 +129,10 @@ interface CaseStore {
   /** Move a stop one place earlier (-1) or later (+1). The order is the direction. */
   moveDraftPoint: (index: number, by: -1 | 1) => void;
   discardDraft: () => void;
+  /** Ask the assistant about a saved hypothesis, through the chat. */
+  askAboutHypothesis: (id: number) => void;
+  /** Called by the chat panel once it has taken the question. */
+  clearFeedbackAsk: () => void;
   savePath: () => Promise<CasePath | null>;
   setPathActive: (id: number, active: boolean) => Promise<boolean>;
   removePath: (id: number) => Promise<boolean>;
@@ -245,6 +278,7 @@ export const useCaseStore = create<CaseStore>((set, get) => ({
   record: [],
   paths: [],
   draft: null,
+  feedbackAsk: null,
   error: null,
   loaded: false,
 
@@ -336,7 +370,9 @@ export const useCaseStore = create<CaseStore>((set, get) => ({
       intensity: null,
     };
     if (!draft) {
-      set({ draft: { label: "", spread: "radiating", trigger: "", points: [stop] } });
+      set({
+        draft: { kind: "presentation", label: "", spread: "radiating", trigger: "", reflection: "", points: [stop] },
+      });
       return;
     }
     // The same structure twice in a row is a zero-length step with no direction.
@@ -374,16 +410,27 @@ export const useCaseStore = create<CaseStore>((set, get) => ({
 
   discardDraft: () => set({ draft: null }),
 
+  askAboutHypothesis: (id) => {
+    const path = get().paths.find((entry) => entry.id === id && entry.kind === "hypothesis");
+    if (!path) return;
+    set((state) => ({ feedbackAsk: { seq: (state.feedbackAsk?.seq ?? 0) + 1, text: feedbackRequest(path) } }));
+  },
+
+  clearFeedbackAsk: () => set({ feedbackAsk: null }),
+
   savePath: async () => {
     const { draft, activeCaseId } = get();
     if (!draft || !activeCaseId || draftProblem(draft)) return null;
     try {
+      const hypothesis = draft.kind === "hypothesis";
       const saved = await db.addCasePath({
         case_id: activeCaseId,
-        kind: "presentation",
+        kind: draft.kind,
         label: draft.label.trim(),
         spread: draft.spread,
-        trigger: draft.trigger.trim() || null,
+        // What brings a symptom on belongs to the patient; a hypothesis has reasoning instead.
+        trigger: hypothesis ? null : draft.trigger.trim() || null,
+        reflection: hypothesis ? draft.reflection.trim() : null,
         points: draft.points,
       });
       set((state) => ({ paths: [...state.paths, saved], draft: null, error: null }));
@@ -576,6 +623,20 @@ export async function virtualPatientContext(
           label: path.label,
           spread: path.spread,
           trigger: path.trigger,
+          points: path.points.map((point) => ({
+            organ_id: point.organ_id,
+            label: point.organ_label ?? labelFor(point.organ_id) ?? point.organ_id,
+            character: point.character,
+            intensity: point.intensity,
+          })),
+        })),
+      // The student's answer, sent beside the presentation and never inside it.
+      hypotheses: digest.paths
+        .filter((path) => path.active && path.kind === "hypothesis" && path.reflection)
+        .map((path) => ({
+          label: path.label,
+          spread: path.spread,
+          reflection: path.reflection ?? "",
           points: path.points.map((point) => ({
             organ_id: point.organ_id,
             label: point.organ_label ?? labelFor(point.organ_id) ?? point.organ_id,

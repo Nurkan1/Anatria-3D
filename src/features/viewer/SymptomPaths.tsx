@@ -41,6 +41,12 @@ import { useCaseStore } from "@/stores/caseStore";
  */
 export const PATH_COLOUR = "#ff5c8a";
 
+/**
+ * A student's hypothesis, in lime: plainly not the patient's symptom, and
+ * clashing with none of the colours above. The same line styles apply.
+ */
+export const HYPOTHESIS_COLOUR = "#a3e635";
+
 /** Line thickness, as a fraction of the model's largest dimension. */
 const TUBE_SCALE = 0.0035;
 /** Stop marker radius at intensity 0 and the growth per point of intensity. */
@@ -67,9 +73,7 @@ export function SymptomPathsLayer({
 
   if (!activeCaseId) return null;
 
-  // A student's hypothesis is not part of the presentation and is not drawn
-  // with it.
-  const shown = paths.filter((path) => path.active && path.kind === "presentation");
+  const shown = paths.filter((path) => path.active);
 
   return (
     <group>
@@ -78,6 +82,7 @@ export function SymptomPathsLayer({
           key={path.id}
           points={path.points}
           spread={path.spread}
+          colour={path.kind === "hypothesis" ? HYPOTHESIS_COLOUR : PATH_COLOUR}
           centres={centres}
           centresRevision={centresRevision}
           modelScale={modelScale}
@@ -88,6 +93,7 @@ export function SymptomPathsLayer({
         <SymptomPath
           points={draft.points}
           spread={draft.spread}
+          colour={draft.kind === "hypothesis" ? HYPOTHESIS_COLOUR : PATH_COLOUR}
           centres={centres}
           centresRevision={centresRevision}
           modelScale={modelScale}
@@ -109,6 +115,7 @@ interface Stop {
 function SymptomPath({
   points,
   spread,
+  colour,
   centres,
   centresRevision,
   modelScale,
@@ -116,6 +123,7 @@ function SymptomPath({
 }: {
   points: CasePath["points"];
   spread: PathSpread;
+  colour: string;
   centres: Map<string, THREE.Vector3>;
   centresRevision: number;
   modelScale: number;
@@ -191,7 +199,7 @@ function SymptomPath({
 
   const material = (
     <meshBasicMaterial
-      color={PATH_COLOUR}
+      color={colour}
       transparent
       opacity={opacity}
       // An annotation over the anatomy, accumulated through it rather than
@@ -228,7 +236,7 @@ function SymptomPath({
               args={[modelScale * (MARKER_BASE + MARKER_PER_INTENSITY * (stop.point.intensity ?? 3)), 16, 16]}
             />
             <meshBasicMaterial
-              color={PATH_COLOUR}
+              color={colour}
               transparent
               opacity={Math.min(1, opacity + 0.25)}
               depthTest={false}

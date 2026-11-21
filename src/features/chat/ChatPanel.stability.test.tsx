@@ -250,3 +250,27 @@ describe("preflight validation", () => {
     else expect((draft as HTMLTextAreaElement).value).toBe("Compare the selection");
   });
 });
+
+describe("a question about a hypothesis, asked from the symptom paths panel", () => {
+  it("is sent through the ordinary send, as the student's own question, in a case drill", async () => {
+    useChatStore.getState().beginSession("case");
+    render(<ChatPanel />);
+    await screen.findByPlaceholderText("Answer the case, or ask for a new one…");
+
+    act(() => useCaseStore.setState({ feedbackAsk: { seq: 1, text: 'My hypothesis is "Lower trunk": C8-T1.' } }));
+
+    await waitFor(() => expect(ipc.ask).toHaveBeenCalledTimes(1));
+    expect(ipc.ask.mock.calls[0]![0]).toMatchObject({ query: 'My hypothesis is "Lower trunk": C8-T1.', mode: "case" });
+    expect(useCaseStore.getState().feedbackAsk).toBeNull();
+  });
+
+  it("is dropped outside a case drill rather than asked of the tutor", async () => {
+    render(<ChatPanel />);
+    await screen.findByPlaceholderText("Ask about the anatomy…");
+
+    act(() => useCaseStore.setState({ feedbackAsk: { seq: 1, text: 'My hypothesis is "Lower trunk".' } }));
+
+    await waitFor(() => expect(useCaseStore.getState().feedbackAsk).toBeNull());
+    expect(ipc.ask).not.toHaveBeenCalled();
+  });
+});

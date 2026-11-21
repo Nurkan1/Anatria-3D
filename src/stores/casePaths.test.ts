@@ -64,6 +64,7 @@ beforeEach(() => {
     record: [],
     paths: [],
     draft: null,
+    feedbackAsk: null,
     error: null,
     loaded: true,
   });
@@ -193,5 +194,60 @@ describe("what the assistant is sent", () => {
     const context = await virtualPatientContext("s1", () => null);
 
     expect("case" in context && context.case.paths).toEqual([]);
+  });
+});
+
+describe("a student's hypothesis", () => {
+  it("cannot be saved without the reasoning, which is the half worth answering", () => {
+    store().addToPath({ organ_id: "a", organ_label: null });
+    store().addToPath({ organ_id: "b", organ_label: null });
+    store().updateDraft({ kind: "hypothesis", label: "Lower trunk" });
+    expect(draftProblem(store().draft!)).toBe("Say why you think this is the route.");
+    store().updateDraft({ reflection: "C8-T1 carry the little finger." });
+    expect(draftProblem(store().draft!)).toBeNull();
+  });
+
+  it("is saved as a hypothesis with its reasoning, and no trigger", async () => {
+    db.addCasePath.mockResolvedValue(path({ kind: "hypothesis" }));
+    store().addToPath({ organ_id: "a", organ_label: null });
+    store().addToPath({ organ_id: "b", organ_label: null });
+    store().updateDraft({ kind: "hypothesis", label: "Lower trunk", trigger: "left over", reflection: " C8-T1. " });
+
+    await store().savePath();
+
+    expect(db.addCasePath).toHaveBeenCalledWith(
+      expect.objectContaining({ kind: "hypothesis", trigger: null, reflection: "C8-T1." }),
+    );
+  });
+
+  it("is asked about through the chat, in the student's own words", () => {
+    useCaseStore.setState({
+      paths: [path({ id: 4, kind: "hypothesis", label: "Lower trunk", reflection: "C8-T1 carry the little finger." })],
+    });
+    store().askAboutHypothesis(4);
+    expect(store().feedbackAsk?.text).toBe('My hypothesis is "Lower trunk": C8-T1 carry the little finger.');
+    const first = store().feedbackAsk?.seq;
+    store().askAboutHypothesis(4);
+    expect(store().feedbackAsk?.seq).toBe((first ?? 0) + 1);
+  });
+
+  it("is never asked about as if a patient's path were a hypothesis", () => {
+    useCaseStore.setState({ paths: [path({ id: 5, kind: "presentation" })] });
+    store().askAboutHypothesis(5);
+    expect(store().feedbackAsk).toBeNull();
+  });
+
+  it("is sent beside the presentation, never inside it", async () => {
+    db.caseDigest.mockResolvedValue({
+      case: CASE, ground_truth: "C8-T1.", visits: [], symptoms: [], record_updates: [],
+      paths: [path({ id: 1 }), path({ id: 2, kind: "hypothesis", label: "Lower trunk", reflection: "C8-T1." })],
+    });
+
+    const context = await virtualPatientContext("s1", () => null);
+
+    expect("case" in context && context.case.paths.map((entry) => entry.label)).toEqual(["Neck to thumb"]);
+    expect("case" in context && context.case.hypotheses).toEqual([
+      expect.objectContaining({ label: "Lower trunk", reflection: "C8-T1.", spread: "radiating" }),
+    ]);
   });
 });
