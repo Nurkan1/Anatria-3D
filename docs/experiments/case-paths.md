@@ -1,8 +1,9 @@
 # Experiment: symptom paths in case drills
 
-Branch `experiment/case-paths`, from `main` at v0.7.1. Built for a presentation
-at the University of Plovdiv on 2026-12-07. Not in the guide: an experiment
-stays out of it until it is merged.
+Started on `experiment/case-paths` from v0.7.1, for a presentation at the
+University of Plovdiv on 2026-12-07. Tested by the owner on Windows and on Kali
+(private dry run in `anatria3d-personal`), given its guide section, and merged
+into `main` on 2026-11-26 for 0.8.0.
 
 The owner's brief, in three phases: draw a symptom's route on the body (start,
 waypoints, end) with its kind of travel, character and intensity; let a student
@@ -139,7 +140,6 @@ and generate a case with the assistant. This notebook covers phase 1.
 
 ## Not done yet
 
-- The guide's section, before any merge.
 - Checked by the owner on 2026-11-21 with his own key: generating a case and
   the Socratic reply to a hypothesis both worked as intended. Not yet run on
   Linux.
