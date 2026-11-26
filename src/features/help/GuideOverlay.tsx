@@ -1150,6 +1150,30 @@ const SECTIONS: Section[] = [
           assistant reasons from the sex on the file either way.
         </Callout>
 
+        <Sub>Drafting a case with the assistant</Sub>
+        <p>
+          <Ui>Draft with the assistant</Ui>, at the top of the composer, writes the
+          case for you. Give it a region or system, such as the brachial plexus,
+          choose <Ui>Preclinical</Ui> or <Ui>Clinical correlation</Ui> and the
+          language, and press <Ui>Draft the case</Ui>. It fills every field: the
+          title, the patient's figures, what is on the record, the answer with each
+          structure's Latin name, and a symptom path drawn through structures the
+          atlas has.
+        </p>
+        <Callout>
+          <strong>It is a draft, and it opens nothing.</strong> Read every field and
+          change what you like before <Ui>Seal and open</Ui>: the case is yours once
+          you seal it. A model can be wrong about anatomy as easily here as anywhere,
+          and small models get the kind of travel or the felt places wrong more often.
+          It uses the provider and model the chat is set to, on your key, and what it
+          cost appears in <Ui>Usage</Ui>.
+        </Callout>
+        <p>
+          To practise on a drafted case yourself, tick <Ui>Hide the answer from me</Ui>{" "}
+          before sealing. The answer is sealed with the case without you reading it,
+          and opens the usual way.
+        </p>
+
         <Sub>Marking what the patient reports</Sub>
         <p>
           Right-click any structure with a patient open and choose{" "}
@@ -1170,6 +1194,54 @@ const SECTIONS: Section[] = [
           model while explaining — clearing overlays, isolating, cutting a section —
           can erase them. Click a complaint in the patient record to fly to where it
           was marked; press <Ui>✕</Ui> beside it in the right-click menu to remove one.
+        </p>
+
+        <Sub>Symptom paths</Sub>
+        <p>
+          A complaint is one place. When a symptom travels, from the neck down the arm
+          to the little finger, draw it as a path. Right-click where it starts and
+          choose <Ui>Start a symptom path here</Ui>, then right-click each next
+          structure and choose <Ui>Add as stop 2 of the path</Ui>, and so on. A panel
+          in the viewport names the path and describes it: what is felt at each stop
+          (pressing, sharp, tingling or weakness) and how much from 0 to 10, and what
+          brings it on.
+        </p>
+        <Rows
+          rows={[
+            ["Radiating", "One symptom travelling along a nerve. Drawn as a solid line with arrows."],
+            ["Referred", "Felt here, caused somewhere else, such as cardiac pain felt in the arm. Drawn dashed."],
+            ["Multifocal", "Separate places with no route between them. No line is drawn."],
+          ]}
+        />
+        <Callout>
+          <strong>The line is a schematic, not the course of a nerve.</strong> It
+          joins the centres of the structures you marked, in order, and that is all it
+          knows. The atlas has no dermatome map, so it does not pretend to draw one.
+          The assistant is told the same and lights the real nerves and vessels that
+          explain a path, so the anatomy you reason from is the atlas's own.
+        </Callout>
+        <p>
+          A path is part of the case: the assistant is given every path that is
+          switched on, in order, and describes it when it presents the patient. A
+          patient can have several. Untick one in the panel to put it away without
+          losing it.
+        </p>
+
+        <Sub>Your hypothesis</Sub>
+        <p>
+          Draw your own answer the same way, and choose <Ui>My hypothesis</Ui> at the
+          top of the path panel: the anatomical route you think explains the case,
+          from where it starts to where it is felt, and why. A hypothesis is drawn in
+          lime, and it cannot be saved without your reasoning, because that is the
+          part worth answering.
+        </p>
+        <p>
+          <Ui>Ask</Ui> beside a saved hypothesis puts your reasoning into the drill. The
+          assistant answers it <strong>Socratically</strong>: what you got right, each
+          structure you confused with another, and a question for each one that leads
+          you to the relation between structure and symptom, instead of handing you
+          the answer. It grades only once you answer its questions or ask to be graded.
+          A hypothesis is never given to it as part of the patient.
         </p>
 
         <Sub>The record keeps learning</Sub>

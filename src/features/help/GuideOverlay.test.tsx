@@ -76,6 +76,27 @@ describe("GuideOverlay, the local model", () => {
   });
 });
 
+describe("GuideOverlay, case drills", () => {
+  it("never lets a symptom path pass for the course of a nerve", () => {
+    render(<GuideOverlay onClose={() => {}} />);
+    expect(text()).toContain("The line is a schematic, not the course of a nerve.");
+    expect(text()).toContain("The atlas has no dermatome map");
+  });
+
+  it("says a drafted case is a draft the author checks and seals", () => {
+    render(<GuideOverlay onClose={() => {}} />);
+    expect(text()).toContain("It is a draft, and it opens nothing.");
+    expect(text()).toContain("cost appears in Usage");
+    expect(text()).toContain("Hide the answer from me");
+  });
+
+  it("says a hypothesis is answered Socratically and kept apart from the patient", () => {
+    render(<GuideOverlay onClose={() => {}} />);
+    expect(text()).toContain("Socratically");
+    expect(text()).toContain("A hypothesis is never given to it as part of the patient.");
+  });
+});
+
 describe("GuideOverlay, contact", () => {
   it("prints the address and copies it", async () => {
     const writeText = vi.fn().mockResolvedValue(undefined);

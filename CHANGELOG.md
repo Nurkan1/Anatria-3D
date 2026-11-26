@@ -13,6 +13,43 @@ There is **no auto-updater**, by design: the application never reaches the
 network on its own. A new version reaches you only when you download and install
 it, so this file is also the answer to "is it worth reinstalling".
 
+## [Unreleased]
+
+### Added
+
+**Symptom paths.** In a case drill, a symptom that travels can be drawn on the
+body: right-click where it starts, then each structure it passes through, to
+where it ends. Each stop says what is felt and how much, and the path says
+what brings it on and how it travels: radiating along a nerve (a solid line
+with arrows), referred (dashed) or in separate places (no line). A patient can
+have several, switched on and off. The line joins the structures you marked and
+is a schematic, not the course of a nerve; the assistant is told so, describes
+the path when it presents the patient, and lights the real nerves and vessels
+that explain it.
+
+**Your hypothesis, answered Socratically.** A student can draw the anatomical
+route they think explains the case, in its own colour, with their reasoning,
+and ask about it. The assistant says what is right, names each structure that
+was confused with another, and asks a question for each instead of handing over
+the answer, grading only once the student has answered.
+
+**Draft a case with the assistant.** The new-case form can be filled by the
+assistant from a region, a level (preclinical or clinical correlation) and a
+language: the record, the sealed answer with Latin names, and a symptom path
+through structures the atlas has. Nothing opens until you have read it,
+changed what you like and sealed it, and a student can seal a drafted case
+without reading its answer. It uses your provider and key, and its cost appears
+in Usage.
+
+### Fixed
+
+**A student is no longer taken for the patient.** In a case drill, "I think it
+is overload" could be answered as if the student had described their own
+health, with a disclaimer and "your job as a mechanic". The assistant now treats
+everything the student writes as reasoning about the invented patient, speaks of
+the patient in the third person, and does not open a drill answer with a
+disclaimer the application already shows.
+
 ## [0.7.1] — 2026-11-16
 
 ### Fixed
