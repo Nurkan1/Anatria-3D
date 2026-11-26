@@ -138,8 +138,9 @@ and generate a case with the assistant. This notebook covers phase 1.
   draft fills a form instead of opening a case. Claude and GPT, which the owner
   uses, are for him to check.
 
-## Not done yet
+## Checked by the owner
 
-- Checked by the owner on 2026-11-21 with his own key: generating a case and
-  the Socratic reply to a hypothesis both worked as intended. Not yet run on
-  Linux.
+- 2026-11-21, Windows, with his own key: generating a case and the Socratic
+  reply to a hypothesis both worked as intended.
+- 2026-11-26, Kali, from the private dry run: everything worked first time,
+  including the path labels drawn by WebKitGTK.
